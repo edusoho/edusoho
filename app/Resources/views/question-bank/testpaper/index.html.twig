@@ -13,14 +13,8 @@
 
   <div>
     {% include 'question-bank/header-navbar.html.twig' %}
-    <div class="panel panel-default panel-col">
-      {% block panel_body %}
-        <div class="panel-body question-list-container js-testpaper-container">
-          <div class="mtl">
-            {% include 'question-bank/testpaper/testpaper-list.html.twig' %}
-          </div>
-        </div>
-      {% endblock %}
+    <div class="test-paper-container">
+      <div id="app"></div>
     </div>
   </div>
 {% endblock %}

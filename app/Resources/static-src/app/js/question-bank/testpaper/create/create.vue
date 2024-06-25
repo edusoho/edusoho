@@ -2,31 +2,33 @@
   <div class="test-create">
     <div class="test-create-title">
       <div class="test-create-title-left">
-        <span class="test-create-title-left-back" @click="back()">
-          <img src="/static-dist/app/img/question-bank/back-image.png" alt="" />
-          返回
-        </span>
+        <div class="test-create-title-left-back" @click="back()">
+          <span class="test-create-title-left-back-img">
+            <img src="/static-dist/app/img/question-bank/back-image.png" alt="" />
+          </span>
+          <span class="test-create-title-left-back-text">返回</span>
+        </div>
         <i></i>
         <span class="test-create-title-left-type">随机卷</span>
       </div>
       <div class="test-create-title-right">
-        <p>
-          <span>试卷</span>
-          <span class="test-create-title-right-mark">0</span>
-        </p>
+        <span class="test-create-title-right-item">
+          <span class="test-create-title-right-text">试卷</span>
+          <span class="test-create-title-right-number">0</span>
+        </span>
         <i></i>
-        <p>
-          <span>总分</span>
-          <span class="test-create-title-right-mark">0</span>
-        </p>
+        <span class="test-create-title-right-item">
+          <span class="test-create-title-right-text">总分</span>
+          <span class="test-create-title-right-number">0.0</span>
+        </span>
       </div>
     </div>
 
     <div class="test-create-content">
       <a-form id="test-create-form" :form="form">
         <a-form-item label="试卷名称">
-          <a-input placeholder="请输入试卷说明" 
-           v-decorator="[
+          <a-input placeholder="请输入试卷说明"
+                   v-decorator="[
           'testname',
           { rules: [{ required: true, message: '请输入试卷名称' }] },
         ]"/>
@@ -77,13 +79,32 @@
               <a-radio :value="1">按题型抽题</a-radio>
               <a-radio :value="2">按题型+分类抽题</a-radio>
             </a-radio-group>
-            <div class="question-type-show">
-              <img
-                src="/static-dist/app/img/question-bank/question-type-show-image.png"
-                alt=""
-              />
-              <span>题型展示设置</span>
-            </div>
+            <a-dropdown :trigger="['click']" placement="bottomRight">
+              <div class="question-type-show">
+                <img
+                  src="/static-dist/app/img/question-bank/question-type-show-image.png"
+                  alt=""
+                />
+                <span>题型展示设置</span>
+              </div>
+              <a-menu slot="overlay" class="question-type-setting-menu">
+                <draggable v-model="questionTypes">
+                  <transition-group>
+                    <a-menu-item v-for="questionType in questionTypes" :key="questionType.type" class="question-type-setting-menu-item">
+                      <span class="question-type-setting-menu-item-label">
+                        <img
+                          class="question-type-setting-menu-item-label-icon"
+                          src="/static-dist/app/img/question-bank/question-type-drag.png"
+                          alt=""
+                        />
+                        <span class="question-type-setting-menu-item-label-text">{{ questionType.name }}</span>
+                      </span>
+                      <a-switch v-model:checked="questionType.checked" class="question-type-setting-menu-item-switch"></a-switch>
+                    </a-menu-item>
+                  </transition-group>
+                </draggable>
+              </a-menu>
+            </a-dropdown>
           </div>
         </a-form-item>
         <div class="question-type">
@@ -117,14 +138,20 @@
     </div>
 
     <footer>
-       <button class="test-create-save" @click="saveBtn()">保存</button>
-       <button class="test-create-cancel">取消</button>
+      <button class="test-create-save" @click="saveBtn()">保存</button>
+      <button class="test-create-cancel">取消</button>
     </footer>
   </div>
 </template>
+
 <script>
 import loadScript from "load-script";
+import Draggable from 'vuedraggable';
+
 export default {
+  components: {
+    Draggable
+  },
   data() {
     return {
       isShow: false,
@@ -167,7 +194,44 @@ export default {
           name: "材料题",
         },
       ],
-      form: this.$form.createForm(this, { name: 'dynamic_rule' }),
+      questionTypes: [
+        {
+          type: "single_choice",
+          name: "单选题",
+          checked: true,
+        },
+        {
+          type: "multiple_choice",
+          name: "多选题",
+          checked: true,
+        },
+        {
+          type: "essay",
+          name: "问答题",
+          checked: true,
+        },
+        {
+          type: "uncertain_choice",
+          name: "不定项",
+          checked: true,
+        },
+        {
+          type: "determine",
+          name: "判断题",
+          checked: true,
+        },
+        {
+          type: "fill",
+          name: "填空题",
+          checked: true,
+        },
+        {
+          type: "material",
+          name: "材料题",
+          checked: true,
+        },
+      ],
+      form: this.$form.createForm(this, { name: "save-test-paper" }),
     };
   },
   mounted() {
@@ -214,5 +278,9 @@ export default {
       });
     },
   },
-};
+}
 </script>
+
+<style scoped>
+
+</style>

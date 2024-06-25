@@ -1,14 +1,15 @@
 <template>
-  <div id="app" >
-        <testpaper-title/>
-  </div> 
+  <div class="test-paper-list-container">
+    <testpaper-header/>
+  </div>
 </template>
 
 <script>
-import testpaperTitle from './components/testpaperTitle.vue';
+import testpaperHeader from './components/header.vue';
+
 export default {
-    components: {
-        testpaperTitle
-    }
+  components: {
+    testpaperHeader
+  }
 };
 </script>

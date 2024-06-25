@@ -1,5 +1,4 @@
 import Vue from 'vue/dist/vue.esm.js';
-import _ from 'lodash';
 import 'moment';
 import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
