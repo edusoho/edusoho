@@ -130,6 +130,7 @@ export default {
       resultId: null, // 考试结果ID
       again: 0, // 是否再考一次
       result: {}, // 返回的考试结果对象
+      testpaperId: '',
       calHeight: null, // 题目列表高度
       subjectList: {}, // 题目列表对象
       question_type_seq: [], // 考试已有题型
@@ -354,7 +355,7 @@ export default {
       this.$router.push({
         name: 'testpaperIntro',
         query: {
-          testId: this.result.testId,
+          testId: this.testpaperId,
           targetId: this.reportData.taskId,
         },
       });
@@ -373,7 +374,7 @@ export default {
       }).then(res => {
         this.courseId = res.testpaperResult.courseId
         const { canDoAgain  } = res.task.activity.testpaperInfo;
-
+        this.testpaperId = res.task.activity.mediaId;
         this.testpaperTitle = res.task.title;
         this.setNavbarTitle(res.task.title);
         this.redoInterval = Number(
