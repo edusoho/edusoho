@@ -1,73 +1,120 @@
-.ant-modal-body {
+.create-test-paper-modal-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  .create-test-paper-modal-body-label {
     display: flex;
-}
+    padding: 5px 0;
+    align-items: center;
+    gap: 4px;
 
-.create-modal-type {
-    width: 56px;
-}
+    .create-test-paper-modal-body-label-placeholder {
+      width: 8px;
+    }
 
-.create-mode-type-list {
-    margin-left: 16px;
+    .create-test-paper-modal-body-label-text {
+      color: #37393D;
+      font-family: "PingFang SC";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 22px;
+    }
+  }
 
-    li {
-        position: relative;
-        margin-bottom: 16px;
-        padding: 16px 32px;
-        width: 356px;
-        border-radius: 4px;
-        border: 1px solid #E5E6EB;
+  .create-test-paper-modal-body-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
 
-        img {
-            margin-top: -4px;
-            margin-right: 8px;
+    .create-test-paper-modal-body-list-item {
+      position: relative;
+      display: flex;
+      width: 356px;
+      padding: 16px 32px;
+      align-items: center;
+      gap: 24px;
+      border-radius: 4px;
+      border: 1px solid #E5E6EB;
+
+      .create-test-paper-modal-body-list-item-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+
+        .create-test-paper-modal-body-list-item-content-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .create-test-paper-modal-body-list-item-content-title-icon {
             width: 18px;
             height: 18px;
-        }
-        .list-active-image {
+          }
+
+          .list-active-image {
             display: none;
-        }
-        .select-image {
-            display: none;
-            position: absolute;
-            top: 3px;
-            right: -8px;
-            width: 40px;
-            height: 40px;
-        }
-        span {
+          }
+
+          .create-test-paper-modal-body-list-item-content-title-text {
             color: #37393D;
             text-align: center;
+            font-family: "PingFang SC";
             font-size: 16px;
             font-style: normal;
             font-weight: 500;
             line-height: 22px;
+          }
         }
 
-        p {
-            margin: 12px 0 0 0;
-            color: #919399;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 22px;
+        .create-test-paper-modal-body-list-item-content-description {
+          color: #919399;
+          font-family: "PingFang SC";
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22px;
         }
-    }
+      }
 
-    .active {
-        border-radius: 4px;
+      .create-test-paper-modal-body-list-item-checked {
+        display: none;
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        width: 40px;
+        height: 40px;
+      }
+
+      &.active {
         border: 1px solid #46C37B;
         background: rgba(70, 195, 123, 0.02);
-        span,p {
-            color: #46C37B;
+
+        .create-test-paper-modal-body-list-item-content-title-text, .create-test-paper-modal-body-list-item-content-description {
+          color: #46C37B !important;
         }
+
         .list-image {
-           display: none;
+          display: none;
         }
+
         .list-active-image {
-            display: inline-block;
+          display: inline-block !important;
         }
-        .select-image {
-            display: block;
+
+        .create-test-paper-modal-body-list-item-checked {
+          display: block;
         }
+      }
     }
+  }
+}
+
+.create-test-paper-modal {
+  .ant-modal-footer {
+    padding: 10px 24px;
+  }
 }

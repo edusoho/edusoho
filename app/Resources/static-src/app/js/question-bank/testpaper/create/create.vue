@@ -4,7 +4,7 @@
       <div class="test-create-title-left">
         <div class="test-create-title-left-back" @click="back()">
           <span class="test-create-title-left-back-img">
-            <img src="/static-dist/app/img/question-bank/back-image.png" alt="" />
+            <img src="/static-dist/app/img/question-bank/back-image.png" alt=""/>
           </span>
           <span class="test-create-title-left-back-text">返回</span>
         </div>
@@ -25,62 +25,85 @@
     </div>
 
     <div class="test-create-content">
-      <a-form id="test-create-form" :form="form">
-        <a-form-item label="试卷名称">
-          <a-input placeholder="请输入试卷说明"
-                   v-decorator="[
-          'testname',
-          { rules: [{ required: true, message: '请输入试卷名称' }] },
-        ]"/>
-          <span class="maxNum">0/50</span>
-        </a-form-item>
-        <a-form-item label="试卷说明">
-          <a-input
-            placeholder="请输入试卷说明"
-            @focus="isShow = true"
-            v-show="!isShow"
-          />
-          <span class="maxNum">0/500</span>
-          <div v-show="isShow">
-            <a-textarea
-              :data-image-download-url="showCKEditorData.publicPath"
-              :name="`test-paper-explain`"
-            />
+      <a-form id="test-create-form" :form="form" class="test-paper-save-form">
+        <div class="test-paper-save-form-item">
+          <div class="test-paper-save-form-item-label">
+            <span class="test-paper-save-form-item-label-required">*</span>
+            试卷名称
           </div>
-        </a-form-item>
-        <div class="test-num-tips" v-show="showNumTips">
-          为了确保每位学生都能获得丰富多样的学习体验，并考虑到系统处理效率及资源分配的最优状态，我们精心设定了试卷生成的灵活性与合理性平衡点。目前，系统支持您创建最多200张独特的随机试卷
-        </div>
-        <a-form-item label="试卷份数">
-          <div class="test-paper-number">
-            <a-input-number
-              id="inputNumber"
-              v-model="testNum"
-              :min="1"
-              :max="10"
-              @change="onChange"
+          <a-form-item>
+            <a-input
+              placeholder="请输入试卷名称"
               v-decorator="[
+                'testname',
+                { rules: [{ required: true, message: '请输入试卷名称' }] },
+              ]"
+            />
+            <span class="max-num">0/50</span>
+          </a-form-item>
+        </div>
+
+        <div class="test-paper-save-form-item">
+          <div class="test-paper-save-form-item-label">试卷说明</div>
+          <a-form-item>
+            <a-input
+              placeholder="请输入试卷说明"
+              @focus="isShow = true"
+              v-show="!isShow"
+            />
+            <span class="max-num">0/500</span>
+            <div v-show="isShow">
+              <a-textarea
+                :data-image-download-url="showCKEditorData.publicPath"
+                :name="`test-paper-explain`"
+              />
+            </div>
+          </a-form-item>
+        </div>
+
+        <div class="test-paper-save-form-item">
+          <div class="test-num-tips" v-show="showNumTips">
+            为了确保每位学生都能获得丰富多样的学习体验，并考虑到系统处理效率及资源分配的最优状态，我们精心设定了试卷生成的灵活性与合理性平衡点。目前，系统支持您创建最多200张独特的随机试卷
+          </div>
+          <div class="test-paper-save-form-item-label">
+            <span class="test-paper-save-form-item-label-required">*</span>
+            试卷份数
+          </div>
+          <a-form-item>
+            <div class="test-paper-number">
+              <a-input-number
+                id="inputNumber"
+                v-model="testNum"
+                :min="1"
+                :max="10"
+                @change="onChange"
+                v-decorator="[
                'testnumber',
               { rules: [{ required: true, message: '请至少设置 1 份试卷' }] },
              ]"
-            />
-            <span class="test-paper-number-text">≤200</span>
-            <span class="test-num-tips-image" @mouseenter="showNumTips = true" @mouseleave="showNumTips = false">
+              />
+              <span class="test-paper-number-text">≤200</span>
+              <span class="test-num-tips-image" @mouseenter="showNumTips = true" @mouseleave="showNumTips = false">
               <img
                 src="/static-dist/app/img/question-bank/test-num-tips.png"
                 alt=""
               />
             </span>
-          </div>
-        </a-form-item>
-        <a-form-item label="抽题方式">
-          <div class="extraction-method-content">
-            <a-radio-group name="radioGroup" :default-value="1">
-              <a-radio :value="1">按题型抽题</a-radio>
-              <a-radio :value="2">按题型+分类抽题</a-radio>
-            </a-radio-group>
-            <a-dropdown :trigger="['click']" placement="bottomRight">
-              <div class="question-type-show">
+            </div>
+          </a-form-item>
+        </div>
+
+        <div class="extraction-method-content">
+          <div class="extraction-method-content-setting">
+            <div class="test-paper-save-form-item">
+              <div class="test-paper-save-form-item-label">抽题方式</div>
+              <a-radio-group name="radioGroup" :default-value="1">
+                <a-radio :value="1">按题型抽题</a-radio>
+                <a-radio :value="2">按题型+分类抽题</a-radio>
+              </a-radio-group>
+            </div>
+            <a-dropdown :trigger="['click']" placement="bottomRight" @visibleChange="onMenuVisibleChange">
+              <div class="question-type-display-setting">
                 <img
                   src="/static-dist/app/img/question-bank/question-type-show-image.png"
                   alt=""
@@ -88,9 +111,11 @@
                 <span>题型展示设置</span>
               </div>
               <a-menu slot="overlay" class="question-type-setting-menu">
-                <draggable v-model="questionTypes">
+                <draggable v-model="questionAllTypes" handle=".question-type-setting-menu-item-label-icon"
+                           drag-class="question-type-setting-menu-item-drag">
                   <transition-group>
-                    <a-menu-item v-for="questionType in questionTypes" :key="questionType.type" class="question-type-setting-menu-item">
+                    <a-menu-item v-for="questionType in questionAllTypes" :key="questionType.type"
+                                 class="question-type-setting-menu-item">
                       <span class="question-type-setting-menu-item-label">
                         <img
                           class="question-type-setting-menu-item-label-icon"
@@ -99,48 +124,52 @@
                         />
                         <span class="question-type-setting-menu-item-label-text">{{ questionType.name }}</span>
                       </span>
-                      <a-switch v-model:checked="questionType.checked" class="question-type-setting-menu-item-switch"></a-switch>
+                      <a-switch v-model:checked="questionType.checked"
+                                class="question-type-setting-menu-item-switch"></a-switch>
                     </a-menu-item>
                   </transition-group>
                 </draggable>
               </a-menu>
             </a-dropdown>
           </div>
-        </a-form-item>
-        <div class="question-type">
-          <div class="question-typ-top">
-            <h3 class="question-typ-top-list">
-              <span v-for="(item,index) in questionType" :key="index">{{item.name}}</span>
-            </h3>
-          </div>
-          <div class="question-type-content">
-            <p class="question-type-content-list">
-              <span>题目数量</span>
-              <input v-for="(data, i) in 7" :key="i" />
-            </p>
-            <p class="question-type-content-list">
-              <span>每题分数</span>
-              <input v-for="(data, i) in 7" :key="i" />
-            </p>
-            <p class="question-type-content-list">
+
+          <div class="question-type-display">
+            <div class="question-typ-top">
+              <h3 class="question-typ-top-list">
+                <span v-for="(item,index) in questionType" :key="index">{{ item.name }}</span>
+              </h3>
+            </div>
+            <div class="question-type-content">
+              <p class="question-type-content-list">
+                <span>题目数量</span>
+                <input v-for="(data, i) in 7" :key="i"/>
+              </p>
+              <p class="question-type-content-list">
+                <span>每题分数</span>
+                <input v-for="(data, i) in 7" :key="i"/>
+              </p>
+              <p class="question-type-content-list">
               <span class="question-type-content-list-total">
                 合计
                 <i>(题数/总分)</i>
                </span>
-              <input v-for="(data, i) in 7" :key="i" disabled />
-            </p>
+                <input v-for="(data, i) in 7" :key="i" disabled/>
+              </p>
+            </div>
           </div>
         </div>
-        <a-form-item label="难度调节">
-          <a-switch checked-children="开启" un-checked-children="关闭" />
-        </a-form-item>
+
+        <div class="test-paper-save-form-item">
+          <div class="test-paper-save-form-item-label">难度调节</div>
+          <a-switch checked-children="开启" un-checked-children="关闭"/>
+        </div>
       </a-form>
     </div>
 
-    <footer>
-      <button class="test-create-save" @click="saveBtn()">保存</button>
+    <div class="test-paper-save-footer">
+      <button class="test-paper-save" @click="saveTestPaper()">保存</button>
       <button class="test-create-cancel">取消</button>
-    </footer>
+    </div>
   </div>
 </template>
 
@@ -194,7 +223,7 @@ export default {
           name: "材料题",
         },
       ],
-      questionTypes: [
+      questionAllTypes: [
         {
           type: "single_choice",
           name: "单选题",
@@ -231,7 +260,7 @@ export default {
           checked: true,
         },
       ],
-      form: this.$form.createForm(this, { name: "save-test-paper" }),
+      form: this.$form.createForm(this, {name: "save-test-paper"}),
     };
   },
   mounted() {
@@ -262,6 +291,9 @@ export default {
         this.isShow = false
       })
     },
+    renderQuestionTypeTable() {
+
+    },
     back() {
       this.$router.push({
         name: "list",
@@ -270,7 +302,9 @@ export default {
     onChange(value) {
       console.log("changed", value);
     },
-    saveBtn() {
+    onMenuVisibleChange(visible) {
+    },
+    saveTestPaper() {
       this.form.validateFields(err => {
         if (!err) {
           console.info('success');
@@ -280,7 +314,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-
-</style>
