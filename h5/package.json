@@ -18,6 +18,9 @@
     "style-lint:fix": "stylelint src/**/*.scss --fix",
     "format-code": "prettier-eslint --write \"src/**/*.js\" \"src/**/*.vue\""
   },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"

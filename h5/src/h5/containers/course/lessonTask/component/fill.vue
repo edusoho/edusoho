@@ -97,7 +97,7 @@
               </button>
               <p class="ai-left-tittle" v-show="stopAiExplain">{{$t('courseLearning.beGenerating')}}</p>
             </div>
-            <div ai-content-right>
+            <div>
               <img src="static/images/explain-ai-img.png" class="ai-right-img" />
             </div>
           </div>
@@ -502,7 +502,7 @@ export default {
           .ai-img {
             margin-right: 5px;
             width: 16px;
-            height: 16px;
+            height: 17px;
           }
         }
         .ai-stopbtn {

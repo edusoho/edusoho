@@ -8,6 +8,7 @@
       :touchable="touchable"
       :loop="false"
       :duration="100"
+      :lazy-render="true"
       @change="changeswiper"
     >
       <van-swipe-item
@@ -156,17 +157,6 @@
             :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
-          <!-- <analysis
-            v-if="!canDo"
-            :test-result="paper.testResult"
-            :analysis="paper.analysis"
-            :answer="paper.answer"
-            :subject="paper.type"
-            :is-current="currentIndex === index"
-            :attachments="paper.attachments"
-            :is-exercise="isExercise"
-            :result-show="resultShow"
-          /> -->
         </div>
       </van-swipe-item>
     </van-swipe>
@@ -202,7 +192,6 @@ import headTop from '../component/head';
 import choiceType from '../component/choice';
 import singleChoice from '../component/single-choice';
 import determineType from '../component/determine';
-// import analysis from '../component/analysis';
 import { Toast } from 'vant';
 import _ from 'lodash';
 
@@ -218,7 +207,6 @@ export default {
     choiceType,
     singleChoice,
     determineType,
-    // analysis
   },
   props: {
     info: {

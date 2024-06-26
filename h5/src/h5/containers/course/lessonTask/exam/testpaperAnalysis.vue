@@ -247,67 +247,6 @@ export default {
         this.wrongList.push(item);
       }
     },
-    // //处理六大题型数据
-    // sixType(type, item) {
-    //   if (type != "fill" && type != "essay") {
-    //     //   由于后台返回的是string格式，前端需要用number格式才能回显。周一让后台统一改为number
-    //     item.answer.forEach((num, index) => {
-    //       item.answer[index] = Number(num);
-    //     });
-    //     let answer = item.answer;
-    //     if (item.testResult) {
-    //       item.testResult.answer.forEach((num, index) => {
-    //         item.testResult.answer[index] = Number(num);
-    //       });
-    //       //为了回显，这里传给子组件的answer要是正确答案和学员选择答案的合集，因为都要选中。
-    //       answer = Array.from(
-    //         new Set([...item.answer, ...item.testResult.answer])
-    //       );
-    //     }
-    //     this.$set(this.answer, item.id, answer);
-    //     // this.info.push(item);
-    //   }
-
-    //   if (type == "essay") {
-    //     let answer = item.testResult ? item.testResult.answer : [];
-    //     this.$set(this.answer, item.id, answer);
-    //     // this.info.push(item);
-    //   }
-
-    //   if (type == "fill") {
-    //     let fillstem = item.stem;
-    //     let { stem, index } = this.fillReplce(fillstem, 0);
-    //     item.stem = stem;
-    //     item.fillnum = index;
-    //     let answer = item.testResult ? item.testResult.answer : [];
-    //     this.$set(this.answer, item.id, answer);
-    //     // this.info.push(item);
-    //   }
-    //   this.info.push(item);
-    //   this.allList.push(item);
-    //   if (item.testResult) {
-    //     if (
-    //       (item.testResult && item.testResult.status !== "right") ||
-    //       !item.testResult
-    //     ) {
-    //       let type = item.parentType ? item.parentType : item.type;
-    //       if (!this.wrongType.includes(type)) {
-    //         this.wrongType.push(type);
-    //       }
-    //       this.wrongList.push(item);
-    //     }
-    //   }
-    // },
-    // //处理富文本，并统计填空题的空格个数
-    // fillReplce(stem, index) {
-    //   const reg = /\[\[.+?\]\]/;
-    //   while (reg.exec(stem)) {
-    //     stem = stem.replace(reg, () => {
-    //       return `<span class="fill-bank">（${++index}）</span>`;
-    //     });
-    //   }
-    //   return { stem, index };
-    // },
     // 答题卡状态判断
     formatStatus(item) {
       if (item.testResult) {
