@@ -1,15 +1,15 @@
 <template>
   <div class="test-paper-list-container">
-    <testpaper-header/>
+    <list-header/>
   </div>
 </template>
 
 <script>
-import testpaperHeader from './components/header.vue';
+import listHeader from './components/header.vue';
 
 export default {
   components: {
-    testpaperHeader
+    listHeader
   }
-};
+}
 </script>

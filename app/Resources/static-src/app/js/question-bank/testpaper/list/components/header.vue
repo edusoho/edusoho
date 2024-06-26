@@ -21,31 +21,45 @@
     </div>
 
     <a-modal
+      :width="488"
+      class="create-test-paper-modal"
       v-model="isShowModal"
       title="创建试卷"
       cancelText="取消"
       okText="创建"
       @ok="handleOk"
     >
-      <p class="create-modal-type">选择类型</p>
-      <ul class="create-mode-type-list">
-        <li
-          v-for="data in testTypeList"
-          :key="data.id"
-          :class="{ active: activeTestTypeIndex === data.id }"
-          @click="activeTestTypeIndex = data.id"
-        >
-          <img :src="data.img" alt="" class="list-image" />
-          <img :src="data.activeImg" alt="" class="list-active-image" />
-          <span>{{ data.title }}</span>
-          <img
-            src="/static-dist/app/img/question-bank/select-image.png"
-            alt=""
-            class="select-image"
-          />
-          <p>{{ data.text }}</p>
-        </li>
-      </ul>
+      <div class="create-test-paper-modal-body">
+        <div class="create-test-paper-modal-body-label">
+          <span class="create-test-paper-modal-body-label-placeholder"></span>
+          <span class="create-test-paper-modal-body-label-text">选择类型</span>
+        </div>
+        <div class="create-test-paper-modal-body-list">
+          <div
+            v-for="data in testTypeList"
+            :key="data.id"
+            class="create-test-paper-modal-body-list-item"
+            :class="{ active: activeTestTypeIndex === data.id }"
+            @click="activeTestTypeIndex = data.id"
+          >
+            <div class="create-test-paper-modal-body-list-item-content">
+              <div class="create-test-paper-modal-body-list-item-content-title">
+                <img :src="data.img" alt=""
+                     class="create-test-paper-modal-body-list-item-content-title-icon list-image"/>
+                <img :src="data.activeImg" alt=""
+                     class="create-test-paper-modal-body-list-item-content-title-icon list-active-image"/>
+                <span class="create-test-paper-modal-body-list-item-content-title-text">{{ data.title }}</span>
+              </div>
+              <div class="create-test-paper-modal-body-list-item-content-description">{{ data.text }}</div>
+            </div>
+            <img
+              src="/static-dist/app/img/question-bank/select-image.png"
+              alt=""
+              class="create-test-paper-modal-body-list-item-checked"
+            />
+          </div>
+        </div>
+      </div>
     </a-modal>
   </div>
 </template>
