@@ -134,27 +134,27 @@
           </div>
 
           <div class="question-type-display">
-            <div class="question-typ-top">
-              <h3 class="question-typ-top-list">
-                <span v-for="(item,index) in questionType" :key="index">{{ item.name }}</span>
-              </h3>
+            <div class="question-type-display-header">
+              <div class="question-type-display-header-top">题型设置</div>
+              <div class="question-type-display-header-normal">题目数量</div>
+              <div class="question-type-display-header-normal">每题分值</div>
+              <div class="question-type-display-header-bottom">
+                <span class="question-type-display-header-bottom-title">合计</span>
+                <span class="question-type-display-header-bottom-description">（题数/总分）</span>
+              </div>
             </div>
-            <div class="question-type-content">
-              <p class="question-type-content-list">
-                <span>题目数量</span>
-                <input v-for="(data, i) in 7" :key="i"/>
-              </p>
-              <p class="question-type-content-list">
-                <span>每题分数</span>
-                <input v-for="(data, i) in 7" :key="i"/>
-              </p>
-              <p class="question-type-content-list">
-              <span class="question-type-content-list-total">
-                合计
-                <i>(题数/总分)</i>
-               </span>
-                <input v-for="(data, i) in 7" :key="i" disabled/>
-              </p>
+            <div v-for="type in questionDisplayTypes">
+              <div class="question-type-display-header-top">{{ type.name }}</div>
+              <div class="question-type-display-cell-number">
+                <span class="question-type-display-cell-number-edit">
+                  <input type="number" value="0"/>
+                </span>
+                <span class="question-type-display-cell-number-total">/5</span>
+              </div>
+              <div class="question-type-display-cell-score">
+                <input type="number" value="2"/>
+              </div>
+              <div class="question-type-display-cell-sum">0 / 0.0</div>
             </div>
           </div>
         </div>
@@ -197,32 +197,7 @@ export default {
         publicPath: "/static-dist/libs/es-ckeditor/ckeditor.js?version=23.1.6"
       },
       testNum: 1,
-      questionType: [
-        {
-          name: "题型设置",
-        },
-        {
-          name: "单选题",
-        },
-        {
-          name: "多选题",
-        },
-        {
-          name: "问答题",
-        },
-        {
-          name: "不定项",
-        },
-        {
-          name: "判断题",
-        },
-        {
-          name: "填空题",
-        },
-        {
-          name: "材料题",
-        },
-      ],
+      questionDisplayTypes: [],
       questionAllTypes: [
         {
           type: "single_choice",
@@ -264,6 +239,7 @@ export default {
     };
   },
   mounted() {
+    this.renderQuestionTypeTable();
     this.$nextTick(() => {
       loadScript(this.showCKEditorData.jqueryPath, err => {
         if (err) {
@@ -292,7 +268,13 @@ export default {
       })
     },
     renderQuestionTypeTable() {
-
+      let displayTypes = [];
+      for (const type of this.questionAllTypes) {
+        if (type.checked) {
+          displayTypes.push(type);
+        }
+      }
+      this.questionDisplayTypes = displayTypes;
     },
     back() {
       this.$router.push({
@@ -303,6 +285,9 @@ export default {
       console.log("changed", value);
     },
     onMenuVisibleChange(visible) {
+      if (!visible) {
+        this.renderQuestionTypeTable();
+      }
     },
     saveTestPaper() {
       this.form.validateFields(err => {
