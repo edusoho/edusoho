@@ -29,7 +29,7 @@
         <div class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
-            试卷名称
+            <span class="test-paper-save-form-item-label-text">试卷名称</span>
           </div>
           <a-form-item>
             <a-input
@@ -44,7 +44,9 @@
         </div>
 
         <div class="test-paper-save-form-item">
-          <div class="test-paper-save-form-item-label">试卷说明</div>
+          <div class="test-paper-save-form-item-label">
+            <span class="test-paper-save-form-item-label-text">试卷说明</span>
+          </div>
           <a-form-item>
             <a-input
               placeholder="请输入试卷说明"
@@ -62,47 +64,50 @@
         </div>
 
         <div class="test-paper-save-form-item">
-          <div class="test-num-tips" v-show="showNumTips">
-            为了确保每位学生都能获得丰富多样的学习体验，并考虑到系统处理效率及资源分配的最优状态，我们精心设定了试卷生成的灵活性与合理性平衡点。目前，系统支持您创建最多200张独特的随机试卷
-          </div>
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
-            试卷份数
+            <span class="test-paper-save-form-item-label-text">试卷份数</span>
           </div>
-          <a-form-item>
-            <div class="test-paper-number">
+          <div class="test-paper-number">
+            <a-form-item>
               <a-input-number
                 id="inputNumber"
                 v-model="testNum"
                 :min="1"
-                :max="10"
-                @change="onChange"
+                :max="200"
                 v-decorator="[
-               'testnumber',
-              { rules: [{ required: true, message: '请至少设置 1 份试卷' }] },
-             ]"
+                  'testnumber',
+                  { rules: [{ required: true, message: '请至少设置 1 份试卷' }] },
+                ]"
               />
-              <span class="test-paper-number-text">≤200</span>
-              <span class="test-num-tips-image" @mouseenter="showNumTips = true" @mouseleave="showNumTips = false">
+            </a-form-item>
+            <span class="test-paper-number-text">≤200</span>
+            <a-tooltip overlayClassName="test-paper-number-tips">
+              <template slot="title">
+                为了确保每位学生都能获得丰富多样的学习体验，并考虑到系统处理效率及资源分配的最优状态，我们精心设定了试卷生成的灵活性与合理性平衡点。目前，系统支持您创建最多200张独特的随机试卷
+              </template>
               <img
+                class="test-paper-number-tips-icon"
                 src="/static-dist/app/img/question-bank/test-num-tips.png"
                 alt=""
               />
-            </span>
-            </div>
-          </a-form-item>
+            </a-tooltip>
+          </div>
         </div>
 
         <div class="extraction-method-content">
           <div class="extraction-method-content-setting">
             <div class="test-paper-save-form-item">
-              <div class="test-paper-save-form-item-label">抽题方式</div>
-              <a-radio-group name="radioGroup" :default-value="1">
-                <a-radio :value="1">按题型抽题</a-radio>
-                <a-radio :value="2">按题型+分类抽题</a-radio>
+              <div class="test-paper-save-form-item-label">
+                <span class="test-paper-save-form-item-label-text">抽题方式</span>
+              </div>
+              <a-radio-group name="type" default-value="questionType" @change="onRadioChange">
+                <a-radio value="questionType">按题型抽题</a-radio>
+                <a-radio value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
-            <a-dropdown :trigger="['click']" placement="bottomRight" @visibleChange="onMenuVisibleChange">
+            <a-dropdown :trigger="['click']" placement="bottomRight" @visibleChange="onMenuVisibleChange"
+                        v-show="chooseQuestionBy === 'questionType'">
               <div class="question-type-display-setting">
                 <img
                   src="/static-dist/app/img/question-bank/question-type-show-image.png"
@@ -133,7 +138,7 @@
             </a-dropdown>
           </div>
 
-          <div class="question-type-display">
+          <div class="question-type-display" v-show="chooseQuestionBy === 'questionType'">
             <div class="question-type-display-header">
               <div class="question-type-display-header-top">题型设置</div>
               <div class="question-type-display-header-normal">题目数量</div>
@@ -157,10 +162,23 @@
               <div class="question-type-display-cell-sum">0 / 0.0</div>
             </div>
           </div>
+
+          <div class="question-category-choose" v-show="chooseQuestionBy === 'questionTypeCategory'">
+            <div class="question-category-choose-btn">
+              <img
+                class="question-category-choose-btn-icon"
+                src="/static-dist/app/img/question-bank/question-category-choose.png"
+                alt=""
+              />
+              <span class="question-category-choose-btn-text">选择分类</span>
+            </div>
+          </div>
         </div>
 
         <div class="test-paper-save-form-item">
-          <div class="test-paper-save-form-item-label">难度调节</div>
+          <div class="test-paper-save-form-item-label">
+            <span class="test-paper-save-form-item-label-text">难度调节</span>
+          </div>
           <a-switch checked-children="开启" un-checked-children="关闭"/>
         </div>
       </a-form>
@@ -184,7 +202,6 @@ export default {
   data() {
     return {
       isShow: false,
-      showNumTips: false,
       explainEditor: "",
       showCKEditorData: {
         filebrowserImageDownloadUrl:
@@ -197,6 +214,7 @@ export default {
         publicPath: "/static-dist/libs/es-ckeditor/ckeditor.js?version=23.1.6"
       },
       testNum: 1,
+      chooseQuestionBy: 'questionType',
       questionDisplayTypes: [],
       questionAllTypes: [
         {
@@ -281,13 +299,13 @@ export default {
         name: "list",
       });
     },
-    onChange(value) {
-      console.log("changed", value);
-    },
     onMenuVisibleChange(visible) {
       if (!visible) {
         this.renderQuestionTypeTable();
       }
+    },
+    onRadioChange(event) {
+      this.chooseQuestionBy = event.target.value;
     },
     saveTestPaper() {
       this.form.validateFields(err => {

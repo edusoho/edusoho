@@ -112,11 +112,11 @@
 
     .test-paper-save-form {
       display: flex;
+      min-height: 492px;
       flex-direction: column;
       align-items: flex-start;
       gap: 24px;
-      flex: 1 0 0;
-      align-self: stretch;
+      flex-shrink: 0;
 
       .test-paper-save-form-item {
         display: flex;
@@ -140,24 +140,93 @@
             font-weight: 400;
             line-height: 20px;
           }
+
+          .test-paper-save-form-item-label-text {
+            color: #37393D;
+            font-family: "PingFang SC";
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 22px;
+          }
+        }
+
+        .test-paper-number {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .test-paper-number-text {
+            color: #5E6166;
+            font-family: "PingFang SC";
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 22px;
+          }
+
+          .test-paper-number-tips-icon {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+          }
         }
 
         .ant-form-item {
           margin-bottom: 0;
 
-          .ant-input {
-            width: 1000px;
-            padding: 6px 12px;
-            border-radius: 2px;
-            border: 1px solid #E5E6EB;
-            background: #FFF;
+          .ant-form-item-control {
+            line-height: normal;
+
+            .ant-input {
+              width: 1000px;
+              height: 32px;
+              padding: 6px 12px;
+              border-radius: 2px;
+              border: 1px solid #E5E6EB;
+              background: #FFF;
+
+              overflow: hidden;
+              color: #37393D;
+              text-overflow: ellipsis;
+              font-family: "PingFang SC";
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 20px;
+            }
+
+            .ant-input-number {
+              display: flex;
+              width: 70px;
+              height: 32px;
+              align-items: center;
+              border-radius: 2px;
+              border: 1px solid #DCDEE0;
+              background: #FFF;
+              color: #37393D;
+              font-family: "PingFang SC";
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 22px;
+
+              .ant-input-number-input {
+                height: 32px;
+              }
+            }
           }
 
           .max-num {
             position: absolute;
             right: 10px;
+            top: -1px;
             color: #C0C0C2;
+            font-family: "PingFang SC";
             font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 20px;
           }
         }
       }
@@ -343,49 +412,43 @@
             height: 100%;
           }
         }
-      }
-    }
 
-    .test-paper-number {
-      .test-paper-number-text {
-        margin: 0 8px;
-        color: #5E6166;
-        font-size: 14px;
-      }
+        .question-category-choose {
+          display: flex;
+          padding: 0 98px;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+          align-self: stretch;
 
-      .test-num-tips-image {
-        img {
-          margin-top: -3px;
-          width: 14px;
-          height: 14px;
+          .question-category-choose-btn {
+            display: flex;
+            padding: 4px 15px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border-radius: 2px;
+            border: 1px dashed #46C37B;
+            background: #FFF;
+            cursor: pointer;
+
+            .question-category-choose-btn-icon {
+              width: 14px;
+              height: 14px;
+            }
+
+            .question-category-choose-btn-text {
+              color: #46C37B;
+              text-align: center;
+              font-family: "PingFang SC";
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 22px;
+            }
+          }
         }
       }
-    }
-
-    .test-num-tips {
-      position: relative;
-      padding: 8px;
-      margin-left: 235px;
-      width: 298px;
-      height: 122px;
-      border-radius: 2px;
-      background: #37393D;
-      color: #FFF;
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 22px;
-    }
-
-    .test-num-tips::after {
-      display: block;
-      content: '';
-      border-width: 6px 6px 6px 6px;
-      border-style: solid;
-      border-color: #37393D transparent transparent transparent;
-      position: absolute;
-      left: 12px;
-      top: 121px;
     }
   }
 
@@ -493,5 +556,12 @@
   .question-type-setting-menu-item-drag {
     background: #fff;
     box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0px 6px 16px 0px rgba(0, 0, 0, 0.08), 0px 9px 28px 8px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.test-paper-number-tips {
+  .ant-tooltip-inner {
+    width: 298px;
+    border-radius: 2px;
   }
 }
