@@ -2,7 +2,7 @@
   <div class="test-create">
     <div class="test-create-title">
       <div class="test-create-title-left">
-        <div class="test-create-title-left-back" @click="back()">
+        <div class="test-create-title-left-back" @click="backConfirm">
           <span class="test-create-title-left-back-img">
             <img src="/static-dist/app/img/question-bank/back-image.png" alt=""/>
           </span>
@@ -164,7 +164,7 @@
           </div>
 
           <div class="question-category-choose" v-show="chooseQuestionBy === 'questionTypeCategory'">
-            <div class="question-category-choose-btn">
+            <div class="question-category-choose-btn" @click="displayChooseCategoryDrawer">
               <img
                 class="question-category-choose-btn-icon"
                 src="/static-dist/app/img/question-bank/question-category-choose.png"
@@ -172,6 +172,9 @@
               />
               <span class="question-category-choose-btn-text">选择分类</span>
             </div>
+<!--            <a-drawer title="选择分类" :visible="drawerVisible">-->
+
+<!--            </a-drawer>-->
           </div>
         </div>
 
@@ -215,6 +218,7 @@ export default {
       },
       testNum: 1,
       chooseQuestionBy: 'questionType',
+      drawerVisible: false,
       questionDisplayTypes: [],
       questionAllTypes: [
         {
@@ -294,9 +298,23 @@ export default {
       }
       this.questionDisplayTypes = displayTypes;
     },
-    back() {
-      this.$router.push({
-        name: "list",
+    backConfirm() {
+      this.$confirm({
+        title: '是否要保存更改？',
+        okText: '保存',
+        cancelText: '不保存',
+        centered: true,
+        onOk: () => {
+          this.$router.push({
+            name: 'list',
+          });
+          this.$message.success('创建成功');
+        },
+        onCancel: () => {
+          this.$router.push({
+            name: 'list',
+          });
+        }
       });
     },
     onMenuVisibleChange(visible) {
@@ -306,6 +324,9 @@ export default {
     },
     onRadioChange(event) {
       this.chooseQuestionBy = event.target.value;
+    },
+    displayChooseCategoryDrawer() {
+      this.drawerVisible = true;
     },
     saveTestPaper() {
       this.form.validateFields(err => {
