@@ -32,7 +32,7 @@
 
          <div class="notice" v-if="type === 'ai_personality'">
             <van-notice-bar class="notice-boreder" mode="closeable" color="#37393D" :scrollable="false"  background="#edf9f2">
-              <span>{{ $t('courseLearning.aiTips') }}</span>
+              <span>{{ $t('courseLearning.exerciseAiTips') }}</span>
               <template #left-icon>
                 <img class="notice-ai-img" src="static/images/AI.png" />
               </template>

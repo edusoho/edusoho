@@ -634,7 +634,7 @@ export default {
     stopGeneration: '停止生成',
     reGenerate: '重新生成',
     beGenerating: '正在生成，请耐心等待哦～',
-    aiTips: '智选练习：精准个性化推送，助力高效复习',
+    exerciseAiTips: '智选练习：精准个性化推送，助力高效复习',
   },
   classLearning: {
     intor: '班级介绍',
