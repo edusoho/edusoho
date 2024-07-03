@@ -30,6 +30,15 @@
             :reviewedCount="reviewedCount ? reviewedCount : exerciseInfo ? exerciseInfo.reviewedCount : 0"
           />
 
+         <div class="notice" v-if="type === 'ai_personality'">
+            <van-notice-bar class="notice-boreder" mode="closeable" color="#37393D" :scrollable="false"  background="#edf9f2">
+              <span>{{ $t('courseLearning.aiTips') }}</span>
+              <template #left-icon>
+                <img class="notice-ai-img" src="static/images/AI.png" />
+              </template>
+            </van-notice-bar>
+         </div>
+
           <single-choice
             v-if="paper.type == 'single_choice'"
             :ref="'submit'+index"
@@ -269,6 +278,10 @@ export default {
       default: ''
     },
     mode: {
+      type: String,
+      default: ''
+    },
+    type: {
       type: String,
       default: ''
     }

@@ -18,6 +18,7 @@
       :slide-index.sync="slideIndex"
       :all="info.length"
       :exerciseInfo="exerciseInfo"
+      :type="$route.query.type"
       :assessment_id="exerciseInfo.testId"
       :exerciseMode="exerciseMode"
       :admission_ticket="exerciseInfo.admission_ticket"
