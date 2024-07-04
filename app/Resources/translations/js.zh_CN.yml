@@ -2288,6 +2288,33 @@ question.bank.difficulty.normal: 一般
 question.bank.difficulty: 困难
 question.bank.reset.btn: 重置
 
+question.bank.paper.status: 状态
+question.bank.paper.type: 类型
+question.bank.paper.generating: 生成中
+question.bank.paper.draft: 草稿
+question.bank.paper.fail: 生成失败
+question.bank.paper.closed: 已关闭
+question.bank.paper.published: 已发布
+question.bank.paper.typeKeyword: 请输入关键词
+question.bank.paper.name: 名称
+question.bank.paper.creator: 创建人
+question.bank.paper.regular: 固定卷
+question.bank.paper.ai_personality: AI 个性卷
+question.bank.paper.random: 随机卷
+question.bank.paper.operation: 操作
+question.bank.paper.num: 试卷数量
+question.bank.paper.numberOfItems/score: 题数/分数
+question.bank.paper.creator/createdAt: 创建人/创建时间
+question.bank.paper.selectAll: 全选
+question.bank.paper.selectedItems: 选择 %select% 项
+question.bank.paper.pageTotal: 共 %total% 项
+question.bank.paper.preview: 预览
+question.bank.paper.close: 关闭
+question.bank.paper.edit: 编辑
+question.bank.paper.publish: 发布
+question.bank.paper.publish.success: 发布成功
+question.bank.paper.close.success: 关闭成功
+
 classroom.category.choose.text: 请选择班级分类
 course.category.choose.text: 请选择课程分类
 classroom.services.choose.train: 练
