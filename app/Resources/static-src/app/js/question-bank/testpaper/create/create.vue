@@ -154,7 +154,7 @@
                 <span class="question-type-display-cell-number-edit">
                   <input type="number" value="0"/>
                 </span>
-                <span class="question-type-display-cell-number-total">/5</span>
+                <span class="question-type-display-cell-number-total">/{{ questionCounts[type.type].total }}</span>
               </div>
               <div class="question-type-display-cell-score">
                 <input type="number" value="2"/>
@@ -237,6 +237,7 @@
 </template>
 
 <script>
+import { apiClient } from 'common/vue/service/api-client';
 import loadScript from "load-script";
 import Draggable from 'vuedraggable';
 
@@ -270,7 +271,7 @@ export default {
           checked: true,
         },
         {
-          type: "multiple_choice",
+          type: "choice",
           name: "多选题",
           checked: true,
         },
@@ -303,35 +304,35 @@ export default {
       questionCounts: {
         single_choice: {
           choose: 0,
-          total: 5,
+          total: 0,
         },
-        multiple_choice: {
+        choice: {
           choose: 0,
-          total: 5,
+          total: 0,
         },
         essay: {
           choose: 0,
-          total: 5,
+          total: 0,
         },
         uncertain_choice: {
           choose: 0,
-          total: 5,
+          total: 0,
         },
         determine: {
           choose: 0,
-          total: 5,
+          total: 0,
         },
         fill: {
           choose: 0,
-          total: 5,
+          total: 0,
         },
         material: {
           choose: 0,
-          total: 5,
+          total: 0,
         },
         sum: {
           choose: 0,
-          total: 35,
+          total: 0,
         },
       },
       difficultyScales: {
@@ -358,6 +359,7 @@ export default {
     };
   },
   mounted() {
+    this.getQuestionCounts();
     this.renderQuestionTypeTable();
     this.$nextTick(() => {
       loadScript(this.showCKEditorData.jqueryPath, err => {
@@ -385,6 +387,18 @@ export default {
       this.explainEditor.on("blur", () => {
         this.isShow = false
       })
+    },
+    getQuestionCounts() {
+      apiClient.get('/api/item/questionType/count', {
+        params: {
+          bank_id: document.getElementById('itemBankId').value,
+        }
+      }).then(res => {
+        res.forEach((item) => {
+          this.questionCounts[item.type].total = item.itemNum;
+          this.questionCounts.sum.total += item.itemNum;
+        });
+      });
     },
     renderQuestionTypeTable() {
       let displayTypes = [];
