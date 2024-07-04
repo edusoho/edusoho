@@ -27,6 +27,7 @@ class AssessmentFilter extends Filter
         'created_time',
         'updated_time',
         'sections',
+        'type',
         'created_user',
         'num',
     ];
