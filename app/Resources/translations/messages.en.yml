@@ -1534,7 +1534,7 @@ question_manage.import.administrator.tip1: Identify and import common formulas, 
 question_manage.import.administrator.tip2: Improve import recognition accuracy and make topic import easier
 question_manage.import.non-administrator-tip: To upgrade the cloud capability, you need to contact the super administrator for the import function
 question_manage.import.non.administrator.close.btn: I know
-question_manage.ai_analysis.introduction: [AI qustion analysis assistant] Coming!
+question_manage.ai_analysis.introduction: '[AI qustion analysis assistant] Coming!'
 question_manage.ai_analysis.introduction.content: I am your AI qustion assistant, click "AI analysis" to view the qustion analysis I search for you, the analysis content is for reference only.
 question_manage.ai_analysis.introduction.tip1: <b>Analytical ability：</b>Be suitable for the question that contain only text, image and video are not supported.
 question_manage.ai_analysis.introduction.tip2: <b>Teacher side：</b>Add an AI analysis button when creating a question or importing questions which without analysis.

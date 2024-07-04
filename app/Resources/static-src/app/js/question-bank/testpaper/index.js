@@ -9,7 +9,7 @@ const routes = [
     component: () => import('app/js/question-bank/testpaper/list/list.vue'),
     props: function () {
       return {
-        itemBankId: document.getElementById('questionBankId').value,
+        itemBankId: document.getElementById('itemBankId').value,
       }
     },
   },
