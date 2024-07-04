@@ -172,9 +172,9 @@
               />
               <span class="question-category-choose-btn-text">选择分类</span>
             </div>
-<!--            <a-drawer title="选择分类" :visible="drawerVisible">-->
+            <!--            <a-drawer title="选择分类" :visible="drawerVisible">-->
 
-<!--            </a-drawer>-->
+            <!--            </a-drawer>-->
           </div>
         </div>
 
@@ -182,7 +182,49 @@
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">难度调节</span>
           </div>
-          <a-switch checked-children="开启" un-checked-children="关闭"/>
+          <a-switch checked-children="开启" un-checked-children="关闭" @change="onSwitchChange"/>
+        </div>
+
+        <div class="test-paper-difficulty" v-show="difficultyVisible">
+          <div class="test-paper-save-form-item">
+            <div class="test-paper-save-form-item-label">
+              <span class="test-paper-save-form-item-label-text">试卷难度</span>
+            </div>
+            <a-slider range :default-value="[30, 70]" :tooltipVisible="false" @change="onSliderChange"
+                      class="test-paper-difficulty-slider"/>
+          </div>
+          <div class="test-paper-difficulty-content">
+            <div class="test-paper-difficulty-scale">
+              <span v-for="(difficulty, key) in difficultyScales"
+                    class="test-paper-difficulty-scale-text">{{ difficulty.text }} {{ difficulty.scale }}%</span>
+            </div>
+            <div class="test-paper-difficulty-count-ratio">
+              <div class="test-paper-difficulty-count-ratio-item">
+                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.simple.text }}</span>
+                <span>
+                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.simple.chooseCount }}</span>
+                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.simple.totalCount }}</span>
+                </span>
+              </div>
+              <i></i>
+              <div class="test-paper-difficulty-count-ratio-item">
+                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.normal.text }}</span>
+                <span>
+                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.normal.chooseCount }}</span>
+                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.normal.totalCount }}</span>
+                </span>
+              </div>
+              <i></i>
+              <div class="test-paper-difficulty-count-ratio-item">
+                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.difficulty.text }}</span>
+                <span>
+                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.difficulty.chooseCount }}</span>
+                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.difficulty.totalCount }}</span>
+                </span>
+              </div>
+            </div>
+            <span class="test-paper-difficulty-tips">如果某个难度的题目数不够，将会随机选择题目来补充</span>
+          </div>
         </div>
       </a-form>
     </div>
@@ -219,6 +261,7 @@ export default {
       testNum: 1,
       chooseQuestionBy: 'questionType',
       drawerVisible: false,
+      difficultyVisible: false,
       questionDisplayTypes: [],
       questionAllTypes: [
         {
@@ -257,6 +300,60 @@ export default {
           checked: true,
         },
       ],
+      questionCounts: {
+        single_choice: {
+          choose: 0,
+          total: 5,
+        },
+        multiple_choice: {
+          choose: 0,
+          total: 5,
+        },
+        essay: {
+          choose: 0,
+          total: 5,
+        },
+        uncertain_choice: {
+          choose: 0,
+          total: 5,
+        },
+        determine: {
+          choose: 0,
+          total: 5,
+        },
+        fill: {
+          choose: 0,
+          total: 5,
+        },
+        material: {
+          choose: 0,
+          total: 5,
+        },
+        sum: {
+          choose: 0,
+          total: 35,
+        },
+      },
+      difficultyScales: {
+        simple: {
+          text: '简单',
+          scale: 30,
+          totalCount: 5,
+          chooseCount: 5,
+        },
+        normal: {
+          text: '一般',
+          scale: 40,
+          totalCount: 20,
+          chooseCount: 14,
+        },
+        difficulty: {
+          text: '困难',
+          scale: 30,
+          totalCount: 10,
+          chooseCount: 10,
+        },
+      },
       form: this.$form.createForm(this, {name: "save-test-paper"}),
     };
   },
@@ -324,6 +421,14 @@ export default {
     },
     onRadioChange(event) {
       this.chooseQuestionBy = event.target.value;
+    },
+    onSwitchChange(checked, event) {
+      this.difficultyVisible = checked;
+    },
+    onSliderChange(value) {
+      this.difficultyScales.simple.scale = value[0];
+      this.difficultyScales.normal.scale = value[1] - value[0];
+      this.difficultyScales.difficulty.scale = 100 - value[1];
     },
     displayChooseCategoryDrawer() {
       this.drawerVisible = true;
