@@ -175,6 +175,7 @@
             <!--            <a-drawer title="选择分类" :visible="drawerVisible">-->
 
             <!--            </a-drawer>-->
+            <question-type-category-display :question-display-types="questionDisplayTypes"/>
           </div>
         </div>
 
@@ -240,9 +241,11 @@
 import { apiClient } from 'common/vue/service/api-client';
 import loadScript from "load-script";
 import Draggable from 'vuedraggable';
+import QuestionTypeCategoryDisplay from './QuestionTypeCategoryDisplay.vue';
 
 export default {
   components: {
+    QuestionTypeCategoryDisplay,
     Draggable
   },
   data() {
