@@ -1,7 +1,6 @@
 <script>
 import listHeader from './components/header.vue';
 import {Testpaper} from 'common/vue/service';
-import {Badge as ABadge, message} from 'ant-design-vue';
 import TestpaperTypeTag from '../../../common/src/TestpaperTypeTag.vue';
 
 const columns = [
@@ -57,6 +56,7 @@ export default {
   data() {
     return {
       status: undefined,
+      type: undefined,
       keywordType: 'name',
       keyword: undefined,
       columns,
@@ -87,11 +87,13 @@ export default {
 
     async fetchTestPaper(params) {
       this.loading = true;
-      const {data, paging} = await Testpaper.search({
-        limit: 20,
+      const searchQuery = Object.assign({
         itemBankId: this.itemBankId,
+        status: this.status,
+        type: this.type,
         ...params
-      });
+      }, this.keywordType === 'creator' ? {createdUser: this.keyword} : {nameLike: this.keyword})
+      const {data, paging} = await Testpaper.search(searchQuery);
 
       const pagination = {...this.pagination};
       pagination.total = paging.total;
@@ -102,10 +104,13 @@ export default {
       this.pagination = pagination;
     },
 
-    async onSearch(nickname) {
-      this.keyWord = nickname;
+    async onSearch() {
       this.pagination.current = 1;
-      await this.fetchTeacher();
+      const params = {
+        limit: this.pagination.pageSize,
+        offset: (this.pagination.current - 1) * this.pagination.pageSize
+      };
+      await this.fetchTestPaper(params);
     },
 
     onSelectChange(selectedRowKeys) {
@@ -132,12 +137,12 @@ export default {
     async publish(record) {
       await Testpaper.changeStatus(record.id, 'open');
       record.status = 'open';
-      message.success(Translator.trans('question.bank.paper.publish.success'));
+      this.$message.success(Translator.trans('question.bank.paper.publish.success'));
     },
     async close(record) {
       await Testpaper.changeStatus(record.id, 'closed');
       record.status = 'closed';
-      message.success(Translator.trans('question.bank.paper.publish.success'));
+      this.$message.success(Translator.trans('question.bank.paper.close.success'));
     }
   },
   watch: {
@@ -174,7 +179,11 @@ export default {
     }
   },
   async created() {
-    await this.fetchTestPaper(this.pagination);
+    const params = {
+      limit: this.pagination.pageSize,
+      offset: (this.pagination.current - 1) * this.pagination.pageSize
+    };
+    await this.fetchTestPaper(params);
   }
 };
 </script>
@@ -214,7 +223,7 @@ export default {
         </a-select-option>
       </a-select>
       <a-input v-model="keyword" :placeholder="'question.bank.paper.typeKeyword'|trans" style="flex: 1 0 0"></a-input>
-      <a-button type="primary">{{ 'site.search_hint'|trans }}</a-button>
+      <a-button type="primary" @click="onSearch">{{ 'site.search_hint'|trans }}</a-button>
       <a-button>{{ 'question.bank.reset.btn'|trans }}</a-button>
     </div>
     <a-table
@@ -251,22 +260,39 @@ export default {
       </template>
       <template slot="operation" slot-scope="record">
         <div class="operation-group">
-          <a-button v-if="['draft', 'open'].includes(record.status)" type="link" class="operation-group-button-active">
+          <a-button v-if="['draft', 'open'].includes(record.status)"
+                    type="link"
+                    class="operation-group-button-active"
+          >
             {{ 'question.bank.paper.preview'|trans }}
           </a-button>
-          <a-button v-if="['generating', 'fail'].includes(record.status)" type="link" :disabled="true">
+          <a-button v-if="['generating', 'fail'].includes(record.status)"
+                    type="link"
+                    :disabled="true"
+          >
             {{ 'question.bank.paper.preview'|trans }}
           </a-button>
-          <a-button v-if="['open'].includes(record.status)" type="link" class="operation-group-button-active">
+          <a-button v-if="['open'].includes(record.status)"
+                    type="link"
+                    class="operation-group-button-active"
+                    @click="close(record)"
+          >
             {{ 'question.bank.paper.close'|trans }}
           </a-button>
-          <a-button v-if="['draft', 'closed'].includes(record.status)" type="link" class="operation-group-button-active"
+          <a-button v-if="['draft', 'closed'].includes(record.status)"
+                    type="link"
+                    class="operation-group-button-active"
                     @click="publish(record)">{{ 'question.bank.paper.publish'|trans }}
           </a-button>
-          <a-button v-if="['generating', 'fail'].includes(record.status)" type="link" :disabled="true">
+          <a-button v-if="['generating', 'fail'].includes(record.status)"
+                    type="link"
+                    :disabled="true">
             {{ 'question.bank.paper.publish'|trans }}
           </a-button>
-          <a-button v-if="['draft', 'open'].includes(record.status)" type="link" class="operation-group-button-active">
+          <a-button v-if="['draft', 'open'].includes(record.status)"
+                    type="link"
+                    class="operation-group-button-active"
+          >
             {{ 'question.bank.paper.edit'|trans }}
           </a-button>
         </div>

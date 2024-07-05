@@ -1,7 +1,7 @@
 {% extends 'item-bank-exercise-manage/exercise-set/layout.html.twig' %}
 
 {% block title %}{{'item_bank_exercise.testpaper_practice'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
-{% do script(['app/js/item-bank-exercise/assessment/index.js']) %}
+{% do script(['app/js/item-bank-exercise/assessment/index.js', 'app/js/item-bank-exercise/assessment/add/index.js']) %}
 {% set course_side_nav = 'assessment' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 
@@ -36,9 +36,8 @@
                 <a href="#modal" data-toggle="modal" data-url="{{ path('item_bank_exercise_manage_assessment_module_create', {exerciseId: exercise.id}) }}"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.add_new_module'|trans }}</a>
               </li>
             </ul>
-            <div class="col-sm-3 pull-right">
-              <a href="#modal" data-toggle="modal" id="add-testpaper" data-url="{{ path('item_bank_exercise_manage_assessment_add_list', {exerciseId: exercise.id, moduleId: moduleId, isPage: 0}) }}" class="cd-btn cd-btn-ghost-primary">{{ 'item_bank_exercise.assessment_exercise.add_assessment'|trans }}</a>
-              <button class="cd-btn cd-btn-ghost-primary mlm js-batch-delete" data-url="{{ path('item_bank_exercise_manage_batch_delete_assessment', {exerciseId: exercise.id}) }}" style="color: rgba(255,72,32,1); border-color: rgba(255,72,32,1);">{{ 'item_bank_exercise.assessment_exercise.remove_assessment'|trans }}</button>
+            <div class="pull-right">
+              <div id="addTestPaper"></div>
             </div>
           </div>
           <div class="js-assessment-container">
