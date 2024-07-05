@@ -15,36 +15,29 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              name: '单选题',
               num: 1,
             }, {
               type: 'choice',
-              name: '多选题',
               num: 0,
             },
             {
               type: 'essay',
-              name: '问答题',
               num: 0,
             },
             {
               type: 'uncertain_choice',
-              name: '不定项',
               num: 0,
             },
             {
               type: 'determine',
-              name: '判断题',
               num: 0,
             },
             {
               type: 'fill',
-              name: '填空题',
               num: 0,
             },
             {
               type: 'material',
-              name: '材料题',
               num: 0,
             },
           ]
@@ -55,36 +48,29 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              name: '单选题',
               num: 1,
             }, {
               type: 'choice',
-              name: '多选题',
               num: 0,
             },
             {
               type: 'essay',
-              name: '问答题',
               num: 0,
             },
             {
               type: 'uncertain_choice',
-              name: '不定项',
               num: 0,
             },
             {
               type: 'determine',
-              name: '判断题',
               num: 0,
             },
             {
               type: 'fill',
-              name: '填空题',
               num: 0,
             },
             {
               type: 'material',
-              name: '材料题',
               num: 0,
             },
           ]
@@ -95,36 +81,29 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              name: '单选题',
               num: 1,
             }, {
               type: 'choice',
-              name: '多选题',
               num: 0,
             },
             {
               type: 'essay',
-              name: '问答题',
               num: 0,
             },
             {
               type: 'uncertain_choice',
-              name: '不定项',
               num: 0,
             },
             {
               type: 'determine',
-              name: '判断题',
               num: 0,
             },
             {
               type: 'fill',
-              name: '填空题',
               num: 0,
             },
             {
               type: 'material',
-              name: '材料题',
               num: 0,
             },
           ]
@@ -135,36 +114,29 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              name: '单选题',
               num: 1,
             }, {
               type: 'choice',
-              name: '多选题',
               num: 0,
             },
             {
               type: 'essay',
-              name: '问答题',
               num: 0,
             },
             {
               type: 'uncertain_choice',
-              name: '不定项',
               num: 0,
             },
             {
               type: 'determine',
-              name: '判断题',
               num: 0,
             },
             {
               type: 'fill',
-              name: '填空题',
               num: 0,
             },
             {
               type: 'material',
-              name: '材料题',
               num: 0,
             },
           ]
