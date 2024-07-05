@@ -11,7 +11,7 @@ import {
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
   Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
   Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb,
-  Empty, PageHeader, TreeSelect, Popover, Avatar, Card, Cascader, Alert, Drawer, Slider
+  Empty, PageHeader, TreeSelect, Popover, Avatar, Card, Cascader, Alert, Drawer, Slider, Badge
 } from '@codeages/design-vue';
 import Clipboard from 'v-clipboard';
 
@@ -58,6 +58,7 @@ if (!window.Vue) {
   Vue.use(Alert);
   Vue.use(Drawer);
   Vue.use(Slider);
+  Vue.use(Badge);
 
   Vue.prototype.$message = Message;
   Vue.prototype.$notification = Notification;

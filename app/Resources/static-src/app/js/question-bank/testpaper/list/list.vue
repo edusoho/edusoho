@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       status: undefined,
+      type: undefined,
       keywordType: 'name',
       keyword: undefined,
       columns,
@@ -87,11 +88,13 @@ export default {
 
     async fetchTestPaper(params) {
       this.loading = true;
-      const {data, paging} = await Testpaper.search({
-        limit: 20,
+      const searchQuery = Object.assign({
         itemBankId: this.itemBankId,
+        status: this.status,
+        type: this.type,
         ...params
-      });
+      }, this.keywordType === 'creator' ? {createdUser: this.keyword} : {nameLike: this.keyword})
+      const {data, paging} = await Testpaper.search(searchQuery);
 
       const pagination = {...this.pagination};
       pagination.total = paging.total;
@@ -102,10 +105,13 @@ export default {
       this.pagination = pagination;
     },
 
-    async onSearch(nickname) {
-      this.keyWord = nickname;
+    async onSearch() {
       this.pagination.current = 1;
-      await this.fetchTeacher();
+      const params = {
+        limit: this.pagination.pageSize,
+        offset: (this.pagination.current - 1) * this.pagination.pageSize
+      };
+      await this.fetchTestPaper(params);
     },
 
     onSelectChange(selectedRowKeys) {
@@ -174,7 +180,11 @@ export default {
     }
   },
   async created() {
-    await this.fetchTestPaper(this.pagination);
+    const params = {
+      limit: this.pagination.pageSize,
+      offset: (this.pagination.current - 1) * this.pagination.pageSize
+    };
+    await this.fetchTestPaper(params);
   }
 };
 </script>
@@ -214,7 +224,7 @@ export default {
         </a-select-option>
       </a-select>
       <a-input v-model="keyword" :placeholder="'question.bank.paper.typeKeyword'|trans" style="flex: 1 0 0"></a-input>
-      <a-button type="primary">{{ 'site.search_hint'|trans }}</a-button>
+      <a-button type="primary" @click="onSearch">{{ 'site.search_hint'|trans }}</a-button>
       <a-button>{{ 'question.bank.reset.btn'|trans }}</a-button>
     </div>
     <a-table

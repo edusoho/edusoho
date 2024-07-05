@@ -2362,3 +2362,9 @@ course.live: Live Course,
 course.appointment: Appointment Course,
 course.try.look: Preview,
 certificate: Certificate
+
+item_bank_exercise.addTestpaper: Add test paper
+item_bank_exercise.abandonOperation: Are you sure to abandon this operation?
+item_bank_exercise.unsaved: The current operation has not been saved yet.
+
+

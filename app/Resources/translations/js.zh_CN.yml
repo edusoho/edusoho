@@ -2329,3 +2329,7 @@ course.live: 直播课程
 course.appointment: 预约课程
 course.try.look: 试看
 certificate: 证
+
+item_bank_exercise.addTestpaper: 添加试卷
+item_bank_exercise.abandonOperation: 确定放弃此次操作吗？
+item_bank_exercise.unsaved: 当前操作尚未保存
