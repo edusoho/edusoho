@@ -12,6 +12,8 @@ interface AssessmentService
 
     const FAILURE = 'failure';
 
+    const GENERATING = 'generating';
+
     public function getAssessment($id);
 
     public function findAssessmentsByIds($assessmentIds);
