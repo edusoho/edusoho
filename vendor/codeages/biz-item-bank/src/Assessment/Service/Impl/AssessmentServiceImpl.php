@@ -493,6 +493,11 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         return empty($assessment['item_count']);
     }
 
+    public function findAssessmentTypes()
+    {
+        return $this->getAssessmentDao()->findTypes();
+    }
+
     private function createAssessmentSnapshots($assessments)
     {
         $assessmentSnapshots = [];

@@ -14,6 +14,13 @@ class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
         return $this->findInField('id', $ids);
     }
 
+    public function findTypes()
+    {
+        $sql = "SELECT `type` FROM `{$this->table}` group by `type`";
+
+        return $this->db()->fetchAll($sql);
+    }
+
     public function declares()
     {
         return array(
@@ -34,6 +41,8 @@ class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
                 'name like :nameLike',
                 'status = :status',
                 'displayable = :displayable',
+                'type = :type',
+                'parent_id = : parent_id'
             ],
         );
     }
