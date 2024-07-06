@@ -89,6 +89,14 @@ class Assessment extends AbstractResource
         $conditions['bank_id'] = $conditions['itemBankId'];
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $total = $this->getAssessmentService()->countAssessments($conditions);
+        if (!empty($conditions['createdUser'])) {
+            $userIds = $this->getUserService()->searchUsers(['nickname' => $conditions['createdUser']], [], 0, PHP_INT_MAX, ['id']);
+            $userIds = array_column($userIds, 'id');
+            $conditions['created_user_ids'] = $userIds;
+            if (empty($userIds)) {
+                return $this->makePagingObject([], 0, $offset, $limit);
+            }
+        }
         $assessments = $this->getAssessmentService()->searchAssessments(
             $conditions,
             ['created_time' => 'DESC'],
