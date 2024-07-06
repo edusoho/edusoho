@@ -21,6 +21,7 @@ use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
+use Doctrine\Common\CommonException;
 use ExamParser\Writer\WriteDocx;
 
 class AssessmentServiceImpl extends BaseService implements AssessmentService
@@ -161,10 +162,14 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
     public function deleteAssessmentByParentId($parentId)
     {
-        $assessments = $this->getAssessmentDao()->search(['parent_id' => $parentId], [], 0, PHP_INT_MAX);
-        $assessmentIds = array_column($assessments, 'id');
+        $assessment = $this->getAssessment($parentId);
+        if (empty($assessment) || $assessment['parent_id'] != 0)  {
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
+        }
+        $assessmentIds = $this->getAssessmentDao()->search(['parent_id' => $parentId], [], 0, PHP_INT_MAX, ['id']);
+        $assessmentIds = array_column($assessmentIds, 'id');
         if (empty($assessmentIds)) {
-            throw new AssessmentException('assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
 
         try {

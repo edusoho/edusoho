@@ -191,6 +191,9 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
 
     public function deleteByAssessmentIds($assessmentIds)
     {
+        if (empty($assessmentIds)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
         $result = $this->getItemBankAssessmentExerciseDao()->batchDelete(['assessmentIds' => $assessmentIds]);
 
         return $result;
