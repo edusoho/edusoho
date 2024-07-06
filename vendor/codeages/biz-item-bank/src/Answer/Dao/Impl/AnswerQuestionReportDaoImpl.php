@@ -100,7 +100,8 @@ class AnswerQuestionReportDaoImpl extends AdvancedDaoImpl implements AnswerQuest
                 'status IN (:statues)',
                 'status != (:not_status)',
                 'id IN (:ids)',
-                'question_id = :question_id'
+                'question_id = :question_id',
+                'assessment_id IN (:assessment_ids)',
             ],
         ];
     }

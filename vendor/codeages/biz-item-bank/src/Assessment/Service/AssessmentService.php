@@ -34,6 +34,8 @@ interface AssessmentService
 
     public function deleteAssessment($id);
 
+    public function deleteAssessmentByParentId($parentId);
+
     public function drawItems($range, $sections);
 
     public function countAssessments($conditions);
