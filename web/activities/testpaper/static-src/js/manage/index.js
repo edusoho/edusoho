@@ -140,11 +140,11 @@ class Testpaper {
   changeContentHight() {
     $('.testpaperTimeRange').on('focus', function() {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 358.8 + 'px';
+      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
     });
     $('.testpaperTimeRange').on('blur', function() {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 358.8 + 'px';
+      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
     });
   }
 
