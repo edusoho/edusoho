@@ -957,3 +957,281 @@
     border-radius: 2px;
   }
 }
+
+.question-category-choose-drawer {
+  .ant-drawer-wrapper-body {
+    display: flex;
+    flex-direction: column;
+
+    .ant-drawer-header {
+      display: flex;
+      padding: 14px 20px;
+      justify-content: space-between;
+      align-items: center;
+      align-self: stretch;
+      border-bottom: 1px solid #EFF0F5;
+    }
+
+    .ant-drawer-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 0;
+      overflow-y: hidden;
+
+      .question-category-choose-container-body {
+        display: flex;
+        align-items: flex-start;
+        flex: 1;
+        margin: 24px 20px;
+        border-radius: 4px;
+        border: 1px solid #E5E6EB;
+        overflow-y: hidden;
+
+        .question-category-choose-all {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 24px;
+          flex: 1 0 0;
+          align-self: stretch;
+          border-right: 1px solid #E5E6EB;
+
+          .question-category-choose-all-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            align-self: stretch;
+            padding: 20px 20px 0;
+
+            .ant-input-affix-wrapper {
+              width: 216px;
+
+              .ant-input {
+                padding: 4px 12px 4px 31px;
+                line-height: 22px;
+                height: auto;
+              }
+            }
+
+            .question-category-choose-all-header-search-icon {
+              width: 16px;
+              height: 16px;
+            }
+
+            .question-category-choose-all-header-check-all-text {
+              color: #37393D;
+              font-family: "PingFang SC";
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 22px;
+            }
+          }
+
+          .question-category-choose-all-body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+            align-self: stretch;
+            padding: 0 20px;
+            overflow-y: auto;
+
+            .question-category-choose-all-body-category {
+              display: flex;
+              align-items: flex-start;
+              gap: 16px;
+              align-self: stretch;
+
+              .question-category-choose-all-body-category-depth-1 {
+                display: flex;
+                align-items: center;
+              }
+
+              .question-category-choose-all-body-category-depth-2 {
+                display: flex;
+                padding: 0 0 0 24px;
+                align-items: center;
+              }
+
+              .question-category-choose-all-body-category-depth-3 {
+                display: flex;
+                padding: 0 48px;
+                align-items: center;
+              }
+
+              .question-category-choose-all-body-category-name {
+                color: #37393D;
+                font-family: "PingFang SC";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 22px;
+              }
+
+              .question-category-choose-all-body-category-operation {
+                color: #46C37B;
+                font-family: "PingFang SC";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 22px;
+                cursor: pointer;
+              }
+            }
+          }
+
+          .ant-checkbox + span {
+            padding-right: 0;
+          }
+        }
+
+        .question-category-choose-selected {
+          display: flex;
+          flex-direction: column;
+          width: 360px;
+          align-items: flex-start;
+          align-self: stretch;
+          gap: 24px;
+
+          .question-category-choose-selected-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            align-self: stretch;
+            padding: 24px 20px 0;
+
+            .question-category-choose-selected-header-selected {
+              color: #37393D;
+              font-feature-settings: 'clig' off, 'liga' off;
+              font-family: "PingFang SC";
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 22px;
+              letter-spacing: 0.1px;
+            }
+
+            .question-category-choose-selected-header-clear {
+              color: #46C37B;
+              text-align: right;
+              font-feature-settings: 'clig' off, 'liga' off;
+              font-family: "PingFang SC";
+              font-size: 14px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: 22px;
+              letter-spacing: 0.1px;
+              cursor: pointer;
+            }
+          }
+
+          .question-category-choose-selected-body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            align-self: stretch;
+            padding: 0 20px;
+            overflow-y: auto;
+
+            .question-category-choose-selected-body-item {
+              display: flex;
+              padding: 8px 16px;
+              justify-content: space-between;
+              align-items: center;
+              align-self: stretch;
+              border-radius: 4px;
+              background: #FAFAFA;
+
+              .question-category-choose-selected-body-item-text {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+
+                .question-category-choose-selected-body-item-text-name {
+                  color: #37393D;
+                  font-family: "PingFang SC";
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 22px;
+                  max-width: 252px;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                }
+
+                .question-category-choose-selected-body-item-text-level {
+                  color: #919399;
+                  font-family: "PingFang SC";
+                  font-size: 12px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 20px;
+                }
+              }
+
+              .question-category-choose-selected-body-item-remove {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+
+      .question-category-choose-container-footer {
+        display: flex;
+        padding: 16px 24px;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        align-self: stretch;
+        border: 1px solid #EFF0F5;
+        background: #FFF;
+
+        .question-category-choose-container-footer-btn-group {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+
+          .question-category-choose-container-footer-btn-cancel {
+            display: flex;
+            padding: 4px 20px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border-radius: 2px;
+            border: 1px solid #E6E7E8;
+            background: #FFF;
+            color: #37393D;
+          }
+
+          .question-category-choose-container-footer-btn-save {
+            display: flex;
+            padding: 5px 20px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border-radius: 2px;
+            border: hidden;
+            background: #46C37B;
+            color: #FFF;
+          }
+
+          .question-category-choose-container-footer-btn-text {
+            text-align: center;
+            font-family: "PingFang SC";
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 22px;
+          }
+        }
+      }
+    }
+  }
+}

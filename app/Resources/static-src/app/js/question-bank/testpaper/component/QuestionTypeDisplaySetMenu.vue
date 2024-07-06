@@ -80,13 +80,13 @@ export default {
     onMenuVisibleChange(visible) {
       if (!visible) {
         this.renderQuestionTypeTable();
-        this.$emit('updateDisplayQuestionType',this.questionAllTypes, this.questionDisplayTypes);
+        this.$emit('updateDisplayQuestionType', this.questionAllTypes, this.questionDisplayTypes);
       }
     },
   },
   mounted() {
     this.renderQuestionTypeTable();
-    this.$emit('updateDisplayQuestionType',this.questionAllTypes, this.questionDisplayTypes);
+    this.$emit('updateDisplayQuestionType', this.questionAllTypes, this.questionDisplayTypes);
   }
 };
 </script>
@@ -106,14 +106,14 @@ export default {
         <transition-group>
           <a-menu-item v-for="questionType in questionAllTypes" :key="questionType.type"
                        class="question-type-setting-menu-item">
-                      <span class="question-type-setting-menu-item-label">
-                        <img
-                          class="question-type-setting-menu-item-label-icon"
-                          src="/static-dist/app/img/question-bank/question-type-drag.png"
-                          alt=""
-                        />
-                        <span class="question-type-setting-menu-item-label-text">{{ questionType.name }}</span>
-                      </span>
+            <span class="question-type-setting-menu-item-label">
+              <img
+                class="question-type-setting-menu-item-label-icon"
+                src="/static-dist/app/img/question-bank/question-type-drag.png"
+                alt=""
+              />
+              <span class="question-type-setting-menu-item-label-text">{{ questionType.name }}</span>
+            </span>
             <a-switch v-model:checked="questionType.checked"
                       class="question-type-setting-menu-item-switch"></a-switch>
           </a-menu-item>
