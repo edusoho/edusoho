@@ -64,10 +64,10 @@ class Assessment extends AbstractResource
 
         try {
             $this->biz['db']->beginTransaction();
-            $this->getAssessmentService()->deleteAssessment($id);
             if ('random' == $assessment['type']) {
                 $this->getAssessmentService()->deleteAssessmentByParentId($id);
             }
+            $this->getAssessmentService()->deleteAssessment($id);
             $this->add($request);
             $this->biz['db']->commit();
         } catch (\Exception $e) {

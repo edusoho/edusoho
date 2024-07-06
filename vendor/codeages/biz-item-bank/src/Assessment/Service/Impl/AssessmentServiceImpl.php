@@ -169,7 +169,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $assessmentIds = $this->getAssessmentDao()->search(['parent_id' => $parentId], [], 0, PHP_INT_MAX, ['id']);
         $assessmentIds = array_column($assessmentIds, 'id');
         if (empty($assessmentIds)) {
-            throw AssessmentException::ASSESSMENT_NOTEXIST();
+            return true;
         }
 
         try {
