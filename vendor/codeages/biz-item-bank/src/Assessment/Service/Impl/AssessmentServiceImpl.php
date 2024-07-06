@@ -21,7 +21,6 @@ use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
-use Doctrine\Common\CommonException;
 use ExamParser\Writer\WriteDocx;
 
 class AssessmentServiceImpl extends BaseService implements AssessmentService
