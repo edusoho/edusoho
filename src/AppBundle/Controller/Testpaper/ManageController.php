@@ -458,10 +458,15 @@ class ManageController extends BaseController
         }
 
         $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
-
-        return $this->render('testpaper/manage/item-get-table.html.twig', [
-            'assessment' => $assessment,
-        ]);
+        if ('random' == $assessment['type']) {
+            return $this->render('testpaper/manage/random-item-get-table.html.twig', [
+                'assessment' => $assessment,
+            ]);
+        } else {
+            return $this->render('testpaper/manage/item-get-table.html.twig', [
+                'assessment' => $assessment,
+            ]);
+        }
     }
 
     public function resultAnalysisAction(Request $request, $targetId, $targetType, $activityId, $studentNum)

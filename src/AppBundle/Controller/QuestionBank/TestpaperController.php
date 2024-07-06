@@ -429,6 +429,8 @@ class TestpaperController extends BaseController
             'bank_id' => $questionBank['itemBankId'],
             'displayable' => 1,
             'keyword' => $request->query->get('keyword', ''),
+            'type' => $request->query->get('type', ''),
+            'parent_id' => 0,
         ];
         $totalCount = $this->getAssessmentService()->countAssessments($conditions);
         $conditions['status'] = 'open';
@@ -454,11 +456,13 @@ class TestpaperController extends BaseController
                 'score' => $testPaper['total_score'],
             ];
         }
+        $assessmentType = array_column($this->getAssessmentService()->findAssessmentTypes(), 'type');
 
         return $this->createJsonResponse([
             'testPapers' => $testPapers,
             'totalCount' => $totalCount,
             'openCount' => $openCount,
+            'assessmentType' => $assessmentType,
         ]);
     }
 

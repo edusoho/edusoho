@@ -43,6 +43,7 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
                 'answer_record_id IN (:answer_record_ids)',
                 'id != :exclude_id',
                 'assessment_id = :assessment_id',
+                'assessment_id IN (:assessment_ids)',
                 'status = :status',
                 'review_user_id != :exclude_review_user_id',
                 'review_user_id = :review_user_id',

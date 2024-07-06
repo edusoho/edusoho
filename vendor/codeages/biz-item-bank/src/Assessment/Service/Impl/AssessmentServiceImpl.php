@@ -71,6 +71,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'type' => 'regular',
             'parentId' => '0',
             'status' => 'draft',
+            'parent_id' => '0'
         ];
 
         $assessment = array_merge($defaultAssessment, $assessment);
@@ -159,6 +160,41 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         }
     }
 
+    public function deleteAssessmentByParentId($parentId)
+    {
+        $assessment = $this->getAssessment($parentId);
+        if (empty($assessment) || $assessment['parent_id'] != 0)  {
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
+        }
+        $assessmentIds = $this->getAssessmentDao()->search(['parent_id' => $parentId], [], 0, PHP_INT_MAX, ['id']);
+        $assessmentIds = array_column($assessmentIds, 'id');
+        if (empty($assessmentIds)) {
+            return true;
+        }
+
+        try {
+            $this->beginTransaction();
+            $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
+            $this->processBatchDeleteAssessment($assessmentIds);
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    protected function processBatchDeleteAssessment($assessmentIds){
+        $this->getSectionService()->deleteAssessmentSectionsByAssessmentIds($assessmentIds);
+        $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentIds($assessmentIds);
+        $daoArr = ['AnswerReportDao', 'AnswerRecordDao', 'AnswerQuestionReportDao'];
+        foreach ($daoArr as $dao){
+            $this->biz->dao('ItemBank:Answer:'.$dao)->batchDelete(['assessment_ids' => $assessmentIds]);
+        }
+    }
+
     protected function processDeleteAssessment($assessment){
         $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessment['id']);
         $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentId($assessment['id']);
@@ -212,7 +248,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'bank_id' => ['integer', ['min', 1]],
             'name' => [['lengthBetween', 1, 255]],
             'updated_user_id' => ['integer', ['min', 0]],
-            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED, self::FAILURE]]],
+            'status' => [['in', [self::GENERATING, self::DRAFT, self::OPEN, self::CLOSED, self::FAILURE]]],
             'item_count' => ['integer', ['min', 0]],
             'question_count' => ['integer', ['min', 0]],
             'total_score' => [],
@@ -455,6 +491,11 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $assessment = $this->getAssessment($assessmentId);
 
         return empty($assessment['item_count']);
+    }
+
+    public function findAssessmentTypes()
+    {
+        return $this->getAssessmentDao()->findTypes();
     }
 
     private function createAssessmentSnapshots($assessments)

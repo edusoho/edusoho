@@ -106,36 +106,8 @@
                 <a-radio value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
-            <a-dropdown :trigger="['click']" placement="bottomRight" @visibleChange="onMenuVisibleChange"
-                        v-show="chooseQuestionBy === 'questionType'">
-              <div class="question-type-display-setting">
-                <img
-                  src="/static-dist/app/img/question-bank/question-type-show-image.png"
-                  alt=""
-                />
-                <span>题型展示设置</span>
-              </div>
-              <a-menu slot="overlay" class="question-type-setting-menu">
-                <draggable v-model="questionAllTypes" handle=".question-type-setting-menu-item-label-icon"
-                           drag-class="question-type-setting-menu-item-drag">
-                  <transition-group>
-                    <a-menu-item v-for="questionType in questionAllTypes" :key="questionType.type"
-                                 class="question-type-setting-menu-item">
-                      <span class="question-type-setting-menu-item-label">
-                        <img
-                          class="question-type-setting-menu-item-label-icon"
-                          src="/static-dist/app/img/question-bank/question-type-drag.png"
-                          alt=""
-                        />
-                        <span class="question-type-setting-menu-item-label-text">{{ questionType.name }}</span>
-                      </span>
-                      <a-switch v-model:checked="questionType.checked"
-                                class="question-type-setting-menu-item-switch"></a-switch>
-                    </a-menu-item>
-                  </transition-group>
-                </draggable>
-              </a-menu>
-            </a-dropdown>
+            <question-type-display-set-menu :default-question-all-types="questionAllTypes"
+                                            @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
           </div>
 
           <div class="question-type-display" v-show="chooseQuestionBy === 'questionType'">
@@ -252,6 +224,9 @@
                 </div>
               </div>
             </a-drawer>
+            <question-type-category-display :question-display-types="questionDisplayTypes"
+                                            :default-question-all-types="questionAllTypes"
+                                            @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
           </div>
         </div>
 
@@ -317,9 +292,13 @@
 import {apiClient} from 'common/vue/service/api-client';
 import loadScript from "load-script";
 import Draggable from 'vuedraggable';
+import QuestionTypeCategoryDisplay from './QuestionTypeCategoryDisplay.vue';
+import QuestionTypeDisplaySetMenu from '../component/QuestionTypeDisplaySetMenu.vue';
 
 export default {
   components: {
+    QuestionTypeDisplaySetMenu,
+    QuestionTypeCategoryDisplay,
     Draggable
   },
   data() {
@@ -573,10 +552,9 @@ export default {
         }
       });
     },
-    onMenuVisibleChange(visible) {
-      if (!visible) {
-        this.renderQuestionTypeTable();
-      }
+    handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
+      this.questionAllTypes = questionAllTypes;
+      this.questionDisplayTypes = questionDisplayTypes;
     },
     onRadioChange(event) {
       this.chooseQuestionBy = event.target.value;

@@ -12,6 +12,8 @@ interface AssessmentService
 
     const FAILURE = 'failure';
 
+    const GENERATING = 'generating';
+
     public function getAssessment($id);
 
     public function findAssessmentsByIds($assessmentIds);
@@ -31,6 +33,8 @@ interface AssessmentService
     public function updateBasicAssessmentByParentId($parentId, $assessment);
 
     public function deleteAssessment($id);
+
+    public function deleteAssessmentByParentId($parentId);
 
     public function drawItems($range, $sections);
 
@@ -57,4 +61,6 @@ interface AssessmentService
     public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId);
 
     public function isEmptyAssessment($assessmentId);
+    
+    public function findAssessmentTypes();
 }
