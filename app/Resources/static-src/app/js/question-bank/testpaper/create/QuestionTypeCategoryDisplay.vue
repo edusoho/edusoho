@@ -1,9 +1,12 @@
 <script>
 
+import QuestionTypeCategoryEditDrawer from './QuestionTypeCategoryEditDrawer.vue';
+
 export default {
   name: 'QuestionTypeCategoryDisplay',
-  components: {},
+  components: {QuestionTypeCategoryEditDrawer},
   props: {
+    defaultQuestionAllTypes: undefined,
     questionDisplayTypes: undefined,
   },
   data() {
@@ -15,30 +18,37 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              num: 1,
+              addNum: 1,
+              totalNum: 5
             }, {
               type: 'choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'essay',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'uncertain_choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'determine',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'fill',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'material',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
           ]
         },
@@ -48,30 +58,37 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              num: 1,
+              addNum: 1,
+              totalNum: 5
             }, {
               type: 'choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'essay',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'uncertain_choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'determine',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'fill',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'material',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
           ]
         },
@@ -81,30 +98,37 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              num: 1,
+              addNum: 1,
+              totalNum: 5
             }, {
               type: 'choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'essay',
-              num: 0,
+              addNum: 0,
+              totalNum: 0
             },
             {
               type: 'uncertain_choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'determine',
-              num: 0,
+              addNum: 0,
+              totalNum: 0
             },
             {
               type: 'fill',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'material',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
           ]
         },
@@ -114,35 +138,43 @@ export default {
           questionTypes: [
             {
               type: 'single_choice',
-              num: 1,
+              addNum: 1,
+              totalNum: 5
             }, {
               type: 'choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'essay',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'uncertain_choice',
-              num: 0,
+              addNum: 0,
+              totalNum: 0
             },
             {
               type: 'determine',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'fill',
-              num: 0,
+              addNum: 0,
+              totalNum: 5
             },
             {
               type: 'material',
-              num: 0,
+              addNum: 0,
+              totalNum: 0
             },
           ]
         },
       ],
       editMaskVisible: false,
+      drawerVisible: false,
     };
   },
   methods: {
@@ -151,6 +183,9 @@ export default {
     },
     hideEditMask() {
       this.editMaskVisible = false;
+    },
+    handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
+      this.$emit('updateDisplayQuestionType',questionAllTypes, questionDisplayTypes);
     }
   },
   created() {
@@ -162,7 +197,8 @@ export default {
   <div class="question-type-category-display" @mouseover="showEditMask" @mouseleave="hideEditMask">
     <div class="question-type-category-display-header">
       <div class="question-type-category-display-header-top">分类</div>
-      <div v-if="categories && categories.length > 0" class="question-type-category-display-header-normal" v-for="category in categories">
+      <div v-if="categories && categories.length > 0" class="question-type-category-display-header-normal"
+           v-for="category in categories">
         <a-tag>{{ category.level }}</a-tag>
         <span class="category-name">{{ category.name }}</span>
       </div>
@@ -171,17 +207,19 @@ export default {
         <span class="question-type-category-display-header-bottom-description">（题数/总分）</span>
       </div>
     </div>
-    <div v-if="questionDisplayTypes && questionDisplayTypes.length > 0" v-for="type in questionDisplayTypes" class="question-type-category-display-header-type">
+    <div v-if="questionDisplayTypes && questionDisplayTypes.length > 0" v-for="type in questionDisplayTypes"
+         class="question-type-category-display-header-type">
       <div class="question-type-category-display-header-top">
         <div class="question-type-category-display-header-top-content">{{ type.name }}</div>
       </div>
-      <div v-for="category in categories" class="question-type-category-display-cell-number">
-        <span class="question-type-category-display-cell-number-total">{{ category.questionTypes.find(questionType => questionType.type === type.type).num }}</span>
+      <div v-for="category in categories" class="question-type-category-display-cell">
+        <span>{{category.questionTypes.find(questionType => questionType.type === type.type).addNum }}</span>
       </div>
       <div class="question-type-category-display-cell-sum">0 / 0.0</div>
     </div>
     <div v-show="editMaskVisible" class="edit-mask-container">
-      <a-button>编辑</a-button>
+      <a-button @click="drawerVisible = true">编辑</a-button>
     </div>
+    <question-type-category-edit-drawer :drawer-visible="drawerVisible" @closeDrawer="drawerVisible = false" :categories="categories" :question-display-types="questionDisplayTypes" :question-all-types="defaultQuestionAllTypes" @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
   </div>
 </template>
