@@ -13,6 +13,7 @@ export default {
     return {
       categories: [
         {
+          id: '1',
           level: '一级分类',
           name: '一建《机电》分章练习',
           questionTypes: [
@@ -53,6 +54,7 @@ export default {
           ]
         },
         {
+          id: '2',
           level: '二级分类',
           name: '1H410000机电工程技术',
           questionTypes: [
@@ -93,6 +95,7 @@ export default {
           ]
         },
         {
+          id: '3',
           level: '三级分类',
           name: '1H410000机电工程常用材料及工程设备材料',
           questionTypes: [
@@ -133,6 +136,7 @@ export default {
           ]
         },
         {
+          id: '4',
           level: '三级分类',
           name: '1H410000机电工程常用材料及工程设备材料',
           questionTypes: [
@@ -220,6 +224,14 @@ export default {
     <div v-show="editMaskVisible" class="edit-mask-container">
       <a-button @click="drawerVisible = true">编辑</a-button>
     </div>
-    <question-type-category-edit-drawer :drawer-visible="drawerVisible" @closeDrawer="drawerVisible = false" :categories="categories" :question-display-types="questionDisplayTypes" :question-all-types="defaultQuestionAllTypes" @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
+    <question-type-category-edit-drawer
+      :drawer-visible="drawerVisible"
+      @closeDrawer="drawerVisible = false"
+      :categories="categories"
+      :question-display-types="questionDisplayTypes"
+      :question-all-types="defaultQuestionAllTypes"
+      @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
+      @updateCategories="(newCategories) => categories = newCategories"
+    />
   </div>
 </template>
