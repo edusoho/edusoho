@@ -144,7 +144,7 @@
               />
               <span class="question-category-choose-btn-text">选择分类</span>
             </div>
-            <a-drawer title="选择分类" :visible="drawerVisible" width="960" @close="drawerVisible = false"
+            <a-drawer title="选择分类" :visible="drawerVisible" :maskClosable="false" width="960" @close="drawerVisible = false"
                       class="question-category-choose-drawer">
               <div class="question-category-choose-container-body">
                 <div class="question-category-choose-all">
@@ -190,6 +190,7 @@
                       placement="bottomRight"
                       ok-text="确定"
                       cancel-text="取消"
+                      @confirm="unCheckedAllCategories"
                     >
                       <span class="question-category-choose-selected-header-clear">清空</span>
                     </a-popconfirm>
@@ -607,12 +608,17 @@ export default {
       }
     },
     unCheckedSelfAndChildren(id) {
-      this.$set(this.checkedQuestionCategoryIds, id, false);
+      this.unCheckedCategory(id);
       if (this.questionCategoriesTree[id].children) {
         this.questionCategoriesTree[id].children.forEach(childId => {
           this.unCheckedSelfAndChildren(childId);
         });
       }
+    },
+    unCheckedAllCategories() {
+      this.questionCategories.forEach(category => {
+        this.unCheckedCategory(category.id);
+      });
     },
     unCheckedCategory(id) {
       this.$set(this.checkedQuestionCategoryIds, id, false);
