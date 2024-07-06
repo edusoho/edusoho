@@ -2266,11 +2266,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         try {
             $this->beginTransaction();
             $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
-            $courses = $this->findCoursesByClassroomId($classroomId);
-            foreach ($courses as $course) {
-                $this->getCourseMemberService()->changeMembersDeadlineByCourseId($course['id'], $day, $waveType);
-            }
-
+            $this->getCourseMemberService()->changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
             $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
             $this->commit();
         } catch (\Exception $e) {
