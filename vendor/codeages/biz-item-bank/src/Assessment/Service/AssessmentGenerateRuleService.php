@@ -11,4 +11,6 @@ interface AssessmentGenerateRuleService
     public function findAssessmentGenerateRuleByAssessmentIds($assessmentIds);
 
     public function search($conditions, $orderBy, $start, $limit);
+
+    public function updateAssessmentGenerateRuleById($id, $assessmentGenerateRuleParams);
 }

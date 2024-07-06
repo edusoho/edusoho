@@ -55,6 +55,29 @@ class Assessment extends AbstractResource
         return true;
     }
 
+    public function update(ApiRequest $request, $id)
+    {
+        $assessment = $this->getAssessmentService()->getAssessment($id);
+        if ('draft' != $assessment['status']) {
+            throw AssessmentException::STATUS_ERROR();
+        }
+
+        try {
+            $this->biz['db']->beginTransaction();
+            if ('random' == $assessment['type']) {
+                $this->getAssessmentService()->deleteAssessmentByParentId($id);
+            }
+            $this->getAssessmentService()->deleteAssessment($id);
+            $this->add($request);
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
+
+        return ['ok' => true];
+    }
+
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
@@ -139,6 +162,13 @@ class Assessment extends AbstractResource
     {
         $assessmentGenerateRule = $this->buildAssessmentGenerateRule($fields, $assessment);
         $this->getAssessmentGenerateRuleService()->createAssessmentGenerateRule($assessmentGenerateRule);
+    }
+
+    private function updateAssessmentGenerateRule($fields, $assessment)
+    {
+        $assessmentGenerateRule = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($assessment['id']);
+        $updateFields = $this->buildAssessmentGenerateRule($fields, $assessment);
+        $this->getAssessmentGenerateRuleService()->updateAssessmentGenerateRuleById($assessmentGenerateRule['id'], $updateFields);
     }
 
     private function buildAssessmentGenerateRule($fields, $assessment)
