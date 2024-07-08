@@ -111,7 +111,9 @@ export default {
         <div class="question-type-category-display-header-action">
           <div class="question-type-category-display-header-top">操作</div>
           <div v-for="(category, index) in categories" class="question-type-category-display-cell" :class="{'row-editing': editingRow === index + 1}">
-            <a href="javascript:" @click="removeCategory(category)">移除</a>
+            <a-popconfirm title="确定要删除当前分类吗？" ok-text="移除" cancel-text="取消" @confirm="removeCategory(category)">
+              <a>移除</a>
+            </a-popconfirm>
           </div>
           <div class="question-type-category-display-cell" :class="{'row-editing': editingRow === categories.length + 1}">
             <div class="question-type-category-display-cell-number"></div>
