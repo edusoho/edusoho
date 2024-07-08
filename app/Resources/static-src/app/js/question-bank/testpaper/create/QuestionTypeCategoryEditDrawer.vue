@@ -21,8 +21,17 @@ export default {
     }
   },
   methods: {
-    closeDrawer() {
+    close() {
       this.$emit('closeDrawer');
+    },
+    closeDrawer() {
+      this.$confirm({
+        title: '确定放弃此次操作吗？',
+        content: '当前操作尚未保存',
+        okText: '确定',
+        cancelText: '取消',
+        onOk: this.close
+      });
     },
     handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
       this.$emit('updateDisplayQuestionType',questionAllTypes, questionDisplayTypes);
