@@ -21,7 +21,8 @@ export default {
               type: 'single_choice',
               addNum: 1,
               totalNum: 5
-            }, {
+            },
+            {
               type: 'choice',
               addNum: 0,
               totalNum: 5
@@ -190,10 +191,35 @@ export default {
     },
     handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
       this.$emit('updateDisplayQuestionType',questionAllTypes, questionDisplayTypes);
+    },
+    showAddNum(category) {
+      const isShowNum = category.addNum > 0 && category.totalNum > 0 || category.totalNum === 0;
+      if (isShowNum) {
+        return category.addNum;
+      } else {
+        return '';
+      }
+    },
+    getQuestionNum(type) {
+      let addNum = 0;
+      if (this.categories && this.categories.length > 0) {
+        for (const category of this.categories) {
+          const num = Number.parseInt(category.questionTypes.find(questionType => questionType.type === type.type).addNum);
+          addNum += isNaN(num) ? 0 : num;
+        }
+      }
+
+      return addNum;
+    },
+    getTotalScore(type) {
+      const questionNum = this.getQuestionNum(type);
+      return (questionNum * this.questionDisplayTypes.find(questionType => questionType.type === type.type).score).toFixed(1);
+    },
+    handleSaveDrawer(categories, questionDisplayTypes) {
+      this.categories = categories;
+      this.handleUpdateDisplayQuestionType(this.defaultQuestionAllTypes, questionDisplayTypes);
     }
   },
-  created() {
-  }
 };
 
 </script>
@@ -216,10 +242,10 @@ export default {
       <div class="question-type-category-display-header-top">
         <div class="question-type-category-display-header-top-content">{{ type.name }}</div>
       </div>
-      <div v-for="category in categories" class="question-type-category-display-cell">
-        <span>{{category.questionTypes.find(questionType => questionType.type === type.type).addNum }}</span>
+      <div v-for="category in categories" class="question-type-category-display-cell" :class="{'question-type-category-display-cell-inactive': showAddNum(category.questionTypes.find(questionType => questionType.type === type.type)) === 0}">
+        <span class="question-type-category-display-cell-number">{{ showAddNum(category.questionTypes.find(questionType => questionType.type === type.type)) }}</span>
       </div>
-      <div class="question-type-category-display-cell-sum">0 / 0.0</div>
+      <div class="question-type-category-display-cell-sum">{{ `${getQuestionNum(type)} / ${getTotalScore(type)}` }}</div>
     </div>
     <div v-show="editMaskVisible" class="edit-mask-container">
       <a-button @click="drawerVisible = true">编辑</a-button>
@@ -227,11 +253,12 @@ export default {
     <question-type-category-edit-drawer
       :drawer-visible="drawerVisible"
       @closeDrawer="drawerVisible = false"
-      :categories="categories"
-      :question-display-types="questionDisplayTypes"
-      :question-all-types="defaultQuestionAllTypes"
+      :default-categories="categories"
+      :default-question-display-types="questionDisplayTypes"
+      :default-question-all-types="defaultQuestionAllTypes"
       @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
       @updateCategories="(newCategories) => categories = newCategories"
+      @saveDrawer="handleSaveDrawer"
     />
   </div>
 </template>

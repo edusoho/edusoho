@@ -106,7 +106,7 @@
                 <a-radio value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
-            <question-type-display-set-menu :default-question-all-types="questionAllTypes"
+            <question-type-display-set-menu v-if="chooseQuestionBy === 'questionType'" :default-question-all-types="questionAllTypes"
                                             @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
           </div>
 
@@ -323,43 +323,7 @@ export default {
       difficultyVisible: false,
       checkChildrenOperationVisible: {},
       questionDisplayTypes: [],
-      questionAllTypes: [
-        {
-          type: "single_choice",
-          name: "单选题",
-          checked: true,
-        },
-        {
-          type: "choice",
-          name: "多选题",
-          checked: true,
-        },
-        {
-          type: "essay",
-          name: "问答题",
-          checked: true,
-        },
-        {
-          type: "uncertain_choice",
-          name: "不定项",
-          checked: true,
-        },
-        {
-          type: "determine",
-          name: "判断题",
-          checked: true,
-        },
-        {
-          type: "fill",
-          name: "填空题",
-          checked: true,
-        },
-        {
-          type: "material",
-          name: "材料题",
-          checked: true,
-        },
-      ],
+      questionAllTypes: null,
       questionCounts: {
         single_choice: {
           choose: 0,
