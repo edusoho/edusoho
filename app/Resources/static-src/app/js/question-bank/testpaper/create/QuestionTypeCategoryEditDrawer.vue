@@ -27,6 +27,20 @@ export default {
       this.$emit('closeDrawer');
     },
     save() {
+
+      let totalQuestionNum = 0;
+
+      for (const category of this.categories) {
+        for (const questionType of category.questionTypes) {
+          totalQuestionNum += Number.parseInt(questionType.addNum);
+        }
+      }
+
+      if (totalQuestionNum === 0) {
+        this.$message.error('请至少选择 1 道题目');
+        return;
+      }
+
       this.$emit('saveDrawer', this.categories, this.questionDisplayTypes);
       this.$emit('updateDisplayQuestionType',this.questionAllTypes, this.questionDisplayTypes);
       this.$message.success(Translator.trans('site.save_success_hint'));
