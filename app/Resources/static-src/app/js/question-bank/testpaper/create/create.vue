@@ -144,7 +144,7 @@
               />
               <span class="question-category-choose-btn-text">选择分类</span>
             </div>
-            <a-drawer title="选择分类" :visible="drawerVisible" :maskClosable="false" width="960" @close="drawerVisible = false"
+            <a-drawer title="选择分类" :visible="drawerVisible" :maskClosable="false" width="960" @close="onDrawerClose"
                       class="question-category-choose-drawer">
               <div class="question-category-choose-container-body">
                 <div class="question-category-choose-all">
@@ -216,7 +216,7 @@
               </div>
               <div class="question-category-choose-container-footer">
                 <div class="question-category-choose-container-footer-btn-group">
-                  <button class="question-category-choose-container-footer-btn-cancel">
+                  <button class="question-category-choose-container-footer-btn-cancel" @click="onDrawerClose">
                     <span class="question-category-choose-container-footer-btn-text">取消</span>
                   </button>
                   <button class="question-category-choose-container-footer-btn-save">
@@ -537,6 +537,7 @@ export default {
     backConfirm() {
       this.$confirm({
         title: '是否要保存更改？',
+        icon: 'exclamation-circle',
         okText: '保存',
         cancelText: '不保存',
         centered: true,
@@ -579,6 +580,20 @@ export default {
     onDrawerDisplay() {
       this.fetchQuestionCategories();
       this.drawerVisible = true;
+    },
+    onDrawerClose() {
+      this.$confirm({
+        title: '确定放弃此次操作吗？',
+        content: '当前操作尚未保存',
+        icon: 'exclamation-circle',
+        okText: '确定',
+        cancelText: '取消',
+        centered: true,
+        onOk: () => {
+          this.checkedQuestionCategoryIds = {};
+          this.drawerVisible = false;
+        },
+      });
     },
     showCheckOperation(id) {
       this.$set(this.checkChildrenOperationVisible, id, true);
