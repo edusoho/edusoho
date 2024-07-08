@@ -14,7 +14,6 @@ use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 
 class AssessmentExercise extends AbstractResource
 {
@@ -42,49 +41,53 @@ class AssessmentExercise extends AbstractResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-
         $exercise = $this->getExerciseService()->tryManageExercise($conditions['exerciseId']);
         $modules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], ExerciseModuleService::TYPE_ASSESSMENT);
         $moduleIds = ArrayToolkit::column($modules, 'id');
         if (empty($modules)) {
             throw ItemBankExerciseException::NOTFOUND_MODULE();
         }
-
+        $moduleId = $conditions['moduleId'];
         if (!empty($moduleId) && !in_array($moduleId, $moduleIds)) {
             $moduleId = $modules[0]['id'];
         }
-
         $moduleId = empty($moduleId) ? $modules[0]['id'] : $moduleId;
-
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $total = $this->getAssessmentService()->countAssessments($conditions);
-
+        $total = $this->getAssessmentExerciseService()->count($conditions);
         $assessmentExercises = $this->getAssessmentExerciseService()->search(
             ['moduleId' => $moduleId],
             ['createdTime' => 'ASC'],
             $offset,
             $limit
         );
-
         $assessmentIds = ArrayToolkit::column($assessmentExercises, 'assessmentId');
         $assessments = $this->getAssessmentService()->findAssessmentsByIds($assessmentIds);
         $AssessmentGenerateRules = $this->getAssessmentGenerateRuleService()->findAssessmentGenerateRuleByAssessmentIds($assessmentIds);
         $numMap = array_column($AssessmentGenerateRules, 'num', 'assessment_id');
-        $assessments = array_map(function ($assessment) use ($numMap) {
-            $assessment['num'] = $numMap[$assessment['id']] ?? null;
+        $assessmentMap = array_column($assessments, null, 'id');
+        $assessmentExercises = array_map(function ($exercise) use ($assessmentMap, $numMap) {
+            $assessmentId = $exercise['assessmentId'];
+            if (isset($assessmentMap[$assessmentId])) {
+                $exercise['assessment'] = $assessmentMap[$assessmentId];
+                $exercise['assessment']['num'] = $numMap[$assessmentId] ?? null;
+            }
 
-            return $assessment;
-        }, $assessments);
-        $assessments = ArrayToolkit::orderByArray($assessments, $assessmentIds);
+            return $exercise;
+        }, $assessmentExercises);
 
-        return $this->makePagingObject([
-            'exercise' => $exercise,
-            'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
-            'modules' => $modules,
-            'moduleId' => $moduleId,
-            'assessments' => $assessments,
-            'assessmentExercises' => ArrayToolkit::index($assessmentExercises, 'assessmentId'),
-        ], $total, $limit, $offset);
+        return $this->makePagingObject($assessmentExercises, $total, $limit, $offset);
+    }
+
+    public function remove(ApiRequest $request)
+    {
+        $fields = $request->request->all();
+        if (!ArrayToolkit::requireds($fields, ['exerciseId', 'id'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $this->getExerciseService()->tryManageExercise($fields['exerciseId']);
+        $this->getAssessmentExerciseService()->deleteAssessmentExercise($fields['id']);
+
+        return ['ok' => true];
     }
 
     /**
@@ -101,14 +104,6 @@ class AssessmentExercise extends AbstractResource
     protected function getQuestionBankService()
     {
         return $this->service('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return ItemCategoryService
-     */
-    protected function getItemCategoryService()
-    {
-        return $this->service('ItemBank:Item:ItemCategoryService');
     }
 
     /**
