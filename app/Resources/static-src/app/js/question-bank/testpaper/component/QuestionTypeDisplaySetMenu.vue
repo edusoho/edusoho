@@ -13,7 +13,10 @@ export default {
         if (!val) {
           return;
         }
-        this.questionAllTypes = val
+        this.questionAllTypes = [];
+        for (const valElement of val) {
+          this.questionAllTypes.push(Object.assign({}, valElement));
+        }
       }
     }
   },

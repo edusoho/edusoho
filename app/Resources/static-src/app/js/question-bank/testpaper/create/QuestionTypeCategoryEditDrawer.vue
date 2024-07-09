@@ -6,10 +6,12 @@ export default {
   name: 'QuestionTypeCategoryEditDrawer',
   props: {
     drawerVisible: false,
-    categories: undefined,
-    questionDisplayTypes: undefined,
+    // categories: undefined,
+    // questionDisplayTypes: undefined,
     questionAllTypes: undefined,
-    questionCounts: undefined,
+    questionConfigs: undefined,
+    defaultCategories: undefined,
+    defaultQuestionDisplayTypes: undefined,
   },
   components: {
     QuestionTypeDisplaySetMenu
@@ -18,21 +20,41 @@ export default {
     return {
       editingCell: null,
       editingRow: null,
+      categories: this.clone(this.defaultCategories),
+      questionDisplayTypes: this.clone(this.defaultQuestionDisplayTypes),
     }
   },
   computed: {
     totalCount() {
       return (categoryId, type) => {
-        if (!this.questionCounts[type][categoryId]) {
+        if (!this.questionConfigs[type].count.total[categoryId]) {
           return 0;
         }
-        return this.questionCounts[type][categoryId];
+        return this.questionConfigs[type].count.total[categoryId];
       }
     },
   },
   methods: {
     close() {
       this.$emit('closeDrawer');
+    },
+    save() {
+      let totalQuestionNum = 0;
+      this.questionDisplayTypes.forEach(type => {
+        this.categories.forEach(category => {
+          totalQuestionNum += this.questionConfigs[type.type].count.choose[category.id];
+        });
+      });
+
+      if (totalQuestionNum === 0) {
+        this.$message.error('请至少选择 1 道题目');
+        return;
+      }
+
+      this.$emit('saveDrawer', this.categories, this.questionDisplayTypes);
+      this.$emit('updateDisplayQuestionType', this.questionDisplayTypes);
+      this.$message.success(Translator.trans('site.save_success_hint'));
+      this.close();
     },
     closeDrawer() {
       this.$confirm({
@@ -43,8 +65,9 @@ export default {
         onOk: this.close
       });
     },
-    handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
-      this.$emit('updateDisplayQuestionType', questionAllTypes, questionDisplayTypes);
+    handleUpdateDisplayQuestionType(questionDisplayTypes) {
+      this.$emit('updateDisplayQuestionType', questionDisplayTypes);
+      this.questionDisplayTypes = questionDisplayTypes;
     },
     handleFinishInputNum(type) {
       type.addNum = type.addNum ? type.addNum > type.totalNum ? type.totalNum : type.addNum : 0;
@@ -53,6 +76,24 @@ export default {
     },
     removeCategory(removedCategory) {
       this.$emit('updateCategories', this.categories.filter(category => category.id !== removedCategory.id));
+    },
+    getQuestionNum(type) {
+      let sumCount = 0;
+      this.categories.forEach(category => {
+        sumCount += this.questionConfigs[type].count.choose[category.id];
+      });
+
+      return sumCount;
+    },
+    getTotalScore(type) {
+      return (this.getQuestionNum(type) * this.questionConfigs[type].score).toFixed(1);
+    },
+    clone(type) {
+      if (type) {
+        return JSON.parse(JSON.stringify(type));
+      } else {
+        return type;
+      }
     }
   },
   watch: {
@@ -61,6 +102,8 @@ export default {
         document.body.style.overflowY = 'hidden';
       } else {
         document.body.style.overflowY = 'auto';
+        this.categories = this.clone(this.defaultCategories);
+        this.questionDisplayTypes = this.clone(this.defaultQuestionDisplayTypes);
       }
     },
     editingCell: async function (val) {
@@ -74,6 +117,19 @@ export default {
         const input = document.getElementById(`${val}-input`);
         input && input.focus();
       })
+    },
+    defaultCategories: function (val) {
+      if (!!val) {
+        this.categories = this.clone(val);
+      }
+    },
+    defaultQuestionDisplayTypes: function (val) {
+      if (!!val) {
+        this.questionDisplayTypes = this.clone(val);
+      }
+    },
+    questionConfigs(val) {
+      console.log(val);
     }
   },
 }
@@ -106,8 +162,7 @@ export default {
             <div class="question-type-category-display-header-normal-level">{{ category.level }}</div>
             <span class="category-name">{{ category.name }}</span>
           </div>
-          <div class="question-type-category-display-header-score"
-               :class="{'row-editing': editingRow === categories.length + 1}">
+          <div class="question-type-category-display-header-score" :class="{'row-editing': editingRow === categories.length + 1}">
             <span class="question-type-category-display-header-top-content">按题型设置分值</span>
           </div>
           <div class="question-type-category-display-header-bottom">
@@ -126,24 +181,21 @@ export default {
                :class="{'row-editing': editingRow === index + 1, 'question-type-category-display-cell-active': totalCount(category.id, type.type) > 0, 'question-type-category-display-cell-inactive': totalCount(category.id, type.type) === 0}">
             <input :id="`${category.id}-${type.type}-num-input`"
                    v-if="editingCell === `${category.id}-${type.type}-num`" type="number" min="0" :max="5"
-                   value="0"
+                   v-model="questionConfigs[type.type].count.choose[category.id]"
                    @blur="" class="question-type-category-display-cell-number"/>
-            <span v-else class="question-type-category-display-cell-number">0</span>
-            <span class="question-type-category-display-cell-number-total">/{{
-                totalCount(category.id, type.type)
-              }}</span>
+            <span class="question-type-category-display-cell-number-total">/{{ totalCount(category.id, type.type) }}</span>
           </div>
           <div :id="`${type.type}-score`" :data-row="categories.length + 1"
                class="question-type-category-display-cell question-type-category-display-cell-active"
                @click="editingCell = `${type.type}-score`"
                :class="{'row-editing': editingRow === categories.length + 1}">
             <input :id="`${type.type}-score-input`" v-if="editingCell === `${type.type}-score`" type="number" min="0"
-                   v-model="type.score"
+                   v-model="questionConfigs[type.type].score"
                    @blur="type.score = type.score ? type.score : 0; editingCell = null; editingRow = null"
                    class="question-type-category-display-cell-number"/>
-            <span v-else class="question-type-category-display-cell-number">{{ type.score }}</span>
+            <span v-else class="question-type-category-display-cell-number">{{ questionConfigs[type.type].score }}</span>
           </div>
-          <div class="question-type-category-display-cell-sum">0 / 0.0</div>
+          <div class="question-type-category-display-cell-sum">{{ `${getQuestionNum(type.type)} / ${getTotalScore(type.type)}` }}</div>
         </div>
         <div class="question-type-category-display-header-action">
           <div class="question-type-category-display-header-top">操作</div>
@@ -163,7 +215,7 @@ export default {
     </div>
     <div class="drawer-bottom">
       <a-button @click="closeDrawer">{{ 'site.cancel'|trans }}</a-button>
-      <a-button type="primary">{{ 'site.btn.save'|trans }}</a-button>
+      <a-button type="primary" @click="save">{{ 'site.btn.save'|trans }}</a-button>
     </div>
   </a-drawer>
 </template>

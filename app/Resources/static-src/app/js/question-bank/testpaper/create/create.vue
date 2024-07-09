@@ -106,7 +106,7 @@
                 <a-radio value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
-            <question-type-display-set-menu :default-question-all-types="questionAllTypes"
+            <question-type-display-set-menu v-if="chooseQuestionBy === 'questionType'" :default-question-all-types="questionAllTypes"
                                             @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
           </div>
 
@@ -562,8 +562,7 @@ export default {
         }
       });
     },
-    handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
-      this.questionAllTypes = questionAllTypes;
+    handleUpdateDisplayQuestionType(questionDisplayTypes) {
       this.questionDisplayTypes = questionDisplayTypes;
     },
     onRadioChange(event) {
