@@ -112,6 +112,82 @@
       }
     }
   }
+
+  .test-paper-save-form-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .test-paper-save-form-item-label {
+      display: flex;
+      width: 68px;
+      padding: 5px 0;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+
+      .test-paper-save-form-item-label-required {
+        color: #F53F3F;
+        text-align: right;
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+      }
+
+      .test-paper-save-form-item-label-text {
+        color: #37393D;
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+      }
+    }
+
+    .ant-form-item {
+      flex: 1 0 0;
+      margin-bottom: 0;
+
+      .ant-form-item-control {
+        line-height: normal;
+
+        .ant-input {
+          height: 32px;
+          padding: 6px 12px;
+          border-radius: 2px;
+          border: 1px solid #E5E6EB;
+          background: #FFF;
+
+          overflow: hidden;
+          color: #37393D;
+          text-overflow: ellipsis;
+          font-family: "PingFang SC";
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 20px;
+        }
+      }
+
+      .max-num {
+        position: absolute;
+        right: 10px;
+        top: -1px;
+        color: #C0C0C2;
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+      }
+    }
+  }
+}
+
+.create-test-paper-modal-body.flex-col {
+  align-items: unset;
 }
 
 .create-test-paper-modal {
