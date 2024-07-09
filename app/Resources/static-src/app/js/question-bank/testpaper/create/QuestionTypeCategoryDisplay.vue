@@ -217,9 +217,13 @@ export default {
     },
     handleSaveDrawer(categories, questionDisplayTypes) {
       this.categories = categories;
+      this.$emit('updateCategories', categories);
       this.handleUpdateDisplayQuestionType(this.defaultQuestionAllTypes, questionDisplayTypes);
     }
   },
+  mounted() {
+    this.$emit('updateCategories', this.categories);
+  }
 };
 
 </script>

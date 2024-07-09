@@ -34,12 +34,13 @@
           <a-form-item>
             <a-input
               placeholder="请输入试卷名称"
+              @change="handleChangeName"
               v-decorator="[
                 'testname',
-                { rules: [{ required: true, message: '请输入试卷名称' }] },
+                { initialValue: testpaperFormState.name, rules: [{ required: true, message: '请输入试卷名称' }] },
               ]"
             />
-            <span class="max-num">0/50</span>
+            <span class="max-num">{{testpaperFormState.name ? testpaperFormState.name.length : 0}}/50</span>
           </a-form-item>
         </div>
 
@@ -48,18 +49,14 @@
             <span class="test-paper-save-form-item-label-text">试卷说明</span>
           </div>
           <a-form-item>
-            <a-input
-              placeholder="请输入试卷说明"
-              @focus="isShow = true"
-              v-show="!isShow"
-            />
-            <span class="max-num">0/500</span>
-            <div v-show="isShow">
+            <div>
               <a-textarea
+                v-model="testpaperFormState.description"
                 :data-image-download-url="showCKEditorData.publicPath"
                 :name="`test-paper-explain`"
               />
             </div>
+            <span class="max-num">{{testpaperFormState.description ? testpaperFormState.description.length : 0}}/500</span>
           </a-form-item>
         </div>
 
@@ -72,12 +69,12 @@
             <a-form-item>
               <a-input-number
                 id="inputNumber"
-                v-model="testNum"
                 :min="1"
                 :max="200"
+                @change="handleChangeNum"
                 v-decorator="[
                   'testnumber',
-                  { rules: [{ required: true, message: '请至少设置 1 份试卷' }] },
+                  { initialValue: testpaperFormState.num, rules: [{ required: true, message: '请至少设置 1 份试卷' }, ] },
                 ]"
               />
             </a-form-item>
@@ -101,7 +98,7 @@
               <div class="test-paper-save-form-item-label">
                 <span class="test-paper-save-form-item-label-text">抽题方式</span>
               </div>
-              <a-radio-group name="type" default-value="questionType" @change="onRadioChange">
+              <a-radio-group v-model="testpaperFormState.generateType" name="type" @change="onRadioChange">
                 <a-radio value="questionType">按题型抽题</a-radio>
                 <a-radio value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
@@ -227,7 +224,9 @@
             </a-drawer>
             <question-type-category-display :question-display-types="questionDisplayTypes"
                                             :default-question-all-types="questionAllTypes"
-                                            @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
+                                            @updateCategories="handleUpdateCategories"
+                                            @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
+            />
           </div>
         </div>
 
@@ -295,6 +294,7 @@ import loadScript from "load-script";
 import Draggable from 'vuedraggable';
 import QuestionTypeCategoryDisplay from './QuestionTypeCategoryDisplay.vue';
 import QuestionTypeDisplaySetMenu from '../component/QuestionTypeDisplaySetMenu.vue';
+import {Testpaper} from 'common/vue/service';
 
 export default {
   components: {
@@ -302,8 +302,12 @@ export default {
     QuestionTypeCategoryDisplay,
     Draggable
   },
+  props: {
+    itemBankId: null,
+  },
   data() {
     return {
+      description: undefined,
       bankId: document.getElementById('itemBankId').value,
       isShow: false,
       explainEditor: "",
@@ -317,7 +321,6 @@ export default {
         language: "zh-cn",
         publicPath: "/static-dist/libs/es-ckeditor/ckeditor.js?version=23.1.6"
       },
-      testNum: 1,
       chooseQuestionBy: 'questionType',
       drawerVisible: false,
       difficultyVisible: false,
@@ -382,6 +385,36 @@ export default {
         },
       },
       form: this.$form.createForm(this, {name: "save-test-paper"}),
+      categories: [],
+      testpaperFormState: {
+        name: '',
+        description: '',
+        type: 'random',
+        questionBankId: null,
+        mode: "rand",
+        num: 1,
+        generateType: "questionType",
+        questionCategoryCounts: [],
+        scores: {},
+        scoreType: {
+          choice: "question",
+          uncertain_choice: "question",
+          fill: "question"
+        },
+        choiceScore: {
+          choice: 0,
+          uncertain_choice: 0,
+          fill: 0,
+        },
+        questionCount: 0,
+        percentages: {
+          simple: 30,
+          normal: 30,
+          difficulty: 40,
+        },
+        wrongQuestionRate: "0"
+      },
+      fetching: false,
     };
   },
   computed: {
@@ -602,11 +635,74 @@ export default {
     unCheckedCategory(id) {
       this.$set(this.checkedQuestionCategoryIds, id, false);
     },
+    handleUpdateCategories(categories) {
+      this.categories = categories;
+    },
     saveTestPaper() {
-      this.form.validateFields(err => {
+      if (this.fetching) {
+        return;
+      }
+      this.form.validateFields(async (err) => {
         if (!err) {
-          console.info('success');
+
+          this.fetching = true;
+          let questionNum = 0;
+          this.testpaperFormState.questionCategoryCounts = [];
+          this.testpaperFormState.questionBankId = this.itemBankId;
+          this.testpaperFormState.num = `${this.testpaperFormState.num}`;
+
+          for (const category of this.categories) {
+
+            const section = {};
+            for (const questionType of category.questionTypes) {
+              section[questionType.type] = {count: questionType.addNum, name: this.questionAllTypes.find(type => type.type === questionType.type).name};
+              questionNum += questionType.addNum;
+            }
+
+            this.testpaperFormState.questionCategoryCounts.push({
+              categoryId: category.id,
+              sections: section
+            })
+          }
+
+          this.testpaperFormState.questionCount = questionNum;
+          const scored = {};
+
+          for (const questionType of this.questionAllTypes) {
+            scored[questionType.type] = questionType.score;
+          }
+
+          this.testpaperFormState.scores = scored;
+
+          this.testpaperFormState.percentages = {
+            simple: `${this.difficultyScales.simple.scale}`,
+            normal: `${this.difficultyScales.normal.scale}`,
+            difficulty: `${this.difficultyScales.difficulty.scale}`,
+          }
+          try {
+            await Testpaper.create(this.testpaperFormState);
+            this.$router.push({
+              name: 'list',
+            });
+            this.$message.success('创建成功');
+          } catch (err) {
+            this.$message.error("创建失败", err)
+          } finally {
+            this.fetching = false;
+          }
         }
+      });
+    },
+    handleChangeNum(value) {
+      this.testpaperFormState.num = Number.parseInt(value) || 1;
+      this.form.setFieldsValue({
+        testnumber: this.testpaperFormState.num,
+      });
+    },
+    handleChangeName(value) {
+      this.testpaperFormState.name = value.target.value;
+      this.form.setFieldsValue({
+        testname: value,
       });
     },
   },

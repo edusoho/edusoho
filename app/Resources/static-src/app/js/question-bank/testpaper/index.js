@@ -16,7 +16,12 @@ const routes = [
   {
     path: '/create',
     name: 'create',
-    component: () => import( 'app/js/question-bank/testpaper/create/create.vue')
+    component: () => import( 'app/js/question-bank/testpaper/create/create.vue'),
+    props: function () {
+      return {
+        itemBankId: document.getElementById('itemBankId').value,
+      }
+    },
   }
 ];
 const router = new Router({
