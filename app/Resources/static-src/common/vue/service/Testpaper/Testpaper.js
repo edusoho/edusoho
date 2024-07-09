@@ -12,4 +12,7 @@ export const Testpaper = _.assignIn(baseService, {
   async changeStatus(id, status) {
     return apiClient.post(`/api/assessment/${id}/status`, {status});
   },
+  async create(params) {
+    return await apiClient.post(`/api/assessment`, params);
+  },
 });

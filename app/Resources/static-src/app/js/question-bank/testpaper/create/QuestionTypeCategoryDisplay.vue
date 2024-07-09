@@ -149,9 +149,13 @@ export default {
     handleSaveDrawer(categories, questionDisplayTypes) {
       this.countVisible = true;
       this.categories = categories;
+      this.$emit('updateCategories', categories);
       this.handleUpdateDisplayQuestionType(this.defaultQuestionAllTypes, questionDisplayTypes);
     }
   },
+  mounted() {
+    this.$emit('updateCategories', this.categories);
+  }
 };
 
 </script>
