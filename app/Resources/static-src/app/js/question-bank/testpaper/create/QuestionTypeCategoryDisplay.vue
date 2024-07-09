@@ -1,6 +1,7 @@
 <script>
 
 import QuestionTypeCategoryEditDrawer from './QuestionTypeCategoryEditDrawer.vue';
+import {apiClient} from 'common/vue/service/api-client';
 
 export default {
   name: 'QuestionTypeCategoryDisplay',
@@ -8,188 +9,47 @@ export default {
   props: {
     defaultQuestionAllTypes: undefined,
     questionDisplayTypes: undefined,
+    categories: undefined,
+    bankId: undefined,
   },
   data() {
     return {
-      categories: [
-        {
-          id: '1',
-          level: '一级分类',
-          name: '一建《机电》分章练习',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            }, {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 5
-            },
-          ]
-        },
-        {
-          id: '2',
-          level: '二级分类',
-          name: '1H410000机电工程技术',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            }, {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 5
-            },
-          ]
-        },
-        {
-          id: '3',
-          level: '三级分类',
-          name: '1H410000机电工程常用材料及工程设备材料',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            }, {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 0
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 0
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 5
-            },
-          ]
-        },
-        {
-          id: '4',
-          level: '三级分类',
-          name: '1H410000机电工程常用材料及工程设备材料',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            }, {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 0
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 0
-            },
-          ]
-        },
-      ],
       editMaskVisible: false,
       drawerVisible: false,
+      questionCounts: {
+        single_choice: {},
+        choice: {},
+        essay: {},
+        uncertain_choice: {},
+        determine: {},
+        fill: {},
+        material: {},
+      },
     };
   },
   methods: {
-    showEditMask() {
-      this.editMaskVisible = true;
+    fetchQuestionCounts() {
+      let categoryIds = [];
+      this.categories.forEach(category => {
+        categoryIds.push(category.id);
+      });
+      apiClient.get('/api/item/categoryIdAndType/count', {
+        params: {
+          bank_id: this.bankId,
+          category_ids: categoryIds,
+        }
+      }).then(res => {
+        res.forEach(item => {
+          this.$set(this.questionCounts[item.type], item.category_id, item.itemNum);
+        });
+      });
     },
-    hideEditMask() {
-      this.editMaskVisible = false;
+    editSettingsForTypeAndCategory() {
+      this.fetchQuestionCounts();
+      this.drawerVisible = true;
     },
     handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
-      this.$emit('updateDisplayQuestionType',questionAllTypes, questionDisplayTypes);
+      this.$emit('updateDisplayQuestionType', questionAllTypes, questionDisplayTypes);
     }
   },
   created() {
@@ -198,12 +58,12 @@ export default {
 
 </script>
 <template>
-  <div class="question-type-category-display" @mouseover="showEditMask" @mouseleave="hideEditMask">
+  <div class="question-type-category-display" @mouseover="editMaskVisible = true" @mouseleave="editMaskVisible = false">
     <div class="question-type-category-display-header">
       <div class="question-type-category-display-header-top">分类</div>
       <div v-if="categories && categories.length > 0" class="question-type-category-display-header-normal"
            v-for="category in categories">
-        <a-tag>{{ category.level }}</a-tag>
+        <div class="question-type-category-display-header-normal-level">{{ category.level }}</div>
         <span class="category-name">{{ category.name }}</span>
       </div>
       <div class="question-type-category-display-header-bottom">
@@ -217,12 +77,12 @@ export default {
         <div class="question-type-category-display-header-top-content">{{ type.name }}</div>
       </div>
       <div v-for="category in categories" class="question-type-category-display-cell">
-        <span>{{category.questionTypes.find(questionType => questionType.type === type.type).addNum }}</span>
+        <span></span>
       </div>
       <div class="question-type-category-display-cell-sum">0 / 0.0</div>
     </div>
     <div v-show="editMaskVisible" class="edit-mask-container">
-      <a-button @click="drawerVisible = true">编辑</a-button>
+      <a-button @click="editSettingsForTypeAndCategory">编辑</a-button>
     </div>
     <question-type-category-edit-drawer
       :drawer-visible="drawerVisible"
@@ -230,6 +90,7 @@ export default {
       :categories="categories"
       :question-display-types="questionDisplayTypes"
       :question-all-types="defaultQuestionAllTypes"
+      :question-counts="questionCounts"
       @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
       @updateCategories="(newCategories) => categories = newCategories"
     />
