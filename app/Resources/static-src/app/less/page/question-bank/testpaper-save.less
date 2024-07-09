@@ -397,7 +397,7 @@
           padding-left: 98px;
           flex-direction: column;
           align-items: flex-start;
-          gap: 10px;
+          gap: 16px;
           align-self: stretch;
 
           .question-category-choose-btn {
@@ -624,11 +624,11 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      color: var(---Text-5, #37393D);
+      color: #37393D;
       text-align: center;
       font-feature-settings: 'clig' off, 'liga' off;
       font-weight: 400;
-      line-height: 24px; /* 150% */
+      line-height: 24px;
       letter-spacing: 0.1px;
 
       .drawer-header-return {
@@ -711,7 +711,7 @@
       align-self: stretch;
       border-bottom: 1px solid #F2F3F5;
 
-      color: var(---Text-5, #37393D);
+      color: #37393D;
       font-family: "PingFang SC";
       font-size: 14px;
       font-style: normal;
@@ -744,6 +744,22 @@
       font-style: normal;
       font-weight: 400;
       line-height: 22px;
+
+      .question-type-category-display-header-normal-level {
+        display: flex;
+        padding: 0 8px;
+        align-items: center;
+        gap: 3px;
+        border-radius: 2px;
+        border: 1px solid #DCDEE0;
+        background: #FAFAFA;
+        color: #5E6166;
+        font-family: "PingFang SC";
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 20px;
+      }
     }
 
     .category-name {
@@ -782,6 +798,7 @@
 
     .question-type-category-display-cell {
       display: flex;
+      height: 55px;
       padding: 16px;
       justify-content: center;
       align-items: center;
@@ -800,11 +817,11 @@
 
       .question-type-category-display-cell-number {
         min-height: 22px;
-        color: var(---Text-5, #37393D);
+        color: #37393D;
       }
 
       .question-type-category-display-cell-number-total {
-        color: var(---Text-2, #C0C0C2);
+        color: #C0C0C2;
       }
 
       .question-type-category-display-cell-number-edit {
@@ -818,10 +835,10 @@
     }
 
     .question-type-category-display-cell.question-type-category-display-cell-inactive {
-      background: var(---fill-2, #F5F5F5);
+      background: #F5F5F5;
 
       .question-type-category-display-cell-number {
-        color: var(---Text-2, #C0C0C2);
+        color: #C0C0C2;
       }
     }
 
@@ -880,7 +897,8 @@
       left: 0;
       bottom: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.10);
       display: flex;
       justify-content: center;
       align-items: center;

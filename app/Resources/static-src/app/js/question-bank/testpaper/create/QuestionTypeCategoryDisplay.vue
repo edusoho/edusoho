@@ -1,6 +1,7 @@
 <script>
 
 import QuestionTypeCategoryEditDrawer from './QuestionTypeCategoryEditDrawer.vue';
+import {apiClient} from 'common/vue/service/api-client';
 
 export default {
   name: 'QuestionTypeCategoryDisplay',
@@ -8,214 +9,145 @@ export default {
   props: {
     defaultQuestionAllTypes: undefined,
     questionDisplayTypes: undefined,
+    categories: undefined,
+    bankId: undefined,
   },
   data() {
     return {
-      categories: [
-        {
-          id: '1',
-          level: '一级分类',
-          name: '一建《机电》分章练习',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            },
-            {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 5
-            },
-          ]
-        },
-        {
-          id: '2',
-          level: '二级分类',
-          name: '1H410000机电工程技术',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            }, {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 5
-            },
-          ]
-        },
-        {
-          id: '3',
-          level: '三级分类',
-          name: '1H410000机电工程常用材料及工程设备材料',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            }, {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 0
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 0
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 5
-            },
-          ]
-        },
-        {
-          id: '4',
-          level: '三级分类',
-          name: '1H410000机电工程常用材料及工程设备材料',
-          questionTypes: [
-            {
-              type: 'single_choice',
-              addNum: 1,
-              totalNum: 5
-            }, {
-              type: 'choice',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'essay',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'uncertain_choice',
-              addNum: 0,
-              totalNum: 0
-            },
-            {
-              type: 'determine',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'fill',
-              addNum: 0,
-              totalNum: 5
-            },
-            {
-              type: 'material',
-              addNum: 0,
-              totalNum: 0
-            },
-          ]
-        },
-      ],
       editMaskVisible: false,
       drawerVisible: false,
+      countVisible: false,
+      questionConfigs: {
+        single_choice: {
+          count: {
+            choose: {},
+            total: {},
+          },
+          score: 2
+        },
+        choice: {
+          count: {
+            choose: {},
+            total: {},
+          },
+          score: 2
+        },
+        essay: {
+          count: {
+            choose: {},
+            total: {},
+          },
+          score: 2
+        },
+        uncertain_choice: {
+          count: {
+            choose: {},
+            total: {},
+          },
+          score: 2
+        },
+        determine: {
+          count: {
+            choose: {},
+            total: {},
+          },
+          score: 2
+        },
+        fill: {
+          count: {
+            choose: {},
+            total: {},
+          },
+          score: 2
+        },
+        material: {
+          count: {
+            choose: {},
+            total: {},
+          },
+          score: 2
+        },
+      },
     };
   },
-  methods: {
-    showEditMask() {
-      this.editMaskVisible = true;
+  computed: {
+    totalCount() {
+      return (categoryId, type) => {
+        if (!this.questionConfigs[type].count.total[categoryId]) {
+          return 0;
+        }
+        return this.questionConfigs[type].count.total[categoryId];
+      }
     },
-    hideEditMask() {
-      this.editMaskVisible = false;
+    chooseCount() {
+      return (categoryId, type) => {
+        if (!this.countVisible) {
+          return '';
+        }
+        if (!this.questionConfigs[type].count.choose[categoryId]) {
+          return 0;
+        }
+        return this.questionConfigs[type].count.choose[categoryId];
+      }
+    },
+    sumCount() {
+      return type => {
+        let sumCount = 0;
+        this.categories.forEach(category => {
+          if (this.questionConfigs[type].count.choose[category.id]) {
+            sumCount += this.questionConfigs[type].count.choose[category.id];
+          }
+        });
+
+        return sumCount;
+      }
+    },
+    sumScore() {
+      return type => {
+        let sumCount = 0;
+        this.categories.forEach(category => {
+          if (this.questionConfigs[type].count.choose[category.id]) {
+            sumCount += this.questionConfigs[type].count.choose[category.id];
+          }
+        });
+
+        return (sumCount * this.questionConfigs[type].score).toFixed(1);
+      }
+    }
+  },
+  methods: {
+    fetchQuestionCounts() {
+      let categoryIds = [];
+      this.categories.forEach(category => {
+        this.questionDisplayTypes.forEach(type => {
+          this.questionConfigs[type.type].count.total[category.id] = 0;
+          this.questionConfigs[type.type].count.choose[category.id] = 0;
+        });
+        categoryIds.push(category.id);
+      });
+      apiClient.get('/api/item/categoryIdAndType/count', {
+        params: {
+          bank_id: this.bankId,
+          category_ids: categoryIds,
+        }
+      }).then(res => {
+        res.forEach(item => {
+          let type = this.questionConfigs[item.type];
+          type.count.total[item.category_id] = item.itemNum;
+          this.questionConfigs[item.type] = {};
+          this.$set(this.questionConfigs, item.type, type);
+        });
+      });
+    },
+    editSettingsForTypeAndCategory() {
+      this.fetchQuestionCounts();
+      this.drawerVisible = true;
     },
     handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
-      this.$emit('updateDisplayQuestionType',questionAllTypes, questionDisplayTypes);
-    },
-    showAddNum(category) {
-      const isShowNum = category.addNum > 0 && category.totalNum > 0 || category.totalNum === 0;
-      if (isShowNum) {
-        return category.addNum;
-      } else {
-        return '';
-      }
-    },
-    getQuestionNum(type) {
-      let addNum = 0;
-      if (this.categories && this.categories.length > 0) {
-        for (const category of this.categories) {
-          const num = Number.parseInt(category.questionTypes.find(questionType => questionType.type === type.type).addNum);
-          addNum += isNaN(num) ? 0 : num;
-        }
-      }
-
-      return addNum;
-    },
-    getTotalScore(type) {
-      const questionNum = this.getQuestionNum(type);
-      return (questionNum * this.questionDisplayTypes.find(questionType => questionType.type === type.type).score).toFixed(1);
+      this.$emit('updateDisplayQuestionType', questionAllTypes, questionDisplayTypes);
     },
     handleSaveDrawer(categories, questionDisplayTypes) {
+      this.countVisible = true;
       this.categories = categories;
       this.$emit('updateCategories', categories);
       this.handleUpdateDisplayQuestionType(this.defaultQuestionAllTypes, questionDisplayTypes);
@@ -228,12 +160,12 @@ export default {
 
 </script>
 <template>
-  <div class="question-type-category-display" @mouseover="showEditMask" @mouseleave="hideEditMask">
+  <div class="question-type-category-display" @mouseover="editMaskVisible = true" @mouseleave="editMaskVisible = false">
     <div class="question-type-category-display-header">
       <div class="question-type-category-display-header-top">分类</div>
       <div v-if="categories && categories.length > 0" class="question-type-category-display-header-normal"
            v-for="category in categories">
-        <a-tag>{{ category.level }}</a-tag>
+        <div class="question-type-category-display-header-normal-level">{{ category.level }}</div>
         <span class="category-name">{{ category.name }}</span>
       </div>
       <div class="question-type-category-display-header-bottom">
@@ -246,22 +178,21 @@ export default {
       <div class="question-type-category-display-header-top">
         <div class="question-type-category-display-header-top-content">{{ type.name }}</div>
       </div>
-      <div v-for="category in categories" class="question-type-category-display-cell" :class="{'question-type-category-display-cell-inactive': showAddNum(category.questionTypes.find(questionType => questionType.type === type.type)) === 0}">
-        <span class="question-type-category-display-cell-number">{{ showAddNum(category.questionTypes.find(questionType => questionType.type === type.type)) }}</span>
+      <div v-for="category in categories" class="question-type-category-display-cell" :class="{'question-type-category-display-cell-inactive': countVisible && totalCount(category.id, type.type) === 0}">
+        <span class="question-type-category-display-cell-number">{{ chooseCount(category.id, type.type) }}</span>
       </div>
-      <div class="question-type-category-display-cell-sum">{{ `${getQuestionNum(type)} / ${getTotalScore(type)}` }}</div>
+      <div class="question-type-category-display-cell-sum">{{ sumCount(type.type) }}/{{ sumScore(type.type) }}</div>
     </div>
     <div v-show="editMaskVisible" class="edit-mask-container">
-      <a-button @click="drawerVisible = true">编辑</a-button>
+      <a-button @click="editSettingsForTypeAndCategory">编辑</a-button>
     </div>
     <question-type-category-edit-drawer
       :drawer-visible="drawerVisible"
       @closeDrawer="drawerVisible = false"
+      :question-configs="questionConfigs"
       :default-categories="categories"
       :default-question-display-types="questionDisplayTypes"
-      :default-question-all-types="defaultQuestionAllTypes"
       @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
-      @updateCategories="(newCategories) => categories = newCategories"
       @saveDrawer="handleSaveDrawer"
     />
   </div>

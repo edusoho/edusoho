@@ -146,8 +146,13 @@
               />
               <span class="question-category-choose-btn-text">选择分类</span>
             </div>
-            <a-drawer title="选择分类" :visible="drawerVisible" :maskClosable="false" width="960" @close="onDrawerClose"
-                      class="question-category-choose-drawer">
+            <a-drawer
+              title="选择分类"
+              width="960"
+              :visible="drawerVisible"
+              :maskClosable="false"
+              @close="onDrawerClose"
+              class="question-category-choose-drawer">
               <div class="question-category-choose-container-body">
                 <div class="question-category-choose-all">
                   <div class="question-category-choose-all-header">
@@ -202,9 +207,7 @@
                          class="question-category-choose-selected-body-item">
                       <div class="question-category-choose-selected-body-item-text">
                         <div class="question-category-choose-selected-body-item-text-name">{{ category.name }}</div>
-                        <span class="question-category-choose-selected-body-item-text-level">{{
-                            categoryLevelText(category.depth)
-                          }}</span>
+                        <span class="question-category-choose-selected-body-item-text-level">{{ category.level }}</span>
                       </div>
                       <img
                         class="question-category-choose-selected-body-item-remove"
@@ -221,16 +224,20 @@
                   <button class="question-category-choose-container-footer-btn-cancel" @click="onDrawerClose">
                     <span class="question-category-choose-container-footer-btn-text">取消</span>
                   </button>
-                  <button class="question-category-choose-container-footer-btn-save">
+                  <button class="question-category-choose-container-footer-btn-save" @click="saveCheckedCategories">
                     <span class="question-category-choose-container-footer-btn-text">保存</span>
                   </button>
                 </div>
               </div>
             </a-drawer>
-            <question-type-category-display :question-display-types="questionDisplayTypes"
-                                            :default-question-all-types="questionAllTypes"
-                                            @updateCategories="handleUpdateCategories"
-                                            @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
+            <question-type-category-display
+              v-show="selectedQuestionCategories.length > 0"
+              :question-display-types="questionDisplayTypes"
+              :default-question-all-types="questionAllTypes"
+              :categories="selectedQuestionCategories"
+              :bankId="bankId"
+              @updateCategories="handleUpdateCategories"
+              @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
             />
           </div>
         </div>
@@ -331,7 +338,43 @@ export default {
       difficultyVisible: false,
       checkChildrenOperationVisible: {},
       questionDisplayTypes: [],
-      questionAllTypes: null,
+      questionAllTypes: [
+        {
+          type: "single_choice",
+          name: "单选题",
+          checked: true,
+        },
+        {
+          type: "choice",
+          name: "多选题",
+          checked: true,
+        },
+        {
+          type: "essay",
+          name: "问答题",
+          checked: true,
+        },
+        {
+          type: "uncertain_choice",
+          name: "不定项",
+          checked: true,
+        },
+        {
+          type: "determine",
+          name: "判断题",
+          checked: true,
+        },
+        {
+          type: "fill",
+          name: "填空题",
+          checked: true,
+        },
+        {
+          type: "material",
+          name: "材料题",
+          checked: true,
+        },
+      ],
       questionCounts: {
         single_choice: {
           choose: 0,
@@ -369,6 +412,7 @@ export default {
       questionCategories: [],
       questionCategoriesTree: {},
       checkedQuestionCategoryIds: {},
+      selectedQuestionCategories: [],
       difficultyScales: {
         simple: {
           text: '简单',
@@ -456,15 +500,6 @@ export default {
       }
       return this.questionCategories.length > 0;
     },
-    categoryLevelText() {
-      return level => {
-        return {
-          1: '一级分类',
-          2: '二级分类',
-          3: '三级分类',
-        }[level];
-      };
-    }
   },
   mounted() {
     this.fetchQuestionCounts();
@@ -526,6 +561,7 @@ export default {
             id: category.id,
             name: category.name,
             depth: category.depth,
+            level: this.getCategoryLevelText(category.depth)
           });
           this.questionCategoriesTree[category.id] = {
             children: []
@@ -535,6 +571,13 @@ export default {
           }
         });
       });
+    },
+    getCategoryLevelText(depth) {
+      return {
+        1: '一级分类',
+        2: '二级分类',
+        3: '三级分类',
+      }[depth];
     },
     backConfirm() {
       this.$confirm({
@@ -556,8 +599,7 @@ export default {
         }
       });
     },
-    handleUpdateDisplayQuestionType(questionAllTypes, questionDisplayTypes) {
-      this.questionAllTypes = questionAllTypes;
+    handleUpdateDisplayQuestionType(questionDisplayTypes) {
       this.questionDisplayTypes = questionDisplayTypes;
     },
     onRadioChange(event) {
@@ -639,6 +681,16 @@ export default {
     },
     unCheckedCategory(id) {
       this.$set(this.checkedQuestionCategoryIds, id, false);
+    },
+    saveCheckedCategories() {
+      this.selectedQuestionCategories = [];
+      this.questionCategories.forEach(category => {
+        if (this.checkedQuestionCategoryIds[category.id]) {
+          this.selectedQuestionCategories.push(category);
+        }
+      });
+      this.drawerVisible = false;
+      this.$message.success('保存成功');
     },
     handleUpdateCategories(categories) {
       this.categories = categories;
