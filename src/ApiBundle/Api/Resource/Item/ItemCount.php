@@ -12,27 +12,27 @@ class ItemCount extends AbstractResource
     public function search(ApiRequest $request, $type)
     {
         $conditions = $request->query->all();
-        $methodName = 'getCountItemBy'.ucfirst($type);
+        if (!isset($conditions['bank_id'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $methodName = 'countItemBy' . ucfirst($type);
 
         return $this->$methodName($conditions);
     }
 
-    public function getCountItemByDifficulty($conditions)
+    private function countItemByDifficulty($conditions)
     {
-        if (!isset($conditions['bank_id'])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-
         return $this->getItemService()->getItemCountGroupByDifficulty($conditions);
     }
 
-    public function getCountItemByQuestionType($conditions)
+    private function countItemByQuestionType($conditions)
     {
-        if (!isset($conditions['bank_id'])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-
         return $this->getItemService()->getItemCountGroupByTypes($conditions);
+    }
+
+    private function countItemByCategoryIdAndType($conditions)
+    {
+        return $this->getItemService()->countItemGroupByCategoryIdAndType($conditions);
     }
 
     /**

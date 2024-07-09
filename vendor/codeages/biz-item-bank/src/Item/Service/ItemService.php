@@ -34,6 +34,8 @@ interface ItemService
 
     public function getItemCountGroupByDifficulty($conditions);
 
+    public function countItemGroupByCategoryIdAndType($conditions);
+
     public function findItemsByCategoryIds($categoryIds);
 
     public function deleteItem($id, $isBatch = false);
