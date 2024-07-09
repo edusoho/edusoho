@@ -3,9 +3,9 @@
     <div class="testpaper-title-left">
       <div
         v-for="item in list"
-        :key="item.id"
-        :class="{ active: activeIndex === item.id }"
-        @click="activeIndex = item.id"
+        :key="item.code"
+        :class="{ active: activeIndex === item.code }"
+        @click="activeIndex = item.code"
       >
         <span>
           <img :src="item.img" alt="" v-if="item.img">
@@ -17,7 +17,7 @@
       <button class="testpaper-title-right-create" @click="showCreatePaperModal">
         创建试卷
       </button>
-      <button class="testpaper-title-right-import">导入固定卷</button>
+      <button v-if="activeIndex === 'all'" class="testpaper-title-right-import">导入固定卷</button>
     </div>
 
     <a-modal
@@ -72,14 +72,16 @@ export default {
         {
           id: 0,
           name: "试卷列表",
+          code: "all"
         },
         {
           id: 1,
           name: "个性卷",
+          code: "ai_personality",
           img: "/static-dist/app/img/question-bank/testpaperAi.png",
         },
       ],
-      activeIndex: 0,
+      activeIndex: "all",
       activeTestTypeIndex: 0,
       isShowModal: false,
       testTypeList: [
@@ -128,5 +130,10 @@ export default {
       });
     },
   },
+  watch: {
+    activeIndex: function (val) {
+      this.$emit('changeTab', val)
+    }
+  }
 };
 </script>

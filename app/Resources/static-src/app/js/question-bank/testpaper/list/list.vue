@@ -69,6 +69,7 @@ export default {
       },
       selectedRowKeys: [],
       pageSizeOptions: ['10', '20', '30', '40', '50'],
+      currentTab: 'all',
     };
   },
   methods: {
@@ -143,6 +144,27 @@ export default {
       await Testpaper.changeStatus(record.id, 'closed');
       record.status = 'closed';
       this.$message.success(Translator.trans('question.bank.paper.close.success'));
+    },
+    async handleChangeTab(tab) {
+      this.currentTab = tab;
+      this.pagination.current = 1;
+      if (tab === 'all') {
+        const params = {
+          limit: this.pagination.pageSize,
+          offset: (this.pagination.current - 1) * this.pagination.pageSize
+        };
+        this.type = undefined;
+        await this.fetchTestPaper(params);
+      } else if (tab === 'ai_personality') {
+
+        const params = {
+          limit: this.pagination.pageSize,
+          offset: (this.pagination.current - 1) * this.pagination.pageSize
+        };
+        this.type = 'ai_personality';
+
+        await this.fetchTestPaper(params);
+      }
     }
   },
   watch: {
@@ -190,7 +212,7 @@ export default {
 
 <template>
   <div class="test-paper-list-container">
-    <list-header/>
+    <list-header @changeTab="handleChangeTab"/>
     <div class="condition-bar">
       <a-select v-model="status" :placeholder="'question.bank.paper.status'|trans" style="width: 156px" allow-clear>
         <a-select-option value="1">
@@ -203,14 +225,14 @@ export default {
           {{ 'question.bank.paper.fail'|trans }}
         </a-select-option>
       </a-select>
-      <a-select :placeholder="'question.bank.paper.type'|trans" style="width: 156px" allow-clear>
-        <a-select-option value="3">
+      <a-select v-model="type" :placeholder="'question.bank.paper.type'|trans" style="width: 156px" allow-clear>
+        <a-select-option value="regular">
           {{ 'question.bank.paper.regular'|trans }}
         </a-select-option>
-        <a-select-option value="1">
+        <a-select-option value="random">
           {{ 'question.bank.paper.random'|trans }}
         </a-select-option>
-        <a-select-option value="2">
+        <a-select-option value="ai_personality">
           {{ 'question.bank.paper.ai_personality'|trans }}
         </a-select-option>
       </a-select>
