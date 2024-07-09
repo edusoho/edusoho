@@ -49,14 +49,19 @@
             <span class="test-paper-save-form-item-label-text">试卷说明</span>
           </div>
           <a-form-item>
-            <div>
+            <a-input
+              placeholder="请输入试卷说明"
+              @focus="isShow = true"
+              v-show="!isShow"
+            />
+            <span class="max-num">{{testpaperFormState.description ? testpaperFormState.description.length : 0}}/500</span>
+            <div v-show="isShow">
               <a-textarea
                 v-model="testpaperFormState.description"
                 :data-image-download-url="showCKEditorData.publicPath"
                 :name="`test-paper-explain`"
               />
             </div>
-            <span class="max-num">{{testpaperFormState.description ? testpaperFormState.description.length : 0}}/500</span>
           </a-form-item>
         </div>
 
