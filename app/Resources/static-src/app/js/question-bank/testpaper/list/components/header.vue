@@ -150,9 +150,15 @@ export default {
     handleOk() {
       this.isShowModal = false;
       if (this.activeIndex === 'all') {
-        this.$router.push({
-          name: 'create'
-        });
+        if (this.activeTestTypeIndex === 0) {
+          window.location.href = document.getElementById('randomTestpaperCreatePath').value;
+        } else if (this.activeTestTypeIndex === 1) {
+          window.location.href = document.getElementById('testpaperCreatePath').value;
+        } else if (this.activeTestTypeIndex === 2) {
+          this.$router.push({name: 'create'});
+        } else {
+          this.$router.push({name: 'create', query: {type: 'ai_personality'}});
+        }
       } else if (this.activeIndex === 'ai_personality') {
         this.$router.push({
           name: 'create', query: {type: 'ai_personality', name: this.testpaperName}
