@@ -9,7 +9,7 @@
           <span class="test-create-title-left-back-text">返回</span>
         </div>
         <i></i>
-        <testpaper-type-tag :type="testpaperFormState.type"/>
+        <testpaper-type-tag :type="testPaperFormState.type"/>
       </div>
       <div class="test-create-title-right">
         <span class="test-create-title-right-item">
@@ -38,7 +38,7 @@
         </template>
       </a-alert>
       <a-form id="test-create-form" :form="form" class="test-paper-save-form">
-        <div class="test-paper-save-form-item">
+        <div class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
             <span class="test-paper-save-form-item-label-text">试卷名称</span>
@@ -46,38 +46,38 @@
           <a-form-item>
             <a-input
               placeholder="请输入试卷名称"
+              :maxLength="50"
               @change="handleChangeName"
               v-decorator="[
                 'testname',
-                { initialValue: testpaperFormState.name, rules: [{ required: true, message: '请输入试卷名称' }] },
+                { initialValue: testPaperFormState.name, rules: [{ required: true, message: '请输入试卷名称' }] },
               ]"
             />
-            <span class="max-num">{{testpaperFormState.name ? testpaperFormState.name.length : 0}}/50</span>
+            <span class="max-num">{{testPaperFormState.name ? testPaperFormState.name.length : 0}}/50</span>
           </a-form-item>
         </div>
 
-        <div class="test-paper-save-form-item">
+        <div class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">试卷说明</span>
           </div>
           <a-form-item>
             <a-input
               placeholder="请输入试卷说明"
-              @focus="isShow = true"
-              v-show="!isShow"
+              @focus="onDescriptionInputFocus"
+              v-show="!descriptionEditorVisible"
             />
-            <span class="max-num">{{testpaperFormState.description ? testpaperFormState.description.length : 0}}/500</span>
-            <div v-show="isShow">
+            <span class="max-num" v-show="!descriptionEditorVisible">{{testPaperFormState.description ? testPaperFormState.description.length : 0}}/500</span>
+            <div v-show="descriptionEditorVisible">
               <a-textarea
-                v-model="testpaperFormState.description"
-                :data-image-download-url="showCKEditorData.publicPath"
-                :name="`test-paper-explain`"
+                v-model="testPaperFormState.description"
+                :name="'test-paper-description'"
               />
             </div>
           </a-form-item>
         </div>
 
-        <div v-if="testpaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item">
+        <div v-if="testPaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
             <span class="test-paper-save-form-item-label-text">试卷份数</span>
@@ -91,7 +91,7 @@
                 @change="handleChangeNum"
                 v-decorator="[
                   'testnumber',
-                  { initialValue: testpaperFormState.num, rules: [{ required: true, message: '请至少设置 1 份试卷' }, ] },
+                  { initialValue: testPaperFormState.num, rules: [{ required: true, message: '请至少设置 1 份试卷' }, ] },
                 ]"
               />
             </a-form-item>
@@ -115,9 +115,9 @@
               <div class="test-paper-save-form-item-label">
                 <span class="test-paper-save-form-item-label-text">抽题方式</span>
               </div>
-              <a-radio-group v-model="testpaperFormState.generateType" name="type" @change="onRadioChange">
+              <a-radio-group v-model="testPaperFormState.generateType" name="type" @change="onRadioChange">
                 <a-radio value="questionType">按题型抽题</a-radio>
-                <a-radio v-if="testpaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题</a-radio>
+                <a-radio v-if="testPaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
             <question-type-display-set-menu v-if="chooseQuestionBy === 'questionType'" :default-question-all-types="questionAllTypes"
@@ -254,7 +254,7 @@
           </div>
         </div>
 
-        <div v-if="testpaperFormState.type === 'ai_personality'" class="test-paper-save-form-item">
+        <div v-if="testPaperFormState.type === 'ai_personality'" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">错题比例</span>
           </div>
@@ -267,7 +267,7 @@
                 @change="handleChangeWrongRate"
                 v-decorator="[
                   'wrongQuestionRate',
-                  { initialValue: testpaperFormState.wrongQuestionRate, rules: [{ required: true, message: '请填写错题比例' }, ] },
+                  { initialValue: testPaperFormState.wrongQuestionRate, rules: [{ required: true, message: '请填写错题比例' }, ] },
                 ]"
               />
             </a-form-item>
@@ -275,7 +275,7 @@
           </div>
         </div>
 
-        <div v-if="testpaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item">
+        <div v-if="testPaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">难度调节</span>
           </div>
@@ -335,7 +335,7 @@
 
 <script>
 import {apiClient} from 'common/vue/service/api-client';
-import loadScript from "load-script";
+import loadScript from 'load-script';
 import Draggable from 'vuedraggable';
 import QuestionTypeCategoryDisplay from './QuestionTypeCategoryDisplay.vue';
 import QuestionTypeDisplaySetMenu from '../component/QuestionTypeDisplaySetMenu.vue';
@@ -354,19 +354,15 @@ export default {
   },
   data() {
     return {
-      description: undefined,
       bankId: document.getElementById('itemBankId').value,
-      isShow: false,
-      explainEditor: "",
-      showCKEditorData: {
-        filebrowserImageDownloadUrl:
-          "/editor/download?token=Mnxjb3Vyc2V8aW1hZ2V8MTY3NzY2OTYyN3w5ZjM2NmRjNjg1ZjUyMzJkZGI0ZjM3MDQ1NzMzODhiNA",
-        filebrowserImageUploadUrl:
-          "/editor/upload?token=Mnxjb3Vyc2V8aW1hZ2V8MTY3NzY2OTYyN3w5ZjM2NmRjNjg1ZjUyMzJkZGI0ZjM3MDQ1NzMzODhiNA",
-        jqueryPath:
-          "/static-dist/libs/jquery/dist/jquery.min.js?version=23.1.6",
-        language: "zh-cn",
-        publicPath: "/static-dist/libs/es-ckeditor/ckeditor.js?version=23.1.6"
+      descriptionEditorVisible: false,
+      descriptionEditor: undefined,
+      CKEditorConfig: {
+        publicPath: document.getElementById('ckeditor_path').value,
+        jqueryPath: document.getElementById('jquery_path').value,
+        filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
+        filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
+        language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
       },
       chooseQuestionBy: 'questionType',
       drawerVisible: false,
@@ -470,26 +466,16 @@ export default {
       },
       form: this.$form.createForm(this, {name: "save-test-paper"}),
       categories: [],
-      testpaperFormState: {
+      testPaperFormState: {
         name: '',
         description: '',
         type: 'random',
         questionBankId: null,
         mode: "rand",
-        num: 1,
+        num: 20,
         generateType: "questionType",
         questionCategoryCounts: [],
         scores: {},
-        scoreType: {
-          choice: "question",
-          uncertain_choice: "question",
-          fill: "question"
-        },
-        choiceScore: {
-          choice: 0,
-          uncertain_choice: 0,
-          fill: 0,
-        },
         questionCount: 0,
         percentages: {
           simple: 30,
@@ -541,39 +527,44 @@ export default {
     this.fetchQuestionCounts();
     this.renderQuestionTypeTable();
     this.$nextTick(() => {
-      loadScript(this.showCKEditorData.jqueryPath, err => {
+      loadScript(this.CKEditorConfig.jqueryPath, err => {
         if (err) {
           console.log(err);
         }
-        loadScript(this.showCKEditorData.publicPath, err => {
+        loadScript(this.CKEditorConfig.publicPath, err => {
           if (err) {
             console.log(err);
           }
-          this.TestPaperExplain();
         });
       });
     });
     const type = this.$route.query.type;
-    this.testpaperFormState.type = type || 'random';
+    this.testPaperFormState.type = type || 'random';
 
     const name = this.$route.query.name;
-    this.testpaperFormState.name = name || '';
+    this.testPaperFormState.name = name || '';
 
-    this.alertVisible = this.testpaperFormState.type === 'ai_personality';
+    this.alertVisible = this.testPaperFormState.type === 'ai_personality';
     console.log(this.alertVisible);
   },
   methods: {
-    TestPaperExplain() {
-      this.explainEditor = window.CKEDITOR.replace(`test-paper-explain`, {
+    initDescriptionEditor() {
+      if (this.descriptionEditor) {
+        this.descriptionEditor.destroy();
+      }
+      this.descriptionEditor = CKEDITOR.replace('test-paper-description', {
         toolbar: "Minimal",
-        fileSingleSizeLimit: this.showCKEditorData.fileSingleSizeLimit,
-        filebrowserImageUploadUrl: this.showCKEditorData.filebrowserImageUploadUrl,
-        filebrowserImageDownloadUrl: this.showCKEditorData.filebrowserImageDownloadUrl,
-        language: this.showCKEditorData.language
+        fileSingleSizeLimit: app.fileSingleSizeLimit,
+        filebrowserImageUploadUrl: this.CKEditorConfig.filebrowserImageUploadUrl,
+        filebrowserImageDownloadUrl: this.CKEditorConfig.filebrowserImageDownloadUrl,
+        language: this.CKEditorConfig.language,
+        startupFocus: true,
       });
-      this.explainEditor.on("blur", () => {
-        this.isShow = false
-      })
+      this.descriptionEditor.on('blur', () => {
+        if (this.descriptionEditor.getData() === '') {
+          this.descriptionEditorVisible = false;
+        }
+      });
     },
     fetchQuestionCounts() {
       apiClient.get('/api/item/questionType/count', {
@@ -645,6 +636,10 @@ export default {
     },
     handleUpdateDisplayQuestionType(questionDisplayTypes) {
       this.questionDisplayTypes = questionDisplayTypes;
+    },
+    onDescriptionInputFocus() {
+      this.initDescriptionEditor();
+      this.descriptionEditorVisible = true;
     },
     onRadioChange(event) {
       this.chooseQuestionBy = event.target.value;
@@ -748,9 +743,9 @@ export default {
 
           this.fetching = true;
           let questionNum = 0;
-          this.testpaperFormState.questionCategoryCounts = [];
-          this.testpaperFormState.questionBankId = this.itemBankId;
-          this.testpaperFormState.num = `${this.testpaperFormState.num}`;
+          this.testPaperFormState.questionCategoryCounts = [];
+          this.testPaperFormState.questionBankId = this.itemBankId;
+          this.testPaperFormState.num = `${this.testPaperFormState.num}`;
 
           for (const category of this.categories) {
 
@@ -760,31 +755,31 @@ export default {
               questionNum += questionType.addNum;
             }
 
-            this.testpaperFormState.questionCategoryCounts.push({
+            this.testPaperFormState.questionCategoryCounts.push({
               categoryId: category.id,
               sections: section
             })
           }
 
-          this.testpaperFormState.questionCount = questionNum;
+          this.testPaperFormState.questionCount = questionNum;
           const scored = {};
 
           for (const questionType of this.questionAllTypes) {
             scored[questionType.type] = questionType.score;
           }
 
-          this.testpaperFormState.scores = scored;
+          this.testPaperFormState.scores = scored;
 
-          this.testpaperFormState.percentages = {
+          this.testPaperFormState.percentages = {
             simple: `${this.difficultyScales.simple.scale}`,
             normal: `${this.difficultyScales.normal.scale}`,
             difficulty: `${this.difficultyScales.difficulty.scale}`,
           }
           try {
-            await Testpaper.create(this.testpaperFormState);
+            await Testpaper.create(this.testPaperFormState);
             await this.$router.push({
               name: 'list',
-              query: {tab: this.testpaperFormState.type === 'ai_personality' ? 'ai_personality' : 'all'}
+              query: {tab: this.testPaperFormState.type === 'ai_personality' ? 'ai_personality' : 'all'}
             });
             this.$message.success('创建成功');
           } catch (err) {
@@ -796,19 +791,19 @@ export default {
       });
     },
     handleChangeNum(value) {
-      this.testpaperFormState.num = Number.parseInt(value) || 1;
+      this.testPaperFormState.num = Number.parseInt(value) || 1;
       this.form.setFieldsValue({
-        testnumber: this.testpaperFormState.num,
+        testnumber: this.testPaperFormState.num,
       });
     },
     handleChangeWrongRate(value) {
-      this.testpaperFormState.wrongQuestionRate = Number.parseInt(value) || 0;
+      this.testPaperFormState.wrongQuestionRate = Number.parseInt(value) || 0;
       this.form.setFieldsValue({
-        wrongQuestionRate: this.testpaperFormState.wrongQuestionRate,
+        wrongQuestionRate: this.testPaperFormState.wrongQuestionRate,
       });
     },
     handleChangeName(value) {
-      this.testpaperFormState.name = value.target.value;
+      this.testPaperFormState.name = value.target.value;
       this.form.setFieldsValue({
         testname: value,
       });
