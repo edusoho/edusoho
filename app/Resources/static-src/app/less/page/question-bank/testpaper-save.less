@@ -109,6 +109,9 @@
 
   .test-create-content {
     padding: 32px 46px 20px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 
     .test-paper-save-form {
       display: flex;
@@ -929,6 +932,40 @@
       font-weight: 400;
       line-height: 22px;
     }
+  }
+
+  .ant-alert-icon {
+    position: relative;
+    top: -2px;
+    left: -12px;
+    img {
+      height: 16.5px;
+    }
+  }
+
+  .paper-type {
+    width: 92px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 4px 0;
+    border-radius: 4px;
+  }
+
+  .paper-type-regular {
+    background-color: rgb(232, 243, 255);
+    color: rgb(22, 93, 255);
+  }
+
+  .paper-type-random {
+    background-color: rgb(255, 243, 232);
+    color: rgb(247, 114, 52);
+  }
+
+  .paper-type-ai {
+    background-color: rgb(232, 255, 234);
+    color: rgb(0, 180, 42);
   }
 }
 

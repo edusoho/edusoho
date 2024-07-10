@@ -149,9 +149,15 @@ export default {
     },
     handleOk() {
       this.isShowModal = false;
-      this.$router.push({
-        name: 'create'
-      });
+      if (this.activeIndex === 'all') {
+        this.$router.push({
+          name: 'create'
+        });
+      } else if (this.activeIndex === 'ai_personality') {
+        this.$router.push({
+          name: 'create', query: {type: 'ai_personality', name: this.testpaperName}
+        });
+      }
     },
     handleChangeName(value) {
       this.testpaperName = value.target.value;

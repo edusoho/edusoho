@@ -9,7 +9,7 @@
           <span class="test-create-title-left-back-text">返回</span>
         </div>
         <i></i>
-        <span class="test-create-title-left-type">随机卷</span>
+        <testpaper-type-tag :type="testpaperFormState.type"/>
       </div>
       <div class="test-create-title-right">
         <span class="test-create-title-right-item">
@@ -25,6 +25,18 @@
     </div>
 
     <div class="test-create-content">
+      <a-alert
+        v-if="alertVisible"
+        message="个性卷 —— 个性化纠错练习，提升学员对知识的全面掌握，错题，新题优先作答，错误率较高的知识点反个性习，提升掌握度！"
+        type="success"
+        closable
+        :after-close="() => alertVisible = false"
+        show-icon
+      >
+        <template slot="icon">
+          <img src="/static-dist/app/img/question-bank/testpaperAiIcon.png" alt=""/>
+        </template>
+      </a-alert>
       <a-form id="test-create-form" :form="form" class="test-paper-save-form">
         <div class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
@@ -65,7 +77,7 @@
           </a-form-item>
         </div>
 
-        <div class="test-paper-save-form-item">
+        <div v-if="testpaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
             <span class="test-paper-save-form-item-label-text">试卷份数</span>
@@ -105,7 +117,7 @@
               </div>
               <a-radio-group v-model="testpaperFormState.generateType" name="type" @change="onRadioChange">
                 <a-radio value="questionType">按题型抽题</a-radio>
-                <a-radio value="questionTypeCategory">按题型+分类抽题</a-radio>
+                <a-radio v-if="testpaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
             <question-type-display-set-menu v-if="chooseQuestionBy === 'questionType'" :default-question-all-types="questionAllTypes"
@@ -242,7 +254,28 @@
           </div>
         </div>
 
-        <div class="test-paper-save-form-item">
+        <div v-if="testpaperFormState.type === 'ai_personality'" class="test-paper-save-form-item">
+          <div class="test-paper-save-form-item-label">
+            <span class="test-paper-save-form-item-label-text">错题比例</span>
+          </div>
+          <div class="test-paper-number">
+            <a-form-item>
+              <a-input-number
+                id="inputNumber"
+                :min="0"
+                :max="100"
+                @change="handleChangeWrongRate"
+                v-decorator="[
+                  'wrongQuestionRate',
+                  { initialValue: testpaperFormState.wrongQuestionRate, rules: [{ required: true, message: '请填写错题比例' }, ] },
+                ]"
+              />
+            </a-form-item>
+            <span class="test-paper-number-text">%</span>
+          </div>
+        </div>
+
+        <div v-if="testpaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">难度调节</span>
           </div>
@@ -307,9 +340,11 @@ import Draggable from 'vuedraggable';
 import QuestionTypeCategoryDisplay from './QuestionTypeCategoryDisplay.vue';
 import QuestionTypeDisplaySetMenu from '../component/QuestionTypeDisplaySetMenu.vue';
 import {Testpaper} from 'common/vue/service';
+import TestpaperTypeTag from '../../../common/src/TestpaperTypeTag.vue';
 
 export default {
   components: {
+    TestpaperTypeTag,
     QuestionTypeDisplaySetMenu,
     QuestionTypeCategoryDisplay,
     Draggable
@@ -464,6 +499,7 @@ export default {
         wrongQuestionRate: "0"
       },
       fetching: false,
+      alertVisible: false,
     };
   },
   computed: {
@@ -517,6 +553,14 @@ export default {
         });
       });
     });
+    const type = this.$route.query.type;
+    this.testpaperFormState.type = type || 'random';
+
+    const name = this.$route.query.name;
+    this.testpaperFormState.name = name || '';
+
+    this.alertVisible = this.testpaperFormState.type === 'ai_personality';
+    console.log(this.alertVisible);
   },
   methods: {
     TestPaperExplain() {
@@ -754,6 +798,12 @@ export default {
       this.testpaperFormState.num = Number.parseInt(value) || 1;
       this.form.setFieldsValue({
         testnumber: this.testpaperFormState.num,
+      });
+    },
+    handleChangeWrongRate(value) {
+      this.testpaperFormState.wrongQuestionRate = Number.parseInt(value) || 0;
+      this.form.setFieldsValue({
+        wrongQuestionRate: this.testpaperFormState.wrongQuestionRate,
       });
     },
     handleChangeName(value) {
