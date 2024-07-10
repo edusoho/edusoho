@@ -16,6 +16,8 @@
     <div class="test-paper-container">
       <div id="app"></div>
       <input type="hidden" id="itemBankId" value="{{ questionBank.itemBankId }}">
+      <input type="hidden" id="randomTestpaperCreatePath" value="{{ path('question_bank_manage_random_testpaper_create', {id: questionBank.itemBankId}) }}">
+      <input type="hidden" id="testpaperCreatePath" value="{{ path('question_bank_manage_testpaper_create', {id: questionBank.itemBankId}) }}">
     </div>
   </div>
 {% endblock %}
