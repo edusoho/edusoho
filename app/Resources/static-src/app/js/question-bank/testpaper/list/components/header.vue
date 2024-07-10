@@ -170,6 +170,14 @@ export default {
     activeIndex: function (val) {
       this.$emit('changeTab', val);
     }
+  },
+  mounted() {
+    const type = this.$route.query.type;
+    if (type === 'ai_personality') {
+      this.activeIndex = 'ai_personality';
+    } else {
+      this.activeIndex = 'all';
+    }
   }
 };
 </script>

@@ -15,4 +15,7 @@ export const Testpaper = _.assignIn(baseService, {
   async create(params) {
     return await apiClient.post(`/api/assessment`, params);
   },
+  async delete(params) {
+    return await apiClient.delete(`/api/assessment`, {data: params});
+  },
 });

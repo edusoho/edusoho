@@ -782,8 +782,9 @@ export default {
           }
           try {
             await Testpaper.create(this.testpaperFormState);
-            this.$router.push({
+            await this.$router.push({
               name: 'list',
+              query: {tab: this.testpaperFormState.type === 'ai_personality' ? 'ai_personality' : 'all'}
             });
             this.$message.success('创建成功');
           } catch (err) {

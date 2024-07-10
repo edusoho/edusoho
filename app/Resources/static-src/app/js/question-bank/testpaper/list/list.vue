@@ -165,6 +165,32 @@ export default {
 
         await this.fetchTestPaper(params);
       }
+    },
+    handleDelete(paper) {
+      const refresh = this.fetchTestPaper;
+      this.$confirm({
+        title: '确定要删除该试卷吗？',
+        icon: 'exclamation-circle',
+        okText: '删除',
+        cancelText: '取消',
+        centered: true,
+        onOk: async () => {
+          try {
+            await Testpaper.delete({id: paper.id});
+            this.$message.success('删除成功');
+            const params = {
+              limit: this.pagination.pageSize,
+              offset: (this.pagination.current - 1) * this.pagination.pageSize
+            };
+            await refresh(params);
+          } catch (err) {
+            this.$message.success('删除失败', err);
+          }
+        },
+      });
+    },
+    exportPaper(paper) {
+      window.open(`/question_bank/${this.itemBankId}/testpaper/${paper.id}/export`, '_blank')
     }
   },
   watch: {
@@ -317,6 +343,15 @@ export default {
           >
             {{ 'question.bank.paper.edit'|trans }}
           </a-button>
+          <a-dropdown :trigger="['click']" placement="bottomRight">
+            <a-button type="link"
+                      class="operation-group-button-active">...
+            </a-button>
+            <a-menu slot="overlay">
+              <a-menu-item v-if="['closed', 'draft'].includes(record.status)" key="delete" @click="handleDelete(record)">删除</a-menu-item>
+              <a-menu-item key="export" @click="exportPaper(record)">导出</a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </div>
       </template>
     </a-table>
