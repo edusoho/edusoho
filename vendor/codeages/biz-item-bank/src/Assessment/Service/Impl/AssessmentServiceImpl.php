@@ -162,8 +162,8 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
     public function deleteAssessmentByIds($assessmentIds)
     {
-        $assessments = $this->getAssessment($assessmentId);
-        if (empty($assessment)) {
+        $assessments = $this->findAssessmentsByIds($assessmentIds);
+        if (empty($assessments)) {
             throw new AssessmentException('assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
         }
 
@@ -172,9 +172,9 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
             $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
 
-            $this->processBatchDeleteAssessment($assessments);
+            $this->processBatchDeleteAssessment($assessmentIds);
 
-            $this->dispatch('assessment.batch.delete', $assessment);
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
 
             $this->commit();
 
