@@ -191,12 +191,32 @@ export default {
     },
     exportPaper(paper) {
       window.open(`/question_bank/${this.itemBankId}/testpaper/${paper.id}/export`, '_blank')
+    },
+    async handleEdit(paper) {
+      if (paper.type === 'regular') {
+        if (['open', 'closed'].includes(paper.status)) {
+          this.$confirm({
+            title: '确定要进行编辑吗？',
+            content: '当前试卷可能已被应用在考试中，修改试卷内容，可能会对学员答题记录、答题成绩等产生影响',
+            icon: "exclamation-circle",
+            okText: Translator.trans("question.bank.paper.edit"),
+            cancelText: Translator.trans("site.cancel"),
+            onOk: () => {
+              window.location.href = `'/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit'`
+            }
+          });
+        } else {
+          window.location.href = `'/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit'`
+        }
+      } else {
+        await this.$router.push({
+          name: 'update', query: {type: paper.type}, params: {id: paper.id}
+        });
+      }
     }
   },
   watch: {
-    status: function (val) {
-      console.log(val);
-    }
+
   },
   computed: {
     rowSelection() {
@@ -340,7 +360,13 @@ export default {
           <a-button v-if="['draft', 'open'].includes(record.status)"
                     type="link"
                     class="operation-group-button-active"
+                    @click="handleEdit(record)"
           >
+            {{ 'question.bank.paper.edit'|trans }}
+          </a-button>
+          <a-button v-if="['generating'].includes(record.status) || ['closed', 'open'].includes(record.status) && record.type === 'random'"
+                    type="link"
+                    :disabled="true">
             {{ 'question.bank.paper.edit'|trans }}
           </a-button>
           <a-dropdown :trigger="['click']" placement="bottomRight">

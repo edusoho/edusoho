@@ -22,6 +22,17 @@ const routes = [
         itemBankId: document.getElementById('itemBankId').value,
       }
     },
+  },
+  {
+    path: '/update/:id',
+    name: 'update',
+    component: () => import( 'app/js/question-bank/testpaper/create/create.vue'),
+    props: function (route) {
+      return {
+        itemBankId: document.getElementById('itemBankId').value,
+        id: route.params.id
+      }
+    },
   }
 ];
 const router = new Router({
