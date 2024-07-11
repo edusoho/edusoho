@@ -16,8 +16,8 @@
     <div class="test-paper-container">
       <div id="app"></div>
       <input type="hidden" id="itemBankId" value="{{ questionBank.itemBankId }}">
-      <input type="hidden" id="randomTestpaperCreatePath" value="{{ path('question_bank_manage_random_testpaper_create', {id: questionBank.itemBankId}) }}">
-      <input type="hidden" id="testpaperCreatePath" value="{{ path('question_bank_manage_testpaper_create', {id: questionBank.itemBankId}) }}">
+      <input type="hidden" id="fixedTestPaperCreatePath" value="{{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}">
+      <input type="hidden" id="fixedAutoTestPaperCreatePath" value="{{ path('question_bank_manage_random_testpaper_create', {id: questionBank.id}) }}">
       <input type="hidden" id="ckeditor_path" value="{{ asset('static-dist/libs/es-ckeditor/ckeditor.js') }}">
       <input type="hidden" id="jquery_path" value="{{ asset('static-dist/libs/jquery/dist/jquery.min.js') }}">
       <input type="hidden" id="ckeditor_image_upload_url" value="{{ path('editor_upload', {token: upload_token('question')}) }}">
