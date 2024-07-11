@@ -221,6 +221,12 @@ export default {
         cancelText: Translator.trans("site.cancel"),
         onOk: async () => {
           await Testpaper.delete({ids: this.selectedRowKeys});
+          this.$message.success('删除成功');
+          const params = {
+            limit: this.pagination.pageSize,
+            offset: (this.pagination.current - 1) * this.pagination.pageSize
+          };
+          await this.fetchTestPaper(params);
         }
       });
     }
