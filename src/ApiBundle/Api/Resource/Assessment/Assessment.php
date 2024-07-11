@@ -17,6 +17,14 @@ use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class Assessment extends AbstractResource
 {
+    public function get(ApiRequest $request, $id)
+    {
+        $assessment = $this->getAssessmentService()->getAssessment($id);
+        $assessment['assessmentGenerateRule'] = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($id);
+
+        return $assessment;
+    }
+
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
