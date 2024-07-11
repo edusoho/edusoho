@@ -9,7 +9,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class AssessmentFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'name', 'description', 'question_count', 'total_score',
+        'id', 'name', 'description', 'question_count', 'total_score', 'assessmentGenerateRule',
     ];
 
     protected $publicFields = [
