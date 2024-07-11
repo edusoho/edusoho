@@ -546,7 +546,6 @@ export default {
     this.testPaperFormState.name = name || '';
 
     this.alertVisible = this.testPaperFormState.type === 'ai_personality';
-    console.log(this.alertVisible);
   },
   methods: {
     initDescriptionEditor() {
@@ -818,26 +817,7 @@ export default {
     const routeName = this.$route.name;
     if (routeName === 'update') {
       const paper = await Testpaper.get(this.id);
-      // testPaperFormState: {
-      //   name: '',
-      //     description: '',
-      //     type: 'random',
-      //     questionBankId: null,
-      //     mode: "rand",
-      //     num: 20,
-      //     generateType: "questionType",
-      //     questionCategoryCounts: [],
-      //     scores: {},
-      //   questionCount: 0,
-      //     percentages: {
-      //     simple: 30,
-      //       normal: 30,
-      //       difficulty: 40,
-      //   },
-      //   wrongQuestionRate: "0"
-      // },
 
-      console.log(paper);
       this.testPaperFormState.name = paper.name;
       this.testPaperFormState.description = paper.description;
       this.testPaperFormState.num = paper.assessmentGenerateRule.num;
