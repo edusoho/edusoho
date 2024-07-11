@@ -30,7 +30,7 @@
         message="个性卷 —— 个性化纠错练习，提升学员对知识的全面掌握，错题，新题优先作答，错误率较高的知识点反个性习，提升掌握度！"
         type="success"
         closable
-        :after-close="() => alertVisible = false"
+        :after-close="() => this.alertVisible = false"
         show-icon
       >
         <template slot="icon">
@@ -49,11 +49,11 @@
               :maxLength="50"
               @change="handleChangeName"
               v-decorator="[
-                'testname',
+                'name',
                 { initialValue: testPaperFormState.name, rules: [{ required: true, message: '请输入试卷名称' }] },
               ]"
             />
-            <span class="max-num">{{testPaperFormState.name ? testPaperFormState.name.length : 0}}/50</span>
+            <span class="max-num">{{ testPaperFormState.name ? testPaperFormState.name.length : 0 }}/50</span>
           </a-form-item>
         </div>
 
@@ -71,14 +71,16 @@
               @focus="onDescriptionInputFocus"
               v-show="!descriptionEditorVisible"
             />
-            <span class="max-num" v-show="!descriptionEditorVisible">{{testPaperFormState.description ? testPaperFormState.description.length : 0}}/500</span>
+            <span class="max-num"
+                  v-show="!descriptionEditorVisible">{{ testPaperFormState.description ? testPaperFormState.description.length : 0 }}/500</span>
             <div v-show="descriptionEditorVisible">
               <a-textarea :name="'test-paper-description'"/>
             </div>
           </a-form-item>
         </div>
 
-        <div v-if="testPaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
+        <div v-if="testPaperFormState.type !== 'ai_personality'"
+             class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
             <span class="test-paper-save-form-item-label-text">试卷份数</span>
@@ -91,7 +93,7 @@
                 :max="200"
                 @change="handleChangeNum"
                 v-decorator="[
-                  'testnumber',
+                  'num',
                   { initialValue: testPaperFormState.num, rules: [{ required: true, message: '请至少设置 1 份试卷' }, ] },
                 ]"
               />
@@ -118,10 +120,12 @@
               </div>
               <a-radio-group v-model="testPaperFormState.generateType" name="type">
                 <a-radio value="questionType">按题型抽题</a-radio>
-                <a-radio v-if="testPaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题</a-radio>
+                <a-radio v-if="testPaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题
+                </a-radio>
               </a-radio-group>
             </div>
-            <question-type-display-set-menu v-if="testPaperFormState.generateType === 'questionType'" :default-question-all-types="questionAllTypes"
+            <question-type-display-set-menu v-if="testPaperFormState.generateType === 'questionType'"
+                                            :default-question-all-types="questionAllTypes"
                                             @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
           </div>
 
@@ -288,8 +292,13 @@
             <div class="test-paper-save-form-item-label">
               <span class="test-paper-save-form-item-label-text">试卷难度</span>
             </div>
-            <a-slider range :default-value="[difficultyScales.simple.scale, difficultyScales.normal.scale + difficultyScales.difficulty.scale]" :tooltipVisible="false" @change="onSliderChange"
-                      class="test-paper-difficulty-slider"/>
+            <a-slider
+              range
+              :default-value="[difficultyScales.simple.scale, difficultyScales.normal.scale + difficultyScales.difficulty.scale]"
+              :tooltipVisible="false"
+              @change="onSliderChange"
+              class="test-paper-difficulty-slider"
+            />
           </div>
           <div class="test-paper-difficulty-content">
             <div class="test-paper-difficulty-scale">
@@ -595,7 +604,8 @@ export default {
           return;
         }
 
-        this.form.validateFields(['description'], async () => {});
+        this.form.validateFields(['description'], async () => {
+        });
       });
     },
     handleScroll: function () {},
@@ -778,7 +788,10 @@ export default {
 
             const section = {};
             for (const questionType of category.questionTypes) {
-              section[questionType.type] = {count: questionType.addNum, name: this.questionAllTypes.find(type => type.type === questionType.type).name};
+              section[questionType.type] = {
+                count: questionType.addNum,
+                name: this.questionAllTypes.find(type => type.type === questionType.type).name
+              };
               questionNum += questionType.addNum;
             }
 
@@ -820,7 +833,7 @@ export default {
     handleChangeNum(value) {
       this.testPaperFormState.num = Number.parseInt(value) || 1;
       this.form.setFieldsValue({
-        testnumber: this.testPaperFormState.num,
+        num: this.testPaperFormState.num,
       });
     },
     handleChangeWrongRate(value) {
@@ -832,7 +845,7 @@ export default {
     handleChangeName(value) {
       this.testPaperFormState.name = value.target.value;
       this.form.setFieldsValue({
-        testname: value,
+        name: value,
       });
     },
   },
