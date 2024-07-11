@@ -145,6 +145,11 @@ export default {
       record.status = 'closed';
       this.$message.success(Translator.trans('question.bank.paper.close.success'));
     },
+    async preview(record) {
+      if (record.type === 'ai_personality') {
+        await this.$router.push({name: 'preview', params: {id: record.id}});
+      }
+    },
     async handleChangeTab(tab) {
       this.currentTab = tab;
       this.pagination.current = 1;
@@ -331,6 +336,7 @@ export default {
           <a-button v-if="['draft', 'open'].includes(record.status)"
                     type="link"
                     class="operation-group-button-active"
+                    @preview="preview(record)"
           >
             {{ 'question.bank.paper.preview'|trans }}
           </a-button>
