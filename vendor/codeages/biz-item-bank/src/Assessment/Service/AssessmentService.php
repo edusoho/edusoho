@@ -34,7 +34,11 @@ interface AssessmentService
 
     public function deleteAssessment($id);
 
+    public function deleteAssessmentByIds($assessmentIds);
+
     public function deleteAssessmentByParentId($parentId);
+
+    public function deleteAssessmentByParentIds($parentIds);
 
     public function drawItems($range, $sections);
 

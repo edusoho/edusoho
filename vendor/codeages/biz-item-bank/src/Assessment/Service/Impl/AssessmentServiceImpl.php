@@ -160,6 +160,31 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         }
     }
 
+    public function deleteAssessmentByIds($assessmentIds)
+    {
+        $assessments = $this->findAssessmentsByIds($assessmentIds);
+        if (empty($assessments)) {
+            throw new AssessmentException('assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
+        }
+
+        try {
+            $this->beginTransaction();
+
+            $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
+
+            $this->processBatchDeleteAssessment($assessmentIds);
+
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
+
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
     public function deleteAssessmentByParentId($parentId)
     {
         $assessment = $this->getAssessment($parentId);
@@ -167,6 +192,34 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
         $assessmentIds = $this->getAssessmentDao()->search(['parent_id' => $parentId], [], 0, PHP_INT_MAX, ['id']);
+        $assessmentIds = array_column($assessmentIds, 'id');
+        if (empty($assessmentIds)) {
+            return true;
+        }
+
+        try {
+            $this->beginTransaction();
+            $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
+            $this->processBatchDeleteAssessment($assessmentIds);
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function deleteAssessmentByParentIds($parentIds)
+    {
+        $assessments = $this->findAssessmentsByIds($parentIds);
+        foreach ($assessments as $assessment) {
+            if (empty($assessment) || $assessment['parent_id'] != 0)  {
+                throw AssessmentException::ASSESSMENT_NOTEXIST();
+            }
+        }
+        $assessmentIds = $this->getAssessmentDao()->search(['parent_ids' => $parentIds], [], 0, PHP_INT_MAX, ['id']);
         $assessmentIds = array_column($assessmentIds, 'id');
         if (empty($assessmentIds)) {
             return true;
