@@ -202,11 +202,11 @@ export default {
             okText: Translator.trans("question.bank.paper.edit"),
             cancelText: Translator.trans("site.cancel"),
             onOk: () => {
-              window.location.href = `'/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit'`
+              window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
             }
           });
         } else {
-          window.location.href = `'/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit'`
+          window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
         }
       } else {
         await this.$router.push({
@@ -357,25 +357,28 @@ export default {
                     :disabled="true">
             {{ 'question.bank.paper.publish'|trans }}
           </a-button>
-          <a-button v-if="['draft', 'open'].includes(record.status)"
+          <a-button v-if="['generating'].includes(record.status) || ['closed', 'open'].includes(record.status) && record.type === 'random'"
+                    type="link"
+                    :disabled="true">
+            {{ 'question.bank.paper.edit'|trans }}
+          </a-button>
+          <a-button v-else
                     type="link"
                     class="operation-group-button-active"
                     @click="handleEdit(record)"
           >
             {{ 'question.bank.paper.edit'|trans }}
           </a-button>
-          <a-button v-if="['generating'].includes(record.status) || ['closed', 'open'].includes(record.status) && record.type === 'random'"
-                    type="link"
-                    :disabled="true">
-            {{ 'question.bank.paper.edit'|trans }}
-          </a-button>
-          <a-dropdown :trigger="['click']" placement="bottomRight">
+          <a-dropdown v-if="['closed', 'draft'].includes(record.status) || record.type === 'regular'"
+                      :trigger="['click']"
+                      placement="bottomRight"
+          >
             <a-button type="link"
                       class="operation-group-button-active">...
             </a-button>
             <a-menu slot="overlay">
               <a-menu-item v-if="['closed', 'draft'].includes(record.status)" key="delete" @click="handleDelete(record)">删除</a-menu-item>
-              <a-menu-item key="export" @click="exportPaper(record)">导出</a-menu-item>
+              <a-menu-item v-if="record.type === 'regular'" key="export" @click="exportPaper(record)">导出</a-menu-item>
             </a-menu>
           </a-dropdown>
         </div>

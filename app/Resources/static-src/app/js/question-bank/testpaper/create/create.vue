@@ -63,16 +63,17 @@
           </div>
           <a-form-item>
             <a-input
+              v-decorator="[
+                  'description',
+                  { initialValue: '', rules: [{ required: false, max: 500, message: '超出 500  个字符长度限制' }, ] },
+               ]"
               placeholder="请输入试卷说明"
               @focus="onDescriptionInputFocus"
               v-show="!descriptionEditorVisible"
             />
             <span class="max-num" v-show="!descriptionEditorVisible">{{testPaperFormState.description ? testPaperFormState.description.length : 0}}/500</span>
             <div v-show="descriptionEditorVisible">
-              <a-textarea
-                v-model="testPaperFormState.description"
-                :name="'test-paper-description'"
-              />
+              <a-textarea :name="'test-paper-description'"/>
             </div>
           </a-form-item>
         </div>
@@ -115,16 +116,16 @@
               <div class="test-paper-save-form-item-label">
                 <span class="test-paper-save-form-item-label-text">抽题方式</span>
               </div>
-              <a-radio-group v-model="testPaperFormState.generateType" name="type" @change="onRadioChange">
+              <a-radio-group v-model="testPaperFormState.generateType" name="type">
                 <a-radio value="questionType">按题型抽题</a-radio>
                 <a-radio v-if="testPaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
-            <question-type-display-set-menu v-if="chooseQuestionBy === 'questionType'" :default-question-all-types="questionAllTypes"
+            <question-type-display-set-menu v-if="testPaperFormState.generateType === 'questionType'" :default-question-all-types="questionAllTypes"
                                             @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
           </div>
 
-          <div class="question-type-display" v-show="chooseQuestionBy === 'questionType'">
+          <div class="question-type-display" v-show="testPaperFormState.generateType === 'questionType'">
             <div class="question-type-display-header">
               <div class="question-type-display-header-top">题型设置</div>
               <div class="question-type-display-header-normal">题目数量</div>
@@ -149,7 +150,7 @@
             </div>
           </div>
 
-          <div class="question-category-choose" v-show="chooseQuestionBy === 'questionTypeCategory'">
+          <div class="question-category-choose" v-show="testPaperFormState.generateType === 'questionTypeCategory'">
             <div class="question-category-choose-btn" @click="onDrawerDisplay">
               <img
                 class="question-category-choose-btn-icon"
@@ -279,7 +280,7 @@
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">难度调节</span>
           </div>
-          <a-switch checked-children="开启" un-checked-children="关闭" @change="onSwitchChange"/>
+          <a-switch v-model="difficultyVisible" checked-children="开启" un-checked-children="关闭"/>
         </div>
 
         <div class="test-paper-difficulty" v-show="difficultyVisible">
@@ -287,7 +288,7 @@
             <div class="test-paper-save-form-item-label">
               <span class="test-paper-save-form-item-label-text">试卷难度</span>
             </div>
-            <a-slider range :default-value="[30, 70]" :tooltipVisible="false" @change="onSliderChange"
+            <a-slider range :default-value="[difficultyScales.simple.scale, difficultyScales.normal.scale + difficultyScales.difficulty.scale]" :tooltipVisible="false" @change="onSliderChange"
                       class="test-paper-difficulty-slider"/>
           </div>
           <div class="test-paper-difficulty-content">
@@ -328,7 +329,7 @@
 
     <div class="test-paper-save-footer">
       <button class="test-paper-save" @click="saveTestPaper()">保存</button>
-      <button class="test-create-cancel">取消</button>
+      <button class="test-create-cancel" @click="backConfirm">取消</button>
     </div>
   </div>
 </template>
@@ -365,7 +366,6 @@ export default {
         filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
         language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
       },
-      chooseQuestionBy: 'questionType',
       drawerVisible: false,
       difficultyVisible: false,
       checkChildrenOperationVisible: {},
@@ -561,10 +561,20 @@ export default {
         language: this.CKEditorConfig.language,
         startupFocus: true,
       });
+      this.descriptionEditor.setData(this.testPaperFormState.description);
       this.descriptionEditor.on('blur', () => {
-        if (this.descriptionEditor.getData() === '') {
+        const data = this.descriptionEditor.getData();
+        this.testPaperFormState.description = data;
+        this.form.setFieldsValue({
+          description: this.testPaperFormState.description,
+        });
+
+        if (data === '') {
           this.descriptionEditorVisible = false;
+          return;
         }
+
+        this.form.validateFields(['description'], async () => {});
       });
     },
     fetchQuestionCounts() {
@@ -642,9 +652,6 @@ export default {
       this.initDescriptionEditor();
       this.descriptionEditorVisible = true;
     },
-    onRadioChange(event) {
-      this.chooseQuestionBy = event.target.value;
-    },
     onCheckBoxChange(event) {
       this.$set(this.checkedQuestionCategoryIds, event.target.value, event.target.checked);
     },
@@ -652,9 +659,6 @@ export default {
       this.questionCategories.forEach(category => {
         this.$set(this.checkedQuestionCategoryIds, category.id, event.target.checked);
       });
-    },
-    onSwitchChange(checked, event) {
-      this.difficultyVisible = checked;
     },
     onSliderChange(value) {
       this.difficultyScales.simple.scale = value[0];
@@ -810,9 +814,49 @@ export default {
       });
     },
   },
-  created() {
-    console.log(this.$route.name);
-    console.log(this.id);
+  async beforeMount() {
+    const routeName = this.$route.name;
+    if (routeName === 'update') {
+      const paper = await Testpaper.get(this.id);
+      // testPaperFormState: {
+      //   name: '',
+      //     description: '',
+      //     type: 'random',
+      //     questionBankId: null,
+      //     mode: "rand",
+      //     num: 20,
+      //     generateType: "questionType",
+      //     questionCategoryCounts: [],
+      //     scores: {},
+      //   questionCount: 0,
+      //     percentages: {
+      //     simple: 30,
+      //       normal: 30,
+      //       difficulty: 40,
+      //   },
+      //   wrongQuestionRate: "0"
+      // },
+
+      console.log(paper);
+      this.testPaperFormState.name = paper.name;
+      this.testPaperFormState.description = paper.description;
+      this.testPaperFormState.num = paper.assessmentGenerateRule.num;
+      this.testPaperFormState.mode = 'rand';
+      this.testPaperFormState.questionBankId = paper.questionBankId;
+      this.testPaperFormState.generateType = paper.assessmentGenerateRule.type;
+
+      if (this.testPaperFormState.description) {
+        this.onDescriptionInputFocus();
+      }
+
+      const difficulty = paper.assessmentGenerateRule.difficulty;
+      if (difficulty.simple && difficulty.normal && difficulty.difficulty) {
+        this.difficultyVisible = true;
+        this.difficultyScales.simple.scale = Number.parseInt(`${difficulty.simple}`);
+        this.difficultyScales.normal.scale = Number.parseInt(`${difficulty.normal}`);
+        this.difficultyScales.difficulty.scale = Number.parseInt(`${difficulty.difficulty}`);
+      }
+    }
   }
 }
 </script>
