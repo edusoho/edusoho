@@ -1,28 +1,9 @@
 <template>
   <div class="test-create">
-    <div class="test-create-title">
-      <div class="test-create-title-left">
-        <div class="test-create-title-left-back" @click="backConfirm">
-          <span class="test-create-title-left-back-img">
-            <img src="/static-dist/app/img/question-bank/back-image.png" alt=""/>
-          </span>
-          <span class="test-create-title-left-back-text">返回</span>
-        </div>
-        <i></i>
-        <testpaper-type-tag :type="testPaperFormState.type"/>
-      </div>
-      <div class="test-create-title-right">
-        <span class="test-create-title-right-item">
-          <span class="test-create-title-right-text">试卷</span>
-          <span class="test-create-title-right-number">0</span>
-        </span>
-        <i></i>
-        <span class="test-create-title-right-item">
-          <span class="test-create-title-right-text">总分</span>
-          <span class="test-create-title-right-number">0.0</span>
-        </span>
-      </div>
-    </div>
+    <test-paper-save-header
+      :type="testPaperFormState.type"
+      @back-confirm="backConfirm"
+    ></test-paper-save-header>
 
     <div class="test-create-content">
       <a-alert
@@ -72,7 +53,7 @@
               v-show="!descriptionEditorVisible"
             />
             <span class="max-num"
-                  v-show="!descriptionEditorVisible">{{ testPaperFormState.description ? testPaperFormState.description.length : 0 }}/500</span>
+                  v-show="!descriptionEditorVisible">0/500</span>
             <div v-show="descriptionEditorVisible">
               <a-textarea :name="'test-paper-description'"/>
             </div>
@@ -337,7 +318,7 @@
     </div>
 
     <div class="test-paper-save-footer">
-      <button class="test-paper-save" @click="saveTestPaper()">保存</button>
+      <button class="test-paper-save" @click="saveTestPaper">创建</button>
       <button class="test-create-cancel" @click="backConfirm">取消</button>
     </div>
   </div>
@@ -347,14 +328,14 @@
 import {apiClient} from 'common/vue/service/api-client';
 import loadScript from 'load-script';
 import Draggable from 'vuedraggable';
-import QuestionTypeCategoryDisplay from './QuestionTypeCategoryDisplay.vue';
-import QuestionTypeDisplaySetMenu from '../component/QuestionTypeDisplaySetMenu.vue';
+import QuestionTypeCategoryDisplay from './components/QuestionTypeCategoryDisplay.vue';
+import QuestionTypeDisplaySetMenu from './components/QuestionTypeDisplaySetMenu.vue';
+import TestPaperSaveHeader from './components/Header';
 import {Testpaper} from 'common/vue/service';
-import TestpaperTypeTag from '../../../common/src/TestpaperTypeTag.vue';
 
 export default {
   components: {
-    TestpaperTypeTag,
+    TestPaperSaveHeader,
     QuestionTypeDisplaySetMenu,
     QuestionTypeCategoryDisplay,
     Draggable
@@ -556,7 +537,7 @@ export default {
 
     this.alertVisible = this.testPaperFormState.type === 'ai_personality';
 
-    const titleEl = document.querySelector('.test-create-title');
+    const titleEl = document.querySelector('.test-paper-save-header');
     if (titleEl) {
       const width = titleEl.parentElement.scrollWidth;
       const offsetTop = titleEl.getBoundingClientRect().top;
@@ -665,10 +646,7 @@ export default {
         cancelText: '不保存',
         centered: true,
         onOk: () => {
-          this.$router.push({
-            name: 'list',
-          });
-          this.$message.success('创建成功');
+          this.saveTestPaper();
         },
         onCancel: () => {
           this.$router.push({

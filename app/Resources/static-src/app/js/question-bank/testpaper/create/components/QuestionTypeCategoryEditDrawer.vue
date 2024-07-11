@@ -1,6 +1,6 @@
 <script>
 
-import QuestionTypeDisplaySetMenu from '../component/QuestionTypeDisplaySetMenu.vue';
+import QuestionTypeDisplaySetMenu from './QuestionTypeDisplaySetMenu.vue';
 
 export default {
   name: 'QuestionTypeCategoryEditDrawer',

@@ -1,7 +1,7 @@
 <script>
-import listHeader from './components/header.vue';
+import ListHeader from './components/header.vue';
+import TestPaperTypeTag from '../TestPaperTypeTag.vue';
 import {Testpaper} from 'common/vue/service';
-import TestpaperTypeTag from '../../../common/src/TestpaperTypeTag.vue';
 
 const columns = [
   {
@@ -50,8 +50,8 @@ export default {
     itemBankId: null
   },
   components: {
-    TestpaperTypeTag,
-    listHeader
+    ListHeader,
+    TestPaperTypeTag
   },
   data() {
     return {
@@ -321,7 +321,7 @@ export default {
       @change="handleTableChange"
     >
       <template slot="type" slot-scope="type">
-        <testpaper-type-tag :type="type"/>
+        <test-paper-type-tag :type="type"/>
       </template>
       <template slot="num" slot-scope="num">
         <span>{{ num ? num : '-' }}</span>
