@@ -546,6 +546,28 @@ export default {
     this.testPaperFormState.name = name || '';
 
     this.alertVisible = this.testPaperFormState.type === 'ai_personality';
+
+    const titleEl = document.querySelector('.test-create-title');
+    if (titleEl) {
+      const width = titleEl.parentElement.scrollWidth;
+      const offsetTop = titleEl.getBoundingClientRect().top;
+      this.handleScroll = () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+        if (scrollTop >= offsetTop) {
+          titleEl.style.width = `${width}px`;
+          titleEl.style.position = 'fixed';
+          titleEl.style.top = '0';
+          titleEl.style.zIndex = '1000';
+        } else {
+          titleEl.style.position = 'static';
+        }
+      };
+      window.addEventListener('scroll', this.handleScroll)
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     initDescriptionEditor() {
@@ -576,6 +598,7 @@ export default {
         this.form.validateFields(['description'], async () => {});
       });
     },
+    handleScroll: function () {},
     fetchQuestionCounts() {
       apiClient.get('/api/item/questionType/count', {
         params: {
