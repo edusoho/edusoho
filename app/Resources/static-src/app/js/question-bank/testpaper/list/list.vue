@@ -11,7 +11,7 @@ const columns = [
     width: 240,
   },
   {
-    title: Translator.trans('question.bank.paper.type'),
+    title: Translator.trans('question.bank.paper.paper.type'),
     dataIndex: 'type',
     scopedSlots: {customRender: 'type'},
     width: 120,
@@ -176,7 +176,7 @@ export default {
         centered: true,
         onOk: async () => {
           try {
-            await Testpaper.delete({id: paper.id});
+            await Testpaper.delete({ids: [paper.id]});
             this.$message.success('删除成功');
             const params = {
               limit: this.pagination.pageSize,
@@ -197,7 +197,6 @@ export default {
         if (['open', 'closed'].includes(paper.status)) {
           this.$confirm({
             title: '确定要进行编辑吗？',
-            content: '当前试卷可能已被应用在考试中，修改试卷内容，可能会对学员答题记录、答题成绩等产生影响',
             icon: "exclamation-circle",
             okText: Translator.trans("question.bank.paper.edit"),
             cancelText: Translator.trans("site.cancel"),
@@ -213,6 +212,17 @@ export default {
           name: 'update', query: {type: paper.type}, params: {id: paper.id}
         });
       }
+    },
+    async batchDelete() {
+      this.$confirm({
+        title: `确定要删除${this.selectedRowKeys.length}份试卷吗？`,
+        icon: "exclamation-circle",
+        okText: "删除",
+        cancelText: Translator.trans("site.cancel"),
+        onOk: async () => {
+          await Testpaper.delete({ids: this.selectedRowKeys});
+        }
+      });
     }
   },
   watch: {
@@ -291,7 +301,7 @@ export default {
         </a-select-option>
       </a-select>
       <a-input v-model="keyword" :placeholder="'question.bank.paper.typeKeyword'|trans" style="flex: 1 0 0"></a-input>
-      <a-button type="primary" @click="onSearch">{{ 'site.search_hint'|trans }}</a-button>
+      <a-button type="primary" @click="onSearch" ghost>{{ 'site.search_hint'|trans }}</a-button>
       <a-button>{{ 'question.bank.reset.btn'|trans }}</a-button>
     </div>
     <a-table
@@ -391,6 +401,7 @@ export default {
           <span class="checkbox-text">{{ 'question.bank.paper.selectAll'|trans }}</span>
         </a-checkbox>
         <span>{{ 'question.bank.paper.selectedItems'|trans({'select': this.selectedRowKeys.length}) }}</span>
+        <a-button type="danger" ghost size="small" :disabled="this.selectedRowKeys.length === 0" @click="batchDelete">{{ 'question.bank.paper.batch.delete'|trans }}</a-button>
       </div>
       <a-pagination
         show-quick-jumper

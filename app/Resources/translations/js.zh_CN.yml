@@ -2293,6 +2293,7 @@ question.bank.reset.btn: 重置
 
 question.bank.paper.status: 状态
 question.bank.paper.type: 类型
+question.bank.paper.paper.type: 试卷类型
 question.bank.paper.generating: 生成中
 question.bank.paper.draft: 草稿
 question.bank.paper.fail: 生成失败
@@ -2317,6 +2318,7 @@ question.bank.paper.edit: 编辑
 question.bank.paper.publish: 发布
 question.bank.paper.publish.success: 发布成功
 question.bank.paper.close.success: 关闭成功
+question.bank.paper.batch.delete: 批量删除
 
 classroom.category.choose.text: 请选择班级分类
 course.category.choose.text: 请选择课程分类
