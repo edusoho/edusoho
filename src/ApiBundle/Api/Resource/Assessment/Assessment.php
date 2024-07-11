@@ -128,20 +128,26 @@ class Assessment extends AbstractResource
 
     public function remove(ApiRequest $request)
     {
-        $assessmentId = $request->request->get('id', 0);
-        if (empty($assessmentId)) {
+        $assessmentIds = $request->request->get('ids', []);
+        if (empty($assessmentIds)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-        if (!in_array($assessment['status'], ['draft', 'closed', 'failure'])) {
-            throw AssessmentException::STATUS_ERROR();
+        $assessments = $this->getAssessmentService()->findAssessmentsByIds($assessmentIds);
+        foreach ($assessments as $assessment) {
+            if (!in_array($assessment['status'], ['draft', 'closed', 'failure'])) {
+                throw AssessmentException::STATUS_ERROR();
+            }
         }
         try {
             $this->biz['db']->beginTransaction();
-            if ('random' == $assessment['type']) {
-                $this->getAssessmentService()->deleteAssessmentByParentId($assessmentId);
+            $randomAssessments = array_filter($assessments, function ($assessment) {
+                return 'random' === $assessment['type'];
+            });
+            $randomAssessmentIds = array_column($randomAssessments, 'id');
+            if (!empty($randomAssessmentIds)) {
+                $this->getAssessmentService()->deleteAssessmentByParentIds($randomAssessmentIds);
             }
-            $this->getAssessmentService()->deleteAssessment($assessmentId);
+            $this->getAssessmentService()->deleteAssessmentByIds($assessmentIds);
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
