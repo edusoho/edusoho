@@ -2335,7 +2335,7 @@ question.bank.paper.typeKeyword: Input keywords
 question.bank.paper.name: Name
 question.bank.paper.creator: Creator
 question.bank.paper.regular: Regular
-question.bank.paper.ai_personality: AI Personalized
+question.bank.paper.aiPersonality: AI Personalized
 question.bank.paper.random: Random
 question.bank.paper.operation: Operation
 question.bank.paper.num: Amount

@@ -157,8 +157,8 @@ export default {
           <a-select-option value="random">
             {{ 'question.bank.paper.random'|trans }}
           </a-select-option>
-          <a-select-option value="ai_personality">
-            {{ 'question.bank.paper.ai_personality'|trans }}
+          <a-select-option value="aiPersonality">
+            {{ 'question.bank.paper.aiPersonality'|trans }}
           </a-select-option>
         </a-select>
         <a-select v-model="keywordType" style="width: 100px">

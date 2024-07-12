@@ -12,7 +12,7 @@ export default {
       'question.bank.paper.regular'|trans
     }}
   </div>
-  <div v-else-if="type === 'ai_personality'" class="paper-type paper-type-ai">
-    {{ 'question.bank.paper.ai_personality'|trans }}
+  <div v-else-if="type === 'aiPersonality'" class="paper-type paper-type-ai">
+    {{ 'question.bank.paper.aiPersonality'|trans }}
   </div>
 </template>

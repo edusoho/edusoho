@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div v-else-if="activeIndex === 'ai_personality'" class="create-test-paper-modal-body flex-col">
+      <div v-else-if="activeIndex === 'aiPersonality'" class="create-test-paper-modal-body flex-col">
         <img src="/static-dist/app/img/question-bank/create-ai-paper.png" alt=""/>
         <a-form :form="form" layout="horizontal">
           <div class="test-paper-save-form-item">
@@ -99,7 +99,7 @@ export default {
         {
           id: 1,
           name: '个性卷',
-          code: 'ai_personality',
+          code: 'aiPersonality',
           img: '/static-dist/app/img/question-bank/testpaperAi.png',
         },
       ],
@@ -157,11 +157,11 @@ export default {
         } else if (this.activeTestTypeIndex === 2) {
           this.$router.push({name: 'create'});
         } else {
-          this.$router.push({name: 'create', query: {type: 'ai_personality'}});
+          this.$router.push({name: 'create', query: {type: 'aiPersonality'}});
         }
-      } else if (this.activeIndex === 'ai_personality') {
+      } else if (this.activeIndex === 'aiPersonality') {
         this.$router.push({
-          name: 'create', query: {type: 'ai_personality', name: this.testpaperName}
+          name: 'create', query: {type: 'aiPersonality', name: this.testpaperName}
         });
       }
     },
@@ -179,8 +179,8 @@ export default {
   },
   mounted() {
     const type = this.$route.query.type;
-    if (type === 'ai_personality') {
-      this.activeIndex = 'ai_personality';
+    if (type === 'aiPersonality') {
+      this.activeIndex = 'aiPersonality';
     } else {
       this.activeIndex = 'all';
     }

@@ -146,7 +146,7 @@ export default {
       this.$message.success(Translator.trans('question.bank.paper.close.success'));
     },
     async preview(record) {
-      if (record.type === 'ai_personality') {
+      if (record.type === 'aiPersonality') {
         await this.$router.push({name: 'preview', params: {id: record.id}});
       }
     },
@@ -160,13 +160,13 @@ export default {
         };
         this.type = undefined;
         await this.fetchTestPaper(params);
-      } else if (tab === 'ai_personality') {
+      } else if (tab === 'aiPersonality') {
 
         const params = {
           limit: this.pagination.pageSize,
           offset: (this.pagination.current - 1) * this.pagination.pageSize
         };
-        this.type = 'ai_personality';
+        this.type = 'aiPersonality';
 
         await this.fetchTestPaper(params);
       }
@@ -283,8 +283,8 @@ export default {
         <a-select-option value="random">
           {{ 'question.bank.paper.random'|trans }}
         </a-select-option>
-        <a-select-option value="ai_personality">
-          {{ 'question.bank.paper.ai_personality'|trans }}
+        <a-select-option value="aiPersonality">
+          {{ 'question.bank.paper.aiPersonality'|trans }}
         </a-select-option>
       </a-select>
       <a-select v-model="keywordType" style="width: 100px">
@@ -336,7 +336,7 @@ export default {
           <a-button v-if="['draft', 'open'].includes(record.status)"
                     type="link"
                     class="operation-group-button-active"
-                    @preview="preview(record)"
+                    @click="preview(record)"
           >
             {{ 'question.bank.paper.preview'|trans }}
           </a-button>

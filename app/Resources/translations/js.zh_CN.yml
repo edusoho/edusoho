@@ -2302,7 +2302,7 @@ question.bank.paper.typeKeyword: 请输入关键词
 question.bank.paper.name: 名称
 question.bank.paper.creator: 创建人
 question.bank.paper.regular: 固定卷
-question.bank.paper.ai_personality: AI 个性卷
+question.bank.paper.aiPersonality: AI 个性卷
 question.bank.paper.random: 随机卷
 question.bank.paper.operation: 操作
 question.bank.paper.num: 试卷数量

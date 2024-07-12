@@ -78,7 +78,7 @@
           </a-form-item>
         </div>
 
-        <div v-if="testPaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
+        <div v-if="testPaperFormState.type !== 'aiPersonality'" class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
             <span class="test-paper-save-form-item-label-text">试卷份数</span>
@@ -118,7 +118,7 @@
               </div>
               <a-radio-group v-model="testPaperFormState.generateType" name="type">
                 <a-radio value="questionType">按题型抽题</a-radio>
-                <a-radio v-if="testPaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题</a-radio>
+                <a-radio v-if="testPaperFormState.type !== 'aiPersonality'" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
             <question-type-display-set-menu v-if="testPaperFormState.generateType === 'questionType'" :default-question-all-types="questionAllTypes"
@@ -255,7 +255,7 @@
           </div>
         </div>
 
-        <div v-if="testPaperFormState.type === 'ai_personality'" class="test-paper-save-form-item">
+        <div v-if="testPaperFormState.type === 'aiPersonality'" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">错题比例</span>
           </div>
@@ -276,7 +276,7 @@
           </div>
         </div>
 
-        <div v-if="testPaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item">
+        <div v-if="testPaperFormState.type !== 'aiPersonality'" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">难度调节</span>
           </div>
@@ -545,7 +545,7 @@ export default {
     const name = this.$route.query.name;
     this.testPaperFormState.name = name || '';
 
-    this.alertVisible = this.testPaperFormState.type === 'ai_personality';
+    this.alertVisible = this.testPaperFormState.type === 'aiPersonality';
   },
   methods: {
     initDescriptionEditor() {
@@ -783,7 +783,7 @@ export default {
             await Testpaper.create(this.testPaperFormState);
             await this.$router.push({
               name: 'list',
-              query: {tab: this.testPaperFormState.type === 'ai_personality' ? 'ai_personality' : 'all'}
+              query: {tab: this.testPaperFormState.type === 'aiPersonality' ? 'aiPersonality' : 'all'}
             });
             this.$message.success('创建成功');
           } catch (err) {
