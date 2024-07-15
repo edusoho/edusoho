@@ -411,6 +411,7 @@ export default {
     const name = this.$route.query.name;
     this.testPaperFormState.name = name || '';
 
+    this.alertVisible = this.testPaperFormState.type === 'aiPersonality';
     const titleEl = document.querySelector('.test-paper-save-header');
     if (titleEl) {
       const width = titleEl.parentElement.scrollWidth;
@@ -521,7 +522,7 @@ export default {
       this.selectedQuestionCategories = categories;
     },
     isPersonalTestPaper() {
-      return this.testPaperFormState.type === 'ai_personality';
+      return this.testPaperFormState.type === 'aiPersonality';
     },
     saveTestPaper() {
       if (this.fetching) {

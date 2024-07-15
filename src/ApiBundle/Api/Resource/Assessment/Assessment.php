@@ -164,9 +164,9 @@ class Assessment extends AbstractResource
             'questionCategoryCounts', 'scores', 'scoreType', 'choiceScore',
             'questionCount', 'percentages',
         ];
-        if (!ArrayToolkit::requireds($fields, $requiredFields)) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
+//         if (!ArrayToolkit::requireds($fields, $requiredFields)) {
+//             throw CommonException::ERROR_PARAMETER_MISSING();
+//         }
         if (empty($fields['questionBankId'])) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }

@@ -33,6 +33,17 @@ const routes = [
         id: route.params.id
       }
     },
+  },
+  {
+    path: '/preview/:id',
+    name: 'preview',
+    component: () => import( 'app/js/question-bank/testpaper/preview/Preview.vue'),
+    props: function (route) {
+      return {
+        itemBankId: document.getElementById('itemBankId').value,
+        id: route.params.id
+      }
+    },
   }
 ];
 const router = new Router({
