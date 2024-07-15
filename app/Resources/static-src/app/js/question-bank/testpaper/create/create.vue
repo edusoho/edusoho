@@ -122,7 +122,9 @@
               </div>
             </div>
             <div v-for="type in questionDisplayTypes">
-              <div class="question-type-display-header-top">{{ type.name }}</div>
+              <div class="question-type-display-header-top">
+                <span class="question-type-display-header-top-text">{{ type.name }}</span>
+              </div>
               <div class="question-type-display-cell-number">
                 <span class="question-type-display-cell-number-edit">
                   <input type="number" value="0"/>

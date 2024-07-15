@@ -18,7 +18,7 @@
       <div class="question-category-choose-container-body">
         <div class="question-category-choose-all">
           <div class="question-category-choose-all-header">
-            <a-input placeholder="搜索分类">
+            <a-input placeholder="搜索分类" @pressEnter="onSearchCategories">
               <img
                 slot="prefix"
                 class="question-category-choose-all-header-search-icon"
@@ -38,7 +38,12 @@
                  @mouseover="checkChildrenOperationVisibleId = category.id"
                  @mouseleave="checkChildrenOperationVisibleId = undefined">
               <div :class="`question-category-choose-all-body-category-depth-${category.depth}`">
-                <a-checkbox :value="category.id" :checked="checkedCategories[category.id]" @change="onCheckBoxChange">
+                <a-tooltip placement="topLeft" title="该分类下暂无题目" v-if="disabledCategories[category.id]">
+                  <a-checkbox :disabled="true">
+                    <span class="question-category-choose-all-body-category-name">{{ category.name }}</span>
+                  </a-checkbox>
+                </a-tooltip>
+                <a-checkbox :value="category.id" :checked="checkedCategories[category.id]" @change="onCheckBoxChange" v-if="disabledCategories[category.id] === false">
                   <span class="question-category-choose-all-body-category-name">{{ category.name }}</span>
                 </a-checkbox>
               </div>
@@ -135,12 +140,13 @@ export default {
       categories: [],
       categoriesTree: {},
       checkedCategories: {},
+      disabledCategories: {},
     };
   },
   computed: {
     checkChildrenVisible() {
       return id => {
-        if (id !== this.checkChildrenOperationVisibleId || this.categoriesTree[id].children.length === 0) {
+        if (id !== this.checkChildrenOperationVisibleId || this.categoriesTree[id].children.length === 0 || this.disabledCategories[id]) {
           return false;
         }
         return this.hasChildUnchecked(id);
@@ -148,7 +154,7 @@ export default {
     },
     unCheckChildrenVisible() {
       return id => {
-        if (id !== this.checkChildrenOperationVisibleId || this.categoriesTree[id].children.length === 0) {
+        if (id !== this.checkChildrenOperationVisibleId || this.categoriesTree[id].children.length === 0 || this.disabledCategories[id]) {
           return false;
         }
         return !this.hasChildUnchecked(id);
@@ -165,7 +171,7 @@ export default {
     },
     allCategoriesChecked() {
       for (const category of this.categories) {
-        if (!this.checkedCategories[category.id]) {
+        if (!this.disabledCategories[category.id] && !this.checkedCategories[category.id]) {
           return false;
         }
       }
@@ -177,28 +183,40 @@ export default {
       this.fetchQuestionCategories();
       this.drawerVisible = true;
     },
-    fetchQuestionCategories() {
-      apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/treeList`).then(res => {
-        this.categories = [];
-        this.categoriesTree = {};
-        this.checkedCategories = {};
-        res.forEach(category => {
-          this.categories.push({
-            id: category.id,
-            name: category.name,
-            depth: category.depth,
-            level: this.getCategoryLevelText(category.depth)
-          });
-          this.categoriesTree[category.id] = {
-            children: []
-          };
-          if (this.categoriesTree[category.parent_id]) {
-            this.categoriesTree[category.parent_id].children.push(category.id);
-          }
+    async fetchQuestionCategories(name = '') {
+      const questionCounts = await apiClient.get('/api/item/categoryId/count', {params: {bank_id: this.bankId}});
+      this.disabledCategories = {};
+      questionCounts.forEach(item => {
+        this.disabledCategories[item.category_id] = false;
+      });
+      const categories = await apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/treeList`);
+      this.categories = [];
+      this.categoriesTree = {};
+      categories.forEach(category => {
+        if (!category.name.includes(name)) {
+          return;
+        }
+        this.categories.push({
+          id: category.id,
+          name: category.name,
+          depth: category.depth,
+          level: this.getCategoryLevelText(category.depth)
         });
-        this.selectedCategories.forEach(category => {
+        this.categoriesTree[category.id] = {
+          children: []
+        };
+        if (this.categoriesTree[category.parent_id]) {
+          this.categoriesTree[category.parent_id].children.push(category.id);
+        }
+        if (this.disabledCategories[category.id] === undefined) {
+          this.disabledCategories[category.id] = true;
+        }
+      });
+      this.checkedCategories = {};
+      this.selectedCategories.forEach(category => {
+        if (!this.disabledCategories[category.id]) {
           this.checkedCategory(category.id);
-        });
+        }
       });
     },
     getCategoryLevelText(depth) {
@@ -210,14 +228,16 @@ export default {
     },
     onCheckAllChange(event) {
       this.categories.forEach(category => {
-        this.$set(this.checkedCategories, category.id, event.target.checked);
+        if (!this.disabledCategories[category.id]) {
+          this.$set(this.checkedCategories, category.id, event.target.checked);
+        }
       });
     },
     onCheckBoxChange(event) {
       this.$set(this.checkedCategories, event.target.value, event.target.checked);
     },
     hasChildUnchecked(id) {
-      if (!this.checkedCategories[id]) {
+      if (!this.disabledCategories[id] && !this.checkedCategories[id]) {
         return true;
       }
       if (this.categoriesTree[id].children) {
@@ -230,7 +250,9 @@ export default {
       return false;
     },
     checkedSelfAndChildren(id) {
-      this.$set(this.checkedCategories, id, true);
+      if (!this.disabledCategories[id]) {
+        this.checkedCategory(id);
+      }
       if (this.categoriesTree[id].children) {
         this.categoriesTree[id].children.forEach(childId => {
           this.checkedSelfAndChildren(childId);
@@ -274,6 +296,9 @@ export default {
       this.$emit('save-selected-categories', selectedCategories);
       this.drawerVisible = false;
       this.$message.success('保存成功');
+    },
+    onSearchCategories(event) {
+      this.fetchQuestionCategories(event.target.value);
     },
     onDrawerClose() {
       this.$confirm({

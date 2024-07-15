@@ -16,6 +16,8 @@ interface ItemDao extends AdvancedDaoInterface
 
     public function countItemGroupByCategoryIdAndType($conditions);
 
+    public function countItemGroupByCategoryId($conditions);
+
     public function countItemQuestionNumByBankId($bankId);
 
     public function countItemQuestionNumByCategoryId($categoryId);
