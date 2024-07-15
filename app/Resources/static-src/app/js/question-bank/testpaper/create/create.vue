@@ -7,17 +7,17 @@
 
     <div class="test-create-content">
       <a-alert
-        v-if="alertVisible"
+        v-if="isPersonalTestPaper()"
         message="个性卷 —— 个性化纠错练习，提升学员对知识的全面掌握，错题，新题优先作答，错误率较高的知识点反个性习，提升掌握度！"
         type="success"
         closable
-        :after-close="() => this.alertVisible = false"
         show-icon
       >
         <template slot="icon">
           <img src="/static-dist/app/img/question-bank/testpaperAiIcon.png" alt=""/>
         </template>
       </a-alert>
+
       <a-form id="test-create-form" :form="form" class="test-paper-save-form">
         <div class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
@@ -45,22 +45,21 @@
           <a-form-item>
             <a-input
               v-decorator="[
-                  'description',
-                  { initialValue: '', rules: [{ required: false, max: 500, message: '超出 500  个字符长度限制' }, ] },
-               ]"
+                'description',
+                { initialValue: '', rules: [{ required: false, max: 500, message: '超出 500  个字符长度限制' }, ] },
+              ]"
               placeholder="请输入试卷说明"
               @focus="onDescriptionInputFocus"
               v-show="!descriptionEditorVisible"
             />
-            <span class="max-num"
-                  v-show="!descriptionEditorVisible">0/500</span>
+            <span class="max-num" v-show="!descriptionEditorVisible">0/500</span>
             <div v-show="descriptionEditorVisible">
               <a-textarea :name="'test-paper-description'"/>
             </div>
           </a-form-item>
         </div>
 
-        <div v-if="testPaperFormState.type !== 'ai_personality'"
+        <div v-if="!isPersonalTestPaper()"
              class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
@@ -101,13 +100,15 @@
               </div>
               <a-radio-group v-model="testPaperFormState.generateType" name="type">
                 <a-radio value="questionType">按题型抽题</a-radio>
-                <a-radio v-if="testPaperFormState.type !== 'ai_personality'" value="questionTypeCategory">按题型+分类抽题
+                <a-radio v-if="!isPersonalTestPaper()" value="questionTypeCategory">按题型+分类抽题
                 </a-radio>
               </a-radio-group>
             </div>
-            <question-type-display-set-menu v-if="testPaperFormState.generateType === 'questionType'"
-                                            :default-question-all-types="questionAllTypes"
-                                            @updateDisplayQuestionType="handleUpdateDisplayQuestionType"/>
+            <question-type-display-set-menu
+              v-if="testPaperFormState.generateType === 'questionType'"
+              :default-question-all-types="questionAllTypes"
+              @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
+            />
           </div>
 
           <div class="question-type-display" v-show="testPaperFormState.generateType === 'questionType'">
@@ -136,98 +137,12 @@
           </div>
 
           <div class="question-category-choose" v-show="testPaperFormState.generateType === 'questionTypeCategory'">
-            <div class="question-category-choose-btn" @click="onDrawerDisplay">
-              <img
-                class="question-category-choose-btn-icon"
-                src="/static-dist/app/img/question-bank/question-category-choose.png"
-                alt=""
-              />
-              <span class="question-category-choose-btn-text">选择分类</span>
-            </div>
-            <a-drawer
-              title="选择分类"
-              width="960"
-              :visible="drawerVisible"
-              :maskClosable="false"
-              @close="onDrawerClose"
-              class="question-category-choose-drawer">
-              <div class="question-category-choose-container-body">
-                <div class="question-category-choose-all">
-                  <div class="question-category-choose-all-header">
-                    <a-input placeholder="搜索分类">
-                      <img
-                        slot="prefix"
-                        class="question-category-choose-all-header-search-icon"
-                        src="/static-dist/app/img/question-bank/question-category-search-icon.png"
-                        alt=""
-                      />
-                    </a-input>
-                    <a-checkbox :indeterminate="checkAllBoxIndeterminate" :checked="allCategoriesChecked"
-                                @change="onCheckAllChange">
-                      <span class="question-category-choose-all-header-check-all-text">选择全部分类</span>
-                    </a-checkbox>
-                  </div>
-                  <div class="question-category-choose-all-body">
-                    <div v-for="category in questionCategories" class="question-category-choose-all-body-category"
-                         @mouseover="showCheckOperation(category.id)" @mouseleave="hideCheckOperation(category.id)">
-                      <div :class="`question-category-choose-all-body-category-depth-${category.depth}`">
-                        <a-checkbox :value="category.id" :checked="checkedQuestionCategoryIds[category.id]"
-                                    @change="onCheckBoxChange">
-                          <span class="question-category-choose-all-body-category-name">{{ category.name }}</span>
-                        </a-checkbox>
-                      </div>
-                      <div>
-                        <span class="question-category-choose-all-body-category-operation"
-                              v-show="checkChildrenVisible(category.id)"
-                              @click="checkedSelfAndChildren(category.id)">全选</span>
-                        <span class="question-category-choose-all-body-category-operation"
-                              v-show="unCheckChildrenVisible(category.id)"
-                              @click="unCheckedSelfAndChildren(category.id)">取消全选</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="question-category-choose-selected">
-                  <div class="question-category-choose-selected-header">
-                    <span class="question-category-choose-selected-header-selected">已选</span>
-                    <a-popconfirm
-                      title="确定要清空全部吗？"
-                      placement="bottomRight"
-                      ok-text="确定"
-                      cancel-text="取消"
-                      @confirm="unCheckedAllCategories"
-                    >
-                      <span class="question-category-choose-selected-header-clear">清空</span>
-                    </a-popconfirm>
-                  </div>
-                  <div class="question-category-choose-selected-body">
-                    <div v-for="category in questionCategories" v-show="checkedQuestionCategoryIds[category.id]"
-                         class="question-category-choose-selected-body-item">
-                      <div class="question-category-choose-selected-body-item-text">
-                        <div class="question-category-choose-selected-body-item-text-name">{{ category.name }}</div>
-                        <span class="question-category-choose-selected-body-item-text-level">{{ category.level }}</span>
-                      </div>
-                      <img
-                        class="question-category-choose-selected-body-item-remove"
-                        src="/static-dist/app/img/question-bank/remove-selected-question-category-icon.png"
-                        alt=""
-                        @click="unCheckedCategory(category.id)"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="question-category-choose-container-footer">
-                <div class="question-category-choose-container-footer-btn-group">
-                  <button class="question-category-choose-container-footer-btn-cancel" @click="onDrawerClose">
-                    <span class="question-category-choose-container-footer-btn-text">取消</span>
-                  </button>
-                  <button class="question-category-choose-container-footer-btn-save" @click="saveCheckedCategories">
-                    <span class="question-category-choose-container-footer-btn-text">保存</span>
-                  </button>
-                </div>
-              </div>
-            </a-drawer>
+            <question-category-select-drawer
+              :bankId="bankId"
+              :selected-categories="selectedQuestionCategories"
+              @save-selected-categories="onQuestionCategoriesSelected"
+            />
+
             <question-type-category-display
               v-show="selectedQuestionCategories.length > 0"
               :question-display-types="questionDisplayTypes"
@@ -240,7 +155,7 @@
           </div>
         </div>
 
-        <div v-if="testPaperFormState.type === 'ai_personality'" class="test-paper-save-form-item">
+        <div v-if="isPersonalTestPaper()" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">错题比例</span>
           </div>
@@ -261,7 +176,7 @@
           </div>
         </div>
 
-        <div v-if="testPaperFormState.type !== 'ai_personality'" class="test-paper-save-form-item">
+        <div v-if="!isPersonalTestPaper()" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">难度调节</span>
           </div>
@@ -327,18 +242,18 @@
 <script>
 import {apiClient} from 'common/vue/service/api-client';
 import loadScript from 'load-script';
-import Draggable from 'vuedraggable';
-import QuestionTypeCategoryDisplay from './components/QuestionTypeCategoryDisplay.vue';
-import QuestionTypeDisplaySetMenu from './components/QuestionTypeDisplaySetMenu.vue';
 import TestPaperSaveHeader from './components/Header';
+import QuestionTypeDisplaySetMenu from './components/QuestionTypeDisplaySetMenu.vue';
+import QuestionCategorySelectDrawer from './components/QuestionCategorySelectDrawer';
+import QuestionTypeCategoryDisplay from './components/QuestionTypeCategoryDisplay.vue';
 import {Testpaper} from 'common/vue/service';
 
 export default {
   components: {
     TestPaperSaveHeader,
     QuestionTypeDisplaySetMenu,
+    QuestionCategorySelectDrawer,
     QuestionTypeCategoryDisplay,
-    Draggable
   },
   props: {
     itemBankId: null,
@@ -356,9 +271,7 @@ export default {
         filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
         language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
       },
-      drawerVisible: false,
       difficultyVisible: false,
-      checkChildrenOperationVisible: {},
       questionDisplayTypes: [],
       questionAllTypes: [
         {
@@ -431,9 +344,6 @@ export default {
           total: 0,
         },
       },
-      questionCategories: [],
-      questionCategoriesTree: {},
-      checkedQuestionCategoryIds: {},
       selectedQuestionCategories: [],
       difficultyScales: {
         simple: {
@@ -476,43 +386,7 @@ export default {
         wrongQuestionRate: "0"
       },
       fetching: false,
-      alertVisible: false,
     };
-  },
-  computed: {
-    checkChildrenVisible() {
-      return id => {
-        if (!this.checkChildrenOperationVisible[id] || this.questionCategoriesTree[id].children.length === 0) {
-          return false;
-        }
-        return this.hasChildUnchecked(id);
-      };
-    },
-    unCheckChildrenVisible() {
-      return id => {
-        if (!this.checkChildrenOperationVisible[id] || this.questionCategoriesTree[id].children.length === 0) {
-          return false;
-        }
-        return !this.hasChildUnchecked(id);
-      };
-    },
-    checkAllBoxIndeterminate() {
-      let checked = 0;
-      for (const category of this.questionCategories) {
-        if (this.checkedQuestionCategoryIds[category.id]) {
-          checked++;
-        }
-      }
-      return checked > 0 && checked < this.questionCategories.length;
-    },
-    allCategoriesChecked() {
-      for (const category of this.questionCategories) {
-        if (!this.checkedQuestionCategoryIds[category.id]) {
-          return false;
-        }
-      }
-      return this.questionCategories.length > 0;
-    },
   },
   mounted() {
     this.fetchQuestionCounts();
@@ -534,8 +408,6 @@ export default {
 
     const name = this.$route.query.name;
     this.testPaperFormState.name = name || '';
-
-    this.alertVisible = this.testPaperFormState.type === 'ai_personality';
 
     const titleEl = document.querySelector('.test-paper-save-header');
     if (titleEl) {
@@ -611,33 +483,6 @@ export default {
       }
       this.questionDisplayTypes = displayTypes;
     },
-    fetchQuestionCategories() {
-      apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/treeList`).then(res => {
-        this.questionCategories = [];
-        this.questionCategoriesTree = {};
-        res.forEach(category => {
-          this.questionCategories.push({
-            id: category.id,
-            name: category.name,
-            depth: category.depth,
-            level: this.getCategoryLevelText(category.depth)
-          });
-          this.questionCategoriesTree[category.id] = {
-            children: []
-          };
-          if (this.questionCategoriesTree[category.parent_id]) {
-            this.questionCategoriesTree[category.parent_id].children.push(category.id);
-          }
-        });
-      });
-    },
-    getCategoryLevelText(depth) {
-      return {
-        1: '一级分类',
-        2: '二级分类',
-        3: '三级分类',
-      }[depth];
-    },
     backConfirm() {
       this.$confirm({
         title: '是否要保存更改？',
@@ -662,92 +507,19 @@ export default {
       this.initDescriptionEditor();
       this.descriptionEditorVisible = true;
     },
-    onCheckBoxChange(event) {
-      this.$set(this.checkedQuestionCategoryIds, event.target.value, event.target.checked);
-    },
-    onCheckAllChange(event) {
-      this.questionCategories.forEach(category => {
-        this.$set(this.checkedQuestionCategoryIds, category.id, event.target.checked);
-      });
-    },
     onSliderChange(value) {
       this.difficultyScales.simple.scale = value[0];
       this.difficultyScales.normal.scale = value[1] - value[0];
       this.difficultyScales.difficulty.scale = 100 - value[1];
     },
-    onDrawerDisplay() {
-      this.fetchQuestionCategories();
-      this.drawerVisible = true;
-    },
-    onDrawerClose() {
-      this.$confirm({
-        title: '确定放弃此次操作吗？',
-        content: '当前操作尚未保存',
-        icon: 'exclamation-circle',
-        okText: '确定',
-        cancelText: '取消',
-        centered: true,
-        onOk: () => {
-          this.checkedQuestionCategoryIds = {};
-          this.drawerVisible = false;
-        },
-      });
-    },
-    showCheckOperation(id) {
-      this.$set(this.checkChildrenOperationVisible, id, true);
-    },
-    hideCheckOperation(id) {
-      this.$set(this.checkChildrenOperationVisible, id, false);
-    },
-    hasChildUnchecked(id) {
-      if (!this.checkedQuestionCategoryIds[id]) {
-        return true;
-      }
-      if (this.questionCategoriesTree[id].children) {
-        for (const childId of this.questionCategoriesTree[id].children) {
-          if (this.hasChildUnchecked(childId)) {
-            return true;
-          }
-        }
-      }
-      return false;
-    },
-    checkedSelfAndChildren(id) {
-      this.$set(this.checkedQuestionCategoryIds, id, true);
-      if (this.questionCategoriesTree[id].children) {
-        this.questionCategoriesTree[id].children.forEach(childId => {
-          this.checkedSelfAndChildren(childId);
-        });
-      }
-    },
-    unCheckedSelfAndChildren(id) {
-      this.unCheckedCategory(id);
-      if (this.questionCategoriesTree[id].children) {
-        this.questionCategoriesTree[id].children.forEach(childId => {
-          this.unCheckedSelfAndChildren(childId);
-        });
-      }
-    },
-    unCheckedAllCategories() {
-      this.questionCategories.forEach(category => {
-        this.unCheckedCategory(category.id);
-      });
-    },
-    unCheckedCategory(id) {
-      this.$set(this.checkedQuestionCategoryIds, id, false);
-    },
-    saveCheckedCategories() {
-      this.selectedQuestionCategories = [];
-      this.questionCategories.forEach(category => {
-        if (this.checkedQuestionCategoryIds[category.id]) {
-          this.selectedQuestionCategories.push(category);
-        }
-      });
-      this.drawerVisible = false;
-      this.$message.success('保存成功');
-    },
     handleUpdateCategories(categories) {
       this.categories = categories;
+    },
+    onQuestionCategoriesSelected(categories) {
+      this.selectedQuestionCategories = categories;
+    },
+    isPersonalTestPaper() {
+      return this.testPaperFormState.type === 'ai_personality';
     },
     saveTestPaper() {
       if (this.fetching) {
@@ -797,7 +569,7 @@ export default {
             await Testpaper.create(this.testPaperFormState);
             await this.$router.push({
               name: 'list',
-              query: {tab: this.testPaperFormState.type === 'ai_personality' ? 'ai_personality' : 'all'}
+              query: {tab: this.isPersonalTestPaper() ? 'ai_personality' : 'all'}
             });
             this.$message.success('创建成功');
           } catch (err) {
