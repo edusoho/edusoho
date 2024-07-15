@@ -1,8 +1,8 @@
 <script>
 
-import TestpaperTypeTag from '../../../common/src/TestpaperTypeTag.vue';
+import TestpaperTypeTag from '../TestpaperTypeTag.vue';
 import {Testpaper} from 'common/vue/service';
-import QuestionTypePreviewDisplay from '../component/QuestionTypePreviewDisplay.vue'
+import QuestionTypePreviewDisplay from '../create/components/QuestionTypePreviewDisplay.vue'
 
 export default {
   components: {QuestionTypePreviewDisplay, TestpaperTypeTag},
