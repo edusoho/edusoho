@@ -28,12 +28,28 @@ class Assessment extends AbstractResource
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
+        $this->initializeFields($fields);
         $this->validate($fields);
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($fields['questionBankId']);
         if (empty($questionBank['itemBank'])) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }
+        $this->generateAssessment($fields, $questionBank);
+
+        return true;
+    }
+
+    private function generateAssessment($fields, $questionBank)
+    {
+        $generateType = $fields['type'] ?? 'default';
+        $methodName = 'generate'.ucfirst($generateType).'Assessment';
+
+        return $this->$methodName($fields, $questionBank);
+    }
+
+    private function generateRandomAssessment($fields, $questionBank)
+    {
         $fields = array_merge($fields, [
             'itemBankId' => $questionBank['itemBankId'],
             'status' => 'generating',
@@ -59,8 +75,34 @@ class Assessment extends AbstractResource
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
         }
+    }
 
-        return true;
+    private function generateAiPersonalityAssessment($fields, $questionBank)
+    {
+        $sections = $fields['questionCategoryCounts'][0]['sections'];
+        if (empty($sections)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+        $total_count = 0;
+        foreach ($sections as $section) {
+            $total_count += $section['count'];
+        }
+        $assessment = array_merge($fields, [
+            'bank_id' => $questionBank['itemBankId'],
+            'created_user_id' => $this->getCurrentUser()->getId(),
+            // item_count 并不准确，受材料题子题数量影响，这里直接设置为0
+            'item_count' => '0',
+            'question_count' => $total_count,
+            'displayable' => '1',
+        ]);
+        try {
+            $this->biz['db']->beginTransaction();
+            $assessment = $this->getAssessmentService()->createBasicAssessment($assessment);
+            $this->createAssessmentGenerateRule($fields, $assessment);
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+        }
     }
 
     public function update(ApiRequest $request, $id)
@@ -173,6 +215,21 @@ class Assessment extends AbstractResource
         if (!$this->getQuestionBankService()->canManageBank($fields['questionBankId'])) {
             throw UserException::PERMISSION_DENIED();
         }
+    }
+
+    private function initializeFields(&$fields)
+    {
+        $fields['scoreType'] = [
+            'choice' => 'question',
+            'uncertain_choice' => 'question',
+            'fill' => 'question',
+        ];
+
+        $fields['choiceScore'] = [
+            'choice' => 0,
+            'uncertain_choice' => 0,
+            'fill' => 2,
+        ];
     }
 
     private function check($fields)
