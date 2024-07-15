@@ -1,23 +1,24 @@
 .test-create {
-  .test-create-title {
+  .test-paper-save-header {
+    background: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 46px;
     border-bottom: 1px solid #F2F3F5;
 
-    .test-create-title-left {
+    .test-paper-save-header-left {
       display: flex;
       align-items: center;
       gap: 16px;
 
-      .test-create-title-left-back {
+      .test-paper-save-header-left-back {
         display: flex;
         align-items: center;
         gap: 8px;
         cursor: pointer;
 
-        .test-create-title-left-back-img {
+        .test-paper-save-header-left-back-img {
           display: flex;
           padding: 2px;
           align-items: flex-start;
@@ -30,7 +31,7 @@
           }
         }
 
-        .test-create-title-left-back-text {
+        .test-paper-save-header-left-back-text {
           color: #37393D;
           text-align: center;
           font-feature-settings: 'clig' off, 'liga' off;
@@ -49,7 +50,7 @@
         border-left: 1px solid #E5E6EB;
       }
 
-      .test-create-title-left-type {
+      .test-paper-save-header-left-type {
         display: flex;
         padding: 4px 16px;
         justify-content: center;
@@ -65,7 +66,7 @@
       }
     }
 
-    .test-create-title-right {
+    .test-paper-save-header-right {
       display: flex;
       padding: 16px;
       justify-content: center;
@@ -74,14 +75,14 @@
       border-radius: 8px;
       background: #FAFAFA;
 
-      .test-create-title-right-item {
+      .test-paper-save-header-right-item {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 16px;
       }
 
-      .test-create-title-right-text {
+      .test-paper-save-header-right-text {
         color: #919399;
         font-family: "PingFang SC";
         font-size: 14px;
@@ -90,7 +91,7 @@
         line-height: 22px;
       }
 
-      .test-create-title-right-number {
+      .test-paper-save-header-right-number {
         color: #000;
         font-family: D-DIN;
         font-size: 24px;
@@ -285,6 +286,13 @@
             font-style: normal;
             font-weight: 500;
             line-height: 22px;
+
+            .question-type-display-header-top-text {
+              background-repeat: no-repeat;
+              background-position: left bottom;
+              background-size: 100% 6px;
+              background-image: linear-gradient(83deg, #EFFFF6 38.56%, #93E1B4 100%);
+            }
           }
 
           .question-type-display-header-normal {
@@ -948,6 +956,7 @@
     position: relative;
     top: -2px;
     left: -12px;
+
     img {
       height: 16.5px;
     }
@@ -1175,6 +1184,71 @@
                 cursor: pointer;
               }
             }
+
+            .question-category-choose-all-body-empty {
+              display: flex;
+              width: 121px;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              gap: 8px;
+              position: absolute;
+              left: 239px;
+              top: 357px;
+
+              .question-category-choose-all-body-empty-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 9px;
+                align-self: stretch;
+
+                .question-category-choose-all-body-empty-content-img {
+                  display: flex;
+                  width: 121px;
+                  height: 99px;
+                  justify-content: center;
+                  align-items: center;
+
+                  img {
+                    width: 105px;
+                    height: 99px;
+                    flex-shrink: 0;
+                  }
+                }
+
+                .question-category-choose-all-body-empty-content-text {
+                  color: #5E6166;
+                  text-align: center;
+                  font-family: "PingFang SC";
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 22px;
+                }
+              }
+
+              .question-category-choose-all-body-add-category-btn {
+                display: flex;
+                height: 32px;
+                padding: 4px 15px;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
+                border: hidden;
+                border-radius: 2px;
+                background: #46C37B;
+                box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
+
+                color: #FFF;
+                text-align: center;
+                font-family: "PingFang SC";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 22px;
+              }
+            }
           }
 
           .ant-checkbox + span {
@@ -1326,6 +1400,70 @@
             line-height: 22px;
           }
         }
+      }
+    }
+  }
+}
+
+.question-category-add-modal {
+  .question-category-add-modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    align-self: stretch;
+
+    .question-category-add-modal-body-description {
+      color: #919399;
+      text-align: center;
+      font-family: "PingFang SC";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 22px;
+    }
+
+    .question-category-add-modal-body-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      align-self: stretch;
+
+      .question-category-add-modal-body-content-label {
+        display: flex;
+        padding: 5px 0;
+        align-items: center;
+        gap: 4px;
+        flex-shrink: 0;
+
+        span {
+          color: #37393D;
+          font-family: "PingFang SC";
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22px;
+        }
+      }
+
+      textarea {
+        display: flex;
+        height: 108px;
+        padding: 5px 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 1 0 0;
+        width: 300px;
+        border-radius: 2px;
+        border: 1px solid #DCDEE0;
+        background: #FFF;
+        align-self: stretch;
+        color: #37393D;
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
       }
     }
   }

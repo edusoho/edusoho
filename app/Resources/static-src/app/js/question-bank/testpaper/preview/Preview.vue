@@ -90,8 +90,8 @@ export default {
       <div class="test-preview-content-question-type-display">
         <question-type-preview-display v-for="(type) in questionTypes"
                                        :type="type"
-                                       :score="paper.assessmentGenerateRule['question_setting'][type] || 2"
-                                       :num="paper.assessmentGenerateRule.questionCounts[type] || 5"
+                                       :score="paper.assessmentGenerateRule['question_setting'].scores[type] || 2"
+                                       :num="paper.assessmentGenerateRule['question_setting'].questionCategoryCounts[0].sections[type].count || 5"
         />
       </div>
     </div>

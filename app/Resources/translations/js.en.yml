@@ -2350,6 +2350,7 @@ question.bank.paper.edit: Edit
 question.bank.paper.publish: Publish
 question.bank.paper.publish.success: Successfully published
 question.bank.paper.close.success: Successfully Closed
+question.bank.paper.batch.delete: Batch Delete
 
 classroom.category.choose.text: Please select a classroom category,
 course.category.choose.text: Please select a course category,

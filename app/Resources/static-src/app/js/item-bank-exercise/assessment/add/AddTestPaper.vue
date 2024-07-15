@@ -1,6 +1,6 @@
 <script>
 import {Testpaper} from 'common/vue/service';
-import TestpaperTypeTag from '../../../common/src/TestpaperTypeTag.vue';
+import TestpaperTypeTag from '../../../question-bank/testpaper/TestPaperTypeTag';
 
 const columns = [
   {

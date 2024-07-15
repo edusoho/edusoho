@@ -35,6 +35,11 @@ class ItemCount extends AbstractResource
         return $this->getItemService()->countItemGroupByCategoryIdAndType($conditions);
     }
 
+    private function countItemByCategoryId($conditions)
+    {
+        return $this->getItemService()->countItemGroupByCategoryId($conditions);
+    }
+
     /**
      * @return ItemService
      */
