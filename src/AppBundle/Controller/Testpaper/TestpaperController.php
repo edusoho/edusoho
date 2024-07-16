@@ -28,6 +28,7 @@ class TestpaperController extends BaseController
     {
         $activity = $this->getActivityService()->getActivity($lessonId, true);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $this->getRandomAssessmentId($testpaperActivity);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
@@ -183,6 +184,24 @@ class TestpaperController extends BaseController
         }
 
         return false;
+    }
+
+    private function getRandomAssessmentId(&$testpaperActivity)
+    {
+        $assessment = $this->getAssessmentService()->getAssessment($testpaperActivity['mediaId']);
+        if ('random' !== $assessment['type']) {
+            return;
+        }
+        $subAssessments = $this->getAssessmentService()->searchAssessments(
+            ['parent_id' => $assessment['id']],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['id']
+        );
+        $subAssessmentIds = array_column($subAssessments, 'id');
+        $allIds = array_merge($subAssessmentIds, [$assessment['id']]);
+        $testpaperActivity['mediaId'] = $allIds[array_rand($allIds)];
     }
 
     /**

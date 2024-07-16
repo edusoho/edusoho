@@ -202,12 +202,12 @@ class Assessment extends AbstractResource
     private function validate($fields)
     {
         $requiredFields = [
-            'name', 'type', 'questionBankId', 'mode', 'num', 'generateType',
-            'questionCategoryCounts', 'scores', 'scoreType', 'choiceScore', 'percentages',
+            'name', 'type', 'questionBankId', 'num', 'generateType',
+            'questionCategoryCounts', 'scores', 'percentages',
         ];
-//         if (!ArrayToolkit::requireds($fields, $requiredFields)) {
-//             throw CommonException::ERROR_PARAMETER_MISSING();
-//         }
+        if (!ArrayToolkit::requireds($fields, $requiredFields)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
         if (empty($fields['questionBankId'])) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }
@@ -229,6 +229,7 @@ class Assessment extends AbstractResource
             'uncertain_choice' => 0,
             'fill' => 2,
         ];
+        $fields['mode'] = 'rand';
     }
 
     private function check($fields)
