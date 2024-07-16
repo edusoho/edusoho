@@ -114,8 +114,8 @@
           <div class="question-type-display" v-show="testPaperFormState.generateType === 'questionType'">
             <div class="question-type-display-header">
               <div class="question-type-display-header-top">题型设置</div>
-              <div class="question-type-display-header-normal">题目数量</div>
-              <div class="question-type-display-header-normal">每题分值</div>
+              <div class="question-type-display-header-normal" :class="{'row-editing': editingRow === 'number'}">题目数量</div>
+              <div class="question-type-display-header-normal" :class="{'row-editing': editingRow === 'score'}">每题分值</div>
               <div class="question-type-display-header-bottom">
                 <span class="question-type-display-header-bottom-title">合计</span>
                 <span class="question-type-display-header-bottom-description">（题数/总分）</span>
@@ -125,15 +125,18 @@
               <div class="question-type-display-header-top">
                 <span class="question-type-display-header-top-text">{{ type.name }}</span>
               </div>
-              <div class="question-type-display-cell-number" :class="questionCounts[type.type].total === 0 ? 'question-type-display-cell-number-disable' : ''">
+              <div class="question-type-display-cell-number" :class="{
+                'row-editing': editingRow === 'number',
+                'question-type-display-cell-number-disable': questionCounts[type.type].total === 0,
+                }">
                 <span class="question-type-display-cell-number-edit" v-show="questionCounts[type.type].total > 0">
-                  <input type="number" value="0"/>
+                  <input type="number" value="0" @focus="editingRow = 'number'"/>
                 </span>
                 <span class="question-type-display-cell-number-total" v-show="questionCounts[type.type].total === 0">{{ questionCounts[type.type].total }}</span>
                 <span class="question-type-display-cell-number-total">/{{ questionCounts[type.type].total }}</span>
               </div>
-              <div class="question-type-display-cell-score">
-                <input type="number" value="2"/>
+              <div class="question-type-display-cell-score" :class="{'row-editing': editingRow === 'score'}">
+                <input type="number" value="2" @focus="editingRow = 'score'"/>
               </div>
               <div class="question-type-display-cell-sum">0 / 0.0</div>
             </div>
@@ -389,6 +392,7 @@ export default {
         wrongQuestionRate: "0"
       },
       fetching: false,
+      editingRow: null,
     };
   },
   mounted() {
