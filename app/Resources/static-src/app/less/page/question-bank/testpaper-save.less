@@ -368,6 +368,10 @@
             }
           }
 
+          .question-type-display-cell-number-disable {
+            background: #F5F5F5;
+          }
+
           .question-type-display-cell-score {
             display: flex;
             padding: 16px;
@@ -693,6 +697,14 @@
 
     .row-editing {
       background: rgba(70, 195, 123, 0.05);
+
+      input {
+        background: rgba(70, 195, 123, 0);
+      }
+    }
+
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
     }
 
     .question-type-category-display-header {

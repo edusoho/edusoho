@@ -100,14 +100,14 @@
               </div>
               <a-radio-group v-model="testPaperFormState.generateType" name="type">
                 <a-radio value="questionType">按题型抽题</a-radio>
-                <a-radio v-if="!isPersonalTestPaper()" value="questionTypeCategory">按题型+分类抽题
-                </a-radio>
+                <a-radio v-if="!isPersonalTestPaper()" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
             <question-type-display-set-menu
               v-if="testPaperFormState.generateType === 'questionType'"
-              :default-question-all-types="questionAllTypes"
-              @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
+              :question-type-display-settings="questionTypeDisplaySettings"
+              :setting-key="testPaperFormState.generateType"
+              @updateQuestionTypeDisplaySetting="onQuestionTypeDisplaySettingUpdate"
             />
           </div>
 
@@ -121,14 +121,15 @@
                 <span class="question-type-display-header-bottom-description">（题数/总分）</span>
               </div>
             </div>
-            <div v-for="type in questionDisplayTypes">
+            <div v-for="type in questionTypeDisplaySettings.questionType" v-show="type.checked">
               <div class="question-type-display-header-top">
                 <span class="question-type-display-header-top-text">{{ type.name }}</span>
               </div>
-              <div class="question-type-display-cell-number">
-                <span class="question-type-display-cell-number-edit">
+              <div class="question-type-display-cell-number" :class="questionCounts[type.type].total === 0 ? 'question-type-display-cell-number-disable' : ''">
+                <span class="question-type-display-cell-number-edit" v-show="questionCounts[type.type].total > 0">
                   <input type="number" value="0"/>
                 </span>
+                <span class="question-type-display-cell-number-total" v-show="questionCounts[type.type].total === 0">{{ questionCounts[type.type].total }}</span>
                 <span class="question-type-display-cell-number-total">/{{ questionCounts[type.type].total }}</span>
               </div>
               <div class="question-type-display-cell-score">
@@ -147,12 +148,12 @@
 
             <question-type-category-display
               v-show="selectedQuestionCategories.length > 0"
-              :question-display-types="questionDisplayTypes"
-              :default-question-all-types="questionAllTypes"
+              :question-type-display-settings="questionTypeDisplaySettings"
+              :question-type-display-setting-key="testPaperFormState.generateType"
               :categories="selectedQuestionCategories"
-              :bankId="bankId"
-              @updateCategories="handleUpdateCategories"
-              @updateDisplayQuestionType="handleUpdateDisplayQuestionType"
+              :bank-id="bankId"
+              @updateCategories="onQuestionCategoriesSelected"
+              @updateQuestionTypeDisplaySetting="onQuestionTypeDisplaySettingUpdate"
             />
           </div>
         </div>
@@ -312,6 +313,7 @@ export default {
           checked: true,
         },
       ],
+      questionTypeDisplaySettings: {},
       questionCounts: {
         single_choice: {
           choose: 0,
@@ -368,7 +370,6 @@ export default {
         },
       },
       form: this.$form.createForm(this, {name: "save-test-paper"}),
-      categories: [],
       testPaperFormState: {
         name: '',
         description: '',
@@ -391,8 +392,8 @@ export default {
     };
   },
   mounted() {
+    this.fetchLastQuestionTypeDisplaySettings();
     this.fetchQuestionCounts();
-    this.renderQuestionTypeTable();
     this.$nextTick(() => {
       loadScript(this.CKEditorConfig.jqueryPath, err => {
         if (err) {
@@ -465,6 +466,12 @@ export default {
       });
     },
     handleScroll: function () {},
+    fetchLastQuestionTypeDisplaySettings() {
+      this.questionTypeDisplaySettings = {
+        questionType: this.getDefaultQuestionTypeDisplaySetting(),
+        questionTypeCategory: this.getDefaultQuestionTypeDisplaySetting(),
+      };
+    },
     fetchQuestionCounts() {
       apiClient.get('/api/item/questionType/count', {
         params: {
@@ -477,14 +484,44 @@ export default {
         });
       });
     },
-    renderQuestionTypeTable() {
-      let displayTypes = [];
-      for (const type of this.questionAllTypes) {
-        if (type.checked) {
-          displayTypes.push(type);
-        }
-      }
-      this.questionDisplayTypes = displayTypes;
+    getDefaultQuestionTypeDisplaySetting() {
+      return [
+        {
+          type: "single_choice",
+          name: "单选题",
+          checked: true,
+        },
+        {
+          type: "choice",
+          name: "多选题",
+          checked: true,
+        },
+        {
+          type: "essay",
+          name: "问答题",
+          checked: true,
+        },
+        {
+          type: "uncertain_choice",
+          name: "不定项",
+          checked: true,
+        },
+        {
+          type: "determine",
+          name: "判断题",
+          checked: true,
+        },
+        {
+          type: "fill",
+          name: "填空题",
+          checked: true,
+        },
+        {
+          type: "material",
+          name: "材料题",
+          checked: true,
+        },
+      ];
     },
     backConfirm() {
       this.$confirm({
@@ -503,8 +540,8 @@ export default {
         }
       });
     },
-    handleUpdateDisplayQuestionType(questionDisplayTypes) {
-      this.questionDisplayTypes = questionDisplayTypes;
+    onQuestionTypeDisplaySettingUpdate(settingKey, displaySetting) {
+      this.$set(this.questionTypeDisplaySettings, settingKey, displaySetting);
     },
     onDescriptionInputFocus() {
       this.initDescriptionEditor();
@@ -514,9 +551,6 @@ export default {
       this.difficultyScales.simple.scale = value[0];
       this.difficultyScales.normal.scale = value[1] - value[0];
       this.difficultyScales.difficulty.scale = 100 - value[1];
-    },
-    handleUpdateCategories(categories) {
-      this.categories = categories;
     },
     onQuestionCategoriesSelected(categories) {
       this.selectedQuestionCategories = categories;
@@ -537,7 +571,7 @@ export default {
           this.testPaperFormState.questionBankId = this.itemBankId;
           this.testPaperFormState.num = `${this.testPaperFormState.num}`;
 
-          for (const category of this.categories) {
+          for (const category of this.selectedQuestionCategories) {
 
             const section = {};
             for (const questionType of category.questionTypes) {
