@@ -410,34 +410,15 @@ export default {
         });
       });
     });
-    const type = this.$route.query.type;
-    this.testPaperFormState.type = type || 'random';
 
-    const name = this.$route.query.name;
-    this.testPaperFormState.name = name || '';
+    const routeName = this.$route.name;
+    if (routeName === 'create') {
+      const type = this.$route.query.type;
+      this.testPaperFormState.type = type || 'random';
 
-    this.alertVisible = this.testPaperFormState.type === 'aiPersonality';
-    const titleEl = document.querySelector('.test-paper-save-header');
-    if (titleEl) {
-      const width = titleEl.parentElement.scrollWidth;
-      const offsetTop = titleEl.getBoundingClientRect().top;
-      this.handleScroll = () => {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
-        if (scrollTop >= offsetTop) {
-          titleEl.style.width = `${width}px`;
-          titleEl.style.position = 'fixed';
-          titleEl.style.top = '0';
-          titleEl.style.zIndex = '1000';
-        } else {
-          titleEl.style.position = 'static';
-        }
-      };
-      window.addEventListener('scroll', this.handleScroll)
+      const name = this.$route.query.name;
+      this.testPaperFormState.name = name || '';
     }
-  },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
     initDescriptionEditor() {
@@ -646,6 +627,7 @@ export default {
       const paper = await Testpaper.get(this.id);
 
       this.testPaperFormState.name = paper.name;
+      this.testPaperFormState.type = paper.type;
       this.testPaperFormState.description = paper.description;
       this.testPaperFormState.num = paper.assessmentGenerateRule.num;
       this.testPaperFormState.mode = 'rand';

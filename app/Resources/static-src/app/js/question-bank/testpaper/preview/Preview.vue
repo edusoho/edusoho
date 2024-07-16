@@ -18,38 +18,37 @@ export default {
   },
   async beforeMount() {
     this.paper = await Testpaper.get(this.id);
-    console.log(this.paper);
   },
   methods: {
     async back() {
       await this.$router.back();
-    }
+    },
   }
 };
 </script>
 <template>
   <div v-if="paper" class="test-create test-preview">
-    <div class="test-create-title">
-      <div class="test-create-title-left">
-        <div class="test-create-title-left-back" @click="back">
-          <span class="test-create-title-left-back-img">
+    <div class="test-paper-save-header">
+      <div class="test-paper-save-header-left">
+        <div class="test-paper-save-header-left-back" @click="back">
+          <span class="test-paper-save-header-left-back-img">
             <img src="/static-dist/app/img/question-bank/back-image.png" alt=""/>
           </span>
-          <span class="test-create-title-left-back-text">返回</span>
+          <span class="test-paper-save-header-left-back-text">返回</span>
         </div>
         <i></i>
         <testpaper-type-tag v-if="paper.type" :type="paper.type"/>
         <span v-if="paper.name">{{ paper.name }}</span>
       </div>
-      <div class="test-create-title-right">
-        <span class="test-create-title-right-item">
-          <span class="test-create-title-right-text">试题</span>
-          <span class="test-create-title-right-number">{{ paper['question_count'] }}</span>
+      <div class="test-paper-save-header-right">
+        <span class="test-paper-save-header-right-item">
+          <span class="test-paper-save-header-right-text">试题</span>
+          <span class="test-paper-save-header-right-number">{{ paper['question_count'] }}</span>
         </span>
         <i></i>
-        <span class="test-create-title-right-item">
-          <span class="test-create-title-right-text">总分</span>
-          <span class="test-create-title-right-number">{{ paper['total_score'] }}</span>
+        <span class="test-paper-save-header-right-item">
+          <span class="test-paper-save-header-right-text">总分</span>
+          <span class="test-paper-save-header-right-number">{{ paper['total_score'] }}</span>
         </span>
       </div>
     </div>
@@ -80,7 +79,9 @@ export default {
           </div>
         </div>
         <div class="test-preview-content-basic-operation">
-          <a-button type="primary">进入编辑</a-button>
+          <a :href="$router.resolve({name: 'update', params: {id}}).href" target="_blank">
+            <a-button type="primary">进入编辑</a-button>
+          </a>
         </div>
       </div>
       <div class="test-preview-content-title-display">
@@ -90,8 +91,8 @@ export default {
       <div class="test-preview-content-question-type-display">
         <question-type-preview-display v-for="(type) in questionTypes"
                                        :type="type"
-                                       :score="paper.assessmentGenerateRule['question_setting'].scores[type] || 2"
-                                       :num="paper.assessmentGenerateRule['question_setting'].questionCategoryCounts[0].sections[type].count || 5"
+                                       :score="2"
+                                       :num=" 5"
         />
       </div>
     </div>
