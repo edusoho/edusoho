@@ -21,4 +21,13 @@ export const Testpaper = _.assignIn(baseService, {
   async get(id) {
     return await apiClient.get(`/api/assessment/${id}`);
   },
+  async searchExercise(params) {
+    return apiClient.get(`/api/assessmentExercise`, {params});
+  },
+  async addToExercise(params) {
+    return await apiClient.post(`/api/assessmentExercise`, params);
+  },
+  async deleteExercise(params) {
+    return await apiClient.delete(`/api/assessmentExercise`, {data: params});
+  },
 });

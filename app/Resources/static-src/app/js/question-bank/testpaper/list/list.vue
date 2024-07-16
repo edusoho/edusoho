@@ -419,7 +419,6 @@ export default {
         show-quick-jumper
         show-size-changer
         :page-size-options="pageSizeOptions"
-        style="margin-top: 16px;"
         :show-total="total => getTableTotal(total)"
         v-model="pagination.current"
         :total="pagination.total"
