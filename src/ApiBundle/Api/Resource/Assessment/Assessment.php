@@ -37,7 +37,7 @@ class Assessment extends AbstractResource
         }
         $this->generateAssessment($fields, $questionBank);
 
-        return true;
+        return ['ok' => true];
     }
 
     private function generateAssessment($fields, $questionBank)
@@ -45,7 +45,7 @@ class Assessment extends AbstractResource
         $generateType = $fields['type'] ?? 'default';
         $methodName = 'generate'.ucfirst($generateType).'Assessment';
 
-        return $this->$methodName($fields, $questionBank);
+        $this->$methodName($fields, $questionBank);
     }
 
     private function generateRandomAssessment($fields, $questionBank)
@@ -90,9 +90,9 @@ class Assessment extends AbstractResource
         $assessment = array_merge($fields, [
             'bank_id' => $questionBank['itemBankId'],
             'created_user_id' => $this->getCurrentUser()->getId(),
-            // item_count 并不准确，受材料题子题数量影响，这里直接设置为0
-            'item_count' => '0',
-            'question_count' => $total_count,
+            'item_count' => $total_count,
+            // question_count 并不准确，受材料题子题数量影响，这里直接设置为0
+            'question_count' => '0',
             'displayable' => '1',
         ]);
         try {
@@ -203,8 +203,7 @@ class Assessment extends AbstractResource
     {
         $requiredFields = [
             'name', 'type', 'questionBankId', 'mode', 'num', 'generateType',
-            'questionCategoryCounts', 'scores', 'scoreType', 'choiceScore',
-            'questionCount', 'percentages',
+            'questionCategoryCounts', 'scores', 'scoreType', 'choiceScore', 'percentages',
         ];
         if (!ArrayToolkit::requireds($fields, $requiredFields)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
