@@ -198,25 +198,22 @@ export default {
       window.open(`/question_bank/${this.itemBankId}/testpaper/${paper.id}/export`, '_blank')
     },
     async handleEdit(paper) {
-      if (paper.type === 'regular') {
-        if (['open', 'closed'].includes(paper.status)) {
-          this.$confirm({
-            title: '确定要进行编辑吗？',
-            icon: "exclamation-circle",
-            okText: Translator.trans("question.bank.paper.edit"),
-            cancelText: Translator.trans("site.cancel"),
-            onOk: () => {
-              window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
-            }
-          });
-        } else {
-          window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
+      this.$confirm({
+        title: '确定要进行编辑吗？',
+        content: '当前试卷可能已被应用在考试中，修改试卷内容，可能会对学员答题记录、答题成绩等产生影响',
+        icon: "exclamation-circle",
+        okText: Translator.trans("question.bank.paper.edit"),
+        cancelText: Translator.trans("site.cancel"),
+        onOk: async () => {
+          if (paper.type === 'regular') {
+            window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
+          } else {
+            await this.$router.push({
+              name: 'update', query: {type: paper.type}, params: {id: paper.id}
+            });
+          }
         }
-      } else {
-        await this.$router.push({
-          name: 'update', query: {type: paper.type}, params: {id: paper.id}
-        });
-      }
+      });
     },
     async batchDelete() {
       this.$confirm({
