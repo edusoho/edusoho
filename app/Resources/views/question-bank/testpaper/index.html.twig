@@ -1,6 +1,12 @@
 {% extends 'my/my-teaching.html.twig' %}
 
 {% block title %}{{ 'my.teaching.question_bank.testpaper.manage'|trans }} - {{ parent() }}{% endblock %}
+
+{% block meta %}
+  {{ parent() }}
+  <meta name="lavalamp-enable" content="0"/>
+{% endblock %}
+
 {% set side_nav = 'my-question-bank' %}
 {% set active_tab = 'testpaper-list' %}
 

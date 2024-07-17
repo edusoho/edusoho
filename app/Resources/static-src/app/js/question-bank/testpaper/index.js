@@ -60,3 +60,5 @@ new Vue({
   router,
   template: '<ant-config-provider/>'
 });
+
+$('.nav.nav-tabs').lavaLamp({setOnClick: false});
