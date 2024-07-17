@@ -13,7 +13,7 @@
       </div>
       <div class="test-paper-save-header-right">
       <span class="test-paper-save-header-right-item">
-        <span class="test-paper-save-header-right-text">试卷</span>
+        <span class="test-paper-save-header-right-text">试题</span>
         <span class="test-paper-save-header-right-number">0</span>
       </span>
         <i></i>

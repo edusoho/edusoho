@@ -278,7 +278,6 @@ export default {
         language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
       },
       difficultyVisible: false,
-      questionDisplayTypes: [],
       questionAllTypes: [
         {
           type: "single_choice",
@@ -356,20 +355,20 @@ export default {
         simple: {
           text: '简单',
           scale: 30,
-          totalCount: 5,
-          chooseCount: 5,
+          totalCount: 0,
+          chooseCount: 0,
         },
         normal: {
           text: '一般',
           scale: 40,
-          totalCount: 20,
-          chooseCount: 14,
+          totalCount: 0,
+          chooseCount: 0,
         },
         difficulty: {
           text: '困难',
           scale: 30,
-          totalCount: 10,
-          chooseCount: 10,
+          totalCount: 0,
+          chooseCount: 0,
         },
       },
       form: this.$form.createForm(this, {name: "save-test-paper"}),
@@ -450,7 +449,6 @@ export default {
         });
       });
     },
-    handleScroll: function () {},
     fetchLastQuestionTypeDisplaySettings() {
       this.questionTypeDisplaySettings = {
         questionType: this.getDefaultQuestionTypeDisplaySetting(),
@@ -466,6 +464,15 @@ export default {
         res.forEach(item => {
           this.questionCounts[item.type].total = item.itemNum;
           this.questionCounts.sum.total += item.itemNum;
+        });
+      });
+      apiClient.get('/api/item/difficulty/count', {
+        params: {
+          bank_id: this.bankId,
+        }
+      }).then(res => {
+        res.forEach(item => {
+          this.difficultyScales[item.difficulty].totalCount = item.itemNum;
         });
       });
     },
@@ -622,8 +629,7 @@ export default {
     },
   },
   async beforeMount() {
-    const routeName = this.$route.name;
-    if (routeName === 'update') {
+    if (this.$route.name === 'update') {
       const paper = await Testpaper.get(this.id);
 
       this.testPaperFormState.name = paper.name;
