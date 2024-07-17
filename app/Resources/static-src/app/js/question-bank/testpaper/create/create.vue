@@ -121,7 +121,7 @@
                 <span class="question-type-display-header-bottom-description">（题数/总分）</span>
               </div>
             </div>
-            <div v-for="type in questionTypeDisplaySettings.questionType" v-show="type.checked">
+            <div class="question-type-display-col" v-for="type in questionTypeDisplaySettings.questionType" v-show="type.checked">
               <div class="question-type-display-header-top">
                 <span class="question-type-display-header-top-text">{{ type.name }}</span>
               </div>
@@ -130,15 +130,15 @@
                 'question-type-display-cell-number-disable': questionCounts[type.type].total === 0,
                 }">
                 <span class="question-type-display-cell-number-edit" v-show="questionCounts[type.type].total > 0">
-                  <input type="number" value="0" @focus="editingRow = 'number'"/>
+                  <input type="number" v-model="questionCounts[type.type].choose" @focus="editingRow = 'number'" @blur="editingRow = null"/>
                 </span>
                 <span class="question-type-display-cell-number-total" v-show="questionCounts[type.type].total === 0">{{ questionCounts[type.type].total }}</span>
                 <span class="question-type-display-cell-number-total">/{{ questionCounts[type.type].total }}</span>
               </div>
               <div class="question-type-display-cell-score" :class="{'row-editing': editingRow === 'score'}">
-                <input type="number" value="2" @focus="editingRow = 'score'"/>
+                <input type="number" v-model="scores.questionType[type.type]" @focus="editingRow = 'score'" @blur="editingRow = null"/>
               </div>
-              <div class="question-type-display-cell-sum">0 / 0.0</div>
+              <div class="question-type-display-cell-sum">{{ questionCounts[type.type].choose }} / {{ sumScore(type.type) }}</div>
             </div>
           </div>
 
@@ -154,9 +154,12 @@
               :question-type-display-settings="questionTypeDisplaySettings"
               :question-type-display-setting-key="testPaperFormState.generateType"
               :categories="selectedQuestionCategories"
+              :scores="scores.questionTypeCategory"
+              :question-counts="questionCounts"
               :bank-id="bankId"
               @updateCategories="onQuestionCategoriesSelected"
               @updateQuestionTypeDisplaySetting="onQuestionTypeDisplaySettingUpdate"
+              @updateQuestionConfigs="onQuestionConfigsUpdate"
             />
           </div>
         </div>
@@ -278,43 +281,6 @@ export default {
         language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
       },
       difficultyVisible: false,
-      questionAllTypes: [
-        {
-          type: "single_choice",
-          name: "单选题",
-          checked: true,
-        },
-        {
-          type: "choice",
-          name: "多选题",
-          checked: true,
-        },
-        {
-          type: "essay",
-          name: "问答题",
-          checked: true,
-        },
-        {
-          type: "uncertain_choice",
-          name: "不定项",
-          checked: true,
-        },
-        {
-          type: "determine",
-          name: "判断题",
-          checked: true,
-        },
-        {
-          type: "fill",
-          name: "填空题",
-          checked: true,
-        },
-        {
-          type: "material",
-          name: "材料题",
-          checked: true,
-        },
-      ],
       questionTypeDisplaySettings: {},
       questionCounts: {
         single_choice: {
@@ -345,9 +311,25 @@ export default {
           choose: 0,
           total: 0,
         },
-        sum: {
-          choose: 0,
-          total: 0,
+      },
+      scores: {
+        questionType: {
+          single_choice: 2,
+          choice: 2,
+          essay: 2,
+          uncertain_choice: 2,
+          determine: 2,
+          fill: 2,
+          material: 2,
+        },
+        questionTypeCategory: {
+          single_choice: 2,
+          choice: 2,
+          essay: 2,
+          uncertain_choice: 2,
+          determine: 2,
+          fill: 2,
+          material: 2,
         },
       },
       selectedQuestionCategories: [],
@@ -377,12 +359,10 @@ export default {
         description: '',
         type: 'random',
         questionBankId: null,
-        mode: "rand",
         num: 20,
         generateType: "questionType",
         questionCategoryCounts: [],
         scores: {},
-        questionCount: 0,
         percentages: {
           simple: 30,
           normal: 30,
@@ -393,6 +373,17 @@ export default {
       fetching: false,
       editingRow: null,
     };
+  },
+  computed: {
+    sumScore() {
+      return type => {
+        return (this.questionCounts[type].choose * this.scores.questionType[type]).toFixed(1);
+      }
+    },
+    totalCount() {
+    },
+    totalScore() {
+    }
   },
   mounted() {
     this.fetchLastQuestionTypeDisplaySettings();
@@ -463,7 +454,6 @@ export default {
       }).then(res => {
         res.forEach(item => {
           this.questionCounts[item.type].total = item.itemNum;
-          this.questionCounts.sum.total += item.itemNum;
         });
       });
       apiClient.get('/api/item/difficulty/count', {
@@ -535,6 +525,12 @@ export default {
     onQuestionTypeDisplaySettingUpdate(settingKey, displaySetting) {
       this.$set(this.questionTypeDisplaySettings, settingKey, displaySetting);
     },
+    onQuestionConfigsUpdate(questionConfigs) {
+      Object.keys(questionConfigs).forEach(type => {
+        this.scores.questionTypeCategory[type] = questionConfigs[type].score;
+        this.questionCounts[type].categoryCounts = questionConfigs[type].count.choose;
+      });
+    },
     onDescriptionInputFocus() {
       this.initDescriptionEditor();
       this.descriptionEditorVisible = true;
@@ -558,36 +554,36 @@ export default {
         if (!err) {
 
           this.fetching = true;
-          let questionNum = 0;
           this.testPaperFormState.questionCategoryCounts = [];
           this.testPaperFormState.questionBankId = this.itemBankId;
           this.testPaperFormState.num = `${this.testPaperFormState.num}`;
 
-          for (const category of this.selectedQuestionCategories) {
-
-            const section = {};
-            for (const questionType of category.questionTypes) {
-              section[questionType.type] = {
-                count: questionType.addNum,
-                name: this.questionAllTypes.find(type => type.type === questionType.type).name
-              };
-              questionNum += questionType.addNum;
-            }
-
+          if (this.testPaperFormState.generateType === 'questionType') {
+            const counts = {};
+            this.questionTypeDisplaySettings.questionType.forEach(type => {
+              if (type.checked) {
+                counts[type.type] = this.questionCounts[type.type].choose;
+              }
+            });
             this.testPaperFormState.questionCategoryCounts.push({
-              categoryId: category.id,
-              sections: section
-            })
+              categoryId: '',
+              counts: counts,
+            });
+          } else {
+            this.selectedQuestionCategories.forEach(category => {
+              const counts = {};
+              this.questionTypeDisplaySettings.questionTypeCategory.forEach(type => {
+                if (type.checked) {
+                  counts[type.type] = this.questionCounts[type.type].categoryCounts[category.id];
+                }
+              });
+              this.testPaperFormState.questionCategoryCounts.push({
+                categoryId: category.id,
+                counts: counts,
+              });
+            });
           }
-
-          this.testPaperFormState.questionCount = questionNum;
-          const scored = {};
-
-          for (const questionType of this.questionAllTypes) {
-            scored[questionType.type] = questionType.score;
-          }
-
-          this.testPaperFormState.scores = scored;
+          this.testPaperFormState.scores = this.scores[this.testPaperFormState.generateType];
 
           this.testPaperFormState.percentages = {
             simple: `${this.difficultyScales.simple.scale}`,

@@ -9,6 +9,7 @@ use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\Testpaper\Builder\RandomTestpaperBuilder;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -59,7 +60,7 @@ class Assessment extends AbstractResource
         }
         try {
             $this->biz['db']->beginTransaction();
-            $assessment = $this->getBiz()['testpaper_builder.random_testpaper']->build($fields);
+            $assessment = $this->getRandomTestPaperBuilder()->build($fields);
 
             $this->createAssessmentGenerateRule($fields, $assessment);
 
@@ -79,18 +80,14 @@ class Assessment extends AbstractResource
 
     private function generateAiPersonalityAssessment($fields, $questionBank)
     {
-        $sections = $fields['questionCategoryCounts'][0]['sections'];
-        if (empty($sections)) {
+        $counts = $fields['questionCategoryCounts'][0]['counts'];
+        if (empty($counts)) {
             throw CommonException::ERROR_PARAMETER();
-        }
-        $total_count = 0;
-        foreach ($sections as $section) {
-            $total_count += $section['count'];
         }
         $assessment = array_merge($fields, [
             'bank_id' => $questionBank['itemBankId'],
             'created_user_id' => $this->getCurrentUser()->getId(),
-            'item_count' => $total_count,
+            'item_count' => array_sum(array_values($counts)),
             // question_count 并不准确，受材料题子题数量影响，这里直接设置为0
             'question_count' => '0',
             'displayable' => '1',
@@ -234,7 +231,7 @@ class Assessment extends AbstractResource
 
     private function check($fields)
     {
-        return $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($fields);
+        return $this->getRandomTestPaperBuilder()->canBuild($fields);
     }
 
     private function createAssessmentGenerateRule($fields, $assessment)
@@ -268,6 +265,14 @@ class Assessment extends AbstractResource
         ];
 
         return $assessmentGenerateRule;
+    }
+
+    /**
+     * @return RandomTestpaperBuilder
+     */
+    private function getRandomTestPaperBuilder()
+    {
+        return $this->biz['testpaper_builder.random_testpaper'];
     }
 
     /**

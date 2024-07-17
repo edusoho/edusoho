@@ -8,6 +8,8 @@ export default {
     questionTypeDisplaySettings: undefined,
     questionTypeDisplaySettingKey: undefined,
     categories: undefined,
+    scores: undefined,
+    questionCounts: undefined,
     bankId: undefined,
   },
   data() {
@@ -15,66 +17,24 @@ export default {
       editMaskVisible: false,
       drawerVisible: false,
       countVisible: false,
-      questionConfigs: {
-        single_choice: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
-        },
-        choice: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
-        },
-        essay: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
-        },
-        uncertain_choice: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
-        },
-        determine: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
-        },
-        fill: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
-        },
-        material: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
-        },
-      },
+      questionTotalCounts: {
+        single_choice: {},
+        choice: {},
+        essay: {},
+        uncertain_choice: {},
+        determine: {},
+        fill: {},
+        material: {},
+      }
     };
   },
   computed: {
     totalCount() {
       return (categoryId, type) => {
-        if (!this.questionConfigs[type].count.total[categoryId]) {
+        if (!this.questionTotalCounts[type][categoryId]) {
           return 0;
         }
-        return this.questionConfigs[type].count.total[categoryId];
+        return this.questionTotalCounts[type][categoryId];
       }
     },
     chooseCount() {
@@ -82,18 +42,21 @@ export default {
         if (!this.countVisible) {
           return '';
         }
-        if (!this.questionConfigs[type].count.choose[categoryId]) {
+        if (!this.questionCounts[type]?.categoryCounts[categoryId]) {
           return 0;
         }
-        return this.questionConfigs[type].count.choose[categoryId];
+        return this.questionCounts[type].categoryCounts[categoryId];
       }
     },
     sumCount() {
       return type => {
+        if (!this.countVisible) {
+          return 0;
+        }
         let sumCount = 0;
         this.categories.forEach(category => {
-          if (this.questionConfigs[type].count.choose[category.id]) {
-            sumCount += Number(this.questionConfigs[type].count.choose[category.id]);
+          if (this.questionCounts[type].categoryCounts[category.id]) {
+            sumCount += Number(this.questionCounts[type].categoryCounts[category.id]);
           }
         });
 
@@ -102,23 +65,29 @@ export default {
     },
     sumScore() {
       return type => {
+        if (!this.countVisible) {
+          return (0).toFixed(1);
+        }
         let sumCount = 0;
         this.categories.forEach(category => {
-          if (this.questionConfigs[type].count.choose[category.id]) {
-            sumCount += Number(this.questionConfigs[type].count.choose[category.id]);
+          if (this.questionCounts[type].categoryCounts[category.id]) {
+            sumCount += Number(this.questionCounts[type].categoryCounts[category.id]);
           }
         });
 
-        return (sumCount * this.questionConfigs[type].score).toFixed(1);
+        return (sumCount * this.scores[type]).toFixed(1);
       }
     }
   },
   methods: {
     onEditDrawerSave(categories, questionTypeDisplaySetting, questionConfigs) {
-      this.countVisible = true;
       this.$emit('updateCategories', categories);
       this.$emit('updateQuestionTypeDisplaySetting', this.questionTypeDisplaySettingKey, questionTypeDisplaySetting);
-      this.questionConfigs = questionConfigs;
+      this.$emit('updateQuestionConfigs', questionConfigs);
+      Object.keys(questionConfigs).forEach(type => {
+        this.questionTotalCounts[type] = questionConfigs[type].count.total;
+      });
+      this.countVisible = true;
     }
   },
 }

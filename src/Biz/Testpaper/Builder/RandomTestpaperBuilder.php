@@ -176,13 +176,13 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         if ((int) $questionCategoryCount['categoryId']) {
             $range['category_ids'][] = $questionCategoryCount['categoryId'];
         }
-        foreach ($questionCategoryCount['sections'] as $type => $section) {
+        foreach ($questionCategoryCount['counts'] as $type => $count) {
             $section = [
                 'conditions' => [
                     'item_types' => [$type],
                 ],
-                'item_count' => $section['count'],
-                'name' => $section['name'],
+                'item_count' => $count,
+                'name' => $this->convertItemTypeToName($type),
                 'score' => empty($fields['scores'][$type]) ? 0 : $fields['scores'][$type],
             ];
 
@@ -233,6 +233,19 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         }
 
         return $sections;
+    }
+
+    private function convertItemTypeToName($type)
+    {
+        return [
+            'single_choice' => '单选题',
+            'choice' => '多选题',
+            'uncertain_choice' => '不定项选择题',
+            'fill' => '填空题',
+            'determine' => '判断题',
+            'essay' => '问答题',
+            'material' => '材料题',
+        ][$type];
     }
 
     /**
