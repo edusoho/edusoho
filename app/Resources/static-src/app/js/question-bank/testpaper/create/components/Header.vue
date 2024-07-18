@@ -14,12 +14,12 @@
       <div class="test-paper-save-header-right">
       <span class="test-paper-save-header-right-item">
         <span class="test-paper-save-header-right-text">试题</span>
-        <span class="test-paper-save-header-right-number">0</span>
+        <span class="test-paper-save-header-right-number">{{ paperQuestionCount }}</span>
       </span>
         <i></i>
         <span class="test-paper-save-header-right-item">
         <span class="test-paper-save-header-right-text">总分</span>
-        <span class="test-paper-save-header-right-number">0.0</span>
+        <span class="test-paper-save-header-right-number">{{ paperScore }}</span>
       </span>
       </div>
     </div>
@@ -35,6 +35,8 @@ export default {
   },
   props: {
     type: null,
+    paperQuestionCount: undefined,
+    paperScore: undefined,
   },
   methods: {
     backConfirm() {

@@ -68,12 +68,4 @@ class RandomAssessmentCreateJob extends AbstractJob
     {
         return $this->biz->service('QuestionBank:QuestionBankService');
     }
-
-    /**
-     * @return SchedulerService
-     */
-    private function getSchedulerService()
-    {
-        return $this->biz->service('Scheduler:SchedulerService');
-    }
 }

@@ -124,6 +124,8 @@ export default {
       :default-categories="categories"
       :default-question-type-display-settings="questionTypeDisplaySettings"
       :question-type-display-setting-key="questionTypeDisplaySettingKey"
+      :default-scores="scores"
+      :default-question-counts="questionCounts"
       @close="drawerVisible = false"
       @save="onEditDrawerSave"
     />

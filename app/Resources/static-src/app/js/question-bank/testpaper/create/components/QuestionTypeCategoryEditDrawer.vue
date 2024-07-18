@@ -10,6 +10,8 @@ export default {
     defaultQuestionTypeDisplaySettings: undefined,
     questionTypeDisplaySettingKey: undefined,
     defaultCategories: undefined,
+    defaultScores: undefined,
+    defaultQuestionCounts: undefined,
     bankId: undefined,
   },
   components: {
@@ -89,7 +91,11 @@ export default {
       this.questionTypeDisplaySetting.forEach(type => {
         this.defaultCategories.forEach(category => {
           this.questionConfigs[type.type].count.choose[category.id] = 0;
+          if (this.defaultQuestionCounts[type.type].categoryCounts && this.defaultQuestionCounts[type.type].categoryCounts[category.id]) {
+            this.questionConfigs[type.type].count.choose[category.id] = this.defaultQuestionCounts[type.type].categoryCounts[category.id];
+          }
         });
+        this.questionConfigs[type.type].score = this.defaultScores[type.type];
         const typeConfig = this.questionConfigs[type.type];
         this.questionConfigs[type.type] = {};
         this.$set(this.questionConfigs, type.type, typeConfig);
@@ -127,7 +133,7 @@ export default {
         return;
       }
 
-      this.$emit('save', this.categories, this.questionTypeDisplaySetting, this.questionConfigs);
+      this.$emit('save', this.categories, _.cloneDeep(this.questionTypeDisplaySetting), _.cloneDeep(this.questionConfigs));
       this.$message.success(Translator.trans('site.save_success_hint'));
       this.close();
     },

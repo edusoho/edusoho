@@ -2,6 +2,8 @@
   <div class="test-create">
     <test-paper-save-header
       :type="testPaperFormState.type"
+      :paper-question-count="paperQuestionCount"
+      :paper-score="paperScore"
       @back-confirm="backConfirm"
     ></test-paper-save-header>
 
@@ -98,7 +100,7 @@
               <div class="test-paper-save-form-item-label">
                 <span class="test-paper-save-form-item-label-text">抽题方式</span>
               </div>
-              <a-radio-group v-model="testPaperFormState.generateType" name="type">
+              <a-radio-group v-model="testPaperFormState.generateType" @change="paperQuestionCount = sumChooseQuestionCount(); paperScore = sumChooseQuestionScore();">
                 <a-radio value="questionType">按题型抽题</a-radio>
                 <a-radio v-if="!isPersonalTestPaper()" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
@@ -377,6 +379,8 @@ export default {
       },
       fetching: false,
       editingRow: null,
+      paperQuestionCount: 0,
+      paperScore: 0,
     };
   },
   computed: {
@@ -385,10 +389,28 @@ export default {
         return (this.questionCounts[type].choose * this.scores.questionType[type]).toFixed(1);
       }
     },
-    totalCount() {
+  },
+  watch: {
+    questionCounts: {
+      handler() {
+        this.paperQuestionCount = this.sumChooseQuestionCount();
+        this.paperScore = this.sumChooseQuestionScore();
+      },
+      deep: true,
     },
-    totalScore() {
-    }
+    scores: {
+      handler() {
+        this.paperScore = this.sumChooseQuestionScore();
+      },
+      deep: true,
+    },
+    questionTypeDisplaySettings: {
+      handler() {
+        this.paperQuestionCount = this.sumChooseQuestionCount();
+        this.paperScore = this.sumChooseQuestionScore();
+      },
+      deep: true,
+    },
   },
   mounted() {
     this.fetchLastQuestionTypeDisplaySettings();
@@ -563,6 +585,8 @@ export default {
         this.scores.questionTypeCategory[type] = questionConfigs[type].score;
         this.questionCounts[type].categoryCounts = questionConfigs[type].count.choose;
       });
+      this.paperQuestionCount = this.sumChooseQuestionCount();
+      this.paperScore = this.sumChooseQuestionScore();
     },
     onDescriptionInputFocus() {
       this.initDescriptionEditor();
@@ -585,6 +609,10 @@ export default {
       }
       this.form.validateFields(async (err) => {
         if (!err) {
+          if (this.sumChooseQuestionCount() === 0) {
+            this.$message.error('请至少选择 1 道题目');
+            return;
+          }
 
           this.fetching = true;
           this.testPaperFormState.questionCategoryCounts = [];
@@ -637,6 +665,44 @@ export default {
           }
         }
       });
+    },
+    sumChooseQuestionCount() {
+      let count = 0;
+      this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
+        if (!type.checked) {
+          return;
+        }
+        if (this.testPaperFormState.generateType === 'questionType') {
+          count += Number(this.questionCounts[type.type].choose);
+        } else if (this.questionCounts[type.type].categoryCounts) {
+          this.selectedQuestionCategories.forEach(category => {
+            if (this.questionCounts[type.type].categoryCounts[category.id]) {
+              count += Number(this.questionCounts[type.type].categoryCounts[category.id]);
+            }
+          });
+        }
+      });
+
+      return count;
+    },
+    sumChooseQuestionScore() {
+      let score = 0;
+      this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
+        if (!type.checked) {
+          return;
+        }
+        if (this.testPaperFormState.generateType === 'questionType') {
+          score += Number(this.questionCounts[type.type].choose) * this.scores.questionType[type.type];
+        } else if (this.questionCounts[type.type].categoryCounts) {
+          this.selectedQuestionCategories.forEach(category => {
+            if (this.questionCounts[type.type].categoryCounts[category.id]) {
+              score += Number(this.questionCounts[type.type].categoryCounts[category.id]) * this.scores.questionTypeCategory[type.type];
+            }
+          });
+        }
+      });
+
+      return score.toFixed(1);
     },
     handleChangeNum(value) {
       this.testPaperFormState.num = Number.parseInt(value) || 1;
