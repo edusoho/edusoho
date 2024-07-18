@@ -22,6 +22,20 @@ export default {
         this.$emit('updateQuestionTypeDisplaySetting', this.settingKey, _.cloneDeep(this.questionTypeDisplaySetting));
       }
     },
+    onSwitchClick(questionType) {
+      if (!questionType.checked) {
+        questionType.checked = true;
+        return;
+      }
+      this.questionTypeDisplaySetting.forEach(type => {
+        if (type.checked && type.type !== questionType.type) {
+          questionType.checked = false;
+        }
+      });
+      if (questionType.checked) {
+        this.$message.error('至少保留一个题型');
+      }
+    }
   },
 }
 </script>
@@ -49,7 +63,7 @@ export default {
               />
               <span class="question-type-setting-menu-item-label-text">{{ questionType.name }}</span>
             </span>
-            <a-switch v-model:checked="questionType.checked"
+            <a-switch :checked="questionType.checked" @click="onSwitchClick(questionType)"
                       class="question-type-setting-menu-item-switch"></a-switch>
           </a-menu-item>
         </transition-group>
