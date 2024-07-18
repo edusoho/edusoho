@@ -114,8 +114,12 @@
           <div class="question-type-display" v-show="testPaperFormState.generateType === 'questionType'">
             <div class="question-type-display-header">
               <div class="question-type-display-header-top">题型设置</div>
-              <div class="question-type-display-header-normal" :class="{'row-editing': editingRow === 'number'}">题目数量</div>
-              <div class="question-type-display-header-normal" :class="{'row-editing': editingRow === 'score'}">每题分值</div>
+              <div class="question-type-display-header-normal" :class="{'row-editing': editingRow === 'number'}">
+                题目数量
+              </div>
+              <div class="question-type-display-header-normal" :class="{'row-editing': editingRow === 'score'}">
+                每题分值
+              </div>
               <div class="question-type-display-header-bottom">
                 <span class="question-type-display-header-bottom-title">合计</span>
                 <span class="question-type-display-header-bottom-description">（题数/总分）</span>
@@ -132,7 +136,8 @@
                 <span class="question-type-display-cell-number-edit" v-show="questionCounts[type.type].total > 0">
                   <input type="number" v-model="questionCounts[type.type].choose" @focus="editingRow = 'number'" @blur="editingRow = null"/>
                 </span>
-                <span class="question-type-display-cell-number-total" v-show="questionCounts[type.type].total === 0">{{ questionCounts[type.type].total }}</span>
+                <span class="question-type-display-cell-number-total"
+                      v-show="questionCounts[type.type].total === 0">{{ questionCounts[type.type].total }}</span>
                 <span class="question-type-display-cell-number-total">/{{ questionCounts[type.type].total }}</span>
               </div>
               <div class="question-type-display-cell-score" :class="{'row-editing': editingRow === 'score'}">
@@ -353,14 +358,14 @@ export default {
           chooseCount: 0,
         },
       },
-      form: this.$form.createForm(this, {name: "save-test-paper"}),
+      form: this.$form.createForm(this, {name: 'save-test-paper'}),
       testPaperFormState: {
         name: '',
         description: '',
         type: 'random',
         questionBankId: null,
         num: 20,
-        generateType: "questionType",
+        generateType: 'questionType',
         questionCategoryCounts: [],
         scores: {},
         percentages: {
@@ -368,7 +373,7 @@ export default {
           normal: 30,
           difficulty: 40,
         },
-        wrongQuestionRate: "0"
+        wrongQuestionRate: '0'
       },
       fetching: false,
       editingRow: null,
@@ -409,14 +414,42 @@ export default {
       const name = this.$route.query.name;
       this.testPaperFormState.name = name || '';
     }
+
+    document.addEventListener('click', (evt) => this.handleRouterSkip(evt));
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', (evt) => this.handleRouterSkip(evt));
   },
   methods: {
+    confirmLeave(href) {
+      this.$confirm({
+        title: '确定要离开当前页面？',
+        content: '离开后所有已编辑更改的数据将消失！',
+        icon: 'exclamation-circle',
+        okText: '离开',
+        cancelText: '取消',
+        centered: true,
+        onOk: () => {
+          window.location.href = href;
+        },
+      });
+    },
+    handleRouterSkip(event) {
+      const target = event.target;
+      if (target.tagName === 'A' && target.getAttribute('href')) {
+        const href = target.getAttribute('href');
+
+        event.preventDefault();
+
+        this.confirmLeave(href);
+      }
+    },
     initDescriptionEditor() {
       if (this.descriptionEditor) {
         this.descriptionEditor.destroy();
       }
       this.descriptionEditor = CKEDITOR.replace('test-paper-description', {
-        toolbar: "Minimal",
+        toolbar: 'Minimal',
         fileSingleSizeLimit: app.fileSingleSizeLimit,
         filebrowserImageUploadUrl: this.CKEditorConfig.filebrowserImageUploadUrl,
         filebrowserImageDownloadUrl: this.CKEditorConfig.filebrowserImageDownloadUrl,
@@ -469,38 +502,38 @@ export default {
     getDefaultQuestionTypeDisplaySetting() {
       return [
         {
-          type: "single_choice",
-          name: "单选题",
+          type: 'single_choice',
+          name: '单选题',
           checked: true,
         },
         {
-          type: "choice",
-          name: "多选题",
+          type: 'choice',
+          name: '多选题',
           checked: true,
         },
         {
-          type: "essay",
-          name: "问答题",
+          type: 'essay',
+          name: '问答题',
           checked: true,
         },
         {
-          type: "uncertain_choice",
-          name: "不定项",
+          type: 'uncertain_choice',
+          name: '不定项',
           checked: true,
         },
         {
-          type: "determine",
-          name: "判断题",
+          type: 'determine',
+          name: '判断题',
           checked: true,
         },
         {
-          type: "fill",
-          name: "填空题",
+          type: 'fill',
+          name: '填空题',
           checked: true,
         },
         {
-          type: "material",
-          name: "材料题",
+          type: 'material',
+          name: '材料题',
           checked: true,
         },
       ];
@@ -589,7 +622,7 @@ export default {
             simple: `${this.difficultyScales.simple.scale}`,
             normal: `${this.difficultyScales.normal.scale}`,
             difficulty: `${this.difficultyScales.difficulty.scale}`,
-          }
+          };
           try {
             await Testpaper.create(this.testPaperFormState);
             await this.$router.push({
@@ -598,7 +631,7 @@ export default {
             });
             this.$message.success('创建成功');
           } catch (err) {
-            this.$message.error("创建失败", err)
+            this.$message.error('创建失败', err);
           } finally {
             this.fetching = false;
           }
@@ -649,5 +682,5 @@ export default {
       }
     }
   }
-}
+};
 </script>
