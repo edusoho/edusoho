@@ -279,13 +279,19 @@ export default {
     <list-header @changeTab="handleChangeTab"/>
     <div class="condition-bar">
       <a-select v-model="status" :placeholder="'question.bank.paper.status'|trans" style="width: 156px" allow-clear>
-        <a-select-option value="1">
-          {{ 'question.bank.paper.generating'|trans }}
-        </a-select-option>
-        <a-select-option value="2">
+        <a-select-option value="draft">
           {{ 'question.bank.paper.draft'|trans }}
         </a-select-option>
-        <a-select-option value="3">
+        <a-select-option value="open">
+          {{ 'question.bank.paper.published'|trans }}
+        </a-select-option>
+        <a-select-option value="closed">
+          {{ 'question.bank.paper.closed'|trans }}
+        </a-select-option>
+        <a-select-option value="generating">
+          {{ 'question.bank.paper.generating'|trans }}
+        </a-select-option>
+        <a-select-option value="failure">
           {{ 'question.bank.paper.fail'|trans }}
         </a-select-option>
       </a-select>

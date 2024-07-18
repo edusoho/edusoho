@@ -2,9 +2,7 @@
 
 namespace Biz\Testpaper\Job;
 
-use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
@@ -14,9 +12,8 @@ class RandomAssessmentCreateJob extends AbstractJob
     {
         $assessment = $this->getAssessmentService()->getAssessment($this->args['assessmentId']);
         $assessmentGenerateRule = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($assessment['id']);
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($this->args['questionBankId']);
         $assessmentParams = [
-            'itemBankId' => $questionBank['itemBankId'],
+            'itemBankId' => $assessment['bank_id'],
             'type' => 'random',
             'name' => $assessment['name'],
             'description' => $assessment['description'],
@@ -59,13 +56,5 @@ class RandomAssessmentCreateJob extends AbstractJob
     protected function getAssessmentGenerateRuleService()
     {
         return $this->biz->service('ItemBank:Assessment:AssessmentGenerateRuleService');
-    }
-
-    /**
-     * @return QuestionBankService
-     */
-    private function getQuestionBankService()
-    {
-        return $this->biz->service('QuestionBank:QuestionBankService');
     }
 }

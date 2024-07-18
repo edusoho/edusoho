@@ -2291,7 +2291,7 @@ question.bank.difficulty.normal: 一般
 question.bank.difficulty: 困难
 question.bank.reset.btn: 重置
 
-question.bank.paper.status: 状态
+question.bank.paper.status: 试卷状态
 question.bank.paper.type: 类型
 question.bank.paper.paper.type: 试卷类型
 question.bank.paper.generating: 生成中

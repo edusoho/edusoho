@@ -32,27 +32,22 @@ class Assessment extends AbstractResource
         $this->initializeFields($fields);
         $this->validate($fields);
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($fields['questionBankId']);
-        if (empty($questionBank['itemBank'])) {
-            throw QuestionBankException::NOT_FOUND_BANK();
-        }
-        $this->generateAssessment($fields, $questionBank);
+        $this->generateAssessment($fields);
 
         return ['ok' => true];
     }
 
-    private function generateAssessment($fields, $questionBank)
+    private function generateAssessment($fields)
     {
         $generateType = $fields['type'] ?? 'default';
         $methodName = 'generate'.ucfirst($generateType).'Assessment';
 
-        $this->$methodName($fields, $questionBank);
+        $this->$methodName($fields);
     }
 
-    private function generateRandomAssessment($fields, $questionBank)
+    private function generateRandomAssessment($fields)
     {
         $fields = array_merge($fields, [
-            'itemBankId' => $questionBank['itemBankId'],
             'status' => 'generating',
         ]);
         if (!$this->check($fields)) {
@@ -70,7 +65,7 @@ class Assessment extends AbstractResource
                 'expression' => intval(time() + 10),
                 'misfire_policy' => 'executing',
                 'class' => 'Biz\Testpaper\Job\RandomAssessmentCreateJob',
-                'args' => ['assessmentId' => $assessment['id'], 'questionBankId' => $fields['questionBankId']],
+                'args' => ['assessmentId' => $assessment['id']],
             ]);
             $this->biz['db']->commit();
         } catch (\Exception $e) {
@@ -78,14 +73,14 @@ class Assessment extends AbstractResource
         }
     }
 
-    private function generateAiPersonalityAssessment($fields, $questionBank)
+    private function generateAiPersonalityAssessment($fields)
     {
         $counts = $fields['questionCategoryCounts'][0]['counts'];
         if (empty($counts)) {
             throw CommonException::ERROR_PARAMETER();
         }
         $assessment = array_merge($fields, [
-            'bank_id' => $questionBank['itemBankId'],
+            'bank_id' => $fields['itemBankId'],
             'created_user_id' => $this->getCurrentUser()->getId(),
             'item_count' => array_sum(array_values($counts)),
             // question_count 并不准确，受材料题子题数量影响，这里直接设置为0
@@ -199,16 +194,17 @@ class Assessment extends AbstractResource
     private function validate($fields)
     {
         $requiredFields = [
-            'name', 'type', 'questionBankId', 'num', 'generateType',
+            'name', 'type', 'itemBankId', 'num', 'generateType',
             'questionCategoryCounts', 'scores', 'percentages',
         ];
         if (!ArrayToolkit::requireds($fields, $requiredFields)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        if (empty($fields['questionBankId'])) {
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($fields['itemBankId']);
+        if (empty($questionBank)) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }
-        if (!$this->getQuestionBankService()->canManageBank($fields['questionBankId'])) {
+        if (!$this->getQuestionBankService()->canManageBank($questionBank['id'])) {
             throw UserException::PERMISSION_DENIED();
         }
     }

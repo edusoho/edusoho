@@ -365,7 +365,7 @@ export default {
         name: '',
         description: '',
         type: 'random',
-        questionBankId: null,
+        itemBankId: null,
         num: 20,
         generateType: 'questionType',
         questionCategoryCounts: [],
@@ -616,7 +616,7 @@ export default {
 
           this.fetching = true;
           this.testPaperFormState.questionCategoryCounts = [];
-          this.testPaperFormState.questionBankId = this.itemBankId;
+          this.testPaperFormState.itemBankId = this.itemBankId;
           this.testPaperFormState.num = `${this.testPaperFormState.num}`;
 
           if (this.testPaperFormState.generateType === 'questionType') {
@@ -732,7 +732,7 @@ export default {
       this.testPaperFormState.description = paper.description;
       this.testPaperFormState.num = paper.assessmentGenerateRule.num;
       this.testPaperFormState.mode = 'rand';
-      this.testPaperFormState.questionBankId = paper.questionBankId;
+      this.testPaperFormState.itemBankId = paper.bank_id;
       this.testPaperFormState.generateType = paper.assessmentGenerateRule.type;
 
       if (this.testPaperFormState.description) {
