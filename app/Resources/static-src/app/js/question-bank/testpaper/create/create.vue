@@ -100,7 +100,7 @@
               <div class="test-paper-save-form-item-label">
                 <span class="test-paper-save-form-item-label-text">抽题方式</span>
               </div>
-              <a-radio-group v-model="testPaperFormState.generateType" @change="paperQuestionCount = sumChooseQuestionCount(); paperScore = sumChooseQuestionScore();">
+              <a-radio-group v-model="testPaperFormState.generateType">
                 <a-radio value="questionType">按题型抽题</a-radio>
                 <a-radio v-if="!isPersonalTestPaper()" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
@@ -217,31 +217,31 @@
               <span v-for="(difficulty, key) in difficultyScales"
                     class="test-paper-difficulty-scale-text">{{ difficulty.text }} {{ difficulty.scale }}%</span>
             </div>
-            <div class="test-paper-difficulty-count-ratio">
-              <div class="test-paper-difficulty-count-ratio-item">
-                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.simple.text }}</span>
-                <span>
-                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.simple.chooseCount }}</span>
-                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.simple.totalCount }}</span>
-                </span>
-              </div>
-              <i></i>
-              <div class="test-paper-difficulty-count-ratio-item">
-                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.normal.text }}</span>
-                <span>
-                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.normal.chooseCount }}</span>
-                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.normal.totalCount }}</span>
-                </span>
-              </div>
-              <i></i>
-              <div class="test-paper-difficulty-count-ratio-item">
-                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.difficulty.text }}</span>
-                <span>
-                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.difficulty.chooseCount }}</span>
-                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.difficulty.totalCount }}</span>
-                </span>
-              </div>
-            </div>
+<!--            <div class="test-paper-difficulty-count-ratio">-->
+<!--              <div class="test-paper-difficulty-count-ratio-item">-->
+<!--                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.simple.text }}</span>-->
+<!--                <span>-->
+<!--                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.simple.chooseCount }}</span>-->
+<!--                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.simple.totalCount }}</span>-->
+<!--                </span>-->
+<!--              </div>-->
+<!--              <i></i>-->
+<!--              <div class="test-paper-difficulty-count-ratio-item">-->
+<!--                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.normal.text }}</span>-->
+<!--                <span>-->
+<!--                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.normal.chooseCount }}</span>-->
+<!--                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.normal.totalCount }}</span>-->
+<!--                </span>-->
+<!--              </div>-->
+<!--              <i></i>-->
+<!--              <div class="test-paper-difficulty-count-ratio-item">-->
+<!--                <span class="test-paper-difficulty-count-ratio-item-text">{{ difficultyScales.difficulty.text }}</span>-->
+<!--                <span>-->
+<!--                  <span class="test-paper-difficulty-count-choose">{{ difficultyScales.difficulty.chooseCount }}</span>-->
+<!--                  <span class="test-paper-difficulty-count-total">/{{ difficultyScales.difficulty.totalCount }}</span>-->
+<!--                </span>-->
+<!--              </div>-->
+<!--            </div>-->
             <span class="test-paper-difficulty-tips">如果某个难度的题目数不够，将会随机选择题目来补充</span>
           </div>
         </div>
@@ -379,8 +379,6 @@ export default {
       },
       fetching: false,
       editingRow: null,
-      paperQuestionCount: 0,
-      paperScore: 0,
     };
   },
   computed: {
@@ -389,28 +387,12 @@ export default {
         return (this.questionCounts[type].choose * this.scores.questionType[type]).toFixed(1);
       }
     },
-  },
-  watch: {
-    questionCounts: {
-      handler() {
-        this.paperQuestionCount = this.sumChooseQuestionCount();
-        this.paperScore = this.sumChooseQuestionScore();
-      },
-      deep: true,
+    paperQuestionCount() {
+      return this.sumChooseQuestionCount();
     },
-    scores: {
-      handler() {
-        this.paperScore = this.sumChooseQuestionScore();
-      },
-      deep: true,
-    },
-    questionTypeDisplaySettings: {
-      handler() {
-        this.paperQuestionCount = this.sumChooseQuestionCount();
-        this.paperScore = this.sumChooseQuestionScore();
-      },
-      deep: true,
-    },
+    paperScore() {
+      return this.sumChooseQuestionScore();
+    }
   },
   mounted() {
     this.fetchLastQuestionTypeDisplaySettings();
@@ -585,8 +567,6 @@ export default {
         this.scores.questionTypeCategory[type] = questionConfigs[type].score;
         this.questionCounts[type].categoryCounts = questionConfigs[type].count.choose;
       });
-      this.paperQuestionCount = this.sumChooseQuestionCount();
-      this.paperScore = this.sumChooseQuestionScore();
     },
     onDescriptionInputFocus() {
       this.initDescriptionEditor();
@@ -668,6 +648,9 @@ export default {
     },
     sumChooseQuestionCount() {
       let count = 0;
+      if (!this.questionTypeDisplaySettings[this.testPaperFormState.generateType]) {
+        return count;
+      }
       this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
         if (!type.checked) {
           return;
@@ -687,6 +670,9 @@ export default {
     },
     sumChooseQuestionScore() {
       let score = 0;
+      if (!this.questionTypeDisplaySettings[this.testPaperFormState.generateType]) {
+        return score.toFixed(1);
+      }
       this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
         if (!type.checked) {
           return;
