@@ -259,6 +259,7 @@ class Assessment extends AbstractResource
             'num' => $fields['num'],
             'type' => $fields['generateType'],
             'assessment_id' => $assessment['id'],
+            'bank_id' => $assessment['bank_id'],
             'question_setting' => $questionSetting,
             'difficulty' => $fields['percentages'],
             'wrong_question_rate' => $fields['wrongQuestionRate'],
