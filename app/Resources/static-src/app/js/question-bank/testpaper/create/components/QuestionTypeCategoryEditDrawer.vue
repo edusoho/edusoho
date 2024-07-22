@@ -164,6 +164,24 @@ export default {
     onQuestionTypeDisplaySettingUpdate(settingKey, displaySetting) {
       this.questionTypeDisplaySettings[settingKey] = displaySetting;
       this.questionTypeDisplaySetting = displaySetting;
+    },
+    onInputCountBlur(type, categoryId) {
+      this.editingRow = null;
+      if (this.questionConfigs[type].count.choose[categoryId] === '') {
+        this.questionConfigs[type].count.choose[categoryId] = 0;
+      }
+      this.questionConfigs[type].count.choose[categoryId] = Number.parseInt(this.questionConfigs[type].count.choose[categoryId]);
+      if (this.questionConfigs[type].count.choose[categoryId] > this.questionConfigs[type].count.total[categoryId]) {
+        this.questionConfigs[type].count.choose[categoryId] = this.questionConfigs[type].count.total[categoryId];
+      }
+    },
+    onInputScoreBlur(type) {
+      this.editingRow = null;
+      if (this.questionConfigs[type].score === '') {
+        this.questionConfigs[type].score = 2;
+      } else if (!Number.isInteger(Number(this.questionConfigs[type].score))) {
+        this.questionConfigs[type].score = Number(this.questionConfigs[type].score).toFixed(1);
+      }
     }
   },
   watch: {
@@ -234,7 +252,7 @@ export default {
             <input v-if="totalCount(category.id, type.type) > 0" type="number" min="0" :max="totalCount(category.id, type.type)"
                    v-model="questionConfigs[type.type].count.choose[category.id]"
                    @focus="editingRow = index"
-                   @blur="editingRow = null"
+                   @blur="onInputCountBlur(type.type, category.id)"
                    class="question-type-category-display-cell-number"/>
             <span class="question-type-category-display-cell-number-total" v-if="totalCount(category.id, type.type) === 0">0</span>
             <span class="question-type-category-display-cell-number-total">/{{ totalCount(category.id, type.type) }}</span>
@@ -243,7 +261,7 @@ export default {
                :class="{'row-editing': editingRow === categories.length}">
             <input type="number" min="0" v-model="questionConfigs[type.type].score"
                    @focus="editingRow = categories.length"
-                   @blur="editingRow = null"
+                   @blur="onInputScoreBlur(type.type)"
                    class="question-type-category-display-cell-number"/>
           </div>
           <div class="question-type-category-display-cell-sum">{{ `${sumNum(type.type)} / ${sumScore(type.type)}` }}</div>

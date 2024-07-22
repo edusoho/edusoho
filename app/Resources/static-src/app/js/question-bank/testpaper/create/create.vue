@@ -136,14 +136,14 @@
                 'question-type-display-cell-number-disable': questionCounts[type.type].total === 0,
                 }">
                 <span class="question-type-display-cell-number-edit" v-show="questionCounts[type.type].total > 0">
-                  <input type="number" v-model="questionCounts[type.type].choose" @focus="editingRow = 'number'" @blur="editingRow = null"/>
+                  <input type="number" v-model="questionCounts[type.type].choose" @focus="editingRow = 'number'" @blur="onInputCountBlur(type.type)"/>
                 </span>
                 <span class="question-type-display-cell-number-total"
                       v-show="questionCounts[type.type].total === 0">{{ questionCounts[type.type].total }}</span>
                 <span class="question-type-display-cell-number-total">/{{ questionCounts[type.type].total }}</span>
               </div>
               <div class="question-type-display-cell-score" :class="{'row-editing': editingRow === 'score'}">
-                <input type="number" v-model="scores.questionType[type.type]" @focus="editingRow = 'score'" @blur="editingRow = null"/>
+                <input type="number" v-model="scores.questionType[type.type]" @focus="editingRow = 'score'" @blur="onInputScoreBlur(type.type)"/>
               </div>
               <div class="question-type-display-cell-sum">{{ questionCounts[type.type].choose }} / {{ sumScore(type.type) }}</div>
             </div>
@@ -713,14 +713,18 @@ export default {
     },
     handleChangeNum(value) {
       this.testPaperFormState.num = Number.parseInt(value) || 1;
-      this.form.setFieldsValue({
-        num: this.testPaperFormState.num,
+      this.$nextTick(() => {
+        this.form.setFieldsValue({
+          num: this.testPaperFormState.num,
+        });
       });
     },
     handleChangeWrongRate(value) {
       this.testPaperFormState.wrongQuestionRate = Number.parseInt(value) || 0;
-      this.form.setFieldsValue({
-        wrongQuestionRate: this.testPaperFormState.wrongQuestionRate,
+      this.$nextTick(() => {
+        this.form.setFieldsValue({
+          wrongQuestionRate: this.testPaperFormState.wrongQuestionRate,
+        });
       });
     },
     handleChangeName(value) {
@@ -728,6 +732,24 @@ export default {
       this.form.setFieldsValue({
         name: value,
       });
+    },
+    onInputCountBlur(type) {
+      this.editingRow = null;
+      if (this.questionCounts[type].choose === '') {
+        this.questionCounts[type].choose = 0;
+      }
+      this.questionCounts[type].choose = Number.parseInt(this.questionCounts[type].choose);
+      if (this.questionCounts[type].choose > this.questionCounts[type].total) {
+        this.questionCounts[type].choose = this.questionCounts[type].total;
+      }
+    },
+    onInputScoreBlur(type) {
+      this.editingRow = null;
+      if (this.scores.questionType[type] === '') {
+        this.scores.questionType[type] = 2;
+      } else if (!Number.isInteger(Number(this.scores.questionType[type]))) {
+        this.scores.questionType[type] = Number(this.scores.questionType[type]).toFixed(1);
+      }
     },
   },
   async beforeMount() {
