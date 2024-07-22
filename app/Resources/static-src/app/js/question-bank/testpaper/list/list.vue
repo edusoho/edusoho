@@ -142,9 +142,23 @@ export default {
       this.$message.success(Translator.trans('question.bank.paper.publish.success'));
     },
     async close(record) {
-      await Testpaper.changeStatus(record.id, 'closed');
-      record.status = 'closed';
-      this.$message.success(Translator.trans('question.bank.paper.close.success'));
+      this.$confirm({
+        title: '操作确认',
+        content: `真的要关闭试卷${record.name}吗？`,
+        icon: 'exclamation-circle',
+        okText: '关闭',
+        cancelText: '取消',
+        centered: true,
+        onOk: async () => {
+          try {
+            await Testpaper.changeStatus(record.id, 'closed');
+            record.status = 'closed';
+            this.$message.success(Translator.trans('question.bank.paper.close.success'));
+          } catch (err) {
+            this.$message.success('关闭失败', err);
+          }
+        },
+      });
     },
     async preview(record) {
       if (record.type === 'aiPersonality') {
@@ -307,7 +321,7 @@ export default {
           {{ 'question.bank.paper.fail'|trans }}
         </a-select-option>
       </a-select>
-      <a-select v-model="type" :placeholder="'question.bank.paper.type'|trans" style="width: 156px" allow-clear>
+      <a-select v-if="currentTab === 'all'" v-model="type" :placeholder="'question.bank.paper.type'|trans" style="width: 156px" allow-clear>
         <a-select-option value="regular">
           {{ 'question.bank.paper.regular'|trans }}
         </a-select-option>
@@ -370,7 +384,7 @@ export default {
           >
             {{ 'question.bank.paper.preview'|trans }}
           </a-button>
-          <a-button v-if="['generating', 'fail'].includes(record.status)"
+          <a-button v-if="['generating', 'fail', 'closed'].includes(record.status)"
                     type="link"
                     :disabled="true"
           >
