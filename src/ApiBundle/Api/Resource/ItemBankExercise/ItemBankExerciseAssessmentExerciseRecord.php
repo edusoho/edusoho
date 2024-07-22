@@ -17,9 +17,14 @@ class ItemBankExerciseAssessmentExerciseRecord extends AbstractResource
         if ('closed' == $exercise['status']) {
             throw ExerciseException::CLOSED_EXERCISE();
         }
+        $assessmentId = $request->request->get('assessmentId', '');
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if ('aiPersonality' == $assessment['type']) {
+            $assessmentId = $assessment['parent_id'];
+        }
         $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseService()->startAnswer(
             $request->request->get('moduleId', ''),
-            $request->request->get('assessmentId', ''),
+            $assessmentId,
             $user['id']
         );
         $answerRecord = $this->getAnswerRecordService()->get($assessmentExerciseRecord['answerRecordId']);
