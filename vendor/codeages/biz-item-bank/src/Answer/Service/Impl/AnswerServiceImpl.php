@@ -36,8 +36,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
         }
         $this->modifyAssessmentIfItemDeleted($assessmentId);
-        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId) && $assessment['type'] != 'aiPersonality') {
+        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
             throw new AnswerException('试卷全部题目已被删除，请联系教师或管理员', ErrorCode::ASSESSMENT_EMPTY);
         }
         $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
@@ -1190,9 +1189,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw new AnswerException('找不到答题记录.', ErrorCode::ANSWER_RECORD_NOTFOUND);
         }
 
-//        if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
-//            throw $this->createInvalidArgumentException('assessment_id invalid.');
-//        }
+        if ($answerRecord['assessment_id'] != $assessmentResponse['assessment_id']) {
+            throw $this->createInvalidArgumentException('assessment_id invalid.');
+        }
 
         if (!in_array($answerRecord['status'], [AnswerRecordStatus::DOING, AnswerRecordStatus::PAUSED])) {
             throw new AnswerException('你已提交过答题，当前页面无法重复提交', ErrorCode::ANSWER_NODOING);

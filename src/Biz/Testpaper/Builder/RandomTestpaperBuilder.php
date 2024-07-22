@@ -182,16 +182,11 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     protected function getRangeAndSectionsByWrongItems(&$sections, $wrongItemIds)
     {
-        // Iterate over each section object in $sections
         foreach ($sections as &$section) {
-            // Check if there are wrong item IDs for the current section type
             if (isset($wrongItemIds[$section['conditions']['item_types'][0]])) {
-                // Collect all item IDs for the current section type
                 $itemIdsForType = array_keys($wrongItemIds[$section['conditions']['item_types'][0]]);
-                // Update the section's itemIds with the collected IDs
                 $section['conditions']['itemIds'] = $itemIdsForType;
             } else {
-                // If no wrong item IDs exist for the section type, clear or keep the default itemIds
                 $section['conditions']['itemIds'] = [];
             }
         }

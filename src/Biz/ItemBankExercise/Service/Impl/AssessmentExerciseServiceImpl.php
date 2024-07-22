@@ -220,12 +220,10 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     {
         $module = $this->getItemBankExerciseModuleService()->get($moduleId);
         if (empty($module) || ExerciseModuleService::TYPE_ASSESSMENT != $module['type']) {
-            file_put_contents('/tmp/jc123', '77777777', 8);
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (!$this->count(['moduleId' => $moduleId, 'assessmentId' => $assessmentId])) {
-            file_put_contents('/tmp/jc123', '666666', 8);
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
