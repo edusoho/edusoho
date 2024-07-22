@@ -54,8 +54,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
         if ('aiPersonality' == $assessment['type']) {
             $assessmentGenerateRule = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($assessment['id']);
-            if ('aiPersonality' == $assessment['type']) {
-                $assessmentParams = [
+            $assessmentParams = [
                     'itemBankId' => $assessment['bank_id'],
                     'type' => 'aiPersonality',
                     'name' => $assessment['name'],
@@ -69,77 +68,71 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
                     'choiceScore' => $assessmentGenerateRule['question_setting']['choiceScore'],
                     'displayable' => '0',
                 ];
-                $userId = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-                $AnswerRecordIds = $this->getAnswerRecordService()->search(['assessmentId' => $assessmentId, 'userId' => $userId], [], 0, PHP_INT_MAX, ['id']);
-                $answerQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_ids' => array_column($AnswerRecordIds, 'id'), 'status' => 'wrong'], [], 0, PHP_INT_MAX);
-                if (empty($answerQuestionReports)) {
-                    $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
-                } else {
-                    $assessmentParams['itemIds'] = array_column($answerQuestionReports, 'item_id');
-                    $items = $this->getItemService()->findItemsByIds($assessmentParams['itemIds']);
-                    // 查询所有的题目类型、每种类型按答错次数排序，然后计算是否欠缺
-                    // 创建一个空数组用于存储每题的错误次数
-                    $wrongCountsByType = [];
+            $userId = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
+            $AnswerRecordIds = $this->getAnswerRecordService()->search(['assessmentId' => $assessmentId, 'userId' => $userId], [], 0, PHP_INT_MAX, ['id']);
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_ids' => array_column($AnswerRecordIds, 'id'), 'status' => 'wrong'], [], 0, PHP_INT_MAX);
+            if (empty($answerQuestionReports)) {
+                $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
+            } else {
+                $assessmentParams['itemIds'] = array_column($answerQuestionReports, 'item_id');
+                $items = $this->getItemService()->findItemsByIds($assessmentParams['itemIds']);
+                // 查询所有的题目类型、每种类型按答错次数排序，然后计算是否欠缺
+                // 创建一个空数组用于存储每题的错误次数
+                $wrongCountsByType = [];
 
-                    // 遍历答题报告，统计每题的错误次数
-                    foreach ($items as $item) {
-                        $itemId = $item['id'];
-                        $type = $item['type'];
+                // 遍历答题报告，统计每题的错误次数
+                foreach ($items as $item) {
+                    $itemId = $item['id'];
+                    $type = $item['type'];
 
-                        // 如果类型不存在于数组中，则添加类型键
-                        if (!isset($wrongCountsByType[$type])) {
-                            $wrongCountsByType[$type] = [];
-                        }
-
-                        // 直接添加或更新错误次数，但只保存itemId和计数
-                        if (!isset($wrongCountsByType[$type][$itemId])) {
-                            $wrongCountsByType[$type][$itemId] = 0;
-                        }
-                        ++$wrongCountsByType[$type][$itemId];
+                    // 如果类型不存在于数组中，则添加类型键
+                    if (!isset($wrongCountsByType[$type])) {
+                        $wrongCountsByType[$type] = [];
                     }
 
-                    // 对每个类型的错误次数进行降序排序
-                    foreach ($wrongCountsByType as $type => &$items) {
-                        arsort($items);
+                    // 直接添加或更新错误次数，但只保存itemId和计数
+                    if (!isset($wrongCountsByType[$type][$itemId])) {
+                        $wrongCountsByType[$type][$itemId] = 0;
                     }
+                    ++$wrongCountsByType[$type][$itemId];
+                }
 
-                    foreach ($wrongCountsByType as $type => &$items) {
-                        arsort($items);
+                // 对每个类型的错误次数进行降序排序
+                foreach ($wrongCountsByType as $type => &$items) {
+                    arsort($items);
+                }
+
+                $targetQuestionsByType = [];
+                foreach ($assessmentGenerateRule['question_setting']['questionCategoryCounts'][0]['counts'] as $questionType => $count) {
+                    // 计算目标问题数量
+                    $targetCount = round($count * $assessmentGenerateRule['wrong_question_rate'] / 100);
+                    // 存储目标问题数量
+                    $targetQuestionsByType[$questionType] = $targetCount;
+                }
+                // 从错误表中取出对应的题目数量
+                $selectedQuestionsByType = [];
+                foreach ($targetQuestionsByType as $type => $targetCount) {
+                    if (isset($wrongCountsByType[$type]) && count($wrongCountsByType[$type]) >= $targetCount) {
+                        $selectedQuestionsByType[$type] = array_slice($wrongCountsByType[$type], 0, $targetCount, true);
+                    } else {
+                        $selectedQuestionsByType[$type] = $wrongCountsByType[$type];
                     }
+                }
+                $assessmentParams['itemIds'] = $selectedQuestionsByType;
+                $countsData = $assessmentParams['questionCategoryCounts'][0]['counts'];
 
-                    $targetQuestionsByType = [];
-                    foreach ($assessmentGenerateRule['question_setting']['questionCategoryCounts'][0]['counts'] as $questionType => $count) {
-                        // 计算目标问题数量
-                        $targetCount = round($count * $assessmentGenerateRule['wrong_question_rate'] / 100);
-                        // 存储目标问题数量
-                        $targetQuestionsByType[$questionType] = $targetCount;
-                    }
-                    // 从错误表中取出对应的题目数量
-                    $selectedQuestionsByType = [];
-                    foreach ($targetQuestionsByType as $type => $targetCount) {
-                        if (isset($wrongCountsByType[$type]) && count($wrongCountsByType[$type]) >= $targetCount) {
-                            $selectedQuestionsByType[$type] = array_slice($wrongCountsByType[$type], 0, $targetCount, true);
-                        } else {
-                            $selectedQuestionsByType[$type] = $wrongCountsByType[$type];
-                        }
-                    }
-                    $assessmentParams['itemIds'] = $selectedQuestionsByType;
-                    $countsData = $assessmentParams['questionCategoryCounts'][0]['counts'];
-
-                    // 定义新的 sections 结构
-                    $sections = [];
-
-                    foreach ($countsData as $key => $value) {
-                        $sections[$key] = [
+                // 定义新的 sections 结构
+                $sections = [];
+                foreach ($countsData as $key => $value) {
+                    $sections[$key] = [
                             'count' => (int) $value, // 确保 count 是整数
                             'name' => 'choice' === $key ? '多选题' : ucfirst(str_replace('_', ' ', $key)), // 根据 key 动态生成 name
                         ];
-                    }
-
-                    // 更新 assessmentParams
-                    $assessmentParams['sections'] = $sections;
-                    $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
                 }
+
+                // 更新 assessmentParams
+                $assessmentParams['sections'] = $sections;
+                $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
             }
         }
         if ($assessment && !$assessment['displayable']) {
