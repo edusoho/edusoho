@@ -85,7 +85,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'displayable' => ['required', ['in', [0, 1]]],
             'type' => ['required', ['in', ['regular', 'random', 'aiPersonality']]],
             'parent_id' => ['required', ['min', 0]],
-            'status' => ['required', ['in', ['generating', 'draft']]],
+            'status' => ['required', ['in', ['generating', 'draft', 'open']]],
         ]);
 
         $itemBank = $this->getItemBankService()->getItemBank($assessment['bank_id']);

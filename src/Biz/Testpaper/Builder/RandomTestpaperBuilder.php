@@ -82,6 +82,16 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         return $itemsMerged;
     }
 
+    private function getSectionsByAiPersonality(array $fields)
+    {
+        list($range, $sections) = $this->getRangeAndSections($fields);
+        if (!empty($fields['itemIds'])) {
+            $this->getRangeAndSectionsByWrongItems($sections, $fields['itemIds']);
+        }
+
+        return $this->getAssessmentService()->drawItems($range, $sections);
+    }
+
     private function mergeItem(&$itemsMerged, $drawItems)
     {
         if (empty($itemsMerged)) {
@@ -163,6 +173,18 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         }
 
         return [$range, $sections];
+    }
+
+    protected function getRangeAndSectionsByWrongItems(&$sections, $wrongItemIds)
+    {
+        foreach ($sections as &$section) {
+            if (isset($wrongItemIds[$section['conditions']['item_types'][0]])) {
+                $itemIdsForType = array_keys($wrongItemIds[$section['conditions']['item_types'][0]]);
+                $section['conditions']['itemIds'] = $itemIdsForType;
+            } else {
+                $section['conditions']['itemIds'] = [];
+            }
+        }
     }
 
     protected function getRangeAndSectionsByQuestionTypeCategory($fields, $questionCategoryCount)
