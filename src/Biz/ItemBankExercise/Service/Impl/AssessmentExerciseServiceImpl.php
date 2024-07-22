@@ -120,18 +120,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
                 }
                 $assessmentParams['itemIds'] = $selectedQuestionsByType;
                 $countsData = $assessmentParams['questionCategoryCounts'][0]['counts'];
-
-                // 定义新的 sections 结构
-                $sections = [];
-                foreach ($countsData as $key => $value) {
-                    $sections[$key] = [
-                            'count' => (int) $value, // 确保 count 是整数
-                            'name' => 'choice' === $key ? '多选题' : ucfirst(str_replace('_', ' ', $key)), // 根据 key 动态生成 name
-                        ];
-                }
-
-                // 更新 assessmentParams
-                $assessmentParams['sections'] = $sections;
+                $assessmentParams['sections'] = $this->buildSections($countsData);
                 $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
             }
         }
@@ -173,6 +162,28 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         }
 
         return $assessmentExerciseRecord;
+    }
+
+    protected function buildSections($countsData)
+    {
+        $sections = [];
+        $chineseNames = [
+            'single_choice' => '单选题',
+            'choice' => '多选题',
+            'essay' => '问答题',
+            'uncertain_choice' => '不定项选择题',
+            'determine' => '判断题',
+            'fill' => '填空题',
+            'material' => '材料题',
+        ];
+        foreach ($countsData as $key => $value) {
+            $sections[$key] = [
+                'count' => (int) $value, // 确保 count 是整数
+                'name' => $chineseNames[$key], // 根据 key 从映射数组中获取中文名称
+            ];
+        }
+
+        return $sections;
     }
 
     public function addAssessments($exerciseId, $moduleId, $assessments)
