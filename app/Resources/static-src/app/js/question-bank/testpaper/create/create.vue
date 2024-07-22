@@ -504,42 +504,42 @@ export default {
         });
       });
     },
-    getDefaultQuestionTypeDisplaySetting() {
+    getDefaultQuestionTypeDisplaySetting(checked = true) {
       return [
         {
           type: 'single_choice',
           name: '单选题',
-          checked: true,
+          checked: checked,
         },
         {
           type: 'choice',
           name: '多选题',
-          checked: true,
+          checked: checked,
         },
         {
           type: 'essay',
           name: '问答题',
-          checked: true,
+          checked: checked,
         },
         {
           type: 'uncertain_choice',
           name: '不定项',
-          checked: true,
+          checked: checked,
         },
         {
           type: 'determine',
           name: '判断题',
-          checked: true,
+          checked: checked,
         },
         {
           type: 'fill',
           name: '填空题',
-          checked: true,
+          checked: checked,
         },
         {
           type: 'material',
           name: '材料题',
-          checked: true,
+          checked: checked,
         },
       ];
     },
@@ -718,9 +718,31 @@ export default {
       this.testPaperFormState.type = paper.type;
       this.testPaperFormState.description = paper.description;
       this.testPaperFormState.num = paper.assessmentGenerateRule.num;
-      this.testPaperFormState.mode = 'rand';
       this.testPaperFormState.itemBankId = paper.bank_id;
       this.testPaperFormState.generateType = paper.assessmentGenerateRule.type;
+      this.testPaperFormState.wrongQuestionRate = paper.assessmentGenerateRule.wrong_question_rate;
+      const displayTypes = Object.keys(paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts);
+      let questionTypeDisplaySetting = this.getDefaultQuestionTypeDisplaySetting(false);
+      questionTypeDisplaySetting.forEach(type => {
+        if (-1 !== displayTypes.indexOf(type.type)) {
+          type.checked = true;
+        }
+      });
+      this.questionTypeDisplaySettings[this.testPaperFormState.generateType] = questionTypeDisplaySetting;
+      displayTypes.forEach(type => {
+        this.scores[this.testPaperFormState.generateType][type] = paper.assessmentGenerateRule.question_setting.scores[type];
+      });
+      if (this.testPaperFormState.generateType === 'questionType') {
+        displayTypes.forEach(type => {
+          this.questionCounts[type].choose = paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts[type];
+        });
+      } else {
+        paper.assessmentGenerateRule.question_setting.questionCategoryCounts.forEach(questionCategoryCount => {
+          displayTypes.forEach(type => {
+            this.questionCounts[type].categoryCounts[questionCategoryCount.categoryId] = questionCategoryCount.counts[type];
+          });
+        });
+      }
 
       if (this.testPaperFormState.description) {
         this.onDescriptionInputFocus();

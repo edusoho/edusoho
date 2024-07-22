@@ -17,6 +17,7 @@ class AssessmentGenerateRuleServiceImpl extends BaseService implements Assessmen
     {
         $this->getValidator()->validate($assessmentGenerateRule, [
             'assessment_id' => 'required',
+            'bank_id' => 'required',
             'num' => ['integer', ['min', 0], ['max', 200]],
             'type' => [['in', ['questionType', 'questionTypeCategory']]],
         ]);

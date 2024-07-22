@@ -40,6 +40,7 @@ class AssessmentGenerateRuleDaoImpl extends AdvancedDaoImpl implements Assessmen
                 'id IN (:ids)',
                 'id NOT IN (:notInIds)',
                 'assessment_id = :assessment_id',
+                'bank_id = :bank_id',
             ],
         );
     }

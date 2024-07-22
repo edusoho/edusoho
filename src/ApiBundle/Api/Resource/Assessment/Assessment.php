@@ -146,7 +146,7 @@ class Assessment extends AbstractResource
             $limit
         );
 
-        $userIds = array_unique(array_column($assessments, 'created_user_id'));
+        $userIds = array_values(array_unique(array_column($assessments, 'created_user_id')));
         $users = $this->getUserService()->findUsersByIds($userIds);
         $ids = array_column($assessments, 'id');
         $assessmentGenerateRules = $this->getAssessmentGenerateRuleService()->findAssessmentGenerateRuleByAssessmentIds($ids);
@@ -255,6 +255,7 @@ class Assessment extends AbstractResource
             'num' => $fields['num'],
             'type' => $fields['generateType'],
             'assessment_id' => $assessment['id'],
+            'bank_id' => $assessment['bank_id'],
             'question_setting' => $questionSetting,
             'difficulty' => $fields['percentages'],
             'wrong_question_rate' => $fields['wrongQuestionRate'],
