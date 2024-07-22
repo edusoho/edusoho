@@ -21,7 +21,7 @@ const columns = [
     dataIndex: 'num',
     scopedSlots: {customRender: 'num'},
     width: 90,
-    align: 'right'
+    align: 'right',
   },
   {
     title: Translator.trans('question.bank.paper.status'),
@@ -33,6 +33,7 @@ const columns = [
     title: Translator.trans('question.bank.paper.numberOfItems/score'),
     scopedSlots: {customRender: 'numberOfItemsAndScore'},
     width: 100,
+    align: 'right',
   },
   {
     title: Translator.trans('question.bank.paper.creator/createdAt'),
@@ -253,6 +254,9 @@ export default {
       };
     },
     isSelectAll() {
+      if (!this.pageData || this.pageData.length === 0) {
+        return false;
+      }
       const currentPageIds = this.pageData.map(data => data.id);
       for (const id of currentPageIds) {
         if (!this.selectedRowKeys.includes(id)) {
@@ -330,7 +334,6 @@ export default {
       :data-source="pageData"
       :row-key="record => record.id"
       :pagination="false"
-      :row-class-name="() => 'teacher-manage-row'"
       :loading="loading"
       :row-selection="rowSelection"
       @change="handleTableChange"

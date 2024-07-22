@@ -422,7 +422,6 @@ export default {
     document.addEventListener('click', this.handleRouterSkip);
   },
   beforeDestroy() {
-    console.log('destroy')
     document.removeEventListener('click', this.handleRouterSkip);
   },
   methods: {

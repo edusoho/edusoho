@@ -1,12 +1,8 @@
 <template>
   <div>
     <div class="question-category-choose-btn" @click="onDrawerDisplay">
-      <img
-        class="question-category-choose-btn-icon"
-        src="/static-dist/app/img/question-bank/question-category-choose.png"
-        alt=""
-      />
-      <span class="question-category-choose-btn-text">选择分类</span>
+
+      <span class="question-category-choose-btn-text">+ 选择分类</span>
     </div>
     <a-drawer
       title="选择分类"
