@@ -17,7 +17,7 @@
       <button class="testpaper-title-right-create" @click="showCreatePaperModal">
         创建试卷
       </button>
-      <button v-if="activeTab === 'all'" class="testpaper-title-right-import">导入固定卷</button>
+      <button v-if="activeTab === 'all'" class="testpaper-title-right-import" @click="showImportPaperModal">导入固定卷</button>
     </div>
 
     <a-modal
@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -144,6 +146,11 @@ export default {
   methods: {
     showCreatePaperModal() {
       this.modalVisible = true;
+    },
+    showImportPaperModal() {
+      axios.get(document.getElementById('importUrl').value).then(res => {
+        $('#modal').modal('show').html(res.data);
+      });
     },
     handleOk() {
       this.modalVisible = false;
