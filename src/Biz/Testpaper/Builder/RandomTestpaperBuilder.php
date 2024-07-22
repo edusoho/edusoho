@@ -16,12 +16,14 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     public function build($fields)
     {
+        $sections = $this->getSections($fields);
+        $sections = $this->setSectionQuestionScore($sections, $fields['type']);
         $assessment = [
             'bank_id' => $fields['itemBankId'],
             'name' => $fields['name'],
             'displayable' => $fields['displayable'] ?? 1,
             'description' => $fields['description'],
-            'sections' => $this->getSections($fields),
+            'sections' => $sections,
             'type' => $fields['type'] ?? 'regular',
             'parent_id' => $fields['parentId'] ?? '0',
             'status' => $fields['status'] ?? 'draft',
@@ -42,13 +44,6 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     }
 
     public function getSections($fields)
-    {
-        $sections = $this->getSectionsByMethod($fields);
-
-        return $this->setSectionQuestionScore($sections, $fields['type']);
-    }
-
-    private function getSectionsByMethod($fields)
     {
         $generateType = $fields['type'] ?? 'default';
         $methodName = 'getSectionsBy'.ucfirst($generateType);
