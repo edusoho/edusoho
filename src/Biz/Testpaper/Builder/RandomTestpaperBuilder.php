@@ -16,14 +16,12 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     public function build($fields)
     {
-        $sections = $this->getSections($fields);
-        $sections = $this->setSectionQuestionScore($sections, $fields['type']);
         $assessment = [
             'bank_id' => $fields['itemBankId'],
             'name' => $fields['name'],
             'displayable' => $fields['displayable'] ?? 1,
             'description' => $fields['description'],
-            'sections' => $sections,
+            'sections' => $this->getSections($fields),
             'type' => $fields['type'] ?? 'regular',
             'parent_id' => $fields['parentId'] ?? '0',
             'status' => $fields['status'] ?? 'draft',
@@ -35,7 +33,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     public function canBuild($options)
     {
         try {
-            $this->getSections($options);
+            $this->getSectionsByMethod($options);
 
             return true;
         } catch (\Exception $e) {
@@ -43,7 +41,14 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         }
     }
 
-    private function getSections($fields)
+    public function getSections($fields)
+    {
+        $sections = $this->getSectionsByMethod($fields);
+
+        return $this->setSectionQuestionScore($sections, $fields['type']);
+    }
+
+    private function getSectionsByMethod($fields)
     {
         $generateType = $fields['type'] ?? 'default';
         $methodName = 'getSectionsBy'.ucfirst($generateType);
@@ -80,6 +85,16 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         }
 
         return $itemsMerged;
+    }
+
+    private function getSectionsByAiPersonality(array $fields)
+    {
+        list($range, $sections) = $this->getRangeAndSections($fields);
+        if (!empty($fields['itemIds'])) {
+            $this->getRangeAndSectionsByWrongItems($sections, $fields['itemIds']);
+        }
+
+        return $this->getAssessmentService()->drawItems($range, $sections);
     }
 
     private function mergeItem(&$itemsMerged, $drawItems)
@@ -163,6 +178,23 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         }
 
         return [$range, $sections];
+    }
+
+    protected function getRangeAndSectionsByWrongItems(&$sections, $wrongItemIds)
+    {
+        // Iterate over each section object in $sections
+        foreach ($sections as &$section) {
+            // Check if there are wrong item IDs for the current section type
+            if (isset($wrongItemIds[$section['conditions']['item_types'][0]])) {
+                // Collect all item IDs for the current section type
+                $itemIdsForType = array_keys($wrongItemIds[$section['conditions']['item_types'][0]]);
+                // Update the section's itemIds with the collected IDs
+                $section['conditions']['itemIds'] = $itemIdsForType;
+            } else {
+                // If no wrong item IDs exist for the section type, clear or keep the default itemIds
+                $section['conditions']['itemIds'] = [];
+            }
+        }
     }
 
     protected function getRangeAndSectionsByQuestionTypeCategory($fields, $questionCategoryCount)

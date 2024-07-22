@@ -9,8 +9,13 @@ use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\Testpaper\Builder\RandomTestpaperBuilder;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExerciseService
 {
@@ -47,6 +52,96 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     public function startAnswer($moduleId, $assessmentId, $userId)
     {
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if ('aiPersonality' == $assessment['type']) {
+            $assessmentGenerateRule = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($assessment['id']);
+            if ('aiPersonality' == $assessment['type']) {
+                $assessmentParams = [
+                    'itemBankId' => $assessment['bank_id'],
+                    'type' => 'aiPersonality',
+                    'name' => $assessment['name'],
+                    'description' => $assessment['description'],
+                    'mode' => 'rand',
+                    'status' => 'open',
+                    'parentId' => $assessment['id'],
+                    'questionCategoryCounts' => $assessmentGenerateRule['question_setting']['questionCategoryCounts'],
+                    'scores' => $assessmentGenerateRule['question_setting']['scores'],
+                    'scoreType' => $assessmentGenerateRule['question_setting']['scoreType'],
+                    'choiceScore' => $assessmentGenerateRule['question_setting']['choiceScore'],
+                    'displayable' => '0',
+                ];
+                $userId = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
+                $AnswerRecordIds = $this->getAnswerRecordService()->search(['assessmentId' => $assessmentId, 'userId' => $userId], [], 0, PHP_INT_MAX, ['id']);
+                $answerQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_ids' => array_column($AnswerRecordIds, 'id'), 'status' => 'wrong'], [], 0, PHP_INT_MAX);
+                if (empty($answerQuestionReports)) {
+                    $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
+                } else {
+                    $assessmentParams['itemIds'] = array_column($answerQuestionReports, 'item_id');
+                    $items = $this->getItemService()->findItemsByIds($assessmentParams['itemIds']);
+                    // 查询所有的题目类型、每种类型按答错次数排序，然后计算是否欠缺
+                    // 创建一个空数组用于存储每题的错误次数
+                    $wrongCountsByType = [];
+
+                    // 遍历答题报告，统计每题的错误次数
+                    foreach ($items as $item) {
+                        $itemId = $item['id'];
+                        $type = $item['type'];
+
+                        // 如果类型不存在于数组中，则添加类型键
+                        if (!isset($wrongCountsByType[$type])) {
+                            $wrongCountsByType[$type] = [];
+                        }
+
+                        // 直接添加或更新错误次数，但只保存itemId和计数
+                        if (!isset($wrongCountsByType[$type][$itemId])) {
+                            $wrongCountsByType[$type][$itemId] = 0;
+                        }
+                        ++$wrongCountsByType[$type][$itemId];
+                    }
+
+                    // 对每个类型的错误次数进行降序排序
+                    foreach ($wrongCountsByType as $type => &$items) {
+                        arsort($items);
+                    }
+
+                    foreach ($wrongCountsByType as $type => &$items) {
+                        arsort($items);
+                    }
+
+                    $targetQuestionsByType = [];
+                    foreach ($assessmentGenerateRule['question_setting']['questionCategoryCounts'][0]['counts'] as $questionType => $count) {
+                        // 计算目标问题数量
+                        $targetCount = round($count * $assessmentGenerateRule['wrong_question_rate'] / 100);
+                        // 存储目标问题数量
+                        $targetQuestionsByType[$questionType] = $targetCount;
+                    }
+                    // 从错误表中取出对应的题目数量
+                    $selectedQuestionsByType = [];
+                    foreach ($targetQuestionsByType as $type => $targetCount) {
+                        if (isset($wrongCountsByType[$type]) && count($wrongCountsByType[$type]) >= $targetCount) {
+                            $selectedQuestionsByType[$type] = array_slice($wrongCountsByType[$type], 0, $targetCount, true);
+                        } else {
+                            $selectedQuestionsByType[$type] = $wrongCountsByType[$type];
+                        }
+                    }
+                    $assessmentParams['itemIds'] = $selectedQuestionsByType;
+                    $countsData = $assessmentParams['questionCategoryCounts'][0]['counts'];
+
+                    // 定义新的 sections 结构
+                    $sections = [];
+
+                    foreach ($countsData as $key => $value) {
+                        $sections[$key] = [
+                            'count' => (int) $value, // 确保 count 是整数
+                            'name' => 'choice' === $key ? '多选题' : ucfirst(str_replace('_', ' ', $key)), // 根据 key 动态生成 name
+                        ];
+                    }
+
+                    // 更新 assessmentParams
+                    $assessmentParams['sections'] = $sections;
+                    $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
+                }
+            }
+        }
         if ($assessment && !$assessment['displayable']) {
             $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($assessmentId);
             if ($assessmentSnapshot) {
@@ -60,7 +155,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
 
             $assessmentExercise = $this->getByModuleIdAndAssessmentId($moduleId, $assessmentId);
             $module = $this->getItemBankExerciseModuleService()->get($moduleId);
-            $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessmentId, $userId);
+            $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessment['id'], $userId);
 
             $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->create([
                 'moduleId' => $moduleId,
@@ -125,10 +220,12 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     {
         $module = $this->getItemBankExerciseModuleService()->get($moduleId);
         if (empty($module) || ExerciseModuleService::TYPE_ASSESSMENT != $module['type']) {
+            file_put_contents('/tmp/jc123', '77777777', 8);
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         if (!$this->count(['moduleId' => $moduleId, 'assessmentId' => $assessmentId])) {
+            file_put_contents('/tmp/jc123', '666666', 8);
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -253,5 +350,45 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerQuestionReportService
+     */
+    protected function getAnswerQuestionReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AssessmentGenerateRuleService
+     */
+    protected function getAssessmentGenerateRuleService()
+    {
+        return $this->biz->service('ItemBank:Assessment:AssessmentGenerateRuleService');
+    }
+
+    /**
+     * @return RandomTestpaperBuilder
+     */
+    private function getRandomTestPaperBuilder()
+    {
+        return $this->biz['testpaper_builder.random_testpaper'];
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 }

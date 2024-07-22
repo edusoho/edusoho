@@ -53,7 +53,9 @@ class ItemDraw
 
         if (!empty($conditions['distribution'])) {
             $items = $this->selectItemsByDifficulty($sectionItemRange, $conditions['distribution'], $count);
-        } else {
+        } else if (!empty($conditions['itemIds'])){
+            $items = $this->selectItemsByWrongItems($sectionItemRange, $conditions['itemIds'], $count);
+        }else {
             $items = $this->randomSelectItems($sectionItemRange, $count);
         }
 
@@ -144,6 +146,45 @@ class ItemDraw
         }
 
         return $selectItems;
+    }
+
+    protected function selectItemsByWrongItems($items, $wrongItemIds, $count) {
+        // 统计 wrongItemIds 的个数
+        $wrongItemCount = count($wrongItemIds);
+
+        // 如果 wrongItemIds 的数量大于等于 count
+        if ($wrongItemCount >= $count) {
+            // 从 wrongItemIds 中选取 count 个元素
+            $selectedWrongItems = array_slice($wrongItemIds, 0, $count);
+
+            // 从 items 中取出对应的数据
+            $result = array_filter($items, function($item) use ($selectedWrongItems) {
+                return in_array($item['id'], $selectedWrongItems);
+            });
+
+            return $result;
+        }
+
+        // 计算需要从 items 中额外抽取的个数
+        $neededItemCount = $count - $wrongItemCount;
+
+        // 排除掉已经存在的 wrongItemIds
+        $filteredItems = array_filter($items, function($item) use ($wrongItemIds) {
+            return !in_array($item['id'], $wrongItemIds);
+        });
+
+        // 从 filteredItems 中随机抽取 neededItemCount 个元素
+        $additionalItems = array_slice($filteredItems, 0, $neededItemCount);
+
+        // 从 items 中取出对应的 wrongItemIds 的数据
+        $wrongItems = array_filter($items, function($item) use ($wrongItemIds) {
+            return in_array($item['id'], $wrongItemIds);
+        });
+
+        // 合并 wrongItems 和 additionalItems
+        $result = array_merge($wrongItems, $additionalItems);
+
+        return $result;
     }
 
     /**

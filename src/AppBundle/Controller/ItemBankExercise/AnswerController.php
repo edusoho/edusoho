@@ -26,13 +26,16 @@ class AnswerController extends BaseController
         }
 
         $latestAnswerRecord = $this->getItemBankAssessmentExerciseRecordService()->getLatestRecord($moduleId, $assessmentId, $user['id']);
+        file_put_contents('/tmp/jc123', '111111', 8);
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
             if (!$this->checkStartAssessmentExercise($assessmentId)) {
                 return $this->redirectToRoute('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'assessment']);
             }
+            file_put_contents('/tmp/jc123', '222222', 8);
             $latestAnswerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer($moduleId, $assessmentId, $user['id']);
+            file_put_contents('/tmp/jc123', '333333333', 8);
         }
-
+        file_put_contents('/tmp/jc123', '222222', 8);
         if (AnswerRecordStatus::REVIEWING == $latestAnswerRecord['status']) {
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
@@ -40,6 +43,7 @@ class AnswerController extends BaseController
                 'role' => 'student',
             ]);
         }
+        file_put_contents('/tmp/jc123', '33333', 8);
         if (AnswerRecordStatus::FINISHED == $latestAnswerRecord['status']) {
             return $this->render(
                 'item-bank-exercise/answer/report.html.twig',
@@ -49,6 +53,7 @@ class AnswerController extends BaseController
                 ]
             );
         }
+        file_put_contents('/tmp/jc123', '4444444', 8);
         $this->getAnswerService()->continueAnswer($latestAnswerRecord['answerRecordId']);
 
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [

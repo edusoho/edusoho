@@ -44,7 +44,8 @@ class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
                 'type = :type',
                 'parent_id = : parent_id',
                 'parent_id IN (:parent_ids)',
-                'created_user_id in (:created_user_ids)'
+                'created_user_id in (:created_user_ids)',
+                'created_user_id = :created_user_id'
             ],
         );
     }
