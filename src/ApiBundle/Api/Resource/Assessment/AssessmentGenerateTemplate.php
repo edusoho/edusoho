@@ -5,17 +5,25 @@ namespace ApiBundle\Api\Resource\Assessment;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Biz\QuestionBank\QuestionBankException;
+use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 
 class AssessmentGenerateTemplate extends AbstractResource
 {
-    public function search(ApiRequest $request, $type)
+    public function search(ApiRequest $request)
     {
-        if (in_array($type, ['questionType', 'questionTypeCategory'])) {
-            throw CommonException::ERROR_PARAMETER();
+        $conditions = $request->query->all();
+        if (empty($conditions['itemBankId'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($conditions['itemBankId']);
+        if (empty($questionBank['itemBank'])) {
+            throw QuestionBankException::NOT_FOUND_BANK();
+        }
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        return $this->getAssessmentGenerateRuleService()->search(['type' => $type], ['created_time' => 'desc'], 0, 1);
+        return $this->getAssessmentGenerateRuleService()->search($conditions, ['created_time' => 'desc'], $offset, $limit);
     }
 
     /**
@@ -24,5 +32,13 @@ class AssessmentGenerateTemplate extends AbstractResource
     private function getAssessmentGenerateRuleService()
     {
         return $this->service('ItemBank:Assessment:AssessmentGenerateRuleService');
+    }
+
+    /**
+     * @return QuestionBankService
+     */
+    private function getQuestionBankService()
+    {
+        return $this->service('QuestionBank:QuestionBankService');
     }
 }
