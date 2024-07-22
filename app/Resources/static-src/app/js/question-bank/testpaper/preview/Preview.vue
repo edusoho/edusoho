@@ -3,9 +3,10 @@
 import TestpaperTypeTag from '../TestpaperTypeTag.vue';
 import {Testpaper} from 'common/vue/service';
 import QuestionTypePreviewDisplay from '../create/components/QuestionTypePreviewDisplay.vue'
+import PaperDescriptionViewModal from './PaperDescriptionViewModal.vue'
 
 export default {
-  components: {QuestionTypePreviewDisplay, TestpaperTypeTag},
+  components: {QuestionTypePreviewDisplay, TestpaperTypeTag, PaperDescriptionViewModal},
   props: {
     itemBankId: null,
     id: null,
@@ -13,7 +14,8 @@ export default {
   data() {
     return {
       paper: null,
-      questionTypes: ['single_choice', 'choice', 'essay', 'uncertain_choice', 'determine', 'fill', 'material']
+      questionTypes: ['single_choice', 'choice', 'essay', 'uncertain_choice', 'determine', 'fill', 'material'],
+      descriptionModalVisible: false,
     }
   },
   async beforeMount() {
@@ -64,6 +66,7 @@ export default {
           <div class="test-preview-content-basic-information-item">
             <span class="test-preview-content-basic-information-item-label">试卷说明：</span>
             <span v-if="paper.description.length === 0" class="test-preview-content-basic-information-item-value">无</span>
+            <a-button v-else type="primary" ghost @click="descriptionModalVisible = true" class="test-preview-content-basic-information-item-value">查看详情</a-button>
           </div>
           <div class="test-preview-content-basic-information-item">
             <span class="test-preview-content-basic-information-item-label">错题比例：</span>
@@ -97,5 +100,6 @@ export default {
         />
       </div>
     </div>
+    <paper-description-view-modal :visible="descriptionModalVisible" :description="paper.description" @closed="descriptionModalVisible = false"/>
   </div>
 </template>
