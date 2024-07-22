@@ -148,6 +148,8 @@ export default {
     async preview(record) {
       if (record.type === 'aiPersonality') {
         await this.$router.push({name: 'preview', params: {id: record.id}});
+      } else {
+        window.location.href = `${window.location.origin}/question_bank/${this.itemBankId}/testpaper/${record.id}/preview`
       }
     },
     async handleChangeTab(tab) {
