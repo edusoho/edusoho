@@ -440,7 +440,7 @@ export default {
     },
     handleRouterSkip(event) {
       const target = event.target;
-      if (target.tagName === 'A' && target.getAttribute('href')) {
+      if (target.tagName === 'A' && target.getAttribute('href') && target.getAttribute('data-is-link')) {
         const href = target.getAttribute('href');
 
         event.preventDefault();
