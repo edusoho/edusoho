@@ -236,7 +236,12 @@ export default {
     }
   },
   watch: {
-
+    async status() {
+      await this.onSearch();
+    },
+    async type() {
+      await this.onSearch();
+    },
   },
   computed: {
     rowSelection() {
