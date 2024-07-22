@@ -321,7 +321,7 @@ export default {
           {{ 'question.bank.paper.fail'|trans }}
         </a-select-option>
       </a-select>
-      <a-select v-model="type" :placeholder="'question.bank.paper.type'|trans" style="width: 156px" allow-clear>
+      <a-select v-if="currentTab === 'all'" v-model="type" :placeholder="'question.bank.paper.type'|trans" style="width: 156px" allow-clear>
         <a-select-option value="regular">
           {{ 'question.bank.paper.regular'|trans }}
         </a-select-option>
