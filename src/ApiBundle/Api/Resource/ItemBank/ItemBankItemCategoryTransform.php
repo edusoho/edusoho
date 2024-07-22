@@ -16,6 +16,9 @@ class ItemBankItemCategoryTransform extends AbstractResource
         if ('treeList' === $mode) {
             return $this->getItemCategoryService()->getItemCategoryTreeList($bankId);
         }
+        if ('map' === $mode) {
+            return $this->getItemCategoryService()->getItemCategoryMap($bankId);
+        }
 
         return [];
     }

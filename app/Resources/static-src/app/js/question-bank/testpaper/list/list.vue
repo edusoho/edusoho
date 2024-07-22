@@ -207,6 +207,7 @@ export default {
         icon: "exclamation-circle",
         okText: Translator.trans("question.bank.paper.edit"),
         cancelText: Translator.trans("site.cancel"),
+        centered: true,
         onOk: async () => {
           if (paper.type === 'regular') {
             window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
