@@ -419,10 +419,11 @@ export default {
       this.testPaperFormState.name = name || '';
     }
 
-    document.addEventListener('click', (evt) => this.handleRouterSkip(evt));
+    document.addEventListener('click', this.handleRouterSkip);
   },
   beforeDestroy() {
-    document.removeEventListener('click', (evt) => this.handleRouterSkip(evt));
+    console.log('destroy')
+    document.removeEventListener('click', this.handleRouterSkip);
   },
   methods: {
     confirmLeave(href) {
