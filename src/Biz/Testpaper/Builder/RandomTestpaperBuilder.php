@@ -35,7 +35,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     public function canBuild($options)
     {
         try {
-            $this->getSectionsByMethod($options);
+            $this->getSections($options);
 
             return true;
         } catch (\Exception $e) {
@@ -43,7 +43,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
         }
     }
 
-    public function getSections($fields)
+    private function getSections($fields)
     {
         $generateType = $fields['type'] ?? 'default';
         $methodName = 'getSectionsBy'.ucfirst($generateType);
