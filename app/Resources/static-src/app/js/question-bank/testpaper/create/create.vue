@@ -598,7 +598,7 @@ export default {
           this.fetching = true;
           this.testPaperFormState.questionCategoryCounts = [];
           this.testPaperFormState.itemBankId = this.itemBankId;
-          this.testPaperFormState.num = `${this.testPaperFormState.num}`;
+          this.testPaperFormState.num = `${this.testPaperFormState.type === 'aiPersonality' ? 0 : this.testPaperFormState.num}`;
 
           if (this.testPaperFormState.generateType === 'questionType') {
             const counts = {};
