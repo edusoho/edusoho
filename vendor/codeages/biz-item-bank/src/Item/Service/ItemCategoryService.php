@@ -20,6 +20,8 @@ interface ItemCategoryService
 
     public function getItemCategoryTree($bankId);
 
+    public function getItemCategoryMap($bankId);
+
     public function findCategoryChildrenIds($id);
 
     public function findMultiCategoryChildrenIds($bankId, $ids);
@@ -35,4 +37,6 @@ interface ItemCategoryService
     public function buildCategoryTreeList($categories, $parentId);
 
     public function buildCategoryTree($categories);
+
+    public function buildCategoryMap($categories);
 }

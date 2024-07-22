@@ -249,7 +249,7 @@
     </div>
 
     <div class="test-paper-save-footer">
-      <button class="test-paper-save" @click="saveTestPaper">创建</button>
+      <button class="test-paper-save" @click="saveTestPaper">{{ $route.name === 'create' ? '创建' : '保存' }}</button>
       <button class="test-create-cancel" @click="backConfirm">取消</button>
     </div>
   </div>
@@ -371,9 +371,9 @@ export default {
         questionCategoryCounts: [],
         scores: {},
         percentages: {
-          simple: 30,
-          normal: 30,
-          difficulty: 40,
+          simple: '',
+          normal: '',
+          difficulty: '',
         },
         wrongQuestionRate: '0'
       },
@@ -422,7 +422,6 @@ export default {
     document.addEventListener('click', this.handleRouterSkip);
   },
   beforeDestroy() {
-    console.log('destroy')
     document.removeEventListener('click', this.handleRouterSkip);
   },
   methods: {
@@ -628,19 +627,40 @@ export default {
           this.testPaperFormState.scores = this.scores[this.testPaperFormState.generateType];
 
           this.testPaperFormState.percentages = {
-            simple: `${this.difficultyScales.simple.scale}`,
-            normal: `${this.difficultyScales.normal.scale}`,
-            difficulty: `${this.difficultyScales.difficulty.scale}`,
+            simple: '',
+            normal: '',
+            difficulty: '',
           };
+          if (this.difficultyVisible) {
+            this.testPaperFormState.percentages = {
+              simple: `${this.difficultyScales.simple.scale}`,
+              normal: `${this.difficultyScales.normal.scale}`,
+              difficulty: `${this.difficultyScales.difficulty.scale}`,
+            };
+          }
+          const isCreate = this.$route.name === 'create';
           try {
-            await Testpaper.create(this.testPaperFormState);
+            if (isCreate) {
+              await Testpaper.create(this.testPaperFormState);
+            } else {
+              this.testPaperFormState.id = this.id;
+              await Testpaper.update(this.testPaperFormState);
+            }
             await this.$router.push({
               name: 'list',
               query: {tab: this.isPersonalTestPaper() ? 'ai_personality' : 'all'}
             });
-            this.$message.success('创建成功');
+            if (isCreate) {
+              this.$message.success('创建成功');
+            } else {
+              this.$message.success('保存成功');
+            }
           } catch (err) {
-            this.$message.error('创建失败', err);
+            if (isCreate) {
+              this.$message.error('创建失败');
+            } else {
+              this.$message.error('保存失败');
+            }
           } finally {
             this.fetching = false;
           }
@@ -737,9 +757,20 @@ export default {
           this.questionCounts[type].choose = paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts[type];
         });
       } else {
+        const categories = await apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/map`);
         paper.assessmentGenerateRule.question_setting.questionCategoryCounts.forEach(questionCategoryCount => {
           displayTypes.forEach(type => {
+            this.questionCounts[type].categoryCounts = this.questionCounts[type].categoryCounts || {};
             this.questionCounts[type].categoryCounts[questionCategoryCount.categoryId] = questionCategoryCount.counts[type];
+          });
+          this.selectedQuestionCategories.push({
+            id: categories[questionCategoryCount.categoryId].id,
+            name: categories[questionCategoryCount.categoryId].name,
+            level: {
+              1: '一级分类',
+              2: '二级分类',
+              3: '三级分类',
+            }[categories[questionCategoryCount.categoryId].depth],
           });
         });
       }
