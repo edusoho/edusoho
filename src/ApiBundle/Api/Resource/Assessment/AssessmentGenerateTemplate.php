@@ -17,7 +17,7 @@ class AssessmentGenerateTemplate extends AbstractResource
         if (empty($conditions['itemBankId'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($conditions['itemBankId']);
+        $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($conditions['itemBankId']);
         if (empty($questionBank['itemBank'])) {
             throw QuestionBankException::NOT_FOUND_BANK();
         }
