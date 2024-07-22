@@ -2,18 +2,14 @@
 
 namespace Codeages\Biz\ItemBank\Assessment\Service\Impl;
 
-use Biz\Testpaper\Builder\RandomTestpaperBuilder;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerQuestionReportDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneDao;
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneQuestionReportDao;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Constant\AssessmentStatus;
 use Codeages\Biz\ItemBank\Assessment\Dao\AssessmentSnapshotDao;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService;
 use Codeages\Biz\ItemBank\BaseService;
