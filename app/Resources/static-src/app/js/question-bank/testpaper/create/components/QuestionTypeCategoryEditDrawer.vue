@@ -23,66 +23,59 @@ export default {
       questionTypeDisplaySettings: {},
       questionTypeDisplaySetting: [],
       categories: [],
-      questionConfigs: {
+      questionCounts: {
         single_choice: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
+          choose: [],
+          total: {},
         },
         choice: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
+          choose: [],
+          total: {},
         },
         essay: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
+          choose: [],
+          total: {},
         },
         uncertain_choice: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
+          choose: [],
+          total: {},
         },
         determine: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
+          choose: [],
+          total: {},
         },
         fill: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
+          choose: [],
+          total: {},
         },
         material: {
-          count: {
-            choose: {},
-            total: {},
-          },
-          score: 2
+          choose: [],
+          total: {},
         },
+      },
+      scores: {
+        single_choice: 2,
+        choice: 2,
+        essay: 2,
+        uncertain_choice: 2,
+        determine: 2,
+        fill: 2,
+        material: 2,
       },
     }
   },
   computed: {
     totalCount() {
       return (categoryId, type) => {
-        if (!this.questionConfigs[type].count.total[categoryId]) {
+        if (!this.questionCounts[type].total[categoryId]) {
           return 0;
         }
-        return this.questionConfigs[type].count.total[categoryId];
+        return this.questionCounts[type].total[categoryId];
+      }
+    },
+    countErrorClass() {
+      return (categoryId, type) => {
+        return this.questionCounts[type].choose[categoryId] > this.questionCounts[type].total[categoryId] ? 'question-type-category-display-cell-number-total-error' : '';
       }
     },
   },
@@ -90,15 +83,12 @@ export default {
     fetchQuestionCounts() {
       this.questionTypeDisplaySetting.forEach(type => {
         this.defaultCategories.forEach(category => {
-          this.questionConfigs[type.type].count.choose[category.id] = 0;
+          this.questionCounts[type.type].choose[category.id] = 0;
           if (this.defaultQuestionCounts[type.type].categoryCounts && this.defaultQuestionCounts[type.type].categoryCounts[category.id]) {
-            this.questionConfigs[type.type].count.choose[category.id] = this.defaultQuestionCounts[type.type].categoryCounts[category.id];
+            this.questionCounts[type.type].choose[category.id] = this.defaultQuestionCounts[type.type].categoryCounts[category.id];
           }
         });
-        this.questionConfigs[type.type].score = this.defaultScores[type.type];
-        const typeConfig = this.questionConfigs[type.type];
-        this.questionConfigs[type.type] = {};
-        this.$set(this.questionConfigs, type.type, typeConfig);
+        this.scores[type.type] = this.defaultScores[type.type];
       });
       let categoryIds = [];
       this.defaultCategories.forEach(category => {
@@ -111,10 +101,7 @@ export default {
         }
       }).then(res => {
         res.forEach(item => {
-          this.questionConfigs[item.type].count.total[item.category_id] = item.itemNum;
-          const typeConfig = this.questionConfigs[item.type];
-          this.questionConfigs[item.type] = {};
-          this.$set(this.questionConfigs, item.type, typeConfig);
+          this.$set(this.questionCounts[item.type].total, item.category_id, item.itemNum);
         });
       });
     },
@@ -125,7 +112,7 @@ export default {
       let totalQuestionNum = 0;
       this.questionTypeDisplaySetting.forEach(type => {
         this.categories.forEach(category => {
-          totalQuestionNum += this.questionConfigs[type.type].count.choose[category.id];
+          totalQuestionNum += this.questionCounts[type.type].choose[category.id];
         });
       });
       if (totalQuestionNum === 0) {
@@ -133,7 +120,7 @@ export default {
         return;
       }
 
-      this.$emit('save', this.categories, _.cloneDeep(this.questionTypeDisplaySetting), _.cloneDeep(this.questionConfigs));
+      this.$emit('save', this.categories, _.cloneDeep(this.questionTypeDisplaySetting), _.cloneDeep(this.questionCounts), _.cloneDeep(this.scores));
       this.$message.success(Translator.trans('site.save_success_hint'));
       this.close();
     },
@@ -153,13 +140,13 @@ export default {
     sumNum(type) {
       let sumCount = 0;
       this.categories.forEach(category => {
-        sumCount += this.questionConfigs[type].count.choose[category.id] ? Number(this.questionConfigs[type].count.choose[category.id]) : 0;
+        sumCount += this.questionCounts[type].choose[category.id] ? Number(this.questionCounts[type].choose[category.id]) : 0;
       });
 
       return sumCount;
     },
     sumScore(type) {
-      return (this.sumNum(type) * this.questionConfigs[type].score).toFixed(1);
+      return (this.sumNum(type) * this.scores[type]).toFixed(1);
     },
     onQuestionTypeDisplaySettingUpdate(settingKey, displaySetting) {
       this.questionTypeDisplaySettings[settingKey] = displaySetting;
@@ -167,25 +154,23 @@ export default {
     },
     onInputCountBlur(type, categoryId) {
       this.editingRow = null;
-      if (this.questionConfigs[type].count.choose[categoryId] === '') {
-        this.questionConfigs[type].count.choose[categoryId] = 0;
+      if (this.questionCounts[type].choose[categoryId] === '') {
+        this.questionCounts[type].choose[categoryId] = 0;
       }
-      this.questionConfigs[type].count.choose[categoryId] = Number.parseInt(this.questionConfigs[type].count.choose[categoryId]);
-      if (this.questionConfigs[type].count.choose[categoryId] > this.questionConfigs[type].count.total[categoryId]) {
-        this.questionConfigs[type].count.choose[categoryId] = this.questionConfigs[type].count.total[categoryId];
+      this.questionCounts[type].choose[categoryId] = Number.parseInt(this.questionCounts[type].choose[categoryId]);
+      if (this.questionCounts[type].choose[categoryId] > this.questionCounts[type].total[categoryId]) {
+        this.questionCounts[type].choose[categoryId] = this.questionCounts[type].total[categoryId];
       }
     },
     onInputScoreBlur(type) {
       this.editingRow = null;
-      if (this.questionConfigs[type].score === '') {
-        this.questionConfigs[type].score = 2;
-      } else {
-        let score = Number(this.questionConfigs[type].score);
-        score = score <= 0 ? 2 : score;
-        if (!Number.isInteger(score)) {
-          score = score.toFixed(1);
-        }
-        this.questionConfigs[type].score = score;
+      if (this.scores[type] === '') {
+        this.scores[type] = 2;
+      } else if (!Number.isInteger(Number(this.scores[type]))) {
+        this.scores[type] = Number(this.scores[type]).toFixed(1);
+      }
+      if (0 === Number(this.scores[type])) {
+        this.scores[type] = 2;
       }
     },
   },
@@ -255,16 +240,16 @@ export default {
                  'question-type-category-display-cell-inactive': totalCount(category.id, type.type) === 0
                }">
             <input v-if="totalCount(category.id, type.type) > 0" type="number" min="0" :max="totalCount(category.id, type.type)"
-                   v-model="questionConfigs[type.type].count.choose[category.id]"
+                   v-model="questionCounts[type.type].choose[category.id]"
                    @focus="editingRow = index"
                    @blur="onInputCountBlur(type.type, category.id)"
                    class="question-type-category-display-cell-number"/>
             <span class="question-type-category-display-cell-number-total" v-if="totalCount(category.id, type.type) === 0">0</span>
-            <span class="question-type-category-display-cell-number-total">/{{ totalCount(category.id, type.type) }}</span>
+            <span class="question-type-category-display-cell-number-total" :class="countErrorClass(category.id, type.type)">/{{ totalCount(category.id, type.type) }}</span>
           </div>
           <div class="question-type-category-display-cell question-type-category-display-cell-active"
                :class="{'row-editing': editingRow === categories.length}">
-            <input type="number" min="0" v-model="questionConfigs[type.type].score"
+            <input type="number" min="0" v-model="scores[type.type]"
                    @focus="editingRow = categories.length"
                    @blur="onInputScoreBlur(type.type)"
                    class="question-type-category-display-cell-number"/>

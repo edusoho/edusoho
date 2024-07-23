@@ -104,6 +104,18 @@ class Assessment extends AbstractResource
 
     public function update(ApiRequest $request, $id)
     {
+        $fields = $request->request->all();
+        if (!in_array($fields['type'], ['random', 'aiPersonality'])) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+        $methodName = 'update'.ucfirst($fields['type']).'Assessment';
+        $this->$methodName($request);
+
+        return ['ok' => true];
+    }
+
+    private function updateRandomAssessment($request, $id)
+    {
         $assessment = $this->getAssessmentService()->getAssessment($id);
         if ('draft' != $assessment['status']) {
             throw AssessmentException::STATUS_ERROR();
@@ -121,8 +133,26 @@ class Assessment extends AbstractResource
             $this->biz['db']->rollback();
             throw $e;
         }
+    }
 
-        return ['ok' => true];
+    private function updateAiPersonalityAssessment($request)
+    {
+        $fields = $request->request->all();
+        $assessment = $this->getAssessmentService()->getAssessment($fields['id']);
+        $counts = $fields['questionCategoryCounts'][0]['counts'];
+        $scores = $fields['scores'];
+        $totalSum = array_sum(array_map(function ($key) use ($counts, $scores) {
+            return $counts[$key] * $scores[$key];
+        }, array_keys($counts)));
+        $assessment = array_merge($assessment, [
+            'name' => $fields['name'],
+            'description' => $fields['description'],
+            'item_count' => array_sum(array_values($counts)),
+            'question_count' => array_sum(array_values($counts)),
+            'total_score' => $totalSum,
+        ]);
+        $this->getAssessmentService()->updateBasicAssessment($fields['id'], $assessment);
+        $this->updateAssessmentGenerateRule($fields, $assessment);
     }
 
     public function search(ApiRequest $request)
@@ -157,9 +187,11 @@ class Assessment extends AbstractResource
         $assessmentGenerateRules = $this->getAssessmentGenerateRuleService()->findAssessmentGenerateRuleByAssessmentIds($ids);
         $assessmentRulesMap = array_column($assessmentGenerateRules, 'num', 'assessment_id');
         foreach ($assessments as &$assessment) {
-            $userId = $assessment['created_user_id'];
-            $assessment['created_user'] = $users[$userId] ?? null;
-            $assessment['num'] = $assessmentRulesMap[$assessment['id']] ?? null;
+            if (isset($assessment['type']) && 'random' === $assessment['type']) {
+                $userId = $assessment['created_user_id'];
+                $assessment['created_user'] = $users[$userId] ?? null;
+                $assessment['num'] = $assessmentRulesMap[$assessment['id']] ?? null;
+            }
         }
 
         return $this->makePagingObject($assessments, $total, $offset, $limit);

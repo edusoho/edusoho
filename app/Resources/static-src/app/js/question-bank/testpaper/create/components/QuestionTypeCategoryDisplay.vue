@@ -80,12 +80,12 @@ export default {
     }
   },
   methods: {
-    onEditDrawerSave(categories, questionTypeDisplaySetting, questionConfigs) {
+    onEditDrawerSave(categories, questionTypeDisplaySetting, questionCounts, scores) {
       this.$emit('updateCategories', categories);
       this.$emit('updateQuestionTypeDisplaySetting', this.questionTypeDisplaySettingKey, questionTypeDisplaySetting);
-      this.$emit('updateQuestionConfigs', questionConfigs);
-      Object.keys(questionConfigs).forEach(type => {
-        this.questionTotalCounts[type] = questionConfigs[type].count.total;
+      this.$emit('updateQuestionConfigs', questionCounts, scores);
+      Object.keys(questionCounts).forEach(type => {
+        this.questionTotalCounts[type] = questionCounts[type].total;
       });
       this.countVisible = true;
     }
