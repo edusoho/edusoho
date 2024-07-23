@@ -764,11 +764,11 @@ export default {
       this.testPaperFormState.name = paper.name;
       this.testPaperFormState.type = paper.type;
       this.testPaperFormState.description = paper.description;
-      this.testPaperFormState.num = 0;
       this.testPaperFormState.itemBankId = paper.bank_id;
       let questionTypeDisplaySetting = this.getDefaultQuestionTypeDisplaySetting(false);
 
       if (paper.assessmentGenerateRule) {
+        this.testPaperFormState.num = paper.assessmentGenerateRule.num;
         this.testPaperFormState.generateType = paper.assessmentGenerateRule.type;
         this.testPaperFormState.wrongQuestionRate = paper.assessmentGenerateRule.wrong_question_rate;
         const displayTypes = Object.keys(paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts);
