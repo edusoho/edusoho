@@ -164,6 +164,7 @@
               :scores="scores.questionTypeCategory"
               :question-counts="questionCounts"
               :bank-id="bankId"
+              :count-visible="questionCountVisible"
               @updateCategories="onQuestionCategoriesSelected"
               @updateQuestionTypeDisplaySetting="onQuestionTypeDisplaySettingUpdate"
               @updateQuestionConfigs="onQuestionConfigsUpdate"
@@ -379,6 +380,7 @@ export default {
       },
       fetching: false,
       editingRow: null,
+      questionCountVisible: false,
     };
   },
   computed: {
@@ -575,6 +577,7 @@ export default {
         this.scores.questionTypeCategory[type] = scores[type];
         this.questionCounts[type].categoryCounts = questionCounts[type].choose;
       });
+      this.questionCountVisible = true;
     },
     onDescriptionInputFocus() {
       this.initDescriptionEditor();
@@ -791,6 +794,7 @@ export default {
             this.questionCounts[type].choose = paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts[type];
           });
         } else {
+          this.questionCountVisible = true;
           const categories = await apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/map`);
           paper.assessmentGenerateRule.question_setting.questionCategoryCounts.forEach(questionCategoryCount => {
             displayTypes.forEach(type => {

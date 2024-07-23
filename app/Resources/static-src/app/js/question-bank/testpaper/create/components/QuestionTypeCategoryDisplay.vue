@@ -1,5 +1,6 @@
 <script>
 import QuestionTypeCategoryEditDrawer from './QuestionTypeCategoryEditDrawer.vue';
+import {apiClient} from 'common/vue/service/api-client';
 
 export default {
   name: 'QuestionTypeCategoryDisplay',
@@ -11,12 +12,12 @@ export default {
     scores: undefined,
     questionCounts: undefined,
     bankId: undefined,
+    countVisible: undefined,
   },
   data() {
     return {
       editMaskVisible: false,
       drawerVisible: false,
-      countVisible: false,
       questionTotalCounts: {
         single_choice: {},
         choice: {},
@@ -42,8 +43,11 @@ export default {
         if (!this.countVisible) {
           return '';
         }
-        if (!this.questionCounts[type]?.categoryCounts[categoryId]) {
+        if (this.totalCount(categoryId, type) === 0) {
           return 0;
+        }
+        if (this.questionCounts[type].categoryCounts[categoryId] === 0) {
+          return '';
         }
         return this.questionCounts[type].categoryCounts[categoryId];
       }
@@ -79,15 +83,31 @@ export default {
       }
     }
   },
+  watch: {
+    countVisible(val) {
+      if (val) {
+        let categoryIds = [];
+        this.categories.forEach(category => {
+          categoryIds.push(category.id);
+        });
+        apiClient.get('/api/item/categoryIdAndType/count', {
+          params: {
+            bank_id: this.bankId,
+            category_ids: categoryIds,
+          }
+        }).then(res => {
+          res.forEach(item => {
+            this.$set(this.questionTotalCounts[item.type], item.category_id, item.itemNum);
+          });
+        });
+      }
+    }
+  },
   methods: {
     onEditDrawerSave(categories, questionTypeDisplaySetting, questionCounts, scores) {
       this.$emit('updateCategories', categories);
       this.$emit('updateQuestionTypeDisplaySetting', this.questionTypeDisplaySettingKey, questionTypeDisplaySetting);
       this.$emit('updateQuestionConfigs', questionCounts, scores);
-      Object.keys(questionCounts).forEach(type => {
-        this.questionTotalCounts[type] = questionCounts[type].total;
-      });
-      this.countVisible = true;
     }
   },
 }
