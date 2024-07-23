@@ -81,11 +81,11 @@ class AssessmentExercise extends AbstractResource
     public function remove(ApiRequest $request)
     {
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, ['exerciseId', 'id'])) {
+        if (!ArrayToolkit::requireds($fields, ['exerciseId', 'ids'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $this->getExerciseService()->tryManageExercise($fields['exerciseId']);
-        $this->getAssessmentExerciseService()->deleteAssessmentExercise($fields['id']);
+        $this->getAssessmentExerciseService()->batchDeleteAssessmentExercise($fields['ids']);
 
         return ['ok' => true];
     }
