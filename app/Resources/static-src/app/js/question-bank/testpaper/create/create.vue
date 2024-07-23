@@ -199,7 +199,7 @@
           <a-switch v-model="difficultyVisible" checked-children="开启" un-checked-children="关闭"/>
         </div>
 
-        <div class="test-paper-difficulty" v-show="difficultyVisible">
+        <div v-if="!isPersonalTestPaper()" class="test-paper-difficulty" v-show="difficultyVisible">
           <div class="test-paper-save-form-item">
             <div class="test-paper-save-form-item-label">
               <span class="test-paper-save-form-item-label-text">试卷难度</span>
