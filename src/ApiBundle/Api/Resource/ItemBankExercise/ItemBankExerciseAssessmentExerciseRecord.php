@@ -19,7 +19,7 @@ class ItemBankExerciseAssessmentExerciseRecord extends AbstractResource
         }
         $assessmentId = $request->request->get('assessmentId', '');
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-        if ('aiPersonality' == $assessment['type']) {
+        if ('aiPersonality' == $assessment['type'] && 0 != $assessment['parent_id']) {
             $assessmentId = $assessment['parent_id'];
         }
         $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseService()->startAnswer(
