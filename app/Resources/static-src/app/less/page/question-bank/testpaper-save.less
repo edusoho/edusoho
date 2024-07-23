@@ -272,7 +272,9 @@
           }
 
           .question-type-display-col {
-            flex-grow: 1;
+            flex: 1 1 0;
+            max-width: 100%;
+            overflow-x: auto;
           }
 
           .question-type-display-header-top {
@@ -345,6 +347,9 @@
 
           .question-type-display-cell-number {
             display: flex;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
             padding: 16px;
             justify-content: space-between;
             align-items: center;
@@ -354,15 +359,24 @@
             background: #FFF;
 
             .question-type-display-cell-number-edit {
+              flex: 1 1 0;
+              width: 100%;
+              max-width: 100%;
+              overflow-x: auto;
               color: #37393D;
               font-family: "PingFang SC";
               font-size: 14px;
               font-style: normal;
               font-weight: 400;
               line-height: 22px;
+
+              input {
+                max-width: 100%;
+              }
             }
 
             .question-type-display-cell-number-total {
+              flex: none;
               color: #C0C0C2;
               font-family: "PingFang SC";
               font-size: 14px;
@@ -378,6 +392,9 @@
 
           .question-type-display-cell-score {
             display: flex;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
             padding: 16px;
             align-items: center;
             gap: 8px;
@@ -396,6 +413,9 @@
 
           .question-type-display-cell-sum {
             display: flex;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
             padding: 16px;
             align-items: center;
             gap: 8px;
@@ -403,6 +423,7 @@
             border-left: 1px solid #F2F3F5;
             border-bottom: 1px solid #F2F3F5;
             background: #FAFAFA;
+            white-space: nowrap;
 
             color: #37393D;
             font-family: "PingFang SC";
