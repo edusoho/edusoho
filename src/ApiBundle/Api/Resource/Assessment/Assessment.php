@@ -77,7 +77,7 @@ class Assessment extends AbstractResource
     {
         $counts = $fields['questionCategoryCounts'][0]['counts'];
         $scores = $fields['scores'];
-        $total_sum = array_sum(array_map(function ($key) use ($counts, $scores) {
+        $totalSum = array_sum(array_map(function ($key) use ($counts, $scores) {
             return $counts[$key] * $scores[$key];
         }, array_keys($counts)));
         if (empty($counts)) {
@@ -87,10 +87,10 @@ class Assessment extends AbstractResource
             'bank_id' => $fields['itemBankId'],
             'created_user_id' => $this->getCurrentUser()->getId(),
             'item_count' => array_sum(array_values($counts)),
-            // question_count 并不准确，受材料题子题数量影响，这里直接设置为question_count
+            // question_count 并不准确，受材料题子题数量影响，这里直接设置等同为item_count
             'question_count' => array_sum(array_values($counts)),
             'displayable' => '1',
-            'total_score' => $total_sum,
+            'total_score' => $totalSum,
         ]);
         try {
             $this->biz['db']->beginTransaction();
