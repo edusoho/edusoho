@@ -2100,7 +2100,6 @@ t.add("question.bank.paper.operation", "Operation", "js", "en");
 t.add("question.bank.paper.num", "Amount", "js", "en");
 t.add("question.bank.paper.numberOfItems\/score", "Number of items\/Score", "js", "en");
 t.add("question.bank.paper.updatePerson\/updatedAt", "Update Person\/Updated Time", "js", "en");
-t.add("question.bank.paper.creator\/createdAt", "Creator\/Created Time", "js", "en");
 t.add("question.bank.paper.selectAll", "Select All", "js", "en");
 t.add("question.bank.paper.selectedItems", "Selected %select% items", "js", "en");
 t.add("question.bank.paper.pageTotal", "Total %total% items", "js", "en");
