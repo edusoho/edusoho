@@ -376,10 +376,18 @@ class TestpaperController extends BaseController
             if ('generating' == $assessment['status']) {
                 return $this->createMessageResponse('warning', '试卷生成中，请稍后再试');
             }
-            $assessmentChildIds = $this->getAssessmentService()->searchAssessments(['parent_id' => $assessmentId], [], 0, PHP_INT_MAX, ['id']);
+            $parentId = 0 == $assessment['parent_id'] ? $assessmentId : $assessment['parent_id'];
+            $assessmentChildIds = $this->getAssessmentService()->searchAssessments(
+                ['parent_id' => $parentId],
+                ['id' => 'ASC'],
+                0,
+                PHP_INT_MAX,
+                ['id']
+            );
+
+            $assessmentChildIds = array_column($assessmentChildIds, 'id');
+            array_unshift($assessmentChildIds, $parentId);
         }
-        $assessmentChildIds = array_column($assessmentChildIds, 'id');
-        $assessmentChildIds[] = $assessmentId;
 
         return $this->render('testpaper/manage/preview.html.twig', [
             'assessment' => $this->addArrayEmphasisStyle($assessment),
