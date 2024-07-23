@@ -58,6 +58,7 @@ class MeJoined extends AbstractResource
             $courseSets[$member['courseSetId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
             $courseSets[$member['courseSetId']]['meJoinedType'] = 'live';
             $courseSets[$member['courseSetId']]['cover'] = $this->transformCover($courseSets[$member['courseSetId']]['cover'], 'course');
+            $courseSets[$member['courseId']]['isExpired'] = $this->isExpired($member['deadline']);
         }
 
         return array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds));
@@ -78,7 +79,7 @@ class MeJoined extends AbstractResource
         );
         $courseConditions = [
             'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
-            'excludeTypes' => ['reservation'],
+            'excludeTypes' => ['reservation', 'live'],
         ];
         if (!empty($courseSets)) {
             $courseConditions['excludeCourseSetIds'] = ArrayToolkit::column($courseSets, 'id');
@@ -99,6 +100,7 @@ class MeJoined extends AbstractResource
                 $courses[$member['courseId']]['meJoinedType'] = 'course';
                 $courses[$member['courseId']]['courseSet']['cover'] = $this->transformCover($courses[$member['courseId']]['courseSet']['cover'], 'course');
                 $courses[$member['courseId']]['cover'] = is_string($courses[$member['courseId']]['cover']) ? null : $courses[$member['courseId']]['cover'];
+                $courses[$member['courseId']]['isExpired'] = $this->isExpired($member['deadline']);
             }
         }
 
@@ -119,19 +121,25 @@ class MeJoined extends AbstractResource
 
         $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
         $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
-        $classrooms = ArrayToolkit::index($classrooms, 'id');
+        $members = ArrayToolkit::index($members, 'classroomId');
 
-        foreach ($members as $member) {
-            $classrooms[$member['classroomId']]['meJoinedType'] = 'classroom';
-            $classrooms[$member['classroomId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
-            $classrooms[$member['classroomId']]['smallPicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
-            $classrooms[$member['classroomId']]['middlePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
-            $classrooms[$member['classroomId']]['largePicture'] = AssetHelper::getFurl($classrooms[$member['classroomId']]['smallPicture'], 'classroom.png');
-            $progress = $this->getClassroomLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
-            $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
+        foreach ($classrooms as &$classroom) {
+            $classroom['meJoinedType'] = 'classroom';
+            $classroom['lastLearnTime'] = (0 == $members[$classroom['id']]['lastLearnTime']) ? $members[$classroom['id']]['updatedTime'] : $members[$classroom['id']]['lastLearnTime'];
+            $classroom['smallPicture'] = AssetHelper::getFurl($classroom['smallPicture'], 'classroom.png');
+            $classroom['middlePicture'] = AssetHelper::getFurl($classroom['smallPicture'], 'classroom.png');
+            $classroom['largePicture'] = AssetHelper::getFurl($classroom['smallPicture'], 'classroom.png');
+            $progress = $this->getClassroomLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
+            $classroom['learningProgressPercent'] = $progress['percent'];
+            $classroom['isExpired'] = $this->isExpired($members[$classroom['id']]['deadline']);
         }
 
         return $classrooms;
+    }
+
+    private function isExpired($deadline)
+    {
+        return 0 != $deadline && $deadline < time();
     }
 
     protected function getItemBanks()
@@ -152,6 +160,7 @@ class MeJoined extends AbstractResource
             if (empty($itemBankExercises[$member['exerciseId']])) {
                 unset($members[$key]);
             } else {
+                $itemBankExercises['isExpired'] = $this->isExpired($member['deadline']);
                 $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
             }
             $member['meJoinedType'] = 'itemBankExercise';

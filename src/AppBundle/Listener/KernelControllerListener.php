@@ -53,7 +53,6 @@ class KernelControllerListener
             $event->setController(function () use ($url) {
                 return new RedirectResponse($url);
             });
-
         }
     }
 
@@ -69,13 +68,14 @@ class KernelControllerListener
             '/login/bind/weixinmob/choose', '/login/bind/weixinmob/changetoexist',
             '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
             '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
-            '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
+            '/partner/login', '/partner/logout',
             '/login/weixinmob', '/login/bind/weixinmob/existbind',
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
             '/register/email_or_mobile/check', '/settings/bind_mobile',
             '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind', '/switch/language',
             '/scrm/buy/goods/callback', '/file/upload', '/file/img/crop', '/online/sample',
+            '/settings/setup_password',
         ];
     }
 

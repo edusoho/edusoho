@@ -1,12 +1,14 @@
 searchResultType:
     course: Course
     classroom: Classroom
+    itemBankExercise: Exercise of question bank
     teacher: Teacher
     thread: Topic
     article: Article
 
 courseStatus:
-    draft: Unpublished
+    draft: draft
+    unpublished: Unpublished
     published: Published
     closed: Closed
 goodsStatus:
@@ -30,6 +32,7 @@ openCourseCategory:
 
 classroomStatus:
     draft: Unpublished
+    unpublished: Unpublished
     published: Published
     closed: Closed
 
@@ -67,6 +70,7 @@ orderItemType:
     course: course
     classroom: classroom
     vip: VIP
+    item_bank_exercise: item_bank_exercise
 
 refundItemType:
     course: course
@@ -213,6 +217,7 @@ boughtType:
 
 userKeyWordType:
     nickname: Nickname
+    wechatNickname: Wechat Nickname
     verifiedMobile: Mobile
     email: Email
     loginIp: Login Ip
@@ -268,6 +273,11 @@ userType:
     apple: Apple connected
     marketing: 微营销
     distributor: 分销
+
+userStatus:
+  all: All
+  locked: Locked
+  unlock: Unlock
 
 userKeyWordTypes:
     nickname: Nickname
@@ -441,7 +451,6 @@ courseSerializeMode:
     finished: Completed
 
 refund_reason:
-    select_reason: --Reason to quit--
     bad_content: Course quality is not quite good
     bad_teacher_attitude: Service is not quite good
     other: Other

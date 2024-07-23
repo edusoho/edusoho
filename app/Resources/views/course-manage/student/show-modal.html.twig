@@ -1,4 +1,4 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'course.members_manage.official_student.show.content_title'|trans}}{% endblock %}
 
@@ -38,9 +38,9 @@
 	<tr>
 		<th>{{'student.profile.gender'|trans}}</th>
 		<td>
-			{% if profile.gender == 'mail' %}
+			{% if profile.gender == 'male' %}
 				{{'student.profile.gender.male'|trans}}
-			{% elseif profile.gender == 'femail' %}
+			{% elseif profile.gender == 'female' %}
 				{{'student.profile.gender.female'|trans}}
 			{% else %}
 				{{'student.profile.field.empty'|trans}}
@@ -85,7 +85,7 @@
 		<th>{{'student.profile.mobile'|trans}}</th>
 		<td>
 		{% if profile.mobile %}
-				{{ profile.mobile }}
+      {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
 			{% else %}
 				{{'student.profile.field.empty'|trans}}
 			{% endif %}

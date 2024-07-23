@@ -15,4 +15,6 @@ interface ExerciseQuestionRecordService
     public function deleteByItemIds(array $itemIds);
 
     public function updateByAnswerRecordIdAndModuleId($answerRecordId, $moduleId);
+
+    public function countQuestionRecordStatus($exerciseId, $itemIds);
 }

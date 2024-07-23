@@ -48,6 +48,24 @@
                 <el-col :span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
 
+            <!-- <el-form-item>
+                <label slot="label">
+                    {{ 'course.marketing_setup.setup.is_show_label'|trans }}
+                </label>
+                <el-col :span="18">
+                    <el-radio v-for="showableRadio in showableRadios"
+                              v-model="marketingForm.showable"
+                              :key="showableRadio.value"
+                              :value="showableRadio.value"
+                              :label="showableRadio.value"
+                              class="cd-radio">
+                        {{ showableRadio.label }}
+                    </el-radio>
+             <div class="course-mangae-info__tip js-expiry-tip ml0">{{ 'course.marketing_setup.rule.show'|trans }}</div>
+                </el-col>
+            </el-form-item> -->
+
+
             <el-form-item>
                 <label slot="label">
                     {{ 'course.marketing_setup.setup.can_join'|trans }}
@@ -122,7 +140,7 @@
                               v-model="marketingForm.expiryMode"
                               :label="value"
                               :key="value"
-                              :disabled="coursePublished || courseClosed || course.platform !== 'self'"
+                              :disabled="expiryModeDisabled || course.platform !== 'self'"
                               class="cd-radio">
                         {{label}}
                     </el-radio>
@@ -132,7 +150,7 @@
                         <span class="caret"></span>
                         <el-radio v-model="marketingForm.deadlineType"
                                   v-for="(label, value) in deadlineTypeRadio"
-                                  :disabled="coursePublished || courseClosed || course.platform !=='self'"
+                                  :disabled="expiryModeDisabled || course.platform !=='self'"
                                   class="cd-radio"
                                   :label="value"
                                   :key="value">
@@ -159,7 +177,7 @@
                             <el-col :span="8">
                                 <el-form-item prop="expiryDays">
                                     <el-input ref="expiryDays" v-model="marketingForm.expiryDays"
-                                              :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
+                                              :disabled="expiryValueDisabled || course.platform !== 'self'">
                                     </el-input>
                                 </el-form-item>
                             </el-col>
@@ -181,7 +199,7 @@
                                     ref="expiryStartDate"
                                     :default-value="today"
                                     :picker-options="startDateOptions"
-                                    :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
+                                    :disabled="expiryValueDisabled || course.platform !== 'self'">
                                 </el-date-picker>
                             </el-form-item>
                             <el-form-item prop="expiryEndDate" style="display: inline-block; margin-left: 4px">
@@ -192,7 +210,7 @@
                                     size="small"
                                     ref="expiryEndDate"
                                     :picker-options="endDateOptions"
-                                    :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
+                                    :disabled="expiryValueDisabled || course.platform !== 'self'">
                                 </el-date-picker>
                             </el-form-item>
                         </div>
@@ -425,6 +443,7 @@
                 maxStudentNum: this.course.maxStudentNum,
                 originPrice: this.course.originPrice,
                 buyable: this.course.buyable,
+                showable: this.course.showable,
                 enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
                 buyExpiryTime: this.course.buyExpiryTime,
                 approval: this.course.approval,
@@ -450,6 +469,16 @@
             });
             return {
                 liveCapacity: liveCapacity,
+                showableRadios: [
+                    {
+                        value: '1',
+                        label: Translator.trans('site.show'),
+                    },
+                    {
+                        value: '0',
+                        label: Translator.trans('site.hide'),
+                    }
+                ],
                 buyableRadios: [
                     {
                         value: '1',
@@ -626,10 +655,8 @@
                     'realtime': Translator.trans('course.teaching_plan.expiry_date.real_time'),
                     'overdue': Translator.trans('course.teaching_plan.expiry_date.overdue_tips'),
                 },
-                courseClosed: courseClosed,
-                courseSetClosed: courseSetClosed,
-                courseSetPublished: courseSetPublished,
-                coursePublished: coursePublished,
+              expiryModeDisabled: this.course.status !== 'draft',
+              expiryValueDisabled: (coursePublished && courseSetPublished) || courseClosed || courseSetClosed,
             }
     }
 }

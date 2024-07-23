@@ -15,6 +15,7 @@ class LiveEventSubscriber extends EventSubscriber
     {
         return [
             'course.teachers.update' => 'onCourseTeachersUpdate',
+            'course.task.update' => 'onCourseTaskUpdate',
         ];
     }
 
@@ -40,6 +41,19 @@ class LiveEventSubscriber extends EventSubscriber
         foreach ($liveIds as $liveId) {
             $liveClient->updateLive(['liveId' => $liveId, 'teacherId' => $liveProviderTeacherId]);
         }
+    }
+
+    public function onCourseTaskUpdate(Event $event)
+    {
+        $task = $event->getSubject();
+        if ('live' != $task['type']) {
+            return;
+        }
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        if (empty($activity) || empty($activity['mediaId'])) {
+            return;
+        }
+        $this->getLiveActivityService()->updateLiveActivityLiveTime($activity['mediaId'], ['liveStartTime' => $activity['startTime'], 'liveEndTime' => $activity['endTime']]);
     }
 
     /**

@@ -4,7 +4,7 @@
       <img v-if="question.target_data.cover" :src="question.target_data.cover.middle" alt="">
     </div>
     <div class="item-info pull-left">
-      <h3 class="text-overflow title" @click="goToWrongQuestionDetail">{{ question.target_data.title | formatHtml }}</h3>
+      <h3 class="title" @click="goToWrongQuestionDetail">{{ question.target_data.title | formatHtml }}</h3>
       <p class="number">{{ question.item_num }} 题</p>
     </div>
     <a-button
@@ -56,12 +56,13 @@ export default {
     width: 45%;
 
     .title {
+      line-height: 22px; 
       display: inline-block;
       max-width: 100%;
       cursor: pointer;
     }
     .number {
-      margin: 72px 0 0;
+      margin: 30px 0 0;
       color: #ff4040;
     }
   }

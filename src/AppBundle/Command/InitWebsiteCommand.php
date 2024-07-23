@@ -3,22 +3,16 @@
 namespace AppBundle\Command;
 
 use AppBundle\Common\BlockToolkit;
+use AppBundle\Common\SystemInitializer;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\User\CurrentUser;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use AppBundle\Common\SystemInitializer;
-use Biz\Crontab\SystemCrontabInitializer;
+use Topxia\Service\Common\ServiceKernel;
 
 class InitWebsiteCommand extends BaseCommand
 {
-    private $db_host = '127.0.0.1';
-    private $db_port = '3306';
-    private $db_user = 'root';
-    private $db_password = 'root';
-    private $db_name = 'edusoho';
-
     protected function configure()
     {
         $this->setName('util:init-website')
@@ -33,6 +27,9 @@ class InitWebsiteCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        //获取数据库连接配置
+        $this->getDbParamters();
+
         $this->logger('开始建校', $output);
         $result = $this->initDb();
         if (true === $result) {
@@ -53,30 +50,30 @@ class InitWebsiteCommand extends BaseCommand
         if (!$this->hasUsedFiles()) {
             $initializer->init();
             $this->initTopBanner();
-            $initializer->initRegisterSetting($user);
-            $setting = array(
-                'auth' => array('register_mode' => 'email'),
-                'storage' => array('upload_mode' => 'cloud',
+            $setting = [
+                'auth' => ['register_mode' => 'email'],
+                'storage' => ['upload_mode' => 'cloud',
                                    'cloud_access_key' => $accessKey,
                                    'cloud_secret_key' => $secretKey,
                                    'cloud_key_applied' => 1,
-                ),
-                'site' => array('name' => $siteName),
-            );
+                ],
+                'site' => ['name' => $siteName],
+            ];
         } else {
             //生成演示数据
             $result = $this->initUsedData();
             $this->logger($result, $output);
+            $initializer->initSettings();
             //将演示数据中的用户角色降为教师
             $this->updateUsedUserData();
-            $setting = array(
-                'storage' => array('upload_mode' => 'cloud',
+            $setting = [
+                'storage' => ['upload_mode' => 'cloud',
                                    'cloud_access_key' => $accessKey,
                                    'cloud_secret_key' => $secretKey,
                                    'cloud_key_applied' => 1,
-                ),
-                'site' => array('name' => $siteName),
-            );
+                ],
+                'site' => ['name' => $siteName],
+            ];
         }
 
         $this->initSetting($setting);
@@ -85,15 +82,29 @@ class InitWebsiteCommand extends BaseCommand
         $username = $input->getArgument('username');
         $password = $input->getArgument('password');
         $email = $input->getArgument('email');
-        $user = array('username' => $username, 'password' => $password, 'email' => $email);
+        $user = ['username' => $username, 'password' => $password, 'email' => $email];
         $user = $this->initUser($user);
         $this->logger('网校设置用户成功', $output);
 
+        $initializer->initRegisterSetting($user);
         $initializer->initFolders();
         $initializer->initLockFile();
         SystemCrontabInitializer::init();
 
         $this->logger('网校创建成功', $output);
+    }
+
+    protected function getDbParamters()
+    {
+        $parameters = file_get_contents(__DIR__.'/../../../app/config/parameters.yml');
+        $parameters = \Symfony\Component\Yaml\Yaml::parse($parameters);
+        $parameters = $parameters['parameters'];
+
+        $this->db_host = $parameters['database_host'];
+        $this->db_port = $parameters['database_port'];
+        $this->db_user = $parameters['database_user'];
+        $this->db_password = $parameters['database_password'];
+        $this->db_name = $parameters['database_name'];
     }
 
     private function logger($message, $output)
@@ -107,24 +118,24 @@ class InitWebsiteCommand extends BaseCommand
 
     private function initUser($user)
     {
-        $registerUser = array(
+        $registerUser = [
             'nickname' => $user['username'],
             'email' => $user['email'],
             'password' => $user['password'],
-        );
+        ];
         $registerUser = $this->getAuthService()->register($registerUser);
 
-        return $this->getUserService()->changeUserRoles($registerUser['id'], array(
+        return $this->getUserService()->changeUserRoles($registerUser['id'], [
             'ROLE_USER',
             'ROLE_TEACHER',
             'ROLE_SUPER_ADMIN',
-        ));
+        ]);
     }
 
     private function initSetting($data)
     {
         foreach ($data as $key => $value) {
-            $originValue = $this->getSettingService()->get($key, array());
+            $originValue = $this->getSettingService()->get($key, []);
             $value = array_merge($originValue, $value);
             $this->getSettingService()->set($key, $value);
         }
@@ -134,13 +145,13 @@ class InitWebsiteCommand extends BaseCommand
     {
         $serviceKernel = ServiceKernel::create('dev', true);
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
+        $currentUser->fromArray([
             'id' => 0,
             'nickname' => '游客',
             'currentIp' => '127.0.0.1',
-            'roles' => array('ROLE_SUPER_ADMIN'),
+            'roles' => ['ROLE_SUPER_ADMIN'],
             'orgId' => 1,
-        ));
+        ]);
         $serviceKernel->setCurrentUser($currentUser);
     }
 
@@ -148,17 +159,19 @@ class InitWebsiteCommand extends BaseCommand
     {
         try {
             $pdo = $this->getDb();
+            $checkTableResult = $pdo->query('show tables;');
+            foreach ($checkTableResult as $i) {
+                return '创建数据库表结构失败，数据库内已存在表结构，请删除数据库后重试';
+            }
             $sqlFile = $this->getContainer()->getParameter('kernel.root_dir').'/../web/install/edusoho.sql';
             $sql = file_get_contents($sqlFile);
             $result = $pdo->exec($sql);
             $pdo = null;
             if (false === $result) {
                 return '创建数据库表结构失败，请删除数据库后重试';
-            } else {
-                $pdo = null;
-
-                return true;
             }
+
+            return true;
         } catch (\PDOException $e) {
             return '数据库连接错误';
         }
@@ -169,14 +182,14 @@ class InitWebsiteCommand extends BaseCommand
         $code = 'jianmo:home_top_banner';
         $blockTemplate = $this->getBlockService()->getBlockTemplateByCode($code);
         $html = BlockToolkit::render($blockTemplate, $this->getContainer());
-        $fields = array(
+        $fields = [
             'data' => $blockTemplate['data'],
             'content' => $html,
             'userId' => 1,
             'blockTemplateId' => $blockTemplate['id'],
             'code' => $code,
             'mode' => $blockTemplate['mode'],
-        );
+        ];
         $this->getBlockService()->createBlock($fields);
     }
 
@@ -212,10 +225,10 @@ class InitWebsiteCommand extends BaseCommand
 
     protected function updateUsedUserData()
     {
-        $this->getUserService()->changeUserRoles(1, array(
+        $this->getUserService()->changeUserRoles(1, [
             'ROLE_USER',
             'ROLE_TEACHER',
-        ));
+        ]);
     }
 
     protected function getDb()

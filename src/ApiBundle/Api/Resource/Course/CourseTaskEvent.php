@@ -194,6 +194,18 @@ class CourseTaskEvent extends AbstractResource
             throw TaskException::UNPUBLISHED_TASK();
         }
 
+        if (!$this->getTaskService()->isFinished($taskId)) {
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+            $learningProgress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $taskResult['userId']);
+
+            return [
+                'result' => $taskResult,
+                'event' => $eventName,
+                'nextTask' => null,
+                'completionRate' => $learningProgress['percent'],
+            ];
+        }
+
         $result = $this->getTaskService()->finishTaskResult($taskId);
 
         $nextTask = $this->getTaskService()->getNextTask($taskId);

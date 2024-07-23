@@ -24,6 +24,8 @@ class CategoryException extends AbstractException
 
     const NOTFOUND_PARENT_CATEGORY = 4042108;
 
+    const CODE_LENGTH_TOO_LONG = 5002108;
+
     public $messages = [
         4042101 => 'exception.category.not_found',
         4042102 => 'exception.category.not_found_group',
@@ -33,5 +35,6 @@ class CategoryException extends AbstractException
         5002106 => 'exception.category.code_digit_invalid',
         5002107 => 'exception.category.code_unavailable',
         4042108 => 'exception.category.not_found_parent_category',
+        5002108 => 'exception.category.code_length_too_long',
     ];
 }

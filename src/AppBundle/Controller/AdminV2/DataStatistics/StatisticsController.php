@@ -11,6 +11,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
 use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
@@ -559,6 +560,9 @@ class StatisticsController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
+        $orderIds = ArrayToolkit::column($joinLessonDetail, 'order_id');
+        $orders = ArrayToolkit::index($this->getOrderService()->findOrdersByIds($orderIds), 'id');
+
         $joinLessonStartData = $this->getMemberOperationService()->searchRecords(
             ['operate_type' => 'join'],
             ['operate_time' => 'ASC'],
@@ -585,6 +589,7 @@ class StatisticsController extends BaseController
                 'joinLessonStartDate' => $joinLessonStartDate,
                 'dataInfo' => $dataInfo,
                 'courseSets' => $courseSets,
+                'orders' => $orders,
             ]
         );
     }
@@ -814,13 +819,14 @@ class StatisticsController extends BaseController
 
         $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+        $goodsSpecs = $this->getGoodsService()->findGoodsSpecsByIds(array_column($orderItems, 'target_id'));
 
         $orderPaymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
         $paymentTrades = ArrayToolkit::index($orderPaymentTrades, 'order_sn');
 
         foreach ($paidClassroomDetails as &$paidClassroomDetail) {
             $paidClassroomDetail['item'] = empty($orderItems[$paidClassroomDetail['id']]) ? [] : $orderItems[$paidClassroomDetail['id']];
-            $paidClassroomDetail['classroom_id'] = empty($paidClassroomDetail['item']) ? 0 : $paidClassroomDetail['item']['target_id'];
+            $paidClassroomDetail['classroom_id'] = empty($paidClassroomDetail['item']) ? 0 : $goodsSpecs[$paidClassroomDetail['item']['target_id']]['targetId'];
             $paidClassroomDetail['trade'] = empty($paymentTrades[$paidClassroomDetail['sn']]) ? [] : $paymentTrades[$paidClassroomDetail['sn']];
             $paidClassroomDetail = MathToolkit::multiply($paidClassroomDetail, ['price_amount', 'pay_amount'], 0.01);
         }
@@ -1256,14 +1262,17 @@ class StatisticsController extends BaseController
         $orderIds = ArrayToolkit::column($incomeDetails, 'id');
         $orderSns = ArrayToolkit::column($incomeDetails, 'order_sn');
 
-        $orderItems = ArrayToolkit::index($this->getOrderService()->findOrderItemsByOrderIds($orderIds), 'order_id');
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
+        $orderItemsIndex = ArrayToolkit::index($orderItems, 'order_id');
         $paymentTrades = ArrayToolkit::index($this->getPayService()->findTradesByOrderSns($orderSns), 'order_sn');
 
         foreach ($incomeDetails as &$incomeDetail) {
-            $incomeDetail['item'] = empty($orderItems[$incomeDetail['id']]) ? [] : $orderItems[$incomeDetail['id']];
+            $incomeDetail['item'] = empty($orderItemsIndex[$incomeDetail['id']]) ? [] : $orderItemsIndex[$incomeDetail['id']];
             $incomeDetail[$type.'_id'] = empty($incomeDetail['item']) ? 0 : $incomeDetail['item']['target_id'];
             $incomeDetail['trade'] = empty($paymentTrades[$incomeDetail['sn']]) ? [] : $paymentTrades[$incomeDetail['sn']];
         }
+
+        $goodsSpecs = $this->getGoodsService()->findGoodsSpecsByIds(array_column($orderItems, 'target_id'));
 
         if ('trend' == $tab) {
             $incomeData = $this->getOrderService()->sumGroupByDate(
@@ -1298,6 +1307,7 @@ class StatisticsController extends BaseController
                 'users' => $users,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
+                'goodsSpecs' => $goodsSpecs,
             ]
         );
     }
@@ -1527,5 +1537,13 @@ class StatisticsController extends BaseController
     public function getMemberOperationService()
     {
         return $this->createService('MemberOperation:MemberOperationService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

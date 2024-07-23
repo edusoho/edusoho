@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\AdminV2\Developer;
 
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -56,6 +57,7 @@ class CdnSettingController extends BaseController
         $security['safe_iframe_domains'] = array_filter(array_unique($security['safe_iframe_domains']));
 
         $this->getSettingService()->set('security', $security);
+        $this->getCacheService()->set('safe_iframe_domains', $security['safe_iframe_domains']);
         $this->getLogService()->info('system', 'update_settings', '域名白名单添加cdn域名', $cdn);
     }
 
@@ -65,5 +67,13 @@ class CdnSettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

@@ -5,13 +5,15 @@ namespace ApiBundle\Api\Resource;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\Common\CommonException;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @OA\Info(title="EduSoho接口", version="default", description="EduSoho接口，随版本动态变化")
@@ -61,6 +63,20 @@ abstract class AbstractResource
         return $this->container->get('templating')->render($view, $parameters);
     }
 
+    protected function createStreamedResponse(callable $callback)
+    {
+        return new StreamedResponse(
+            $callback,
+            200,
+            [
+                'Content-Type' => 'text/event-stream',
+                'Cache-Control' => 'no-cache',
+                'Connection' => 'keep-alive',
+                'X-Accel-Buffering' => 'no',
+            ]
+        );
+    }
+
     /**
      * @return Biz
      */
@@ -87,6 +103,18 @@ abstract class AbstractResource
         }
 
         return $requestData;
+    }
+
+    protected function filterUtf8mb4($str)
+    {
+        $str = preg_replace_callback(
+            '/./u',
+            function (array $match) {
+                return strlen($match[0]) >= 4 ? '' : $match[0];
+            },
+            $str);
+
+        return $str;
     }
 
     protected function getOffsetAndLimit(ApiRequest $request)
@@ -161,19 +189,6 @@ abstract class AbstractResource
         return $this->container->get('api.plugin.config.manager')->isPluginInstalled($code);
     }
 
-    public function getPluginVersion($code)
-    {
-        $plugins = $this->container->get('kernel')->getPluginConfigurationManager()->getInstalledPlugins();
-
-        foreach ($plugins as $plugin) {
-            if (strtolower($plugin['code']) == strtolower($code)) {
-                return $plugin['version'];
-            }
-        }
-
-        return null;
-    }
-
     public function getClientIp()
     {
         return $this->container->get('request_stack')->getMasterRequest()->getClientIp();
@@ -186,24 +201,26 @@ abstract class AbstractResource
 
     /**
      * 验证验证码token
+     *
      * @return [type] [description]
      */
     protected function checkDragCaptchaToken(Request $request, $token)
     {
-        $enableAntiBrushCaptcha = $this->getSettingService()->node("ugc_content_audit.enable_anti_brush_captcha");
-        if(empty($enableAntiBrushCaptcha)){
+        $enableAntiBrushCaptcha = $this->getSettingService()->node('ugc_content_audit.enable_anti_brush_captcha');
+        if (empty($enableAntiBrushCaptcha)) {
             return true;
         }
         $session = $request->getSession();
-        $dragTokens = empty($session->get('dragTokens')) ? array() : $session->get('dragTokens');
-        if(in_array($token, $dragTokens)){
+        $dragTokens = empty($session->get('dragTokens')) ? [] : $session->get('dragTokens');
+        if (in_array($token, $dragTokens)) {
             array_splice($dragTokens, array_search($token, $dragTokens), 1);
-            $session->set("dragTokens", $dragTokens);
+            $session->set('dragTokens', $dragTokens);
+
             return true;
         }
+
         return false;
     }
-
 
     protected function trans($message, $arguments = [], $domain = null, $locale = null)
     {
@@ -240,8 +257,11 @@ abstract class AbstractResource
         return $this->getBiz()->service('S2B2C:S2B2CFacadeService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
-        return $this->getBiz()->service("System:SettingService");
+        return $this->getBiz()->service('System:SettingService');
     }
 }

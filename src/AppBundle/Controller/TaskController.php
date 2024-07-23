@@ -22,6 +22,7 @@ use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
 use Biz\User\UserException;
 use Biz\Visualization\Service\LearnControlService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -40,8 +41,9 @@ class TaskController extends BaseController
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '请先登录', '', 3, $this->generateUrl('login'));
         }
+        $activity = [];
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
             $activity = $this->getActivityService()->getActivity($task['activityId'], true);
             if (!empty($activity['ext']) && !empty($activity['ext']['file'])) {
                 $media = $activity['ext']['file'];
@@ -54,6 +56,17 @@ class TaskController extends BaseController
         }
         $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        if ('0' == $courseSet['canLearn']) {
+            if (in_array($activity['mediaType'], ['homework', 'testpaper', 'exercise'])) {
+                $answerReports = $this->getAnswerReportService()->search(['user_id' => $user['id'], 'answer_scene_id' => $activity['ext']['answerSceneId']], [], 0, PHP_INT_MAX);
+                if (empty($answerReports)) {
+                    return $this->createMessageResponse('info', '课程已关闭，无法学习', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+                }
+            } else {
+                return $this->createMessageResponse('info', '课程已关闭，无法学习', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
+            }
+        }
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
             $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);
@@ -71,8 +84,7 @@ class TaskController extends BaseController
         $activityConfig = $this->getActivityConfigByTask($task);
         $preview = $preview && $this->getCourseService()->hasCourseManagerRole();
         if ($member && 'student' === $member['role'] && !$preview) {
-            $wrappedTasks = ArrayToolkit::index($this->getTaskService()->wrapTaskResultToTasks($courseId, $this->getTaskService()->findTasksByCourseId($courseId)), 'id');
-            if (!empty($wrappedTasks[$task['id']]) && $wrappedTasks[$task['id']]['lock']) {
+            if ($this->getTaskService()->isTaskLocked($id)) {
                 return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
             }
             if ($activityConfig->allowTaskAutoStart($task)) {
@@ -110,7 +122,7 @@ class TaskController extends BaseController
             //需要8.3.8重构
             $number = explode('-', $task['number']);
             if (array_key_exists(1, $number)) {
-                $task['number'] = $chapter['published_number'] . '-' . $number[1];
+                $task['number'] = $chapter['published_number'].'-'.$number[1];
             }
         }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
@@ -171,6 +183,20 @@ class TaskController extends BaseController
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->getActivityService()->getActivityConfig($activity['mediaType']);
+    }
+
+    public function downloadAppShowAction(Request $request)
+    {
+        $meCount = $this->setting('meCount', []);
+        $courseId = $request->get('courseId');
+
+        return $this->render(
+            'task/app-modal.html.twig',
+            [
+                'mobileCode' => empty($meCount['mobileCode']) ? 'zhixiang' : $meCount['mobileCode'],
+                'courseId' => $courseId,
+            ]
+        );
     }
 
     public function previewAction($courseId, $id)
@@ -323,6 +349,7 @@ class TaskController extends BaseController
             [
                 'task' => $task,
                 'preview' => $preview,
+                'doAgain' => $request->query->get('doAgain', false),
             ]
         );
     }
@@ -474,7 +501,7 @@ class TaskController extends BaseController
         }
 
         $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['controller'] . ':finishCondition';
+        $action = $config[$task['type']]['controller'].':finishCondition';
 
         return $this->forward($action, ['activity' => $activity]);
     }
@@ -524,8 +551,8 @@ class TaskController extends BaseController
      * @param  $taskId
      *
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
      *
+     * @throws \Exception
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
@@ -580,7 +607,7 @@ class TaskController extends BaseController
 
     private function freshTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.' . $taskId;
+        $key = 'task.'.$taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key, []);
         $taskStore['start'] = time();
@@ -591,7 +618,7 @@ class TaskController extends BaseController
 
     private function validTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.' . $taskId;
+        $key = 'task.'.$taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key);
 
@@ -741,5 +768,13 @@ class TaskController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
     }
 }

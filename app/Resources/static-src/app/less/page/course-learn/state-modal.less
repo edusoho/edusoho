@@ -1,45 +1,97 @@
+// 注** 课程练习说明与章节练习说明公用
 .task-state-modal {
+  padding: 24px;
+  background: url("@{img-src}testpaper/examination.instructions.png");
+  background-size: cover;
+  border-radius: 4px;
+
   .title {
-    text-align: center;
+    height: 28px;
+    line-height: 28px;
     font-size: 22px;
-    color: @gray-darker;
-    margin-bottom: 20px;
-    line-height: 1;
-    i {
-      font-size: 22px;
-      margin-right: 10px;
-    }
+    font-weight: 600;
+    margin-bottom: 24px;
   }
+
   .content {
     font-size: 12px;
-    background-color: #fafafa;
-    padding: 30px 70px;
-    text-align: center;
+    background-color: #fff;
+    padding: 24px 24px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 66px 0px rgba(30, 104, 167, 0.08);
+
+    @media (max-width: 768px) {
+      padding: 30px 20px;
+    }
+
     .content-title {
       line-height: 1;
       font-size: 16px;
       color: @gray-darker;
       margin-bottom: 40px;
     }
+
     .content-progress {
       margin-bottom: 15px;
     }
+
+    .exercise-create-modal {
+      margin: 74px 0 58px;
+      text-align: center;
+
+      .test-modal {
+        width: 64px;
+        height: 72px;
+      }
+
+      .test-modal-text {
+        left: 8px;
+        top: 42px;
+        color: #5E6166;
+      }
+
+      .one-question {
+        display: inline-block;
+        margin-top: -4px;
+        margin-left: 82px;
+        width: 64px;
+        height: 64px;
+      }
+
+      .one-question-text {
+        left: 78px;
+        top: 42px;
+        color: #5E6166;
+        white-space: nowrap;
+      }
+
+      .one-question-tips {
+        left: 66px;
+        top: 60px;
+        white-space: nowrap;
+      }
+    }
   }
+
   &.task-state-modal-xs {
     padding: 6px 0;
+
     .title {
       font-size: 12px;
       text-align: left;
+
       i {
         font-size: 14px;
       }
     }
+
     .content {
       padding: 0;
       background-color: transparent;
       text-align: left;
       margin-bottom: 13px;
       color: @gray;
+
       .content-title {
         font-size: 12px;
         color: @gray-dark;
@@ -48,12 +100,18 @@
         font-weight: normal;
         border-bottom: 1px solid @border-color;
       }
+
       .content-progress {
         padding-bottom: 14px;
         border-bottom: 1px solid @border-color;
         margin-bottom: 0;
       }
     }
+  }
+
+  .footer-btn {
+    height: 38px;
+    line-height: 38px;
   }
 }
 
@@ -63,8 +121,51 @@
     padding-bottom: 0;
     text-align: center;
   }
+
   .modal-footer {
     border-top: 0;
     padding-top: 0;
+  }
+}
+
+// 课程|章节-继续练习-异常模态框
+.continue-exercise-abnormal {
+  margin: 10% auto;
+  padding: 60px 64px;
+  width: 444px;
+  text-align: center;
+  background-color: #fff;
+  border-radius: 4px;
+
+  .review-img {
+    margin: 0 auto;
+    margin-bottom: 32px;
+    width: 125px;
+    height: 125px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .review-tip-title {
+    margin: 0 auto;
+    margin-bottom: 56px;
+    width: 304px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #5E6166;
+    text-align: center;
+  }
+
+  .back-btn {
+    display: inline-block;
+    padding: 5px 16px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #37393D;
+    border-radius: 4px;
+    border: 1px solid #E1E1E1;
   }
 }

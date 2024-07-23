@@ -44,7 +44,7 @@ define(function(require, exports, module) {
 
         $(".js-confirm-btn").on("click", function(){
           var val = $(".js-private-key-value").val();
-          $('[name=rsa_private_key]').val(val);
+          $('[name=rsa_private_key]').removeAttr('disabled').val(val);
           $('#js-private-key').html(val.substring(0,12) + '******');
           $('#privateKeyModal').modal('hide');
         });

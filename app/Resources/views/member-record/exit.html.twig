@@ -1,15 +1,18 @@
 {% import "macro.html.twig" as web_macro %}
+
+{% do script(['app/js/member-record/exit/index.js']) %}
+
 {% include 'member-record/form.html.twig' %}
 <table class="table table-striped" id="quit-record-list">
   <thead>
   <tr>
-    <th>{{ 'course.members_manage.records.name'|trans }}</th>
-    <th>{{ 'user.fields.mobile_simple_label'|trans }}</th>
-    <th>{{ 'user.fields.email_label'|trans }}</th>
-    <th>{{ 'course.members_manage.quit_records.date'|trans }}</th>
-    <th>{{ 'course.members_manage.quit_type'|trans }}</th>
-    <th>{{ 'course.members_manage.quit_records.reason'|trans }}</th>
-    <th>{{ 'course.members_manage.is_refunded'|trans }}</th>
+    <th width="150">{{ 'course.members_manage.records.name'|trans }}</th>
+    <th width="140">{{ 'user.fields.mobile_simple_label'|trans }}</th>
+    <th width="150">{{ 'user.fields.email_label'|trans }}</th>
+    <th width="150">{{ 'course.members_manage.quit_records.date'|trans }}</th>
+    <th width="90">{{ 'course.members_manage.quit_type'|trans }}</th>
+    <th width="130">{{ 'course.members_manage.quit_records.reason'|trans }}</th>
+    <th width="100">{{ 'course.members_manage.is_refunded'|trans }}</th>
   </tr>
   </thead>
   <tbody>
@@ -23,23 +26,30 @@
         <a class="link-primary" target="_blank" href="{{ user_show_path({id:user.id}) }}">{{ user.nickname }}</a><br/>
         {# <span class="text-sm text-grey">{{ 'order.sn'|trans }}: {{ order.sn|default('--') }}<span> #}
       </td>
-      <td class="vertical-middle">
-        {% if profile.mobile %}{{ profile.mobile }}{% else %}--{% endif %}
+      <td class="vertical-middle" width="126">
+        {% if profile.mobile %}{% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}{% else %}--{% endif %}
       </td>
       <td class="vertical-middle">
-        {{ user.email }}
+        {% if not is_system_generated_email(user.email) %}
+          {{ user.email }}
+        {% else %}
+          --
+        {% endif %}
       </td>
-      <td class="vertical-middle">
+      <td class="vertical-middle" width="152">
         {{ record.operate_time|date('Y-n-d H:i') }}
       </td>
-      <td class="vertical-middle">
+      <td class="vertical-middle" width="92">
         {{ dict_text('exit_reason', record.reason_type) }}
       </td>
-      <td class="vertical-middle">
-        {% set operator = users[record['operator_id']]|default() %}
-        {% if record.user_id != record.operator_id and operator and operator.type != 'system' %}
-          ({{ operator.nickname }})
-        {% endif %}{{ record.reason|trans }}
+      <td class="vertical-middle text-overflow"  width="165">
+        <div class="text-overflow js-exit-reason" style="line-height: 40px">
+          {% set operator = users[record['operator_id']]|default() %}
+          {% if record.user_id != record.operator_id and operator and operator.type != 'system' %}
+            ({{ operator.nickname }})
+          {% endif %}
+          {{ record.reason|trans }}
+        </div>
       </td>
       <td class="vertical-middle">
         {% if record.refund_id > 0 or 'refund' == record.reason_type %}

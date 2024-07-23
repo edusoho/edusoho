@@ -136,7 +136,7 @@ class StudentExporter extends Exporter
             $member[] = $profile['weibo'] ? $profile['weibo'] : '-';
 
             foreach ($fields as $value) {
-                $member[] = $profile[$value] ? str_replace([PHP_EOL, '"'], '', $profile[$value]) : '-';
+                $member[] = $profile[$value] ? str_replace([PHP_EOL, '"'], '', $profile[$value])."\t" : '-';
             }
 
             $datas[] = $member;
@@ -191,6 +191,11 @@ class StudentExporter extends Exporter
             'courseId' => $conditions['courseId'],
             'role' => 'student',
         ];
+    }
+
+    public function postExport()
+    {
+        $this->getLogService()->warning('course', 'export_students', '导出学员数据');
     }
 
     /**

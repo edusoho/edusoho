@@ -58,6 +58,11 @@ class ErrorCode
 
     const ANSWER_OLD_VERSION = 50095210;
 
+    /**
+     * APP会返回上一页
+     */
+    const NOT_ITEM_BANK_MEMBER = 50095211;
+
     const ITEM_NOT_FOUND = 40495001;
 
     const ITEM_ARGUMENT_INVALID = 50095002;
@@ -92,10 +97,41 @@ class ErrorCode
      */
     const ASSESSMENT_NOTOPEN = 50095103;
 
+    const ASSESSMENT_EMPTY = 50095104;
+
     /**
      * 题库不存在
      */
     const ITEM_BANK_NOT_FOUND = 40495301;
 
     const ITEM_BANK_NOT_EMPTY = 40395302;
+
+    /**
+     * 练习模式错误
+     */
+    const EXERCISE_MODE_ERROR = 40095203;
+
+    /**
+     * 答题已结束
+     */
+    const ANSWER_FINISHED = 40095204;
+
+    /**
+     * 题目已提交
+     */
+    const ANSWER_SUMBMITTED = 40095205;
+
+    /**
+     * 题目未提交
+     */
+    const ANSWER_NOT_SUBMIT = 40095206;
+
+    /**
+     * 题目已批阅
+     */
+    const ANSWER_REVIEWED = 40095207;
+
+    const ANSWER_ENDTIME_WITHIN_EXPIRY_DATE = 40095208;
+
+    const NO_USERS_AUTO_SUMBMIT_ANSWER = 40095209;
 }

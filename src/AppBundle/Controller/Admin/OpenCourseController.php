@@ -14,6 +14,7 @@ class OpenCourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if (empty($conditions['categoryId'])) {
             unset($conditions['categoryId']);

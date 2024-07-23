@@ -23,6 +23,7 @@ class ClassroomController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $conditions = $this->fillOrgCode($conditions);
         $paginator = new Paginator(
@@ -116,12 +117,14 @@ class ClassroomController extends BaseController
         $published = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'published']));
         $closed = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'closed']));
         $draft = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'draft']));
+        $unpublished = $this->getClassroomService()->countClassrooms(array_merge($conditions, ['status' => 'unpublished']));
 
         return [
             'total' => empty($total) ? 0 : $total,
             'published' => empty($published) ? 0 : $published,
             'closed' => empty($closed) ? 0 : $closed,
             'draft' => empty($draft) ? 0 : $draft,
+            'unpublished' => empty($unpublished) ? 0 : $unpublished,
         ];
     }
 
@@ -192,12 +195,22 @@ class ClassroomController extends BaseController
         }
         $this->getClassroomService()->deleteClassroom($id);
 
-        return $this->createJsonResponse(['code' => 0, 'message' => $this->trans('site.delete_success_hint')]);
+        return $this->createJsonResponse(['code' => 0, 'message' => '删除成功']);
+    }
+
+    public function unpublishedAction($id)
+    {
+        $this->getClassroomService()->unpublishedClassroom($id);
+
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        return $this->renderClassroomTr($id, $classroom);
     }
 
     public function checkEsProductCanDeleteAction(Request $request, $id)
     {
         $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom');
+
         return $this->createJsonResponse(['status' => $status]);
     }
 
@@ -315,6 +328,7 @@ class ClassroomController extends BaseController
     public function statisticsAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $conditions = $this->fillOrgCode($conditions);
 
         $paginator = new Paginator(
@@ -365,7 +379,7 @@ class ClassroomController extends BaseController
         $usersProfile = empty($members) ? [] : $this->getUserService()->findUserProfilesByIds($userIds);
         $usersApproval = $this->getUserService()->searchApprovals([
             'userIds' => $userIds,
-            'status' => 'approved',], [], 0, count($userIds));
+            'status' => 'approved', ], [], 0, count($userIds));
         $usersApproval = ArrayToolkit::index($usersApproval, 'userId');
 
         foreach ($users as $key => &$user) {

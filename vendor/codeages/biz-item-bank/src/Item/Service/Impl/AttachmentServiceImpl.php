@@ -143,6 +143,7 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
             'target_id' => [['min', 0]],
             'global_id' => [['lengthBetween', 1, 32]],
             'size' => [],
+            'seq' => [],
             'file_type' => [],
             'convert_status' => [],
             'audio_convert_status' => [],

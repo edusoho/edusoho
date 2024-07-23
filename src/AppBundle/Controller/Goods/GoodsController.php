@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\Goods\Service\GoodsService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserFieldService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,11 +19,14 @@ class GoodsController extends BaseController
         $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET', ['preview' => $preview, 'targetId' => $targetId]);
         $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
         if (1 != $preview && 'published' !== $goods['status']) {
-            return $this->createMessageResponse('info', '你访问的课程不存在', null, 3000, $this->generateUrl('homepage'));
+            return $this->redirectToRoute('goods_show', ['id' => $id, 'preview' => 1, 'targetId' => $targetId]);
         }
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
         $goods['showPlan'] = 1 == count($goods['specs']) || empty($goods['specs'][0]['title']) ? 0 : 1;
+        if (!empty($goods['product']['target']['categoryId'])) {
+            $goods['breadcrumbs'] = $this->getCategoryService()->findCategoryBreadcrumbs($goods['product']['target']['categoryId']);
+        }
 
         return $this->render(
             'goods/show.html.twig',
@@ -68,5 +72,13 @@ class GoodsController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 }

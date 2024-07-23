@@ -39,8 +39,7 @@ class Homework extends Activity
             $questions = $homework['assessment'] ? $this->getSectionItemService()->findSectionItemDetailByAssessmentId($homework['assessment']['id']) : [];
             $questionBank = $categories = [];
             if ($questions) {
-                $itemBankIds = array_unique(ArrayToolkit::column($questions, 'bank_id'));
-                $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId(array_shift($itemBankIds));
+                $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($homework['assessment']['bank_id']);
             }
             if ($questionBank) {
                 $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
@@ -72,7 +71,7 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => 0,
+                'need_score' => 'score' == $fields['finishType'] ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
                 'pass_score' => empty($fields['finishData']) ? 0 : $fields['finishData'],
@@ -82,6 +81,7 @@ class Homework extends Activity
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $assessment['id'],
+                'assessmentBankId' => $assessment['bank_id'],
             ]);
 
             $this->getBiz()['db']->commit();
@@ -95,8 +95,18 @@ class Homework extends Activity
 
     protected function createAssessment($name, $fields)
     {
+        $sortItems = [];
         $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
-        $items = $this->processItemQuestions($items, $fields);
+
+        $items = ArrayToolkit::index($items, 'id');
+        foreach ($fields['questionIds'] as $id) {
+            if (!isset($items[$id])) {
+                continue;
+            }
+            $sortItems[] = $items[$id];
+        }
+
+        $items = $this->processItemQuestions($sortItems, $fields);
         $bankIds = array_column($items, 'bank_id');
         $assessment = [
             'bank_id' => array_shift($bankIds),
@@ -157,14 +167,16 @@ class Homework extends Activity
                 'limited_time' => 0,
                 'do_times' => 0,
                 'redo_interval' => 0,
-                'need_score' => 0,
+                'need_score' => 'score' == $activity['finishType'] ? 1 : 0,
                 'manual_marking' => 1,
                 'start_time' => 0,
             ]);
+            $assessment = $this->getAssessmentService()->getAssessment($homework['assessmentId']);
 
             $activity = $this->getHomeworkActivityService()->create([
                 'answerSceneId' => $answerScene['id'],
                 'assessmentId' => $homework['assessmentId'],
+                'assessmentBankId' => $assessment['bank_id'],
                 'has_published' => $this->isQuote,
             ]);
 
@@ -189,6 +201,12 @@ class Homework extends Activity
 
         $this->getAssessmentService()->updateBasicAssessment($homework['assessmentId'], $fields);
 
+        $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
+        $this->getAnswerSceneService()->update($homework['answerSceneId'], [
+            'need_score' => ('score' == $sourceActivity['finishType']) ? 1 : 0,
+            'finishData' => empty($sourceActivity['finishData']) ? $answerScene['pass_score'] : $sourceActivity['finishData'],
+        ]);
+
         return $homework;
     }
 
@@ -198,16 +216,27 @@ class Homework extends Activity
         if (!$homework) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
-        $accessment = [
+        $assessment = [
             'name' => $fields['title'],
             'description' => $fields['description'],
         ];
+
+        $sortItems = [];
         if (!empty($fields['questionIds'])) {
             $items = $this->getItemService()->findItemsByIds($fields['questionIds'], true);
-            $items = $this->processItemQuestions($items, $fields);
+
+            $items = ArrayToolkit::index($items, 'id');
+            foreach ($fields['questionIds'] as $id) {
+                if (!isset($items[$id])) {
+                    continue;
+                }
+                $sortItems[] = $items[$id];
+            }
+
+            $items = $this->processItemQuestions($sortItems, $fields);
             $bankIds = array_column($items, 'bank_id');
-            $accessment['bank_id'] = array_shift($bankIds);
-            $accessment['sections'] = [
+            $assessment['bank_id'] = array_shift($bankIds);
+            $assessment['sections'] = [
                 [
                     'name' => '作业题目',
                     'items' => $items,
@@ -217,9 +246,13 @@ class Homework extends Activity
 
         $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
         $answerScene['pass_score'] = empty($fields['finishData']) ? $answerScene['pass_score'] : $fields['finishData'];
+        $answerScene['need_score'] = ('score' == $fields['finishType']) ? 1 : 0;
 
         $this->getAnswerSceneService()->update($homework['answerSceneId'], $answerScene);
-        $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $accessment);
+        $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $assessment);
+        if (!empty($assessment['bank_id'])) {
+            $this->getHomeworkActivityService()->update($homework['id'], ['assessmentBankId' => $assessment['bank_id']]);
+        }
 
         return $homework;
     }
@@ -229,7 +262,7 @@ class Homework extends Activity
         return $this->getHomeworkActivityService()->delete($targetId);
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
         $user = $this->getCurrentUser();
 

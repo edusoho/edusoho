@@ -44,6 +44,19 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->db()->fetchAll($sql, [$courseSetTitle]);
     }
 
+    public function canLearningByCourseSetIds($courseSetIds)
+    {
+        $sql = "UPDATE {$this->table} set canLearn = '1' where courseSetId in ({$courseSetIds}) and status = 'published';";
+        $this->db()->executeQuery($sql);
+    }
+
+    public function banLearningByCourseSetIds($courseSetIds)
+    {
+        $courseSetIds = implode(',', $courseSetIds);
+        $sql = "UPDATE {$this->table} set canLearn = '0' where courseSetId in ({$courseSetIds});";
+        $this->db()->executeQuery($sql);
+    }
+
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
     {
         if (empty($status)) {
@@ -73,6 +86,25 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function findByCourseSetIds(array $setIds)
     {
         return $this->findInField('courseSetId', $setIds);
+    }
+
+    public function findCoursesByIdsAndCourseSetTitleLike($ids, $title)
+    {
+        if (empty($ids)) {
+            return [];
+        }
+
+        $marksIds = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE id IN ({$marksIds})";
+
+        if ($title) {
+            $sql .= ' AND courseSetTitle LIKE ?';
+            $params = array_merge($ids, ['%'.$title.'%']);
+        } else {
+            $params = $ids;
+        }
+
+        return $this->db()->fetchAll($sql, $params);
     }
 
     public function findCoursesByIds($ids)
@@ -169,6 +201,18 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function updateCategoryByCourseSetId($courseSetId, $fields)
     {
         $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
+    }
+
+    public function updateByCourseSetId($courseSetId, $fields)
+    {
+        $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
+    }
+
+    public function canLearningByCourseSetId($courseSetIds)
+    {
+        $courseSetIds = implode(',', $courseSetIds);
+        $sql = "UPDATE {$this->table} set canLearn = '1' where courseSetId in ({$courseSetIds}) and status = 'published';";
+        $this->db()->executeQuery($sql);
     }
 
     public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit)
@@ -294,6 +338,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.type IN (:types)',
                 'course_v8.courseType = :courseType',
                 'course_v8.isDefault = :isDefault',
+                'course_v8.canLearn = :canLearn',
             ],
             'wave_cahceable_fields' => ['hitNum'],
         ];

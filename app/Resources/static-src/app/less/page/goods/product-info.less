@@ -90,17 +90,57 @@
         padding: 32px 16px 16px;
         margin-top: 24px;
         background-color: #fff;
+        position: relative;
         &:first-child {
           margin-top: 0;
         };
         .content-item__title {
           position: relative;
-          margin: 0;
+          margin-bottom: 8px;
           padding-left: 14px;
           font-size: 18px;
           font-weight: 500;
           line-height: 24px;
           color: #333;
+        }
+        .searchInput {
+          position: absolute;
+          right: 16px;
+          top: 24px;
+          width: 300px;
+
+          .ant-btn-primary {
+            background-color: @brand-primary !important;
+            border-color: @brand-primary !important;
+          }
+
+          .ant-input:hover {
+            border-color:  @brand-primary !important;
+          }
+
+          .ant-input:focus {
+            border-color:  @brand-primary !important;
+            outline: none !important;
+            box-shadow: none !important;
+          }
+
+          
+        }
+        .emptyCourse {
+          height: 609px;
+          margin-top: 78px;
+          text-align: center;
+
+          .emptyCourseImg {
+            width: 142px;
+            height: 116px;
+          }
+
+          .emptyCourseContent {
+            margin-top: 12px;
+            color: #919399;
+            line-height: 22px;
+          }
         }
       }
     }

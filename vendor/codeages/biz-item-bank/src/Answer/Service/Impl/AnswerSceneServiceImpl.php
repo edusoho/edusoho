@@ -51,7 +51,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         $answerScene = $this->getValidator()->validate($answerScene, [
             'name' => ['required'],
             'limited_time' => ['integer', ['min', 0]],
-            'do_times' => ['integer', ['in', [0, 1]]],
+            'do_times' => ['integer', ['min', 0], ['max', 100]],
             'redo_interval' => ['integer', ['min', 0]],
             'need_score' => ['integer', ['in', [0, 1]]],
             'manual_marking' => ['integer', ['in', [0, 1]]],
@@ -62,14 +62,15 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'question_report_job_name' => [['lengthMax', 128]],
             'last_review_time' => ['integer'],
             'question_report_update_time' => ['integer'],
+            'exam_mode' => ['integer'],
+            'id' => ['integer'],
+            'end_time' => ['integer'],
+            'is_items_seq_random' => ['integer', ['in', [0, 1]]],
+            'is_options_seq_random' => ['integer', ['in', [0, 1]]],
         ]);
 
         if (isset($answerScene['do_times']) && 1 == $answerScene['do_times']) {
             $answerScene['redo_interval'] = 0;
-        }
-
-        if (isset($answerScene['do_times']) && 0 == $answerScene['do_times']) {
-            $answerScene['start_time'] = 0;
         }
 
         return $answerScene;
@@ -87,21 +88,23 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             return false;
         }
 
-        if (0 != $answerScene['start_time'] && $answerScene['start_time'] > time()) {
+        if ($answerScene['start_time'] > 0 && $answerScene['start_time'] > time()) {
+            return false;
+        }
+        if ($answerScene['end_time'] > 0 && $answerScene['end_time'] < time()) {
+            return false;
+        }
+
+        $doneTimes = $this->getAnswerRecordService()->count(['answer_scene_id' => $id, 'user_id' => $userId]);
+        if ($answerScene['do_times'] > 0 && $doneTimes >= $answerScene['do_times']) {
             return false;
         }
 
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($id, $userId);
-        if ($latestAnswerRecord) {
-            if (1 == $answerScene['do_times']) {
-                return false;
-            }
+        if ($latestAnswerRecord && 0 < $answerScene['redo_interval']) {
+            $answerReport = $this->getAnswerReportService()->getSimple($latestAnswerRecord['answer_report_id']);
 
-            if (0 < $answerScene['redo_interval']) {
-                $answerReport = $this->getAnswerReportService()->getSimple($latestAnswerRecord['answer_report_id']);
-
-                return $answerScene['redo_interval'] * 60 <= time() - $answerReport['review_time'];
-            }
+            return $answerScene['redo_interval'] * 60 <= time() - $answerReport['review_time'];
         }
 
         return true;
@@ -237,7 +240,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         }
 
         $answerSceneQuestionReports = [];
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(array_keys($questionReports));
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(array_keys($questionReports));
         foreach ($questionReports as $questionId => $reports) {
             if (empty($questions[$questionId])) {
                 continue;

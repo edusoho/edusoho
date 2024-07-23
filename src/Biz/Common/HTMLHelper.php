@@ -2,6 +2,8 @@
 
 namespace Biz\Common;
 
+use AppBundle\Common\UrlToolkit;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\Util\HTMLPurifierFactory;
 use Codeages\Biz\Framework\Context\Biz;
@@ -24,18 +26,12 @@ class HTMLHelper
             return '';
         }
 
-        $security = $this->getSettingService()->get('security');
+        $safeDomains = $this->getCacheService()->get('safe_iframe_domains') ?: [];
 
-        if (!empty($security['safe_iframe_domains'])) {
-            $safeDomains = $security['safe_iframe_domains'];
-        } else {
-            $safeDomains = array();
-        }
-
-        $config = array(
+        $config = [
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
             'safeIframeDomains' => $safeDomains,
-        );
+        ];
 
         $factory = new HTMLPurifierFactory($config);
         $purifier = $factory->create($trusted);
@@ -43,18 +39,19 @@ class HTMLHelper
         $html = $purifier->purify($html);
         $html = str_replace('http-equiv', '', $html);
         $html = $this->handleOuterLink($html, $safeDomains);
+        $html = $this->filterInvalidImgSrc($html);
 
         if (!$trusted) {
             return $html;
         }
         $styles = $purifier->context->get('StyleBlocks');
         if ($styles) {
-            $html = implode("\n", array(
+            $html = implode("\n", [
                 '<style type="text/css">',
                 implode("\n", $styles),
                 '</style>',
                 $html,
-            ));
+            ]);
         }
 
         return $html;
@@ -66,9 +63,9 @@ class HTMLHelper
             return '';
         }
 
-        $config = array(
+        $config = [
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
-        );
+        ];
 
         $factory = new HTMLPurifierFactory($config);
         $purifier = $factory->createSimple();
@@ -102,7 +99,7 @@ class HTMLHelper
 
     protected function handleOuterLink($html, $safeDomains)
     {
-        $siteSettings = $this->getSettingService()->get('site', array());
+        $siteSettings = $this->getSettingService()->get('site', []);
         $url = isset($siteSettings['url']) ? $this->getTrimUrl($siteSettings['url']) : '';
 
         preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)(.*?)[\'\"].*?\>/i', $html, $matches);
@@ -127,13 +124,35 @@ class HTMLHelper
         return $html;
     }
 
+    protected function filterInvalidImgSrc($html)
+    {
+        $siteSettings = $this->getSettingService()->get('site', []);
+        $siteUrl = isset($siteSettings['url']) ? $this->getTrimUrl($siteSettings['url']) : '';
+        preg_match_all('/\<img[^\>]*?src\s*=\s*[\'\"](?:http:\/\/|https:\/\/)?(.*?)[\'\"].*?\>/i', $html, $matches);
+        $webDir = $this->biz['kernel.root_dir'].'/../web';
+        foreach ($matches[1] as $key => $match) {
+            if (0 === strpos($match, '/')) {
+                $match = preg_replace('/\?version=[\d.]+/', '', $match);
+                $imgPath = $webDir.$match;
+            }
+            if (!empty($siteUrl) && 0 === strpos($match, $siteUrl)) {
+                $imgPath = $webDir.str_replace($siteUrl, '', $match);
+            }
+            if (!empty($imgPath) && !file_exists($imgPath)) {
+                $html = str_replace($matches[0][$key], '', $html);
+                $imgPath = '';
+            }
+        }
+
+        return $html;
+    }
+
     protected function getTrimUrl($url)
     {
         $url = !empty($url) ? $url : '';
         $url = rtrim($url, '/');
-        $url = ltrim($url, 'http://');
 
-        return ltrim($url, 'https://');
+        return UrlToolkit::ltrimHttpProtocol($url);
     }
 
     /**
@@ -142,5 +161,13 @@ class HTMLHelper
     private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    private function getCacheService()
+    {
+        return $this->biz->service('System:CacheService');
     }
 }

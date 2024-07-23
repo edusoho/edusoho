@@ -31,6 +31,10 @@ class TestpaperShow {
     this.element.on('click','.js-delete-btn', (event) => {
       this.onDeleteSingle(event);
     });
+
+    this.element.on('click','.js-edit-testpaper', (event) => {
+      this.onEditTestpaper(event);
+    });
   }
 
   onBatchDelete(event) {
@@ -114,6 +118,19 @@ class TestpaperShow {
       }).error(function(){
         cd.message({type: 'danger', message: Translator.trans('testpaper_manage.save_error_hint')});
       });
+    });
+  }
+
+  onEditTestpaper(event) {
+    let $target = $(event.currentTarget);
+
+    cd.confirm({
+      title: Translator.trans('confirm.oper.tip'),
+      content: $target.attr('title'),
+      okText: Translator.trans('site.confirm'),
+      cancelText: Translator.trans('site.close'),
+    }).on('ok', () => {
+      window.location.href = $target.data('url');
     });
   }
 

@@ -1,7 +1,9 @@
 {% extends 'my/layout.html.twig' %}
+{% do script(['app/js/tab/classroom-tab/index.js'])  %}
 
 {% block title %}{{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}} - {{ parent() }}{% endblock %}
 
+{% set tab_nav = 'learning' %}
 {% set side_nav = 'my-classroom' %}
 
 {% block main %}
@@ -12,11 +14,17 @@
 }
 </style>
 <div class="panel panel-default panel-col lesson-manage-panel">
+  {% if is_mobile_client() %}
   <div class="panel-heading">
-   {{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}
+    {{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}
+    <form class="search-form pull-right" style="margin-right: 34px;" method="get">
+      <input class="search-input-content inline-block" type="text" name="title" value="{{ app.request.get("title") }}" placeholder="{{ 'course.placeholder.name'|trans }}" />
+      <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit"></a>
+    </form>
   </div>
 
   <div class="panel-body">
+      {# {% include 'my/learning/classroom/nav-pill.html.twig' %} #}
     <ul class="course-wide-list">
       {% for classroom in classrooms if classroom %}
         <li class="my-course-item my-course-item--classroom cd-mb16 clearfix">
@@ -29,11 +37,11 @@
             {% endif %}
           </a>
           <div class="my-course-item__info">
-            <div class="my-course-item__title text-overflow">
+            <div class="my-course-item__title">
               {% if can_obtain_certificates(classroom.id, 'classroom') %}
-                <a style="margin-top: 5px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'classroom.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+                <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'classroom.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
               {% endif %}
-              <a class="cd-link-major" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title|raw}}</a>
+              <a style="font-size: 16px;" class="cd-link-major" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title|raw}}</a>
             </div>
 
             {% if 'assistant' in members[classroom.id].role %}
@@ -74,6 +82,9 @@
       {% endfor %}
     </ul>
   </div>
+  {% else %}
+		<div id="app"></div>
+	{% endif %}
 </div>
 
 {% endblock %}

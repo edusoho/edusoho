@@ -16,6 +16,7 @@ use Biz\Common\CommonException;
 use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Sms\SmsException;
 use Biz\System\SettingException;
+use Biz\User\UserException;
 
 class User extends AbstractResource
 {
@@ -139,6 +140,19 @@ class User extends AbstractResource
         }
 
         return $update;
+    }
+
+    public function search(ApiRequest $request)
+    {
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $currentUser = $this->getCurrentUser();
+        if (!$currentUser->isSuperAdmin()) {
+            throw UserException::PERMISSION_DENIED();
+        }
+        $users = $this->getUserService()->searchUsers(['isStudent' => 1], ['id' => 'ASC'], $offset, $limit);
+        $total = $this->getUserService()->countUsers(['isStudent' => 1]);
+
+        return $this->makePagingObject($users, $total, $offset, $limit);
     }
 
     private function getPassword($password, $host)

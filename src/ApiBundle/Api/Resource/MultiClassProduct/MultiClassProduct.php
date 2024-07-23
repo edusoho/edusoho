@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\MultiClassProduct;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -19,6 +20,7 @@ class MultiClassProduct extends AbstractResource
      * @param $id
      *
      * @return mixed
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function update(ApiRequest $request, $id)
     {
@@ -50,6 +52,7 @@ class MultiClassProduct extends AbstractResource
      * @param $id
      *
      * @return bool[]
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function remove(ApiRequest $request, $id)
     {
@@ -75,6 +78,7 @@ class MultiClassProduct extends AbstractResource
 
     /**
      * @return mixed
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function add(ApiRequest $request)
     {
@@ -100,12 +104,14 @@ class MultiClassProduct extends AbstractResource
 
     /**
      * @return array
+     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN,ROLE_EDUCATIONAL_ADMIN")
      */
     public function search(ApiRequest $request)
     {
         $conditions = [
             'keywords' => $request->query->get('keywords', ''),
         ];
+        $conditions = array_filter($conditions);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 

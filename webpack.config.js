@@ -80,7 +80,7 @@ module.exports = {
       ],
     },
     {
-      name: "swagger-ui/dist/swagger-ui.css",
+      name: 'swagger-ui/dist/swagger-ui.css',
     },
     // 纯拷贝item-bank/lib/itemBank.umd.min.js
     {
@@ -93,6 +93,9 @@ module.exports = {
     // 纯拷贝item-bank/lib/local目录下的语言包
     {
       name: 'item-bank/lib/locale',
+    },
+    {
+      name: 'item-bank/lib/img',
     },
     {
       name: 'es5-shim/es5-shim.js',

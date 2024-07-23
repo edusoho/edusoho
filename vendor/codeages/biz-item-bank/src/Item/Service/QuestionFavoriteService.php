@@ -10,6 +10,8 @@ interface QuestionFavoriteService
 
     public function deleteByQuestionFavorite($questionFavorite);
 
+    public function deleteByItemIds(array $itemIds);
+
     public function search($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function count($conditions);

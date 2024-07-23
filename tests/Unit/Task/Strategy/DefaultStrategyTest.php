@@ -454,6 +454,11 @@ class DefaultStrategyTest extends BaseTestCase
                     'withParams' => [2, ['status' => 'published']],
                     'runTimes' => 2,
                 ],
+                [
+                    'functionName' => 'update',
+                    'withParams' => [['ids' => [1, 2]], ['status' => 'published']],
+                    'runTimes' => 1,
+                ],
             ]
         );
         $task = [
@@ -462,7 +467,7 @@ class DefaultStrategyTest extends BaseTestCase
             'status' => 'create',
         ];
         $task = $this->getDefaultStrategy()->publishTask($task);
-        $this->getTaskDao()->shouldHaveReceived('update')->times(2);
+        $this->getTaskDao()->shouldHaveReceived('update')->times(1);
         $this->assertEquals('published', $task['status']);
     }
 

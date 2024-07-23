@@ -38,9 +38,9 @@
 	<tr>
 		<th>{{'user.fields.gender_label'|trans}}</th>
 		<td>
-			{% if profile.gender == 'mail' %}
+			{% if profile.gender == 'male' %}
 				{{'user.fields.gender.male'|trans}}
-			{% elseif profile.gender == 'femail' %}
+			{% elseif profile.gender == 'female' %}
 				{{'user.fields.gender.female'|trans}}
 			{% else %}
 				{{'site.datagrid.empty'|trans}}
@@ -84,8 +84,8 @@
 	<tr>
 		<th>{{'user.fields.phone_label'|trans}}</th>
 		<td>
-		{% if profile.mobile %}
-				{{ profile.mobile }}
+      {% if profile.mobile %}
+        {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
 			{% else %}
 				{{'site.datagrid.empty'|trans}}
 			{% endif %}

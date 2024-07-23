@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
@@ -15,7 +16,9 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -33,6 +36,10 @@ class TestpaperAction extends AbstractResource
     public function add(ApiRequest $request, $id)
     {
         $action = $request->request->get('action');
+        $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($id);
+        if ($assessmentSnapshot) {
+            $id = $assessmentSnapshot['origin_assessment_id'];
+        }
         $assessment = $this->getAssessmentService()->getAssessment($id);
         $method = $action.'Testpaper';
         if (!method_exists($this, $method)) {
@@ -72,6 +79,17 @@ class TestpaperAction extends AbstractResource
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if ($activity['startTime'] > time()) {
+            throw TestpaperException::EXAM_NOT_START();
+        }
+        if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
+            throw TestpaperException::END_OF_EXAM();
+        }
+
+        if (0 == $activity['ext']['remainderDoTimes'] && '1' == $activity['ext']['isLimitDoTimes']) {
+            throw TestpaperException::NO_DO_TIMES();
+        }
+
         $task['activity'] = $activity;
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
 
@@ -86,13 +104,15 @@ class TestpaperAction extends AbstractResource
             }
 
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
-        }else if('reviewing' != $answerRecord['status']){
+        } elseif (AnswerRecordStatus::REVIEWING != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
-        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
@@ -104,7 +124,7 @@ class TestpaperAction extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 1,
-            'courseId' => $course['id']
+            'courseId' => $course['id'],
         ];
     }
 
@@ -151,9 +171,9 @@ class TestpaperAction extends AbstractResource
 
         $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
 
-        if ($scene['do_times'] && $answerRecord && 'finished' == $answerRecord['status']) {
+        if ('1' == $scene['do_times'] && $answerRecord && AnswerRecordStatus::FINISHED == $answerRecord['status']) {
             throw TestpaperException::FORBIDDEN_RESIT();
         } elseif ($scene['redo_interval'] && $answerReport) {
             $nextDoTime = $answerReport['review_time'] + $scene['redo_interval'] * 60;
@@ -162,15 +182,17 @@ class TestpaperAction extends AbstractResource
             }
         }
 
-        if (!$answerRecord || ($answerRecord && 'finished' == $answerRecord['status'])) {
+        if (!$answerRecord || (AnswerRecordStatus::FINISHED == $answerRecord['status'])) {
             $answerRecord = $this->getAnswerService()->startAnswer($scene['id'], $assessment['id'], $user['id']);
             $answerReport = [];
-        }else if('reviewing' != $answerRecord['status']){
+        } elseif (AnswerRecordStatus::REVIEWING != $answerRecord['status']) {
             $answerRecord = $this->getAnswerService()->continueAnswer($answerRecord['id']);
         }
 
-        $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($answerRecord['id']);
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecord['id']);
         $testpaperWrapper = new TestpaperWrapper();
         $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports), 'type', 'id');
         $testpaper = $testpaperWrapper->wrapTestpaper($assessment, $scene);
@@ -181,7 +203,7 @@ class TestpaperAction extends AbstractResource
             'testpaper' => $testpaper,
             'items' => $items,
             'isShowTestResult' => 0,
-            'courseId' => $course['id']
+            'courseId' => $course['id'],
         ];
     }
 
@@ -263,5 +285,13 @@ class TestpaperAction extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 }

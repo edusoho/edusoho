@@ -77,6 +77,11 @@ class ActivityController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         if (!empty($activityId)) {
             $activity = $this->getActivityService()->getActivity($activityId, true);
+
+            if (!empty($activity['ext']['roomType']) && 'pseudo' == $activity['ext']['roomType']) {
+                $activity['mediaType'] = 'pseudolive';
+                $activity['liveFile'] = json_decode(json_decode($activity['content'], true));
+            }
         } else {
             $activity = [
                 'id' => $activityId,
@@ -87,10 +92,7 @@ class ActivityController extends BaseController
                 'canEdit' => 1,
             ];
         }
-        if (!empty($activity['ext']) && 'pseudo' == $activity['ext']['roomType']) {
-            $activity['mediaType'] = 'pseudolive';
-            $activity['liveFile'] = json_decode(json_decode($activity['content'], true));
-        }
+
         $container = $this->get('activity_runtime_container');
 
         return $container->content($activity);

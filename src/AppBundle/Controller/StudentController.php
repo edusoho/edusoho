@@ -38,11 +38,11 @@ class StudentController extends BaseController
             }
         }
 
-        return $this->render('student/show-modal.html.twig', array(
+        return $this->render('student/show-modal.html.twig', [
             'user' => $user,
             'profile' => $profile,
             'userFields' => $userFields,
-        ));
+        ]);
     }
 
     public function definedShowAction(Request $request, $userId)
@@ -73,19 +73,19 @@ class StudentController extends BaseController
             }
         }
 
-        $course = $this->getSettingService()->get('course', array());
+        $course = $this->getSettingService()->get('course', []);
 
-        $userinfoFields = array();
+        $userinfoFields = [];
 
         if (isset($course['userinfoFields'])) {
             $userinfoFields = $course['userinfoFields'];
         }
 
-        return $this->render('student/defined-show-modal.html.twig', array(
+        return $this->render('student/defined-show-modal.html.twig', [
             'profile' => $profile,
             'userFields' => $userFields,
             'userinfoFields' => $userinfoFields,
-        ));
+        ]);
     }
 
     /**

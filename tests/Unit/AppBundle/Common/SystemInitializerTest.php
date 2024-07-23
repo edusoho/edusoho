@@ -4,6 +4,7 @@ namespace AppBundle\Common\Tests;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Common\SystemInitializer;
 use Biz\BaseTestCase;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Filesystem\Filesystem;
@@ -13,14 +14,14 @@ class SystemInitializerTest extends BaseTestCase
     public function testInit()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         $initializer->init();
     }
 
     public function testInitPages()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initPages', []);
         $result = $this->getContentService()->searchContents([], ['id' => 'ASC'], 0, \PHP_INT_MAX);
 
@@ -46,13 +47,21 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitCoin()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
-        ReflectionUtils::invokeMethod($initializer, '_initCoin', []);
+        $initializer = new SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initCoinSetting', []);
         $result = $this->getSettingService()->get('coin');
         $default = [
+            'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
-            'coin_enabled' => 0,
+            'coin_name' => '虚拟币',
+            'coin_content' => '',
+            'coin_picture' => '',
+            'coin_picture_50_50' => '',
+            'coin_picture_30_30' => '',
+            'coin_picture_20_20' => '',
+            'coin_picture_10_10' => '',
+            'charge_coin_enabled' => '',
         ];
 
         $this->assertArrayEquals($default, $result);
@@ -61,7 +70,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitNavigations()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initNavigations', []);
         $result = $this->getNavigationService()->searchNavigations([], [], 0, \PHP_INT_MAX);
 
@@ -96,8 +105,8 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitThemes()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
-        ReflectionUtils::invokeMethod($initializer, '_initThemes', []);
+        $initializer = new SystemInitializer($output);
+        ReflectionUtils::invokeMethod($initializer, '_initThemesSetting', []);
 
         $result = $this->getSettingService()->get('theme');
         $default = ['uri' => 'jianmo'];
@@ -107,7 +116,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitBlocks()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initBlocks', []);
 
         $result = $this->getBlockService()->searchBlockTemplates([], [], 0, \PHP_INT_MAX);
@@ -133,12 +142,12 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitJob()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initJob', []);
 
         $result = $this->getSchedulerService()->searchJobs([], [], 0, \PHP_INT_MAX);
 
-        $this->assertEquals(26, count($result));
+        $this->assertEquals(22, count($result));
 
         $this->assertArrayEquals([
             'Order_FinishSuccessOrdersJob',
@@ -149,10 +158,6 @@ class SystemInitializerTest extends BaseTestCase
             'Scheduler_MarkExecutingTimeoutJob',
             'RefreshLearningProgressJob',
             'UpdateInviteRecordOrderInfoJob',
-            'Xapi_PushStatementsJob',
-            'Xapi_AddActivityWatchToStatementJob',
-            'Xapi_ArchiveStatementJob',
-            'Xapi_ConvertStatementsJob',
             'SyncUserTotalLearnStatisticsJob',
             'SyncUserLearnDailyPastLearnStatisticsJob',
             'DeleteUserLearnDailyPastLearnStatisticsJob',
@@ -162,7 +167,6 @@ class SystemInitializerTest extends BaseTestCase
             'DeleteFiredLogJob',
             'CheckConvertStatusJob',
             'updateCourseSetHotSeq',
-            'UpdateLiveStatusJob',
             'CloudConsultFreshJob',
             'DeleteUserFootprintJob',
             'WechatSubscribeRecordSynJob',
@@ -172,7 +176,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitSystemUsers()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initSystemUsers', []);
         $result = $this->getUserService()->searchUsers([], [], 0, \PHP_INT_MAX);
         $this->assertEquals(1, count($result));
@@ -195,7 +199,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitFolders()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, 'initFolders', []);
 
         $folders = [
@@ -214,7 +218,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitRole()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initRole', []);
 
         $result = $this->getRoleService()->searchRoles([], [], 0, \PHP_INT_MAX);
@@ -232,7 +236,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testinitLockFile()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         $initializer->initLockFile();
         $filesystem = new Filesystem();
         $files = [
@@ -248,7 +252,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitOrg()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initOrg', []);
         $result = $this->getOrgService()->searchOrgs([], [], 0, \PHP_INT_MAX);
 
@@ -268,7 +272,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitFile()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
         ReflectionUtils::invokeMethod($initializer, '_initFile', []);
 
         $result = $this->getFileService()->getAllFileGroups();
@@ -329,13 +333,18 @@ class SystemInitializerTest extends BaseTestCase
                 'code' => 'classroom',
                 'public' => 1,
             ],
+            [
+                'name' => '题目',
+                'code' => 'question',
+                'public' => 1,
+            ],
         ], $result);
     }
 
     public function testInitCategory()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initCategory', []);
         $courseGroup = $this->getCategoryService()->getGroupByCode('course');
@@ -352,7 +361,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitTag()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initTag', []);
         $result = $this->getTagService()->getTagByName('默认标签');
@@ -363,7 +372,7 @@ class SystemInitializerTest extends BaseTestCase
     public function testInitRegisterSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, 'initRegisterSetting', [['nickname' => 'test']]);
         $result = $this->getSettingService()->get('auth');
@@ -400,7 +409,7 @@ EOD;
     public function testInitStorageSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initStorageSetting', []);
         $result = $this->getSettingService()->get('storage');
@@ -414,16 +423,21 @@ EOD;
 
     public function testInitDefaultSetting()
     {
-        $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
-
+        $initializer = new SystemInitializer(new ConsoleOutput());
         ReflectionUtils::invokeMethod($initializer, '_initDefaultSetting', []);
+
         $result = $this->getSettingService()->get('default');
         $this->assertArrayEquals([
             'chapter_name' => '章',
             'user_name' => '学员',
             'part_name' => '节',
         ], $result);
+    }
+
+    public function testInitPostNumRulesSetting()
+    {
+        $initializer = new SystemInitializer(new ConsoleOutput());
+        ReflectionUtils::invokeMethod($initializer, '_initPostNumRulesSetting', []);
 
         $result = $this->getSettingService()->get('post_num_rules');
         $this->assertArrayEquals([
@@ -442,9 +456,12 @@ EOD;
                 ],
             ],
         ], $result);
+    }
 
-        $result = $this->getSettingService()->get('developer');
-        $this->assertArrayEquals([], $result);
+    public function testInitDeveloperSetting()
+    {
+        $initializer = new SystemInitializer(new ConsoleOutput());
+        ReflectionUtils::invokeMethod($initializer, '_initDeveloperSetting', []);
 
         $result = $this->getSettingService()->get('developer');
         $this->assertArrayEquals([
@@ -455,7 +472,7 @@ EOD;
     public function testInitPaymentSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initPaymentSetting', []);
         $result = $this->getSettingService()->get('payment');
@@ -472,7 +489,7 @@ EOD;
     public function testInitSiteSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initSiteSetting', []);
         $result = $this->getSettingService()->get('site');
@@ -494,7 +511,7 @@ EOD;
     public function testInitRefundSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initRefundSetting', []);
         $result = $this->getSettingService()->get('refund');
@@ -509,7 +526,7 @@ EOD;
     public function testInitConsultSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initConsultSetting', []);
         $result = $this->getSettingService()->get('contact');
@@ -534,7 +551,7 @@ EOD;
     public function testInitMagicSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initMagicSetting', []);
         $result = $this->getSettingService()->get('magic');
@@ -548,7 +565,7 @@ EOD;
     public function testInitMailerSetting()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         ReflectionUtils::invokeMethod($initializer, '_initMailerSetting', []);
         $result = $this->getSettingService()->get('mailer');
@@ -566,7 +583,7 @@ EOD;
     public function testInitAdminUser()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         $fields = [
             'email' => 'test@edusoho.com',
@@ -583,7 +600,7 @@ EOD;
     public function testInitCustom()
     {
         $output = new ConsoleOutput();
-        $initializer = new \AppBundle\Common\SystemInitializer($output);
+        $initializer = new SystemInitializer($output);
 
         $initializer->_initCustom();
     }

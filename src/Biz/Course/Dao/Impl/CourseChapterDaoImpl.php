@@ -113,6 +113,9 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => [
+                'seq',
+            ],
             'conditions' => [
                 'id = :id',
                 'id in (:ids)',
@@ -127,6 +130,7 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
                 'type = :type',
                 'type in (:types)',
                 'status = :status',
+                'status in (:statuses)',
                 'syncId = :syncId',
                 'syncId in (:syncIds)',
                 'syncId > :syncIdGT',

@@ -57,8 +57,19 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     {
         $range = [
             'bank_id' => $fields['itemBankId'],
-            'category_ids' => empty($fields['ranges']['categoryId']) ? [] : [$fields['ranges']['categoryId']],
+            'category_ids' => [],
         ];
+
+        //重新构建category_ids分类参数
+        if ((int) $fields['ranges']['categoryId']) {
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds($fields['ranges']['categoryId']);
+            if ($categoryIds) {
+                $categoryIds[] = $fields['ranges']['categoryId'];
+                $range['category_ids'] = $categoryIds;
+            } else {
+                $range['category_ids'] = [$fields['ranges']['categoryId']];
+            }
+        }
 
         $sections = [];
         foreach ($fields['sections'] as $type => $section) {
@@ -124,5 +135,10 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
     protected function getAssessmentService()
     {
         return $this->biz->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    protected function getItemCategoryService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemCategoryService');
     }
 }

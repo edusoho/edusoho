@@ -18,8 +18,6 @@ class UserException extends AbstractException
 
     const ERROR_RESET_PASSWORD_EMAIL = 5000105;
 
-    const FORBIDDEN_DISCUZ_USER_RESET_PASSWORD = 4030106;
-
     const ERROR_MOBILE_REGISTERED = 4030107;
 
     const FORBIDDEN_REGISTER_LIMIT = 4030108;
@@ -109,13 +107,14 @@ class UserException extends AbstractException
 
     const EMAIL_PASSWORD_ERROR = 4040121;
 
+    const USER_ALREADY_BIND = 4000122;
+
     public $messages = [
         4040101 => 'exception.user.unlogin',
         4030102 => 'exception.user.login_limit',
         4030103 => 'exception.user.register_error',
         4040104 => 'exception.user.not_found',
         5000105 => 'exception.user.reset_password_email_send',
-        4030106 => 'exception.user.discuz_user_reset_password',
         4030107 => 'exception.user.mobile_registered',
         4030108 => 'exception.user.register_limit',
         4030110 => 'exception.user.message_forbidden',
@@ -160,5 +159,6 @@ class UserException extends AbstractException
         4040119 => 'exception.user.mobile_not_found',
         4040120 => 'exception.user.user_is_destroyed',
         4040121 => 'exception.user.email_password_error',
+        4000122 => 'exception.user.already_bind',
     ];
 }

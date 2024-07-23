@@ -39,18 +39,30 @@
     />
 
     <a-modal
-      title="错题练习小提示"
-      width="400px"
+      title="错题练习"
+      width="446px"
+      ok-text="开始答题"
+      cancel-text="取消"
       :visible="visible"
       @cancel="visible = false"
+      @ok="goToWrongExercises"
     >
-      <p>已为你随机筛选最多20题</p>
-
-      <template slot="footer">
-        <a-button type="primary" @click="goToWrongExercises">
-          随机练习
-        </a-button>
-      </template>
+      <div>
+        展示数量：
+        <a-radio-group v-model:value="modeValue" name="radioGroup">
+          <a-radio class="font-normal" value="A">{{ Math.min(wrongNumCount,20) }}题</a-radio>
+          <a-radio class="font-normal" value="B">自定义</a-radio>
+        </a-radio-group>
+        <div v-show="modeValue === 'B'">
+          <div>
+            <a-input class="item-num" v-model:value="itemNum" type="number" v-on:input="changeInput" v-on:blur="blurInput" />题
+          </div>
+          <div class="item-num-tip">
+            可输入范围：1≤题目数量≤单个错题本全部错题
+          </div>
+        </div>
+      </div>
+      
     </a-modal>
 
   </div>
@@ -58,7 +70,7 @@
 
 <script>
 import _ from 'lodash';
-import { WrongBookQuestionShow } from 'common/vue/service';
+import { WrongBookQuestionShow, WrongBook_pool } from 'common/vue/service';
 import CourseScreen from './screen/Course.vue';
 import ClassroomScreen from './screen/Classroom.vue';
 import QuestionBankScreen from './screen/QuestionBank.vue';
@@ -67,7 +79,7 @@ import Choice from './components/Choice.vue';
 import Judge from './components/Judge.vue';
 import Fill from './components/Fill.vue';
 import Empty from 'app/vue/views/components/Empty.vue';
-
+import { message } from 'ant-design-vue';
 export default {
   name: 'WrongQuestionDetail',
 
@@ -106,7 +118,10 @@ export default {
         classroom: 'ClassroomScreen',
         exercise: 'QuestionBankScreen'
       },
-      visible: false
+      visible: false,
+      modeValue:'A',
+      itemNum:1,
+      wrongNumCount:null,
     }
   },
 
@@ -118,9 +133,38 @@ export default {
 
   created() {
     this.fetchWrongBookQuestion();
+    this.getWrongBook_pool()
   },
 
   methods: {
+    changeInput() {
+      if (!/^[0-9]+$/.test(this.itemNum)) {
+        this.itemNum = this.itemNum.replace(/[^\d]/g,'');
+      }
+      if (this.itemNum > this.wrongNumCount) {
+        this.itemNum = this.wrongNumCount;
+      } 
+      if (this.itemNum < 0) {
+        this.itemNum = 1
+      }
+    },
+    blurInput() {
+      if (this.itemNum === '') {
+        this.itemNum = 1
+      }
+    },
+    async getWrongBook_pool() {
+      const apiParams = {
+        params: {
+          targetType: this.targetType
+        },
+        query: {
+          poolId: this.targetId
+        }
+      };
+      const res = await WrongBook_pool.get(apiParams)
+      this.wrongNumCount = res.wrongNumCount
+    },
     async fetchWrongBookQuestion() {
       this.questionList = [];
       this.loading = true;
@@ -140,6 +184,7 @@ export default {
       this.pagination.total = Number(paging.total);
       this.loading = false;
       this.questionList = data;
+      this.wrongNumCount = Number(paging.total)
     },
 
     currentQuestionComponent(answerMode) {
@@ -148,19 +193,19 @@ export default {
 
     // 错题练习
     handleClickWrongExercises() {
-      if (localStorage.getItem('first_wrong_exercises')) {
-        this.goToWrongExercises();
-        return;
-      }
-
       this.visible = true;
-      localStorage.setItem('first_wrong_exercises', true);
     },
 
     goToWrongExercises() {
+      if(this.itemNum == 0 && this.modeValue === 'B') return message.warning('答题数不能为0');
+
       this.visible = false;
       // 错题练习
-      window.location.href = window.location.origin + `/wrong_question_book/pool/${this.$route.params.target_id}/practise`+ this.makeQuery({targetType:this.targetType, ...this.searchParams});
+      if (this.modeValue === 'B') {
+        window.location.href = window.location.origin + `/wrong_question_book/pool/${this.$route.params.target_id}/practise`+ this.makeQuery({targetType:this.targetType, itemNum:this.itemNum, ...this.searchParams});
+      } else {
+        window.location.href = window.location.origin + `/wrong_question_book/pool/${this.$route.params.target_id}/practise`+ this.makeQuery({targetType:this.targetType, ...this.searchParams});
+      }
     },
     makeQuery(queryObject) {
       const query = Object.entries(queryObject)
@@ -231,5 +276,13 @@ export default {
     font-size: 20px;
     line-height: 32px;
   }
+}
+.item-num {
+  margin: 8px 8px 8px 74px;
+  width: 102px;
+}
+.item-num-tip {
+  margin-left: 74px;
+  color: #919399;
 }
 </style>

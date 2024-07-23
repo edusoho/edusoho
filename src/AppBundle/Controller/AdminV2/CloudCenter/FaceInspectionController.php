@@ -17,6 +17,8 @@ class FaceInspectionController extends BaseController
     public function overviewAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
+
         $paginator = new Paginator(
             $request,
             $this->getFaceInspectionService()->countUsersJoinUserFace($conditions),

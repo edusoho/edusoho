@@ -140,6 +140,34 @@
   {% endif %}
 {% endmacro %}
 
+{% macro skip_paginator(paginator, class) %}
+  <input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
+  {% set perpages = [10, 20, 50 ,100] %}
+	{% if paginator|default() and paginator.lastPage >= 1 %}
+    <nav class="{{ class|default('text-center') }}">
+      <ul class="pagination cd-pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}" data-page="{{paginator.firstPage}}"><a href="javascript:;"><i class="cd-icon cd-icon-first-page"></i></a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}" data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-url="{{ paginator.getPageUrl(page) }}" data-page="{{page}}"><a href="javascript:;">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}" data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-right"></i></a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}" data-page="{{paginator.getLastPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-last-page"></i></a></li>
+        {% endif %}
+          <select class="js-current-perpage-count">
+            {% for perpage in perpages %}
+              <option class="js-current-option" {% if paginator.getPerPageCount() == perpage %}selected{% endif %}>{{ perpage }}</option>
+            {% endfor %}
+          </select>
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}
+
 {% macro paginator(paginator, class) %}
   {% if paginator|default() and paginator.lastPage > 1 %}
     <nav class=" {{ class|default('text-center') }}">

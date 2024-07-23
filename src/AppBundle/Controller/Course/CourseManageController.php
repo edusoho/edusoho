@@ -30,7 +30,6 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Pay\Service\PayService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
@@ -548,8 +547,8 @@ class CourseManageController extends BaseController
             $data['services'] = empty($data['services']) ? [] : $data['services'];
             $data['drainage'] = [
                 'enabled' => empty($data['drainageEnabled']) ? 0 : $data['drainageEnabled'],
-                'image' => empty($data['drainageImage']) ? '' : $data['drainageImage'],
-                'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
+                'image' => empty($data['drainageImage']) ? '' : preg_replace('/^.+\/files\//', '/files/', $data['drainageImage']),
+            'text' => empty($data['drainageText']) ? '' : $data['drainageText'],
             ];
             $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
             if (in_array($courseSet['type'], ['live', 'reservation']) || !empty($courseSet['parentId'])) {
@@ -576,6 +575,10 @@ class CourseManageController extends BaseController
 
             if ($this->isPluginInstalled('Vip')) {
                 $this->setVipRight($course, $data);
+            }
+
+            if (!empty($data['covers'])) {
+                $this->getCourseSetService()->changeCourseSetCover($courseSetId, $data['covers']);
             }
 
             return $this->createJsonResponse(true);
@@ -615,6 +618,10 @@ class CourseManageController extends BaseController
         $course['title'] = empty(trim($course['title'])) ? '默认计划' : $course['title'];
         $course['drainageEnabled'] = empty($course['drainage']['enabled']) ? 0 : 1;
         $course['drainageImage'] = empty($course['drainage']['image']) ? '' : $course['drainage']['image'];
+        if (!empty($course['drainageImage'])) {
+            $course['drainageImage'] = preg_replace('/^.+\/files\//', '/files/', $course['drainageImage']);
+            $course['drainageImage'] = $this->getWebExtension()->getFurl($course['drainageImage']);
+        }
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
 
         return $this->render(
@@ -647,7 +654,7 @@ class CourseManageController extends BaseController
                 'vipLevelId' => $data['vipLevelId'],
                 'supplierCode' => 'course',
                 'uniqueCode' => $course['id'],
-                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'] . '-' . $course['title'],
+                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'].'-'.$course['title'],
             ]);
         }
     }
@@ -828,6 +835,9 @@ class CourseManageController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
+        $teacherItems = $this->getUserService()->findUsersByIds(array_column($teachers, 'userId'));
+        $teacherItemIds = array_column($teacherItems, 'id');
+        $indexedTeacherItems = array_combine($teacherItemIds, $teacherItems);
         $teacherIds = [];
 
         if (!empty($teachers)) {
@@ -836,8 +846,8 @@ class CourseManageController extends BaseController
                     'id' => $teacher['userId'],
                     'isVisible' => $teacher['isVisible'],
                     'nickname' => $teacher['nickname'],
-
                     'avatar' => $this->get('web.twig.extension')->avatarPath($teacher, 'small'),
+                    'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER', $indexedTeacherItems[$teacher['userId']]['roles']),
                 ];
             }
         }
@@ -897,6 +907,13 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function unpublishedAction(Request $request, $courseSetId, $courseId)
+    {
+        $this->getCourseService()->unpublishedCourse($courseId);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
         $this->getCourseService()->deleteCourse($courseId);
@@ -907,7 +924,7 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
-    public function checkEsProductCanDeleteAction(Request $request,$courseId)
+    public function checkEsProductCanDeleteAction(Request $request, $courseId)
     {
         $status = $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$courseId], 'course');
 
@@ -956,7 +973,11 @@ class CourseManageController extends BaseController
     public function courseItemsSortAction(Request $request, $courseId)
     {
         $ids = $request->request->get('ids', []);
+        if (!$this->checkSortAble($ids, $courseId)) {
+            return $this->createJsonResponse(['refresh' => true]);
+        }
         $ids = $this->getCourseService()->courseItemIdsHandle($courseId, $ids);
+
         $this->getCourseService()->sortCourseItems($courseId, $ids);
         $this->getCourseService()->sortLiveTasksWithLiveCourse($courseId, $ids);
 
@@ -1051,55 +1072,6 @@ class CourseManageController extends BaseController
         );
     }
 
-    public function taskLearnDetailAction(Request $request, $courseSetId, $courseId, $taskId)
-    {
-        $students = [];
-        $task = $this->getTaskService()->getTask($taskId);
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-
-        $count = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($taskId, 'all');
-        $paginator = new Paginator($request, $count, 20);
-
-        $results = $this->getTaskResultService()->searchTaskResults(
-            ['courseId' => $courseId, 'activityId' => $task['activityId']],
-            ['createdTime' => 'ASC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        foreach ($results as $key => $result) {
-            $user = $this->getUserService()->getUser($result['userId']);
-            $students[$key]['nickname'] = $user['nickname'];
-            $students[$key]['startTime'] = $result['createdTime'];
-            $students[$key]['finishedTime'] = $result['finishedTime'];
-            $students[$key]['learnTime'] = round($result['time'] / 60);
-            $students[$key]['watchTime'] = round($result['watchTime'] / 60);
-
-            if ('testpaper' == $activity['mediaType']) {
-                $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-                $paperResult = $this->getTestpaperService()->getUserFinishedResult(
-                    $testpaperActivity['mediaId'],
-                    $courseId,
-                    $activity['id'],
-                    'testpaper',
-                    $user['id']
-                );
-                $students[$key]['result'] = empty($paperResult) ? 0 : $paperResult['score'];
-            }
-        }
-
-        $task['length'] = intval($activity['length']);
-
-        return $this->render(
-            'course-manage/dashboard/task-detail-modal.html.twig',
-            [
-                'task' => $task,
-                'paginator' => $paginator,
-                'students' => $students,
-            ]
-        );
-    }
-
     public function questionMarkerStatsAction(Request $request, $courseSetId, $courseId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
@@ -1135,6 +1107,17 @@ class CourseManageController extends BaseController
         $this->getCourseService()->changeHidePublishLesson($courseId, $status);
 
         return $this->createJsonResponse(true);
+    }
+
+    private function checkSortAble($ids, $courseId)
+    {
+        return true;
+//        $taskCount = $this->getTaskService()->countTasks(['courseId' => $courseId]);
+//        $filteredIds = array_filter($ids, function ($id) {
+//            return false !== strpos($id, 'chapter');
+//        });
+//
+//        return count($filteredIds) != $taskCount;
     }
 
     private function sortMarkerStats(&$stats, $request)
@@ -1274,14 +1257,6 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
      * @return UploadFileService
      */
     protected function getUploadFileService()
@@ -1303,11 +1278,6 @@ class CourseManageController extends BaseController
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
-    }
-
-    protected function getTestpaperActivityService()
-    {
-        return $this->createService('Activity:TestpaperActivityService');
     }
 
     /**

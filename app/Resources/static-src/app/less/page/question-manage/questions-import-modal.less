@@ -1,0 +1,236 @@
+// 题目导入、试卷导入模态框共用
+.questions-input-modal {
+  .modal-content {
+    width: 520px;
+    transform: translateX(-20px);
+
+    .modal-header {
+      padding: 12px 20px;
+
+      .modal-title {
+        height: 26px;
+        line-height: 26px;
+        font-size: 18px;
+        font-weight: 500;
+        color: #37393D;
+        text-align: center;
+      }
+    }
+    .modal-body {
+      border-top: 1px solid #EFF0F5;
+      padding: 20px;
+
+      .modal-body-contnet {
+        padding: 30px 16px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px dashed #E5E6EB;
+        background: #FAFAFA;
+        cursor: pointer;
+
+        .upload-img {
+          width: 105px;
+        }
+
+        .upload-successful-img {
+          width: 84px;
+        }
+
+        .upload-tips {
+          font-size: 14px;
+          height: 22px;
+          line-height: 22px;
+          color: #919399;
+        }
+
+        .upload-text {
+          font-size: 14px;
+          line-height: 22px;
+          color: #37393D;
+        }
+        .upload-successful-text {
+          font-size: 14px;
+          line-height: 22px;
+          color: @brand-primary;
+        }
+      }
+      .modal-body-lodaing {
+        padding: 58px 16px;
+      }
+
+      .a-not-click {
+        color: #D2D3D4;
+        pointer-events: none;
+      }
+
+      
+
+      .format-conversion {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+
+        .format-span {
+          margin-right: 8px;
+          align-items: center;
+        }
+      }
+
+      .import-questions-content {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+
+        .view-the-tutorial {
+          float: right;
+        }
+      }
+      .import-info {
+        display: inline-block;
+        height: 22px;
+        line-height: 22px; 
+        font-size: 14px;
+        color: #37393D;
+        font-size: 14px;
+      }
+      .anchor-point {
+        display: inline-block;
+        margin: 6px;
+        width: 6px;
+        height: 6px;
+        background-color: #333;
+        border-radius: 50%;
+      }
+
+      .modal-read-error {
+        padding: 56px 16px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px dashed #E5E6EB;
+        background: #FAFAFA;
+
+        .error-img {
+          width: 84px;
+          height: 84px;
+        }
+
+        .error-tip-text {
+          font-size: 14px;
+          line-height: 22px;
+          color: #F53F3F;
+        }
+      }
+
+      /* 表示总长度背景色 */
+      // IE10以上
+      .upload-progress {
+        width: 120px;
+        height: 4px;
+        color: #46C37B; // 完成背景色
+        border-radius: 24px;
+        background: #F3F3F5; // 默认背景色
+      }
+      // Chrome
+      // 默认背景色
+      .upload-progress::-webkit-progress-bar {   
+        border-radius: 24px;
+        background-color: #F3F3F5 !important;
+      }
+      /* 表示已完成进度背景色 */
+      .upload-progress::-webkit-progress-value {
+        border-radius: 24px;
+        background: #46C37B !important;
+      }
+      // FireFox
+      /* 表示已完成进度背景色 */
+      .upload-progress::-moz-progress-bar {
+        border-radius: 24px;
+        background-color:#46C37B;
+      }
+
+      .guided-missile-frame {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 20px;
+        margin-bottom: 20px;
+        border-radius: 6px;
+        background: #FAFAFA;
+
+        .guide-info-message-block {
+          margin-right: 10px;
+          height: 66px;
+          color: #37393D;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 22px; 
+        }
+
+        .guide-picture {
+          width: 125px;
+        }
+      }
+      .guide-message-esay-integrity {
+        color: #5E6166;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px; 
+      }
+    }
+    .modal-footer {
+      padding: 24px;
+      text-align: center;
+
+      .close-btn {
+        width: auto !important;
+      }
+
+      .footer-import-rule {
+        display: inline-block;
+        height: 36px;
+        padding: 6px 32px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+      }
+
+      .reset-import {
+        height: 36px;
+        padding: 6px 32px;
+        border-radius: 4px;
+
+        color: #FFF;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 22px;
+      }
+
+      .close-btn {
+        display: inline-block;
+        margin-right: 8px;
+        width: 122px;
+        height: 36px;
+        padding: 6px 32px;
+        border-radius: 4px;
+        border: 1px solid #E5E6EB;
+        background: #fff;
+
+        color: #37393D;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 22px;
+      }
+      .import-btn-disabled {
+        background: #D2D3D4;
+        border: 1px solid #D2D3D4;
+      }
+    }
+  }
+}

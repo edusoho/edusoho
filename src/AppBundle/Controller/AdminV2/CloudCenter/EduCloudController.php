@@ -17,7 +17,9 @@ use Biz\Content\Service\FileService;
 use Biz\EduCloud\Service\Impl\MicroyanConsultServiceImpl;
 use Biz\File\Service\UploadFileService;
 use Biz\IM\Service\ConversationService;
+use Biz\Search\Constant\CloudSearchType;
 use Biz\Search\Service\SearchService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\UserException;
@@ -101,8 +103,8 @@ class EduCloudController extends BaseController
         return $this->render('admin-v2/cloud-center/edu-cloud/overview/index.html.twig', [
             'isBinded' => $isBinded,
             'overview' => $overview,
-            'paidService' => isset($paidService) ? $paidService : false,
-            'unPaidService' => isset($unPaidService) ? $unPaidService : false,
+            'paidService' => $paidService ?? false,
+            'unPaidService' => $unPaidService ?? false,
         ]);
     }
 
@@ -583,6 +585,7 @@ class EduCloudController extends BaseController
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
 
         $this->getSettingService()->set('cloud_sms', $smsStatus);
+        $this->getSettingService()->notifyCloudSmsUpdate(['isShippingNotifyEnabled' => false]);
 
         return $this->redirect($this->generateUrl('admin_v2_edu_cloud_sms_overview'));
     }
@@ -1009,7 +1012,7 @@ class EduCloudController extends BaseController
             $settings['cloud_key_applied'] = 1;
 
             $this->getSettingService()->set('storage', $settings);
-
+            $this->getCacheService()->clear('cloud_status');
             $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('admin_v2_setting_cloud_key'));
@@ -1269,11 +1272,12 @@ class EduCloudController extends BaseController
         }
         if (empty($data['type'])) {
             $data['type'] = [
-                'course' => 1,
-                'classroom' => 1,
-                'teacher' => 1,
-                'thread' => 1,
-                'article' => 1,
+                CloudSearchType::COURSE => 1,
+                CloudSearchType::CLASSROOM => 1,
+                CloudSearchType::ITEM_BANK_EXERCISE => 1,
+                CloudSearchType::TEACHER => 1,
+                CloudSearchType::THREAD => 1,
+                CloudSearchType::ARTICLE => 1,
             ];
         }
         $this->getSettingService()->set('cloud_search', $data);
@@ -1337,6 +1341,11 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('cloud_sms', $smsStatus);
         }
+
+        //同步到商城云短信的配置
+        if ($dataUserPosted && isset($dataUserPosted['sms_shipping_notify'])) {
+            $this->getSettingService()->notifyCloudSmsUpdate(['isShippingNotifyEnabled' => 'on' == $dataUserPosted['sms_shipping_notify']]);
+        }
     }
 
     /**
@@ -1368,6 +1377,7 @@ class EduCloudController extends BaseController
             'sms_vip_buy_notify' => 'off',
             'sms_coin_buy_notify' => 'off',
             'sms_comment_modify' => 'off',
+            'sms_shipping_notify' => 'off',
         ];
 
         $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);

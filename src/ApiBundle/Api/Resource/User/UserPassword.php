@@ -6,14 +6,13 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Common\BizSms;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\UserException;
 use AppBundle\Common\EncryptionToolkit;
-use Biz\Common\CommonException;
 use AppBundle\Common\SimpleValidator;
+use Biz\Common\BizSms;
+use Biz\Common\CommonException;
 use Biz\Sms\SmsException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Biz\User\UserException;
 
 class UserPassword extends AbstractResource
 {
@@ -25,17 +24,17 @@ class UserPassword extends AbstractResource
     {
         $function = 'resetPasswordBy'.ucfirst($type);
 
-        return \call_user_func(array($this, $function), $identify, $request);
+        return \call_user_func([$this, $function], $identify, $request);
     }
 
     private function resetPasswordByMobile($mobile, $request)
     {
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, array(
+        if (!ArrayToolkit::requireds($fields, [
             'smsToken',
             'smsCode',
             'encrypt_password',
-        ))) {
+        ])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -72,25 +71,20 @@ class UserPassword extends AbstractResource
             throw UserException::NOTFOUND_USER();
         }
 
-        $userPartner = $this->getSettingService()->get('user_partner', []);
-        if ('discuz' == $user['type'] && isset($userPartner['mode']) && 'discuz' == $userPartner['mode']) {
-            throw UserException::FORBIDDEN_DISCUZ_USER_RESET_PASSWORD();
-        }
-
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
         try {
-            $site = $this->getSettingService()->get('site', array());
-            $mailOptions = array(
+            $site = $this->getSettingService()->get('site', []);
+            $mailOptions = [
                 'to' => $user['email'],
                 'template' => 'email_reset_password',
                 'format' => 'html',
-                'params' => array(
+                'params' => [
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL),
+                    'verifyurl' => $this->getHttpHost().'/password/reset/update?token='.$token,
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
-                ),
-            );
+                ],
+            ];
 
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
@@ -102,6 +96,21 @@ class UserPassword extends AbstractResource
         $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
 
         return $user;
+    }
+
+    protected function getHttpHost()
+    {
+        return $this->getSchema()."://{$_SERVER['HTTP_HOST']}";
+    }
+
+    protected function getSchema()
+    {
+        $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
+        if (!empty($https) && 'off' !== strtolower($https)) {
+            return 'https';
+        }
+
+        return 'http';
     }
 
     private function getBizSms()

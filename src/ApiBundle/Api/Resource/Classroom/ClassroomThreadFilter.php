@@ -4,10 +4,11 @@ namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\AssetHelper;
 
 class ClassroomThreadFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $publicFields = [
             'id',
             'targetType',
             'targetId',
@@ -37,7 +38,8 @@ class ClassroomThreadFilter extends Filter
             'updateTime',
             'updatedTime',
             'user',
-    );
+            'imgs',
+    ];
 
     protected function publicFields(&$data)
     {
@@ -58,6 +60,12 @@ class ClassroomThreadFilter extends Filter
             $classroomFilter->filter($data['target']);
             $data['classroom'] = $data['target'];
             unset($data['target']);
+        }
+
+        if (isset($data['imgs'])) {
+            foreach ($data['imgs'] as &$img) {
+                $img = AssetHelper::getFurl($img);
+            }
         }
     }
 }

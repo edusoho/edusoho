@@ -19,9 +19,9 @@
   </td>
   <td class="vertical-middle">
     {% if user.verifiedMobile %}
-      {{ user.verifiedMobile }}
+      {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
     {% elseif userProfile.mobile %}
-      {{ userProfile.mobile }}
+      {% include 'user-mobile-mask.html.twig' with { mobile: userProfile.mobile } %}
     {% else %}
       --
     {% endif %}

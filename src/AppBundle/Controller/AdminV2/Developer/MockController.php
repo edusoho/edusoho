@@ -2,20 +2,20 @@
 
 namespace AppBundle\Controller\AdminV2\Developer;
 
+use AppBundle\Common\Exception\AccessDeniedException;
+use AppBundle\Common\ReflectionUtils;
 use AppBundle\Common\TimeMachine;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Distributor\Job\DistributorSyncJob;
 use Biz\Distributor\Service\Impl\DistributorCourseOrderServiceImpl;
+use Biz\Distributor\Util\DistributorJobStatus;
+use Biz\Distributor\Util\DistributorUtil;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Exception\AccessDeniedException;
-use Biz\Distributor\Util\DistributorJobStatus;
-use Biz\Distributor\Job\DistributorSyncJob;
-use AppBundle\Common\ReflectionUtils;
 use Codeages\Weblib\Auth\SignatureTokenAlgo;
-use Biz\Distributor\Util\DistributorUtil;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class MockController extends BaseController
@@ -25,12 +25,12 @@ class MockController extends BaseController
         $this->validate();
         $tokenExpireDateStr = TimeMachine::expressionToStr('+2 day');
 
-        return $this->render('admin-v2/developer/mock/index.html.twig', array(
+        return $this->render('admin-v2/developer/mock/index.html.twig', [
             'couponExpireDateStr' => 1,
             'tokenExpireDateStr' => $tokenExpireDateStr,
             'typeSamples' => $this->getTypeSamples(),
             'comment' => $this->getApiBaseComment(),
-        ));
+        ]);
     }
 
     public function mockDistributorTokenAction(Request $request, $type)
@@ -40,9 +40,9 @@ class MockController extends BaseController
         $params = $request->request->all();
         $token = DistributorUtil::generateTokenByType($this->getBiz(), $type, $params);
 
-        return $this->createJsonResponse(array(
+        return $this->createJsonResponse([
             'token' => $token,
-        ));
+        ]);
     }
 
     public function getPostDistributorDataAction(Request $request)
@@ -65,12 +65,12 @@ class MockController extends BaseController
         $drpService = $service->getDrpService();
 
         if (!empty($drpService)) {
-            $job = new DistributorSyncJob(array(), $this->getBiz());
-            $result = ReflectionUtils::invokeMethod($job, 'sendData', array($drpService, $service));
+            $job = new DistributorSyncJob([], $this->getBiz());
+            $result = ReflectionUtils::invokeMethod($job, 'sendData', [$drpService, $service]);
             if (DistributorJobStatus::FINISHED == $result['status']) {
-                return $this->createJsonResponse(array('result' => 'true'));
+                return $this->createJsonResponse(['result' => 'true']);
             } else {
-                return $this->createJsonResponse(array('result' => $result['result']));
+                return $this->createJsonResponse(['result' => $result['result']]);
             }
         }
     }
@@ -84,7 +84,7 @@ class MockController extends BaseController
 
         $result = $this->post($url, $bodyStr, $this->generateToken($url, $bodyStr));
 
-        return $this->createJsonResponse(array('result' => $result));
+        return $this->createJsonResponse(['result' => $result]);
     }
 
     public function postDataWithVersion3Action(Request $request)
@@ -100,7 +100,7 @@ class MockController extends BaseController
                 $user = $this->getUserService()->getUser($apiUserId);
                 if (empty($user)) {
                     $user = $this->getUserService()->getUserByUUID($apiUserId);
-                    if(empty($user)) {
+                    if (empty($user)) {
                         $this->createNewException(UserException::NOTFOUND_USER());
                     }
                 }
@@ -110,12 +110,12 @@ class MockController extends BaseController
                     time() + 3600 * 24 * 30
                 );
             }
-            $result = array('X-Auth-Token' => $token);
+            $result = ['X-Auth-Token' => $token];
         } else {
             $result = $this->sendApiVersion3($params);
         }
 
-        return $this->createJsonResponse(array('result' => $result));
+        return $this->createJsonResponse(['result' => $result]);
     }
 
     public function downloadTokenAction()
@@ -124,7 +124,7 @@ class MockController extends BaseController
 
         $path = $this->getMockedTokenPath();
 
-        return $this->createJsonResponse(array('result' => file_get_contents($path)));
+        return $this->createJsonResponse(['result' => file_get_contents($path)]);
     }
 
     /**
@@ -158,19 +158,24 @@ class MockController extends BaseController
 
     private function validate()
     {
-        $validHosts = array(
+        $validHosts = [
             'local',
             'dev',
             'esdev.com',
             'localhost',
             'www.edusoho-test1.com',
-        );
-        $host = $_SERVER['HTTP_HOST'];
-        if (!in_array($host, $validHosts) && false === strpos($host, '.edusoho.cn')) {
-            throw new AccessDeniedException($host.'不允许使用此功能！！！');
+        ];
+
+        /**
+         * $_SERVER['SERVER_NAME'] 来代替 $_SERVER['HTTP_HOST']。
+         * 这个个变量是从服务器配置中获取的，而不是从请求头中获取的，因此不能被伪造。
+         */
+        $hostName = $_SERVER['SERVER_NAME'];
+        if (!in_array($hostName, $validHosts) && false === strpos($hostName, '.edusoho.cn')) {
+            throw new AccessDeniedException($hostName.'不允许使用此功能！！！');
         }
 
-        $storage = $this->getSettingService()->get('storage', array());
+        $storage = $this->getSettingService()->get('storage', []);
         if (empty($storage['cloud_access_key'])) {
             $this->createNewException(SettingException::NOT_SET_CLOUD_ACCESS_KEY());
         }
@@ -189,7 +194,7 @@ class MockController extends BaseController
 
         $signText = "{$url}\n{$body}";
 
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting = $this->getSettingService()->get('storage', []);
         $cloudAccessKey = $storageSetting['cloud_access_key'];
 
         $signatureText = $strategy->signature(
@@ -200,7 +205,7 @@ class MockController extends BaseController
         return "{$cloudAccessKey}:{$deadline}:{$once}:{$signatureText}";
     }
 
-    private function sendApiVersion3($params = array(), $conditions = array())
+    private function sendApiVersion3($params = [], $conditions = [])
     {
         $apiUrl = $params['apiUrl'];
         $apiMethod = $params['apiMethod'];
@@ -216,7 +221,7 @@ class MockController extends BaseController
             $user = $this->getUserService()->getUser($apiUserId);
             if (empty($user)) {
                 $user = $this->getUserService()->getUserByUUID($apiUserId);
-                if(empty($user)) {
+                if (empty($user)) {
                     $this->createNewException(UserException::NOTFOUND_USER());
                 }
             }
@@ -227,7 +232,10 @@ class MockController extends BaseController
             );
         }
 
-        $url = $_SERVER['HTTP_ORIGIN'].$apiUrl;
+        $protocol = empty($_SERVER['HTTPS']) ? 'http://' : 'https://';
+        $domain = $_SERVER['SERVER_NAME'];
+        $port = ('80' == $_SERVER['SERVER_PORT'] || '443' == $_SERVER['SERVER_PORT']) ? '' : ':'.$_SERVER['SERVER_PORT'];
+        $url = $protocol.$domain.$port.$apiUrl;
 
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
@@ -242,7 +250,7 @@ class MockController extends BaseController
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
-        $headers = array('Accept: application/vnd.edusoho.v2+json');
+        $headers = ['Accept: application/vnd.edusoho.v2+json'];
         if ('true' == $apiAuthorized) {
             $token = $this->generateToken($apiUrl, '');
             $headers[] = 'Authorization: Signature '.$token;
@@ -285,7 +293,7 @@ class MockController extends BaseController
         curl_close($curl);
 
         if (empty($curlinfo['namelookup_time'])) {
-            return array();
+            return [];
         }
 
         if (isset($conditions['contentType']) && 'plain' == $conditions['contentType']) {
@@ -294,7 +302,7 @@ class MockController extends BaseController
         $result = json_decode($body, true);
 
         if (empty($result)) {
-            $result = array('detailedMsg' => $body);
+            $result = ['detailedMsg' => $body];
         }
 
         return $result;
@@ -312,9 +320,9 @@ class MockController extends BaseController
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $bodyStr);
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
             'Authorization: Signature '.$token,
-        ));
+        ]);
         $response = curl_exec($curl);
         curl_close($curl);
 
@@ -326,14 +334,14 @@ class MockController extends BaseController
         $biz = $this->getBiz();
         $dir = $biz['root_directory'].'app/Resources/views/admin-v2/developer/mock/sample-data/';
         $fileNames = scandir($dir);
-        $typeSamples = array();
+        $typeSamples = [];
         foreach ($fileNames as $fileName) {
             if (strpos($fileName, '.md') && !strpos($fileName, '_doc')) {
                 $typeNamesSeg = explode('.md', $fileName);
                 $typeName = $typeNamesSeg[0];
                 $fileContent = file_get_contents($dir.$fileName);
                 $docContent = file_get_contents($dir.$typeName.'_doc.md');
-                $keyValue = array();
+                $keyValue = [];
                 $keyValue['key'] = $typeName;
                 $keyValue['value'] = $fileContent;
                 $keyValue['doc'] = $docContent;
@@ -360,12 +368,12 @@ class MockController extends BaseController
         preg_match('/api-method: (.*?)\n/s', $docContent, $apiMethodsSegs);
         preg_match('/api-authorized: (.*?)\n/s', $docContent, $apiAuthorizedSegs);
 
-        return array(
+        return [
             'apiVersion' => $apiVersionSegs[1],
             'apiUrl' => $apiUrlSegs[1],
             'apiMethod' => $apiMethodsSegs[1],
             'apiAuthorized' => $apiAuthorizedSegs[1],
-        );
+        ];
     }
 
     private function saveMockedToken($token)

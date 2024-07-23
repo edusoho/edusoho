@@ -25,6 +25,11 @@ class DateToolkit
         return $range;
     }
 
+    public static function isToday($unixTime)
+    {
+        return date('Y-m-d', time()) == date('Y-m-d', $unixTime);
+    }
+
     /**
      * @return int
      */

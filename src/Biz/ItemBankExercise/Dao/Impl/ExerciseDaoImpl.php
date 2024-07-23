@@ -123,9 +123,10 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
-            'orderbys' => ['createdTime', 'seq', 'studentNum', 'rating', 'id', 'recommendedTime', 'recommended', 'recommendedSeq'],
+            'orderbys' => ['createdTime', 'seq', 'studentNum', 'rating', 'id', 'recommendedTime', 'recommended', 'recommendedSeq', 'updatedTime'],
             'serializes' => [
                 'teacherIds' => 'delimiter',
+                'hiddenChapterIds' => 'delimiter',
                 'cover' => 'json',
             ],
             'conditions' => [

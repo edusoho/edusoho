@@ -16,10 +16,10 @@ class ClassroomMemberImporter extends Importer
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $price = $request->request->get('price');
         $remark = $request->request->get('remark', '通过批量导入添加');
-        $orderData = array(
+        $orderData = [
             'amount' => $price,
             'remark' => $remark,
-        );
+        ];
 
         return $this->excelDataImporting($classroom, $importData, $orderData);
     }
@@ -47,18 +47,20 @@ class ClassroomMemberImporter extends Importer
             if ($isClassroomStudent || $isClassroomTeacher) {
                 ++$existsUserCount;
             } else {
-                $info = array(
+                $info = [
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
                     'isNotify' => 1,
-                );
+                ];
                 $this->getClassroomService()->becomeStudentWithOrder($targetObject['id'], $user['id'], $info);
 
                 ++$successCount;
             }
         }
 
-        return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
+        $this->getLogService()->warning('classroom', 'import_user', '导入学员数据');
+
+        return ['existsUserCount' => $existsUserCount, 'successCount' => $successCount];
     }
 
     public function getTemplate(Request $request)
@@ -66,10 +68,10 @@ class ClassroomMemberImporter extends Importer
         $classroomId = $request->query->get('classroomId');
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        return $this->render('classroom-manage/import.html.twig', array(
+        return $this->render('classroom-manage/import.html.twig', [
             'classroom' => $classroom,
             'importerType' => $this->type,
-        ));
+        ]);
     }
 
     public function tryImport(Request $request)
@@ -91,6 +93,11 @@ class ClassroomMemberImporter extends Importer
             return $danger;
         }
 
+        $repeatInfo = $this->checkRepeatData();
+        if (!empty($repeatInfo)) {
+            return $this->createErrorResponse($repeatInfo);
+        }
+
         $classroomId = $request->request->get('classroomId');
         $classroomCoursesCount = $this->getClassroomService()->countCoursesByClassroomId($classroomId);
         $chunkNum = $this->calculateChunkNum($classroomCoursesCount);
@@ -104,7 +111,7 @@ class ClassroomMemberImporter extends Importer
         return $this->createSuccessResponse(
             $importData['allUserData'],
             $importData['checkInfo'],
-            array_merge($request->request->all(), array('chunkNum' => $chunkNum))
+            array_merge($request->request->all(), ['chunkNum' => $chunkNum])
         );
     }
 

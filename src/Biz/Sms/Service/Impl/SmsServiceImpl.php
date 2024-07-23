@@ -109,7 +109,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             $to = $currentUser['verifiedMobile'];
         }
 
-        if ('sms_login' == $smsType) {
+        if (in_array($smsType, ['sms_login'])) {
             // FIXME 先兼容教育云，待教育云添加新的类型
             $smsType = 'sms_bind';
         }

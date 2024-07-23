@@ -10,7 +10,8 @@ use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
-use Biz\LiveStatistics\Service\Impl\LiveCloudStatisticsServiceImpl;
+use Biz\InfoSecurity\Service\MobileMaskService;
+use Biz\LiveStatistics\Service\LiveCloudStatisticsService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\User\Service\UserService;
@@ -28,7 +29,7 @@ class LiveStatisticMember extends AbstractResource
         if (empty($activity['ext']['liveId'])) {
             LiveActivityException::NOTFOUND_LIVE();
         }
-        $this->getLiveStatisticsService()->getLiveMemberData($task);
+        $this->getLiveStatisticsService()->syncLiveMemberData($task['activityId']);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = ['courseId' => $task['courseId'], 'liveId' => $activity['ext']['liveId'], 'excludeUserIds' => [$activity['ext']['anchorId']]];
@@ -42,26 +43,25 @@ class LiveStatisticMember extends AbstractResource
     protected function buildUserConditions(ApiRequest $request, &$conditions)
     {
         $nameOrMobile = $request->query->get('nameOrMobile', '');
-        if (!empty($nameOrMobile)) {
-            $mobile = SimpleValidator::mobile($nameOrMobile);
-            if ($mobile) {
-                $user = $this->getUserService()->getUserByVerifiedMobile($nameOrMobile);
-                $users = empty($user) ? [] : [$user];
-            } else {
-                $users = $this->getUserService()->searchUsers(
-                    ['nickname' => $nameOrMobile],
-                    [],
-                    0,
-                    PHP_INT_MAX,
-                    ['id']
-                );
-            }
-            $userIds = ArrayToolkit::column($users, 'id');
-            $conditions['userIds'] = empty($userIds) ? [-1] : $userIds;
+        if (empty($nameOrMobile)) {
+            return;
         }
+        if (SimpleValidator::mobile($nameOrMobile)) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($nameOrMobile);
+            $users = empty($user) ? [] : [$user];
+        } else {
+            $users = $this->getUserService()->searchUsers(
+                ['nickname' => $nameOrMobile],
+                [],
+                0,
+                PHP_INT_MAX,
+                ['id']
+            );
+        }
+        $conditions['userIds'] = array_column($users, 'id') ?: [-1];
     }
 
-    public function processMemberData($activity, $members)
+    protected function processMemberData($activity, $members)
     {
         $cloudStatisticData = $activity['ext']['cloudStatisticData'];
         $userIds = ArrayToolkit::column($members, 'userId');
@@ -72,11 +72,13 @@ class LiveStatisticMember extends AbstractResource
             $member['nickname'] = empty($users[$member['userId']]) ? '--' : $users[$member['userId']]['nickname'];
             $member['email'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['emailVerified']) ? '--' : $users[$member['userId']]['email'];
             $member['checkinNum'] = empty($cloudStatisticData['checkinNum']) || empty($member['checkinNum']) ? '--' : $member['checkinNum'].'/'.$cloudStatisticData['checkinNum'];
-            $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '--' : $users[$member['userId']]['verifiedMobile'];
+            $member['mobile'] = empty($users[$member['userId']]) || empty($users[$member['userId']]['verifiedMobile']) ? '' : $users[$member['userId']]['verifiedMobile'];
             $member['watchDuration'] = empty($member['watchDuration']) ? 0 : round($member['watchDuration'] / 60, 1);
             $member['answerNum'] = empty($member['answerNum']) ? 0 : $member['answerNum'];
             $member['chatNumber'] = empty($member['chatNum']) ? 0 : $member['chatNum'];
             $member['firstEnterTime'] = empty($member['firstEnterTime']) ? '--' : date('Y-m-d H:i', $member['firstEnterTime']);
+            $member['encryptedMobile'] = empty($member['mobile']) ? '' : $this->getMobileMaskService()->encryptMobile($member['mobile']);
+            $member['mobile'] = empty($member['mobile']) ? '--' : $this->getMobileMaskService()->maskMobile($member['mobile']);
         }
 
         return $members;
@@ -91,7 +93,7 @@ class LiveStatisticMember extends AbstractResource
     }
 
     /**
-     * @return LiveCloudStatisticsServiceImpl
+     * @return LiveCloudStatisticsService
      */
     protected function getLiveStatisticsService()
     {
@@ -128,5 +130,13 @@ class LiveStatisticMember extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return MobileMaskService
+     */
+    protected function getMobileMaskService()
+    {
+        return $this->service('InfoSecurity:MobileMaskService');
     }
 }

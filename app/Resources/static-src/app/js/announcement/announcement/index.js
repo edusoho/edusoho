@@ -3,7 +3,8 @@ $('a[data-role="announcement-modal"]').click(function () {
   $modal.html('').load($(this).data('url'));
 });
 
-$('.announcement-list').on('click', '[data-role=delete]', function () {
+$('.announcement-list [data-role=delete]').on('click', function (event) {
+  event.stopPropagation();
   if (confirm(Translator.trans('announcement.delete_hint'))) {
     $.post($(this).data('url'), function () {
       window.location.reload();

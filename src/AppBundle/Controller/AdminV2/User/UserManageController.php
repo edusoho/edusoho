@@ -32,12 +32,12 @@ class UserManageController extends UserCommonController
         $fields = $request->query->all();
 
         $conditions = [
-            'roles' => 'ROLE_USER',
+            'role' =>'ROLE_USER',
             'keywordType' => '',
             'keyword' => '',
             'keywordUserType' => '',
             'destroyed' => 0,
-            'isStudent' => 0,
+            'isStudent' => true,
         ];
 
         return $this->index($fields, $conditions, $indexTwigUrl);

@@ -22,33 +22,48 @@ class MeClassroom extends AbstractResource
             'userId' => $this->getCurrentUser()->getId(),
             'role' => 'student',
         ];
-
-        $total = $this->getClassroomService()->searchMemberCount($conditions);
-
+        $orderBy = [
+            'lastLearnTime' => 'desc',
+            'createdTime' => 'desc',
+        ];
+        $members = $this->getClassroomService()->searchMembers($conditions, $orderBy, 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'classroomId');
         if (isset($querys['format']) && 'pagelist' == $querys['format']) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
-
-            $classrooms = $this->getClassrooms($conditions, [], $offset, $limit);
+            $classroomConditions = $this->buildClassroomConditions($members, $querys);
+            if (empty($classroomConditions['ids'])) {
+                return $this->makePagingObject([], 0, $offset, $limit);
+            }
+            $classrooms = $this->getClassroomService()->searchClassrooms($classroomConditions, [], 0, PHP_INT_MAX);
+            $orderedClassroomIds = array_column($members, 'classroomId');
+            $indexClassroom = ArrayToolkit::index($classrooms, 'id');
+            $orderedClassroom = [];
+            foreach ($orderedClassroomIds as $orderedClassroomId) {
+                if (!empty($indexClassroom[$orderedClassroomId])) {
+                    $orderedClassroom[] = $indexClassroom[$orderedClassroomId];
+                }
+            }
+            $classrooms = array_slice($orderedClassroom, $offset, $limit);
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
             foreach ($classrooms as &$classroom) {
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
+                $classroom['isExpired'] = empty($members[$classroom['id']]) || $this->isExpired($members[$classroom['id']]['deadline']);
             }
 
-            return $this->makePagingObject($classrooms, $total, $offset, $limit);
+            return $this->makePagingObject($classrooms, $this->getClassroomService()->countClassrooms($classroomConditions), $offset, $limit);
         } else {
-            $members = $this->getClassroomService()->searchMembers($conditions, [], 0, $total);
             $classroomIds = ArrayToolkit::column($members, 'classroomId');
 
             $classrooms = array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
             $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
-            $classrooms = ArrayToolkit::index($classrooms, 'id');
 
-            foreach ($members as $member) {
-                $classrooms[$member['classroomId']]['lastLearnTime'] = $member['createdTime'];
-                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['classroomId'], $this->getCurrentUser()->getId());
-                $classrooms[$member['classroomId']]['learningProgressPercent'] = $progress['percent'];
+            foreach ($classrooms as &$classroom) {
+                $classroom['lastLearnTime'] = $members[$classroom['id']]['createdTime'];
+                $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
+                $classroom['learningProgressPercent'] = $progress['percent'];
+                $classroom['isExpired'] = empty($members[$classroom['id']]) || $this->isExpired($members[$classroom['id']]['deadline']);
             }
 
             array_multisort(ArrayToolkit::column($classrooms, 'lastLearnTime'), SORT_DESC, $classrooms);
@@ -57,14 +72,46 @@ class MeClassroom extends AbstractResource
         }
     }
 
-    private function getClassrooms($conditions, $orderBy, $offset, $limit)
+    private function buildClassroomConditions($members, $querys)
     {
-        $classroomIds = ArrayToolkit::column(
-            $this->getClassroomService()->searchMembers($conditions, [], $offset, $limit),
-            'classroomId'
-        );
+        $classroomConditions = [];
+        if (!isset($querys['type'])) {
+            $classroomConditions['ids'] = ArrayToolkit::column($members, 'classroomId');
 
-        return array_values($this->getClassroomService()->findClassroomsByIds($classroomIds));
+            return $classroomConditions;
+        }
+
+        $learningIds = [];
+        $learnedIds = [];
+        $isExpiredIds = [];
+        foreach ($members as $member) {
+            if ($this->isExpired($member['deadline'])) {
+                $isExpiredIds[] = $member['classroomId'];
+            } elseif ($member['isFinished']) {
+                $learnedIds[] = $member['classroomId'];
+            } else {
+                $learningIds[] = $member['classroomId'];
+            }
+        }
+        $classroomConditions['titleLike'] = $querys['title'];
+        switch ($querys['type']) {
+            case 'learning':
+            case 'learned':
+                $classroomConditions['ids'] = 'learning' === $querys['type'] ? $learningIds : $learnedIds;
+                $classroomConditions['excludeStatus'] = 'closed';
+                break;
+            default:
+                $closedClassroomIds = $this->getClassroomService()->searchClassrooms(['status' => 'closed', 'ids' => array_merge($learningIds, $learnedIds)], [], 0, PHP_INT_MAX, ['id']);
+                $classroomConditions['ids'] = array_merge($isExpiredIds, array_column($closedClassroomIds, 'id'));
+                break;
+        }
+
+        return $classroomConditions;
+    }
+
+    private function isExpired($deadline)
+    {
+        return 0 != $deadline && $deadline < time();
     }
 
     /**

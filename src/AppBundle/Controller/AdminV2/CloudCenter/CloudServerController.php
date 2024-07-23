@@ -16,42 +16,42 @@ class CloudServerController extends BaseController
             return $this->render('admin-v2/cloud-center/cloud-server/sms/trial.html.twig');
         }
 
-        if (!($this->isVisibleCloud())) {
+        if (!$this->getEduCloudService()->isVisibleCloud()) {
             return $this->redirect($this->generateUrl('admin_my_cloud_overview'));
         }
 
-        $settings = $this->getSettingService()->get('storage', array());
+        $settings = $this->getSettingService()->get('storage', []);
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             $this->setFlashMessage('warning', 'admin.cloud.license.has_no_license');
 
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
-        $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array());
+        $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', []);
         try {
             $api = CloudAPIFactory::create('root');
             $overview = $api->get('/me/sms/overview');
             $smsInfo = $api->get('/me/sms_account');
             $this->checkSmsSign($smsInfo);
         } catch (\RuntimeException $e) {
-            return $this->render('admin-v2/cloud-center/edu-cloud/sms-error.html.twig', array());
+            return $this->render('admin-v2/cloud-center/edu-cloud/sms-error.html.twig', []);
         }
         $isSmsWithoutEnable = $this->isSmsWithoutEnable($overview, $cloudSmsSettings);
         if ($isSmsWithoutEnable) {
             $overview['isBuy'] = isset($overview['isBuy']) ? $overview['isBuy'] : true;
 
-            return $this->render('admin-v2/cloud-center/edu-cloud/sms/without-enable.html.twig', array(
+            return $this->render('admin-v2/cloud-center/edu-cloud/sms/without-enable.html.twig', [
                 'overview' => $overview,
                 'cloudSmsSettings' => $cloudSmsSettings,
-            ));
+            ]);
         }
         $chartData = $this->dealChartData($overview['data']);
 
-        return $this->render('admin-v2/cloud-center/edu-cloud/sms/overview.html.twig', array(
+        return $this->render('admin-v2/cloud-center/edu-cloud/sms/overview.html.twig', [
             'account' => $overview['account'],
             'chartData' => $chartData,
             'smsInfo' => $smsInfo,
-        ));
+        ]);
     }
 
     protected function checkSmsSign($smsInfo)
@@ -94,11 +94,6 @@ class CloudServerController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    private function isVisibleCloud()
-    {
-        return $this->getEduCloudService()->isVisibleCloud();
     }
 
     private function isSmsWithoutEnable($overview, $cloudSmsSettings)

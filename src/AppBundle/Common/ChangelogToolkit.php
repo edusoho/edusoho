@@ -12,16 +12,13 @@ class ChangelogToolkit
 
     public static function parseSingleChangelog($changelogStr)
     {
-        $result = array(
-            'items' => array(),
-        );
-        $pattern = "/^(?:\S|\s)*((?:[1-9]\d|[1-9])(?:\.(?:[1-9]\d|\d)){2})\s*(?:\(|（)(\S*)(?:\)|）)\s*/";
+        $pattern = '/^[^\d]+(\d+\.\d+\.\d+)\s*(\(|（)(\d+-\d+-\d+)(\)|）)([\s\S]*?)(【新增|【修复|【优化|新增|修复|优化)/';
         preg_match($pattern, $changelogStr, $metas);
         if (!empty($metas)) {
-            $result['version'] = trim($metas['1']);
-            $result['date'] = trim($metas['2']);
+            $result['version'] = trim($metas[1]);
+            $result['date'] = trim($metas[3]);
+            $result['tips'] = trim($metas[5]);
         }
-
         $spiltPattern = '/'.PHP_EOL.'/';
         $changelogArr = preg_split($spiltPattern, $changelogStr, -1, PREG_SPLIT_NO_EMPTY);
         $result['items'] = self::matchItems($changelogArr);
@@ -31,16 +28,16 @@ class ChangelogToolkit
 
     protected static function matchItems($changelogArr)
     {
-        $items = array();
-        $types = array(
+        $items = [];
+        $types = [
             self::CHANGELOG_FIX,
             self::CHANGELOG_NEW,
             self::CHANGELOG_OPTIMIZATION,
-        );
+        ];
 
-        foreach ($types as $type) {
-            foreach ($changelogArr as $line) {
-                if (0 === strpos(trim($line), $type)) {
+        foreach ($changelogArr as $line) {
+            foreach ($types as $type) {
+                if (false !== strpos(trim($line), $type) && 0 == count($items)) {
                     $items[] = trim($line);
                 }
             }

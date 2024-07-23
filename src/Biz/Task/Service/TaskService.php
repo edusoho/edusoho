@@ -45,8 +45,6 @@ interface TaskService
 
     public function publishTask($id);
 
-    public function publishTasksByCourseId($courseId);
-
     public function unpublishTask($id);
 
     /**
@@ -58,6 +56,8 @@ interface TaskService
     public function deleteTask($id);
 
     public function deleteTasksByCategoryId($courseId, $categoryId);
+
+    public function deleteTasks(array $ids);
 
     public function findTasksByCourseId($courseId);
 
@@ -110,7 +110,7 @@ interface TaskService
 
     public function finishTask($taskId);
 
-    public function isFinished($taskId);
+    public function isFinished($taskId, $userId = 0);
 
     public function tryTakeTask($taskId);
 
@@ -153,7 +153,7 @@ interface TaskService
 
     public function findTasksFetchActivityByChapterId($chapterId);
 
-    public function finishTaskResult($taskId);
+    public function finishTaskResult($taskId, $userId = 0);
 
     public function findFreeTasksByCourseId($courseId);
 
@@ -249,4 +249,6 @@ interface TaskService
     public function findTasksByCopyIdAndLockedCourseIds($copyId, $courseIds);
 
     public function syncClassroomCourseTasks($courseId, $real);
+
+    public function isTaskLocked($taskId);
 }

@@ -390,6 +390,10 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                             $this->createNewException(CategoryException::CODE_DIGIT_INVALID());
                         }
 
+                        if (strlen($category['code']) > 64){
+                            $this->createNewException(CategoryException::CODE_LENGTH_TOO_LONG());
+                        }
+
                         $exclude = empty($relatedCategory['code']) ? null : $relatedCategory['code'];
                         if (!$this->isCategoryCodeAvailable($category['code'], $exclude)) {
                             $this->createNewException(CategoryException::CODE_UNAVAILABLE());

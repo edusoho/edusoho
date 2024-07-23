@@ -3,23 +3,17 @@
 namespace Biz\Testpaper\Wrapper;
 
 use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\ItemBank\Item\AnswerMode\ChoiceAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\RichTextAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\SingleChoiceAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\TextAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\TrueFalseAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\UncertainChoiceAnswerMode;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
+use Biz\Question\Traits\QuestionAnswerModeTrait;
+use Biz\Question\Traits\QuestionFormulaImgTrait;
+use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
+use Topxia\Service\Common\ServiceKernel;
 
 class TestpaperWrapper
 {
-    protected $modeToType = [
-        SingleChoiceAnswerMode::NAME => 'single_choice',
-        ChoiceAnswerMode::NAME => 'choice',
-        UncertainChoiceAnswerMode::NAME => 'uncertain_choice',
-        TrueFalseAnswerMode::NAME => 'determine',
-        TextAnswerMode::NAME => 'fill',
-        RichTextAnswerMode::NAME => 'essay',
-    ];
+    use QuestionFormulaImgTrait;
+    use QuestionAIAnalysisTrait;
+    use QuestionAnswerModeTrait;
 
     protected $answerStatus = [
         'right' => 'right',
@@ -43,6 +37,7 @@ class TestpaperWrapper
             'description' => $assessment['description'],
             'bankId' => $assessment['bank_id'],
             'limitedTime' => empty($scene['limited_time']) ? '0' : $scene['limited_time'],
+            'examMode' => empty($scene['exam_mode']) ? '0' : $scene['exam_mode'],
             'score' => $assessment['total_score'],
             'itemCount' => $assessment['item_count'],
             'createdUserId' => $assessment['created_user_id'],
@@ -99,7 +94,8 @@ class TestpaperWrapper
             'teacherSay' => empty($report['comment']) ? '' : $report['comment'],
             'rightItemCount' => empty($report['right_rate']) ? '0' : $report['right_rate'],
             'passedStatus' => empty($report['grade']) ? 'none' : $report['grade'],
-            'limitedTime' => $scene['limited_time'],
+            'limitedTime' => $record['limited_time'],
+            'examMode' => $record['exam_mode'],
             'beginTime' => $record['begin_time'],
             'endTime' => $record['end_time'],
             'updateTime' => $record['updated_time'],
@@ -109,6 +105,7 @@ class TestpaperWrapper
             'checkTeacherId' => empty($report['review_user_id']) ? '0' : $report['review_user_id'],
             'checkedTime' => empty($report['review_time']) ? '0' : $report['review_time'],
             'usedTime' => $record['used_time'],
+            'exerciseMode' => $record['exercise_mode'],
         ];
     }
 
@@ -116,9 +113,9 @@ class TestpaperWrapper
     {
         $items = [];
         $this->questionReports = ArrayToolkit::index($questionReports, 'question_id');
-
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
+                $item['section_id'] = $section['id'];
                 if (1 != $item['isDelete']) {
                     $items[$item['id']] = $this->wrapItem($item);
                 }
@@ -128,8 +125,25 @@ class TestpaperWrapper
         return $items;
     }
 
+    public function wrapAIAnalysis($items)
+    {
+        foreach ($items as &$item) {
+            if ('material' == $item['type']) {
+                foreach ($item['subs'] as &$question) {
+                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($question, $item);
+                }
+            } else {
+                $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($item);
+            }
+        }
+
+        return $items;
+    }
+
     protected function wrapItem($item)
     {
+        $item = $this->convertFormulaToImg($item);
+        $item = $this->addItemEmphasisStyle($item);
         if ('material' == $item['type']) {
             $question = [
                 'id' => $item['id'],
@@ -145,6 +159,8 @@ class TestpaperWrapper
                 'analysis' => $item['analysis'],
                 'parentId' => '0',
                 'subs' => [],
+                'attachments' => $item['attachments'],
+                'sectionId' => $item['section_id'],
             ];
             foreach ($item['questions'] as $itemQuestion) {
                 if (1 != $itemQuestion['isDelete']) {
@@ -175,6 +191,9 @@ class TestpaperWrapper
             'analysis' => $itemQuestion['analysis'],
             'parentId' => '0',
             'testResult' => [],
+            'attachments' => $itemQuestion['attachments'],
+            'sectionId' => $item['section_id'],
+            'itemId' => $item['id'],
         ];
 
         $question['answer'] = $this->convertAnswer($itemQuestion['answer'], $question);
@@ -189,6 +208,11 @@ class TestpaperWrapper
 
         if (!empty($this->questionReports[$question['id']])) {
             $questionReport = $this->questionReports[$question['id']];
+            $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
+                ArrayToolkit::column($this->questionReports, 'id'),
+                AttachmentService::ANSWER_TYPE
+            ) ?? [];
+            $attachments = ArrayToolkit::group($attachments, 'target_id');
             $question['testResult'] = [
                 'id' => $questionReport['id'],
                 'testId' => $questionReport['assessment_id'],
@@ -198,6 +222,7 @@ class TestpaperWrapper
                 'score' => $questionReport['score'],
                 'answer' => $this->convertAnswer($questionReport['response'], $question),
                 'teacherSay' => $questionReport['comment'],
+                'attachments' => $attachments[$questionReport['id']],
             ];
         }
 
@@ -249,5 +274,18 @@ class TestpaperWrapper
         }
 
         return $metas;
+    }
+
+    /**
+     * @return AttachmentService
+     */
+    private function getAttachmentService()
+    {
+        return $this->getBiz()->service('ItemBank:Item:AttachmentService');
+    }
+
+    private function getBiz()
+    {
+        return ServiceKernel::instance()->getBiz();
     }
 }

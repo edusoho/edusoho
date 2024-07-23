@@ -1,29 +1,46 @@
 let $form = $('#refund-form');
 let $modal = $form.parents('.modal');
 let $reasonNote = $form.find('#reasonNote');
+const $reasonNoteContainer = $form.find('#reasonNote-container');
 let $warnning = $form.find('.warnning');
+const $reasonNoteNumber = $form.find('.js-textarea-number')
+const $submitBtn = $('button[type="submit"]')
+
+function changeReasonNote(text = '') {
+  $reasonNote.val(text)
+  $reasonNoteNumber.text(text.length)
+}
 
 $form.find('[name="reason[type]"]').on('change', function () {
   let $this = $(this),
-    $selected = $this.find('option:selected');
+  $selected = $this.find('option:selected');
+
   if ($selected.val() == 'other') {
-    $reasonNote.val('').removeClass('hide');
+    changeReasonNote('')
+    $reasonNoteContainer.removeClass('hide');
+    $submitBtn.attr('disabled', true)
   } else {
-    $reasonNote.addClass('hide').val($selected.text());
+    $reasonNoteContainer.addClass('hide')
+    changeReasonNote($selected.text())
+    
+    if ($selected.val() !== '') {
+      $submitBtn.removeAttr('disabled')
+    } else {
+      $submitBtn.attr('disabled', true)
+    }
   }
   $warnning.text('');
-}).change();
+})
 
-$reasonNote.on('change', function () {
-  let $this = $(this);
-  if ($this.val().length > 120) {
-    $warnning.text(Translator.trans('order.refund.reason_limit_hint'));
-  } else if ($this.val().length == 0) {
-    $warnning.text(Translator.trans('order.refund.reason_required_hint'));
+$reasonNote.on('input', function () {
+  $reasonNoteNumber.text($reasonNote.val().length)
+
+  if ($reasonNote.val().length == 0) {
+    $submitBtn.attr('disabled', true)
   } else {
-    $warnning.text('');
+    $submitBtn.removeAttr('disabled')
   }
-}).change();
+})
 
 $form.on('submit', function () {
   if ($form.find('#reasonType').val() == 'reason') {

@@ -25,7 +25,6 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\NotificationService;
@@ -381,6 +380,7 @@ class ClassroomManageController extends BaseController
     {
         $role = $request->query->get('role');
         $fileName = sprintf('classroom-%s-%s-(%s).csv', $id, $role, date('Y-n-d'));
+        $this->getLogService()->warning('classroom', 'export_students', '导出学员数据');
 
         return ExportHelp::exportCsv($request, $fileName);
     }
@@ -447,7 +447,7 @@ class ClassroomManageController extends BaseController
                         [PHP_EOL, '"'],
                         '',
                         $profiles[$classroomMember['userId']][$key]
-                    ).'",' : '-'.',';
+                    )."\t".'",' : '-'.',';
             }
             $students[] = $member;
         }
@@ -485,9 +485,21 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
         $userIds = $request->query->get('userIds', '');
+        $all = $request->query->get('all', '0');
         $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
+            if ($all) {
+                if ('day' == $fields['updateType']) {
+                    $this->getClassroomService()->changeMembersDeadlineByClassroomId($classroomId, $fields['day'], $fields['waveType']);
+
+                    return $this->createJsonResponse(true);
+                }
+                $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
+                $this->getClassroomService()->updateMember(['classroomId' => $classroomId], ['deadline' => $date]);
+
+                return $this->createJsonResponse(true);
+            }
             if ('day' == $fields['updateType']) {
                 $this->getClassroomService()->updateMembersDeadlineByDay(
                     $classroomId,
@@ -508,6 +520,7 @@ class ClassroomManageController extends BaseController
             'classroom' => $this->getClassroomService()->getClassroom($classroomId),
             'users' => $users,
             'userIds' => array_column($users, 'id'),
+            'all' => $all,
         ]);
     }
 
@@ -529,7 +542,15 @@ class ClassroomManageController extends BaseController
         $waveType = $request->query->get('waveType');
         $day = $request->query->get('day');
         $userIds = $request->query->get('userIds');
+        $all = $request->query->get('all', 0);
         $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
+        if ($all && 'minus' == $waveType) {
+            $classroomMember = $this->getClassroomService()->searchMembers(['classroomId' => $classroomId, 'deadline_GE' => '1'], ['deadline' => 'ASC'], 0, 1);
+
+            return $this->createJsonResponse($classroomMember[0]['deadline'] - $day * 24 * 60 * 60 > time());
+        } else {
+            return $this->createJsonResponse(true);
+        }
         if ($this->getClassroomService()->checkDayAndWaveTypeForUpdateDeadline(
             $classroomId,
             $userIds,
@@ -571,6 +592,7 @@ class ClassroomManageController extends BaseController
                 'id' => $user['id'],
                 'nickname' => $user['nickname'],
                 'avatar' => $this->getWebExtension()->avatarPath($user, 'small'),
+                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER', $user['roles']),
             ];
         }
         $headTeacher = $this->getUserService()->getUser($classroom['headTeacherId']);
@@ -604,6 +626,7 @@ class ClassroomManageController extends BaseController
                 'id' => $headTeacher['id'],
                 'nickname' => $headTeacher['nickname'],
                 'avatar' => $this->getWebExtension()->avatarPath($headTeacher, 'small'),
+                'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER', $headTeacher['roles']),
             ];
         }
 
@@ -806,6 +829,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryHandleClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $studentDetailCount = $this->getReportService()->getStudentDetailCount($id, $conditions);
         $paginator = new Paginator(
             $request,
@@ -1388,14 +1412,6 @@ class ClassroomManageController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

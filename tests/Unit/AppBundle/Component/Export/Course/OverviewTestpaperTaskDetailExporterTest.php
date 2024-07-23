@@ -24,29 +24,6 @@ class OverviewTestpaperTaskDetailExporterTest extends BaseTestCase
                 ],
             ]
         );
-        $this->mockBiz(
-            'Testpaper:TestpaperService',
-            [
-                [
-                    'functionName' => 'findTestResultsByTestpaperIdAndUserIds',
-                    'returnValue' => [
-                        1 => [
-                            'id' => '1',
-                            'userId' => 1,
-                            'usedTime' => 41,
-                            'firstScore' => 1,
-                            'maxScore' => 14,
-                        ],
-                    ],
-                ],
-                [
-                    'functionName' => 'getTestpaperByIdAndType',
-                    'returnValue' => [
-                        'id' => 1,
-                    ],
-                ],
-            ]
-        );
 
         $this->mockBiz(
             'ItemBank:Answer:AnswerReportService',

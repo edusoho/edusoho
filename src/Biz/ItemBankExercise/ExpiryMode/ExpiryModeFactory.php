@@ -11,7 +11,7 @@ class ExpiryModeFactory
         return new $export();
     }
 
-    private function expiryModeMap($name)
+    private static function expiryModeMap($name)
     {
         $map = [
             'days' => 'Biz\ItemBankExercise\ExpiryMode\DaysExpiryMode',

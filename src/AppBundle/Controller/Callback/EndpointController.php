@@ -55,7 +55,7 @@ class EndpointController extends BaseController
             throw new NotFoundHttpException(sprintf('Processor %s not found', $key));
         }
         if (empty($this->pool[$key])) {
-            $instance = new $processors[$key]();
+            $instance = new $processors[$key]($this->container);
             if ($instance instanceof ContainerAwareInterface) {
                 $instance->setContainer($this->container);
             }

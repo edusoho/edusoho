@@ -73,6 +73,9 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
         },
         mobile: {
           phone: Translator.trans('validate.phone.message'),
+        },
+        truename: {
+          chinese_alphanumeric: Translator.trans('validate.truename_chinese_alphanumeric.message'),
         }
       }
     });

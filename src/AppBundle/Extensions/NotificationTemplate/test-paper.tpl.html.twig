@@ -16,7 +16,11 @@
         {% if data.type == 'perusal' %}
           {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_homework_check',{id:data.courseId,answerRecordId:data.id})) %}
         {% elseif data.type == 'read' %}
-          {% set do = macro.link('notification.test-paper.read.do'|trans, path('homework_result_show',{answerRecordId:data.id,action:'my'})) %}
+          {% if data.taskId|default %}
+            {% set do = macro.link('notification.test-paper.read.do'|trans, path('course_task_show', {courseId: data.courseId, id: data.taskId})) %}
+          {% else %}
+            {% set do = macro.link('notification.test-paper.read.do'|trans, path('homework_result_show', {answerRecordId: data.id, action: 'my'})) %}
+          {% endif %}
         {% endif %}
 
       {% else %}
@@ -24,11 +28,13 @@
         {% if data.type == 'perusal' %}
           {% if data.courseId|default(0) %}
             {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_testpaper_check',{id:data.courseId,answerRecordId:data.id})) %}
-          {% else %}
-            {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('testpaper_check',{answerRecordId:data.id})) %}
           {% endif %}
         {% elseif data.type == 'read' %}
-          {% set do = macro.link('notification.test-paper.read.do'|trans, path('testpaper_result_show',{answerRecordId:data.id,action:'my'})) %}
+          {% if data.taskId|default %}
+            {% set do = macro.link('notification.test-paper.read.do'|trans, path('course_task_show', {courseId: data.courseId, id: data.taskId})) %}
+          {% else %}
+            {% set do = macro.link('notification.test-paper.read.do'|trans, path('testpaper_result_show', {answerRecordId: data.id, action: 'my'})) %}
+          {% endif %}
         {% endif %}
 
       {% endif %}

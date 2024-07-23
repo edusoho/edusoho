@@ -2,25 +2,24 @@
 
 namespace AppBundle\Controller\AdminV2\Trade;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\MathToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Common\CommonException;
 use Codeages\Biz\Pay\Service\AccountService;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\MathToolkit;
 
 class BillController extends BaseController
 {
     public function indexAction(Request $request, $type)
     {
-        if (!in_array($type, array('coin', 'money'))) {
+        if (!in_array($type, ['coin', 'money'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $account = $this->getAccountService()->getUserBalanceByUserId(0);
         $conditions = $request->query->all();
         $conditions['amount_type'] = $type;
         $conditions['user_id'] = 0;
@@ -33,7 +32,7 @@ class BillController extends BaseController
 
         $cashes = $this->getAccountProxyService()->searchCashflows(
             $conditions,
-            array('id' => 'DESC'),
+            ['id' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -42,7 +41,7 @@ class BillController extends BaseController
         $trades = ArrayToolkit::index($trades, 'trade_sn');
 
         foreach ($cashes as &$cash) {
-            $cash = MathToolkit::multiply($cash, array('amount'), 0.01);
+            $cash = MathToolkit::multiply($cash, ['amount'], 0.01);
         }
         $buyerIds = ArrayToolkit::column($cashes, 'buyer_id');
         $users = $this->getUserService()->findUsersByIds($buyerIds);
@@ -50,16 +49,18 @@ class BillController extends BaseController
 
         list($inflow, $outflow) = $this->getInflowAndOutflow($conditions);
 
-        return $this->render("admin-v2/trade/bill/{$type}.html.twig", array(
+        $netIncome = ($inflow - $outflow) < 0 ? 0 : $inflow - $outflow;
+
+        return $this->render("admin-v2/trade/bill/{$type}.html.twig", [
             'cashes' => $cashes,
             'paginator' => $paginator,
             'users' => $users,
             'userProfiles' => $userProfiles,
-            'account' => $account,
+            'netIncome' => $netIncome,
             'outflow' => $outflow,
             'inflow' => $inflow,
             'trades' => $trades,
-        ));
+        ]);
     }
 
     private function getInflowAndOutflow($conditions)
@@ -73,7 +74,7 @@ class BillController extends BaseController
         $conditions['type'] = 'inflow';
         $amountInflow = $this->getAccountProxyService()->sumColumnByConditions('amount', $conditions);
 
-        return array($amountInflow * 0.01, $amountOutflow * 0.01);
+        return [$amountInflow * 0.01, $amountOutflow * 0.01];
     }
 
     /**

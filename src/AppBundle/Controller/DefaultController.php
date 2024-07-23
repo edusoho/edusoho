@@ -41,10 +41,10 @@ class DefaultController extends BaseController
     public function appDownloadAction()
     {
         $meCount = $this->getMeCount();
-        $mobileCode = (empty($meCount['mobileCode']) ? 'edusohov3' : $meCount['mobileCode']);
+        $mobileCode = (empty($meCount['mobileCode']) ? 'zhixiang' : $meCount['mobileCode']);
 
-        if ($this->getWebExtension()->isMicroMessenger() && 'edusohov3' == $mobileCode) {
-            $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi';
+        if ($this->getWebExtension()->isMicroMessenger() && 'zhixiang' == $mobileCode) {
+            $url = 'http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.zhixiang';
         } else {
             $url = $this->generateUrl('mobile_download', ['from' => 'qrcode', 'code' => $mobileCode], UrlGeneratorInterface::ABSOLUTE_URL);
         }
@@ -243,7 +243,7 @@ class DefaultController extends BaseController
             return $this->redirect($this->generateUrl('login', ['goto' => $this->generateUrl('feedback', $request->query->all())]));
         }
 
-        if (!$this->getWebExtension()->isSaas() || (!$user->isAdmin() && !$user->isTeacher())) {
+        if (!$this->getWebExtension()->isShowFeedback() || (!$user->isAdmin() && !$user->isTeacher())) {
             throw $this->createNotFoundException();
         }
 

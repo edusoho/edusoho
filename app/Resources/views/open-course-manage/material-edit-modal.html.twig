@@ -19,6 +19,10 @@
 
     {% include 'file-chooser/file-choose.html.twig' with { mediaType: 'download', fileType: 'all', file: null , courseId: course.id } %}
     <input id="materials" type="hidden" name="fileId">
+    
+    <div class="text-right mt12">
+      <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+    </div>
   </form>
 
 {% endblock %}

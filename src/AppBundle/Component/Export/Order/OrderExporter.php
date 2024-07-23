@@ -4,6 +4,7 @@ namespace AppBundle\Component\Export\Order;
 
 use AppBundle\Common\MathToolkit;
 use AppBundle\Component\Export\Exporter;
+use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Order\Service\OrderService;
 
@@ -149,6 +150,11 @@ class OrderExporter extends Exporter
         }
 
         return $parameter;
+    }
+
+    public function postExport()
+    {
+        $this->getLogService()->warning('order', 'export_order', '导出订单信息');
     }
 
     private function getExportStatus($orderStatus)

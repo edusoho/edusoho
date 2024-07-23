@@ -22,7 +22,7 @@ interface LiveActivityService
      */
     public function updateLiveActivity($id, $fields, $activity);
 
-    public function updateLiveStatus($liveId, $status);
+    public function updateLiveActivityLiveTime($id, $fields);
 
     public function startLive($liveId, $startTime);
 

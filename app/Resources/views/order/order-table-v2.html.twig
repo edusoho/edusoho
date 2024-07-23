@@ -67,7 +67,7 @@
             </div>
 
             {% if order.pay_amount != 0 and order.status in ['success'] and order.refund.status|default('') in ['cancel', ''] %}
-              {% if order.refund_deadline != 0 and order.item.target_type in ['course', 'classroom'] %}
+              {% if order.refund_deadline != 0 and order.item.target_type in ['course', 'classroom', 'item_bank_exercise'] %}
                 {% if order.refund_deadline > date().timestamp %}
                   <br>
                   <div class="table-action__item">

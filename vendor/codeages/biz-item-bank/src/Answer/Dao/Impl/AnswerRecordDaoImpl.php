@@ -3,9 +3,9 @@
 namespace Codeages\Biz\ItemBank\Answer\Dao\Impl;
 
 use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class AnswerRecordDaoImpl extends GeneralDaoImpl implements AnswerRecordDao
+class AnswerRecordDaoImpl extends AdvancedDaoImpl implements AnswerRecordDao
 {
     protected $table = 'biz_answer_record';
 
@@ -42,6 +42,11 @@ class AnswerRecordDaoImpl extends GeneralDaoImpl implements AnswerRecordDao
         $sql = "DELETE FROM {$this->table} WHERE assessment_id = ?";
 
         return $this->db()->executeUpdate($sql, [$assessmentId]);
+    }
+
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
     }
 
     public function declares()

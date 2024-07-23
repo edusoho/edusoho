@@ -10,6 +10,7 @@ use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExerciseService
 {
@@ -45,6 +46,13 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
 
     public function startAnswer($moduleId, $assessmentId, $userId)
     {
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if ($assessment && !$assessment['displayable']) {
+            $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($assessmentId);
+            if ($assessmentSnapshot) {
+                $assessmentId = $assessmentSnapshot['origin_assessment_id'];
+            }
+        }
         $this->canStartAnswer($moduleId, $assessmentId, $userId);
 
         try {
@@ -174,7 +182,9 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         $assessment = $this->getItemBankAssessmentExerciseDao()->getByAssessmentId($assessmentId);
         $result = $this->getItemBankAssessmentExerciseDao()->deleteByAssessmentId($assessmentId);
 
-        $this->dispatch('assessmentExercise.delete', $assessment);
+        if (!empty($assessment)) {
+            $this->dispatch('assessmentExercise.delete', $assessment);
+        }
 
         return $result;
     }
@@ -225,5 +235,13 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     protected function getUserFootprintService()
     {
         return $this->createService('User:UserFootprintService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 }

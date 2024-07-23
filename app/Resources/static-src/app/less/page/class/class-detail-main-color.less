@@ -36,6 +36,39 @@
 
 // 班级主体、课程主体－－－－－－－－－－－－－－－－－－－－
 .class-course-list {
+  .search-class-form {
+    display: inline-block;
+    position: relative;
+  }
+
+  .search-class-input-content {
+    width: 260px;
+    padding: 8px 12px;
+    height: 36px;
+    border: 1px solid #E1E3E5;
+    border-right: none;
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+  }
+
+  .search-class-input-content:hover {
+    border-color: @brand-primary !important;
+  }
+
+  .search-class-input-content:focus {
+    outline: none !important;
+  }
+
+  .searchClassCourseBtn {
+    position: absolute;
+    left: 260px;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    height: 36px;
+    line-height: 34px;
+    padding: 0 16px !important;
+  }
+
   .course-item {
     .media {
       .course-show {

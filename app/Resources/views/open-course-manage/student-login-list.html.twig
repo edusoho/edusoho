@@ -42,7 +42,7 @@
           {{ student.lastEnterTime|date('Y-m-d H:i:s') }}
         </td>
 
-        <td style="vertical-align: middle;">{{ student.mobile }}</td>
+        <td style="vertical-align: middle;">{% if student.mobile|default() %}{% include 'user-mobile-mask.html.twig' with { mobile: student.mobile } %}{% endif %}</td>
 
         {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
           <td style="vertical-align: middle;">

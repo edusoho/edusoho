@@ -5,13 +5,13 @@
         <th width="30%">用户名</th>
         <td width="70%">
           <a class="pull-right" href="javascript:;" @click="toPersonalHomepage(user.user.uuid)">个人主页</a>
-          {{ user.user.nickname }}
+          {{ user.user ? user.user.nickname : '' }}
         </td>
       </tr>
 
       <tr>
         <th>Email</th>
-        <td>{{ user.profile.email || '- -' }}</td>
+        <td>{{ user.profile ? user.profile.email : '- -' }}</td>
       </tr>
 
       <tr>
@@ -45,7 +45,9 @@
 
       <tr>
         <th>手机号码</th>
-        <td>{{ formatStr(user.profile.mobile) }}</td>
+        <td>
+          <mobile-ice :mobile="formatStr(user.profile.mobile)" :encryptedMobile="user.profile.encryptedMobile" />
+        </td>
       </tr>
       <tr>
         <th>公司</th>

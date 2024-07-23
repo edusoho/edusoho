@@ -10,6 +10,7 @@ use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -19,8 +20,8 @@ use Biz\Review\Service\ReviewService;
 use Biz\System\Service\CacheService;
 use Biz\User\Service\TokenService;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Endroid\QrCode\QrCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,7 @@ class ExerciseController extends BaseController
             return $this->createMessageResponse('error', $this->trans('item_bank_exercise.exercise_create.forbidden'));
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
+        if (empty($questionBank['itemBank'])) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
@@ -113,6 +114,24 @@ class ExerciseController extends BaseController
                 'previewAs' => $previewAs,
             ]
         );
+    }
+
+    public function exitAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->get($exerciseId);
+        $user = $this->getCurrentUser();
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        if (empty($member)) {
+            $this->createNewException(ItemBankExerciseException::NOTFOUND_MEMBER());
+        }
+        $req = $request->request->all();
+
+        $this->getExerciseMemberService()->removeStudent($exercise['id'], $user['id'], [
+            'reason' => $req['reason']['note'],
+            'reasonType' => 'exit',
+        ]);
+
+        return $this->redirect($this->generateUrl('item_bank_exercise_show', ['id' => $exerciseId]));
     }
 
     protected function getTabs($exercise)
@@ -195,8 +214,10 @@ class ExerciseController extends BaseController
         $qrCode->setPadding(10);
         $img = $qrCode->get('png');
 
-        $headers = ['Content-Type' => 'image/png',
-            'Content-Disposition' => 'inline; filename="image.png"', ];
+        $headers = [
+            'Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="image.png"',
+        ];
 
         return new Response($img, 200, $headers);
     }
@@ -269,10 +290,9 @@ class ExerciseController extends BaseController
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
-        $categoryTree = [];
+        $chapterTree = [];
         if ($exercise['chapterEnable']) {
-            $categoryTree = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
+            $chapterTree = $this->getItemBankChapterExerciseService()->getPublishChapterTreeList($exercise['questionBankId']);
         }
         $records = [];
         if ($member) {
@@ -283,6 +303,11 @@ class ExerciseController extends BaseController
                 PHP_INT_MAX
             );
             $records = ArrayToolkit::index($records, 'itemCategoryId');
+
+            $answerRecords = $this->getAnswerRecordService()->findByIds(array_column($records, 'answerRecordId'));
+            foreach ($records as &$record) {
+                $record['exercise_mode'] = $answerRecords[$record['answerRecordId']]['exercise_mode'];
+            }
         }
 
         return $this->render('item-bank-exercise/tabs/list/chapter-list.html.twig', [
@@ -290,7 +315,7 @@ class ExerciseController extends BaseController
             'moduleId' => $moduleId,
             'member' => $member,
             'records' => $records,
-            'categoryTree' => $categoryTree,
+            'categoryTree' => $chapterTree,
             'previewAs' => $previewAs,
         ]);
     }
@@ -329,6 +354,9 @@ class ExerciseController extends BaseController
                 0,
                 PHP_INT_MAX
             );
+            if ($exercise['assessmentEnable']) {
+                $records = $this->addAssessmentInfo($records);
+            }
             $records = ArrayToolkit::index($records, 'assessmentId');
         }
 
@@ -394,6 +422,19 @@ class ExerciseController extends BaseController
         $this->getExerciseMemberService()->quitExerciseByDeadlineReach($user['id'], $id);
 
         return $this->redirect($this->generateUrl('item_bank_exercise_show', ['id' => $id]));
+    }
+
+    private function addAssessmentInfo(array $records)
+    {
+        $answerRecords = $this->getAnswerRecordService()->findByIds(array_column($records, 'answerRecordId'));
+        $answerAssessments = $this->getAssessmentService()->findAssessmentsByIds(array_column($answerRecords, 'assessment_id'));
+        foreach ($records as &$record) {
+            $answerAssessment = $answerAssessments[$answerRecords[$record['answerRecordId']]['assessment_id']];
+            $record['item_count'] = $answerAssessment['item_count'];
+            $record['total_score'] = $answerAssessment['total_score'];
+        }
+
+        return $records;
     }
 
     protected function getQrcodeUrl($id)
@@ -498,14 +539,6 @@ class ExerciseController extends BaseController
     }
 
     /**
-     * @return ItemCategoryService
-     */
-    protected function getItemCategoryService()
-    {
-        return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    /**
      * @return AssessmentExerciseService
      */
     protected function getAssessmentExerciseService()
@@ -535,5 +568,21 @@ class ExerciseController extends BaseController
     protected function getAssessmentExerciseRecordService()
     {
         return $this->createService('ItemBankExercise:AssessmentExerciseRecordService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ChapterExerciseService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

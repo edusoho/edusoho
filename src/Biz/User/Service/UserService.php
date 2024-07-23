@@ -27,12 +27,16 @@ interface UserService
 
     public function getUserByType($type);
 
+    public function findUserByType($type);
+
     public function getUserByUUID($uuid);
 
     public function updateUserUpdatedTime($id);
 
     //根据用户名/邮箱/手机号精确查找用户
     public function getUserByLoginField($keyword, $isFilterDestroyed = false);
+
+    public function getUserByLoginTypeAndField($loginType, $loginValue);
 
     public function getUserByVerifiedMobile($mobile);
 

@@ -36,7 +36,7 @@ class PageDiscovery extends AbstractResource
             $mode = 'draft';
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
-        foreach ($discoverySettings as &$discoverySetting) {
+        foreach ($discoverySettings as $key => &$discoverySetting) {
             if ('slide_show' == $discoverySetting['type']) {
                 array_walk($discoverySetting['data'], function (&$slide) {
                     if (in_array($slide['link']['type'], ['course', 'classroom'])) {
@@ -74,7 +74,12 @@ class PageDiscovery extends AbstractResource
 
             if ('announcement' == $discoverySetting['type']) {
                 $announcement = $this->getAnnouncementService()->searchAnnouncements(['startTime' => time(), 'endTime' => time(), 'targetType' => 'global'], ['startTime' => 'DESC'], 0, 1);
-                $discoverySetting['data'] = empty($announcement) ? '' : $announcement[0]['content'];
+                if (empty($announcement)) {
+                    unset($discoverySettings[$key]);
+                } else {
+                    $discoverySetting['data'] = $announcement[0]['content'];
+                }
+                continue;
             }
 
             if('information' == $discoverySetting['type']){

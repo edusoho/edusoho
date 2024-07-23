@@ -47,7 +47,7 @@ uploader.on('file.finish', (file) => {
   }
 
   let module = $('input[name="module"]').val();
-  $.get('/attachment/file/' + file.no + '/show', {module: module},function (html) {
+  $.get('/attachment/file/' + file.globalId + '/show', {module: module},function (html) {
     $list.append(html);
     $ids.val(file.no);
     $modal.modal('hide');

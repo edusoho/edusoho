@@ -1,8 +1,30 @@
-<li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-lesson js-task-manage-item drag clearfix " style="cursor: default">
+<li id="chapter-{{ lesson.id }}" data-id="{{ lesson.id }}" class="task-manage-item js-task-manage-items task-manage-lesson js-task-manage-item drag clearfix " style="cursor: default">
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
-    <div class="item-content text-overflow js-item-content" style="color:#666">{{ lesson.name }}</div>
-    <div class="item-actions">{% if lesson.question_num %}{{ lesson.question_num }}{% endif %}</div>
+    <div class="item-content text-overflow js-item-content js-item-contents" style="color:#666">
+    <label 
+        class="cd-checkbox chapter-operation js-chapter-operation" 
+        data-id="{{lesson.id}}"
+        data-parentId="{{ lesson.parent_id }}"
+        <input type="checkbox" value="1" data-toggle="cd-checkbox">
+      </label>
+      {% if lesson.status == 'published' %}
+        <span class="chapter-status-published js-chapter-status">
+          {{ 'course.status.published'|trans }}
+        </span>
+      {% else %}
+        <span class="chapter-status-unpublished js-chapter-status">
+          {{ 'course.status.unpublished'|trans }}
+        </span>
+      {% endif %}
+      {{ lesson.name }}
+    </div>
+    <div class="item-actions three-level-item-actions">{% if lesson.question_num %}{{ lesson.question_num }}{% endif %}</div>
+    {% if lesson.status == 'published' %}
+      <a class="item-publish-btn js-item-publish" data-publishurl="{{ path('item_bank_exercise_manage_chapter_exercise_unpublish', {exerciseId: exercise.id}) }}" data-status="{{ lesson.status }}" data-id="{{ lesson.id }}" href="javascript:;">{{ 'course.plan_task.unpublish_btn'|trans }}</a>
+    {% else %}
+      <a class="item-publish-btn js-item-publish" data-publishurl="{{ path('item_bank_exercise_manage_chapter_exercise_publish', {exerciseId: exercise.id}) }}" data-status="{{ lesson.status }}" data-id="{{ lesson.id }}" href="javascript:;">{{ 'course.plan_task.publish_btn'|trans }}</a>
+    {% endif %}
   </div>
 </li>
 

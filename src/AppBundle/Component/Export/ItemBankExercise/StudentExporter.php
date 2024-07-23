@@ -4,7 +4,6 @@ namespace AppBundle\Component\Export\ItemBankExercise;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
-use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserFieldService;
@@ -35,6 +34,7 @@ class StudentExporter extends Exporter
         $fields = [
             'user.fields.username_label',
             'user.fields.email_label',
+            'user.fields.phone_label',
             'task.learn_data_detail.createdTime',
             'exercise.answers.done_num',
             'exercise.answers.completion_rate',
@@ -86,10 +86,11 @@ class StudentExporter extends Exporter
 
             $member[] = $user['nickname']."\t";
             $member[] = $user['email'];
+            $member[] = empty($user['mobile']) ? (empty($userProfile['mobile']) ? '-' : $userProfile['mobile']) : $user['mobile'];
             $member[] = date('Y-n-d H:i:s', $exerciseMember['createdTime']);
             $member[] = $exerciseMember['doneQuestionNum'];
-            $member[] = $exerciseMember['completionRate'] . '%';
-            $member[] = $exerciseMember['masteryRate'] . '%';
+            $member[] = $exerciseMember['completionRate'].'%';
+            $member[] = $exerciseMember['masteryRate'].'%';
             $member[] = $profile['truename'] ? $profile['truename'] : '-';
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
@@ -126,6 +127,11 @@ class StudentExporter extends Exporter
         ];
     }
 
+    public function postExport()
+    {
+        $this->getLogService()->warning('item_bank_exercise', 'export_students', '导出学员数据');
+    }
+
     /**
      * @return UserFieldService
      */
@@ -148,13 +154,5 @@ class StudentExporter extends Exporter
     protected function getExerciseMemberService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
-    }
-
-    /**
-     * @return ChapterExerciseRecordService
-     */
-    protected function getChapterExerciseRecordService()
-    {
-        return $this->getBiz()->service('ItemBankExercise:ChapterExerciseRecordService');
     }
 }

@@ -91,7 +91,7 @@ class InformationCollectDetailExporter extends Exporter
 
             $resultItemValues = ArrayToolkit::column($exportData[$result['id']], 'value');
             foreach ($resultItemValues as $value) {
-                $data[] = $value;
+                $data[] = is_numeric($value) && strlen($value) > 15 ? "\t".$value."\t" : $value;
             }
             $contents[] = $data;
         }

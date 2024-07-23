@@ -48,14 +48,14 @@ $.validator.setDefaults({
     let $form = $(form);
     let $btn = $(settings.currentDom);
     $form.triggerHandler("submitHandler");
-    
+
     if(settings.captcha != null && Object.keys(settings.captcha).length > 0 && settings.captcha.isShowCaptcha == 1){
       settings.captcha.captchaClass.showDrag();
       return false;
     }
 
     //规定不要用模态框 submit按钮（<input type=’submit’>）提交表单；
-    
+
     if (!$btn.length) {
       $btn = $(form).find('[type="submit"]');
     }
@@ -525,10 +525,21 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
   let l = calculateByteLength(value);
   let bool = l <= Number(params);
   if (!bool) {
-    $.validator.messages.byte_maxlength = `字符长度必须小于等于${params}，一个中文字算2个字符`;
+    $.validator.messages.byte_maxlength = `最多支持${params}个字符，一个中文字算2个字符`;
   }
   return this.optional(element) || l <= Number(params);
 }, Translator.trans('validate.byte_maxlength.message'));
+
+$.validator.addMethod('optional_range', function (value, element, params) {
+  if (!value) return true;
+
+	return this.optional(element) || params.optional() || (Number(value) >= params.range[0] && Number(value) <= params.range[1])
+}, Translator.trans('validate.valid_enter_a_positive.integer'));
+
+$.validator.addMethod("idcard_format", function(value, element) {
+  const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+  return this.optional(element) || reg.test(value);
+}, Translator.trans('validate.valid_idcard_formate.message'));
 
 $.validator.addMethod('es_email', function (value, element, params) {
   return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);

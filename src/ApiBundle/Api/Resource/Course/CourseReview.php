@@ -56,7 +56,10 @@ class CourseReview extends AbstractResource
                 'userId' => $this->getCurrentUser()->getId(),
                 'rating' => $request->request->get('rating'),
                 'content' => $request->request->get('content'),
-            ]
+                '_dragCaptchaToken' => $request->request->get('_dragCaptchaToken'),
+            ],
+            [],
+            $request->getHttpRequest()
         ));
     }
 }

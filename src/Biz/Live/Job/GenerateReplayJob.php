@@ -68,9 +68,9 @@ class GenerateReplayJob extends AbstractJob
 
     protected function prepareConditions()
     {
-        $endTimeGE = strtotime('-2 day');
+        $endTimeGT = strtotime('-2 day');
         $conditions = [
-            'endTime_GE' => $endTimeGE,
+            'endTime_GT' => $endTimeGT,
             'endTime_LT' => time(),
             'mediaType' => 'live',
             'copyId' => 0,

@@ -28,4 +28,9 @@ class MemberOperationRecordDaoImpl extends AdvancedDaoImpl implements MemberOper
             ],
         ];
     }
+
+    public function findRecordsByOrderIdAndType($orderId, $type)
+    {
+        return $this->findByFields(array('orderId' => $orderId, 'operateType' => $type));
+    }
 }

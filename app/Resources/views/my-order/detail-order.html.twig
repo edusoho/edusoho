@@ -95,6 +95,34 @@
         {% endif %}
       {% endif %}
 
+      {% if order.status == 'refunded' %}
+        <tr>
+          <td width="25%">{{ 'order.refund_amount'|trans }}</td>
+          <td width="75%"><span class="color-danger">{{ orderRefund.amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}</td>
+        </tr>
+        {% if orderRefund.refund_coin_amount != 0 %}
+          <tr>
+            <td width="25%" class="color-gray cd-pl32">
+              {{ 'order.refund_coin_amount'|trans }}
+            </td>
+            <td width="75%">
+              <span class="color-danger">{{ orderRefund.refund_coin_amount|to_coin(0) }}</span>
+            </td>
+          </tr>
+        {% endif %}
+
+        {% if orderRefund.refund_cash_amount != 0 %}
+          <tr>
+            <td width="25%" class="color-gray cd-pl32">
+              {{ 'order.refund_cash_amount'|trans }}
+            </td>
+            <td width="75%">
+              <span class="color-danger">{{ orderRefund.refund_cash_amount|to_cash(0) }}</span> {{ 'site.currency.CNY'|trans }}
+            </td>
+          </tr>
+        {% endif %}
+      {% endif %}
+
       <tr>
         <td width="25%">{{'order.created_time'|trans}}</td>
         <td width="75%">{{ order.created_time | date('Y-n-d H:i:s') }}</td>

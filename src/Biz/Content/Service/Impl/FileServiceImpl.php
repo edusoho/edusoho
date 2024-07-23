@@ -99,6 +99,29 @@ class FileServiceImpl extends BaseService implements FileService
         return $record;
     }
 
+    public function addFiles($group, array $filePaths)
+    {
+        $files = [];
+        foreach ($filePaths as $filePath) {
+            $files[] = new File($filePath);
+        }
+        $group = $this->getGroupDao()->getByCode($group);
+        $records = [];
+        foreach ($files as $key => $file) {
+            $records[] = [
+                'groupId' => $group['id'],
+                'userId' => $this->getCurrentUser()->getId(),
+                'uri' => $this->generateUri($group, $file),
+                'mime' => '',
+                'size' => $file->getSize(),
+            ];
+            $this->saveFile($file, $records[$key]['uri']);
+        }
+        $this->getFileDao()->batchCreate($records);
+
+        return $records;
+    }
+
     protected function validateFileExtension(File $file, $extensions)
     {
         if ($file instanceof UploadedFile) {

@@ -16,6 +16,7 @@ class ArticleController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $categoryId = 0;
 

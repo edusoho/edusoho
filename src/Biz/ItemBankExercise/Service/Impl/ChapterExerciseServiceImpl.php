@@ -9,11 +9,13 @@ use Biz\Common\CommonException;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseService
 {
-    public function startAnswer($moduleId, $categroyId, $userId)
+    public function startAnswer($moduleId, $categroyId, $userId, $exerciseMode = 0)
     {
         $this->canStartAnswer($moduleId, $categroyId, $userId);
 
@@ -25,6 +27,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $assessment = $this->createAssessmentByCategroyId($categroyId, $module);
 
             $answerRecord = $this->getAnswerService()->startAnswer($module['answerSceneId'], $assessment['id'], $userId);
+            $answerRecord = $this->getAnswerRecordService()->update($answerRecord['id'], ['exercise_mode' => $exerciseMode]);
 
             $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->create([
                 'moduleId' => $moduleId,
@@ -51,7 +54,92 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         return $chapterExerciseRecord;
     }
 
-    protected function canStartAnswer($moduleId, $categroyId, $userId)
+    public function getChapter($chapterId)
+    {
+        return $this->getItemCategoryService()->getItemCategory($chapterId);
+    }
+
+    public function findChaptersByIds($ids)
+    {
+        return $this->getItemCategoryService()->findItemCategoriesByIds($ids);
+    }
+
+    public function getPublishChapterTree($questionBankId)
+    {
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
+        if (empty($exercise)) {
+            return [];
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+        if (empty($questionBank)) {
+            return [];
+        }
+        $chapters = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        if (empty($chapters)) {
+            return [];
+        }
+
+        $chapters = $this->filterHiddenChapters($chapters, $exercise['hiddenChapterIds']);
+
+        return $this->getItemCategoryService()->buildCategoryTree($chapters);
+    }
+
+    public function getPublishChapterTreeList($questionBankId)
+    {
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
+        if (empty($exercise)) {
+            return [];
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
+        if (empty($questionBank)) {
+            return [];
+        }
+        $chapters = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
+        if (empty($chapters)) {
+            return [];
+        }
+
+        $chapters = $this->filterHiddenChapters($chapters, $exercise['hiddenChapterIds']);
+
+        return $this->getItemCategoryService()->buildCategoryTreeList($chapters, 0);
+    }
+
+    public function getChapterTreeList($questionBankId)
+    {
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
+        if (empty($exercise)) {
+            return [];
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
+        if (empty($questionBank)) {
+            return [];
+        }
+        $chapters = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBankId']);
+        $hiddenChapterIds = array_flip($exercise['hiddenChapterIds']);
+        foreach ($chapters as &$chapter) {
+            $chapter['status'] = isset($hiddenChapterIds[$chapter['id']]) ? 'unpublished' : 'published';
+        }
+
+        return $chapters;
+    }
+
+    public function findChapterChildrenIds($questionBankId, $ids)
+    {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($questionBankId);
+
+        return $this->getItemCategoryService()->findMultiCategoryChildrenIds($questionBank['itemBankId'], $ids);
+    }
+
+    protected function filterHiddenChapters($chapters, $hiddenChapterIds)
+    {
+        $hiddenChapterIds = array_flip($hiddenChapterIds);
+
+        return array_filter($chapters, function ($chapter) use ($hiddenChapterIds) {
+            return !isset($hiddenChapterIds[$chapter['id']]);
+        });
+    }
+
+    protected function canStartAnswer($moduleId, $categoryId, $userId)
     {
         $module = $this->getItemBankExerciseModuleService()->get($moduleId);
         if (empty($module) || ExerciseModuleService::TYPE_CHAPTER != $module['type']) {
@@ -63,9 +151,12 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
 
-        $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
-        if (empty($categroy) || 0 == $categroy['question_num']) {
+        $category = $this->getChapter($categoryId);
+        if (empty($category)) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+        if (0 == $category['question_num']) {
+            $this->createNewException(AssessmentException::ASSESSMENT_EMPTY());
         }
 
         $itemBankExercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
@@ -74,11 +165,11 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
-        if ($questionBank['itemBank']['id'] != $categroy['bank_id']) {
+        if ($questionBank['itemBank']['id'] != $category['bank_id']) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $latestRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categroyId, $userId);
+        $latestRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categoryId, $userId);
         if (!empty($latestRecord) && AnswerService::ANSWER_RECORD_STATUS_FINISHED != $latestRecord['status']) {
             $this->createNewException(ItemBankExerciseException::CHAPTER_ANSWER_IS_DOING());
         }
@@ -91,7 +182,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
         try {
             $this->beginTransaction();
 
-            $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
+            $categroy = $this->getChapter($categroyId);
             $itemBank = $this->getItemBankService()->getItemBank($categroy['bank_id']);
 
             $itemIds = ArrayToolkit::column(
@@ -133,7 +224,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
 
         $loop = 1;
         while ($loop <= 3) {
-            $categroy = $this->getItemCategoryService()->getItemCategory($categroyId);
+            $categroy = $this->getChapter($categroyId);
             if (empty($categroy)) {
                 break;
             }
@@ -223,5 +314,13 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
     protected function getUserFootprintService()
     {
         return $this->createService('User:UserFootprintService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

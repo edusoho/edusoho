@@ -123,7 +123,7 @@ class WechatGateway extends AbstractGateway
             }
         } else {
             $data = $response->getData();
-            throw new PayGatewayException($data['return_msg']);
+            throw new PayGatewayException($data['err_code_des'] ?? $data['return_msg']);
         }
 
 
@@ -138,7 +138,7 @@ class WechatGateway extends AbstractGateway
             'out_trade_no' => $trade['trade_sn'],
             'out_refund_no' => time(),
             'total_fee' => $trade['cash_amount'],
-            'refund_fee' => $trade['cash_amount'],
+            'refund_fee' => empty($trade['refund_amount']) ? $trade['cash_amount']: $trade['refund_amount'],
             'refund_desc' => empty($trade['refund_reason']) ? '' : $trade['refund_reason']
         ))->send();
 

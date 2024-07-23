@@ -1,5 +1,4 @@
 {% import "macro.html.twig" as web_macro %}
-
 <div class="courseset-manage-header cd-mb32 clearfix">
   {% block coursesetImg %}
   {% endblock %}
@@ -10,10 +9,12 @@
     <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
   {% elseif item.status =='published' %}
     <span class="course-publish-status course-publish-status--published">{{'course.status.published'|trans }}</span>
+  {% elseif item.status =='unpublished' %}
+    <span class="course-publish-status course-publish-status--unpublished">{{'course.status.delist'|trans}}</span>
   {% endif %}
 
   <div class="courseset-manage-header-info">
-    <div class="courseset-manage-header-info__title text-overflow" {% if item.title|length > 21 %}data-toggle="tooltip" title="{{ item.title }}" data-container="body" {% endif %}>
+    <div class="courseset-manage-header-info__title" style="width: 320px; display: block;" {% if item.title|length > 21 %}data-toggle="tooltip" title="{{ item.title }}" data-container="body" {% endif %}>
     {% block coursesetTitle %}
       <span class="cd-dark-major">{{ item.title }}</span>
     {% endblock %}

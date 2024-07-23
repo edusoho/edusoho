@@ -46,9 +46,9 @@ class MaterialWidget {
       this.onClickDeleteBtn(event);
     });
 
-    this.element.on('click', '.js-download-btn', (event) => {
-      this.onClickDownloadBtn(event);
-    });
+    // this.element.on('click', '.js-download-btn', (event) => {
+    //   this.onClickDownloadBtn(event);
+    // });
 
     this.element.on('click', '.js-collect-btn', (event) => {
       this.onClickCollectBtn(event);

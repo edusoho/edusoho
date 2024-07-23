@@ -22,7 +22,7 @@ abstract class AnnouncementProcessor
 
     abstract public function getTargetShowUrl();
 
-    abstract public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
+    abstract public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement);
 
     abstract public function tryManageObject($targetId);
 

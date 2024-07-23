@@ -119,6 +119,7 @@ class ActivityCopyTest extends BaseTestCase
                 'redo_interval' => 1,
                 'do_times' => 1,
             ]],
+            ['functionName' => 'canStart', 'returnValue' => true],
         ]);
 
         $this->mockBiz('Activity:VideoActivityDao', [

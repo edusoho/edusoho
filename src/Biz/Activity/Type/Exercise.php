@@ -5,10 +5,8 @@ namespace Biz\Activity\Type;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\ExerciseActivityService;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
@@ -105,7 +103,7 @@ class Exercise extends Activity
         return $this->getExerciseActivityService()->deleteActivity($targetId);
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
         $user = $this->getCurrentUser();
 
@@ -176,22 +174,6 @@ class Exercise extends Activity
                 'name' => '练习题目',
             ],
         ];
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->getBiz()->service('Activity:ActivityService');
     }
 
     /**

@@ -1,5 +1,5 @@
 <template>
-  <aside-layout :breadcrumbs="[{ name: '教务仪表盘' }]">
+  <aside-layout :breadcrumbs="[{ name: '教务仪表盘' }]" :titleTip="titleTip">
     <a-spin :spinning="getListLoading">
       <dashboard-card :graphicData="graphicData" />
       <a-row :gutter="24">
@@ -78,6 +78,7 @@ export default {
         questionAnswerRateList: {},
       },
       getListLoading: false,
+      titleTip: "仅统计班课相关数据",
     };
   },
 

@@ -118,6 +118,7 @@ class ReadDocx
         foreach ($paragraphList as $paragraph) {
             $text .= trim($paragraph->textContent).PHP_EOL;
         }
+        $text = preg_replace('/ QUOTE <w:docimg src=.*?> ?/', '', $text);
         $text = str_replace('<w:docimg', '&docimg;', $text);
         $text = str_replace('<', '&lt;', $text);
         $text = str_replace('&docimg;', '<img', $text);
@@ -183,6 +184,9 @@ class ReadDocx
             }
             $imageId = $img->getAttribute('r:id');
             $imageShape = $imageXml->getElementsByTagName('shape')->item(0);
+            if (empty($imageShape)) {
+                continue;
+            }
             $style = $imageShape->getAttribute('style');
             preg_match('/width:(.*?);/', $style, $widthMatches);
             preg_match('/height:(.*?);/', $style, $heightMatches);

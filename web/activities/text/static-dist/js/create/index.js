@@ -17,7 +17,7 @@ load.then(function(){
       rules: {
         title: {
           required: true,
-          maxlength: 50,
+          byte_maxlength: 100,
           trim: true,
           course_title: true,
         },
@@ -52,7 +52,6 @@ load.then(function(){
     });
 
     if (context.activityId) {
-      console.log(123);
       window.ltc.api({
         name: 'getActivity',
         pathParams: {

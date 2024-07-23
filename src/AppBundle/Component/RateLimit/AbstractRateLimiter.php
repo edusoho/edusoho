@@ -62,7 +62,7 @@ class AbstractRateLimiter
     /**
      * @return \Biz\Common\BizCaptcha
      */
-    private function getBizCaptcha()
+    protected function getBizCaptcha()
     {
         return $this->biz['biz_captcha'];
     }

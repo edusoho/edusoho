@@ -15,8 +15,8 @@ class SmsLoginRateLimiter extends SmsRateLimiter
 
         $ihr = $this->ipHourRateLimiter->check($request->getClientIp());
         $sdr = $this->siteDayRateLimiter->check('site');
-
         $isLimitReach = $ihr <= 0 || $sdr <= 0;
+
         if ($isLimitReach) {
             throw $this->createMaxRequestOccurException();
         }
@@ -24,8 +24,16 @@ class SmsLoginRateLimiter extends SmsRateLimiter
 
     protected function validateCaptcha($request)
     {
-        $token = $request->request->get('dragCaptchaToken');
-        $this->getDragCaptcha()->check($token);
+        if ($request->request->has('captchaToken')) {
+            $captchaToken = $request->request->get('captchaToken');
+            $phrase = $request->request->get('phrase');
+
+            $this->getBizCaptcha()->check($captchaToken, $phrase);
+        } else {
+            $dragCaptchaToken = $request->request->get('dragCaptchaToken');
+
+            $this->getDragCaptcha()->check($dragCaptchaToken);
+        }
     }
 
     /**

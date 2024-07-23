@@ -51,6 +51,7 @@ export default class Homework {
       $('#homework-about-field').val(editor.getData());
     });
     editor.on('blur', () => {
+      $('#homework-about-field').val(editor.getData());
       validator.form();
     });
   }
@@ -127,12 +128,9 @@ export default class Homework {
       rules: {
         title: {
           required: true,
-          maxlength: 50,
+          byte_maxlength: 100,
           trim: true,
           course_title: true,
-        },
-        description: {
-          required: true
         },
         content: 'required',
         'questionLength': {

@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\WrongBook\Service\WrongQuestionService;
 
@@ -20,16 +21,19 @@ class MeWrongBookCertainType extends AbstractResource
         $conditions['user_id'] = $this->getCurrentUser()->getId();
         $conditions['target_type'] = $type;
         $conditions['item_num_GT'] = 0;
+        if ('exercise' == $type) {
+            $conditions['target_ids'] = ArrayToolkit::column($this->getExerciseMemberService()->findByUserIdAndRole($this->getCurrentUser()->getId(), 'student'), 'questionBankId');
+        }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-        $wrongBookPools = $this->service('WrongBook:WrongQuestionService')->searchWrongBookPool(
+        $wrongBookPools = $this->getWrongQuestionService()->searchWrongBookPool(
             $conditions,
             ['created_time' => 'DESC'],
             $offset,
             $limit
         );
-        $total = $this->service('WrongBook:WrongQuestionService')->countWrongBookPool($conditions);
+        $total = $this->getWrongQuestionService()->countWrongBookPool($conditions);
 
         $relationField = 'target_id';
         if ('exercise' == $type) {
@@ -70,5 +74,13 @@ class MeWrongBookCertainType extends AbstractResource
     protected function getExerciseService()
     {
         return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->service('ItemBankExercise:ExerciseMemberService');
     }
 }

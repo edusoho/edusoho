@@ -1,6 +1,16 @@
 <template>
     <div class="cd-container">
-        <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a> / {{goods.title|removeHtml}}</div>
+        <div class="product-breadcrumb"><a href="/">{{ 'homepage'|trans }}</a>
+            <span v-for="(item, index) in goods.breadcrumbs" :key="index">/ <a :href="'/' + goods.type + '/explore/' + item.code">{{item.name}}</a></span>
+             / {{goods.title|removeHtml}}
+        </div>
+        <a-alert
+            v-if="goods.product.target.status == 'closed'"
+            class="mt16"
+            :message="alertMessage"
+            type="warning"
+            show-icon
+            />
         <detail :vip-enabled="vipEnabled" :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
@@ -9,30 +19,32 @@
                 <div v-if="isFixed" class="fixed">
                     <div class="cd-container clearfix">
                         <ul class="info-left__nav pull-left">
-                            <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">{{ 'goods.show_page.tab.intro'|trans }}</a>
+                            <li :class="howActive == 1 ? 'active' : ''"><a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                             </li>
-                            <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
+                            <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                             </li>
                             <li v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
+                                 :class="howActive == 3 ? 'active' : ''">
+                                <a href="#info-left-3">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <buy-sku :sku="currentSku" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+                            <buy-sku :sku="currentSku" :btn-class="goods.product.target.status == 'closed' ? 'product-detail__btn js-handleLearnOnMessage' : 'product-detail__btn'" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
                         </div>
                     </div>
                 </div>
 
                 <ul class="info-left__nav" ref="infoLeftNav">
                     <li :class="howActive == 1 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(1)">{{ 'goods.show_page.tab.intro'|trans }}</a>
+                        <a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                     </li>
                     <li :class="howActive == 2 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
+                        <a href="#info-left-2">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                     </li>
                     <li v-if="ugcReviewSetting.enable_review == 1
                                  && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 3 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
+                        <a href="#info-left-3">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                     </li>
                 </ul>
 
@@ -55,7 +67,18 @@
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
-                        <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
+                        <div class="searchInput">
+                          <a-input-search :placeholder="'course.search.placeholder'|trans" enter-button @search="searchCourse" />
+                        </div>
+                        <classroom-courses v-if="searchResult.length > 0 || componentsData.classroomCourses.length > 0" :classroomCourses="isSearch ? searchResult : componentsData.classroomCourses"></classroom-courses>
+                        <div v-if="searchResult.length === 0 && isSearch" class="emptyCourse">
+                          <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
+                          <p class="emptyCourseContent">{{ 'classroom.search.empty.course' | trans }}</p>
+                        </div>
+                        <div v-if="componentsData.classroomCourses.length === 0 && !isSearch" class="emptyCourse">
+                          <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
+                          <p class="emptyCourseContent">{{ 'classroom.empty.course' | trans }}</p>
+                        </div>
                     </div>
 
                     <div v-if="ugcReviewSetting.enable_review == 1
@@ -67,6 +90,7 @@
                                  :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
+                                 :goods="goods"
                                  v-if="ugcReviewSetting.enable_review == 1
                                  && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
                         >
@@ -104,15 +128,15 @@
     export default {
         data() {
             return {
+                isSearch: false,
                 howActive: 1,
                 flag: true,
                 isFixed: false,
                 timerClick: null,
                 timerScroll: null,
                 goodsId: window.location.pathname.replace(/[^0-9]/ig, ""),
-                goods: {},
                 currentSku: {},
-                componentsData: {},
+                searchResult: []
             }
         },
         props: {
@@ -121,15 +145,15 @@
                 default: null,
             },
             componentsData: {
-                type: Array,
+                type: Object,
                 default: null,
             },
             currentUserId: {
-                type: Number,
+                type: String,
                 default: null
             },
             targetId: {
-                type: Number,
+                type: [Number, String],
                 default: null
             },
             isUserLogin: {
@@ -141,11 +165,11 @@
                 default: null,
             },
             goodsSetting: {
-                type: Object,
+                type: [Object, Array],
                 default: null,
             },
             ugcReviewSetting: {
-                type: Object,
+                type: [Object, Array],
                 default: null,
             },
             activityMetas: {
@@ -182,6 +206,17 @@
             Certificate,
         },
         computed: {
+            alertMessage() {
+                if (this.goods.type === 'classroom') {
+                    return Translator.trans('goods.show_page.tab.classroom.closed_tip');
+                }
+
+                if (this.goods.type === 'course' && this.targetId) {
+                    return Translator.trans('goods.show_page.tab.course.closed_tip');
+                }
+
+                return Translator.trans('validate.learn_content.closed');
+            },
             summaryHtml() {
                 if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
                 return this.goods.summary;
@@ -206,6 +241,17 @@
             },
         },
         methods: {
+            searchCourse(value) {
+              this.isSearch = Boolean(value)
+
+              axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
+                    params: {
+                        title: value
+                    }
+                }).then((res) => {
+                    this.searchResult = res.data
+                });
+            },
             getGoodsInfo() {
                 axios.get(`/api/good/${this.goodsId}`, {
                     headers: {'Accept': 'application/vnd.edusoho.v2+json'}
@@ -307,7 +353,7 @@
         },
         created() {
             window.addEventListener("scroll", this.handleScroll);
-            console.log(this.goods);
+
             if (this.goods.type == 'classroom') {
                 return this.changeSku(this.goods.product.target.id);
             }

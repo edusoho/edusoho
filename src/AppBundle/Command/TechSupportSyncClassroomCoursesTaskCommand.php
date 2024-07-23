@@ -39,10 +39,10 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
 
             return;
         }
-        $copyCourses = $this->getCourseService()->searchCourses($conditions, ['updatedTime' => 'DESC'], 0, $count, ['id', 'parentId', 'courseSetId']);
+        $copyCourses = $this->getCourseService()->searchCourses($conditions, ['updatedTime' => 'DESC'], 0, $count, ['id', 'parentId', 'courseSetId', 'creator', 'courseType']);
         // 原课程下的课时
         $originCourseIds = array_column($copyCourses, 'parentId');
-        $originTasks = $this->getTaskService()->searchTasks(['courseIds' => $originCourseIds], [], 0, PHP_INT_MAX, ['id', 'courseId', 'activityId', 'title']);
+        $originTasks = $this->getTaskService()->searchTasks(['courseIds' => $originCourseIds], [], 0, PHP_INT_MAX, ['id', 'courseId', 'activityId', 'title', 'categoryId', 'type']);
         $countOriginTasks = count($originTasks);
         if (empty($countOriginTasks)) {
             $output->writeln('<info>不存在需要同步的课时任务</info>');
@@ -88,7 +88,7 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
             }
             if ($toDeleteChapterIds && $real) {
                 $this->getCourseChapterDao()->batchDelete(['copyIds' => $toDeleteChapterIds]);
-                $output->writeln("<info>删除多余的章节成功</info>");
+                $output->writeln('<info>删除多余的章节成功</info>');
             }
             // 创建章节
             $newChapters = [];
@@ -128,8 +128,8 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
             // 创建课时
             $toCopyTaskIds = array_diff($originTaskIds, $copyTaskIds);
             if ($toCopyTaskIds) {
-                $toCopyTaskIds = implode(',', $toCopyTaskIds);
-                $output->writeln("<info>待创建的课时: {$toCopyTaskIds}</info>");
+                $outputToCopyTaskIds = implode(',', $toCopyTaskIds);
+                $output->writeln("<info>待创建的课时: {$outputToCopyTaskIds}</info>");
             }
             $newTasks = [];
             foreach ($toCopyTaskIds as $toCopyTaskId) {
@@ -160,7 +160,7 @@ class TechSupportSyncClassroomCoursesTaskCommand extends BaseCommand
                 if (isset($newActivities[$copyCourse['id']][$originTask['activityId']])) {
                     $task['activityId'] = $newActivities[$copyCourse['id']][$originTask['activityId']]['id'];
                 } else {
-                    $task['activityId'] = $copyActivities[$copyCourse['id']][$originTask['categoryId']]['id'];
+                    $task['activityId'] = $copyActivities[$copyCourse['id']][$originTask['activityId']]['id'];
                 }
                 $task['copyId'] = $toCopyTaskId;
                 $task['fromCourseSetId'] = $copyCourse['courseSetId'];

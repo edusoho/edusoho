@@ -24,7 +24,7 @@
 			              </div>
 			              <ul class="live-courses">
 			              	{% for list in liveList.current %}
-			                	<li>
+			                	<li data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ list.title }}">
                           <a href="{{ path('course_task_show', {courseId: list.courseId, id: list.id}) }}"><span>{{ list.startTime|date('H:i') }}</span>
                             {{ list.title }}
                           </a>
@@ -45,7 +45,7 @@
 		              </div>
 		              <ul class="live-courses">
 		                {% for list in liveList.future %}
-		                	<li>
+		                	<li data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ list.title }}">
                         <a href="{{ path('course_task_show', {courseId:list.courseId, id: list.id}) }}" target="_blank"><span>{{ list.startTime|date('H:i') }}</span>
                           {{ list.title }}
                         </a>
@@ -63,3 +63,9 @@
       </div>
     </div>
   </div>
+
+<script>
+$('[data-toggle="tooltip"]').tooltip({
+  html: true,
+});
+</script>

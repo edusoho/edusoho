@@ -4,7 +4,8 @@
       <img :src="item.courseSet.cover.middle" alt="">
     </div>
     <div class="column-item__info">
-      <div class="column-item__title text-overflow">{{ item.title || item.courseSetTitle }}</div>
+      <div class="column-item__title text-overflow">{{ item.courseSetTitle }}</div>
+      <div class="column-item__subtitle text-overflow">{{ item.title }}</div>
       <div class="column-item__price">{{ item.price }} {{ 'cny' | trans }}</div>
     </div>
   </div>
@@ -16,7 +17,7 @@ export default {
 
   props: {
     item: {
-      type: Object, 
+      type: Object,
       required: true
     }
   }
@@ -59,6 +60,14 @@ export default {
     font-weight: 500;
     color: #333;
     line-height: 20px;
+  }
+
+  &__subtitle {
+    height: 18px;
+    margin-top: -2px;
+    padding: 3px 0;
+    color: #86909c;
+    font-size: 12px;
   }
 
   &__price {

@@ -30,8 +30,13 @@
           <i class="es-icon es-icon-chevronleft"></i>{{ 'course.task.learning.back_course_btn'|trans }}
         </a>
         {{ display_task_title(task) }}
+        
         {% if setting('wechat.wechat_notification_enabled')|default(false) and not weChatUser.isSubscribe|default(false) %}
-          <span class="pull-right cd-text-lg js-wechat-qrcode-btn wechat-inform-task hidden-xs" data-img="{{ setting('wechat.account_code') }}" {% if not weChatUser %}data-url="{{ path('login_wechat_qrcode') }}"{% endif %}><span class="wechat-inform-task__tip cd-mr8">{{ 'wechat.notification.course_notification_open'|trans}}</span><i class="es-icon es-icon-qr-code"></i></span>
+          {% if course.canLearn == '1' %}
+          <span class="pull-right cd-text-lg js-wechat-qrcode-btn wechat-inform-task hidden-xs" {% if not weChatUser %}data-url="{{ path('login_wechat_qrcode') }}"{% endif %}><span class="wechat-inform-task__tip cd-mr8">{{ 'wechat.notification.course_notification_open'|trans}}</span><i class="es-icon es-icon-qr-code"></i></span>
+          {% else %}
+          <span class="pull-right cd-text-lg hidden-xs js-handleLearnOnMessage wechat-inform-task"><span class="cd-mr8">{{ 'wechat.notification.course_notification_open'|trans}}</span><i class="es-icon es-icon-qr-code"></i></span>
+          {% endif %}
         {% endif %}
       </div>
       <div class="dashboard-body">
@@ -52,7 +57,6 @@
             data-file-id="{{ media.id|default(0) }}"
             data-url="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview') }) }}"
                   data-video-header-length="{{ videoHeaderLength|default(0) }}"
-            src="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview'), blank:true }) }}"
             style="width:100%;height:100%;border:0px"
             allowfullscreen webkitallowfullscreen>
           </iframe>
@@ -119,13 +123,18 @@
         </div>
         {% if course.enableFinish|default(0) == 1 %}
           <a type="button" href="javascript:;"
+          {% if course.canLearn == '1' %}
             {% if taskResult.status != 'finish' %}
               class="btn btn-transparent btn-learn js-btn-learn"
               id='learn-btn'
               data-url='{{ path("course_task_finish",{courseId: task.courseId, id: task.id}) }}'
             {% else %}
               class="btn btn-transparent btn-learn js-btn-learn active"
-            {% endif %}>
+            {% endif %}
+          {% else %}
+              class="btn btn-transparent btn-learn js-handleLearnOnMessage {% if taskResult.status == 'finish' %}active{% endif %}"
+          {% endif %}
+            >
               <i class="es-icon es-icon--check-circle done"></i>
               <i class="es-icon es-icon-undone-check doing"></i>
             {{ 'course.task.learning.learned_btn'|trans }}

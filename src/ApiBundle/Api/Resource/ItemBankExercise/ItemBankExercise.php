@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\ItemBankExercise\ItemBankExerciseException;
 
 class ItemBankExercise extends AbstractResource
 {
@@ -14,6 +15,9 @@ class ItemBankExercise extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $itemBankExercise = $this->getItemBankExerciseService()->get($id);
+        if (empty($itemBankExercise)) {
+            throw ItemBankExerciseException::NOTFOUND_EXERCISE();
+        }
 
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
@@ -43,9 +47,10 @@ class ItemBankExercise extends AbstractResource
             unset($conditions['categoryId']);
         }
 
-        $sort = $this->getSort($request);
+        $sort = $this->getSort($request) ?: ['recommendedSeq' => 'ASC'];
+
         if (array_key_exists('recommendedSeq', $sort)) {
-            $sort = ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'createdTime' => 'DESC'];
+            $sort = ['recommended' => 'DESC', 'recommendedSeq' => 'ASC', 'updatedTime' => 'DESC'];
             $itemBankExercises = $this->getItemBankExerciseService()->search($conditions, $sort, $offset, $limit);
         } elseif (array_key_exists('studentNum', $sort) && array_key_exists('lastDays', $conditions)) {
             $itemBankExercises = $this->getItemBankExerciseService()->searchOrderByStudentNumAndLastDays($conditions, $conditions['lastDays'], $offset, $limit);

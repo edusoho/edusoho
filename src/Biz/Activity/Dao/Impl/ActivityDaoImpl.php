@@ -26,9 +26,35 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->getByFields(['copyId' => $copyId, 'fromCourseSetId' => $courseSetId]);
     }
 
-    public function findActivitiesByCourseSetId($courseSetId)
+    public function findByCopyIdAndCourseIds($copyId, $courseIds)
     {
-        return $this->findByFields(['fromCourseSetId' => $courseSetId]);
+        if (empty($courseIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $params = array_merge([$copyId], $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId= ? AND fromCourseId IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, $params) ?: [];
+    }
+
+    public function findByCopyIdsAndCourseIds($copyIds, $courseIds)
+    {
+        if (empty($copyIds) || empty($courseIds)) {
+            return [];
+        }
+
+        $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
+        $courseIdMarks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parameters = array_merge($copyIds, $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND fromCourseId IN ({$courseIdMarks})";
+
+        return $this->db()->fetchAll($sql, $parameters) ?: [];
     }
 
     public function findSelfVideoActivityByCourseIds($courseIds)
@@ -97,15 +123,6 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
         return $this->db()->fetchAll($sql, array_merge($courseIds, $mediaTypes));
     }
 
-    public function findFinishedLivesWithinOneDay()
-    {
-        $currentTime = time();
-        $expiredTime = 3600 * 24;
-        $sql = "SELECT * FROM {$this->table} WHERE mediaType = 'live' AND {$currentTime} > endTime AND ({$currentTime} - endTime) < {$expiredTime};";
-
-        return $this->db()->fetchAll($sql, []);
-    }
-
     public function findActivitiesByTypeAndCreatedTimeAndUpdatedTimeFinishType($type, $createdTime, $updatedTime, $finishType)
     {
         $sql = "SELECT * FROM {$this->table} WHERE mediaType = ? AND createdTime <= ? AND finishType = ? AND updatedTime <= ?;";
@@ -115,38 +132,39 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
 
     public function declares()
     {
-        $declares['orderbys'] = ['endTime', 'startTime', 'createdTime'];
-        $declares['conditions'] = [
-            'id IN (:ids)',
-            'fromCourseId = :fromCourseId',
-            'mediaType = :mediaType',
-            'fromCourseId IN (:courseIds)',
-            'title like :title',
-            'mediaType <> :excludeMediaType',
-            'fromCourseId NOT IN (:excludeCourseIds)',
-            'mediaType IN (:mediaTypes)',
-            'mediaId IN (:mediaIds)',
-            'mediaId = :mediaId',
-            'fromCourseSetId = :fromCourseSetId',
-            'fromCourseSetId IN (:courseSetIds)',
-            'startTime >= :startTime_GT',
-            'startTime <= :startTime_LT',
-            'endTime <= :endTime_LT',
-            'endTime > :endTime_GT',
-            'createdTime = :createdTime',
-            'updatedTime = :updatedTime',
-            'copyId = :copyId',
-            'copyId IN (:copyIds)',
-            'finishType = :finishType',
-            'finishData = :finishData',
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['endTime', 'startTime', 'createdTime'],
+            'conditions' => [
+                'id IN (:ids)',
+                'fromCourseId = :fromCourseId',
+                'mediaType = :mediaType',
+                'fromCourseId IN (:courseIds)',
+                'title like :title',
+                'mediaType <> :excludeMediaType',
+                'fromCourseId NOT IN (:excludeCourseIds)',
+                'mediaType IN (:mediaTypes)',
+                'mediaId IN (:mediaIds)',
+                'mediaId = :mediaId',
+                'fromCourseSetId = :fromCourseSetId',
+                'fromCourseSetId IN (:courseSetIds)',
+                'startTime >= :startTime_GT',
+                'startTime <= :startTime_LT',
+                'endTime <= :endTime_LT',
+                'endTime > :endTime_GT',
+                'createdTime = :createdTime',
+                'updatedTime = :updatedTime',
+                'copyId = :copyId',
+                'copyId IN (:copyIds)',
+                'finishType = :finishType',
+                'finishData = :finishData',
+            ],
         ];
-
-        return $declares;
     }
 
     public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime, $excludeId = null)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE fromCourseId = ? AND (( startTime >= ? AND startTime <= ? ) OR ( startTime <= ? AND endTime >= ? ) OR ( endTime >= ? AND endTime <= ? ))";
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseId = ? AND mediaType = 'live' AND (( startTime >= ? AND startTime <= ? ) OR ( startTime <= ? AND endTime >= ? ) OR ( endTime >= ? AND endTime <= ? ))";
 
         if ($excludeId) {
             $excludeId = intval($excludeId);

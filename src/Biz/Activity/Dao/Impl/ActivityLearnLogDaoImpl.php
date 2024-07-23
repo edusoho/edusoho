@@ -37,7 +37,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     private function isTableExists($subfix)
     {
         $sql = "SHOW tables LIKE '{$this->table()}_{$subfix}'";
-        $tables = $this->db()->fetchAll($sql, array());
+        $tables = $this->db()->fetchAll($sql, []);
 
         return !empty($tables);
     }
@@ -54,7 +54,7 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
     {
         $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? and event = 'finish'";
 
-        return $this->db()->fetchAll($sql, array($activityId, $userId)) ?: array();
+        return $this->db()->fetchAll($sql, [$activityId, $userId]) ?: [];
     }
 
     /**
@@ -80,44 +80,36 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
                 FROM {$this->table()}
                 WHERE userId = ? AND activityId IN ({$marks});";
 
-        return $this->db()->fetchColumn($sql, array_merge(array($userId), $activityIds)) ?: 0;
+        return $this->db()->fetchColumn($sql, array_merge([$userId], $activityIds)) ?: 0;
     }
 
     public function deleteByActivityId($activityId)
     {
-        return $this->db()->delete($this->table(), array('activityId' => $activityId));
+        return $this->db()->delete($this->table(), ['activityId' => $activityId]);
     }
 
     public function getLastestByActivityIdAndUserId($activityId, $userId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? AND userId = ? ORDER BY createdTime DESC";
 
-        return $this->db()->fetchAssoc($sql, array($activityId, $userId));
+        return $this->db()->fetchAssoc($sql, [$activityId, $userId]);
     }
 
-    public function sumLearnTimeGroupByUserId($conditions)
+    public function deleteLimitByActivityId($activityId, $limit)
     {
-        $conditions['learnedTime_GE'] = 0;
-        $conditions['learnedTime_LE'] = 24 * 60 * 60;
-        $conditions['event_NEQ'] = 'watching';
-
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('sum(`learnedTime`) as learnedTime, `userId`')
-            ->groupBy('userId');
-
-        return $builder->execute()->fetchAll();
+        return $this->db()->executeUpdate("DELETE FROM {$this->table()} WHERE activityId = ? LIMIT {$limit};", [$activityId]);
     }
 
     public function declares()
     {
-        return array(
-            'orderbys' => array(
+        return [
+            'orderbys' => [
                 'createdTime',
-            ),
-            'serializes' => array(
+            ],
+            'serializes' => [
                 'data' => 'json',
-            ),
-            'conditions' => array(
+            ],
+            'conditions' => [
                 'activityId = :activityId',
                 'event = :event_EQ',
                 'event <> :event_NEQ',
@@ -128,8 +120,8 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
                 'createdTime >= :createdTime_GE',
                 'createdTime <= :createdTime_LE',
                 'createdTime < :createdTime_LT',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

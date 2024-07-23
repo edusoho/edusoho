@@ -1,17 +1,17 @@
 admin:
-    path: /
+    path: '/'
     defaults:
         _controller: 'AppBundle:Admin/Default:index'
 admin_discovery_column_category_tree:
-    path: /discovery_column/category/tree
+    path: '/discovery_column/category/tree'
     defaults:
         _controller: 'AppBundle:Admin/DiscoveryColumn:categoryTree'
 admin_setting_security:
-    path: /setting/security
+    path: '/setting/security'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:security'
 admin_notice_modal:
-    path: /notice/modal
+    path: '/notice/modal'
     defaults:
         _controller: 'AppBundle:Admin/Default:notice'
 admin_question_remind_teachers:
@@ -23,7 +23,7 @@ admin_question_remind_teachers:
     permissions:
         - admin
 admin_operation_analysis:
-    path: /operation/analysis
+    path: '/operation/analysis'
     defaults:
         _controller: 'AppBundle:Admin/Default:operationAnalysisDashbordBlock'
     permissions:
@@ -59,25 +59,25 @@ admin_course_explore:
     permissions:
         - admin
 admin_dashboard:
-    path: /dashboard
+    path: '/dashboard'
     defaults:
         _controller: 'AppBundle:Admin/Default:dashboard'
     permissions:
         - admin
 admin_opencourse_analysis:
-    path: /opencourse/analysis
+    path: '/opencourse/analysis'
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseAnalysis:index'
 admin_opencourse_analysis_referer_summary:
-    path: /opencourse/analysis/referer/summary
+    path: '/opencourse/analysis/referer/summary'
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseAnalysis:summary'
 admin_opencourse_analysis_referer_watch_statistics:
-    path: /opencourse/analysis/watch
+    path: '/opencourse/analysis/watch'
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseAnalysis:watch'
 admin_opencourse_analysis_referer_summary_list:
-    path: /opencourse/analysis/referer/list
+    path: '/opencourse/analysis/referer/list'
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseAnalysis:summaryList'
 admin_opencourse_analysis_referer_detail:
@@ -89,7 +89,7 @@ admin_opencourse_analysis_referer_detail_list:
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseAnalysis:detailList'
 admin_opencourse_analysis_conversion:
-    path: opencourse/analysis/conversion
+    path: 'opencourse/analysis/conversion'
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseAnalysis:conversion'
 admin_opencourse_analysis_conversion_result:
@@ -97,7 +97,7 @@ admin_opencourse_analysis_conversion_result:
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseAnalysis:conversionResult'
 admin_content:
-    path: /content
+    path: '/content'
     defaults:
         _controller: 'AppBundle:Admin/Content:index'
 admin_content_create:
@@ -137,7 +137,7 @@ admin_content_delete:
     permissions:
         - admin_content
 admin_content_alias_check:
-    path: /content/alias/check
+    path: '/content/alias/check'
     defaults:
         _controller: 'AppBundle:Admin/Content:aliasCheck'
     permissions:
@@ -147,11 +147,11 @@ admin_block:
     defaults:
         _controller: 'AppBundle:Admin/Block:index'
 admin_block_match:
-    path: /block/list/quikSearch
+    path: '/block/list/quikSearch'
     defaults:
         _controller: 'AppBundle:Admin/Block:blockMatch'
 admin_block_create:
-    path: /block/create
+    path: '/block/create'
     defaults:
         _controller: 'AppBundle:Admin/Block:create'
 admin_block_delete:
@@ -161,7 +161,7 @@ admin_block_delete:
     methods:
         - POST
 admin_block_code_check_forcreate:
-    path: /block/code/check/forcreate
+    path: '/block/code/check/forcreate'
     defaults:
         _controller: 'AppBundle:Admin/Block:checkBlockCodeForCreate'
 admin_block_code_check_foredit:
@@ -209,19 +209,19 @@ admin_blockhistory_preview:
     defaults:
         _controller: 'AppBundle:Admin/Block:preview'
 admin_tag:
-    path: /tag
+    path: '/tag'
     defaults:
         _controller: 'AppBundle:Admin/Tag:index'
     permissions:
         - admin_course_tag_manage
 admin_tag_create:
-    path: /tag/create
+    path: '/tag/create'
     defaults:
         _controller: 'AppBundle:Admin/Tag:create'
     permissions:
         - admin_course_tag_add
 admin_tag_checkname:
-    path: /tag/checkname
+    path: '/tag/checkname'
     defaults:
         _controller: 'AppBundle:Admin/Tag:checkName'
     permissions:
@@ -241,11 +241,11 @@ admin_tag_delete:
     permissions:
         - admin_course_tag_manage
 admin_tag_group:
-    path: /tag/group
+    path: '/tag/group'
     defaults:
         _controller: 'AppBundle:Admin/TagGroup:index'
 admin_tag_group_create:
-    path: /tag/group/create
+    path: '/tag/group/create'
     defaults:
         _controller: 'AppBundle:Admin/TagGroup:create'
 admin_tag_group_update:
@@ -253,7 +253,7 @@ admin_tag_group_update:
     defaults:
         _controller: 'AppBundle:Admin/TagGroup:update'
 admin_tag_group_checkname:
-    path: /tag/group/checkname
+    path: '/tag/group/checkname'
     defaults:
         _controller: 'AppBundle:Admin/TagGroup:checkName'
 admin_tag_group_delete:
@@ -261,35 +261,35 @@ admin_tag_group_delete:
     defaults:
         _controller: 'AppBundle:Admin/TagGroup:delete'
 admin_user:
-    path: /user
+    path: '/user'
     defaults:
         _controller: 'AppBundle:Admin/User:index'
     permissions:
         - admin_user_manage
 admin_user_create:
-    path: /user/create
+    path: '/user/create'
     defaults:
         _controller: 'AppBundle:Admin/User:create'
 admin_user_create_email_check:
-    path: /user/create/email/check
+    path: '/user/create/email/check'
     defaults:
         _controller: 'AppBundle:Admin/User:emailCheck'
     permissions:
         - admin_user_manage
 admin_user_create_mobile_check:
-    path: /user/create/mobile/check
+    path: '/user/create/mobile/check'
     defaults:
         _controller: 'AppBundle:Admin/User:mobileCheck'
     permissions:
         - admin_user_manage
 admin_user_create_email_or_mobile_check:
-    path: /user/create/email_or_mobile/check
+    path: '/user/create/email_or_mobile/check'
     defaults:
         _controller: 'AppBundle:Admin/User:emailOrMobileCheck'
     permissions:
         - admin_user_manage
 admin_user_create_nickname_check:
-    path: /user/create/nickname/check
+    path: '/user/create/nickname/check'
     defaults:
         _controller: 'AppBundle:Admin/User:nicknameCheck'
     permissions:
@@ -335,7 +335,7 @@ admin_user_avatar_crop:
     permissions:
         - admin_user_avatar
 admin_teacher:
-    path: /teacher
+    path: '/teacher'
     defaults:
         _controller: 'AppBundle:Admin/Teacher:index'
 admin_teacher_promote:
@@ -343,7 +343,7 @@ admin_teacher_promote:
     defaults:
         _controller: 'AppBundle:Admin/Teacher:promote'
 admin_teacher_promote_list:
-    path: /teacher/promote/list
+    path: '/teacher/promote/list'
     defaults:
         _controller: 'AppBundle:Admin/Teacher:promoteList'
     permissions:
@@ -374,21 +374,21 @@ admin_user_send_emailverify_email:
     methods:
         - POST
 admin_navigation:
-    path: /setting/navigation
+    path: '/setting/navigation'
     defaults:
         _controller: 'AppBundle:Admin/Navigation:index'
     permissions:
         - admin_top_navigation
         - admin_foot_navigation
 admin_navigation_seqs_update:
-    path: /setting/navigation/seqs/update
+    path: '/setting/navigation/seqs/update'
     defaults:
         _controller: 'AppBundle:Admin/Navigation:updateSeqs'
     permissions:
         - admin_top_navigation
         - admin_foot_navigation
 admin_navigation_create:
-    path: /setting/navigation/create
+    path: '/setting/navigation/create'
     defaults:
         _controller: 'AppBundle:Admin/Navigation:create'
     permissions:
@@ -411,7 +411,7 @@ admin_navigation_delete:
         - admin_top_navigation
         - admin_foot_navigation
 admin_review:
-    path: /review
+    path: '/review'
     defaults:
         _controller: 'AppBundle:Admin/CourseReview:index'
     permissions:
@@ -425,7 +425,7 @@ admin_review_delete:
     permissions:
         - admin_course_review_tab
 admin_review_batch_delete:
-    path: /review/batch_delete
+    path: '/review/batch_delete'
     defaults:
         _controller: 'AppBundle:Admin/CourseReview:batchDelete'
     methods:
@@ -433,7 +433,7 @@ admin_review_batch_delete:
     permissions:
         - admin_course_review_tab
 admin_course_note:
-    path: /note
+    path: '/note'
     defaults:
         _controller: 'AppBundle:Admin/CourseNote:index'
     permissions:
@@ -447,7 +447,7 @@ admin_note_delete:
     permissions:
         - admin_course_note_manage
 admin_note_batch_delete:
-    path: /note/batch_delete
+    path: '/note/batch_delete'
     defaults:
         _controller: 'AppBundle:Admin/CourseNote:batchDelete'
     methods:
@@ -505,7 +505,7 @@ admin_open_course_delete:
     methods:
         - POST
 admin_check_password:
-    path: /check/password
+    path: '/check/password'
     defaults:
         _controller: 'AppBundle:Admin/Course:checkPassword'
     permissions:
@@ -539,7 +539,7 @@ admin_open_course_close:
     methods:
         - POST
 admin_open_course_recommend_list:
-    path: /open/course/recommend/list
+    path: '/open/course/recommend/list'
     defaults:
         _controller: 'AppBundle:Admin/OpenCourse:recommendList'
 admin_open_course_recommend:
@@ -569,15 +569,15 @@ admin_course_set_cancel_recommend:
         - admin_course_set_recommend_list
         - admin_course_set_cancel_recommend
 admin_course_chooser:
-    path: /course_set/chooser
+    path: '/course_set/chooser'
     defaults:
         _controller: 'AppBundle:Admin/CourseSet:chooser'
 admin_course_set_recommend_list:
-    path: /course_set/recommend/list
+    path: '/course_set/recommend/list'
     defaults:
         _controller: 'AppBundle:Admin/CourseSet:recommendList'
 admin_course_category:
-    path: /course/category
+    path: '/course/category'
     defaults:
         _controller: 'AppBundle:Admin/Course:category'
     permissions:
@@ -608,17 +608,17 @@ admin_courses_data:
     permissions:
         - admin_course_set_data
 admin_order_manage:
-    path: /order/manage
+    path: '/order/manage'
     defaults:
         _controller: 'AppBundle:Admin/Order:manage'
 admin_course_search:
-    path: /course/search
+    path: '/course/search'
     defaults:
         _controller: 'AppBundle:Admin/Course:search'
     permissions:
         - admin_operation_mobile_select_manage
 admin_course_search_to_fill_banner:
-    path: /course/search_to_fill_banner
+    path: '/course/search_to_fill_banner'
     defaults:
         _controller: 'AppBundle:Admin/Course:searchToFillBanner'
     permissions:
@@ -635,7 +635,7 @@ admin_open_course:
         _controller: 'AppBundle:Admin/OpenCourse:index'
         filter: open
 admin_live_get_max_online:
-    path: /livecourse/get/maxOnline
+    path: '/livecourse/get/maxOnline'
     defaults:
         _controller: 'AppBundle:Admin/LiveCourse:getMaxOnline'
     permissions:
@@ -651,7 +651,7 @@ admin_order_adjust_price:
     permissions:
         - admin_finance
 admin_order_refunds:
-    path: /order/refunds
+    path: '/order/refunds'
     defaults:
         _controller: 'AppBundle:Admin/OrderRefund:refunds'
     permissions:
@@ -669,13 +669,13 @@ admin_order_audit_refund:
     permissions:
         - admin_finance
 admin_setting_site:
-    path: /setting/site
+    path: '/setting/site'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:site'
     permissions:
         - admin_setting_message
 admin_setting_site_save:
-    path: /setting/site/save
+    path: '/setting/site/save'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:saveSite'
     permissions:
@@ -683,25 +683,25 @@ admin_setting_site_save:
     methods:
         - POST
 admin_operation_mobile:
-    path: /operation/mobile
+    path: '/operation/mobile'
     defaults:
         _controller: 'AppBundle:Admin/Mobile:mobile'
     permissions:
         - admin_operation_mobile_banner_manage
 admin_operation_mobile_upgrade:
-    path: /operation/mobile_upgrade
+    path: '/operation/mobile_upgrade'
     defaults:
         _controller: 'AppBundle:Admin/Mobile:mobileUpgrade'
     permissions:
         - admin_operation_mobile_banner_manage
 admin_operation_mobile_select:
-    path: /operation/mobile/select
+    path: '/operation/mobile/select'
     defaults:
         _controller: 'AppBundle:Admin/Mobile:mobileSelect'
     permissions:
         - admin_operation_mobile_select_manage
 admin_operation_mobile_customization_upgrade:
-    path: /operation/mobile/customization_upgrade
+    path: '/operation/mobile/customization_upgrade'
     defaults:
         _controller: 'AppBundle:Admin/Mobile:customizationUpgrade'
     methods:
@@ -721,31 +721,31 @@ admin_discovery_column_title_check:
     defaults:
         _controller: 'AppBundle:Admin/DiscoveryColumn:checkTitle'
 admin_discovery_column_sort:
-    path: /discovery_column/sort
+    path: '/discovery_column/sort'
     defaults:
         _controller: 'AppBundle:Admin/DiscoveryColumn:sort'
 admin_discovery_column_index:
-    path: /discovery_column/index
+    path: '/discovery_column/index'
     defaults:
         _controller: 'AppBundle:Admin/DiscoveryColumn:index'
 admin_discovery_column_create:
-    path: /discovery_column/create
+    path: '/discovery_column/create'
     defaults:
         _controller: 'AppBundle:Admin/DiscoveryColumn:create'
 admin_setting_mobile_discoveries:
-    path: /setting/mobile_discoveries
+    path: '/setting/mobile_discoveries'
     defaults:
         _controller: 'AppBundle:Admin/Setting:mobileDiscoveries'
     permissions:
         - admin_setting_mobile_settings
 admin_setting_mobile:
-    path: /setting/mobile
+    path: '/setting/mobile'
     defaults:
         _controller: 'AppBundle:Admin/Setting:mobile'
     permissions:
         - admin_setting_mobile_settings
 admin_setting_mobile_iap_product:
-    path: /setting/mobile_iap_product
+    path: '/setting/mobile_iap_product'
     defaults:
         _controller: 'AppBundle:Admin/Setting:mobileIapProduct'
 admin_setting_mobile_iap_product_delete:
@@ -787,7 +787,7 @@ admin_setting_mobile_picture_remove:
     permissions:
         - admin_setting_mobile_settings
 admin_setting_logo_upload:
-    path: /setting/logo/upload
+    path: '/setting/logo/upload'
     defaults:
         _controller: 'AppBundle:Admin/Setting:logoUpload'
     methods:
@@ -795,7 +795,7 @@ admin_setting_logo_upload:
     permissions:
         - admin_setting_message
 admin_setting_logo_remove:
-    path: /setting/logo/remove
+    path: '/setting/logo/remove'
     defaults:
         _controller: 'AppBundle:Admin/Setting:logoRemove'
     methods:
@@ -803,7 +803,7 @@ admin_setting_logo_remove:
     permissions:
         - admin_setting_message
 admin_setting_live_logo_upload:
-    path: /setting/live/logo/upload
+    path: '/setting/live/logo/upload'
     defaults:
         _controller: 'AppBundle:Admin/Setting:liveLogoUpload'
     methods:
@@ -811,7 +811,7 @@ admin_setting_live_logo_upload:
     permissions:
         - admin_setting_live_course
 admin_setting_favicon_upload:
-    path: /setting/favicon/upload
+    path: '/setting/favicon/upload'
     defaults:
         _controller: 'AppBundle:Admin/Setting:faviconUpload'
     methods:
@@ -819,7 +819,7 @@ admin_setting_favicon_upload:
     permissions:
         - admin_setting_message
 admin_setting_favicon_remove:
-    path: /setting/favicon/remove
+    path: '/setting/favicon/remove'
     defaults:
         _controller: 'AppBundle:Admin/Setting:faviconRemove'
     methods:
@@ -827,79 +827,79 @@ admin_setting_favicon_remove:
     permissions:
         - admin_setting_message
 admin_setting_auth:
-    path: /setting/auth
+    path: '/setting/auth'
     defaults:
         _controller: 'AppBundle:Admin/UserSetting:auth'
     permissions:
         - admin_user_auth
 admin_setting_mailer:
-    path: /setting/mailer
+    path: '/setting/mailer'
     defaults:
         _controller: 'AppBundle:Admin/Setting:mailer'
 admin_setting_mailer_test:
-    path: /setting/mailer/test
+    path: '/setting/mailer/test'
     defaults:
         _controller: 'AppBundle:Admin/Setting:mailerTest'
     methods:
         - GET
 admin_setting_login_bind:
-    path: /setting/login-connect
+    path: '/setting/login-connect'
     defaults:
         _controller: 'AppBundle:Admin/UserSetting:loginConnect'
 admin_setting_payment:
-    path: /setting/payment
+    path: '/setting/payment'
     defaults:
         _controller: 'AppBundle:Admin/FinanceSetting:payment'
     permissions:
         - admin_payment
 admin_cloud_video_overview:
-    path: /cloud/video/overview
+    path: '/cloud/video/overview'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:videoOverview'
 admin_cloud_video_overview_renew:
-    path: /cloud/video/renew/modal
+    path: '/cloud/video/renew/modal'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:showRenewVideo'
 admin_cloud_setting_video:
-    path: /setting/cloud/video
+    path: '/setting/cloud/video'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:videoSetting'
 admin_cloud_normal_video_delete:
-    path: /setting/cloud/normal/video/delete
+    path: '/setting/cloud/normal/video/delete'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:deleteVideo'
 admin_setting_cloud:
-    path: /setting/cloud
+    path: '/setting/cloud'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:key'
     permissions:
         - admin_setting_my_cloud
 admin_setting_cloud_key:
-    path: /setting/cloud/key
+    path: '/setting/cloud/key'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:key'
     permissions:
         - admin_setting_my_cloud
 admin_setting_cloud_key_info:
-    path: /setting/cloud/key/info
+    path: '/setting/cloud/key/info'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:keyInfo'
     permissions:
         - admin_setting_my_cloud
 admin_setting_cloud_key_bind:
-    path: /setting/cloud/key/bind
+    path: '/setting/cloud/key/bind'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:keyBind'
     permissions:
         - admin_setting_my_cloud
 admin_setting_cloud_key_update:
-    path: /setting/cloud/key/update
+    path: '/setting/cloud/key/update'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:keyUpdate'
     permissions:
         - admin_setting_my_cloud
 admin_setting_cloud_key_apply:
-    path: /setting/cloud/key/apply
+    path: '/setting/cloud/key/apply'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:keyApply'
     methods:
@@ -907,7 +907,7 @@ admin_setting_cloud_key_apply:
     permissions:
         - admin_setting_my_cloud
 admin_setting_cloud_key_copyright:
-    path: /setting/cloud/key/copyright
+    path: '/setting/cloud/key/copyright'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:keyCopyright'
     methods:
@@ -915,7 +915,7 @@ admin_setting_cloud_key_copyright:
     permissions:
         - admin_setting_my_cloud
 admin_setting_cloud_video_watermark_upload:
-    path: /setting/cloud/video_watermark/upload
+    path: '/setting/cloud/video_watermark/upload'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:videoWatermarkUpload'
     methods:
@@ -923,7 +923,7 @@ admin_setting_cloud_video_watermark_upload:
     permissions:
         - admin_cloud_video_overview
 admin_setting_cloud_video_watermark_remove:
-    path: /setting/cloud/video_watermark/remove
+    path: '/setting/cloud/video_watermark/remove'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:videoWatermarkRemove'
     methods:
@@ -931,7 +931,7 @@ admin_setting_cloud_video_watermark_remove:
     permissions:
         - admin_cloud_video_overview
 admin_setting_cloud_video_embed_watermark_upload:
-    path: /setting/cloud/video_embed_watermark/upload
+    path: '/setting/cloud/video_embed_watermark/upload'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:videoEmbedWatermarkUpload'
     methods:
@@ -939,7 +939,7 @@ admin_setting_cloud_video_embed_watermark_upload:
     permissions:
         - admin_cloud_video_overview
 admin_setting_cloud_video_embed_watermark_remove:
-    path: /setting/cloud/video_embed_watermark/remove
+    path: '/setting/cloud/video_embed_watermark/remove'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:videoWatermarkRemove'
     methods:
@@ -947,38 +947,38 @@ admin_setting_cloud_video_embed_watermark_remove:
     permissions:
         - admin_cloud_video_overview
 admin_setting_refund:
-    path: /setting/refund
+    path: '/setting/refund'
     defaults:
         _controller: 'AppBundle:Admin/FinanceSetting:refund'
 admin_setting_share:
-    path: /setting/share
+    path: '/setting/share'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:share'
 admin_setting_default_avatar_crop:
-    path: /setting/default/avatar/crop
+    path: '/setting/default/avatar/crop'
     defaults:
         _controller: 'AppBundle:Admin/SystemDefaultSetting:defaultAvatarCrop'
     permissions:
         - admin_setting_avatar
 admin_setting_default_course_picture_crop:
-    path: /setting/default/course/picture/crop
+    path: '/setting/default/course/picture/crop'
     defaults:
         _controller: 'AppBundle:Admin/SystemDefaultSetting:defaultCoursePictureCrop'
     permissions:
         - admin_setting_avatar
         - course_manage_picture
 admin_setting_ip_blacklist:
-    path: /setting/ip-blacklist
+    path: '/setting/ip-blacklist'
     defaults:
         _controller: 'AppBundle:Admin/Setting:ipBlacklist'
     permissions:
         - admin_setting_ip_blacklist_manage
 admin_setting_theme:
-    path: /setting/theme
+    path: '/setting/theme'
     defaults:
         _controller: 'AppBundle:Admin/Theme:index'
 admin_setting_theme_change:
-    path: /setting/theme/change
+    path: '/setting/theme/change'
     defaults:
         _controller: 'AppBundle:Admin/Theme:change'
     methods:
@@ -998,7 +998,7 @@ admin_reset_currentTheme_config:
     permissions:
         - admin_setting_theme
 admin_save_themes_config:
-    path: /theme/config/save
+    path: '/theme/config/save'
     defaults:
         _controller: 'AppBundle:Admin/Theme:saveConfig'
     methods:
@@ -1012,123 +1012,113 @@ admin_confirm_themes_config:
     permissions:
         - admin_setting_theme
 admin_themes_show:
-    path: /theme/show
+    path: '/theme/show'
     defaults:
         _controller: 'AppBundle:Admin/Theme:show'
     permissions:
         - admin_setting_theme
 admin_themes_config_edit:
-    path: /theme/config/edit
+    path: '/theme/config/edit'
     defaults:
         _controller: 'AppBundle:Admin/Theme:themeConfigEdit'
     permissions:
         - admin_setting_theme
-admin_setting_user_center:
-    path: /setting/user-center
-    defaults:
-        _controller: 'AppBundle:Admin/UserSetting:userCenter'
 admin_setting_avatar:
-    path: /setting/user-avatar
+    path: '/setting/user-avatar'
     defaults:
         _controller: 'AppBundle:Admin/UserSetting:userAvatar'
     permissions:
         - admin_setting_avatar
 admin_setting_user_message:
-    path: /setting/message
+    path: '/setting/message'
     defaults:
         _controller: 'AppBundle:Admin/UserSetting:message'
     permissions:
         - admin_setting_user_message
 admin_setting_user_fields:
-    path: /setting/user-fields
+    path: '/setting/user-fields'
     defaults:
         _controller: 'AppBundle:Admin/UserSetting:userFields'
 admin_setting_course_setting:
-    path: /setting/course-setting
+    path: '/setting/course-setting'
     defaults:
         _controller: 'AppBundle:Admin/CourseSetting:courseSetting'
     permissions:
         - admin_setting_course
 admin_setting_course_avatar:
-    path: /setting/course-avatar
+    path: '/setting/course-avatar'
     defaults:
         _controller: 'AppBundle:Admin/CourseSetting:courseAvatar'
 admin_setting_live_course_setting:
-    path: /setting/live-course-setting
+    path: '/setting/live-course-setting'
     defaults:
         _controller: 'AppBundle:Admin/CourseSetting:liveCourseSetting'
     permissions:
         - admin_setting_live_course
 admin_open_course_setting:
-    path: /setting/open-course-setting
+    path: '/setting/open-course-setting'
     defaults:
         _controller: 'AppBundle:Admin/OpenCourseSetting:openCourseSetting'
     permissions:
         - admin_open_course_setting
 admin_message_setting:
-    path: /setting/message-setting
+    path: '/setting/message-setting'
     defaults:
         _controller: 'AppBundle:Admin/MessageSetting:messageSetting'
     permissions:
         - admin_message_course
 admin_setting_questions_setting:
-    path: /setting/questions-setting
+    path: '/setting/questions-setting'
     defaults:
         _controller: 'AppBundle:Admin/CourseSetting:questionsSetting'
 admin_setting_consult_setting:
-    path: /setting/consult-setting
+    path: '/setting/consult-setting'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:consultSetting'
 admin_setting_es_bar:
-    path: /setting/es-bar
+    path: '/setting/es-bar'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:esBarSetting'
 admin_setting_consult_upload:
-    path: /setting/consult-upload
+    path: '/setting/consult-upload'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:consultUpload'
     permissions:
         - admin_setting_consult_setting
 admin_setting_consult_webchat_delete:
-    path: /setting/consult-webchat-delete
+    path: '/setting/consult-webchat-delete'
     defaults:
         _controller: 'AppBundle:Admin/SiteSetting:deleteWebchat'
     methods:
         - POST
     permissions:
         - admin_setting_consult_setting
-admin_setting_admin_sync:
-    path: /setting/admin_sync
-    defaults:
-        _controller: 'AppBundle:Admin/Setting:adminSync'
-    permissions:
-        - admin_setting_user_center
 admin_setting_developer:
-    path: /setting/developer
+    path: '/setting/developer'
     defaults:
         _controller: 'AppBundle:Admin/DeveloperSetting:index'
     permissions:
         - admin
 admin_setting_developer_version:
-    path: /setting/developer/version
+    path: '/setting/developer/version'
     defaults:
         _controller: 'AppBundle:Admin/DeveloperSetting:version'
 admin_setting_developer_magic:
-    path: /setting/developer/magic
+    path: '/setting/developer/magic'
     defaults:
         _controller: 'AppBundle:Admin/DeveloperSetting:magic'
 admin_setting_post_num_rules:
-    path: /setting/post_num_rules
+    path: '/setting/post_num_rules'
     defaults:
         _controller: 'AppBundle:Admin/Setting:postNumRules'
     permissions:
         - admin_setting_post_num_rules_settings
 admin_setting_cdn:
-    path: /setting/cdn
+    path: '/setting/cdn'
     defaults:
         _controller: 'AppBundle:Admin/CdnSetting:index'
 admin_mocked:
-    path: /mock
+    path: '/mock'
     defaults:
         _controller: 'AppBundle:Admin/Mock:index'
 admin_mocked_distributor_token:
@@ -1136,41 +1126,41 @@ admin_mocked_distributor_token:
     defaults:
         _controller: 'AppBundle:Admin/Mock:mockDistributorToken'
 admin_mocked_distributor_get_post_data:
-    path: /mock/distributor_get_post_data
+    path: '/mock/distributor_get_post_data'
     defaults:
         _controller: 'AppBundle:Admin/Mock:getPostDistributorData'
 admin_mocked_distributor_post_data:
-    path: /mock/distributor_post_data
+    path: '/mock/distributor_post_data'
     defaults:
         _controller: 'AppBundle:Admin/Mock:postDistributorData'
     methods:
         - POST
 admin_mocked_marketing_post_data:
-    path: /mock/marketing_post_data
+    path: '/mock/marketing_post_data'
     defaults:
         _controller: 'AppBundle:Admin/Mock:postMarketingData'
     methods:
         - POST
 admin_mocked_post_data_version_3:
-    path: /mock/post_data_version_3
+    path: '/mock/post_data_version_3'
     defaults:
         _controller: 'AppBundle:Admin/Mock:postDataWithVersion3'
     methods:
         - POST
 admin_mocked_download_token:
-    path: /mock/download_token
+    path: '/mock/download_token'
     defaults:
         _controller: 'AppBundle:Admin/Mock:downloadToken'
     methods:
         - POST
 admin_optimize:
-    path: /setting/optimize
+    path: '/setting/optimize'
     defaults:
         _controller: 'AppBundle:Admin/Optimize:index'
     permissions:
         - admin_optimize_settings
 admin_optimize_remove_cache:
-    path: /setting/optimize/remove-cache
+    path: '/setting/optimize/remove-cache'
     defaults:
         _controller: 'AppBundle:Admin/Optimize:removeCache'
     methods:
@@ -1178,7 +1168,7 @@ admin_optimize_remove_cache:
     permissions:
         - admin_optimize_settings
 admin_optimize_remove_tmp:
-    path: /optimize/remove-tmp
+    path: '/optimize/remove-tmp'
     defaults:
         _controller: 'AppBundle:Admin/Optimize:removeTemp'
     methods:
@@ -1186,7 +1176,7 @@ admin_optimize_remove_tmp:
     permissions:
         - admin_optimize_settings
 admin_optimize_remove_backup:
-    path: /setting/optimize/remove-backup
+    path: '/setting/optimize/remove-backup'
     defaults:
         _controller: 'AppBundle:Admin/Optimize:removeBackup'
     methods:
@@ -1194,7 +1184,7 @@ admin_optimize_remove_backup:
     permissions:
         - admin_optimize_settings
 admin_optimize_backupdb:
-    path: /setting/optimize/backupdb
+    path: '/setting/optimize/backupdb'
     defaults:
         _controller: 'AppBundle:Admin/Optimize:backupdb'
     methods:
@@ -1202,59 +1192,59 @@ admin_optimize_backupdb:
     permissions:
         - admin_optimize_settings
 admin_optimize_remove_show_progressbar:
-    path: /setting/optimize/show-progressbar
+    path: '/setting/optimize/show-progressbar'
     defaults:
         _controller: 'AppBundle:Admin/Optimize:showProgressbar'
     permissions:
         - admin_optimize_settings
 admin_logs:
-    path: /setting/logs
+    path: '/setting/logs'
     defaults:
         _controller: 'AppBundle:Admin/Log:index'
 admin_logs_field_change:
-    path: /setting/logs/logFieldChange
+    path: '/setting/logs/logFieldChange'
     defaults:
         _controller: 'AppBundle:Admin/Log:logFieldChange'
 admin_performance:
-    path: /setting/performance
+    path: '/setting/performance'
     defaults:
         _controller: 'AppBundle:Admin/Setting:performance'
 admin_logs_prod:
-    path: /setting/logs/prod
+    path: '/setting/logs/prod'
     defaults:
         _controller: 'AppBundle:Admin/Log:prod'
 admin_logs_action_dicts:
-    path: /setting/logs/logActions
+    path: '/setting/logs/logActions'
     defaults:
         _controller: 'AppBundle:Admin/Log:logActions'
 admin_logs_username_match:
-    path: /setting/logs/usernameMatchUsers
+    path: '/setting/logs/usernameMatchUsers'
     defaults:
         _controller: 'AppBundle:Admin/Log:usernameMatchUsers'
 admin_logs_old:
-    path: /setting/logs/old
+    path: '/setting/logs/old'
     defaults:
         _controller: 'AppBundle:Admin/Log:old'
 admin_cloud_access:
-    path: /cloud/access
+    path: '/cloud/access'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:access'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_recharge:
-    path: /cloud/recharge
+    path: '/cloud/recharge'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:recharge'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_account_person:
-    path: /cloud/account/person
+    path: '/cloud/account/person'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:accountPerson'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_list_coupon:
-    path: /cloud/list/coupon
+    path: '/cloud/list/coupon'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:listCoupon'
     permissions:
@@ -1266,7 +1256,7 @@ admin_cloud_service_overview:
     permissions:
         - admin_my_cloud_overview
 admin_cloud_detail:
-    path: /cloud/detail
+    path: '/cloud/detail'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:detail'
     permissions:
@@ -1278,27 +1268,27 @@ admin_cloud_buy:
     permissions:
         - admin_my_cloud_overview
 admin_cloud_live_more:
-    path: /cloud/live/more
+    path: '/cloud/live/more'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:liveMore'
 admin_cloud_tlp:
-    path: /cloud/tlp
+    path: '/cloud/tlp'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:tlp'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_video:
-    path: /cloud/video
+    path: '/cloud/video'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:video'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_video_detail:
-    path: /cloud/video/detail
+    path: '/cloud/video/detail'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:videoDetail'
 admin_cloud_video_switch:
-    path: /cloud/video/switch
+    path: '/cloud/video/switch'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:videoSwitch'
 admin_cloud_show:
@@ -1311,91 +1301,91 @@ admin_cloud_email_buy:
     defaults:
         _controller: 'AppBundle:Admin/Cloud:emailBuy'
 admin_edu_cloud_search_result_type:
-    path: /setting/edu_cloud/search_result/type
+    path: '/setting/edu_cloud/search_result/type'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:setSearchResultType'
 admin_wap_set:
-    path: /setting/wap
+    path: '/setting/wap'
     defaults:
         _controller: 'AppBundle:Admin/OperationSetting:wapSet'
 admin_cloud_sms_sign:
-    path: /cloud/sms/sign
+    path: '/cloud/sms/sign'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:smsSign'
 admin_cloud_email_account:
-    path: /cloud/email/count
+    path: '/cloud/email/count'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:emailAccount'
 admin_cloud_email_list:
-    path: /cloud/email/list
+    path: '/cloud/email/list'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:emailList'
 admin_cloud_live_upgrade:
-    path: /cloud/live/upgrade
+    path: '/cloud/live/upgrade'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:liveUpgrade'
 admin_cloud_live_renew:
-    path: /cloud/live/renew
+    path: '/cloud/live/renew'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:liveRenew'
 admin_cloud_email_count:
-    path: /cloud/email/list
+    path: '/cloud/email/list'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:emailCount'
 admin_cloud_search:
-    path: /cloud/search
+    path: '/cloud/search'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:search'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_doc:
-    path: /cloud/doc
+    path: '/cloud/doc'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:doc'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_live:
-    path: /cloud/live
+    path: '/cloud/live'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:live'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_sms_account:
-    path: /cloud/sms/account
+    path: '/cloud/sms/account'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:smsAccount'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_video_account:
-    path: /cloud/video/account
+    path: '/cloud/video/account'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:videoAccount'
 admin_cloud_video_upgrade:
-    path: /cloud/video/upgrade
+    path: '/cloud/video/upgrade'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:videoUpgrade'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_video_renew:
-    path: /cloud/video/renew
+    path: '/cloud/video/renew'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:videoRenew'
     permissions:
         - admin_my_cloud_overview
 admin_cloud_search_detail:
-    path: /cloud/search/detail
+    path: '/cloud/search/detail'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:searchDetail'
 admin_cloud_sms_detail:
-    path: /cloud/sms/detail
+    path: '/cloud/sms/detail'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:smsDetail'
 admin_cloud_sms_statistics:
-    path: /cloud/sms/statistics
+    path: '/cloud/sms/statistics'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:smsStatistics'
 admin_cloud_sms_setting:
-    path: /cloud/sms/setting
+    path: '/cloud/sms/setting'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:smsSetting'
 admin_app_center:
@@ -1404,25 +1394,25 @@ admin_app_center:
         _controller: 'AppBundle:Admin/App:center'
         postStatus: all
 admin_my_cloud:
-    path: /setting/my/cloud
+    path: '/setting/my/cloud'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:myCloud'
     permissions:
         - admin_my_cloud_overview
 admin_my_cloud_overview:
-    path: /setting/my/cloud/overview
+    path: '/setting/my/cloud/overview'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:myCloudOverview'
 admin_cloud_file:
-    path: /cloud_files
+    path: '/cloud_files'
     defaults:
         _controller: 'AppBundle:Admin/CloudFile:index'
 admin_cloud_file_manage:
-    path: /cloud_files/manage
+    path: '/cloud_files/manage'
     defaults:
         _controller: 'AppBundle:Admin/CloudFile:manage'
 admin_cloud_file_render_table:
-    path: /cloud_files/table/render
+    path: '/cloud_files/table/render'
     defaults:
         _controller: 'AppBundle:Admin/CloudFile:render'
 admin_cloud_file_detail:
@@ -1455,17 +1445,17 @@ admin_cloud_file_delete:
     methods:
         - POST
 admin_cloud_file_batch_delete:
-    path: /cloud_file/delete/batch
+    path: '/cloud_file/delete/batch'
     defaults:
         _controller: 'AppBundle:Admin/CloudFile:batchDelete'
     methods:
         - POST
 admin_cloud_file_delete_modal_show:
-    path: /cloud_file/delete/show
+    path: '/cloud_file/delete/show'
     defaults:
         _controller: 'AppBundle:Admin/CloudFile:deleteShow'
 admin_cloud_file_tag_show:
-    path: /cloud_file/tag/show
+    path: '/cloud_file/tag/show'
     defaults:
         _controller: 'AppBundle:Admin/CloudFile:batchTagShow'
 admin_app_installed:
@@ -1473,29 +1463,29 @@ admin_app_installed:
     defaults:
         _controller: 'AppBundle:Admin/App:installed'
 admin_app_uninstall:
-    path: /app/uninstall
+    path: '/app/uninstall'
     defaults:
         _controller: 'AppBundle:Admin/App:uninstall'
     permissions:
         - admin_app_installed
 admin_app_upgrades:
-    path: /app/upgrades
+    path: '/app/upgrades'
     defaults:
         _controller: 'AppBundle:Admin/App:upgrades'
 admin_app_upgrades_count:
-    path: /app/upgrades_count
+    path: '/app/upgrades_count'
     defaults:
         _controller: 'AppBundle:Admin/App:upgradesCount'
     permissions:
         - admin_app_upgrades
 admin_oldUpgradeCheck:
-    path: /upgrade/check
+    path: '/upgrade/check'
     defaults:
         _controller: 'AppBundle:Admin/App:oldUpgradeCheck'
     permissions:
         - admin_app_upgrades
 admin_app_logs:
-    path: /app/logs
+    path: '/app/logs'
     defaults:
         _controller: 'AppBundle:Admin/App:logs'
 admin_app_package_update_agreement:
@@ -1601,11 +1591,11 @@ admin_app_package_update_check_newest:
     methods:
         - POST
 admin_category_create:
-    path: /category/create
+    path: '/category/create'
     defaults:
         _controller: 'AppBundle:Admin/Category:create'
 admin_category_checkcode:
-    path: /category/checkcode
+    path: '/category/checkcode'
     defaults:
         _controller: 'AppBundle:Admin/Category:checkCode'
     permissions:
@@ -1623,19 +1613,19 @@ admin_category_delete:
     methods:
         - POST
 admin_category_sort:
-    path: /category/sort
+    path: '/category/sort'
     defaults:
         _controller: 'AppBundle:Admin/Category:sort'
     methods:
         - POST
 admin_message:
-    path: /message
+    path: '/message'
     defaults:
         _controller: 'AppBundle:Admin/Message:index'
     permissions:
         - admin_message_manage
 admin_message_delete_messages:
-    path: /delete/choosed/messages
+    path: '/delete/choosed/messages'
     defaults:
         _controller: 'AppBundle:Admin/Message:deleteChoosedMessages'
     methods:
@@ -1643,7 +1633,7 @@ admin_message_delete_messages:
     permissions:
         - admin_message_manage
 admin_login_record:
-    path: /login_record
+    path: '/login_record'
     defaults:
         _controller: 'AppBundle:Admin/LoginRecord:index'
 admin_login_record_details:
@@ -1653,7 +1643,7 @@ admin_login_record_details:
     permissions:
         - admin_login_record
 admin_thread:
-    path: /thread
+    path: '/thread'
     defaults:
         _controller: 'AppBundle:Admin/CourseThread:index'
     permissions:
@@ -1668,7 +1658,7 @@ admin_thread_delete:
         - admin_course_thread
         - admin_course_question_manage
 admin_thread_batch_delete:
-    path: /thread/batch_delete
+    path: '/thread/batch_delete'
     defaults:
         _controller: 'AppBundle:Admin/CourseThread:batchDelete'
     methods:
@@ -1712,25 +1702,25 @@ show_idcard:
     permissions:
         - admin_approval_approvals
 admin_article_category:
-    path: /article/category
+    path: '/article/category'
     defaults:
         _controller: 'AppBundle:Admin/ArticleCategory:index'
     permissions:
         - admin_operation_article_category
 admin_article_category_create:
-    path: /article/category/create
+    path: '/article/category/create'
     defaults:
         _controller: 'AppBundle:Admin/ArticleCategory:create'
     permissions:
         - admin_operation_article_category
 admin_article_category_checkparentid:
-    path: /article/category/checkparentid
+    path: '/article/category/checkparentid'
     defaults:
         _controller: 'AppBundle:Admin/ArticleCategory:checkParentId'
     permissions:
         - admin_operation_article_category
 admin_article_category_checkcode:
-    path: /article/category/checkcode
+    path: '/article/category/checkcode'
     defaults:
         _controller: 'AppBundle:Admin/ArticleCategory:checkCode'
     permissions:
@@ -1748,35 +1738,35 @@ admin_article_category_delete:
     methods:
         - POST
 admin_article_category_sort:
-    path: /article/category/sort
+    path: '/article/category/sort'
     defaults:
         _controller: 'AppBundle:Admin/ArticleCategory:sort'
     methods:
         - POST
 admin_article_setting:
-    path: /setting/article
+    path: '/setting/article'
     defaults:
         _controller: 'AppBundle:Admin/OperationSetting:articleSet'
 admin_article:
-    path: /article
+    path: '/article'
     defaults:
         _controller: 'AppBundle:Admin/Article:index'
     permissions:
         - admin_operation_article_manage
 admin_article_create:
-    path: /article/create
+    path: '/article/create'
     defaults:
         _controller: 'AppBundle:Admin/Article:create'
     permissions:
         - admin_operation_article_create
 admin_article_picture_crop:
-    path: /article/picture/crop
+    path: '/article/picture/crop'
     defaults:
         _controller: 'AppBundle:Admin/Article:pictureCrop'
     permissions:
         - admin_operation_article_manage
 admin_article_show_upload:
-    path: /article/show/upload
+    path: '/article/show/upload'
     defaults:
         _controller: 'AppBundle:Admin/Article:showUpload'
     permissions:
@@ -1830,7 +1820,7 @@ admin_article_trash:
     permissions:
         - admin_operation_article_manage
 admin_article_delete:
-    path: /article/delete
+    path: '/article/delete'
     defaults:
         _controller: 'AppBundle:Admin/Article:delete'
     methods:
@@ -1838,25 +1828,25 @@ admin_article_delete:
     permissions:
         - admin_operation_article_manage
 admin_invite:
-    path: /invite
+    path: '/invite'
     defaults:
         _controller: 'AppBundle:Admin/Invite:userRecords'
     permissions:
         - admin_operation_invite
 admin_invite_record:
-    path: /invite/record
+    path: '/invite/record'
     defaults:
         _controller: 'AppBundle:Admin/Invite:record'
     permissions:
         - admin_operation_invite
 admin_invite_detail:
-    path: /invite/detail
+    path: '/invite/detail'
     defaults:
         _controller: 'AppBundle:Admin/Invite:inviteDetail'
     permissions:
         - admin_operation_invite
 admin_invite_set:
-    path: /setting/invite
+    path: '/setting/invite'
     defaults:
         _controller: 'AppBundle:Admin/OperationSetting:inviteSet'
 admin_invite_coupon:
@@ -1865,27 +1855,27 @@ admin_invite_coupon:
         _controller: 'AppBundle:Admin/Invite:coupon'
         filter: invited
 admin_invite_coupon_query:
-    path: /invite/coupon/query/
+    path: '/invite/coupon/query/'
     defaults:
         _controller: 'AppBundle:Admin/Invite:queryInviteCoupon'
 admin_group:
-    path: /group/
+    path: '/group/'
     defaults:
         _controller: 'AppBundle:Admin/Group:index'
     permissions:
         - admin_operation_group_manage
 admin_group_set:
-    path: /setting/group
+    path: '/setting/group'
     defaults:
         _controller: 'AppBundle:Admin/OperationSetting:groupSet'
 admin_groupThread:
-    path: /group/thread
+    path: '/group/thread'
     defaults:
         _controller: 'AppBundle:Admin/Group:thread'
     permissions:
         - admin_operation_group_thread
 admin_groupThread_batch_delete:
-    path: /group/batchDeleteThread
+    path: '/group/batchDeleteThread'
     defaults:
         _controller: 'AppBundle:Admin/Group:batchDeleteThread'
     permissions:
@@ -2081,7 +2071,7 @@ admin_operation_analysis_lesson_exit:
     permissions:
         - admin_operation_analysis
 admin_user_fields_add:
-    path: /user_fields/add
+    path: '/user_fields/add'
     defaults:
         _controller: 'AppBundle:Admin/UserSetting:addUserFields'
     permissions:
@@ -2099,25 +2089,25 @@ admin_user_fields_delete:
     permissions:
         - admin_setting_user_fields
 admin_system_status:
-    path: /system/status
+    path: '/system/status'
     defaults:
         _controller: 'AppBundle:Admin/Default:systemStatus'
     permissions:
         - admin
 admin_official_messages:
-    path: /official/messages
+    path: '/official/messages'
     defaults:
         _controller: 'AppBundle:Admin/Default:officialMessages'
     permissions:
         - admin
 admin_uploadfile_head_leader_params:
-    path: /uploadfile/video/head/leader/params
+    path: '/uploadfile/video/head/leader/params'
     defaults:
         _controller: 'AppBundle:Admin/UploadFile:headLeaderParams'
     permissions:
         - admin_setting_cloud_video
 admin_coin_picture:
-    path: /coin/picture
+    path: '/coin/picture'
     defaults:
         _controller: 'AppBundle:Admin/Coin:picture'
     methods:
@@ -2125,7 +2115,7 @@ admin_coin_picture:
     permissions:
         - admin_coin_settings
 admin_coin_picture_remove:
-    path: /coin/picture/remove
+    path: '/coin/picture/remove'
     defaults:
         _controller: 'AppBundle:Admin/Coin:pictureRemove'
     methods:
@@ -2133,53 +2123,53 @@ admin_coin_picture_remove:
     permissions:
         - admin_coin_settings
 admin_coin_settings:
-    path: /setting/coin
+    path: '/setting/coin'
     defaults:
         _controller: 'AppBundle:Admin/Coin:settings'
 admin_coin_records:
-    path: /coin/records
+    path: '/coin/records'
     defaults:
         _controller: 'AppBundle:Admin/Coin:records'
 admin_order_manage_export_csv:
-    path: /order/manage/export
+    path: '/order/manage/export'
     defaults:
         _controller: 'AppBundle:Admin/Order:exportCsv'
 admin_coin_user_records:
-    path: /coin/records/user
+    path: '/coin/records/user'
     defaults:
         _controller: 'AppBundle:Admin/Coin:userRecords'
 admin_coin_flow_detail:
-    path: /coin/flow/detail/
+    path: '/coin/flow/detail/'
     defaults:
         _controller: 'AppBundle:Admin/Coin:flowDetail'
     permissions:
         - admin_coin_user_records
 admin_coin_model:
-    path: /setting/coin/model
+    path: '/setting/coin/model'
     defaults:
         _controller: 'AppBundle:Admin/Coin:model'
     permissions:
         - admin_coin_settings
 admin_coin_model_ajax:
-    path: /setting/coin/model/ajax
+    path: '/setting/coin/model/ajax'
     defaults:
         _controller: 'AppBundle:Admin/Coin:tableAjax'
     permissions:
         - admin_coin_user_records
 admin_coin_model_save:
-    path: /coin/model/save
+    path: '/coin/model/save'
     defaults:
         _controller: 'AppBundle:Admin/Coin:modelSave'
     permissions:
         - admin_coin_user_records
 admin_common_add:
-    path: /common/add
+    path: '/common/add'
     defaults:
         _controller: 'AppBundle:Admin/CommonAdmin:addCommonAdmin'
     permissions:
         - admin
 admin_common_admin:
-    path: /common/admin
+    path: '/common/admin'
     defaults:
         _controller: 'AppBundle:Admin/CommonAdmin:commonAdmin'
     permissions:
@@ -2191,99 +2181,99 @@ admin_common_remove:
     permissions:
         - admin
 admin_edu_cloud_sms:
-    path: /edu_cloud/sms/overview
+    path: '/edu_cloud/sms/overview'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:smsOverview'
     permissions:
         - admin_edu_cloud_sms_overview
 admin_edu_cloud_setting_sms:
-    path: /setting/edu_cloud/sms
+    path: '/setting/edu_cloud/sms'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:smsSetting'
 admin_edu_cloud_sms_status:
-    path: /setting/sms/status
+    path: '/setting/sms/status'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:smsStatus'
 admin_edu_cloud_apply_for_sms:
-    path: /edu_cloud/apply_for_sms
+    path: '/edu_cloud/apply_for_sms'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:applyForSms'
     permissions:
         - admin_edu_cloud_sms_overview
 admin_edu_cloud_sms_no_message:
-    path: /edu_cloud/admin_edu_cloud_sms_no_message
+    path: '/edu_cloud/admin_edu_cloud_sms_no_message'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:smsNoMessage'
     permissions:
         - admin_edu_cloud_sms_overview
 admin_edu_cloud_email:
-    path: /edu_cloud/email/overview
+    path: '/edu_cloud/email/overview'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:emailOverview'
     permissions:
         - admin_edu_cloud_email_overview
 admin_edu_cloud_email_setting:
-    path: /edu_cloud/email/setting
+    path: '/edu_cloud/email/setting'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:emailSetting'
     permissions:
         - admin_edu_cloud_email_overview
 admin_edu_cloud_email_switch:
-    path: /edu_cloud/email/switch
+    path: '/edu_cloud/email/switch'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:emailSwitch'
     permissions:
         - admin_edu_cloud_email_overview
 admin_edu_cloud_search:
-    path: /edu_cloud/search/overview
+    path: '/edu_cloud/search/overview'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:searchOverview'
 admin_edu_cloud_setting_search:
-    path: /setting/edu_cloud/search
+    path: '/setting/edu_cloud/search'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:searchSetting'
 admin_edu_cloud_attachment:
-    path: /setting/edu_cloud/attachment
+    path: '/setting/edu_cloud/attachment'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:attachment'
     permissions:
         - admin_edu_cloud_attachment
 admin_edu_cloud_search_clause:
-    path: /setting/edu_cloud/search/clause
+    path: '/setting/edu_cloud/search/clause'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:searchClause'
     permissions:
         - admin_edu_cloud_search
 admin_edu_cloud_search_reapply:
-    path: /setting/edu_cloud/search/reapply
+    path: '/setting/edu_cloud/search/reapply'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:searchReapply'
 admin_edu_cloud_search_open:
-    path: /setting/edu_cloud/search/open
+    path: '/setting/edu_cloud/search/open'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:searchOpen'
 admin_edu_cloud_search_close:
-    path: /setting/edu_cloud/search/close
+    path: '/setting/edu_cloud/search/close'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:searchClose'
     permissions:
         - admin_edu_cloud_search
 admin_app_im:
-    path: /setting/app/im
+    path: '/setting/app/im'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:appIm'
 admin_app_im_update:
-    path: /setting/app/im/update
+    path: '/setting/app/im/update'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:appImUpdateStatus'
     methods:
         - POST
 admin_announcement:
-    path: /announcement
+    path: '/announcement'
     defaults:
         _controller: 'AppBundle:Admin/Announcement:index'
 admin_announcement_create:
-    path: /announcement/create
+    path: '/announcement/create'
     defaults:
         _controller: 'AppBundle:Admin/Announcement:create'
 admin_announcement_delete:
@@ -2301,11 +2291,11 @@ admin_announcement_edit:
     permissions:
         - admin_announcement
 admin_batch_notification:
-    path: /batch_notification
+    path: '/batch_notification'
     defaults:
         _controller: 'AppBundle:Admin/BatchNotification:index'
 admin_batch_notification_create:
-    path: /batch_notification/create
+    path: '/batch_notification/create'
     defaults:
         _controller: 'AppBundle:Admin/BatchNotification:create'
 admin_batch_notification_edit:
@@ -2331,51 +2321,45 @@ admin_batch_notification_send:
     permissions:
         - admin_batch_notification
 admin_feedback:
-    path: /feedback
+    path: '/feedback'
     defaults:
         _controller: 'AppBundle:Admin/Default:feedback'
     permissions:
         - admin
 admin_report_status:
-    path: /reports/status
+    path: '/reports/status'
     defaults:
         _controller: 'AppBundle:Admin/System:report'
     permissions:
         - admin_report_status_list
 admin_report_status_php:
-    path: /reports/status/php
+    path: '/reports/status/php'
     defaults:
         _controller: 'AppBundle:Admin/System:php'
     permissions:
         - admin_report_status_list
 admin_report_status_directory:
-    path: /reports/status/directory
+    path: '/reports/status/directory'
     defaults:
         _controller: 'AppBundle:Admin/System:checkDir'
     permissions:
         - admin_report_status_list
-admin_report_status_ucenter:
-    path: /reports/status/ucenter
-    defaults:
-        _controller: 'AppBundle:Admin/System:ucenter'
-    permissions:
-        - admin_report_status_list
 admin_report_status_email_send:
-    path: /reports/status/email/send
+    path: '/reports/status/email/send'
     defaults:
         _controller: 'AppBundle:Admin/System:emailSendCheck'
 admin_cloud_attachment:
-    path: /cloud_attachment
+    path: '/cloud_attachment'
     defaults:
         _controller: 'AppBundle:Admin/CloudAttachment:index'
     permissions:
         - admin_cloud_attachment_manage
 admin_cloud_edulive_overview:
-    path: /cloud/edulive/overview
+    path: '/cloud/edulive/overview'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:liveOverview'
 admin_setting_cloud_edulive:
-    path: /setting/cloud/edulive
+    path: '/setting/cloud/edulive'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:liveSetting'
 admin_cloud_edulive_logo_crop:
@@ -2383,11 +2367,11 @@ admin_cloud_edulive_logo_crop:
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:logoCrop'
 admin_keyword:
-    path: /keyword/
+    path: '/keyword/'
     defaults:
         _controller: 'AppBundle:Admin/Sensitive:index'
 admin_keyword_create:
-    path: /keyword/create
+    path: '/keyword/create'
     defaults:
         _controller: 'AppBundle:Admin/Sensitive:create'
 admin_keyword_delete:
@@ -2405,19 +2389,19 @@ admin_keyword_change:
     permissions:
         - admin_keyword
 admin_keyword_banlogs:
-    path: /keyword/banlogs
+    path: '/keyword/banlogs'
     defaults:
         _controller: 'AppBundle:Admin/Sensitive:banlogs'
 admin_classroom:
-    path: /classroom/index
+    path: '/classroom/index'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomAdmin:index'
 admin_classroom_setting:
-    path: /setting/classroom
+    path: '/setting/classroom'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomAdmin:set'
 admin_classroom_create:
-    path: /classroom/create
+    path: '/classroom/create'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomAdmin:addClassroom'
 admin_classroom_close:
@@ -2439,11 +2423,11 @@ admin_classroom_delete:
     methods:
         - POST
 admin_classroom_category:
-    path: /classroom/category
+    path: '/classroom/category'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomCategory:index'
 admin_classroom_thread:
-    path: /classroom/thread
+    path: '/classroom/thread'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomThreadAdmin:index'
 admin_classroom_thread_delete:
@@ -2453,7 +2437,7 @@ admin_classroom_thread_delete:
     methods:
         - POST
 admin_classroom_thread_batch_delete:
-    path: /classroom/thread/batch_delete
+    path: '/classroom/thread/batch_delete'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomThreadAdmin:batchDelete'
 admin_classroom_set_recommend:
@@ -2469,11 +2453,11 @@ admin_classroom_cancel_recommend:
     permissions:
         - admin_classroom_cancel_recommend
 admin_classroom_recommend_list:
-    path: /classroom/recommend/list
+    path: '/classroom/recommend/list'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomAdmin:recommendList'
 admin_classroom_review:
-    path: /classroom/review
+    path: '/classroom/review'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomReview:index'
 admin_classroom_review_delete:
@@ -2483,21 +2467,21 @@ admin_classroom_review_delete:
     methods:
         - POST
 admin_classroom_review_batch_delete:
-    path: /classroom/review/batch_delete
+    path: '/classroom/review/batch_delete'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomReview:batchDelete'
     methods:
         - POST
 admin_classroom_chooser:
-    path: /classroom/chooser
+    path: '/classroom/chooser'
     defaults:
         _controller: 'AppBundle:Admin/ClassroomAdmin:chooser'
 admin_org:
-    path: /org
+    path: '/org'
     defaults:
         _controller: 'AppBundle:Admin/OrgManage:index'
 admin_org_create:
-    path: /org/create
+    path: '/org/create'
     defaults:
         _controller: 'AppBundle:Admin/OrgManage:create'
 admin_org_update:
@@ -2511,15 +2495,15 @@ admin_org_delete:
     methods:
         - POST
 admin_org_checkcode:
-    path: /org/checkcode
+    path: '/org/checkcode'
     defaults:
         _controller: 'AppBundle:Admin/OrgManage:checkCode'
 admin_org_checkname:
-    path: /org/checkname
+    path: '/org/checkname'
     defaults:
         _controller: 'AppBundle:Admin/OrgManage:checkName'
 admin_org_sort:
-    path: /org/sort
+    path: '/org/sort'
     defaults:
         _controller: 'AppBundle:Admin/OrgManage:sort'
     methods:
@@ -2529,13 +2513,13 @@ admin_batch_update_org:
     defaults:
         _controller: 'AppBundle:Admin/OrgManage:batchUpdate'
 admin_roles:
-    path: /roles
+    path: '/roles'
     defaults:
         _controller: 'AppBundle:Admin/Role:index'
     permissions:
         - admin_role_manage
 admin_role_create:
-    path: /role/create
+    path: '/role/create'
     defaults:
         _controller: 'AppBundle:Admin/Role:create'
 admin_role_edit:
@@ -2555,43 +2539,43 @@ admin_role_show:
     permissions:
         - admin_role_manage
 admin_role_check_name:
-    path: /role/checkName
+    path: '/role/checkName'
     defaults:
         _controller: 'AppBundle:Admin/Role:checkName'
     permissions:
         - admin_role_manage
 admin_role_check_code:
-    path: /role/checkCode
+    path: '/role/checkCode'
     defaults:
         _controller: 'AppBundle:Admin/Role:checkCode'
     permissions:
         - admin_role_manage
 admin_cloud_consult_setting:
-    path: /cloud/consult/setting
+    path: '/cloud/consult/setting'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:consultSetting'
 admin_login_marketing:
-    path: /login/marketing
+    path: '/login/marketing'
     defaults:
         _controller: 'AppBundle:Admin/Marketing:loginMarketing'
 admin_login_distributor:
-    path: /login/distributor
+    path: '/login/distributor'
     defaults:
         _controller: 'AppBundle:Admin/Marketing:loginDistributor'
 admin_jobs:
-    path: /jobs
+    path: '/jobs'
     defaults:
         _controller: 'AppBundle:Admin/Job:index'
 admin_job_logs:
-    path: /job/logs
+    path: '/job/logs'
     defaults:
         _controller: 'AppBundle:Admin/Job:logs'
 admin_crontab:
-    path: /crontab
+    path: '/crontab'
     defaults:
         _controller: 'AppBundle:Admin/Crontab:index'
 admin_crontab_resotre:
-    path: /crontab/restore
+    path: '/crontab/restore'
     defaults:
         _controller: 'AppBundle:Admin/Crontab:restore'
     methods:
@@ -2620,18 +2604,6 @@ admin_job_fired_logs:
     path: '/job/{id}/fire/{jobFiredId}/logs'
     defaults:
         _controller: 'AppBundle:Admin/Job:fireLogs'
-admin_xapi_setting:
-    path: /xapi/setting
-    defaults:
-        _controller: 'AppBundle:Admin/Xapi:setting'
-admin_xapi_statement_list:
-    path: /xapi/statement_list
-    defaults:
-        _controller: 'AppBundle:Admin/Xapi:index'
-admin_xapi_statement_detail:
-    path: '/xapi/statement/{id}/detail'
-    defaults:
-        _controller: 'AppBundle:Admin/Xapi:detail'
 admin_course_task_data_export_prepare:
     path: '/course/{courseId}/datas/export/prepare'
     defaults:
@@ -2643,7 +2615,7 @@ admin_course_task_data_export:
     defaults:
         _controller: 'AppBundle:Admin/Course:exportTaskDatas'
 admin_cloud_ad:
-    path: /cloud/ad
+    path: '/cloud/ad'
     defaults:
         _controller: 'AppBundle:Admin/EduCloud:getAd'
 sms_prepare:
@@ -2655,11 +2627,11 @@ publish_sms_send:
     defaults:
         _controller: 'AppBundle:Admin/Sms:send'
 generate_short_link:
-    path: /generate/short/link
+    path: '/generate/short/link'
     defaults:
         _controller: 'AppBundle:Admin/Sms:changeLink'
 admin_queue_failed_logs:
-    path: /queue/failed_logs
+    path: '/queue/failed_logs'
     defaults:
         _controller: 'AppBundle:Admin/Queue:failedJobs'
 admin_queue_failed_log_modal:
@@ -2667,7 +2639,7 @@ admin_queue_failed_log_modal:
     defaults:
         _controller: 'AppBundle:Admin/Queue:failedJob'
 admin_online:
-    path: /online
+    path: '/online'
     defaults:
         _controller: 'AppBundle:Online:index'
 admin_bill:
@@ -2675,7 +2647,7 @@ admin_bill:
     defaults:
         _controller: 'AppBundle:Admin/Bill:bill'
 admin_user_learn_statistics:
-    path: /user/learn/statistics
+    path: '/user/learn/statistics'
     defaults:
         _controller: 'AppBundle:Admin/UserLearnStatistics:show'
 admin_user_learn_detail:
@@ -2687,35 +2659,35 @@ admin_user_learn_chart:
     defaults:
         _controller: 'AppBundle:Admin/UserLearnStatistics:learnChart'
 admin_user_learn_statistics_info:
-    path: /user/learn/statistics/info
+    path: '/user/learn/statistics/info'
     defaults:
         _controller: 'AppBundle:Admin/UserLearnStatistics:syncInfo'
 admin_cloud_data_lab:
-    path: /data/lab
+    path: '/data/lab'
     defaults:
         _controller: 'AppBundle:Admin/DataLab:data'
 admin_cloud_feature_lab:
-    path: /feature/lab
+    path: '/feature/lab'
     defaults:
         _controller: 'AppBundle:Admin/FeatureLab:setting'
 admin_cloud_face_identify:
-    path: /face_identify/setting
+    path: '/face_identify/setting'
     defaults:
         _controller: 'AppBundle:Admin/FeatureLab:faceIdentify'
 admin_wechat_app:
-    path: /wechat_app
+    path: '/wechat_app'
     defaults:
         _controller: 'AppBundle:Admin/WeChatApp:index'
 admin_wechat_app_access:
-    path: /cloud/accessWechat
+    path: '/cloud/accessWechat'
     defaults:
         _controller: 'AppBundle:Admin/Cloud:accessWechat'
 admin_course_tag_match:
-    path: /course_set/tag/match
+    path: '/course_set/tag/match'
     defaults:
         _controller: 'AppBundle:Admin/CourseSet:courseTagMatch'
 admin_setting_wechat_auth:
-    path: /wechat/auth/setting
+    path: '/wechat/auth/setting'
     defaults:
         _controller: 'AppBundle:Admin/WeChatSetting:index'
 admin_setting_wechat_pre_auth_url:
@@ -2723,7 +2695,7 @@ admin_setting_wechat_pre_auth_url:
     defaults:
         _controller: 'AppBundle:Admin/WeChatSetting:preAuthUrl'
 admin_wechat_notification_record:
-    path: /wechat/notification/record
+    path: '/wechat/notification/record'
     defaults:
         _controller: 'AppBundle:Admin/WeChatNotification:record'
 admin_wechat_notification_record_detail:
@@ -2731,27 +2703,27 @@ admin_wechat_notification_record_detail:
     defaults:
         _controller: 'AppBundle:Admin/WeChatNotification:recordDetail'
 admin_wechat_fans_list:
-    path: /wechat/fans/list
+    path: '/wechat/fans/list'
     defaults:
         _controller: 'AppBundle:Admin/WeChatNotification:fansList'
 admin_wechat_notification_manage:
-    path: /wechat/notification/manage
+    path: '/wechat/notification/manage'
     defaults:
         _controller: 'AppBundle:Admin/WeChatNotification:manage'
 admin_wechat_notification_show:
-    path: /wechat/notification/show
+    path: '/wechat/notification/show'
     defaults:
         _controller: 'AppBundle:Admin/WeChatNotification:show'
 admin_wechat_notification_template_status:
-    path: /wechat/notification/template/status
+    path: '/wechat/notification/template/status'
     defaults:
         _controller: 'AppBundle:Admin/WeChatNotification:status'
 admin_coupon:
-    path: /coupon
+    path: '/coupon'
     defaults:
         _controller: 'AppBundle:Admin/CouponBatch:index'
 admin_coupon_generate:
-    path: /coupon/generate
+    path: '/coupon/generate'
     defaults:
         _controller: 'AppBundle:Admin/CouponBatch:generate'
 admin_coupon_batch_create:
@@ -2761,7 +2733,7 @@ admin_coupon_batch_create:
     methods:
         - POST
 admin_coupon_checkprefix:
-    path: /coupon/checkprefix
+    path: '/coupon/checkprefix'
     defaults:
         _controller: 'AppBundle:Admin/CouponBatch:checkPrefix'
 admin_coupon_delete:
@@ -2787,11 +2759,11 @@ admin_coupon_get_receive_url:
     defaults:
         _controller: 'AppBundle:Admin/CouponBatch:getReceiveUrl'
 admin_coupon_query:
-    path: /coupon/index
+    path: '/coupon/index'
     defaults:
         _controller: 'AppBundle:Admin/Coupon:index'
 admin_coupon_setting:
-    path: /setting/coupon
+    path: '/setting/coupon'
     defaults:
         _controller: 'AppBundle:Admin/Coupon:setting'
 admin_coupon_chooser:
@@ -2803,21 +2775,21 @@ admin_coupon_chooser_resource_list:
     defaults:
         _controller: 'AppBundle:Admin/CouponBatch:chooserResourceList'
 admin_wechat_notification_setting_modal:
-    path: /wechat/notification/setting_edit
+    path: '/wechat/notification/setting_edit'
     defaults:
         _controller: 'AppBundle:Admin/WeChatNotification:settingModal'
 admin_upgrade_v2_setting:
-    path: /upgrade/v2_setting
+    path: '/upgrade/v2_setting'
     defaults:
         _controller: 'AppBundle:Admin/Default:upgradeV2Setting'
     methods:
         - POST
 admin_question_bank:
-    path: /question_bank/index
+    path: '/question_bank/index'
     defaults:
         _controller: 'AppBundle:Admin/QuestionBank:index'
 admin_question_bank_manage_create:
-    path: /question_bank/create
+    path: '/question_bank/create'
     defaults:
         _controller: 'AppBundle:Admin/QuestionBank:create'
 admin_question_bank_manage_edit:
@@ -2831,11 +2803,11 @@ admin_question_bank_manage_delete:
     methods:
         - POST
 admin_question_bank_category:
-    path: /question_bank/category/index
+    path: '/question_bank/category/index'
     defaults:
         _controller: 'AppBundle:Admin/QuestionBankCategory:index'
 admin_question_bank_category_manage_create:
-    path: /question_bank/category/create
+    path: '/question_bank/category/create'
     defaults:
         _controller: 'AppBundle:Admin/QuestionBankCategory:create'
 admin_question_bank_category_manage_edit:
@@ -2849,7 +2821,7 @@ admin_question_bank_category_manage_delete:
     methods:
         - POST
 admin_question_bank_category_sort:
-    path: /question_bank/category/sort
+    path: '/question_bank/category/sort'
     defaults:
         _controller: 'AppBundle:Admin/QuestionBankCategory:sort'
     methods:

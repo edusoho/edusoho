@@ -17,6 +17,7 @@ class OpenCourses extends BaseResource
 
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
+        unset($conditions['start'], $conditions['limit']);
 
         $total = $this->getOpenCourseService()->countCourses($conditions);
         $openCourses = $this->getOpenCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);

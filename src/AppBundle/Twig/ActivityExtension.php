@@ -7,6 +7,7 @@ use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Player\Service\PlayerService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -48,6 +49,7 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('doc_player', [$this, 'docPlayer']),
             new \Twig_SimpleFunction('resource_player_context', [$this, 'resourcePlayerContext']),
             new \Twig_SimpleFunction('activity_visible', [$this, 'isActivityVisible']),
+            new \Twig_SimpleFunction('create_exercise_assessment', [$this, 'createExerciseAssessment']),
         ];
     }
 
@@ -201,6 +203,24 @@ class ActivityExtension extends \Twig_Extension
         return isset($activities[$type]) ? call_user_func($activities[$type]['visible'], $courseSet, $course) : false;
     }
 
+    public function createExerciseAssessment($activity)
+    {
+        $range = $activity['ext']['drawCondition']['range'];
+        $sections = [$activity['ext']['drawCondition']['section']];
+        $assessment = [
+            'name' => $activity['title'],
+            'displayable' => 0,
+            'description' => '',
+            'bank_id' => $range['bank_id'],
+            'sections' => $this->getAssessmentService()->drawItems($range, $sections),
+        ];
+        $assessment = $this->getAssessmentService()->createAssessment($assessment);
+        $this->getAssessmentService()->openAssessment($assessment['id']);
+        $assessment['itemCounts'] = $this->getAssessmentService()->countAssessmentItemTypesNum($assessment['id']);
+
+        return $assessment;
+    }
+
     public function lengthFormat($len, $type = null)
     {
         if (empty($len) || 0 == $len) {
@@ -299,5 +319,13 @@ class ActivityExtension extends \Twig_Extension
     protected function getResourceFacadeService()
     {
         return $this->biz->service('CloudPlatform:ResourceFacadeService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->biz->service('ItemBank:Assessment:AssessmentService');
     }
 }

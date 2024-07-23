@@ -19,6 +19,7 @@ class InformationCollectController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $page = new Paginator(
             $request,

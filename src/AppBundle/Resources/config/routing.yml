@@ -1,5 +1,5 @@
 homepage:
-    path: /
+    path: '/'
     defaults:
         _controller: 'AppBundle:Default:index'
     h5: true
@@ -8,7 +8,7 @@ ltc:
     defaults:
         _controller: 'AppBundle:LTC/Runtime:entryPoint'
 crontab_web:
-    path: /anon/crontab
+    path: '/anon/crontab'
     defaults:
         _controller: 'AppBundle:Common:crontab'
     methods:
@@ -28,40 +28,44 @@ jstranslation_js:
         _format: js|json
         domain: '[\w]+'
 switch_language:
-    path: /switch/language
+    path: '/switch/language'
     defaults:
         _controller: 'AppBundle:Default:translate'
 homepage_category:
-    path: /course/search
+    path: '/course/search'
     defaults:
         _controller: 'AppBundle:Default:coursesCategory'
 live_jump:
-    path: /live/jump
+    path: '/live/jump'
     defaults:
         _controller: 'AppBundle:Default:jump'
 login:
-    path: /login
+    path: '/login'
     defaults:
         _controller: 'AppBundle:Login:index'
     h5: true
+external_login:
+  path:  '/login/external'
+  defaults:
+        _controller: 'AppBundle:Login:externalLogin'
 login_check:
-    path: /login_check
+    path: '/login_check'
 logout:
-    path: /logout
+    path: '/logout'
 login_ajax:
-    path: /login/ajax
+    path: '/login/ajax'
     defaults:
         _controller: 'AppBundle:Login:ajax'
 login_sms:
-    path: /login/sms
+    path: '/login/sms'
     defaults:
         _controller: 'AppBundle:Login:sms'
 login_sms_ajax:
-    path: /login/sms/ajax
+    path: '/login/sms/ajax'
     defaults:
         _controller: 'AppBundle:Login:smsAjax'
 login_qrcode:
-    path: /login/qrcode
+    path: '/login/qrcode'
     defaults:
         _controller: 'AppBundle:Login:qrcode'
 login_face_token:
@@ -72,6 +76,10 @@ login_parse_face_token:
     path: '/login/face_token/parse/{token}'
     defaults:
         _controller: 'AppBundle:Login:parseFaceToken'
+login_agreement:
+    path: '/login/agreement'
+    defaults:
+        _controller: 'AppBundle:Login:agreement'
 login_bind:
     path: '/login/bind/{type}'
     defaults:
@@ -81,31 +89,31 @@ login_bind_callback:
     defaults:
         _controller: 'AppBundle:LoginBind:callback'
 oauth2_login_index:
-    path: /oauth2/login/main
+    path: '/oauth2/login/main'
     defaults:
         _controller: 'AppBundle:OAuth2/Login:main'
 oauth2_login_app:
-    path: /oauth2/login/app
+    path: '/oauth2/login/app'
     defaults:
         _controller: 'AppBundle:OAuth2/Login:app'
 oauth2_login_try_bind_account:
-    path: /oauth2/login/try/bind_account
+    path: '/oauth2/login/try/bind_account'
     defaults:
         _controller: 'AppBundle:OAuth2/Login:tryBindAccount'
     methods:
         - POST
 oauth2_login_bind_account:
-    path: /oauth2/login/bind_account
+    path: '/oauth2/login/bind_account'
     defaults:
         _controller: 'AppBundle:OAuth2/Login:bindAccount'
     methods:
         - POST
 oauth2_login_bind_login:
-    path: /oauth2/login/bind_login
+    path: '/oauth2/login/bind_login'
     defaults:
         _controller: 'AppBundle:OAuth2/Login:bindLogin'
 oauth2_login_create:
-    path: /oauth2/login/create
+    path: '/oauth2/login/create'
     defaults:
         _controller: 'AppBundle:OAuth2/Login:create'
 original_account_check:
@@ -113,47 +121,47 @@ original_account_check:
     defaults:
         _controller: 'AppBundle:OAuth2/Login:OriginalAccountCheck'
 oauth2_login_success:
-    path: /oauth2/login/success
+    path: '/oauth2/login/success'
     defaults:
         _controller: 'AppBundle:OAuth2/Login:success'
 login_check_email:
-    path: /login/check/email
+    path: '/login/check/email'
     defaults:
         _controller: 'AppBundle:Login:checkEmail'
 password_init:
-    path: /password/init
+    path: '/password/init'
     defaults:
         _controller: 'AppBundle:PasswordInit:initPassword'
 common_qrcode:
-    path: /common/qrcode
+    path: '/common/qrcode'
     defaults:
         _controller: 'AppBundle:Common:qrcode'
 common_wechat_subscribe_wap:
-    path: /common/subscribe/wap
+    path: '/common/subscribe/wap'
     defaults:
         _controller: 'AppBundle:Common:weChatOfficialSubscribe'
 user_terms:
-    path: /userterms
+    path: '/userterms'
     defaults:
         _controller: 'AppBundle:Register:userTerms'
 privacy_policy:
-    path: /privacyPolicy
+    path: '/privacyPolicy'
     defaults:
         _controller: 'AppBundle:Register:privacyPolicy'
 distributor_register:
-    path: /distributor_register
+    path: '/distributor_register'
     defaults:
         _controller: 'AppBundle:Distributor:register'
 distributor_product:
-    path: /distributor_product
+    path: '/distributor_product'
     defaults:
         _controller: 'AppBundle:Distributor:product'
 register:
-    path: /register
+    path: '/register'
     defaults:
         _controller: 'AppBundle:Register:index'
 register_success:
-    path: /register/success
+    path: '/register/success'
     defaults:
         _controller: 'AppBundle:Register:success'
 register_submited:
@@ -165,11 +173,11 @@ register_reset_email:
     defaults:
         _controller: 'AppBundle:Register:resetEmail'
 register_reset_email_check:
-    path: /register/email/reset/check
+    path: '/register/email/reset/check'
     defaults:
         _controller: 'AppBundle:Register:resetEmailCheck'
 register_reset_email_verify:
-    path: /register/email/reset/verify
+    path: '/register/email/reset/verify'
     defaults:
         _controller: 'AppBundle:Register:resetEmailVerify'
     methods:
@@ -185,55 +193,59 @@ register_email_verify:
     defaults:
         _controller: 'AppBundle:Register:emailVerify'
 register_email_check:
-    path: /register/email/check
+    path: '/register/email/check'
     defaults:
         _controller: 'AppBundle:Register:emailCheck'
 register_mobile_check:
-    path: /register/mobile/check
+    path: '/register/mobile/check'
     defaults:
         _controller: 'AppBundle:Register:mobileCheck'
 register_email_or_mobile_check:
-    path: /register/email_or_mobile/check
+    path: '/register/email_or_mobile/check'
     defaults:
         _controller: 'AppBundle:Register:emailOrMobileCheck'
 register_nickname_check:
-    path: /register/nickname/check
+    path: '/register/nickname/check'
     defaults:
         _controller: 'AppBundle:Register:nicknameCheck'
 invitecode_check:
-    path: /register/invitecode/check
+    path: '/register/invitecode/check'
     defaults:
         _controller: 'AppBundle:Register:invitecodeCheck'
 register_captcha_check:
-    path: /register/captcha/check
+    path: '/register/captcha/check'
     defaults:
         _controller: 'AppBundle:Register:captchaCheck'
 register_captcha_modal:
-    path: /register/captcha/modal
+    path: '/register/captcha/modal'
     defaults:
         _controller: 'AppBundle:Register:captchaModal'
 register_analysis:
-    path: /register/analysis
+    path: '/register/analysis'
     defaults:
         _controller: 'AppBundle:Register:analysis'
+register_agreement:
+    path: '/register/agreement'
+    defaults:
+        _controller: 'AppBundle:Register:agreement'
 register_captcha_num:
-    path: /captcha_num
+    path: '/captcha_num'
     defaults:
         _controller: 'AppBundle:Register:captcha'
 file_upload:
-    path: /file/upload
+    path: '/file/upload'
     defaults:
         _controller: 'AppBundle:File:upload'
     methods:
         - POST
 qr_code_upload:
-    path: /qr/code/upload
+    path: '/qr/code/upload'
     defaults:
         _controller: 'AppBundle:File:qrCodeUpload'
     methods:
         - POST
 file_img_crop:
-    path: /file/img/crop
+    path: '/file/img/crop'
     defaults:
         _controller: 'AppBundle:File:cropImg'
     methods:
@@ -252,18 +264,18 @@ attachment_form_fields:
     methods:
         - GET
 uploader_entry:
-    path: /uploader
+    path: '/uploader'
     defaults:
         _controller: 'AppBundle:Uploader:entry'
 uploader_init:
-    path: /uploader/init
+    path: '/uploader/init'
     defaults:
         _controller: 'AppBundle:Uploader:init'
     methods:
         - GET
         - POST
 uploader_auth:
-    path: /uploader/auth
+    path: '/uploader/auth'
     defaults:
         _controller: 'AppBundle:Uploader:uploadAuth'
     methods:
@@ -271,54 +283,54 @@ uploader_auth:
         - POST
         - OPTIONS
 uploader_batch_upload:
-    path: /uploader/batch_upload
+    path: '/uploader/batch_upload'
     defaults:
         _controller: 'AppBundle:Uploader:batchUpload'
 uploader_finished:
-    path: /uploader/finished
+    path: '/uploader/finished'
     defaults:
         _controller: 'AppBundle:Uploader:finished'
     methods:
         - GET
         - POST
 uploader_upload_callback:
-    path: /uploader/upload_callback
+    path: '/uploader/upload_callback'
     defaults:
         _controller: 'AppBundle:Uploader:uploadCallback'
     methods:
         - GET
         - POST
 uploader_process_callback:
-    path: /uploader/process_callback
+    path: '/uploader/process_callback'
     defaults:
         _controller: 'AppBundle:Uploader:processCallback'
     methods:
         - POST
 uploader_chunks_start:
-    path: /uploader/chunks/start
+    path: '/uploader/chunks/start'
     defaults:
         _controller: 'AppBundle:Uploader:chunksStart'
 uploader_chunks_finish:
-    path: /uploader/chunks/finish
+    path: '/uploader/chunks/finish'
     defaults:
         _controller: 'AppBundle:Uploader:chunksFinish'
 uploadfile_upload:
-    path: /uploadfile/upload
+    path: '/uploadfile/upload'
     defaults:
         _controller: 'AppBundle:UploadFile:upload'
     methods:
         - POST
         - OPTIONS
 uploadfile_browser:
-    path: /uploadfile/browser
+    path: '/uploadfile/browser'
     defaults:
         _controller: 'AppBundle:UploadFile:browser'
 uploadfile_params:
-    path: /uploadfile/params
+    path: '/uploadfile/params'
     defaults:
         _controller: 'AppBundle:UploadFile:params'
 uploadfile_browsers:
-    path: /uploadfile/browsers
+    path: '/uploadfile/browsers'
     defaults:
         _controller: 'AppBundle:UploadFile:browsers'
 hls_playlist:
@@ -354,13 +366,13 @@ hls_audio_clef:
     defaults:
         _controller: 'AppBundle:HLSAudio:clef'
 editor_upload:
-    path: /editor/upload
+    path: '/editor/upload'
     defaults:
         _controller: 'AppBundle:Editor:upload'
     methods:
         - POST
 editor_download:
-    path: /editor/download
+    path: '/editor/download'
     defaults:
         _controller: 'AppBundle:Editor:download'
     methods:
@@ -370,7 +382,7 @@ liveroom_ticket:
     defaults:
         _controller: 'AppBundle:Liveroom:ticket'
 live_auth:
-    path: /live/auth
+    path: '/live/auth'
     defaults:
         _controller: 'AppBundle:LiveAuth:index'
 order_detail:
@@ -412,7 +424,7 @@ media_subtitle_delete:
     methods:
         - POST
 media_subtitle_manage_dialog:
-    path: /media/subtitles/manage/dialog
+    path: '/media/subtitles/manage/dialog'
     defaults:
         _controller: 'AppBundle:Subtitle:manageDialog'
 announcement_list:
@@ -446,88 +458,88 @@ announcement_delete:
     methods:
         - POST
 search:
-    path: /search
+    path: '/search'
     defaults:
         _controller: 'AppBundle:Search:index'
 cloud_search:
-    path: /cloud/search
+    path: '/cloud/search'
     defaults:
         _controller: 'AppBundle:Search:cloudSearch'
 settings:
-    path: /settings
+    path: '/settings'
     defaults:
         _controller: 'AppBundle:Settings:profile'
     h5: true
 settings_avatar_crop_modal:
-    path: /settings/avatar/crop/modal
+    path: '/settings/avatar/crop/modal'
     defaults:
         _controller: 'AppBundle:Settings:avatarCropModal'
 settings_profile_avatar_crop_modal:
-    path: /settings/profile/avatar/crop/modal
+    path: '/settings/profile/avatar/crop/modal'
     defaults:
         _controller: 'AppBundle:Settings:profileAvatarCropModal'
 settings_assistant_qrcode_crop_modal:
-    path: /settings/assistant/qrcode/crop/modal
+    path: '/settings/assistant/qrcode/crop/modal'
     defaults:
         _controller: 'AppBundle:Settings:assistantQrCodeCropModal'
 settings_avatar_fetch_partner:
-    path: /settings/avatar/fetch_partner
+    path: '/settings/avatar/fetch_partner'
     defaults:
         _controller: 'AppBundle:Settings:avatarFetchPartner'
     methods:
         - POST
 settings_security:
-    path: /settings/security
+    path: '/settings/security'
     defaults:
         _controller: 'AppBundle:Settings:security'
 settings_set_password:
-    path: /settings/set_password
+    path: '/settings/set_password'
     defaults:
         _controller: 'AppBundle:Settings:setPassword'
 settings_pay_password:
-    path: /settings/pay_password
+    path: '/settings/pay_password'
     defaults:
         _controller: 'AppBundle:Settings:payPassword'
 settings_reset_pay_password:
-    path: /settings/reset_pay_password
+    path: '/settings/reset_pay_password'
     defaults:
         _controller: 'AppBundle:Settings:resetPayPassword'
 settings_find_pay_password:
-    path: /settings/find_pay_password
+    path: '/settings/find_pay_password'
     defaults:
         _controller: 'AppBundle:Settings:findPayPassword'
 settings_update_pay_password:
-    path: /settings/update_pay_password
+    path: '/settings/update_pay_password'
     defaults:
         _controller: 'AppBundle:Settings:updatePayPassword'
 settings_security_questions:
-    path: /settings/security_questions
+    path: '/settings/security_questions'
     defaults:
         _controller: 'AppBundle:Settings:securityQuestions'
 setting_nickname:
-    path: /settings/nickname
+    path: '/settings/nickname'
     defaults:
         _controller: 'AppBundle:Settings:nickname'
 update_nickname_check:
-    path: /settings/nickname/check
+    path: '/settings/nickname/check'
     defaults:
         _controller: 'AppBundle:Settings:nicknameCheck'
 settings_password:
-    path: /settings/password
+    path: '/settings/password'
     defaults:
         _controller: 'AppBundle:Settings:password'
 settings_email:
-    path: /settings/email
+    path: '/settings/email'
     defaults:
         _controller: 'AppBundle:Settings:email'
 settings_email_verify:
-    path: /settings/email/verify
+    path: '/settings/email/verify'
     defaults:
         _controller: 'AppBundle:Settings:emailVerify'
     methods:
         - POST
 settings_binds:
-    path: /settings/binds
+    path: '/settings/binds'
     defaults:
         _controller: 'AppBundle:Settings:binds'
 settings_binds_unbind:
@@ -545,55 +557,55 @@ settings_binds_bind_callback:
     defaults:
         _controller: 'AppBundle:Settings:bindCallback'
 settings_scrm:
-    path: /settings/scrm
+    path: '/settings/scrm'
     defaults:
         _controller: 'AppBundle:Settings:scrm'
 settings_scrm_bind:
-    path: /settings/scrm/bind
+    path: '/settings/scrm/bind'
     defaults:
         _controller: 'AppBundle:Settings:scrmBind'
 settings_setup_password:
-    path: /settings/setup_password
+    path: '/settings/setup_password'
     defaults:
         _controller: 'AppBundle:Settings:setupPassword'
 settings_setup_check_nickname:
-    path: /settings/setup/check_nickname
+    path: '/settings/setup/check_nickname'
     defaults:
         _controller: 'AppBundle:Settings:setupCheckNickname'
 auth_email_confirm:
-    path: /auth/email/confirm
+    path: '/auth/email/confirm'
     defaults:
         _controller: 'AppBundle:Auth:emailConfirm'
 password_reset:
-    path: /password/reset
+    path: '/password/reset'
     defaults:
         _controller: 'AppBundle:PasswordReset:index'
 password_reset_update:
-    path: /password/reset/update
+    path: '/password/reset/update'
     defaults:
         _controller: 'AppBundle:PasswordReset:update'
 raw_password_update:
-    path: /raw/password/update
+    path: '/raw/password/update'
     defaults:
         _controller: 'AppBundle:PasswordReset:changeRawPassword'
 browser_upgrade:
-    path: /browser/upgrade
+    path: '/browser/upgrade'
     defaults:
         _controller: 'AppBundle:Browser:upgrade'
 category_all:
-    path: /category/all
+    path: '/category/all'
     defaults:
         _controller: 'AppBundle:Category:all'
 tag:
-    path: /tag
+    path: '/tag'
     defaults:
         _controller: 'AppBundle:Tag:index'
 tag_all:
-    path: /tag/all_jsonm
+    path: '/tag/all_jsonm'
     defaults:
         _controller: 'AppBundle:Tag:all'
 tag_match:
-    path: /tag/match_jsonp
+    path: '/tag/match_jsonp'
     defaults:
         _controller: 'AppBundle:Tag:match'
 tag_show:
@@ -601,25 +613,25 @@ tag_show:
     defaults:
         _controller: 'AppBundle:Tag:show'
 following_match_bynickname:
-    path: /following/bynickname/match_jsonp
+    path: '/following/bynickname/match_jsonp'
     defaults:
         _controller: 'AppBundle:Message:match'
 comment_widget_init:
-    path: /comment-widget/init
+    path: '/comment-widget/init'
     defaults:
         _controller: 'AppBundle:CommentWidget:init'
 comment_widget_create:
-    path: /comment-widget/create
+    path: '/comment-widget/create'
     defaults:
         _controller: 'AppBundle:CommentWidget:create'
 comment_widget_delete:
-    path: /comment-widget/delete
+    path: '/comment-widget/delete'
     defaults:
         _controller: 'AppBundle:CommentWidget:delete'
     methods:
         - POST
 notification:
-    path: /notification
+    path: '/notification'
     defaults:
         _controller: 'AppBundle:Notification:index'
 batch_notification_show:
@@ -651,27 +663,27 @@ my_teaching_classrooms:
         _controller: 'AppBundle:My/Classroom:teaching'
         tab: publish
 my_teaching_multi_class:
-    path: /my/teaching/multi_class
+    path: '/my/teaching/multi_class'
     defaults:
         _controller: 'AppBundle:My/MultiClass:teaching'
 my_teaching_live_calendar:
-    path: /my/teaching/live/calendar
+    path: '/my/teaching/live/calendar'
     defaults:
         _controller: 'AppBundle:My/CourseSet:teachingLivesCalendar'
 my_live_courses_learning:
-    path: /my/learning/live
+    path: '/my/learning/live'
     defaults:
         _controller: 'AppBundle:My/CourseSet:lives'
 my_testpaper_check_list:
-    path: /my/testpaper/check
+    path: '/my/testpaper/check'
     defaults:
         _controller: 'AppBundle:My/Testpaper:checkList'
 my_testpaper_list:
-    path: /my/testpaper/list
+    path: '/my/testpaper/list'
     defaults:
         _controller: 'AppBundle:My/Testpaper:list'
 my_favorite_question_list:
-    path: /my/question/favorite/list
+    path: '/my/question/favorite/list'
     defaults:
         _controller: 'AppBundle:My/Question:favoriteList'
 my_favorite_question_preview:
@@ -697,21 +709,21 @@ my_homework_list:
         _controller: 'AppBundle:My/Homework:list'
         status: finished
 my_orders:
-    path: /my/orders
+    path: '/my/orders'
     defaults:
         _controller: 'AppBundle:My/Order:index'
     h5: true
 my_certificates:
-    path: /my/certificates
+    path: '/my/certificates'
     defaults:
         _controller: 'AppBundle:My/Certificate:index'
     h5: true
 my_wrong_question_book:
-    path: /my/wrong_question_book
+    path: '/my/wrong_question_book'
     defaults:
         _controller: 'AppBundle:My/WrongQuestionBook:index'
 my_wrong_question_book_target_detail:
-    path: /my/wrong_question_book/wrong_questions
+    path: '/my/wrong_question_book/wrong_questions'
     defaults:
         _controller: 'AppBundle:My/WrongQuestionBook:detail'
 wrong_question_book_practise_redirect:
@@ -731,11 +743,11 @@ wrong_question_book_practise_show_result:
     defaults:
         _controller: 'AppBundle:My/WrongQuestionBook:showResult'
 my_unclaimed_certificates:
-    path: /my/certificates/unclaimed
+    path: '/my/certificates/unclaimed'
     defaults:
         _controller: 'AppBundle:My/Certificate:unclaimed'
 my_order_refunds:
-    path: /my/order_refunds
+    path: '/my/order_refunds'
     defaults:
         _controller: 'AppBundle:My/OrderRefund:index'
 my_order_refund_detail:
@@ -757,15 +769,15 @@ web_user_order_detail:
     defaults:
         _controller: 'AppBundle:My/Order:detail'
 my_refunds:
-    path: /my/refunds
+    path: '/my/refunds'
     defaults:
         _controller: 'AppBundle:My/Order:refunds'
 income_records:
-    path: /my/income_records
+    path: '/my/income_records'
     defaults:
         _controller: 'AppBundle:My/MoneyRecord:index'
 payout_records:
-    path: /my/payout_records
+    path: '/my/payout_records'
     defaults:
         _controller: 'AppBundle:My/MoneyRecord:payout'
 user_show:
@@ -791,7 +803,7 @@ user_course_set_unstick:
     methods:
         - POST
 my_page_show:
-    path: /my/page/show
+    path: '/my/page/show'
     defaults:
         _controller: 'AppBundle:User:pageShow'
 user_about:
@@ -835,7 +847,7 @@ user_unfollow:
     methods:
         - POST
 user_remind_counter:
-    path: /user_remind_counter
+    path: '/user_remind_counter'
     defaults:
         _controller: 'AppBundle:User:remindCounter'
 user_teaching_classrooms:
@@ -859,7 +871,7 @@ user_card_show:
     defaults:
         _controller: 'AppBundle:User:cardShow'
 login_after_fill_userinfo:
-    path: /fill/userinfo
+    path: '/fill/userinfo'
     defaults:
         _controller: 'AppBundle:User:fillUserInfo'
 message_create:
@@ -867,15 +879,15 @@ message_create:
     defaults:
         _controller: 'AppBundle:Message:create'
 message:
-    path: /message/
+    path: '/message/'
     defaults:
         _controller: 'AppBundle:Message:index'
 message_check_receiver:
-    path: /message/check/receiver
+    path: '/message/check/receiver'
     defaults:
         _controller: 'AppBundle:Message:checkReceiver'
 message_send:
-    path: /message/send/
+    path: '/message/send/'
     defaults:
         _controller: 'AppBundle:Message:send'
 message_send_to_receiver:
@@ -903,7 +915,7 @@ content_article_show:
     defaults:
         _controller: 'AppBundle:Content:articleShow'
 content_article_list:
-    path: /carticle
+    path: '/carticle'
     defaults:
         _controller: 'AppBundle:Content:articleList'
 content_activity_show:
@@ -911,7 +923,7 @@ content_activity_show:
     defaults:
         _controller: 'AppBundle:Content:activityShow'
 content_activity_list:
-    path: /activity
+    path: '/activity'
     defaults:
         _controller: 'AppBundle:Content:activityList'
 content_page_show:
@@ -919,11 +931,11 @@ content_page_show:
     defaults:
         _controller: 'AppBundle:Content:pageShow'
 content_page_list:
-    path: /page
+    path: '/page'
     defaults:
         _controller: 'AppBundle:Content:pageList'
 content_course_rule:
-    path: /courserule
+    path: '/courserule'
     defaults:
         _controller: 'AppBundle:Course/CourseManage:courseRule'
 course_set_live_capacity:
@@ -931,67 +943,59 @@ course_set_live_capacity:
     defaults:
         _controller: 'AppBundle:Course/CourseManage:liveCapacity'
 teacher:
-    path: /teacher
+    path: '/teacher'
     defaults:
         _controller: 'AppBundle:Teacher:index'
 teacher_search:
-    path: /teacher/search
+    path: '/teacher/search'
     defaults:
         _controller: 'AppBundle:Teacher:search'
 teacher_qualification:
-    path: /teacher/qualification
+    path: '/teacher/qualification'
     defaults:
         _controller: 'AppBundle:Teacher:qualification'
 partner_login:
-    path: /partner/login
+    path: '/partner/login'
     defaults:
         _controller: 'AppBundle:Partner:login'
 partner_logout:
-    path: /partner/logout
+    path: '/partner/logout'
     defaults:
         _controller: 'AppBundle:Partner:logout'
-partner_discuz_notify:
-    path: /partner/discuz/api/notify
-    defaults:
-        _controller: 'AppBundle:PartnerDiscuz:notify'
-partner_phpwind_notify:
-    path: /partner/phpwind/api/notify
-    defaults:
-        _controller: 'AppBundle:PartnerPhpwind:notify'
 cloud_set_server:
-    path: /cloud/set-server
+    path: '/cloud/set-server'
     defaults:
         _controller: 'AppBundle:Cloud:setServer'
 cloud_video_fingerprint:
-    path: /cloud/video_fingerprint
+    path: '/cloud/video_fingerprint'
     defaults:
         _controller: 'AppBundle:Cloud:videoFingerprint'
 cloud_ppt_watermark:
-    path: /cloud/ppt_watermark
+    path: '/cloud/ppt_watermark'
     defaults:
         _controller: 'AppBundle:Cloud:pptWatermark'
 cloud_doc_watermark:
-    path: /cloud/doc_watermark
+    path: '/cloud/doc_watermark'
     defaults:
         _controller: 'AppBundle:Cloud:docWatermark'
 cloud_testpaper_watermark:
-    path: /cloud/testpaper_watermark
+    path: '/cloud/testpaper_watermark'
     defaults:
         _controller: 'AppBundle:Cloud:testpaperWatermark'
 systeminfo:
-    path: /systeminfo
+    path: '/systeminfo'
     defaults:
         _controller: 'AppBundle:Systeminfo:index'
 setting_approval_submit:
-    path: /settings/approval/submit
+    path: '/settings/approval/submit'
     defaults:
         _controller: 'AppBundle:Settings:approvalSubmit'
 setting_qualification:
-    path: /settings/qualification
+    path: '/settings/qualification'
     defaults:
         _controller: 'AppBundle:Settings:qualification'
 article_show:
-    path: /article
+    path: '/article'
     defaults:
         _controller: 'AppBundle:Article:index'
 article_detail:
@@ -1036,35 +1040,39 @@ article_tag_show:
     defaults:
         _controller: 'AppBundle:Article:tag'
 mobile:
-    path: /mobile/
+    path: '/mobile/'
     defaults:
         _controller: 'AppBundle:Mobile:index'
 mobile_download_qrcode:
-    path: /mobile/downloadQrcode
+    path: '/mobile/downloadQrcode'
     defaults:
         _controller: 'AppBundle:Mobile:downloadQrcode'
+mobile_download_middle_page:
+    path: '/mobile/downloadMiddlePage'
+    defaults:
+        _controller: 'AppBundle:Mobile:downloadMiddlePage'
 mobile_download:
-    path: /mobile/download
+    path: '/mobile/download'
     defaults:
         _controller: 'AppBundle:Mobile:download'
 mobile_userterms:
-    path: /mobile/userterms
+    path: '/mobile/userterms'
     defaults:
         _controller: 'AppBundle:Mobile:userterms'
 mobile_privacy_Policy:
-    path: /mobile/privacy_policy
+    path: '/mobile/privacy_policy'
     defaults:
         _controller: 'AppBundle:Mobile:privacyPolicy'
 group:
-    path: /group
+    path: '/group'
     defaults:
         _controller: 'AppBundle:Group:index'
 group_search_group:
-    path: /group/search_group
+    path: '/group/search_group'
     defaults:
         _controller: 'AppBundle:Group:search'
 group_add:
-    path: /group/add
+    path: '/group/add'
     defaults:
         _controller: 'AppBundle:Group:addGroup'
 group_show:
@@ -1138,7 +1146,7 @@ group_thread_update:
     defaults:
         _controller: 'AppBundle:GroupThread:updateThread'
 group_thread_check_user:
-    path: /mygroup/checkuser
+    path: '/mygroup/checkuser'
     defaults:
         _controller: 'AppBundle:GroupThread:checkUser'
 group_thread_show:
@@ -1180,19 +1188,19 @@ group_thread_adopt:
     defaults:
         _controller: 'AppBundle:GroupThread:adopt'
 group_upload:
-    path: /group/thread/upload
+    path: '/group/thread/upload'
     defaults:
         _controller: 'AppBundle:GroupThread:upload'
 my_bill:
-    path: /my/bill
+    path: '/my/bill'
     defaults:
         _controller: 'AppBundle:My/Coin:cashBill'
 my_coin:
-    path: /my/coin
+    path: '/my/coin'
     defaults:
         _controller: 'AppBundle:My/Coin:index'
 my_invite_code:
-    path: /my/invitecode
+    path: '/my/invitecode'
     defaults:
         _controller: 'AppBundle:My/Coin:inviteCode'
 note_like:
@@ -1208,39 +1216,39 @@ note_cancel_like:
     methods:
         - POST
 receive_coupon:
-    path: /my/invitecode/receivecoupon
+    path: '/my/invitecode/receivecoupon'
     defaults:
         _controller: 'AppBundle:My/Coin:receiveCoupon'
 coin_show:
-    path: /my/coin/show
+    path: '/my/coin/show'
     defaults:
         _controller: 'AppBundle:My/Coin:show'
 user_password_check:
-    path: /user/password/check
+    path: '/user/password/check'
     defaults:
         _controller: 'AppBundle:User:checkPassword'
 cashier_show:
-    path: /cashier/standard
+    path: '/cashier/standard'
     defaults:
         _controller: 'AppBundle:Cashier/Cashier:show'
 cashier_redirect:
-    path: /cashier/redirect
+    path: '/cashier/redirect'
     defaults:
         _controller: 'AppBundle:Cashier/Cashier:redirect'
 cashier_wechat_js_pay:
-    path: /pay/center/wxpay
+    path: '/pay/center/wxpay'
     defaults:
         _controller: 'AppBundle:Cashier/Wechat:wechatJsPay'
 cashier_wechat_js_pay_h5:
-    path: /pay/center/wxpay_h5
+    path: '/pay/center/wxpay_h5'
     defaults:
         _controller: 'AppBundle:Cashier/Wechat:wechatJsPayH5'
 cashier_wechat_mweb_app_trade:
-    path: /pay/center/wxpay_mweb_app_trade
+    path: '/pay/center/wxpay_mweb_app_trade'
     defaults:
         _controller: 'AppBundle:Cashier/Wechat:wechatAppMwebTrade'
 cashier_password_check:
-    path: /cashier/password/check
+    path: '/cashier/password/check'
     defaults:
         _controller: 'AppBundle:Cashier/Cashier:checkPayPassword'
 cashier_pay_price:
@@ -1250,7 +1258,7 @@ cashier_pay_price:
     methods:
         - POST
 cashier_pay_success:
-    path: /cashier/pay/success
+    path: '/cashier/pay/success'
     defaults:
         _controller: 'AppBundle:Cashier/Cashier:success'
 cashier_pay_notify:
@@ -1264,11 +1272,11 @@ cashier_pay_return_for_app:
     defaults:
         _controller: 'AppBundle:Cashier/Callback:returnForApp'
 cashier_redirect_for_h5:
-    path: /h5cashier/redirect
+    path: '/h5cashier/redirect'
     defaults:
         _controller: 'AppBundle:Cashier/CashierH5:redirect'
 cashier_pay_success_for_h5:
-    path: /h5cashier/pay/success
+    path: '/h5cashier/pay/success'
     defaults:
         _controller: 'AppBundle:Cashier/CashierH5:success'
 cashier_pay_return_for_h5:
@@ -1280,13 +1288,13 @@ cashier_pay_return:
     defaults:
         _controller: 'AppBundle:Cashier/Callback:return'
 pay_center_auth_unbind:
-    path: /pay/center/auth_unbind
+    path: '/pay/center/auth_unbind'
     defaults:
         _controller: 'AppBundle:PayCenter:unbindAuth'
     methods:
         - POST
 auth_unbind_mobile_show:
-    path: /pay/center/mobile_show
+    path: '/pay/center/mobile_show'
     defaults:
         _controller: 'AppBundle:PayCenter:showMobile'
 pay_return:
@@ -1302,31 +1310,31 @@ pay_notify:
     defaults:
         _controller: 'AppBundle:PayCenter:payNotify'
 pay_success_show:
-    path: /pay/center/success/show
+    path: '/pay/center/success/show'
     defaults:
         _controller: 'AppBundle:PayCenter:showTarget'
 pay_password_check:
-    path: /pay/password/check
+    path: '/pay/password/check'
     defaults:
         _controller: 'AppBundle:PayCenter:payPasswordCheck'
 pay_error:
-    path: /pay/error
+    path: '/pay/error'
     defaults:
         _controller: 'AppBundle:PayCenter:payError'
 pay_result_notice:
-    path: /pay/result/notice
+    path: '/pay/result/notice'
     defaults:
         _controller: 'AppBundle:PayCenter:resultNotice'
 wxpay_roll:
-    path: /pay/wxpay/roll
+    path: '/pay/wxpay/roll'
     defaults:
         _controller: 'AppBundle:PayCenter:wxpayRoll'
 order_show:
-    path: /order/show
+    path: '/order/show'
     defaults:
         _controller: 'AppBundle:Order/Order:show'
 order_create:
-    path: /order/create
+    path: '/order/create'
     defaults:
         _controller: 'AppBundle:Order/Order:create'
     methods:
@@ -1411,27 +1419,27 @@ ajax_thread_member_show:
     methods:
         - GET
 vip:
-    path: /vip/
+    path: '/vip/'
 vip_buy:
-    path: /vip/buy
+    path: '/vip/buy'
 vip_renew:
-    path: /vip/renew
+    path: '/vip/renew'
 vip_upgrade:
-    path: /vip/upgrade
+    path: '/vip/upgrade'
 edu_cloud_sms_send:
-    path: /edu_cloud/sms_send
+    path: '/edu_cloud/sms_send'
     defaults:
         _controller: 'AppBundle:EduCloud:smsSend'
     methods:
         - POST
 edu_cloud_sms_send_registration:
-    path: /edu_cloud/sms_send_registration
+    path: '/edu_cloud/sms_send_registration'
     defaults:
         _controller: 'AppBundle:EduCloud:smsSendRegistration'
     methods:
         - POST
 edu_cloud_sms_send_check_captcha:
-    path: /edu_cloud/sms_send_check_captcha
+    path: '/edu_cloud/sms_send_check_captcha'
     defaults:
         _controller: 'AppBundle:EduCloud:smsSendCheckCaptcha'
     methods:
@@ -1445,43 +1453,43 @@ edu_cloud_sms_send_callback:
     defaults:
         _controller: 'AppBundle:EduCloud:smsCallBack'
 edu_cloud_search_callback:
-    path: /edu_cloud/search/callback
+    path: '/edu_cloud/search/callback'
     defaults:
         _controller: 'AppBundle:EduCloud:searchCallBack'
 settings_bind_mobile:
-    path: /settings/bind_mobile
+    path: '/settings/bind_mobile'
     defaults:
         _controller: 'AppBundle:Settings:bindMobile'
 settings_mobile_bind:
-    path: /settings/mobile_bind
+    path: '/settings/mobile_bind'
     defaults:
         _controller: 'AppBundle:Settings:mobileBind'
 settings_check_login_password:
-    path: /settings/check_login_password
+    path: '/settings/check_login_password'
     defaults:
         _controller: 'AppBundle:Settings:passwordCheck'
     methods:
         - POST
 password_reset_by_sms:
-    path: /password/reset/by_sms
+    path: '/password/reset/by_sms'
     defaults:
         _controller: 'AppBundle:PasswordReset:resetBySms'
     methods:
         - POST
 settings_find_pay_password_by_sms:
-    path: /settings/find_pay_password_by_sms
+    path: '/settings/find_pay_password_by_sms'
     defaults:
         _controller: 'AppBundle:Settings:findPayPasswordBySms'
 password_reset_by_email_success:
-    path: /password/reset/email/success
+    path: '/password/reset/email/success'
     defaults:
         _controller: 'AppBundle:PasswordReset:emailResetSuccess'
 settings_find_pay_password_by_question:
-    path: /settings/find_pay_password_by_question
+    path: '/settings/find_pay_password_by_question'
     defaults:
         _controller: 'AppBundle:Settings:findPayPasswordByQuestion'
 edu_cloud_sms_callback:
-    path: /edu_cloud/sms_callback
+    path: '/edu_cloud/sms_callback'
     defaults:
         _controller: 'AppBundle:EduCloud:cloudCallBack'
     methods:
@@ -1491,15 +1499,15 @@ common_parse_qrcode:
     defaults:
         _controller: 'AppBundle:Common:parseQrcode'
 esbar_my_classroom:
-    path: /esbar/my/classroom
+    path: '/esbar/my/classroom'
     defaults:
         _controller: 'AppBundle:EsBar/EsBar:classroom'
 esbar_my_course:
-    path: /esbar/my/course
+    path: '/esbar/my/course'
     defaults:
         _controller: 'AppBundle:EsBar/EsBar:course'
 esbar_my_notify:
-    path: /esbar/my/notify
+    path: '/esbar/my/notify'
     defaults:
         _controller: 'AppBundle:EsBar/EsBar:notify'
 esbar_my_practice:
@@ -1507,19 +1515,19 @@ esbar_my_practice:
     defaults:
         _controller: 'AppBundle:EsBar/EsBar:practice'
 esbar_my_study_center:
-    path: /esbar/my/study_center
+    path: '/esbar/my/study_center'
     defaults:
         _controller: 'AppBundle:EsBar/EsBar:studyCenter'
 my:
-    path: /my
+    path: '/my'
     defaults:
         _controller: 'AppBundle:My/Course:index'
 my_cards:
-    path: /my/cards
+    path: '/my/cards'
     defaults:
         _controller: 'AppBundle:My/Card:index'
 card_info:
-    path: /card/info
+    path: '/card/info'
     defaults:
         _controller: 'AppBundle:My/Card:cardInfo'
 open_course_explore:
@@ -1570,7 +1578,7 @@ open_course_manage_lesson_sort:
     methods:
         - POST
 open_course_draft_create:
-    path: /open/course/draft/create
+    path: '/open/course/draft/create'
     defaults:
         _controller: 'AppBundle:OpenCourseLessonManage:draftCreate'
 open_course_manage_picture_crop:
@@ -1616,7 +1624,7 @@ open_course_manage_file_convert:
     methods:
         - POST
 open_course_manage_file_status:
-    path: /open/course/manage/file/status
+    path: '/open/course/manage/file/status'
     defaults:
         _controller: 'AppBundle:OpenCourseFileManage:fileStatus'
 open_course_manage_delete_materials_show:
@@ -1838,6 +1846,10 @@ course_task_show:
     path: '/course/{courseId}/task/{id}/show'
     defaults:
         _controller: 'AppBundle:Task:show'
+course_task_download_app_show:
+  path: '/course/task/downloadAppShow'
+  defaults:
+    _controller: 'AppBundle:Task:downloadAppShow'
 course_task_preview:
     path: '/course/{courseId}/task/{id}/preview'
     defaults:
@@ -2034,6 +2046,10 @@ course_manage_chapter_delete:
         _controller: 'AppBundle:Course/ChapterManage:delete'
     methods:
         - POST
+chapter_manage_lesson_tree:
+    path: '/chapter/manage/lessonTree/{targetType}/{targetId}/{type}'
+    defaults:
+        _controller: 'AppBundle:Course/ChapterManage:lessonTree'
 course_manage_lesson_create:
     path: '/course/{courseId}/lesson/create'
     defaults:
@@ -2049,7 +2065,7 @@ course_manage_lesson_valid_num:
     methods:
         - POST
 course_manage_lesson_valid_type:
-    path: /course/lesson/valid_type
+    path: '/course/lesson/valid_type'
     defaults:
         _controller: 'AppBundle:Course/LessonManage:validLessonType'
     methods:
@@ -2113,7 +2129,7 @@ course_set_explore:
         category: ''
     h5: true
 live_course_set_explore:
-    path: /live
+    path: '/live'
     defaults:
         _controller: 'AppBundle:Course/LiveCourseSet:explore'
 course_set_manage_sync:
@@ -2280,6 +2296,12 @@ course_set_manage_course_close:
         _controller: 'AppBundle:Course/CourseManage:close'
     methods:
         - POST
+course_set_manage_course_unpublished:
+    path: '/course_set/{courseSetId}/course/{courseId}/unpublished'
+    defaults:
+        _controller: 'AppBundle:Course/CourseManage:unpublished'
+    methods:
+        - POST
 course_set_manage_course_delete:
     path: '/course_set/{courseSetId}/course/{courseId}/delete'
     defaults:
@@ -2315,48 +2337,48 @@ course_manage_items_sort:
     methods:
         - POST
 my_courses_learning:
-    path: /my/courses/learning
+    path: '/my/courses/learning'
     defaults:
         _controller: 'AppBundle:My/Course:learning'
     h5: true
 my_courses_learned:
-    path: /my/courses/learned
+    path: '/my/courses/learned'
     defaults:
         _controller: 'AppBundle:My/Course:learned'
 my_courses_live_calendar:
-    path: /my/courses/live/calendar
+    path: '/my/courses/live/calendar'
     defaults:
         _controller: 'AppBundle:My/Course:learningLivesCalendar'
 my_course_sets_favorite:
-    path: /my/courses/favorite
+    path: '/my/courses/favorite'
     defaults:
         _controller: 'AppBundle:My/CourseSet:favorite'
 my_classrooms:
-    path: /my/classrooms
+    path: '/my/classrooms'
     defaults:
         _controller: 'AppBundle:My/Classroom:classroom'
 my_classroom_discussions:
-    path: /my/classroom/discussions
+    path: '/my/classroom/discussions'
     defaults:
         _controller: 'AppBundle:My/Classroom:classroomDiscussions'
 my_classroom_questions:
-    path: /my/classroom/questions
+    path: '/my/classroom/questions'
     defaults:
         _controller: 'AppBundle:My/Classroom:classroomQuestions'
 my_question_bank:
-    path: /my/question_bank
+    path: '/my/question_bank'
     defaults:
         _controller: 'AppBundle:My/ItemBankExercise:itemBank'
 my_questions:
-    path: /my/questions
+    path: '/my/questions'
     defaults:
         _controller: 'AppBundle:My/Thread:questions'
 my_discussions:
-    path: /my/discussions
+    path: '/my/discussions'
     defaults:
         _controller: 'AppBundle:My/Thread:discussions'
 my_notebooks:
-    path: /my/notebooks
+    path: '/my/notebooks'
     defaults:
         _controller: 'AppBundle:My/Notebook:index'
 my_notebook_show:
@@ -2370,27 +2392,27 @@ my_note_delete:
     methods:
         - POST
 my_group_member_center:
-    path: /my/group
+    path: '/my/group'
     defaults:
         _controller: 'AppBundle:My/Group:memberCenter'
 my_group_member_join:
-    path: /my/group/join
+    path: '/my/group/join'
     defaults:
         _controller: 'AppBundle:My/Group:memberJoin'
 my_group_member_threads:
-    path: /my/group/threads
+    path: '/my/group/threads'
     defaults:
         _controller: 'AppBundle:My/Group:memberThreads'
 my_group_member_posts:
-    path: /my/group/posts
+    path: '/my/group/posts'
     defaults:
         _controller: 'AppBundle:My/Group:memberPosts'
 my_group_thread_collecting:
-    path: /my/group/collecting
+    path: '/my/group/collecting'
     defaults:
         _controller: 'AppBundle:My/Group:collecting'
 course_set_manage_create:
-    path: /course_set/create
+    path: '/course_set/create'
     defaults:
         _controller: 'AppBundle:Course/CourseSetManage:create'
 course_set_show:
@@ -2414,7 +2436,7 @@ course_exit_no_reason:
     defaults:
         _controller: 'AppBundle:Course/Course:exitForNoReason'
 course_exit_modal:
-    path: /course/show_exit_modal
+    path: '/course/show_exit_modal'
     defaults:
         _controller: 'AppBundle:Course/Course:exitModal'
 course_thread_create:
@@ -2508,7 +2530,7 @@ course_set_manage_file_convert:
     methods:
         - POST
 course_set_manage_file_status:
-    path: /course_set/manage/file/status
+    path: '/course_set/manage/file/status'
     defaults:
         _controller: 'AppBundle:Course/CourseSetFileManage:fileStatus'
 course_set_manage_delete_materials_show:
@@ -2556,15 +2578,15 @@ course_material_delete:
     methods:
         - POST
 replay_choose:
-    path: /replay/choose
+    path: '/replay/choose'
     defaults:
         _controller: 'AppBundle:Replay/Replay:list'
 media_materiallib_choose:
-    path: /media/materiallib/choose
+    path: '/media/materiallib/choose'
     defaults:
         _controller: 'AppBundle:FileChooser:materialChoose'
 media_materiallib_contacts:
-    path: /media/materiallib/contacts
+    path: '/media/materiallib/contacts'
     defaults:
         _controller: 'AppBundle:FileChooser:findMySharingContacts'
 media_course_file_choose:
@@ -2576,19 +2598,19 @@ media_video_import:
     defaults:
         _controller: 'AppBundle:FileChooser:import'
 uploader_auth_v2:
-    path: /uploader/v2/auth
+    path: '/uploader/v2/auth'
     defaults:
         _controller: 'AppBundle:Uploader:auth'
     methods:
         - GET
 uploader_init_v2:
-    path: /uploader/v2/init
+    path: '/uploader/v2/init'
     defaults:
         _controller: 'AppBundle:Uploader:init'
     methods:
         - GET
 uploader_finished_v2:
-    path: /uploader/v2/finished
+    path: '/uploader/v2/finished'
     defaults:
         _controller: 'AppBundle:Uploader:finished'
     methods:
@@ -2597,18 +2619,6 @@ course_set_manage_question:
     path: '/course_set/{id}/manage/question'
     defaults:
         _controller: 'AppBundle:Question/Manage:index'
-course_set_manage_show_tasks:
-    path: '/course_set/{courseSetId}/manage/show/tasks'
-    defaults:
-        _controller: 'AppBundle:Question/Manage:showTasks'
-    methods:
-        - POST
-course_set_manage_question_check_num:
-    path: '/course_set/{courseSetId}/manage/question/check/num'
-    defaults:
-        _controller: 'AppBundle:Question/Manage:showQuestionTypesNum'
-    methods:
-        - POST
 course_set_manage_testpaper:
     path: '/course_set/{id}/manage/testpaper'
     defaults:
@@ -2631,10 +2641,6 @@ course_manage_testpaper_result_graph:
     path: '/course/{id}/activity/{activityId}/testpaper/graph'
     defaults:
         _controller: 'AppBundle:Course/TestpaperManage:resultGraph'
-testpaper_check:
-    path: '/testpaper/{resultId}/check'
-    defaults:
-        _controller: 'AppBundle:Course/TestpaperManage:checkForword'
 course_manage_testpaper_check_list:
     path: '/course/{id}/manage/testpaper/check'
     defaults:
@@ -2655,10 +2661,10 @@ course_manage_exam_result_anlysis:
     path: '/course/{id}/manage/exam/activity/{activityId}/analysis'
     defaults:
         _controller: 'AppBundle:Course/TestpaperManage:resultAnalysis'
-course_set_manage_testpaper_build_check:
-    path: '/course_set/{courseSetId}/manage/{type}/build/check'
+course_testpaper_check_list:
+    path: '/testpaper/check/{targetType}/{targetId}/{type}'
     defaults:
-        _controller: 'AppBundle:Testpaper/Manage:buildCheck'
+        _controller: 'AppBundle:Testpaper/Manage:checkList'
 testpaper_do:
     path: '/lesson/{lessonId}/testpaper/{testId}/do'
     defaults:
@@ -2711,10 +2717,6 @@ homework_start_do:
     path: '/lesson/{lessonId}/homework/{homeworkId}/startDo'
     defaults:
         _controller: 'AppBundle:Homework:startDo'
-homework_show:
-    path: '/homework/{resultId}/show'
-    defaults:
-        _controller: 'AppBundle:Homework:doTest'
 homework_result_show:
     path: '/homework/result/{answerRecordId}/show'
     defaults:
@@ -2748,7 +2750,7 @@ exercise_finish:
     methods:
         - POST
 attachment_upload:
-    path: /attachment/upload
+    path: '/attachment/upload'
     defaults:
         _controller: 'AppBundle:File/Attachment:upload'
     methods:
@@ -2801,6 +2803,8 @@ classroom_manage_course_remove:
     path: '/classroom/{id}/manage/course/{courseId}/remove'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:removeCourse'
+    methods:
+        - POST
 classroom_manage_course_delete:
     path: '/classroom/{classroomId}/manage/course_set/{courseSetId}/course/{courseId}/delete'
     defaults:
@@ -2864,7 +2868,7 @@ classroom_manage_close:
     methods:
         - POST
 classroom_manage_checkName:
-    path: /classroom/manage/checkName
+    path: '/classroom/manage/checkName'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:checkName'
 classroom_manage_student_remark:
@@ -3004,7 +3008,7 @@ classroom_member_deadline_reach:
     defaults:
         _controller: 'AppBundle:Classroom/Classroom:deadlineReach'
 classroom_expiry_date_rule:
-    path: /classroom_expiry_date_rule
+    path: '/classroom_expiry_date_rule'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:expiryDateRule'
 classroom_explore:
@@ -3141,47 +3145,47 @@ classroom_certificates:
     defaults:
         _controller: 'AppBundle:Classroom/Classroom:certificates'
 material_lib_browsing:
-    path: /material/lib/browse
+    path: '/material/lib/browse'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:index'
 material_lib_show_browsing:
-    path: /material/lib/show/browse
+    path: '/material/lib/show/browse'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:showMyMaterialLibForm'
 material_lib_my_sharing:
-    path: /material/lib/my/sharing/show
+    path: '/material/lib/my/sharing/show'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:showShareForm'
 material_lib_my_sharing_detail:
-    path: /material/lib/my/sharing_detail/show
+    path: '/material/lib/my/sharing_detail/show'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:historyDetailShow'
 material_lib_my_sharing_users:
-    path: /material/lib/my/sharing_users/show
+    path: '/material/lib/my/sharing_users/show'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:historyUserShow'
 material_lib_my_sharing_contacts:
-    path: /material/lib/recent/contacts
+    path: '/material/lib/recent/contacts'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:findMySharingContacts'
 material_lib_save_sharing:
-    path: /material/lib/my/sharing/save
+    path: '/material/lib/my/sharing/save'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:saveShare'
 material_tag_show_match:
-    path: /material/lib/tag/match
+    path: '/material/lib/tag/match'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:match'
 material_lib_show_sharing_history:
-    path: /material/lib/my/sharing/history
+    path: '/material/lib/my/sharing/history'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:showShareHistory'
 material_lib_cancel_sharing:
-    path: /material/lib/my/sharing/cancel
+    path: '/material/lib/my/sharing/cancel'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:cancelShare'
 material_lib_save_collection:
-    path: /material/lib/my/collection/save
+    path: '/material/lib/my/collection/save'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:collect'
 material_lib_file_preview:
@@ -3227,11 +3231,11 @@ material_lib_live_replay_remove:
     methods:
       - POST
 material_lib_live_replay_edit:
-    path: '/material/lib/live_replay/{liveActivityId}/edit'
+    path: '/material/lib/live_replay/{activityId}/edit'
     defaults:
       _controller: 'AppBundle:MaterialLib/LiveReplay:edit'
 app_download:
-    path: /app/download
+    path: '/app/download'
     defaults:
         _controller: 'AppBundle:Default:appDownload'
 announcement_global_show:
@@ -3257,19 +3261,19 @@ material_delete:
     methods:
         - POST
 material_batch_delete:
-    path: /materials/batch/delete
+    path: '/materials/batch/delete'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:batchDelete'
     methods:
         - POST
 material_delete_modal_show:
-    path: /materials/delete/show
+    path: '/materials/delete/show'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:deleteModalShow'
     methods:
         - POST
 material_batch_share:
-    path: /materials/batch/share
+    path: '/materials/batch/share'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:batchShare'
     methods:
@@ -3279,7 +3283,7 @@ material_unshare:
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:unshare'
 material_batch_tag_show:
-    path: /materials/batch/tag/show
+    path: '/materials/batch/tag/show'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:batchTagShow'
 global_file_document_player:
@@ -3303,7 +3307,7 @@ global_file_document:
     defaults:
         _controller: 'AppBundle:MaterialLib/GlobalFilePlayer:document'
 material_lib_choose:
-    path: /material/lib/choose
+    path: '/material/lib/choose'
     defaults:
         _controller: 'AppBundle:MaterialLib/MaterialLib:materialChoose'
 switch_org:
@@ -3317,7 +3321,7 @@ org_tree:
     methods:
         - GET
 coupon_check:
-    path: /coupon/check
+    path: '/coupon/check'
     defaults:
         _controller: 'AppBundle:Order/Order:couponCheck'
 my_course_show:
@@ -3326,6 +3330,12 @@ my_course_show:
         _controller: 'AppBundle:My/Course:show'
         tab: tasks
     h5: true
+course_closed:
+  path: '/course/closed'
+  defaults:
+    _controller: 'AppBundle:Course/Course:closed'
+    tab: tasks
+  h5: true
 course_member_expired:
     path: '/course/{id}/member/expired'
     defaults:
@@ -3339,7 +3349,7 @@ course_buy:
     defaults:
         _controller: 'AppBundle:Course/CourseBuy:buy'
 course_order_repay:
-    path: /course/order/repay
+    path: '/course/order/repay'
     defaults:
         _controller: 'AppBundle:Course/CourseOrder:repay'
 course_show:
@@ -3353,7 +3363,7 @@ course_task_paging_show:
     defaults:
         _controller: 'AppBundle:Course/Course:tasksByPaging'
 course_set_archive:
-    path: /archive/course
+    path: '/archive/course'
     defaults:
         _controller: 'AppBundle:Course/CourseSet:archive'
 course_set_archive_show:
@@ -3365,7 +3375,7 @@ course_set_archive_task:
     defaults:
         _controller: 'AppBundle:Course/CourseSet:archiveTask'
 changelog_list:
-    path: /changelog/list
+    path: '/changelog/list'
     defaults:
         _controller: 'AppBundle:Changelog:list'
 course_task_marker_manage:
@@ -3405,7 +3415,7 @@ course_task_question_markers_show:
     defaults:
         _controller: 'AppBundle:QuestionMarker:showQuestionMakers'
 course_task_question_marker_finish:
-    path: /course/task/media/question_marker/finish
+    path: '/course/task/media/question_marker/finish'
     defaults:
         _controller: 'AppBundle:QuestionMarker:finishQuestionMarker'
     methods:
@@ -3441,40 +3451,44 @@ callback:
     defaults:
         _controller: 'AppBundle:Callback/Endpoint:publish'
 mobile_qrcode:
-    path: /mobile/qrcode
+    path: '/mobile/qrcode'
     defaults:
         _controller: 'AppBundle:Common:mobileQrcode'
 event_dispatch:
-    path: /event/dispatch
+    path: '/event/dispatch'
     defaults:
         _controller: 'AppBundle:Event:dispatch'
     methods:
         - POST
 _oauth2_token:
-    path: /login/oauth/access_token
+    path: '/login/oauth/access_token'
     defaults:
         _controller: 'AppBundle:OAuth2/Token:token'
     methods:
         - POST
 marketing_user_login:
-    path: /marketing/user/login
+    path: '/marketing/user/login'
     defaults:
         _controller: 'AppBundle:MarketingUser:login'
 user_login_marketing:
-    path: /marketing/user/login
+    path: '/marketing/user/login'
     defaults:
         _controller: 'AppBundle:MarketingUser:login'
 marketing_activity:
     path: '/marketing/activity/{activityId}'
     defaults:
         _controller: 'AppBundle:Marketing:activity'
+marketing_weixin_pay:
+    path: '/marketing/weixin_pay'
+    defaults:
+        _controller: 'AppBundle:Marketing:weixinPay'
 export:
     path: '/export/{name}/{type}'
     defaults:
         _controller: 'AppBundle:Export/Export:export'
         type: csv
 online_sample:
-    path: /online/sample
+    path: '/online/sample'
     defaults:
         _controller: 'AppBundle:Online:sample'
 pre_export:
@@ -3499,7 +3513,7 @@ member_operation_exit_record_export_csv:
     defaults:
         _controller: 'AppBundle:MemberOperationRecord:exitRecordExportCsv'
 order_calculate_price:
-    path: /order/price/calculate
+    path: '/order/price/calculate'
     defaults:
         _controller: 'AppBundle:Order/Order:price'
         limit: ''
@@ -3511,7 +3525,7 @@ course_sort:
     methods:
         - POST
 client_time_check:
-    path: /client_time_check
+    path: '/client_time_check'
     defaults:
         _controller: 'AppBundle:Default:clientTimeCheck'
     methods:
@@ -3521,7 +3535,7 @@ drag_captcha:
     defaults:
         _controller: 'AppBundle:Common:dragCaptcha'
 login_wechat_qrcode:
-    path: /login/wechat/qrcode
+    path: '/login/wechat/qrcode'
     defaults:
         _controller: 'AppBundle:Login:wechatQrcode'
 testpaper_re_edit:
@@ -3532,6 +3546,10 @@ question_re_edit:
     path: '/question/re_edit/{token}'
     defaults:
         _controller: 'AppBundle:Question/Manage:reEdit'
+question_parse_progress:
+    path: '/question/parse_progress/{token}'
+    defaults:
+      _controller: 'AppBundle:Question/Manage:parseProgress'
 subject_edit_template:
     path: '/subject/edit/{type}'
     methods:
@@ -3549,7 +3567,7 @@ subject_show_template:
     defaults:
         _controller: 'AppBundle:Testpaper/Manage:showTemplate'
 subject_convert_template:
-    path: /sublect/convert
+    path: '/sublect/convert'
     methods:
         - POST
     defaults:
@@ -3566,6 +3584,12 @@ questions_import_save:
         - POST
     defaults:
         _controller: 'AppBundle:Question/Manage:saveImportQuestions'
+questions_import_check_duplicated_questions:
+    path: '/questions/{token}/checkDuplicatedQuestions'
+    methods:
+        - POST
+    defaults:
+        _controller: 'AppBundle:Question/Manage:checkDuplicatedQuestions'
 coupon_receive:
     pattern: '/coupon/{token}/receive'
     defaults:
@@ -3580,17 +3604,17 @@ activity_ppt_token:
     defaults:
         _controller: 'AppBundle:Activity/Ppt:getPptToken'
 oauth2_es_authorize:
-    path: /oauth/authorize
+    path: '/oauth/authorize'
     defaults:
         _controller: 'AppBundle:OAuth2/Server/Authorization:authorize'
 oauth2_es_token:
-    path: /oauth/token
+    path: '/oauth/token'
     defaults:
         _controller: 'AppBundle:OAuth2/Server/Authorization:token'
     methods:
         - POST
 oauth2_es_token_verify:
-    path: /oauth/access_token
+    path: '/oauth/access_token'
     defaults:
         _controller: 'AppBundle:OAuth2/Server/Authorization:verify'
 oauth2_es_user_info:
@@ -3598,11 +3622,11 @@ oauth2_es_user_info:
     defaults:
         _controller: 'AppBundle:OAuth2/Server/Authorization:getUserInfo'
 question_bank_list:
-    path: /my/question_banks
+    path: '/my/question_banks'
     defaults:
         _controller: 'AppBundle:QuestionBank/Manage:index'
 question_bank_create:
-    path: /question_bank/create
+    path: '/question_bank/create'
     defaults:
         _controller: 'AppBundle:QuestionBank/Manage:create'
 question_bank_manage:
@@ -3610,7 +3634,7 @@ question_bank_manage:
     defaults:
         _controller: 'AppBundle:QuestionBank/Manage:manage'
 question_bank_member_match:
-    path: /question_bank/member_match
+    path: '/question_bank/member_match'
     defaults:
         _controller: 'AppBundle:QuestionBank/Manage:memberMatch'
 question_bank_manage_question_category:
@@ -3643,10 +3667,22 @@ question_bank_manage_question_show_ajax:
     path: '/question_bank/{id}/questions/show/ajax'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:getQuestionsHtml'
+question_bank_manage_import_intro:
+    path: '/question_bank/import_intro'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:importIntro'
+question_bank_manage_ai_analysis_intro:
+    path: '/question_bank/ai_analysis_intro'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:aiAnalysisIntro'
 question_bank_manage_question_import:
     path: '/question_bank/{id}/question/import'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:import'
+question_bank_manage_download_import_template:
+    path: '/question_bank/{id}/download_import_template/{type}'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:downloadImportTemplate'
 question_bank_manage_question_create:
     path: '/question_bank/{id}/question/{type}/create'
     defaults:
@@ -3669,14 +3705,34 @@ question_bank_manage_question_delete:
     path: '/question_bank/{id}/question/{itemId}/delete'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:delete'
+question_bank_manage_check_question_duplicative:
+    path: '/question_bank/{id}/checkQuestionDuplicative'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:checkQuestionDuplicative'
+    methods:
+        - POST
+question_bank_manage_check_duplicative_questions:
+    path: '/question_bank/{id}/check_duplicative_questions'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:checkDuplicativeQuestions'
+question_bank_manage_update_duplicative_question:
+    path: '/question_bank/{id}/duplicative_question/{questionId}/update'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/Question:updateDuplicativeQuestion'
 question_bank_manage_question_export:
     path: '/question_bank/{id}/questions/export'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:export'
 question_bank_manage_question_category_show:
-    path: /question_bank/question/show/category
+    path: '/question_bank/question/show/category'
     defaults:
         _controller: 'AppBundle:QuestionBank/QuestionCategory:showCategories'
+    methods:
+        - POST
+question_bank_manage_question_category_sort:
+    path: '/question_bank/{id}/question/category/sort'
+    defaults:
+        _controller: 'AppBundle:QuestionBank/QuestionCategory:sort'
     methods:
         - POST
 question_bank_manage_question_set_category:
@@ -3686,7 +3742,7 @@ question_bank_manage_question_set_category:
     methods:
         - POST
 question_bank_manage_question_check_num:
-    path: /question_bank/manage/question/check/num
+    path: '/question_bank/manage/question/check/num'
     defaults:
         _controller: 'AppBundle:QuestionBank/Question:showQuestionTypesNum'
     methods:
@@ -3766,7 +3822,7 @@ question_bank_manage_question_picked:
     defaults:
         _controller: 'AppBundle:QuestionBank/Testpaper:pickedQuestion'
 answer_engine_review:
-    path: /answer_engine/review
+    path: '/answer_engine/review'
     defaults:
         _controller: 'AppBundle:AnswerEngine/AnswerEngine:reviewSave'
     methods:
@@ -3781,23 +3837,23 @@ course_task_json_data:
     defaults:
         _controller: 'AppBundle:Course/Course:getTaskListData'
 item_attachment_init_upload:
-    path: /item/attachment/upload/init
+    path: '/item/attachment/upload/init'
     defaults:
         _controller: 'AppBundle:Item/Attachment:initUpload'
 item_attachment_finish_upload:
-    path: /item/attachment/upload/finish
+    path: '/item/attachment/upload/finish'
     defaults:
         _controller: 'AppBundle:Item/Attachment:finishUpload'
 item_attachment_delete:
-    path: /item/attachment/delete
+    path: '/item/attachment/delete'
     defaults:
         _controller: 'AppBundle:Item/Attachment:delete'
 item_attachment_preview:
-    path: /item/attachment/preview
+    path: '/item/attachment/preview'
     defaults:
         _controller: 'AppBundle:Item/Attachment:preview'
 item_attachment_download:
-    path: /item/attachment/download
+    path: '/item/attachment/download'
     defaults:
         _controller: 'AppBundle:Item/Attachment:download'
 facein_capture_index:
@@ -3812,7 +3868,7 @@ facein_capture_upload:
     methods:
         - POST
 facein_capture_check:
-    path: /facein/user_face/check
+    path: '/facein/user_face/check'
     defaults:
         _controller: 'AppBundle:FaceInspection/Capture:check'
 facein_inspection_save:
@@ -3836,11 +3892,11 @@ category_choices:
         type: course
 
 render_org:
-    path: /render/org
+    path: '/render/org'
     defaults:
         _controller: 'AppBundle:Vue/Common:renderOrg'
 upload_image:
-    path: /render/upload/image
+    path: '/render/upload/image'
     defaults:
         _controller: 'AppBundle:Vue/Common:uploadImage'
 item_bank_exercise_qrcode:
@@ -3950,6 +4006,30 @@ item_bank_exercise_manage_chapter_exercise_open:
     path: '/item_bank_exercise/{exerciseId}/manage/chapter_exercise/open'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/ChapterExercise:open'
+item_bank_exercise_manage_chapter_exercise_publish:
+    path: '/item_bank_exercise/{exerciseId}/manage/chapter/publish'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ChapterExercise:publish'
+    methods:
+        - POST
+item_bank_exercise_manage_chapter_exercise_unpublish:
+    path: '/item_bank_exercise/{exerciseId}/manage/chapter/unpublish'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ChapterExercise:unpublish'
+    methods:
+        - POST
+item_bank_exercise_manage_marketing_open_display:
+    path: '/item_bank_exercise/{exerciseId}/manage/marketing/open_display'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ExerciseManage:openDisplay'
+    methods:
+        - POST
+item_bank_exercise_manage_marketing_close_display:
+    path: '/item_bank_exercise/{exerciseId}/manage/marketing/close_display'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/ExerciseManage:closeDisplay'
+    methods:
+        - POST
 item_bank_exercise_manage_marketing_info:
     path: '/item_bank_exercise/{exerciseId}/manage/marketing/info'
     defaults:
@@ -3979,7 +4059,7 @@ item_bank_exercise_buy:
     defaults:
         _controller: 'AppBundle:ItemBankExercise/ExerciseBuy:buy'
 item_bank_exercise_explore:
-    path: /exercise/explore
+    path: '/exercise/explore'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/Explore:index'
 item_bank_exercise_show:
@@ -3989,6 +4069,13 @@ item_bank_exercise_show:
         tab: ''
         moduleId: 0
     h5: true
+#适配item_bank_exercise_show路由
+item_bank_exercise_exit:
+  path: '/item_bank/exercise/{exerciseId}/exit'
+  defaults:
+    _controller: 'AppBundle:ItemBankExercise/Exercise:exit'
+  methods:
+  - POST
 my_item_bank_exercise_show:
     path: '/my/item_bank_exercise/{id}/{tab}/{moduleId}'
     defaults:
@@ -4004,13 +4091,21 @@ item_bank_exercise_category_answer:
     path: '/item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/answer'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/Answer:categoryAnswer'
+item_bank_exercise_category_info_modal:
+    path: '/item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/info_modal'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/Answer:categoryInfoModal'
+item_bank_exercise_submit_single_mode_not_support_modal:
+    path: '/item_bank/exercise/submit_single_mode_not_support_modal'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/Answer:notSupportSubmitSingle'
 goods_show:
     path: '/goods/show/{id}'
     defaults:
         _controller: 'AppBundle:Goods/Goods:show'
     h5: true
 render_buy_flow_modal:
-    path: /goods/buy_flow/modal
+    path: '/goods/buy_flow/modal'
     defaults:
         _controller: 'AppBundle:Goods/Goods:buyFLowModal'
 certificate_image_show:
@@ -4031,7 +4126,7 @@ certificate_detail:
     defaults:
         _controller: 'AppBundle:Certificate/Certificate:certificateDetail'
 face_inspection_select:
-    path: /face/inspection/select
+    path: '/face/inspection/select'
     defaults:
         _controller: 'AppBundle:FaceInspection/Capture:selectFace'
 information_collect_event:
@@ -4059,7 +4154,7 @@ exam_result_analysis_job_check:
     defaults:
         _controller: 'AppBundle:Testpaper/BaseTestpaper:jobCheck'
 common_report:
-    path: /common/report
+    path: '/common/report'
     defaults:
         _controller: 'AppBundle:Report:submit'
 common_report_tags_modal:
@@ -4067,11 +4162,11 @@ common_report_tags_modal:
     defaults:
         _controller: 'AppBundle:Report:tagsModal'
 scrm_buy_goods_callback:
-    path: /scrm/buy/goods/callback
+    path: '/scrm/buy/goods/callback'
     defaults:
         _controller: 'AppBundle:SCRM/Callback:goods'
 feedback:
-    path: /feedback
+    path: '/feedback'
     defaults:
         _controller: 'AppBundle:Default:feedback'
 scrm_user_bind_result:
@@ -4079,31 +4174,44 @@ scrm_user_bind_result:
     defaults:
         _controller: 'AppBundle:SCRM/Bind:result'
 live_cloud_callback:
-    path: /callback/live/handle
+    path: '/callback/live/handle'
     defaults:
         _controller: 'AppBundle:Callback/Live:handle'
 agreement:
-    path: /agreement/course/purchase
+    path: '/agreement/course/purchase'
     defaults:
         _controller: 'AppBundle:Agreement:coursePurchaseAgreement'
 disclaimers:
-    path: /disclaimers
+    path: '/disclaimers'
     defaults:
         _controller: 'AppBundle:Agreement:disclaimers'
 course_live_member_statistic_export:
-    path: /task/{taskId}/live_statistic/export
+    path: '/task/{taskId}/live_statistic/export'
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:taskLiveStatisticExport'
 course_live_task_statistic_export:
-    path: /course/{courseId}/live_statistic/export
+    path: '/course/{courseId}/live_statistic/export'
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:courseLiveStatisticExport'
 course_live_task_roll_call_export:
-    path: /task/{taskId}/live_statistic/roll_call/export
+    path: '/task/{taskId}/live_statistic/roll_call/export'
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:rollCallExport'
 classroom_live_task_statistic_export:
-    path: /classroom/{classroomId}/live_statistic/export
+    path: '/classroom/{classroomId}/live_statistic/export'
     defaults:
         _controller: 'AppBundle:LiveStatisticExport:classroomLiveStatisticExport'
 
+unified_payment_notify:
+    path: '/callback/unified_payment/{payment}/notify'
+    defaults:
+        _controller: 'AppBundle:UnifiedPayment:notify'
+        methods:
+          - POST
+
+user_show_mobile:
+  path: '/show_mobile'
+  defaults:
+    _controller: 'AppBundle:MobileMask:showMobile'
+  methods:
+    - POST

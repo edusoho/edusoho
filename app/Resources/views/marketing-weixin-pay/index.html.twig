@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['app/js/marketing-wechat-pay/index.js']) %}
+
+{% block body %}
+  <style>
+  </style>
+
+  <button class="btn btn-primary js-weixin-pay disabled">支付</button>
+{% endblock %}

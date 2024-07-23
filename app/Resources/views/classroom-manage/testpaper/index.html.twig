@@ -3,14 +3,21 @@
 {% block title %}{{'classroom.testpaper_check'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'testpaper-check' %}
 
+{% do script(['libs/vue.js', 'app/js/course-manage/testpaper-check/index.js']) %}
+
 {% block main %}
 <div class="panel panel-default panel-col">
-
-  <div class="panel-heading">
+  <div class="classroom-testpaper">
     {{'classroom.my_check'|trans}}
+    <div class="testpaper-check-title">
+      <div id="app"></div>
+    </div>
   </div>
-  <div class="panel-body">
+  <div class="panel-body js-task-list">
     {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'testpaper'})) }}
   </div>
 </div>
+<input type="hidden" value="classroom" class="js-testpaper-check-header">
+<input type="hidden" value="{{classroom.id}}" class="js-testpaper-check-targetid">
+<input type="hidden" value="testpaper" class="js-testpaper-check-type">
 {% endblock %}

@@ -14,22 +14,22 @@ class TaskSyncSubscriberTest extends BaseTestCase
 {
     public function testGetSubscribedEvents()
     {
-        $expected = array(
+        $expected = [
             'course.task.create' => 'onCourseTaskCreate',
             'course.task.update' => 'onCourseTaskUpdate',
             'course.task.updateOptional' => 'onCourseTaskUpdate',
             'course.task.delete' => 'onCourseTaskDelete',
             'course.task.publish' => 'onCourseTaskPublish',
             'course.task.unpublish' => 'onCourseTaskUnpublish',
-        );
+        ];
         $this->assertEquals($expected, TaskSyncSubscriber::getSubscribedEvents());
     }
 
     public function testOnCourseTaskCreateWithCopyId()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 1,
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskCreate($event);
 
@@ -38,10 +38,10 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskCreateWithCopiedCourseEmpty()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 0,
             'courseId' => 1,
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskCreate($event);
 
@@ -50,19 +50,51 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskCreate()
     {
-        $this->mockBiz('Course:CourseDao', array(
-            array(
+        $this->mockBiz('Course:CourseDao', [
+            [
                 'functionName' => 'findCoursesByParentIdAndLocked',
-                'returnValue' => array(array('id' => 1)),
-                'withParams' => array(1, 1),
-            ),
-        ));
+                'returnValue' => [['id' => 1, 'courseSetId' => 1]],
+                'withParams' => [1, 1],
+            ],
+        ]);
+        $this->mockBiz('Activity:ActivityDao', [
+            [
+                'functionName' => 'get',
+                'returnValue' => ['id' => 1],
+                'withParams' => [1],
+            ],
+            [
+                'functionName' => 'findByCopyIdAndCourseIds',
+                'returnValue' => [['id' => 2, 'fromCourseId' => 1, 'fromCourseSetId' => 1]],
+                'withParams' => [1, [1]],
+            ],
+            [
+                'functionName' => 'batchCreate',
+            ],
+        ]);
+        $this->mockBiz('Course:CourseMaterialDao', [
+            [
+                'functionName' => 'search',
+                'returnValue' => [],
+            ],
+        ]);
+        $this->mockBiz('Task:TaskDao', [
+            [
+                'functionName' => 'findByCopyIdAndLockedCourseIds',
+                'returnValue' => [],
+            ],
+            [
+                'functionName' => 'batchCreate',
+                'returnValue' => [],
+            ],
+        ]);
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => 1,
+            'activityId' => 1,
             'copyId' => 0,
             'courseId' => 1,
-        ));
+        ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $eventSubscriber->onCourseTaskCreate($event);
@@ -74,9 +106,9 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskUpdateWithCopyId()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 1,
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskUpdate($event);
 
@@ -85,10 +117,10 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskUpdateWithCopiedCourseEmpty()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 0,
             'courseId' => 1,
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskUpdate($event);
 
@@ -97,19 +129,47 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskUpdate()
     {
-        $this->mockBiz('Course:CourseDao', array(
-            array(
+        $this->mockBiz('Course:CourseDao', [
+            [
                 'functionName' => 'findCoursesByParentIdAndLocked',
-                'returnValue' => array(array('id' => 1)),
-                'withParams' => array(1, 1),
-            ),
-        ));
+                'returnValue' => [['id' => 1]],
+                'withParams' => [1, 1],
+            ],
+        ]);
+        $this->mockBiz('Task:TaskDao', [
+            [
+                'functionName' => 'findByCopyIdAndLockedCourseIds',
+                'withParams' => [1, [1]],
+                'returnValue' => [['id' => 2, 'activityId' => 2]],
+            ],
+            [
+                'functionName' => 'update',
+                'withParams' => [['ids' => [2]], []],
+            ],
+        ]);
+        $this->mockBiz('Activity:ActivityDao', [
+            [
+                'functionName' => 'get',
+                'withParams' => [1],
+                'returnValue' => ['mediaType' => 'text'],
+            ],
+            [
+                'functionName' => 'findByIds',
+                'withParams' => [[2]],
+                'returnValue' => ['mediaType' => 'text'],
+            ],
+            [
+                'functionName' => 'update',
+                'withParams' => [['ids' => [2]], []],
+            ],
+        ]);
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => 1,
             'copyId' => 0,
             'courseId' => 1,
-        ));
+            'activityId' => 1,
+        ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $eventSubscriber->onCourseTaskUpdate($event);
@@ -121,10 +181,10 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskPublishWithCopyId()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 1,
             'status' => 'testStatus',
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskPublish($event);
 
@@ -133,11 +193,11 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskPublishWithCopiedCourseEmpty()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 0,
             'courseId' => 1,
             'status' => 'testStatus',
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskPublish($event);
 
@@ -151,14 +211,14 @@ class TaskSyncSubscriberTest extends BaseTestCase
         $childCourse = $this->createCourse(2, $parentCourse['id']);
         $chileTask = $this->createTask(2, $childCourse['id'], $parentTask['id']);
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => 1,
             'copyId' => 0,
             'courseType' => $parentCourse['courseType'],
             'courseId' => $parentCourse['id'],
             'status' => 'testStatus',
             'categoryId' => 1,
-        ));
+        ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
 
@@ -180,14 +240,14 @@ class TaskSyncSubscriberTest extends BaseTestCase
         $childCourse = $this->createCourse(2, $parentCourse['id'], 'normal');
         $chileTask = $this->createTask(2, $childCourse['id'], $parentTask['id']);
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => 1,
             'copyId' => 0,
             'courseType' => $parentCourse['courseType'],
             'courseId' => $parentCourse['id'],
             'status' => 'testStatus',
             'categoryId' => 1,
-        ));
+        ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
 
@@ -204,9 +264,9 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskUnPublishWithCopyId()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 1,
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskUnpublish($event);
 
@@ -215,10 +275,10 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskUnPublishWithCopiedCourseEmpty()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 0,
             'courseId' => 1,
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskUnpublish($event);
 
@@ -232,13 +292,13 @@ class TaskSyncSubscriberTest extends BaseTestCase
         $childCourse = $this->createCourse(2, $parentCourse['id']);
         $chileTask = $this->createTask(2, $childCourse['id'], $parentTask['id'], 'published');
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => 1,
             'copyId' => 0,
             'courseType' => $parentCourse['courseType'],
             'courseId' => $parentCourse['id'],
             'categoryId' => 1,
-        ));
+        ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
 
@@ -260,13 +320,13 @@ class TaskSyncSubscriberTest extends BaseTestCase
         $childCourse = $this->createCourse(2, $parentCourse['id'], 'normal');
         $chileTask = $this->createTask(2, $childCourse['id'], $parentTask['id'], 'published');
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => 1,
             'copyId' => 0,
             'courseType' => $parentCourse['courseType'],
             'courseId' => $parentCourse['id'],
             'categoryId' => 1,
-        ));
+        ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
 
@@ -283,7 +343,7 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskDeleteWithCopyId()
     {
-        $event = new Event(array('copyId' => 1));
+        $event = new Event(['copyId' => 1]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
 
         $result = $eventSubscriber->onCourseTaskDelete($event);
@@ -292,10 +352,10 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskDeleteWithCopiedCourseEmpty()
     {
-        $event = new Event(array(
+        $event = new Event([
             'copyId' => 0,
             'courseId' => 1,
-        ));
+        ]);
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $result = $eventSubscriber->onCourseTaskDelete($event);
 
@@ -304,32 +364,55 @@ class TaskSyncSubscriberTest extends BaseTestCase
 
     public function testOnCourseTaskDelete()
     {
-        $this->mockBiz('Course:CourseDao', array(
-            array(
+        $this->mockBiz('Course:CourseDao', [
+            [
                 'functionName' => 'findCoursesByParentIdAndLocked',
-                'returnValue' => array(array('id' => 1)),
-                'withParams' => array(1, 1),
-            ),
-        ));
+                'withParams' => [1, 1],
+                'returnValue' => [['id' => 2, 'courseSetId' => 2]],
+            ],
+        ]);
+        $this->mockBiz('Task:TaskDao', [
+            [
+                'functionName' => 'findByCopyIdAndLockedCourseIds',
+                'withParams' => [1, [2]],
+                'returnValue' => [['id' => 2], ['id' => 3], ['id' => 4], ['id' => 5], ['id' => 6], ['id' => 7]],
+            ],
+            [
+                'functionName' => 'batchDelete',
+                'withParams' => [['ids' => [2, 3, 4, 5, 6, 7]]],
+            ],
+            [
+                'functionName' => 'findByIds',
+                'withParams' => [[2, 3, 4, 5, 6, 7]],
+                'returnValue' => [['id' => 2, 'activityId' => 2], ['id' => 3, 'activityId' => 3], ['id' => 4, 'activityId' => 4], ['id' => 5, 'activityId' => 5], ['id' => 6, 'activityId' => 6], ['id' => 7, 'activityId' => 7]],
+            ],
+            [
+                'functionName' => 'search',
+                'returnValue' => [],
+            ],
+        ]);
 
-        $event = new Event(array(
+        $event = new Event([
             'id' => 1,
             'copyId' => 0,
             'courseId' => 1,
-        ));
+        ]);
 
         $eventSubscriber = new TaskSyncSubscriber($this->biz);
         $eventSubscriber->onCourseTaskDelete($event);
 
-        $job = $this->getSchedulerJobDao()->getByName('course_task_delete_sync_job_1');
+        $job = $this->getSchedulerJobDao()->getByName('activity_delete_job_2');
         $this->assertNotEmpty($job);
-        $this->assertEquals('Biz\Task\Job\CourseTaskDeleteSyncJob', $job['class']);
-        $this->assertEquals(array('taskId' => 1, 'courseId' => 1), $job['args']);
+        $this->assertEquals('Biz\Activity\Job\DeleteActivityJob', $job['class']);
+        $this->assertEquals(['ids' => [2, 3, 4, 5, 6, 7]], $job['args']);
+
+        $job = $this->getSchedulerJobDao()->getByName('task_delete_event_job_2');
+        $this->assertEquals('Biz\Task\Job\CourseTaskDeleteEventJob', $job['class']);
     }
 
     private function createCourse($courseId, $parentId = 0, $courseType = CourseService::DEFAULT_COURSE_TYPE)
     {
-        $course = array(
+        $course = [
             'id' => $courseId,
             'courseSetId' => $courseId,
             'title' => 'testCourseTitle',
@@ -377,14 +460,14 @@ class TaskSyncSubscriberTest extends BaseTestCase
             'rewardPoint' => 0,
             'taskRewardPoint' => 0,
             'isHideUnpublish' => 0,
-        );
+        ];
 
         return $this->getCourseDao()->create($course);
     }
 
     private function createTask($taskId, $courseId, $copyId = 0, $status = 'create')
     {
-        $task = array(
+        $task = [
             'id' => $taskId,
             'courseId' => $courseId,
             'seq' => 2,
@@ -407,7 +490,7 @@ class TaskSyncSubscriberTest extends BaseTestCase
             'createdUserId' => 2,
             'createdTime' => time(),
             'updatedTime' => time(),
-        );
+        ];
 
         return $this->getTaskDao()->create($task);
     }

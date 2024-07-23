@@ -65,6 +65,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
+    public function findCoursesByIdsAndCourseSetTitle($ids, $title)
+    {
+        $courses = $this->getCourseDao()->findCoursesByIdsAndCourseSetTitleLike($ids, $title);
+
+        return ArrayToolkit::index($courses, 'id');
+    }
+
     public function findCourseByCourseSetTitleLike($courseSetTitle)
     {
         return $this->getCourseDao()->findCourseByCourseSetTitleLike($courseSetTitle);
@@ -430,6 +437,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'maxStudentNum',
                 'locked',
                 'enableAudio',
+                'discussionNum',
+                'questionNum',
             ]
         );
 
@@ -791,17 +800,49 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::UNPUBLISHED_COURSE());
         }
         $course['status'] = 'closed';
+        $course['canLearn'] = '0';
 
         try {
             $this->beginTransaction();
             $course = $this->getCourseDao()->update($id, $course);
 
             $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
             //如果课程下没有了已发布的教学计划，则关闭此课程
-            if (empty($publishedCourses)) {
+            if (empty($publishedCourses) && empty($classroomRef)) {
                 $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
                 if ('published' === $courseSet['status']) {
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
+                }
+            }
+            $this->commit();
+            $this->dispatchEvent('course.close', new Event($course));
+            $this->unpublishGoodsSpecs($course);
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+    }
+
+    public function unpublishedCourse($id)
+    {
+        $course = $this->tryManageCourse($id);
+        if ('published' != $course['status']) {
+            $this->createNewException(CourseException::UNPUBLISHED_COURSE());
+        }
+        $course['status'] = 'unpublished';
+
+        try {
+            $this->beginTransaction();
+            $course = $this->getCourseDao()->update($id, $course);
+
+            $publishedCourses = $this->findPublishedCoursesByCourseSetId($course['courseSetId']);
+            $classroomRef = $this->getClassroomService()->getClassroomCourseByCourseSetId($course['courseSetId']);
+            //如果课程下没有了已发布的教学计划，则关闭此课程
+            if (empty($publishedCourses) && empty($classroomRef)) {
+                $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+                if ('published' === $courseSet['status']) {
+                    $this->getCourseSetService()->unpublishedCourseSet($course['courseSetId']);
                 }
             }
             $this->commit();
@@ -820,8 +861,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $id,
             [
                 'status' => 'published',
+                'canLearn' => '1',
             ]
         );
+        $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
@@ -1171,6 +1214,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearnTask($taskId)
     {
         $task = $this->getTaskService()->getTask($taskId);
+        $course = $this->getCourse($task['courseId']);
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         $chain = $this->biz['course.task.learn_chain'];
 
         if (empty($chain)) {
@@ -1190,6 +1237,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
+            //监控此处是否存在异常
+            $this->getLogService()->info('course', 'sortCourseItems', $e->getMessage(), [$courseId, $ids]);
             throw $e;
         }
     }
@@ -1212,10 +1261,142 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (in_array($chapter['id'], $chapterIds)) {
                 continue;
             }
-            array_push($ids, $chapterType . '-' . $chapter['id']);
+            array_push($ids, $chapterType.'-'.$chapter['id']);
         }
 
         return $ids;
+    }
+
+    public function getLessonTree($courseIds, $type)
+    {
+        $lessonTrees = [];
+        $lessonTree = [];
+        $courses = $this->findCoursesByIds($courseIds);
+        $tasks = $this->getTaskService()->searchTasks(['courseIds' => $courseIds, 'type' => $type], ['seq' => 'ASC'], 0, PHP_INT_MAX, ['categoryId', 'courseId']);
+        $tasks = ArrayToolkit::group($tasks, 'courseId');
+        $chapters = $this->getChapterDao()->search(
+            ['courseIds' => $courseIds, 'status' => 'published'],
+            ['seq' => 'DESC'],
+            0,
+            PHP_INT_MAX,
+            ['id', 'title', 'type', 'courseId']
+        );
+        $chapters = ArrayToolkit::group($chapters, 'courseId');
+        foreach ($tasks as $courseId => $taskGroup) {
+            $lessonTree = [];
+            $lessonIds = array_flip(array_column($taskGroup, 'categoryId'));
+            $stack = [];
+            foreach ($chapters[$courseId] ?? [] as $chapter) {
+                if ('lesson' == $chapter['type'] && isset($lessonIds[$chapter['id']])) {
+                    $stack[] = [
+                        'id' => $chapter['id'],
+                        'type' => 'lesson',
+                        'title' => $chapter['title'],
+                    ];
+                }
+                if ('unit' == $chapter['type']) {
+                    $children = $this->findUnitChildren($chapter['id'], $stack);
+                    if ($children) {
+                        $stack[] = [
+                            'id' => $chapter['id'],
+                            'type' => 'unit',
+                            'title' => $chapter['title'],
+                            'children' => $children,
+                        ];
+                    }
+                }
+                if ('chapter' == $chapter['type']) {
+                    $children = $this->findChapterChildren($chapter['id'], $stack);
+                    if ($children) {
+                        $stack[] = [
+                            'id' => $chapter['id'],
+                            'type' => 'chapter',
+                            'title' => $chapter['title'],
+                            'children' => $children,
+                        ];
+                    }
+                }
+            }
+            while (!empty($stack)) {
+                $chapter = array_pop($stack);
+                if (count($courseIds) > 1) {
+                    $chapter['parentId'] = $courseId;
+                }
+                $lessonTree[] = $chapter;
+            }
+            $lessonTrees[] = [
+                'id' => $courseId,
+                'type' => 'course',
+                'title' => $courses[$courseId]['courseSetTitle'],
+                'children' => $lessonTree,
+            ];
+        }
+
+        if (count($courseIds) > 1) {
+            return $lessonTrees;
+        }
+
+        return $lessonTree;
+    }
+
+    protected function findUnitChildren($chapterId, &$stack)
+    {
+        if (empty($stack)) {
+            return [];
+        }
+        $children = [];
+        while ('lesson' == end($stack)['type']) {
+            $lesson = array_pop($stack);
+            $lesson['parentId'] = $chapterId;
+            $children[] = $lesson;
+        }
+
+        return $children;
+    }
+
+    protected function findChapterChildren($chapterId, &$stack)
+    {
+        if (empty($stack)) {
+            return [];
+        }
+        $children = [];
+        while (in_array(end($stack)['type'], ['lesson', 'unit'])) {
+            $lesson = array_pop($stack);
+            $lesson['parentId'] = $chapterId;
+            $children[] = $lesson;
+        }
+
+        return $children;
+    }
+
+    public function findLessonIds($courseId, $type, $chapterId)
+    {
+        $chapters = $this->getChapterDao()->search(
+            ['courseId' => $courseId, 'status' => 'published'],
+            ['seq' => 'ASC'],
+            0,
+            PHP_INT_MAX,
+            ['id', 'type']
+        );
+        $start = false;
+        $lessonIds = [];
+        foreach ($chapters as $chapter) {
+            if ($chapter['id'] == $chapterId) {
+                $start = true;
+                continue;
+            }
+            if ('lesson' == $chapter['type'] && $start) {
+                $lessonIds[] = $chapter['id'];
+            }
+            if ('chapter' == $chapter['type'] && $start) {
+                break;
+            }
+            if ('unit' == $chapter['type'] && 'unit' == $type && $start) {
+                break;
+            }
+        }
+
+        return $lessonIds;
     }
 
     public function createChapter($chapter)
@@ -1224,6 +1405,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::CHAPTERTYPE_INVALID());
         }
 
+        $chapter['title'] = $this->purifyHtml($chapter['title'], true);
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
@@ -1234,6 +1416,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateChapter($courseId, $chapterId, $fields)
     {
         $this->tryManageCourse($courseId);
+        $fields['title'] = $this->purifyHtml($fields['title'], true);
         $chapter = $this->getChapterDao()->get($chapterId);
         $oldChapter = $chapter;
 
@@ -1290,6 +1473,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return [];
+    }
+
+    public function getChapterById($chapterId)
+    {
+        return $this->getChapterDao()->get($chapterId);
     }
 
     public function countUserLearningCourses($userId, $filters = [])
@@ -1853,7 +2041,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $task,
             function ($value, $key) use (&$task) {
                 if (is_numeric($value)) {
-                    $task[$key] = (string)$value;
+                    $task[$key] = (string) $value;
                 } else {
                     $task[$key] = $value;
                 }
@@ -2400,7 +2588,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                         'title' => $courseSet['title'],
                         'courseId' => $task['courseId'],
                         'taskId' => $task['id'],
-                        'event' => $courseSet['title'] . '-' . $course['title'] . '-' . $task['title'],
+                        'event' => $courseSet['title'].'-'.$course['title'].'-'.$task['title'],
                         'startTime' => date('Y-m-d H:i:s', $task['startTime']),
                         'endTime' => date('Y-m-d H:i:s', $task['endTime']),
                         'date' => date('w', $task['startTime']),
@@ -2868,7 +3056,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $fields['buyExpiryTime'] = date('Y-m-d', strlen($fields['buyExpiryTime']) > 10 ? $fields['buyExpiryTime'] / 1000 : $fields['buyExpiryTime']);
             }
 
-            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'] . ' 23:59:59');
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
         } else {
             $fields['buyExpiryTime'] = 0;
         }
@@ -2924,6 +3112,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->tryManageCourse($courseId, $courseSetId);
+    }
+
+    public function banLearningByCourseSetId($courseSetId)
+    {
+        $this->getCourseDao()->updateByCourseSetId($courseSetId, ['canLearn' => '0']);
+    }
+
+    public function canLearningByCourseSetId($courseSetId)
+    {
+        $this->getCourseDao()->canLearningByCourseSetId($courseSetId);
+    }
+
+    public function banLearningByCourseSetIds($courseSetIds)
+    {
+        $this->getCourseDao()->banLearningByCourseSetIds($courseSetIds);
+    }
+
+    public function canLearningByCourseSetIds($courseSetIds)
+    {
+        $this->getCourseDao()->canLearningByCourseSetId($courseSetIds);
     }
 
     /**
@@ -3029,7 +3237,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $chapterSort = [];
         foreach ($sorts as $sort) {
             foreach ($sort['chapters'] as $chapter) {
-                $chapterSort[] = 'chapter-' . $chapter['id'];
+                $chapterSort[] = 'chapter-'.$chapter['id'];
             }
         }
 

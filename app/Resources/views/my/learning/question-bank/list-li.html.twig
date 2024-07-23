@@ -1,5 +1,4 @@
 <div class="my-course-item cd-mb16 clearfix">
-
   <a class="my-course-item__link" href="{{ path('my_item_bank_exercise_show', {id:exercise.id}) }}">
     {{ lazy_img(filepath(exercise.cover.large|default(null), 'item_bank_exercise.png'), 'my-course-item__picture', exercise.title) }}
     {% if exercise.status == 'closed' %}
@@ -9,7 +8,7 @@
     {% endif %}
   </a>
   <div class="my-course-item__info">
-    <div class="my-course-item__title text-overflow">
+    <div class="my-course-item__title" style="width: 200px;">
       <a class="cd-link-major" href="{{ path('my_item_bank_exercise_show', {id:exercise.id}) }}">{{ exercise.title }}</a>
     </div>
 

@@ -8,7 +8,7 @@ admin_v2:
             disable: true
         # 教务模块
         admin_v2_education:
-            quick_entrance_icon_class: 'icon-color-green'
+            quick_entrance_icon_class: 'icon-color-purple'
             name: admin_v2.nav.education
             children:
                 admin_v2_education_overview:
@@ -81,7 +81,7 @@ admin_v2:
                                     router_name: admin_v2_multi_class_setting
         # 教学模块
         admin_v2_teach:
-            quick_entrance_icon_class: 'icon-color-green'
+            quick_entrance_icon_class: 'icon-color-blue'
             name: admin_v2.nav.teach
             children:
                 # 课程管理（group）
@@ -153,7 +153,7 @@ admin_v2:
                                             icon: 'glyphicon glyphicon-ban-circle'
                                             mode: none
                                             class: close-course
-                                            visible: (courseSet.status == 'published')
+                                            visible: (courseSet.status == 'published' or courseSet.status == 'unpublished')
                                         admin_v2_course_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
                                             router_name: admin_v2_sms_prepare
@@ -163,6 +163,16 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-envelope'
                                             mode: modal
+                                            visible: (courseSet.status == 'published')
+                                        admin_v2_course_set_unpublished:
+                                            name: admin_v2.course.basic_tab.unpublished_btn
+                                            router_params:
+                                                id: (courseSet.id)
+                                                filter: (filter)
+                                            group: groupButton
+                                            icon: 'es-icon es-icon-delist'
+                                            mode: none
+                                            class: delist-course
                                             visible: (courseSet.status == 'published')
                                         admin_v2_course_set_clone:
                                             name: admin_v2.course.basic.basic_tab.clone_btn
@@ -257,7 +267,7 @@ admin_v2:
                                             group: groupButton
                                             router_params:
                                                 id: (classroom.id)
-                                            visible: ( classroom.status == 'published' )
+                                            visible: ( classroom.status == 'published' or classroom.status == 'unpublished')
                                         admin_v2_classroom_open:
                                             name: admin_v2.course.classroom.basic_tab.publish_submit_btn
                                             mode: none
@@ -276,6 +286,15 @@ admin_v2:
                                             router_params:
                                                 id: (classroom.id)
                                             visible: ( classroom.status=='draft' or classroom.status=='closed' )
+                                        admin_v2_classroom_unpublished:
+                                            name: admin_v2.course.classroom.basic_tab.unpublished_btn
+                                            mode: none
+                                            class: delist-classroom
+                                            icon: 'es-icon es-icon-delist'
+                                            group: groupButton
+                                            router_params:
+                                                id: (classroom.id)
+                                            visible: ( classroom.status == 'published')
                                         admin_v2_sms_prepare:
                                             name: admin_v2.btn.sms_send_btn
                                             router_name: admin_v2_sms_prepare
@@ -361,6 +380,15 @@ admin_v2:
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-eye-open'
                                             blank: 1
+                                        admin_v2_item_bank_exercise_unpublished:
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.unpublished_btn
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            class: delist-exercise
+                                            icon: 'es-icon es-icon-delist'
+                                            mode: none
+                                            visible: (exercise.status == 'published')
                                         admin_v2_item_bank_exercise_publish:
                                             name: admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn
                                             router_params:
@@ -378,7 +406,7 @@ admin_v2:
                                           class: close-exercise
                                           icon: 'glyphicon glyphicon-ok-circle'
                                           mode: none
-                                          visible: (exercise.status == 'published')
+                                          visible: (exercise.status == 'published' or exercise.status == 'unpublished')
                                         admin_v2_item_bank_exercise_delete:
                                             name: admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn
                                             class: delete-exercise
@@ -540,6 +568,8 @@ admin_v2:
                                   name: admin_v2.cloud.file_setting.basic_tab
                                 admin_v2_cloud_attachment_setting:
                                     name: admin_v2.cloud.attachment_setting.basic_tab
+                                admin_v2_question_bank_attachment_setting:
+                                    name: admin_v2.cloud.question_bank.attachment_setting.basic_tab
                         # 题库管理
                         admin_v2_question_bank:
                             name: admin_v2.question_bank.menu
@@ -565,9 +595,13 @@ admin_v2:
                                             router_name: admin_v2_question_bank_category_manage_create
                                             group: topBtn
                                             mode: modal
+                                admin_v2_question_ai_analysis:
+                                   name: admin_v2.question.ai_analysis_tab
+                                   router_name: admin_v2_question_ai_analysis
+                                   disable: true
         # 营销管理模块
         admin_v2_marketing:
-            quick_entrance_icon_class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-orange'
             name: admin_v2.nav.marketing
             children:
                 # 公开课管理
@@ -721,7 +755,7 @@ admin_v2:
                                     disable: true
         # 运营管理模块
         admin_v2_operating:
-            quick_entrance_icon_class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-orange'
             name: admin_v2.nav.operating
             children:
                 # 网校装修(group)
@@ -1005,7 +1039,7 @@ admin_v2:
                                     disable: true
         # 用户管理模块
         admin_v2_user:
-            quick_entrance_icon_class: 'icon-color-blue'
+            quick_entrance_icon_class: 'icon-color-green'
             name: admin_v2.nav.user
             children:
                 admin_v2_user_group:
@@ -1105,7 +1139,7 @@ admin_v2:
                                             class: delete-user
                                             group: groupButton
                                             mode: none
-                                            visible: (user.type != 'system' and is_super_admin())
+                                            visible: (user.type != 'system' and is_super_admin() or has_permission('admin_v2_user_delete'))
                                             router_params:
                                                 id: (user.id)
                                         admin_v2_user_org_update:
@@ -1226,7 +1260,7 @@ admin_v2:
                                             class: delete-user
                                             group: groupButton
                                             mode: none
-                                            visible: (user.type != 'system' and is_super_admin())
+                                            visible: (user.type != 'system' and is_super_admin() or has_permission('admin_v2_staff_delete'))
                                             router_params:
                                                 id: (user.id)
                                         admin_v2_staff_org_update:
@@ -1288,7 +1322,7 @@ admin_v2:
                                     router_name: admin_v2_scrm
         # 交易模块
         admin_v2_trade:
-            quick_entrance_icon_class: 'icon-color-yellow'
+            quick_entrance_icon_class: 'icon-color-red'
             name: admin_v2.nav.trade
             children:
                 # 订单管理
@@ -1383,7 +1417,7 @@ admin_v2:
                                     router_name: admin_v2_data_statistics_index
         # 系统模块
         admin_v2_system:
-            quick_entrance_icon_class: 'icon-color-blue'
+            quick_entrance_icon_class: 'icon-color-light-blue'
             name: admin_v2.nav.system
             children:
                 # 通用管理
@@ -1412,8 +1446,6 @@ admin_v2:
                                     router_name: admin_v2_setting_auth
                                 admin_v2_setting_login_bind:
                                     name: admin_v2.system.user.login_bind_tab
-                                admin_v2_setting_user_center:
-                                    name: admin_v2.system.user.user_center_tab
                                 admin_v2_setting_user_fields:
                                     name: admin_v2.system.user.user_fields_tab
                                 admin_v2_setting_avatar:
@@ -1622,6 +1654,14 @@ admin_v2:
                                 admin_v2_logs_prod:
                                     name: admin_v2.system.logs.logs_prod_tab
                                     disable: true
+                        # 系统API设置
+                        admin_v2_api_settings:
+                            name: admin_v2.system.api_setting_menu
+                            children:
+                                admin_v2_API_setting:
+                                    name: admin_v2.system.api_setting_basic_tab
+                                    disable: true
+                                    router_name: admin_v2_api_setting
                         # 安全设置
                         admin_v2_security:
                             name: admin_v2.system.security_menu
@@ -1632,7 +1672,24 @@ admin_v2:
                                     name: admin_v2.system.security_tab
                                 admin_v2_post_num_rules_setting:
                                     name: admin_v2.system.post_num_tab
-
+                                admin_v2_anti_fraud_reminder_setting:
+                                    name: admin_v2.system.anti_fraud_reminder_tab
+                        admin_v2_sms_defence:
+                            name: admin_v2.system.sms_defence_menu
+                            visible: false
+                            children:
+                                admin_v2_sms_request_log_list:
+                                    name: admin_v2.sms.request.log.list_tab
+                                admin_v2_sms_black_ip_list:
+                                    name: admin_v2.sms.ip.black.list_tab
+                                    children:
+                                        admin_v2_sms_black_ip_unlock:
+                                            name: admin_v2.user.sms_black_ip_unlock_btn
+                                            group: groupButton
+                                            class: unlockIp
+                                            mode: none
+                                            router_params:
+                                                id: (smsRequestLog.id)
         # 云市场模块
         admin_v2_cloud_center:
             name: admin_v2.nav.cloud_center
@@ -1857,14 +1914,6 @@ admin_v2:
                     name: admin_v2.nav.developer_module.basic_group
                     is_group: true
                     children:
-                        admin_v2_xapi_manage:
-                            name: admin_v2.developer.xapi_manage
-                            disable: true
-                            children:
-                                admin_v2_xapi_setting:
-                                    name: admin_v2.developer.xapi_setting
-                                admin_v2_xapi_statement_list:
-                                    name: admin_v2.developer.xapi_statement
                         admin_v2_cdn_manage:
                             name: admin_v2.developer.cdn_manage
                             disable: true

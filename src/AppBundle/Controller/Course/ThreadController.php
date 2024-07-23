@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\CourseException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
@@ -18,8 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
-use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
-use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class ThreadController extends CourseBaseController
@@ -103,7 +102,6 @@ class ThreadController extends CourseBaseController
         }
 
         $thread = $this->getThreadService()->getThread($course['id'], $threadId);
-
         if (empty($thread)) {
             $this->createNewException(ThreadException::NOTFOUND_THREAD());
         }
@@ -185,7 +183,9 @@ class ThreadController extends CourseBaseController
     public function createAction(Request $request, $courseId)
     {
         list($course, $member, $response) = $this->tryBuildCourseLayoutData($request, $courseId);
-
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         if ($response) {
             return $response;
         }
@@ -202,7 +202,6 @@ class ThreadController extends CourseBaseController
         ]);
 
         if ('POST' == $request->getMethod()) {
-
             // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
             //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
             // }
@@ -264,7 +263,6 @@ class ThreadController extends CourseBaseController
         $form = $this->createThreadForm($thread);
 
         if ('POST' == $request->getMethod()) {
-
             // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
             //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
             // }
@@ -427,7 +425,9 @@ class ThreadController extends CourseBaseController
     public function postAction(Request $request, $courseId, $threadId)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
         if ($course['parentId']) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
             $classroomSetting = $this->getSettingService()->get('classroom');
@@ -446,7 +446,6 @@ class ThreadController extends CourseBaseController
         $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
-
             // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
             //     return $this->createJsonResponse(['error' => ['code'=> 403, 'message' => $this->trans("exception.form..drag.expire")]], 403);
             // }
@@ -577,7 +576,7 @@ class ThreadController extends CourseBaseController
             // if(!$this->checkDragCaptchaToken($request, $request->request->get("_dragCaptchaToken", ""))){
             //     return $this->createMessageResponse('error', $this->trans("exception.form..drag.expire"));
             // }
-            
+
             $form->handleRequest($request);
 
             if ($form->isValid()) {
@@ -758,5 +757,10 @@ class ThreadController extends CourseBaseController
             ->add('courseId', HiddenType::class)
             ->add('threadId', HiddenType::class)
             ->getForm();
+    }
+
+    protected function getCourseThreadService()
+    {
+        return $this->getBiz()->service('Course:ThreadService');
     }
 }

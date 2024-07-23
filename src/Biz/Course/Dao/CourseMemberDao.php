@@ -99,6 +99,8 @@ interface CourseMemberDao extends AdvancedDaoInterface
 
     public function updateMembers($conditions, $updateFields);
 
+    public function changeMembersDeadlineByCourseId($courseId, $day);
+
     public function deleteByCourseIdAndRole($courseId, $role);
 
     public function deleteByCourseId($courseId);

@@ -90,24 +90,11 @@ class ActivityDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($activity4, $activities[1], $this->getCompareKeys());
     }
 
-    public function findFinishedLivesWithinOneDay()
-    {
-        $expected = [];
-        $expected[1] = $this->mockDataObject(['startTime' => time() - 3600 * 28, 'endTime' => time() - 3600 * 27, 'mediaType' => 'live']);
-        $expected[2] = $this->mockDataObject(['startTime' => time() - 3600, 'endTime' => time() - 1800, 'mediaType' => 'live']);
-
-        $res = $this->getDao()->findFinishedLivesWithinOneDay();
-        $testFields = $this->getCompareKeys();
-
-        $this->assertArrayEquals($expected[2], $res[0], $testFields);
-        $this->assertEquals(1, count($res));
-    }
-
     public function testFindOverlapTimeActivitiesByCourseId()
     {
-        $activity1 = $this->mockActivity(['title' => 'activity1', 'startTime' => 20, 'endTime' => 30]);
+        $activity1 = $this->mockActivity(['title' => 'activity1', 'mediaType' => 'live', 'startTime' => 20, 'endTime' => 30]);
         $activity2 = $this->mockActivity(['title' => 'activity2', 'startTime' => 30, 'endTime' => 40]);
-        $activity3 = $this->mockActivity(['title' => 'activity3', 'startTime' => 25, 'endTime' => 35]);
+        $activity3 = $this->mockActivity(['title' => 'activity3', 'mediaType' => 'live', 'startTime' => 25, 'endTime' => 35]);
         $activities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(1, 30, 20, 2);
 
         $this->assertEquals(count($activities), 2);

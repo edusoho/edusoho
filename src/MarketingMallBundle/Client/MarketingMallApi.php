@@ -3,8 +3,6 @@
 namespace MarketingMallBundle\Client;
 
 use AppBundle\Common\ArrayToolkit;
-use Codeages\RestApiClient\Exceptions\ResponseException;
-use Codeages\RestApiClient\Exceptions\ServerException;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification;
 use Firebase\JWT\JWT;
@@ -34,7 +32,7 @@ class MarketingMallApi
         self::$accessKey = $setting['access_key'] ?? '';
         self::$secretKey = $setting['secret_key'] ?? '';
         $headers[] = 'Content-type: application/json';
-        $headers[] = 'Authorization: ' . $this->makeToken();
+        $headers[] = 'Authorization: '.$this->makeToken();
         self::$headers = $headers;
         self::$timestamp = time();
         $config = [
@@ -76,7 +74,7 @@ class MarketingMallApi
     {
         $params = ArrayToolkit::parts($params[0], [
             'targetType',
-            'goodsContent'
+            'goodsContent',
         ]);
         $this->post('/api-school/goods/updateGoodsContent', $params);
     }
@@ -84,9 +82,9 @@ class MarketingMallApi
     public function updateTeacherInfo($params)
     {
         $params = ArrayToolkit::parts($params[0], [
-            'content'
+            'content',
         ]);
-        $params['type'] = "teacherInfo";
+        $params['type'] = 'teacherInfo';
         $params['targetId'] = json_decode($params['content'], true)['userId'];
         $this->post('/api-school/goods/updateTeacherInfo', $params);
     }
@@ -106,6 +104,11 @@ class MarketingMallApi
         $this->post('/api-school/user/unlock', ...$params);
     }
 
+    public function unbindUser($params)
+    {
+        $this->post('/api-school/user/unbind', ...$params);
+    }
+
     public function checkGoodsIsPublishByCodes($params)
     {
         return $this->get('/api-school/goods/getGoodsPublishStatus', ['goodsCodes' => implode(',', $params[0])]);
@@ -121,9 +124,14 @@ class MarketingMallApi
         return $this->post('/api-school/goods/syncNotify', ['type' => implode($param)]);
     }
 
-    public function setWechatMobileSetting($params)
+    public function setPaymentSetting($params)
     {
-        return $this->post('/api-school/wechatSetting/setWechatMobileSetting', ...$params);
+        return $this->post('/api-school/unifiedPayment/setPaymentSetting', ...$params);
+    }
+
+    public function notifyPaid($params)
+    {
+        return $this->post('/api-school/unifiedPayment/notifyPaid', ...$params);
     }
 
     public function notifyUpdateLogo()
@@ -134,6 +142,31 @@ class MarketingMallApi
     public function notifyWapUpdate()
     {
         return $this->post('/api-school/setting/removeWapSettingCache');
+    }
+
+    public function notifyTradeClosed($params)
+    {
+        return $this->post('/api-school/unifiedPayment/notifyTradeClosed', ...$params);
+    }
+
+    public function notifyUserProtocolUpdate($params)
+    {
+        return $this->post('/api-school/userAuthSetting/updateProtocol', ...$params);
+    }
+
+    public function notifyPasswordLevelUpdate($params)
+    {
+        return $this->post('/api-school/userAuthSetting/updatePasswordLevel', ...$params);
+    }
+
+    public function notifyCloudSmsUpdate($params)
+    {
+        return $this->post('/api-school/setting/updateCloudSms', ...$params);
+    }
+
+    public function logout($params)
+    {
+        return $this->post('/api-school/user/logout', ...$params);
     }
 
 //    例子  token头直接设置了参数code也直接加了
@@ -154,7 +187,7 @@ class MarketingMallApi
         try {
             $response = self::$client->get($uri, $params, self::$headers);
         } catch (\RuntimeException $e) {
-            throw new MarketingMallApiException('营销商城服务异常，请联系管理员(' . $uri . ')');
+            throw new MarketingMallApiException('营销商城服务异常，请联系管理员('.$uri.')');
         }
         if (empty($response)) {
             $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params]);
@@ -170,7 +203,7 @@ class MarketingMallApi
         try {
             $response = self::$client->post($uri, $params, self::$headers);
         } catch (\RuntimeException $e) {
-            throw new MarketingMallApiException('营销商城服务异常，请联系管理员(' . $uri . ')');
+            throw new MarketingMallApiException('营销商城服务异常，请联系管理员('.$uri.')');
         }
 
         if (empty($response)) {
@@ -184,7 +217,7 @@ class MarketingMallApi
 
     private function makeToken()
     {
-        return self::$accessKey . ':' . JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
+        return self::$accessKey.':'.JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
     }
 
     /**
@@ -203,7 +236,7 @@ class MarketingMallApi
             return self::$logger;
         }
         $logger = new Logger('marketing-mall');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir') . '/marketing-mall.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/marketing-mall.log', Logger::DEBUG));
 
         self::$logger = $logger;
 

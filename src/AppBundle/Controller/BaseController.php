@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -67,6 +68,16 @@ class BaseController extends Controller
         return $user;
     }
 
+    protected function prepareLimitedTime($limitedTime = 0)
+    {
+        $limitedTime = ltrim($limitedTime, 0);
+        if (empty($limitedTime)) {
+            return 0;
+        }
+
+        return $limitedTime;
+    }
+
     protected function authenticateUser(array $user)
     {
         $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
@@ -74,6 +85,24 @@ class BaseController extends Controller
         $currentUser->fromArray($user);
 
         return $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+    }
+
+    protected function fillUserStatus($conditions)
+    {
+        if (isset($conditions['userStatus'])) {
+            if ('locked' == $conditions['userStatus']) {
+                $conditions['locked'] = '1';
+            }
+
+            if ('unlock' == $conditions['userStatus']) {
+                $conditions['locked'] = '0';
+            }
+            unset($conditions['userStatus']);
+
+            return $conditions;
+        }
+
+        return $conditions;
     }
 
     protected function fillOrgCode($conditions)
@@ -234,6 +263,19 @@ class BaseController extends Controller
         $this->get('session')->getFlashBag()->add($level, $message);
     }
 
+    protected function setFlashException(HttpExceptionInterface $exception)
+    {
+        $this->setFlashMessage(
+            'currentThrowedException',
+            [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'statusCode' => $exception->getStatusCode(),
+            ]
+        );
+    }
+
     protected function agentInWhiteList($userAgent)
     {
         // com.tencent.mm.app.Application 是安卓端小程序在播放视频时的UA，无法找到为什么UA是这样的具体原因，为了容错
@@ -379,18 +421,20 @@ class BaseController extends Controller
 
         $parsedUrl = parse_url($url);
 
-        if ($parsedUrl == false){
+        if (false == $parsedUrl) {
             return $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
-        if (!empty($parsedUrl['host'])){
+        if (!empty($parsedUrl['host'])) {
             $url = $this->unParseUrl($parsedUrl);
+        } elseif ('/' != $url[0]) {
+            $url = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
         $isUnsafeHost = isset($parsedUrl['host']) && !in_array($parsedUrl['host'], $safeHosts);
-        $isInvalidUrl = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
+        $isInvalidScheme = isset($parsedUrl['scheme']) && !in_array($parsedUrl['scheme'], ['http', 'https']);
 
-        if (empty($url) || $isUnsafeHost || $isInvalidUrl) {
+        if (empty($url) || $isUnsafeHost || $isInvalidScheme) {
             $url = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
@@ -399,32 +443,36 @@ class BaseController extends Controller
 
     protected function unParseUrl($parsedUrl)
     {
-        $scheme   = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '//';
-        $host     = $parsedUrl['host'] ?? '';
-        $port     = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-        $path     = $parsedUrl['path'] ?? '';
-        $query    = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : '';
-        $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'].'://' : '//';
+        $host = $parsedUrl['host'] ?? '';
+        $port = isset($parsedUrl['port']) ? ':'.$parsedUrl['port'] : '';
+        $path = $parsedUrl['path'] ?? '';
+        $query = isset($parsedUrl['query']) ? '?'.$parsedUrl['query'] : '';
+        $fragment = isset($parsedUrl['fragment']) ? '#'.$parsedUrl['fragment'] : '';
+
         return "$scheme$host$port$path$query$fragment";
     }
 
     /**
      * 验证验证码token
+     *
      * @return [type] [description]
      */
     protected function checkDragCaptchaToken(Request $request, $token)
     {
-        $enableAntiBrushCaptcha = $this->getSettingService()->node("ugc_content_audit.enable_anti_brush_captcha");
-        if(empty($enableAntiBrushCaptcha)){
+        $enableAntiBrushCaptcha = $this->getSettingService()->node('ugc_content_audit.enable_anti_brush_captcha');
+        if (empty($enableAntiBrushCaptcha)) {
             return true;
         }
         $session = $request->getSession();
-        $dragTokens = empty($session->get('dragTokens')) ? array() : $session->get('dragTokens');
-        if(in_array($token, $dragTokens)){
+        $dragTokens = empty($session->get('dragTokens')) ? [] : $session->get('dragTokens');
+        if (in_array($token, $dragTokens)) {
             array_splice($dragTokens, array_search($token, $dragTokens), 1);
-            $session->set("dragTokens", $dragTokens);
+            $session->set('dragTokens', $dragTokens);
+
             return true;
         }
+
         return false;
     }
 
@@ -496,5 +544,20 @@ class BaseController extends Controller
         $key = md5($accessKey.$secretKey);
 
         return new JWTAuth($key);
+    }
+
+    protected function getHttpHost()
+    {
+        return $this->getSchema()."://{$_SERVER['HTTP_HOST']}";
+    }
+
+    protected function getSchema()
+    {
+        $https = empty($_SERVER['HTTPS']) ? '' : $_SERVER['HTTPS'];
+        if (!empty($https) && 'off' !== strtolower($https)) {
+            return 'https';
+        }
+
+        return 'http';
     }
 }

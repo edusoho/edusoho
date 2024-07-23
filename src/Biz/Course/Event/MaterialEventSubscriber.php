@@ -163,7 +163,9 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
     protected function updateMaterialNum($event)
     {
         $material = $event->getSubject();
-        $this->getCourseService()->updateCourseStatistics($material['courseId'], ['materialNum']);
+        if (!empty($material['courseId'])) {
+            $this->getCourseService()->updateCourseStatistics($material['courseId'], ['materialNum']);
+        }
         if (!empty($material['courseSetId'])) {
             $this->getCourseSetService()->updateCourseSetStatistics($material['courseSetId'], ['materialNum']);
         }

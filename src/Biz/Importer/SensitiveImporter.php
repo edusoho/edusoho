@@ -4,6 +4,7 @@ namespace Biz\Importer;
 
 use Biz\Sensitive\Service\SensitiveService;
 use Biz\User\CurrentUser;
+use Biz\User\UserException;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -56,7 +57,9 @@ class SensitiveImporter extends Importer
 
     public function tryImport(Request $request)
     {
-        return $this->getCurrentUser()->hasPermission('admin_v2_system_sensitive_words');
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_system_sensitive_words')) {
+            throw UserException::PERMISSION_DENIED();
+        }
     }
 
     public function check(Request $request)

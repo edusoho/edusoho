@@ -40,6 +40,9 @@ class FileToolkit
         $image = $blob['tmp_name'];
         $tpe = $blob['type'];
         $bases = explode('/', $tpe); //分割出图片格式image/png
+        if(!in_array(strtolower($bases[1]), ['jpg', 'jpeg', 'bmp', 'gif', 'png'])) {
+            return false;
+        }
         $suffix = '.'.$bases[1];
         $fileName = self::getImgName($type, $suffix);
         $fp = fopen($image, 'r');

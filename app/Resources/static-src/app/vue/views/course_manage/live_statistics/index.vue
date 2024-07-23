@@ -3,32 +3,18 @@
     <template #title>{{ 'live_statistics' | trans }}</template>
 
     <div class="clearfix">
-      <a-input-search
-        class="pull-left"
-        :placeholder="'live_statistics.task_name_placeholder' | trans"
-        style="width: 200px;"
-        @search="onSearch"
-      />
-      <a-button
-        type="primary"
-        class="pull-right"
-        @click="handleClickExport"
-      >
+      <a-input-search class="pull-left" :placeholder="'live_statistics.task_name_placeholder' | trans"
+        style="width: 200px;" @search="onSearch" />
+      <a-button type="primary" class="pull-right" @click="handleClickExport">
         {{ 'site.btn.export' | trans }}
       </a-button>
     </div>
 
-    <a-table
-      class="mt24"
-      :columns="columns"
-      :data-source="data"
-      :row-key="record => record.id"
-      :pagination="pagination"
-      :loading="loading"
-      @change="handleTableChange"
-    >
+    <a-table class="mt24" :columns="columns" :data-source="data" :row-key="record => record.id" :pagination="pagination"
+      :loading="loading" @change="handleTableChange">
       <template slot="customTitle" slot-scope="text, record">
-        <a-button type="link" @click="handleClickViewTask(record.id)">{{ text }}</a-button>
+        <a-button style="max-width: 240px; white-space: pre-wrap;" type="link" @click="handleClickViewTask(record.id)">{{
+          text }}</a-button>
       </template>
       <template slot="startTime" slot-scope="text">
         {{ $dateFormat(text, 'YYYY-MM-DD HH:mm') }}
@@ -56,7 +42,8 @@ const columns = [
   {
     title: Translator.trans('course.task'),
     dataIndex: 'title',
-    scopedSlots: { customRender: 'customTitle' }
+    scopedSlots: { customRender: 'customTitle' },
+    width: 240
   },
   {
     title: Translator.trans('live_statistics.live_start_time'),

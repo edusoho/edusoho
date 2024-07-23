@@ -90,7 +90,7 @@ class Client
         ];
 
         if (!empty($options['url'])) {
-            $params['url'] = $options['url'];
+            $params['page'] = $options['url'];
         }
 
         if (!empty($options['miniprogram'])) {
@@ -103,8 +103,6 @@ class Client
 
         if (isset($rawResult['errmsg']) && 'ok' != $rawResult['errmsg']) {
             $this->logger && $this->logger->error('WECHAT_SEND_MESSAGE_ERROR', ['params' => $params, 'error' => $rawResult]);
-
-            return [];
         }
 
         return $rawResult;

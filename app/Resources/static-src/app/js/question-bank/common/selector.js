@@ -3,6 +3,7 @@ export default class Selector {
     this.$elem = $(selector);
     this.init();
     this.selectMap = {};
+    this.status = false
   }
 
   init() {
@@ -18,9 +19,11 @@ export default class Selector {
     this.$elem.on('click', '.js-select-all', (e) => {
       let $target = $(e.target);
       if ($target.prop('checked')) {
+        this.status = true
         this.$elem.find('.js-select-all').prop('checked', true);
         this.addItems();
       } else {
+        this.status = false
         this.$elem.find('.js-select-all').prop('checked', false);
         this.removeItems();
       }
@@ -60,7 +63,7 @@ export default class Selector {
 
   addItems() {
     this.$elem.find('.js-checkbox').each((index, item) => {
-      if (!$(item).prop('checked')) {
+      if (this.status) {
         this.addItem(item);
         this.addCb && this.addCb(item);
       }
@@ -69,7 +72,7 @@ export default class Selector {
 
   removeItems() {
     this.$elem.find('.js-checkbox').each((index, item) => {
-      if ($(item).prop('checked')) {
+      if (!this.status) {
         let obj = this.getItem($(item));
         this.removeItem(obj);
         this.removeCb && this.removeCb(item);

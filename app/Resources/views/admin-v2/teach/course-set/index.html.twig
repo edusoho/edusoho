@@ -5,7 +5,13 @@
 {% set script_controller = 'course/manage' %}
 
 {% block main %}
-
+<style>
+.status_tooptip_intro {
+  .tooltip-inner {
+    max-width: max-content !important;
+  }
+}
+</style>
   {% include 'admin-v2/teach/course-set/tab-filter.html.twig' %}
   <div class="well well-sm mtl">
     <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
@@ -53,7 +59,8 @@
     <span class="mrl">{{ 'admin.course_manage.manage.count'|trans({'%courseNum%':courseSetStatusNum.total})|raw }}</span>
     <span class="mrl">{{ 'admin.course_manage.manage.published_count'|trans({'%publishedNum%':courseSetStatusNum.published})|raw }}</span>
     <span class="mrl">{{ 'admin.course_manage.manage.closed_count'|trans({'%closedNum%':courseSetStatusNum.closed})|raw }}</span>
-    <span class="mrl">{{ 'admin.course_manage.manage.unpublish_count'|trans({'%unPublishedNum%':courseSetStatusNum.draft})|raw }}</span>
+    <span class="mrl">{{ 'admin.course_manage.manage.draft_count'|trans({'%draftNum%':courseSetStatusNum.draft})|raw }}</span>
+    <span class="mrl">{{ 'admin.course_manage.manage.unpublish_count'|trans({'%unPublishedNum%':courseSetStatusNum.unpublished})|raw }}</span>
   </p>
 
   <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
@@ -89,7 +96,11 @@
 
       
       <th>{{ 'admin.course_manage.manage.creator'|trans }}</th>
-      <th>{{ 'admin.course_manage.manage.status'|trans }}</th>
+      <th class="status_tooptip_intro">{{ 'admin.course_manage.manage.status'|trans }}
+      <span class="es-icon es-icon-wenhaotishi" 
+          style="color: #919399;font-size: 14px;" 
+          data-toggle="tooltip" 
+          title="{{ 'admin.setting.table.status.tooltip'|trans }}"></span></th>
       <th width="10%">{{'admin.course_manage.operater'|trans}}</th>
     </tr>
     </thead>

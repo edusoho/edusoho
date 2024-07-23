@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 
 class MeItemBankExerciseModuleCategory extends AbstractResource
 {
@@ -21,8 +22,7 @@ class MeItemBankExerciseModuleCategory extends AbstractResource
             return [];
         }
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
-        $categories = $this->getItemCategoryService()->getItemCategoryTreeList($questionBank['itemBank']['id']);
+        $chapters = $this->getItemBankChapterExerciseService()->getPublishChapterTreeList($itemBankExercise['questionBankId']);
 
         $answerRecords = $this->getItemBankChapterExerciseRecordService()->search(
             ['userId' => $user['id'], 'moduleId' => $moduleId],
@@ -31,29 +31,13 @@ class MeItemBankExerciseModuleCategory extends AbstractResource
             PHP_INT_MAX
         );
         $answerRecordGroups = ArrayToolkit::group($answerRecords, 'itemCategoryId');
-        foreach ($categories as &$category) {
-            if (!empty($answerRecordGroups[$category['id']])) {
-                $category['latestAnswerRecord'] = end($answerRecordGroups[$category['id']]);
+        foreach ($chapters as &$chapter) {
+            if (!empty($answerRecordGroups[$chapter['id']])) {
+                $chapter['latestAnswerRecord'] = end($answerRecordGroups[$chapter['id']]);
             }
         }
 
-        return $categories;
-    }
-
-    /**
-     * @return \Biz\QuestionBank\Service\QuestionBankService
-     */
-    protected function getQuestionBankService()
-    {
-        return $this->service('QuestionBank:QuestionBankService');
-    }
-
-    /**
-     * @return \Codeages\Biz\ItemBank\Item\Service\ItemCategoryService
-     */
-    protected function getItemCategoryService()
-    {
-        return $this->service('ItemBank:Item:ItemCategoryService');
+        return $chapters;
     }
 
     /**
@@ -70,5 +54,13 @@ class MeItemBankExerciseModuleCategory extends AbstractResource
     protected function getItemBankChapterExerciseRecordService()
     {
         return $this->service('ItemBankExercise:ChapterExerciseRecordService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->service('ItemBankExercise:ChapterExerciseService');
     }
 }

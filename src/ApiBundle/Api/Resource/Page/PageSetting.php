@@ -149,6 +149,15 @@ class PageSetting extends AbstractResource
                 $couponBatch['targetDetail'] = $this->getCouponBatchService()->getCouponBatchTargetDetail($couponBatch['id']);
             }
         }
+
+        if ('poster' == $discoverySetting['type']) {
+            array_walk($discoverySetting['data'], function (&$slide) {
+                if (empty($slide)) {
+                    $slide = (object) [];
+                }
+            });
+        }
+
         $pageDiscoveryFilter = new PageDiscoveryFilter();
         $pageDiscoveryFilter->setMode(Filter::PUBLIC_MODE);
         $pageDiscoveryFilter->filter($discoverySetting);

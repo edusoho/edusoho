@@ -49,9 +49,13 @@ class LoginBindController extends BaseController
             $params['os'] = $request->query->get('os');
         }
 
+        //设置微信校验逻辑
+        $state = uniqid('edusoho');
+        $this->get('session')->set('login_bind.credential', $state);
+
         $callbackUrl = $this->generateUrl('login_bind_callback', $params, UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $url = $client->getAuthorizeUrl($callbackUrl);
+        $url = $client->getAuthorizeUrl($callbackUrl, $state);
 
         return $this->redirect($url);
     }
@@ -105,13 +109,18 @@ class LoginBindController extends BaseController
                 return $this->redirect($this->generateUrl('register'));
             }
 
+            if ($user['locked']) {
+                return $this->createMessageResponse('error', 'exception.user.lock', '', 3000);
+            }
+
             if ($this->getCurrentUser()->getId() != $user['id']) {
                 $this->authenticateUser($user);
             }
 
             if ('weixinmob' == $type) {
-                $user = $this->getCurrentUser();
-                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($user, $bind, $token);
+                $this->getWeChatService()->freshOfficialWeChatUserWhenLogin($this->getCurrentUser(), $bind, $token);
+            } elseif ('weixinweb' == $type) {
+                $this->getWeChatService()->freshOpenAppWeChatUserWhenLogin($this->getCurrentUser(), $token);
             }
 
             if ($this->getAuthService()->hasPartnerAuth()) {

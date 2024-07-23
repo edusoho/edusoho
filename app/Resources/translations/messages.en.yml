@@ -65,6 +65,7 @@ site.default.all: All
 site.default.user: User
 site.default.course: Course
 site.default.question.bank: Question Bank
+site.default.item.bank.exercise: Item Bank Exercise
 site.default.plan: Plan
 site.default.more: More
 site.default.manage: Config
@@ -77,9 +78,11 @@ site.default.times: Times
 site.default.detail: Detail
 site.default.program_name: Default Program
 site.default.plan_setting: Default plan settings
+site.default.mobile: mobile
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
+site.tips.delist: Confirm removal?
 site.qrcode_tips: Scan
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
 site.tips.exercise_qrcode_tips: 'Scan the QR code on the right and go to the mobile terminal to learn'
@@ -322,6 +325,7 @@ form.btn.submit_disabled: Submitted
 form.btn.reset_password: 'Reset password'
 form.btn.send: Send
 form.btn.upload: Upload
+form.btn.reupload: Reupload
 form.btn.picture_crop: 'Select the picture to upload'
 form.btn.remove: Remove
 form.btn.comment: Comment
@@ -550,7 +554,9 @@ order.paid_course.minus: 'Deduct'
 order.refund: 'Quit the course'
 order.refund.item_type: item type
 order.refund.reason: 'Quit reason'
-order.refund.reason_tips: 'Please input your quit reason'
+order.refund.reason_tips: 'Please enter the reason for exiting'
+order.refund.reason_warning: You will not be able to continue learning after exiting, you need to rejoin or buy！
+order.refund.reason_select_tips: Please choose a reason for exiting
 order.refund.apply_for_btn: 'Apply for refund'
 order.refund.buy_price: '(you have paid：%amount% CNY）'
 order.refund.refund_is_not_supported: Refund is not supported
@@ -833,7 +839,7 @@ buy.payments_disabled_title: Open payment function reminder
 buy.payments_disabled_tips: Since the online school does not open any payment function, the current product does not support purchase. Please contact the online school to open the payment function before purchasing.
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
 course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
-course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
+course.remove_students_tips: 'The course has been closed and cannot be studied. If you want the course not to be displayed but students can continue to study, you can set "remove" after the course is published.'
 course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
@@ -872,7 +878,7 @@ course.teaching_plan.sort.save: Save sort
 course.teaching_plan.sort.cancel: Cancel sort
 course.teaching_plan.create.max_plan_number: Support to create 10 plans, if you need to add more, please add after the original plan is deleted.
 course.teaching_plan.create.new_plan_name: 'Program name'
-course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
+course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the plan being published.'
 course.teaching_plan.create.name: Name
 course.teaching_plan.create.mode: 'Learn mode'
 course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
@@ -895,6 +901,8 @@ course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
 course.teaching_plan.publish_btn: 'Publish'
 course.teaching_plan.manage: Teaching plan manage
+course.teaching_plan.show_page: Enable page display
+course.teaching_plan.hide_page: Disable page display
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
@@ -913,6 +921,7 @@ course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
 course.plan_setup.finish_rule.nothing: 'No limitation'
+course.plan_setup.finish_rule.indefinite.duration: Indefinite duration
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
@@ -930,6 +939,9 @@ course.student_manage: 'Student config'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
 course.marketing_setup.setup.can_not_join: Not joinable
+course.marketing_setup.setup.is_show_label: Page display
+course.marketing_setup.setup.can_show: Enable
+course.marketing_setup.setup.can_hide: Disable
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
@@ -974,6 +986,7 @@ course.members_manage.export.field_learn_time: The cumulative learning time
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.batch_upload_deadline: Batch modification validity period
+course.members_manage.official_student.all_update_deadline: All modification validity period
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.seq: Seq
@@ -1054,6 +1067,7 @@ course.members_manage.join_records.date: 'join date'
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
+course.testpaper_check.tips: No related content
 course.testpaper_check.start_date: 'Start date:'
 course.testpaper_check.status.check: Checked
 course.testpaper_check.status.not_check: 'UnCheck'
@@ -1207,6 +1221,7 @@ course.status.followed: Bookmarked
 course.status.follow: Bookmark
 course.status.closed: Closed
 course.status.unpublished: Unpublished
+course.status.delist: No longer available
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
@@ -1222,7 +1237,7 @@ course.preview.course: Preview course
 course.preview.plan: Preview Plan
 course.check.plan: View Plan
 course.share: Share
-course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
+course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a><div>please enroll to learn</div>'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
 item_bank_exercise.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
@@ -1493,6 +1508,11 @@ course.question_manage.manage.material: Material
 course.question_manage.manage.belong_change_tips: If this question is cited, changing the subordinate is likely to affect the practice of the class, please be cautious!
 course.question_manage.edit: Edit
 course.question_manage.import.btn: Import question
+course.question_manage.start.import: Start import
+course.question_manage.new.import.instructions: New version import instructions
+course.question_manage.guide.message: A new way of topic import, support formula, form, special character batch recognition import, improve management and operation efficiency. The new version of the topic import is divided into 【 simple version 】 and 【 complete version 】.
+course.question_manage.guide.message.tip1: 1. [Simple version] can add import mode and description on the previous word template (copy the copy on the new template and paste it on the old template), automatically identify the question type, "simple version" only supports single choice, multiple choice, fill-in, judgment, question and answer.
+course.question_manage.guide.message.tip2: 2. [Full version] Add optional multiple choice questions and material questions on the basis of the "simple version", and you need to download a new template to use.
 course.question_manage.import.modal_title: Import question
 course.question_manage.import.new_hint: Read before upload
 course.question_manage.import.drag_document_hint: Drag document to here
@@ -1501,13 +1521,34 @@ course.question_manage.import.download_template: Download template
 course.question_manage.import.doc_to_docx_hint: How doc convert to docx?
 question_manage.import.doc_to_docx_hint.tutorial: Tutorial
 course.question_manage.import.upload_document: Upload
-course.question_manage.import.reupload_document: Re-Upload
+question_manage.import.click: Click
+question_manage.import.description.supported: 'Import Description: Upload is supported'
+question_manage.import.easy: (Easy)
+question_manage.import.integrity: (Integrity)
+question_manage.import.easy.tips: Import mode and description can be added to the previous word template (copy the copy paste on the new template), automatic recognition reminder, only support single choice, multiple choice, fill in the blank, judgment, question and answer
+question_manage.import.easy.integrity: Each question should be marked with question type, and special single choice, multiple choice, indefinite choice, fill in the blank, judgment, question and answer material
+question_manage.import.formate.text: Format document
+question_manage.import.format.conversion: Format conversion
+question_manage.import.new.version.introduction: New version import function introduction
+question_manage.import.administrator.tip1: Identify and import common formulas, tables, and special characters
+question_manage.import.administrator.tip2: Improve import recognition accuracy and make topic import easier
+question_manage.import.non-administrator-tip: To upgrade the cloud capability, you need to contact the super administrator for the import function
+question_manage.import.non.administrator.close.btn: I know
+question_manage.ai_analysis.introduction: [AI qustion analysis assistant] Coming!
+question_manage.ai_analysis.introduction.content: I am your AI qustion assistant, click "AI analysis" to view the qustion analysis I search for you, the analysis content is for reference only.
+question_manage.ai_analysis.introduction.tip1: <b>Analytical ability：</b>Be suitable for the question that contain only text, image and video are not supported.
+question_manage.ai_analysis.introduction.tip2: <b>Teacher side：</b>Add an AI analysis button when creating a question or importing questions which without analysis.
+question_manage.ai_analysis.introduction.tip3: <b>Student side：</b>Add an AI analysis button when student view the result page to question which without analysis.
+question_manage.ai_analysis.introduction.close: I get it
+course.question_manage.import.reupload_document: reupload
+course.question_manage.import.Successful: Upload successfully
 course.question_manage.import.uploading: Uploading...
 course.question_manage.import.use_old_template: Use Old Template
 course.question_manage.impport.cancle: Cancel
 course.question_manage.import.filename_length_limit: File names cannot exceed 50 characters
 course.question_manage.import.docx_support_hint2: Please upload .docx Word file
 course.question_manage.import.doc_to_docx_hint2: <a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">Click here</a>to see how doc convert to docx
+course.question_manage.import.text.rule.tip: Please upload documents in DOCX or XLSX format
 course.question_manage.import.rule: Import rule description
 course.question_manage.export_hint: (question export only support new template now)
 course.question_manage.export_btn: export question
@@ -1542,6 +1583,7 @@ course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
 course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in %taskName%, close the test paper may prevent students from participating in the test, please do not close the test paper.'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
+course.testpaper_manage.edit_tips: "The current test paper may have been used in the test. Modifying the content of the test paper may affect the students' answer records and scores. Do you want to continue?"
 course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
 course.testpaper_manage.export: Export
@@ -1823,6 +1865,20 @@ course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
 course.plan_task.activity_manage.exercise.info_tips.question_lack: The number of questions is inconsistent with the teacher's settings, please contact the teacher!
 course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
+course.plan_task.activity_manage.exercise.single_choice: Single_choice
+course.plan_task.activity_manage.exercise.choice: Choice
+course.plan_task.activity_manage.exercise.uncertain_choice: Uncertain_choice
+course.plan_task.activity_manage.exercise.determine: Determine
+course.plan_task.activity_manage.exercise.fill: Fill
+course.plan_task.activity_manage.exercise.essay: Essay
+course.plan_task.activity_manage.exercise.material: Material
+course.plan_task.activity_manage.exercise.questions: '%itemCount% questions'
+course.plan_task.activity_manage.exercise.selective.answer.mode: Selective answer mode
+course.plan_task.activity_manage.exercise.test.mode: Test mode
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: One question one answer mode
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: (Currently not supported on PC)
+course.plan_task.activity_manage.exercise.continue.tips-title: The current practice mode is [one question, one answer], which is not supported on the PC, please move to the mobile phone to continue answering
+course.plan_task.activity_manage.exercise.continue.back-btn: Back to course catalog
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
@@ -1879,35 +1935,69 @@ course.plan_task.activity_manage.testpaper.default_comment3: You are awesome! I 
 course.plan_task.activity_manage.testpaper.default_comment4: A little slack, right? Keep going!
 course.plan_task.activity_manage.testpaper.default_comment5: With heart, focus and persistence, you can do better!
 course.plan_task.activity_manage.testpaper.comment_remove: Remove
+course.plan_task.activity_manage.testpaper.validity.period.of.examination: Validity period of examination
+course.plan_task.activity_manage.testpaper.please.enter.endtime: Please enter the end time
+course.plan_task.activity_manage.testpaper.number.of.remaining.tests: Number of remaining tests
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
-course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0 hours, indicates no limit. When the test count is set to 1, Retest Interval does not take effect.
 course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
 course.plan_task.activity_manage.testpaper.times: 'Number of test'
+course.plan_task.activity_manage.testpaper.mode: 'Mode of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
-course.plan_task.activity_manage.testpaper.times.once: Single
+course.plan_task.activity_manage.testpaper.times.once: Restrict
 course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.show_answer: Show the answer and analysis after passing
 course.plan_task.activity_manage.testpaper.show_answer_tips: The setting takes effect when the number of exams is not limited.
 course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
+course.plan_task.activity_manage.testpaper.topic.out.of.order: Topic out of order
+course.plan_task.activity_manage.testpaper.option.out.of.order: Option out of order
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
+course.plan_task.activity_manage.testpaper.question.disorder: After this is enabled, when students enter the exam, all the small questions within the corresponding big question will be randomly sorted
+course.plan_task.activity_manage.testpaper.option.disorder: When turned on, all multiple choice options will be randomly ordered when students enter the exam
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1. unlimited: no time limit, permanent validity;</div>2. the specified date interval: there is a fixed start and end time, outside this time can not participate in the exam;<div>3. specify the start time: only specify the start time, do not specify the end time, permanently valid, not to the start time can not participate in the test;</div>"
 course.plan_task.activity_manage.testpaper.comment_tips: 'Scoring interval setting rules: 1. The scoring interval includes the lower limit and upper limit of the interval. 2. When the student score is greater than or equal to the lower limit of the interval or less than the upper limit of the interval, the comments of the interval will be automatically displayed. 3. If there are overlapping score ranges, the comments ranked at the top in the comment list will be displayed first.'
 course.plan_task.activity_manage.testpaper.time: Time
 course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
 course.plan_task.activity_manage.testpaper.mode.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.mode.realTime: Specify
+course.plan_task.activity_manage.testpaper.mode.realTimeRange: Specified date interval
+course.plan_task.activity_manage.testpaper.mode.startTime: Specify start time
 course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.score_pass: 'Pass Score'
 course.plan_task.activity_manage.homework.score_pass: 'Pass Score'
+course.plan_task.activity_manage.testpaper.not_start_tips: 'The exam does not start'
+course.plan_task.activity_manage.testpaper.end_tips: The examination is over
+course.plan_task.activity_manage.testpaper.start_time_tips: 'Test start time'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
 course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
 course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">%limitedTime% minutes</span>.'
-course.plan_task.activity_manage.testpaper.limit_tips: '<span class="color-warning">Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
+course.plan_task.activity_manage.testpaper.limit_tips:
+  'Reminder: Once the test starts, the test will be handed in automatically after the countdown is over.'
+course.plan_task.activity_manage.testpaper.enddate.limit_tips: 'Reminder: The current exam has ended, please click the button to view the test results'
+course.plan_task.activity_manage.testpaper.limit_tips1:
+  '<span class="color-gray">Reminder: This test will not be handed in automatically, and the time spent on the exam will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
+course.plan_task.activity_manage.testpaper.one_limit_tips:
+  '<span class="color-gray">Reminder: There is only one chance to test. Once the test starts, the test will be handed in automatically after the countdown is over.</span>'
+course.plan_task.activity_manage.testpaper.one_limit_tips1:
+  '<span class="color-gray">Reminder: There is only one chance to take the test, and the test will not be handed in automatically, and the test time will be displayed in real time, and the time will not be counted if you leave halfway.</span>'
+course.plan_task.activity_manage.testpaper.questionNum: 'Number of questions'
+course.plan_task.activity_manage.testpaper.questionCount: 'questions'
+course.plan_task.activity_manage.testpaper.questionScore: 'score'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
+course.plan_task.activity_manage.testpaper.mock_type: 'mock exam'
+course.plan_task.activity_manage.testpaper.mock_tips1: 'Automatic submission of papers at the end of the countdown'
+course.plan_task.activity_manage.testpaper.mock_tips2: 'If you leave during the exam, the countdown will not stop'
+course.plan_task.activity_manage.testpaper.mock_tips3: 'The mock exam duration must be greater than 0'
+course.plan_task.activity_manage.testpaper.practise_type: 'practice exam'
+course.plan_task.activity_manage.testpaper.practise_tips1: 'Unlimited test time, no automatic hand-in'
+course.plan_task.activity_manage.testpaper.practise_tips2: 'Leaving during the test does not count the test time'
+course.plan_task.activity_manage.testpaper.practise_tips3: "The length of the test does not affect the student's answering time"
+
 course.plan_task.activity_manage.video: Video
 course.plan_task.activity_manage.video.time: 'Duration'
 course.plan_task.activity_manage.video.subtitle: 'Subtitles'
@@ -2014,17 +2104,23 @@ item_bank_exercise.assessment_exercise.add_new_module: Create
 item_bank_exercise.assessment_exercise.add_assessment: Add Assessment
 item_bank_exercise.assessment_exercise.remove_assessment: Remove Assessment
 item_bank_exercise.chapter_exercise.category_empty: No chapters have been added to the current item bank exercise
+item_bank_exercise.chapter_exercise.item: item
+item_bank_exercise.chapter_exercise.batch.release: Batch release
+item_bank_exercise.chapter_exercise.batch.cancellation: Batch cancellation
+item_bank_exercise.chapter_exercise.batch.num.clear: Clear away
 item_bank_exercise.chapter_exercise.empty: 'It is empty, open the chapter exercise now'
 item_bank_exercise.assessment_exercise.empty: 'It is empty, open the assessment exercise now'
 item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the setting of "Item management by category".Provide students with a hierarchical list of brushing exercises
 item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
 item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
+item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
 item_bank_exercise.assessment_exercise.add_module: Create
 item_bank_exercise.assessment_exercise.edit_module: Edit
 item_bank_exercise.assessment_exercise.module.name: Module Name
 item_bank_exercise.goto_learning: Goto learning
 item_bank_exercise.my_teaching_notice: Itembank Exercise，Please goto <a class="alert-link" href="%url%"><u>Itembank</u></a> Create
+item_bank_exercise.continue.back-btn: 'Back to Chapter Table of Contents'
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
@@ -2139,6 +2235,7 @@ open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error: Lesson create error
 classroom: Class
 column: Column
+classroom.search.empty.course: There are currently no suitable courses available~
 classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
@@ -2442,7 +2539,7 @@ classroom.answer_questions_tips: 'All questions will be answered, help you remov
 classroom.testpaper_review: 'Test paper will be reviewed within 24 hours'
 classroom.testpaper_review_tips: 'Test paper will be reviewed within 24 hours, teachers will point out where the exact issue is.'
 classroom.homework_review: 'Homework will be reviewed within 24 hours'
-classroom.set_head_teacher_tips: 'Head teacher will be in charge of the %name%. There can only be one head teacher.'
+classroom.set_head_teacher_tips: 'Head teacher will be in charge of the classroom. There can only be one head teacher.'
 classroom.set_teacher: 'Teacher Settings'
 classroom.set_teacher_tips: "<div>The teachers will be dispalyed by the orders set here.</div> <div>Teachers can design the learning plan, answer questions, review homeworks and test papers as well as initiate activities.</div> <div>Note: Head teacher is from course teachers, and cannot add manually. </div>\n"
 classroom.set_teacher_empty: 'There is no teacher. Go to course settings now.'
@@ -2455,6 +2552,8 @@ classroom.add_course_tips: 'Inprogress, please wait.'
 classroom.delete_btn: Delete
 classroom.free_course: Free
 classroom.teach_plan: 'Program'
+classroom.closed.course: Close the course
+classroom.open.course: Publish course
 classroom.live_course_playing: 'On live'
 classroom.live: Live
 classroom.task_num: "%taskName% number: %number%\n"
@@ -2641,6 +2740,9 @@ user.init.password_placeholder: 'Please input your password'
 user.init.password_placeholder_again: 'Please input your password again'
 user.init.password.confirm.password: 'Confirm'
 user.init.password.submit.password.loading: 'submitting...'
+register.read.and.agree: Read and agree
+register.agree.and.register: Agree and register
+register.agree.and.sign.in: Agree and sign in
 
 user.oauth.login_by_email: 'Email'
 user.oauth.login_by_mobile: 'Mobile'
@@ -2687,6 +2789,7 @@ user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>.Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.upload.img.tip: 'Please upload file with png, gif, jpg format, Image size should not exceed 2MB'
+user.settings.upload.img.tips: 'Please upload an image in JPG/GIF/PNG format, the size should not exceed 5MB, and the recommended size is 400X400'
 user.settings.upload.qrcode.tip: Teaching assistants please make sure to upload the QR code
 user.settings.scrm: SCRM Bind
 user.settings.scrm.tips: Synchronize teaching assistant information to enterprise WeChat, so that teaching assistants can manage students in WeChat groups and provide community services.
@@ -2818,6 +2921,7 @@ user.settings.security.oauth_bind.success: Bind oauth account successfully
 user.settings.security.oauth_bind.exist_account: The oauth account had beend bind.
 user.settings.security.oauth_bind.authentication_fail: Authentication fail
 user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do again.
+user.settings.security.oauth_bind.state.authentication_fail: state authentication fail.
 user.settings.basic_info: 'Basic info'
 user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
@@ -3093,9 +3197,11 @@ custom_page.empty: 'The current page has not been edited yet ,please edit in the
 search.empty: 'Cannot find related %name%, please change your keyword.'
 search.content_title: Search
 search.relative_courses_result: 'Total <span class="color-danger phm">%count%</span> courses with <span class="color-danger phm">“%keywords%”</span>'
-search.relative_classrooms_result: Total <span class="color-danger phm">%count%</span> classrooms with <span class="color-danger phm">“%keywords%”</span> related %classroom%
+search.relative_classrooms_result: 'Total <span class="color-danger phm">%count%</span> classrooms with <span class="color-danger phm">“%keywords%”</span> related %classroom%'
+search.relative_item_bank_exercises_result: 'Total <span class="color-danger phm">%count%</span> itemBankExercises with <span class="color-danger phm">“%keywords%”</span>'
 search.result_course_copy: 'Total <span class="color-danger phm">%count%</span> courses'
 search.result_classrooms_copy: 'Total <span class="color-danger phm">%count%</span> %classroom%'
+search.result_item_bank_exercises_copy: 'Total <span class="color-danger phm">%count%</span> itemBankExercises'
 search.all_courses: 'All courses'
 search.vip_courses: 'VIP courses'
 search.free_courses: 'Free courses'
@@ -3104,6 +3210,8 @@ search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
 search.free_item_bank: Free
+search.all_item_bank_exercise: 'All itemBankExercise'
+search.free_item_bank_exercise: 'Free itemBankExercise'
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -3228,6 +3336,13 @@ cloud_search.thread.from: From
 cloud_search.thread.recommend.content_title: 'Popular groups'
 cloud_search.article: Article
 cloud_search.article.result: 'Have found <span class="color-danger">%counts%</span> article(s)'
+
+cloud_search.itemBankExercise: 'Exercise of question bank'
+cloud_search.itemBankExercise.result: 'Have found <span class="color-danger">%counts%</span> Exercise of question bank(s)'
+cloud_search.itemBankExercise.evaluate: 'Judgments %ratingNum%'
+cloud_search.itemBankExercise.recommend.content_title: 'Recommend Exercise of question bank'
+cloud_search.itemBankExercise.recommend.empty: 'Sorry, no Recommend Exercise of question bank now.'
+
 group: 'Group Channel'
 group.name: 'Group name'
 group.about: 'Group Instruction'
@@ -3824,7 +3939,7 @@ my.teaching.open_course.material.upload_time: 'Uploaded At'
 my.teaching.question_bank.create: Create
 my.teaching.question_bank.list: Question Bank List
 my.teaching.question_bank.instructions: Instructions
-my.teaching.question_bank.name_tip: Enter up to 30 characters
+my.teaching.question_bank.name_tip: Enter up to 100 characters
 my.teaching.question_bank.info: Bank Info
 my.teaching.question_bank.exercise_set: The setting of item bank exercise
 my.teaching.question_bank.name_label: Name
@@ -3929,6 +4044,7 @@ my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
 my.learning.course.learned: Learned
+my.learning.course.expired: Expired
 my.learning.course.favorite: Favorite
 my.learning.course.favorited: Favorited
 my.learning.course.favorite_empty: 'No record'
@@ -4089,8 +4205,10 @@ change_log: Changelog
 common.courseStatus.draft: Draft
 common.courseStatus.published: Published
 common.courseStatus.closed: Closed
+common.courseStatus.unpublished: Unpublished
 common.classroomStatus.draft: Draft
 common.classroomStatus.published: Published
+common.classroomStatus.unpublished: Unpublished
 common.classroomStatus.closed: Closed
 common.fileType.video: Video
 common.fileType.audio: Audio
@@ -4325,6 +4443,7 @@ admin.course_manage.manage.course_tips: "<div style='width:250px;'>\n  <span sty
 admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%courseNum%</strong>\n"
 admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
+admin.course_manage.manage.draft_count: "draft：<strong class=\"inflow-num\">%draftNum%</strong>\n"
 admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.course_set_manage.recommend.tips: Priority shall be given to the recommended serial number from small to large, and those not recommended shall be in reverse order according to the creation time
 admin.course_set_manage.manage.number: Id
@@ -4486,6 +4605,9 @@ admin.user.statistics.data_detail.active_chart: Active
 admin.user.statistics.data_detail.learn_detail: Learn Detail
 admin.user.statistics.data_detail.teaching_plan_name: 'Plan name'
 admin.user.statistics.data_detail.student_trend_ninety_days: '90 days'
+admin.user.statistics.data_detail.student_trend_one_year: '1 year'
+admin.user.statistics.data_detail.student_trend_two_year: '2 years'
+admin.user.statistics.data_detail.student_trend_three_year: '3 years'
 admin.user.statistics.data_detail.plan_progress_tip: 'The average plan progress is the average of all plans'
 admin.user.statistics.data_detail.task_progress_tip: 'Task completion ratio is the number of completed tasks divide the total number of tasks'
 admin.user.statistics.data_detail.from_classroom: From Class
@@ -4647,6 +4769,7 @@ admin.classroom_manage.manage.describe_tips: "<div style='width:250px;'>\n  <spa
 admin.classroom_manage.manage.count: "Classrooms：<strong class=\"inflow-num\">%courseNum%</strong>\n"
 admin.classroom_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>(s) \n"
 admin.classroom_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
+admin.classroom_manage.manage.draft_count: "draft：<strong class=\"inflow-num\">%draftNum%</strong>\n"
 admin.classroom_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.classroom_manage.manage.number_th: '%title% ID'
 admin.classroom_manage.manage.name_th: '%name% Title'
@@ -4655,6 +4778,7 @@ admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
 admin.classroom_manage.manage.creator: Creator/Date
 admin.classroom_manage.manage.status_th: Status
+admin.classroom_manage.manage.showable: isShow
 admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
 admin.classroom_manage.manage.category: Category
@@ -4664,7 +4788,8 @@ admin.classroom_manage.manage.price: '%price%(CNY)'
 admin.classroom_manage.manage.origin_price: 'Original %priceAll% (CNY)'
 admin.classroom_manage.manage.published: Published
 admin.classroom_manage.manage.closed: Closed
-admin.classroom_manage.manage.unpublished: Unpublished
+admin.classroom_manage.manage.unpublished: unpublished
+admin.classroom_manage.manage.draft: Draft
 admin.classroom_manage.manage.manage_btn: Manage
 admin.classroom_manage.recommend.seq_th: Sequence
 admin.classroom_manage.recommend.name_th: '%name% Title'
@@ -4900,6 +5025,11 @@ admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF
 admin.setting.site.icp.help_block: 'According to the Measures for the Administration of Record of Non-operational Internet Information Services (Order No. 33 of the former Ministry of Information Industry), the main record number issued by the Ministry of Industry and Information Technology shall be placed at the bottom of the webpage and linked to the website of the Ministry of Industry and Information Technology after the success of the record:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>For public enquiries and verification. If you violate the regulations of relevant departments, there will be a risk of violation'
 admin.setting.site.public_security.help_block: 'According to the relevant provisions of "Computer Information Network and International Networking Security Protection Management Measures", after the successful filing by the Ministry of Industry and Information Technology, the website shall be logged in within 30 days from the date of the website opening<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>Submit the application for public security network filing. After the verification and approval of the public security network filing，You need to log in within 30 days<a href="http://www.beian.gov.cn/" target=_blank>National Internet security management service platform</a>，In your record website details, the website public security organs record number and icon information editing placed at the bottom of the page'
 admin.setting.site.logo.view_btn: 'Click To View'
+admin.setting.table.status.tooltip: |
+  "<div style='text-align:left;'>Unpublished: Students cannot join</div>"
+  "<div style='text-align:left;'>Published: Students can join and study</div>"
+  "<div style='text-align:left;'>Withdrawn: Not visible to students on the front-end, but they can still join and study</div>"
+  "<div style='text-align:left;'>Closed: Student reception is not visible and cannot be studied</div>"
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
 admin.setting.site.seo_keywords: 'SEO Keyword'
@@ -5259,6 +5389,7 @@ admin.mobile_manage.discovery_upgrade.function: >
 admin.mobile_manage.discovery_upgrade.transfer_btn: 'To use'
 admin.wechat_notification.switch: WeChat Notification Setting
 admin.wechat_notification.template: WeChat Notification Template
+admin.wechat_notification.message_subscribe.template: WeChat Subscriber Notification Template
 admin.wechat_notification.template_name: Template Name
 admin.wechat_notification.template_content_sample: Template Content Sample
 admin.wechat_notification.send_object: Send Object
@@ -5307,8 +5438,6 @@ admin.operation_analysis.register.web_email: Email
 admin.operation_analysis.register.weibo: Weibo
 admin.operation_analysis.register.qq: QQ
 admin.operation_analysis.register.renren: Renren
-admin.operation_analysis.register.discuz: Discuz
-admin.operation_analysis.register.phpwind: Phpwind
 admin.operation_analysis.register.weixin: Wechat
 admin.operation_analysis.register.import: Imported
 admin.operation_analysis.register.other: Other
@@ -5695,8 +5824,12 @@ admin.user.manage.form.time_option.register: 'Register Time'
 admin.user.manage.form.time_option.default: '-- Date Type --'
 admin.user.manage.form.role_option.default: '-- All Roles --'
 admin.user.manage.form.user_type_option.default: '--Register Source --'
+admin.user.manage.form.user_status_option.default: '--Student status --'
 plugin.admin.user.manage.form.user_export_btn: 'Export'
+plugin.admin.user.manage.form.user_student_export_btn: 'Export'
+plugin.admin.user.manage.form.user_staff_export_btn: 'ExportStaffData'
 admin.user.manage.fields.mobile_label: Mobile
+admin.user.manage.fields.wechat_nickname: Wechat Nickname
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total: '
 admin.user.manage.fields.forbid_label: Forbid
@@ -6116,6 +6249,8 @@ admin.edu_cloud.edu_sms.validation_type: Validation
 admin.edu_cloud.edu_sms.bind_mobile: 'Phone Binding'
 admin.edu_cloud.edu_sms.login: 'Login with sms'
 admin.edu_cloud.edu_sms.verification_code_tips: 'Your verification code is 123456 (do not divulge), this verification code within 30 minutes of input is valid.'
+admin.edu_cloud.edu_sms.shipping_notify: 'Shipping notice'
+admin.edu_cloud.edu_sms.shipping_notify_tips: 'The 《Product Name》 you purchased from 《Marketing Mall Name》 has been shipped.'
 admin.edu_cloud.edu_sms.singel_user: 'Single User'
 admin.edu_cloud.edu_sms.auto_singel_send: 'Automatically sent separately'
 admin.edu_cloud.edu_sms.default_open: 'Default Enable'
@@ -6295,6 +6430,7 @@ admin.edu_cloud.edu_im.im_describe: 'IM Function description'
 admin.edu_cloud.edu_im.im_describe_tips: 'Currently only supports Kuozhi APP 3.6 And above version; <br>When activated, courses and classes will have corresponding live chat discussion groups, and users can use it for personal chat; <br>It''s a effective tool for teachers to push courses and class information to the student; <br>It also helps to the improve the communications between students and teachers. <br>'
 admin.edu_cloud.edu_attachment.attachment_tips: '<h4> You have not activate cloud video service, so the cloud attachment features are not available. <a href="%videoUrl%"> Activate Now </a><a href="%detailUrl%" target="_blank"> Learn about cloud video </a></h4><p> "Cloud attachment" allows you to manage resources from various dimensions such as upload time and resource type.It helps you to manage all resources, and do not have to worry about the outdated resource which take storage space. </p>'
 admin.edu_cloud.edu_attachment.function: Attachments
+admin.edu_cloud.edu_attachment.download_setting: Download Settings
 admin.edu_cloud.edu_attachment.open_radio: Active
 admin.edu_cloud.edu_attachment.close_radio: Disabled
 admin.edu_cloud.edu_attachment.service_setting: Settings
@@ -6446,18 +6582,6 @@ admin.login_connect.type.weibo.help_block: 'The final step , please enter the lo
 admin.login_connect.verifcation_loging_interface: 'Login interface validation code'
 admin.login_connect.verifcation_code: 'Validation code'
 admin.login_connect.verifcation_code.help_block: 'When applying for third-party logon interface, you will be asked to verify your site domain name. Please copy and paste the validation code here, then submit.'
-admin.user_center.admin_sync_btn: 'Administrator account synchronization'
-admin.user_center.user_center.title: 'User Center'
-admin.user_center.user_center.help_block: 'Support Discuz User Center X2.5/X3.0/X3.1/X3.2'
-admin.user_center.user_center.uc_connect.help_block: 'Tip: Due to discuz use mysql_connect connection, high version php has been abandoned, it is recommended not to fill in mysql, Leave it blank'
-admin.user_center.user_center.config_error: 'The configuration file <strong>%path%</strong> not be writable，please open this file and correct it.'
-admin.user_center.Configration: Configuration
-admin.user_center.Configration.help_block: 'How to configure?'
-admin.user_center.WindId_Configration: 'WindId configuration'
-admin.user_center.WindId_Configration.help_block: 'If you use phpwind (WindID) user Center, please fill in this configuration.'
-admin.user_center.filtr_email_list: 'Filtered email address list'
-admin.user_center.filtr_email_list.help_block: 'Enter one email address per line. If the email on the list appeared in the third party login process, then the system will generates a random email address for the user.'
-admin.user_center.tips: "<p>1. If communication fails,  usurers will be prompted  <strong class=\"user-center-copys-darken\"> “Input is not valid” </strong>or “communications failed, please contact the administrator to configure” </p> while register or login. <p>2. If communication successfully, all Discuz<strong class=\"user-center-copys-darken\"> registered users </strong> username (required to meet EduSoho registration rules, or synchronization will failed), password , Email, can sync to the site before or after the communication. </p> <p>3. If communication successfully, only the <strong class=\"user-center-copys-darken\"> new users register after the commnication </strong> can login and synchronize to Discuz. <p>4. Because of different <strong class=\"user-center-copys-darken\">password encryption mechanism </strong>, Discuz Registered users cannot batch import to the site, neither the registered user of the site bacht import to Discuz 。 </p>\n"
 admin.user_fields.add_field_btn: 'Add a field'
 admin.user_fields.customer_fields_setting: 'Custom field settings'
 admin.user_fields.fields_title: 'Field name'
@@ -6568,6 +6692,10 @@ admin.setting_course.doc_task_water_mark: 'Doc Water Mark'
 admin.setting_course.doc_task_water_mark_info: 'Doc Water Mark Info'
 admin.setting_course.doc_task_water_mark_info_tips: "For better user experience, it is recommended to combine at most 2 items of information to display. Note: If the user's real name and mobile phone number are not available, it will be displayed as -"
 admin.setting_course.Prevent_copying_test_paper: 'Test paper anti copy'
+admin.setting_course.Only_available_for_learning_on_APP: 'Only available for learning on APP'
+admin.setting_course.Only_available_for_learning_on_APP_tips: 'After turning it on, users can only watch audio and video, live broadcasts, live broadcast replays, and live broadcast tasks on the APP.'
+admin.setting_course.app_content_theft_prevention: 'APP content theft prevention'
+admin.setting_course.app_content_theft_prevention_tips: 'After turning it on, users cannot record the screen when watching audio and video tasks on the APP. In addition, the Android system cannot take screenshots and the IOS system cannot cast the screen.'
 admin.setting_course.course_operation_mode: 'Course operation mode'
 admin.setting_course.course_comments_manage: 'Course commnets manage'
 admin.setting_course.course_review: 'Course review'
@@ -6663,6 +6791,11 @@ admin.setting_wechat_auth.account_code_empty: No QR Code Yet
 admin.setting_wechat_auth.account_code_view: View Larger Image
 admin.setting_wechat_auth.account_code_download: Download QR code
 admin.setting_wechat_auth.message_template: Message template
+admin.setting_wechat_pay.cert_key: Wechat merchant platform certificate key
+admin.setting_wechat_pay.cert_key_hint: The private key file of wechat merchant platform needs to be applied in [wechat Merchant Platform] - [Account Center] - [API Security] - [API Certificate]. If you have applied, you can directly upload the [apiclient_key.pem] file in the folder to ES <a target="_blank" href="javascript:;">Apply for an API certificate</a>
+admin.setting_wechat_pay.cert: Wechat merchant platform certificate
+admin.setting_wechat_pay.cert_hint: The certificate file of wechat merchant platform needs to be applied in [wechat Merchant Platform] - [Account Center] - [API Security] - [API Certificate]. If you have applied, you can directly upload the file [apiclient_cert.pem] in the folder to ES <a target="_blank" href="javascript:;">Apply for an API certificate</a>
+admin.setting_wechat_pay.cert_uploaded: Uploaded
 
 admin.developer_setting.cloud_notification_api: Notification API
 admin.developer_setting.cloud_wechat_api: WeChat API
@@ -6672,7 +6805,8 @@ admin.developer_setting.content_title: 'Developer settings'
 admin.developer_setting.debug_label: Debugging
 admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_setting.es_live_api_server: ES Live API
-admin.developer_xapi_address: XAPI address
+admin.developer_setting.question_parse_api_server: Question Parse API
+admin.developer_setting.ai_api_server: AI API address
 admin.developer_face_address: AI Face API address
 admin.developer_push_address: Push API address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
@@ -6706,7 +6840,6 @@ admin.magic_setting.export_limit: 'Export order limit in single time'
 admin.magic_setting.export_allow_count: 'Maximum order export quantity'
 admin.magic_setting.enable_org: 'Turn on organization settings'
 admin.magic_setting.quick_pay: 'Turn on quick pay'
-admin.magic_setting.uc_phpwind: 'Turn on phpwind settings'
 admin.magic_setting.login_limit: 'Account and log off the set'
 admin.magic_setting.file_single_size_limit: Single file set upload size
 admin.magic_setting.file_single_size_limit_tip: MByte,be used by editor upload only
@@ -6720,6 +6853,8 @@ admin.magic_setting.live_entry_time_tip: second
 admin.magic_setting.biz_answer_scene_report_threshold: Testpaper and Homework Threshold
 admin.magic_setting.biz_answer_scene_report_threshold_tip: Default 15000
 admin.magic_setting.security_video_player: Security video player switch
+admin.magic_setting.enable_marketing_mall_alpha_test: mall alpha test switch
+admin.magic_setting.enable_marketing_mall_license: mall license switch
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -6822,6 +6957,24 @@ admin.post_num_rules.same_ip_rule: 'Maximum posts(including replies) per Ip in 5
 admin.post_num_rules.post_num: 'Post count'
 admin.post_num_rules.post_num_tips: 'Post count must be integer greater than or equal to 0. 0 means no limit'
 admin.post_num_rules.same_user_rule: 'Maximum posts(including replies) per user in 5 minutes'
+admin.anti_fraud_reminder.setting: APP anti-fraud pop-up window settings
+admin.anti_fraud_reminder.open_radio: Open
+admin.anti_fraud_reminder.close_radio: Closed
+admin.anti_fraud_reminder.setting.enable.tips: After opening, the user will give an anti-fraud pop-up window reminder when entering the APP
+admin.anti_fraud_reminder.reminder_frequency: Reminder frequency
+admin.anti_fraud_reminder.alert_the_object: Alert the object
+admin.anti_fraud_reminder.visible_to_all_users: Visible to all users
+admin.anti_fraud_reminder.visible_only_to_paid_users: Visible only to paying users
+admin.anti_fraud_reminder.to_paid_users_tips: Paid users refer to users who pay an amount ≥ 0.01 within the institution
+admin.anti_fraud_reminder.view_reminder_example: See examples of reminders
+admin.anti_fraud_reminder.tips.title: 【Fraud Alert】
+admin.anti_fraud_reminder.tips.content_one: Recently, we have discovered that some criminals are impersonating online school staff and committing fraud under the guise of "refunds"! If you receive any related text messages or phone calls, please do not believe them!!!
+admin.anti_fraud_reminder.tips.content_two: We have prepared an anti-fraud and anti-harassment tutorial for you. Click on the link below to learn more.
+admin.anti_fraud_reminder.tips.detail: Click here to view the anti-harassment settings tutorial >
+admin.anti_fraud_reminder.tips.app.button: View Tutorial >
+admin.anti_fraud_reminder.every: Every
+admin.anti_fraud_reminder.every_day_reminder: Day remind once
+
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'
 admin.reports_status.current_status: 'Current status'
@@ -6841,12 +6994,14 @@ admin.reports_status.no_install_mysql_pdo: 'MySQL_PDO not installed'
 admin.reports_status.upload_file_size: 'File upload size'
 admin.reports_status.upload_file_size_tips: 'It determines the maximum size of upload videosadmin.reports_status.upload_file_size_greater_than_200m: Larger than 200M'
 admin.reports_status.upload_file_size_greater_than_200m: 'greater than 200M'
+admin.reports_status.upload_file_size_greater_than_2048m: 'greater than 2048M'
 admin.reports_status.form_data_size: 'Form data size'
 admin.reports_status.form_data_size_tips: 'This value cannot be less than the file upload size value'
 admin.reports_status.php_max_run_time: 'Maximum running time of PHP scripts'
 admin.reports_status.php_max_run_time_tips: 'That determines the maximum available time when you upload videos'
 admin.reports_status.php_max_execution_time: '%maxExecutionTime% secondsadmin.reports_status.upload_file_size_greater_than_300m: Larger than 300Madmin.reports_status.upload_file_execution_time_30s: 30 seconds'
 admin.reports_status.upload_file_size_greater_than_300m: 'greater than 300M'
+admin.reports_status.upload_file_size_greater_than_30s: 'greater than 30s'
 admin.reports_status.upload_file_execution_time_30s: '30 seconds'
 admin.reports_status.php_extend: 'PHP Extensionadmin.reports_status.php__mbstring_extend_tips: The extensions used to handle Chinese charactersadmin.reports_status.php__curl_extend_tips: This extension is used to read files remotelyadmin.reports_status.php__gd_extend_tips: The extension is used to process  pictures'
 admin.reports_status.php__mbstring_extend_tips: 'This extension is used to process Chinese characters'
@@ -6854,9 +7009,9 @@ admin.reports_status.php__curl_extend_tips: 'This extension is used to remotely 
 admin.reports_status.php__gd_extend_tips: 'This extension is used to process the image'
 admin.reports_status.system_communication: 'Communication situations'
 admin.reports_status.system_status: Status
-admin.reports_status.system_communication_with_discuz: 'Connection with Discuz Ucenter'
 admin.reports_status.system_checking: Detecting.....
 admin.reports_status.system_email_send: 'Send email'
+admin.reports_status.system_email_send_detection: 'Immediate detection'
 admin.reports_status.system_email_send_tips: 'System will send a test email to current user during each test. Please make sure the current user''s email is correct.Check email exception in system log.'
 admin.reports_status.system_file_and_catalog_authority: 'System files, directory permissions checking'
 admin.reports_status.system_file_and_catalog_authority_available: 'File directory permissions properly'
@@ -6990,7 +7145,7 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening
 admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>When a user opens more than one page, the next learning page is the main one, and the previous learning page is kicked out.</p>
-  <p>When the three types of lessons (homework/exam/live) are being studied, the study page will not be able to kick out these three types of lessons.</p>
+  <p>In order to ensure the real-time upload of learning data, homework/exam/live class hours are prohibited and cannot be changed by default.</p>
   <p>require terminal upgrade to PC side V20.4.6, APP side V4.9.3</p>
 admin.setting_course.video_play_setting.reject_current_play: Reject this access to the study page
 admin.setting_course.video_play_setting.reject_current_play.tips: When the user opens more than one page, the first learning page will take precedence and the second learning page will not be allowed to enter.Only available in the micro online school for the start-up theme.
@@ -7124,7 +7279,7 @@ admin.payment_setting.alipay_api_type.direct.hint: >
   <span class="warning-state">Computer Browser</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
 admin.payment_setting.alipay_api_type.mobile: Mobile Website Payment Interface
 admin.payment_setting.alipay_api_type.mobile.hint: >
-  <span class="warning-state">Mobile browser</span> and <span class="warning-state">KuoZhi School</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
+  <span class="warning-state">Mobile browser</span> and <span class="warning-state">ZhiXiang School</span> Supported Pay after opening this interface, Need to go to Alipay to open and view <a href="%aliApiHelpUrl%" target="_blank">Open tutorial</a>
 admin.payment_setting.alipay_api_type.escow: 'Secured transaction interface'
 admin.payment_setting.alipay_api_type.dualfun: 'Standard dual-interface'
 admin.payment_setting.alipay_api_hint: 'You can get the PID and KEY after applying the Alipay interface access successfully<a href="%alipayApplication%" target="_blank"> How to apply? </a><br>If you need to use "immediate payment interface" in moblie app, please access the <a href="%mobileAlipayApplication%" target="blank"> Mobile Web payment </a><br>'
@@ -7457,19 +7612,6 @@ admin.wechat_app.flow_entrance_introduction_title: Self-contained traffic
 admin.wechat_app.flow_entrance_introduction_content: WeChat's 900 million monthly active users, nearby WeApp, WeChat search and other functions, let you easily get customers.
 admin.wechat_app.easy_promotion_introduction_title: Ultralight promotion
 admin.wechat_app.easy_promotion_introduction_content: Streamlined experience, lowering user thresholds, and facilitating users to quickly spread on WeChat, promoting low-cost and high-transformation
-admin.xapi.title: Push details
-admin.xapi.id: Push id
-admin.xapi.version: xAPI version
-admin.xapi.body: Push body
-admin.xapi.status: Push status
-admin.xapi.verb: Push behavior
-admin.xapi.target_type: Push type
-admin.xapi.time: Push time
-admin.xapi.created_time: Created Time
-admin.xapi.operation: Operation
-admin.xapi.enable_label: Turn on xAPI
-admin.xapi.push_url_label: Set the xAPI address
-admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
 site.date_format: 'F j, Y h:i'
 site.date_coupon: 'F j, Y'
@@ -7575,6 +7717,7 @@ course.homework_check.review_btn: Review
 course.homework_check.review.empty: 'No data found'
 course.homework_check.review.name: Name
 course.homework_check.review.score: Score
+course.homework_check.review.begin_time: 'Begin time'
 course.homework_check.review.submit_time: 'Submit time'
 course.homework_check.review.submit_num: Submit Num
 course.testpaper_check.review.submit_num: Submit Num
@@ -7710,6 +7853,7 @@ admin.cloud.license.edition_mismatching: Edition is mismathing with current lice
 admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
+goods.show_page.closed_tips: The product is closed, not allowed to join and purchase
 
 # 通知
 notification.cash_account.recharge: You have successfully recharged %value% %coin_name%, <a href="%url%">check now</a>.
@@ -8006,6 +8150,7 @@ my.reward_points_message: '$ %num% in cash, the credits will not be refunded whe
 my.reward_points_instructions: 'Points instructions'
 
 task.learn_data_detail.nickname: name
+task.learn_data_detail.mobile: mobile
 task.learn_data_detail.createdTime: Join Time
 task.learn_data_detail.join_time: Join Time
 task.learn_data_detail.finishedTime: Finished Time
@@ -8113,6 +8258,8 @@ log.module.question_bank: 'Question Bank'
 log.module.item_bank_exercise: 'Item Bank Exercise'
 log.module.multi_class_assistant: Multi class assistant
 log.module.multi_class: Multi class
+log.module.wrong_question: 'Wrong Question'
+log.module.ai: AI
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -8373,6 +8520,8 @@ log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
 log.action.question_bank.delete_question: Delete Question
+log.action.question_bank.sort_question_category: 'Bank Category Sort'
+log.action.question_bank.edit_testpaper: 'Edit testpaper'
 log.action.item_bank_exercise.add_student: 'Add student'
 log.action.item_bank_exercise.remove_student: Remove Student
 log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
@@ -8380,6 +8529,8 @@ log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
 log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
 log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
 log.action.item_bank_exercise.close_exercise: Close Item Exercise
+log.action.item_bank_exercise.publish_exercise_chapter: 'Publish the question bank exercise chapter'
+log.action.item_bank_exercise.unpublish_exercise_chapter: 'Cancel the release of the question bank exercise chapter'
 log.action.certifiacte.create_certificate: Create Certificate
 log.action.certifiacte.auto_issue: Auto Issue Certificate
 log.action.certifiacte.create_template: Create Template
@@ -9209,7 +9360,6 @@ exception.article.category_code_invalid: code is invalid
 exception.article.category_numeric_code: code is all number
 exception.user.unlogin: 'Please login.'
 exception.user.message_forbidden: 'Does''t support sending message to this user.'
-exception.user.discuz_user_reset_password: Please retrieve your password through the forum！
 exception.user.not_found: 'Cannot find this user!'
 exception.form.expire: 'Timeout, please commit again!'
 exception.form..drag.expire: 'The verification code has expired, please refresh the page and resubmit！'
@@ -9220,6 +9370,7 @@ exception.user.not_match_auth: 'User is not match auth'
 exception.user.mobile_not_found: 'User mobile is not found'
 exception.user.user_is_destroyed: User is destroyed
 exception.user.email_password_error: The email password is incorrect
+exception.user.already_bind: The user is already bound
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
@@ -9345,7 +9496,9 @@ exception.coupon.finished: Coupon finished
 exception.coupon.over_batch_limit: Exceeding the batch total limit
 
 exception.lesson.not_found: Lesson is not exist
+exception.open_course_live_ticket.not_found: Open Course Live Ticket is not exist
 exception.lesson.parameter_missing: Missing class number
+
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 exception.task.not_found: Task is not exist
@@ -9465,6 +9618,13 @@ exception.testpaper.modify_committed_testpaper: The test paper that has been sub
 exception.testpaper.doing: The test paper has not been submitted
 exception.testpaper.redo_interval_exist: Teacher set retry interval
 exception.testpaper.forbidden_delete_open_testpaper: Opne testpaper can not be deleted
+exception.testpaper.do_times_more_than_100: Exam frequency exceeds the maximum value
+exception.testpaper.start_time_earlier_than_current: The exam has started and cannot be modified
+exception.testpaper.end_time_earlier_than_start_time: The end time cannot be earlier than or equal to the start time
+exception.testpaper.no_do_times: The current exam count has been used up, please reselect the exam
+exception.testpaper.end_of_exam: The current exam has ended, please reselect the exam
+exception.testpaper.exam_not_started: The current exam has not started
+exception.testpaper.start_time_earlier_than_current_time: The start time cannot be earlier than the current time
 exception.uploadfile.file_not_found: file does not exist
 exception.uploadfile.forbidden_manage_file: No rights to manage resources
 exception.uploadfile.error_status: Incorrect state
@@ -9638,6 +9798,7 @@ exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
 exception.coupon.receive_late: You are one step too late, the coupon has been claimed!
 
+exception.item_bank_exercise.chapter_answer_is_doing: 'Exercise record already exists, please start answering again'
 exception.item_bank_exercise.forbidden_learn: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher for help.'
 exception.item_bank_exercise.exercise.not_found: Item bank exercise does not exist
 exception.item_bank_exercise.exercise.forbidden_manage_exercise: Forbidden manage this item bank exercise
@@ -9660,12 +9821,19 @@ exception.item_bank_exercise.member.non_expired: The student has not expired
 exception.item_bank_exercise.member.member_not_student: Member is not student
 exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
 exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
+exception.item_bank_exercise.exercise.not_arrive: The item bank exercise has not reached learning time，add failed
+exception.item_bank_exercise.parent_chapter_unpublish: 'Please publish the previous chapter first'
+exception.item_bank_exercise.answer_unpublish_chapter: The current chapter has been cancelled and cannot continue to answer ~
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
-
+exception.item_bank.assessment.is_empty: All questions have been removed from the paper. Please contact the teacher or administrator
+exception.exercise.closed.tips.title: Question bank exercises have been closed and cannot be purchased/studied
+exception.exercise.closed.tips.content: The results of the question bank exercises can be viewed
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
 exception.wechat.template_conflict_industry_hint: Service number industry setting error.
+exception.not_continue.look: Cannot continue viewing.
+exception.go_home: Go back home.
 
 exception.destroy_account.reason_too_long: Write off reason limit 200 words
 exception.destroy_account.not_found_record: Record Not Found
@@ -9943,6 +10111,7 @@ coupon.status.receive: Received
 coupon.status.used: Used
 
 coupon.generate_num: Number of generation
+coupon.deduction_amount_rang: The deduction amount must be between 0.01 and 1,000,000
 coupon.generate_num_hint: The number of generation must be between 1 and 10,000.
 coupon.generate_num_unit: pcs
 coupon.prefix: Coupon prefix
@@ -10076,7 +10245,7 @@ admin_v2.homepage.cloud_notice: "Welcome, your trail will be expired on<strong> 
 admin_v2.homepage.quick_entrance: Quick Entrance
 admin_v2.edit_quick_entrance.btn: Edit Entrance
 admin_v2.quick_entrance_setting: Set Quick Entrance
-admin_v2.quick_entrance_setting.tips: (Set up to 7 quick entries）
+admin_v2.quick_entrance_setting.tips: (Set up to 8 quick entries）
 
 ##分类标签
 admin_v2.course.tag: Tag
@@ -10098,8 +10267,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: New upgrade
 admin_v2.homepage.school_info.system_status.upgraded: Latest
 admin_v2.homepage.school_info.system_version: System version
 admin_v2.homepage.school_info.access_web: Home
-admin_v2.homepage.school_info.access_mobile_app: Access App
-admin_v2.homepage.school_info.access_wechat_app: Access wechat app
+admin_v2.homepage.school_info.access_mobile_web: Micronetwork school
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: Wechat app
+admin_v2.homepage.school_info.no_access: Have not opened
 admin_v2.homepage.school_info.level.none: Open source
 admin_v2.homepage.school_info.level.saas: SaaS
 admin_v2.homepage.school_info.level.license: License
@@ -10168,9 +10339,10 @@ admin_v2.wechat_official_account.title: Official Account
 admin_v2.wechat_official_account.text: Follow the EduSoho official account to get the latest education information
 admin_v2.homepage.announcement_from_platform: Announcement From Platform
 admin_v2.homepage.application_intro: Application Introduction
-admin_v2.homepage.application_intro.more_btn: View more marketing cloud application
+admin_v2.homepage.quick_custom: Custom
+admin_v2.homepage.application_intro.more_btn: Marketing cloud application
 admin_v2.business_advice.title: Business advice
-admin_v2.buiness_advice.goto_qiqiuyu: EduSoho Business School
+admin_v2.buiness_advice.goto_qiqiuyu: Business School
 
 admin_v2.notice.upgrade_notice: The new background for the plugin for a new adaptation, in order to facilitate your background management, need to manually upgrade all installed plugins
 admin_v2.notice.go_to_upgrade: Go to upgrade
@@ -10624,6 +10796,9 @@ exception.exercise.closed: This exercise is closed. If you have any questions, p
 exception.exercise.forbidden_access_exercise: No access to other students' exercises!
 exception.exercise.forbidden_duplicate_commit_exercise: Exercises have been completed, do not repeat the submission!
 exception.exercise.not_found_result: The result of the exercise does not exist
+exception.exercise.exercise_is_doing: 'Exercise record already exists, please start answering again'
+exception.exercise.exercise_not_do: 'This exercise cannot be answered. Please exit and start again'
+exception.exercise.lack_question: "The number of questions is inconsistent with the teacher's settings, please contact the teacher!"
 
 exception.homework.not_found: Homework does not exist
 exception.homework.draft: This homework has not been published. If you have any questions, please contact the teacher!
@@ -10906,8 +11081,10 @@ admin.multi_class_copy.failure.notify: Your new multi-class《%newTitle%》is co
 
 course.task_manage.no_permission_tips: 'Sorry, you can not edit tasks. Contact site administrator for help.'
 
-exception.wrong_question.data_fields_missing: Wrong question data fields missing
+exception.wrong_book.wrong_question.data_fields_missing: Wrong question data fields missing
 exception.wrong_book.wrong_question.not_exist: Wrong question not exist
+exception.wrong_book.wrong_question_num.limit: 'Out of input range'
+
 course.replay_manage.no_permission_tips: 'Sorry, you can not edit replays. Contact site administrator for help.'
 course.teacher_manage.no_permission_tips: 'Sorry, you can not edit teachers. Contact site administrator for help.'
 
@@ -10943,7 +11120,10 @@ course.live_replay.tips: The current version only supports viewing of live playb
 course.homework.pass_score: Set passing score
 course.homework.pass_score.tip1: 'Full marks：'
 course.homework.pass_score.tip2: Qualified if the score is reached
+course.placeholder.name: Please enter the course name
+
 testpaper.score_set.option: question score
+
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%.%taskNumber%:%taskTitle%'
@@ -10976,3 +11156,62 @@ live_course.record_replay.select3: Only record courseware
 live_course.record_replay.btn: To Record
 live_course.record_replay.safair_tip: Safair may be blocked, please use another browser
 live_course.record_replay.show_btn: local recording
+exception.sms_request.abnormal_sms_sending: Abnormal sms sending
+admin.question_bank.file.download.setting.enable.tips: The mobile terminal does not provide the function of downloading question bank attachments, which is not affected by settings
+admin.question_bank.file.download.setting.disable.tips: After the download permission is enabled, both teachers and students can download attachments. Otherwise, they cannot download attachments
+admin.question_bank.question_bank_attachment.open_radio: Active
+admin.question_bank.question_bank_attachment.close_radio: Disabled
+
+#短信防御
+sms.defence.request.log.fingerprint: fingerprint
+sms.defence.request.log.coordinate: coordinate
+sms.defence.request.log.ip: ip
+sms.defence.request.log.mobile: mobile
+sms.defence.request.log.userAgent: userAgent
+sms.defence.request.log.is_illegal: is illegal
+sms.defence.request.log.disable_type: disable type
+sms.defence.request.log.created_time: created time
+sms.defence.request.log.view_record_label: show
+smd.defence.black.ip.list.ip: ip
+smd.defence.black.ip.list.expire_time: expire time
+smd.defence.black.ip.list.created_time: created time
+smd.defence.black.ip.unlock: unlock IP
+sms.defence.request.log.is_illegal.yes: yes
+sms.defence.request.log.is_illegal.no: no
+sms.defence.request.log.disable_type.ip: Multiple requests for the same IP address
+sms.defence.request.log.disable_type.coordinate: Multiple requests for the same coordinate
+sms.defence.request.log.disable_type.none: none
+
+course.start_answer.all_question_deleted: 'All questions have been deleted, please contact the teacher or administrator'
+item_bank.access_cloud: Upgrade now
+next.skip: 'Next Step (1/2)'
+
+external.application.ip_white_list.title: External Application IP white list
+external.application.ip_white_list.tips: External application server exit IP needs to be added, and multiple line breaks can be supported
+external.application.top.one.tips: Through external application docking, EduSoho business data can be obtained and EduSoho can be exempted from external application account registration
+external.application.top.two.tips: More relevant docking instructions
+external.application.login.status: API setting switch
+external.application.login.open: Turned on
+external.application.login.closed: Close
+admin.system.api_setting.tips: AppKey And SecretKey Shoud Be Used EduSoho API Auth
+admin.setting.api_secret.reset_confirm_message: The old SecretKey will become invalid after being res
+
+mobile.middle_page.top: Put the school in your pocket
+mobile.middle_page.open: Click to open
+mobile.middle_page.browser: Click on the top right... In "Open in Browser" continue to jump
+task.app_modal.title: Only learning in App
+task.app_modal.intro: Please download / open 
+task.app_modal.app: APP
+task.app_modal.learning: Continue learning
+task.app_modal.use: Use mobile phone
+task.app_modal.sweep: sweep
+
+admin_v2.question.ai_analysis.teacher_ebable: AI Question Analysis (Teacher Side)
+admin_v2.question.ai_analysis.teacher_ebable.tip: After it is opened, the teacher can generate AI analysis when creating/importing questions, and edit the generated content.
+admin_v2.question.ai_analysis.student_ebable: AI Question Analysis (Student Side)
+admin_v2.question.ai_analysis.student_ebable.tip: After it is opened, the student can generate AI analysis for the question without analysis.
+admin_v2.question.ai_analysis.Upgrade: Upgrade cloud capabilities
+admin_v2.question.ai_analysis.experience: , Experience powerful 
+admin_v2.question.ai_analysis.problem: problem resolution
+admin_v2.question.ai_analysis.tittle: Build new heights of intelligent education, comprehensively upgrade cloud capabilities, lead a new era of deep interaction and accurate analysis of Al question bank, and open unlimited possibilities for personalized learning
+admin_v2.question.ai_analysis.upgrade_now: Upgrade now

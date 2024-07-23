@@ -9,10 +9,19 @@
   </td>
  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
   <td>
+    {% if wechatUsers[user.id]|default() and wechatUsers[user.id].nickname|default() %}
+      {{ wechatUsers[user.id].nickname }}
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td>
     {% if user.verifiedMobile %}
-      {{ user.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
+      {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+      <span class="text-success">({{ 'user.fields.mobile_label.bind'|trans }})</span>
     {% elseif profile.mobile %}
-      {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
+      {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
+      <span class="text-danger">({{ 'user.fields.mobile_label.no_bind'|trans }})</span>
     {% else %}
        --
     {% endif %}

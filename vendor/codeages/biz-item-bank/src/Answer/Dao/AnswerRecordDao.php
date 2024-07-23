@@ -1,7 +1,10 @@
 <?php
+
 namespace Codeages\Biz\ItemBank\Answer\Dao;
 
-interface AnswerRecordDao
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
+
+interface AnswerRecordDao extends AdvancedDaoInterface
 {
     public function getLatestAnswerRecordByAnswerSceneIdAndUserId($answerSceneId, $userId);
 
@@ -12,4 +15,6 @@ interface AnswerRecordDao
     public function countGroupByAnswerSceneId($conditions);
 
     public function deleteByAssessmentId($assessmentId);
+
+    public function findByIds($ids);
 }

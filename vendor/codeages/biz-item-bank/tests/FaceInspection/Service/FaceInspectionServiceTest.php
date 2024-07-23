@@ -62,7 +62,7 @@ class FaceInspectionServiceTest extends IntegrationTestCase
     {
         $result = $this->getFaceInspectionService()->makeToken(1, 'test', 'test');
 
-        $this->assertEquals(213, strlen($result));
+        $this->assertEquals(183, strlen($result));
     }
 
     public function mockRecord($result = [])

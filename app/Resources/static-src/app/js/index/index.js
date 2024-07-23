@@ -2,6 +2,10 @@ import Swiper from 'swiper';
 import '../teacher/follow-btn';
 import { isMobileUpdateDevice } from 'common/utils';
 
+$('[data-toggle="tooltip"]').tooltip({
+  html: true,
+});
+
 if ($('.es-poster .swiper-slide').length > 1) {
   var swiper = new Swiper('.es-poster.swiper-container', {
     pagination: '.swiper-pager',
@@ -48,4 +52,7 @@ $(document).ready(function() {
     template: $('.js-current-live-course .js-live-notify-body').html(),
     acitonClassName: '.js-live-notify-link'
   });
+  $('[data-toggle="tooltip"]').tooltip({
+    html: true,
+    });
 });

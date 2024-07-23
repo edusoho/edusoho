@@ -7,6 +7,7 @@ use Codeages\Biz\ItemBank\Answer\Dao\AnswerReportDao;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerException;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerReportException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\BaseService;
@@ -139,7 +140,7 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         $answerQuestionReports = ArrayToolkit::index($answerQuestionReports, 'question_id');
         $assessmentQuestions = $this->getAssessmentService()->findAssessmentQuestions($answerRecord['assessment_id']);
-        $questions = $this->getItemService()->findQuestionsByQuestionIds(
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(
             ArrayToolkit::column($assessmentQuestions, 'question_id')
         );
 
@@ -168,8 +169,10 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
                 'revise' => empty($answerQuestionReports[$questionId]) ? [] : $answerQuestionReports[$questionId]['revise'],
             ];
         }
+        $questionReports = $this->sortPerArrayValue($questionReports, 'seq');
+        $questionReports = $this->getAnswerRandomSeqService()->shuffleQuestionReportsAndConvertOptionsIfNecessary($questionReports, $answerRecordId);
 
-        return $this->sortPerArrayValue($questionReports, 'seq');
+        return $questionReports;
     }
 
     protected function sortPerArrayValue($arr, $attrName, $ascending = true)
@@ -218,6 +221,32 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
         return $this->getAnswerReportDao()->batchUpdate($ids, $updateColumnsList);
     }
 
+    public function batchCreateAnswerReports($answerReports)
+    {
+        return $this->getAnswerReportDao()->batchCreate($answerReports);
+    }
+
+    public function replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots)
+    {
+        if (empty($assessmentSnapshots)) {
+            return;
+        }
+        $updateAssessments = [];
+        $updateSections = [];
+        foreach ($assessmentSnapshots as $assessmentSnapshot) {
+            $updateAssessments[$assessmentSnapshot['origin_assessment_id']] = [
+                'assessment_id' => $assessmentSnapshot['snapshot_assessment_id'],
+            ];
+            foreach ($assessmentSnapshot['sections_snapshot'] as $originSectionId => $snapshotSectionId) {
+                $updateSections[$originSectionId] = [
+                    'section_id' => $snapshotSectionId,
+                ];
+            }
+        }
+        $this->getAnswerReportDao()->batchUpdate(array_keys($updateAssessments), $updateAssessments, 'assessment_id');
+        $this->getAnswerQuestionReportService()->replaceAssessmentsAndSectionsWithSnapshotAssessmentsAndSections($updateAssessments, $updateSections);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionService
      */
@@ -248,6 +277,14 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
     protected function getAnswerQuestionReportService()
     {
         return $this->biz->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 
     /**

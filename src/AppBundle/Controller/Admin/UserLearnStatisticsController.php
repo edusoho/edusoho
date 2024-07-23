@@ -20,6 +20,7 @@ class UserLearnStatisticsController extends BaseController
             'isDefault' => 'false',
         ];
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $conditions = array_merge($defaultCondition, $conditions);
         $userConditions = ['nickname' => $conditions['nickname']];
         $paginator = new Paginator(

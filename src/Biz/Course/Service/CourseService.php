@@ -21,6 +21,8 @@ interface CourseService
 
     public function findCoursesByIds($ids);
 
+    public function findCoursesByIdsAndCourseSetTitle($ids, $title);
+
     public function findCoursesByCourseSetIds(array $setIds);
 
     public function findCoursesByParentIdAndLocked($parentId, $locked);
@@ -61,6 +63,8 @@ interface CourseService
     public function copyCourse($newCourse);
 
     public function getChapter($courseId, $chapterId);
+
+    public function getChapterById($chapterId);
 
     /**
      * @param $chapter
@@ -113,6 +117,14 @@ interface CourseService
      * @Log(module="course",action="close_course",funcName="getCourse")
      */
     public function closeCourse($id);
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close_course",funcName="getCourse")
+     */
+    public function unpublishedCourse($id);
 
     /**
      * @param $id
@@ -371,4 +383,16 @@ interface CourseService
     public function findCourseByCourseSetTitleLike($courseSetTitle);
 
     public function courseItemIdsHandle($courseId, $ids);
+
+    public function getLessonTree($courseIds, $type);
+
+    public function findLessonIds($courseId, $type, $chapterId);
+
+    public function banLearningByCourseSetId($courseSetId);
+
+    public function canLearningByCourseSetId($courseSetId);
+
+    public function banLearningByCourseSetIds($courseSetIds);
+
+    public function canLearningByCourseSetIds($courseSetIds);
 }

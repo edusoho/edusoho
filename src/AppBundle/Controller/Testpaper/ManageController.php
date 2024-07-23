@@ -14,7 +14,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\File\UploadFileException;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
@@ -24,11 +24,12 @@ use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use http\Exception\InvalidArgumentException;
-use PhpOffice\PhpWord\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function indexAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
@@ -57,37 +58,28 @@ class ManageController extends BaseController
         ]);
     }
 
-    public function checkListAction(Request $request, $targetId, $targetType, $type)
+    public function checkListAction(Request $request, $targetType, $targetId, $type)
     {
-        $courseIds = [$targetId];
-        $courses = [];
-        $courseSets = [];
-        if ('classroom' === $targetType) {
-            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
-            $courseIds = ArrayToolkit::column($courses, 'id');
-            $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds($courseIds);
-        }
-
-        $conditions = [
-            'courseIds' => empty($courseIds) ? [-1] : $courseIds,
-            'type' => $type,
-        ];
+        $params = $request->query->all();
+        $conditions = $this->prepareConditions($targetType, $targetId, $params);
+        $conditions['type'] = $type;
 
         $paginator = new Paginator(
             $request,
             $this->getTaskService()->countTasks($conditions),
             10
         );
+        $paginator->setBaseUrl($this->generateUrl('course_testpaper_check_list', array_merge(['targetType' => $targetType, 'targetId' => $targetId, 'type' => $type], $params)));
         $tasks = $this->getTaskService()->searchTasks(
             $conditions,
             ['seq' => 'ASC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $courses = $this->getCourseService()->findCoursesByIds(array_column($tasks, 'courseId'));
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds(array_column($courses, 'id'));
 
         list($tasks, $testpapers) = $this->getTaskService()->findTestpapers($tasks, $type);
-
-        $resultStatusNum = $this->findTestpapersStatusNum($tasks);
 
         return $this->render('testpaper/manage/check-list.html.twig', [
             'testpapers' => $testpapers,
@@ -95,11 +87,62 @@ class ManageController extends BaseController
             'targetId' => $targetId,
             'targetType' => $targetType,
             'tasks' => $tasks,
-            'resultStatusNum' => $resultStatusNum,
-            'courses' => ArrayToolkit::index($courses, 'id'),
-            'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+            'resultStatusNum' => $this->findTestpapersStatusNum($tasks),
+            'courses' => $courses,
+            'courseSets' => $courseSets,
             'type' => $type,
         ]);
+    }
+
+    protected function prepareConditions($targetType, $targetId, $params)
+    {
+        $conditions = [];
+        if (isset($params['title'])) {
+            $conditions['titleLike'] = $this->purifyHtml($params['title']);
+        }
+        $courseId = $this->prepareCourseId($targetType, $targetId, $params);
+        if ('classroom' === $targetType && empty($courseId)) {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($targetId);
+            $conditions['courseIds'] = array_column($courses, 'id') ?: [-1];
+
+            return $conditions;
+        }
+        $conditions['courseId'] = $courseId;
+
+        if (!empty($params['lessonId'])) {
+            $conditions['categoryId'] = $params['lessonId'];
+
+            return $conditions;
+        }
+        if (!empty($params['unitId'])) {
+            $conditions['categoryIds'] = $this->getCourseService()->findLessonIds($courseId, 'unit', $params['unitId']) ?: [-1];
+
+            return $conditions;
+        }
+        if (!empty($params['chapterId'])) {
+            $conditions['categoryIds'] = $this->getCourseService()->findLessonIds($courseId, 'chapter', $params['chapterId']) ?: [-1];
+        }
+
+        return $conditions;
+    }
+
+    private function prepareCourseId($targetType, $targetId, $params)
+    {
+        if (!empty($params['courseId'])) {
+            return $params['courseId'];
+        }
+        if ('course' == $targetType) {
+            return $targetId;
+        }
+        foreach (['chapterId', 'unitId', 'lessonId'] as $key) {
+            if (!empty($params[$key])) {
+                $chapter = $this->getCourseService()->getChapterById($params[$key]);
+
+                return $chapter['courseId'];
+            }
+        }
+
+        return 0;
     }
 
     public function checkAction(Request $request, $answerRecordId, $targetId, $source = 'course')
@@ -299,13 +342,14 @@ class ManageController extends BaseController
                 $member .= $users[$answerRecord['user_id']]['verifiedMobile'] ? $users[$answerRecord['user_id']]['verifiedMobile'].',' : '-'.',';
                 $member .= $users[$answerRecord['user_id']]['emailVerified'] ? $users[$answerRecord['user_id']]['email'].',' : '-'.',';
                 $member .= date('Y-m-d H:i:s', $answerRecord['begin_time'])."\t".',';
+                $member .= ('doing' == $answerRecord['status']) ? '-'.',' : date('Y-m-d H:i:s', $answerRecord['end_time'])."\t".',';
                 $member .= $this->timeFormatterFilter($answerRecord['used_time']).',';
                 $member .= $this->trans('course.homework_check.review.submit_num_detail', ['%num%' => $index + 1]).',';
                 $member .= $this->getReviewStatus($answerRecord['status']).',';
                 $member .= $answerReport['score'].',';
                 $member .= $answerScene['pass_score'].',';
                 $member .= $this->getPassStatus($answerReport['grade']).',';
-                $reviewer = $this->getReviewer($users[$answerReport['review_user_id']], $answerRecord);
+                $reviewer = $this->getReviewer($users[$answerReport['review_user_id']] ?? [], $answerRecord);
                 $member .= is_numeric($reviewer) ? $reviewer."\t".',' : $reviewer.','; //批阅人
                 $member .= $answerReport['comment'] ? $answerReport['comment'].',' : '-'.','; //教师评语
 
@@ -319,8 +363,8 @@ class ManageController extends BaseController
     protected function getExportFieldTitle($type)
     {
         $str = [
-            'homework' => '用户名,姓名,手机号,邮箱,作业时间（年-月-日-时-分-秒）,作业用时（时-分-秒）,作业次数,状态,作业成绩,合格成绩,通过状态,批阅人,教师评语',
-            'testpaper' => '用户名,姓名,手机号,邮箱,开考时间（年-月-日-时-分-秒）,考试用时（时-分-秒）,考试次数,状态,本次成绩,通过成绩,通过状态,批阅人,教师评语',
+            'homework' => '用户名,姓名,手机号,邮箱,作业时间（年-月-日-时-分-秒）,提交时间（年-月-日-时-分-秒）,作业用时（时-分-秒）,作业次数,状态,作业成绩,合格成绩,通过状态,批阅人,教师评语',
+            'testpaper' => '用户名,姓名,手机号,邮箱,开考时间（年-月-日-时-分-秒）,提交时间（年-月-日-时-分-秒）,考试用时（时-分-秒）,考试次数,状态,本次成绩,通过成绩,通过状态,批阅人,教师评语',
         ];
 
         return $str[$type];
@@ -385,6 +429,8 @@ class ManageController extends BaseController
 
     public function transcriptExportAction(Request $request, $courseId, $testpaperId, $activityId)
     {
+        $this->getCourseService()->tryManageCourse($courseId);
+
         $activity = $this->getActivityService()->getActivity($activityId);
         if (!$activity) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
@@ -392,18 +438,6 @@ class ManageController extends BaseController
         $fileName = sprintf('%s_%s结果_%s.csv', $activity['title'], 'testpaper' == $activity['mediaType'] ? $this->trans('testpaper.check.homework') : $this->trans('testpaper.check.testpaper'), date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
-    }
-
-    public function buildCheckAction(Request $request, $courseSetId, $type)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $data = $request->request->all();
-        $data['courseSetId'] = $courseSet['id'];
-
-        $result = $this->getTestpaperService()->canBuildTestpaper($type, $data);
-
-        return $this->createJsonResponse($result);
     }
 
     public function infoAction(Request $request, $id)
@@ -612,9 +646,8 @@ class ManageController extends BaseController
             $question['options'] = [];
             $question['answers'] = [];
         }
-        $question = $this->filterQuestion($question);
 
-        return $question;
+        return $this->filterQuestion($question);
     }
 
     protected function convertChoice($toType, $question)
@@ -625,13 +658,17 @@ class ManageController extends BaseController
         if ('single_choice' == $toType) {
             $question['answers'] = [reset($question['answers'])];
         }
-        $question = $this->filterQuestion($question);
 
-        return $question;
+        return $this->filterQuestion($question);
     }
 
     public function showTemplateAction(Request $request, $type)
     {
+        $validTypes = ['choice', 'determine', 'essay', 'fill', 'material', 'single_choice', 'uncertain_choice'];
+
+        if (!in_array($type, $validTypes)) {
+            throw new \InvalidArgumentException('Invalid type');
+        }
         $question = $request->request->get('question', []);
         $seq = $request->request->get('seq', 1);
         $token = $request->request->get('token', '');
@@ -664,7 +701,8 @@ class ManageController extends BaseController
 
     public function saveImportTestpaperAction(Request $request, $token)
     {
-        $content = $request->getContent();
+        $content = $this->replaceRemoteImgToLocalImg($request->getContent());
+        $content = $this->replaceFormulaToLocalImg($content);
         $postData = json_decode($content, true);
         $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
         $data = $token['data'];
@@ -805,45 +843,6 @@ class ManageController extends BaseController
         return $data;
     }
 
-    protected function getCheckedEssayQuestions($questions)
-    {
-        $essayQuestions = [];
-
-        $essayQuestions['essay'] = !empty($questions['essay']) ? $questions['essay'] : [];
-
-        if (empty($questions['material'])) {
-            return $essayQuestions;
-        }
-
-        foreach ($questions['material'] as $questionId => $question) {
-            $questionTypes = ArrayToolkit::column(empty($question['subs']) ? [] : $question['subs'], 'type');
-
-            if (in_array('essay', $questionTypes)) {
-                $essayQuestions['material'][$questionId] = $question;
-            }
-        }
-
-        return $essayQuestions;
-    }
-
-    protected function findRelatedData($activity, $paper)
-    {
-        $relatedData = [];
-        $userFirstResults = $this->getTestpaperService()->findExamFirstResults($paper['id'], $paper['type'], $activity['id']);
-
-        $relatedData['total'] = count($userFirstResults);
-
-        $userFirstResults = ArrayToolkit::group($userFirstResults, 'status');
-        $finishedResults = empty($userFirstResults['finished']) ? [] : $userFirstResults['finished'];
-
-        $relatedData['finished'] = count($finishedResults);
-        $scores = array_sum(ArrayToolkit::column($finishedResults, 'score'));
-        $avg = empty($relatedData['finished']) ? 0 : $scores / $relatedData['finished'];
-        $relatedData['avgScore'] = number_format($avg, 1);
-
-        return $relatedData;
-    }
-
     protected function findTestpapersStatusNum($tasks)
     {
         $resultStatusNum = [];
@@ -865,18 +864,6 @@ class ManageController extends BaseController
         }
 
         return $resultStatusNum;
-    }
-
-    protected function getRedirectRoute($mode, $type)
-    {
-        $routes = [
-            'nextCheck' => [
-                'course' => 'course_manage_exam_next_result_check',
-                'classroom' => 'classroom_manage_exam_next_result_check',
-            ],
-        ];
-
-        return $routes[$mode][$type];
     }
 
     protected function getQuestionTypes()
@@ -901,32 +888,11 @@ class ManageController extends BaseController
     }
 
     /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
-    /**
      * @return CategoryService
      */
     protected function getQuestionCategoryService()
     {
         return $this->createService('Question:CategoryService');
-    }
-
-    protected function getQuestionAnalysisService()
-    {
-        return $this->createService('Question:QuestionAnalysisService');
     }
 
     /**

@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Announcement\Processor;
 
-use Biz\BaseTestCase;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
+use Biz\BaseTestCase;
 
 class ClassroomAnnouncementProcessorTest extends BaseTestCase
 {
@@ -11,12 +11,12 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array(
+        $this->mockBiz('Classroom:ClassroomService', [
+            [
                 'functionName' => 'canManageClassroom',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
         $result = $processor->checkManage(1);
         $this->assertTrue($result);
@@ -26,12 +26,12 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array(
+        $this->mockBiz('Classroom:ClassroomService', [
+            [
                 'functionName' => 'canTakeClassroom',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
         $result = $processor->checkTake(1);
         $this->assertTrue($result);
@@ -49,32 +49,32 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array(
+        $this->mockBiz('Classroom:ClassroomService', [
+            [
                 'functionName' => 'searchMemberCount',
                 'returnValue' => 2,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'searchMembers',
-                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
-            ),
-        ));
+                'returnValue' => [['userId' => 1], ['userId' => 2]],
+            ],
+        ]);
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 0),
-            ),
-        ));
+                'returnValue' => ['enabled' => 0],
+            ],
+        ]);
 
-        $this->mockBiz('User:NotificationService', array(
-            array(
+        $this->mockBiz('User:NotificationService', [
+            [
                 'functionName' => 'notify',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
-        $result = $processor->announcementNotification(1, array('title' => 'announcement'), 'showurl');
+        $result = $processor->announcementNotification(1, ['title' => 'announcement'], 'showurl', ['id' => 1]);
         $this->assertTrue($result);
     }
 
@@ -82,50 +82,50 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array(
+        $this->mockBiz('Classroom:ClassroomService', [
+            [
                 'functionName' => 'searchMemberCount',
                 'returnValue' => 2,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'searchMembers',
-                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
-            ),
-            array(
+                'returnValue' => [['userId' => 1], ['userId' => 2]],
+            ],
+            [
                 'functionName' => 'getClassroom',
-                'returnValue' => array('id' => 1, 'title' => 'classroom title'),
-            ),
-        ));
+                'returnValue' => ['id' => 1, 'title' => 'classroom title'],
+            ],
+        ]);
 
-        $this->mockBiz('IM:ConversationService', array(
-            array(
+        $this->mockBiz('IM:ConversationService', [
+            [
                 'functionName' => 'getConversationByTarget',
-                'returnValue' => array('no' => '1234567890'),
-            ),
-        ));
+                'returnValue' => ['no' => '1234567890'],
+            ],
+        ]);
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 1),
-            ),
-        ));
+                'returnValue' => ['enabled' => 1],
+            ],
+        ]);
 
-        $this->mockBiz('User:NotificationService', array(
-            array(
+        $this->mockBiz('User:NotificationService', [
+            [
                 'functionName' => 'notify',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->mockBiz('Queue:QueueService', array(
-            array(
+        $this->mockBiz('Queue:QueueService', [
+            [
                 'functionName' => 'pushJob',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
-        $result = $processor->announcementNotification(1, array('title' => 'announcement'), 'showurl');
+        $result = $processor->announcementNotification(1, ['title' => 'announcement'], 'showurl', ['id' => 1]);
         $this->assertTrue($result);
     }
 
@@ -133,12 +133,12 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 1),
-            ),
-        ));
+                'returnValue' => ['enabled' => 1],
+            ],
+        ]);
 
         $result = $processor->isIMEnabled();
 
@@ -149,12 +149,12 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 0),
-            ),
-        ));
+                'returnValue' => ['enabled' => 0],
+            ],
+        ]);
 
         $result = $processor->isIMEnabled();
 
@@ -165,16 +165,16 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array(
+        $this->mockBiz('Classroom:ClassroomService', [
+            [
                 'functionName' => 'tryManageClassroom',
                 'returnValue' => true,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'getClassroom',
-                'returnValue' => array('id' => 1, 'title' => 'classroom content'),
-            ),
-        ));
+                'returnValue' => ['id' => 1, 'title' => 'classroom content'],
+            ],
+        ]);
 
         $classroom = $processor->tryManageObject(1);
 
@@ -186,12 +186,12 @@ class ClassroomAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createClassroomProcessor();
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array(
+        $this->mockBiz('Classroom:ClassroomService', [
+            [
                 'functionName' => 'getClassroom',
-                'returnValue' => array('id' => 1),
-            ),
-        ));
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
 
         $result = $processor->getTargetObject(1);
 

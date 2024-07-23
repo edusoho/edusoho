@@ -13,6 +13,7 @@ class SensitiveController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
         $conditions = [
             'keyword' => '',
             'searchKeyWord' => '',
@@ -24,6 +25,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
         $paginator = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
         $keywords = $this->getSensitiveService()->searchKeywords($conditions, ['id' => 'DESC'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
         foreach ($keywords as &$keyword) {
@@ -97,6 +99,7 @@ class SensitiveController extends BaseController
     public function banlogsAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
         $conditions = [
             'keyword' => '',
             'searchBanlog' => '',
@@ -108,6 +111,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
 
         if (empty($banlogs)) {
             $banlogs = [];
@@ -152,7 +156,12 @@ class SensitiveController extends BaseController
         }
 
         foreach ($banlogs as &$value) {
-            $value['text'] = str_replace($value['keywordName'], "<span style='color:#FF0000'>".$value['keywordName'].'</span>', $value['text']);
+            //对原有存在的异常数据进行过滤
+            $value['text'] = $this->getBiz()['html_helper']->purify($value['text']);
+            $pattern = '/'.$value['keywordName'].'/i';
+            $value['text'] = preg_replace_callback($pattern, function($matches) {
+                return "<span style='color:#FF0000'>".$matches[0].'</span>';
+            }, $value['text']);
             $value['text'] = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", '', $value['text']);
         }
 

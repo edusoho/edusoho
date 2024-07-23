@@ -19,6 +19,8 @@ interface MessageService
      */
     public function sendMessage($fromId, $toId, $content, $createdTime = null);
 
+    public function sendMessageNoSensitiveCheck($fromId, $toId, $content);
+
     public function getConversation($conversationId);
 
     /**

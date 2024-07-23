@@ -85,11 +85,7 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
 
         $member = $this->getExerciseMemberService()->getExerciseMember($orderItem['target_id'], $orderItem['user_id']);
         if (!empty($member)) {
-            $info = [
-                'reason' => $orderRefundItem['order_refund']['reason'],
-                'reason_type' => 'refund',
-            ];
-            $this->getExerciseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+            $this->getExerciseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id'], ['reason'=>'同意退款','reasonType'=>'exit']);
         }
 
         $this->updateMemberRecordByRefundItem($orderItem);

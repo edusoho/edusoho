@@ -23,6 +23,9 @@
                               :disabled="course.status !== 'draft' || course.platform !== 'self'"
                               class="cd-radio">{{ label }}
                     </el-radio>
+                  <div class="course-mangae-info__tip">
+                    {{ 'course.plan_setup.learn_mode_hint'|trans }}
+                  </div>
                 </el-col>
             </el-form-item>
 

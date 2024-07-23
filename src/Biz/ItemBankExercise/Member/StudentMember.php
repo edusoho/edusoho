@@ -68,7 +68,7 @@ class StudentMember extends Member
         $exercise = $this->getExerciseService()->get($member['exerciseId']);
 
         if (empty($info['reason']) || empty($info['reasonType'])) {
-           throw CommonException::ERROR_PARAMETER_MISSING();
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         $record = [
@@ -113,12 +113,16 @@ class StudentMember extends Member
             throw ItemBankExerciseException::NOTFOUND_EXERCISE();
         }
 
-        if (!in_array($exercise['status'], ['published'])) {
+        if (!in_array($exercise['status'], ['published', 'unpublished'])) {
             throw ItemBankExerciseException::UNPUBLISHED_EXERCISE();
         }
 
         if ($this->getExerciseMemberService()->isExerciseMember($exerciseId, $userId)) {
             throw ItemBankExerciseMemberException::DUPLICATE_MEMBER();
+        }
+
+        if ('date' == $exercise['expiryMode'] && $exercise['expiryStartDate'] > time()) {
+            throw ItemBankExerciseException::EXERCISE_NOT_ARRIVING();
         }
 
         $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);

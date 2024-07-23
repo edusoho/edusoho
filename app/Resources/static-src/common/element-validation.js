@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const trim = (rule, value, callback) => {
   value.trim().length > 0 ? callback() : callback(new Error(Translator.trans('validate.trim.message')));
 };
@@ -40,6 +42,37 @@ const calculateByteLength = (string) => {
   return length;
 }
 
+const isPositiveInteger = (num) => {
+  return _.isInteger(num) && num > 0 ;
+}
+
+const inter_byte = (rule, value, callback) => {
+
+  if (!value || (!rule.maxSize && !rule.minSize)) {
+    return callback();
+  }
+
+  let byteLength = 0;
+  for (let i = 0 ; i < value.length; i++) {
+    let c = value.charAt(i);
+
+    if (/^[\u0000-\u00ff]$/.test(c)) {
+      byteLength++;
+    } else {
+      byteLength += 2;
+    }
+  }
+
+  if ( rule.maxSize && isPositiveInteger(rule.maxSize) && byteLength > rule.maxSize ) {
+    callback(new Error(Translator.trans('validate.length_max.message', {'length': rule.maxSize})));
+  } else if ( rule.minSize && isPositiveInteger(rule.minSize) && byteLength < rule.minSize ) {
+    callback(new Error(Translator.trans('validate.length_min.message', {'length': rule.minSize})));
+  } else {
+    callback();
+  }
+}
+
+
 export {
   trim,
   course_title,
@@ -49,4 +82,5 @@ export {
   digits_0,
   currency,
   course_title_length,
+  inter_byte
 };

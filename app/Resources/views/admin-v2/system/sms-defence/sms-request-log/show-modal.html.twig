@@ -1,0 +1,50 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.user.manage.user_show.fields.heading_title'|trans}}{% endblock %}
+
+{% block body %}
+
+  <table class="table table-striped table-condenseda table-bordered">
+    <tr>
+      <th width="25%">{{'sms.defence.request.log.fingerprint'|trans}}</th>
+      <td width="75%">
+        {{ smsRequestLog.fingerprint }}
+      </td>
+    </tr>
+    <tr>
+      <th width="25%">{{'sms.defence.request.log.coordinate'|trans}}</th>
+      <td width="75%">
+        {{ smsRequestLog.coordinate }}
+      </td>
+    </tr>
+    <tr>
+      <th width="25%">{{'sms.defence.request.log.ip'|trans}}</th>
+      <td width="75%">
+        {{ smsRequestLog.ip }}
+      </td>
+    </tr>
+    <tr>
+      <th width="25%">{{'sms.defence.request.log.mobile'|trans}}</th>
+      <td width="75%">
+        {% include 'user-mobile-mask.html.twig' with { mobile: smsRequestLog.mobile } %}
+      </td>
+    </tr>
+    <tr>
+      <th width="25%">{{'sms.defence.request.log.userAgent'|trans}}</th>
+      <td width="75%">
+        {{ smsRequestLog.userAgent }}
+      </td>
+    </tr>
+    <tr>
+      <th width="25%">{{'sms.defence.request.log.created_time'|trans}}</th>
+      <td width="75%">
+        {{ smsRequestLog.createdTime|date('Y-n-d H:i:s') }}
+      </td>
+    </tr>
+
+  </table>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

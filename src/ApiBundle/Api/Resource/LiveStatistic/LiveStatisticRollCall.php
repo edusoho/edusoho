@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\LiveActivityException;
 use Biz\Activity\Service\ActivityService;
-use Biz\Live\LiveStatisticsException;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Biz\Live\Service\LiveStatisticsService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -29,10 +29,8 @@ class LiveStatisticRollCall extends AbstractResource
         $statistics = $this->getLiveStatisticsService()->getCheckinStatisticsByLiveId($activity['ext']['liveId']);
         if ($status && !empty($statistics['data']['detail'])) {
             $groupedStatistics = ArrayToolkit::group($statistics['data']['detail'], 'checkin');
-            $groupedStatistics = [
-                empty($groupedStatistics[0]) ? [] : $groupedStatistics[0],
-                empty($groupedStatistics[1]) ? [] : $groupedStatistics[1],
-            ];
+            $groupedStatistics[0] = empty($groupedStatistics[0]) ? [] : $groupedStatistics[0];
+            $groupedStatistics[1] = empty($groupedStatistics[1]) ? [] : $groupedStatistics[1];
             $statistics['data']['detail'] = 'checked' == $status ? $groupedStatistics[1] : $groupedStatistics[0];
         }
 
@@ -51,19 +49,12 @@ class LiveStatisticRollCall extends AbstractResource
             $statistic['nickname'] = empty($users[$statistic['userId']]) ? '--' : $users[$statistic['userId']]['nickname'];
             $statistic['email'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['emailVerified']) ? '--' : $users[$statistic['userId']]['email'];
             $statistic['checkin'] = empty($statistic['checkin']) ? 0 : 1;
-            $statistic['mobile'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['verifiedMobile']) ? '--' : $users[$statistic['userId']]['verifiedMobile'];
+            $statistic['mobile'] = empty($users[$statistic['userId']]) || empty($users[$statistic['userId']]['verifiedMobile']) ? '' : $users[$statistic['userId']]['verifiedMobile'];
+            $statistic['encryptedMobile'] = empty($statistic['mobile']) ? '' : $this->getMobileMaskService()->encryptMobile($statistic['mobile']);
+            $statistic['mobile'] = empty($statistic['mobile']) ? '--' : $this->getMobileMaskService()->maskMobile($statistic['mobile']);
         }
 
         return $statistics;
-    }
-
-    public function processJsonData($liveId)
-    {
-        try {
-            $checkin = $this->getLiveStatisticsService()->updateCheckinStatistics($liveId);
-            $visitor = $this->getLiveStatisticsService()->updateVisitorStatistics($liveId);
-        } catch (LiveStatisticsException $e) {
-        }
     }
 
     /**
@@ -96,5 +87,13 @@ class LiveStatisticRollCall extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return MobileMaskService
+     */
+    protected function getMobileMaskService()
+    {
+        return $this->service('InfoSecurity:MobileMaskService');
     }
 }

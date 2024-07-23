@@ -4,13 +4,13 @@ namespace Biz\WrongBook\Pool;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\WrongBook\Dao\WrongQuestionBookPoolDao;
 use Biz\WrongBook\Dao\WrongQuestionCollectDao;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 
 class ItemBankExercisePool extends AbstractPool
 {
@@ -43,7 +43,7 @@ class ItemBankExercisePool extends AbstractPool
         }
 
         $collects = $this->getWrongQuestionCollectDao()->findCollectBYPoolId($pool['id']);
-        $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => ArrayToolkit::column($collects, 'id')], [], 0, PHP_INT_MAX);
+        $wrongQuestions = empty($collects) ? [] : $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => ArrayToolkit::column($collects, 'id')], [], 0, PHP_INT_MAX);
 
         $searchConditions['chapter'] = $this->exerciseChapterSearch($pool['target_id'], $conditions);
         $searchConditions['testpaper'] = $this->exerciseAssessmentSearch($pool['target_id'], $conditions, $wrongQuestions);
@@ -75,7 +75,7 @@ class ItemBankExercisePool extends AbstractPool
             return [];
         }
 
-        return $this->getItemCategoryService()->getItemCategoryTree($targetId);
+        return $this->getItemBankChapterExerciseService()->getPublishChapterTree($targetId);
     }
 
     protected function exerciseAssessmentSearch($targetId, $conditions, $wrongQuestions)
@@ -153,7 +153,7 @@ class ItemBankExercisePool extends AbstractPool
      */
     protected function getWrongQuestionService()
     {
-        return  $this->biz->service('WrongBook:WrongQuestionService');
+        return $this->biz->service('WrongBook:WrongQuestionService');
     }
 
     /**
@@ -162,14 +162,6 @@ class ItemBankExercisePool extends AbstractPool
     protected function getExerciseModuleService()
     {
         return $this->biz->service('ItemBankExercise:ExerciseModuleService');
-    }
-
-    /**
-     * @return ItemCategoryService
-     */
-    protected function getItemCategoryService()
-    {
-        return $this->biz->service('ItemBank:Item:ItemCategoryService');
     }
 
     /**
@@ -194,5 +186,13 @@ class ItemBankExercisePool extends AbstractPool
     protected function getItemBankExerciseService()
     {
         return $this->biz->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:ChapterExerciseService');
     }
 }

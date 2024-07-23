@@ -2,11 +2,11 @@
 
 namespace ApiBundle\Api\Resource\Classroom;
 
+use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
-use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Annotation\ResponseFilter;
 
 class ClassroomCourse extends AbstractResource
 {
@@ -16,10 +16,15 @@ class ClassroomCourse extends AbstractResource
      */
     public function search(ApiRequest $request, $classroomId)
     {
-        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $title = trim($request->query->get('title', ''));
+        if ($title) {
+            $courses = $this->getClassroomService()->findSortedCoursesByClassroomIdAndCourseSetTitle($classroomId, $title);
+        } else {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        }
 
-        $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
-        $this->getOCUtil()->multiple($courses, array('creator', 'teacherIds'));
+        $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
+        $this->getOCUtil()->multiple($courses, ['creator', 'teacherIds']);
 
         return $courses;
     }

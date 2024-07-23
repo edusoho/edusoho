@@ -1,3 +1,20 @@
+import MobileCourse from './MobileCourse';
+import Vant from 'vant';
+
+Vue.config.productionTip = false;
+Vue.use(Vant);
+
+Vue.filter('trans', function (value, params) {
+  if (!value) return '';
+  return Translator.trans(value, params);
+});
+
+if($('[name="isWeixin"]').val() || $('[name="isMobile"]').val()) {
+  new Vue({
+    render: createElement => createElement(MobileCourse)
+  }).$mount('#app');
+}
+
 $('.js-search-type').on('click', event => {
   const $this = $(event.currentTarget);
   window.location.href = $this.val();

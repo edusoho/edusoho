@@ -10,9 +10,8 @@ class SimpleValidator
     public static function email($value)
     {
         $value = (string) $value;
-        $valid = filter_var($value, FILTER_VALIDATE_EMAIL);
 
-        return false !== $valid;
+        return 1 === preg_match('/^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/', $value);
     }
 
     public static function nickname($value, array $option = [])

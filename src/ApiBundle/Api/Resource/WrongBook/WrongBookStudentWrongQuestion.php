@@ -31,6 +31,9 @@ class WrongBookStudentWrongQuestion extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestionsWithDistinctItem($conditions, $orderBys, $offset, $limit);
+        if(empty($wrongQuestions)) {
+            return (object)[];
+        }
         $wrongQuestions = $this->makeCourseWrongQuestionInfo($wrongQuestions);
         $wrongQuestionCount = $this->getWrongQuestionService()->countWrongQuestionsWithDistinctItem($conditions);
 

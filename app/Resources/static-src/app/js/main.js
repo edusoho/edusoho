@@ -11,6 +11,7 @@ import {isMobileDevice} from 'common/utils';
 import notify from 'common/notify';
 import './alert';
 import 'echo-js';
+import 'app/common/katex-render';
 
 echo.init();
 
@@ -23,6 +24,26 @@ if ($('#rewardPointNotify').length > 0) {
     notify('success', decodeURIComponent(message));
   }
 }
+
+$(document).on('click', '.js-handleLearnOnMessage', function (event) {
+  event.preventDefault();
+  notify('danger', decodeURIComponent(Translator.trans('validate.course.closed')));
+});
+
+$(document).on('click', '.js-handleClassroomOnMessage', function (event) {
+  event.preventDefault();
+  notify('danger', decodeURIComponent(Translator.trans('validate.classroom.closed')));
+});
+
+$(document).on('click', '.js-handleExerciseOnMessage', function (event) {
+  event.preventDefault();
+  notify('danger', decodeURIComponent(Translator.trans('validate.exercise.closed')));
+});
+
+$(document).on('click', '.js-handleLearnContentOnMessage', function (event) {
+  event.preventDefault();
+  notify('danger', decodeURIComponent(Translator.trans('validate.learn_content.closed')));
+});
 
 $('[data-toggle="popover"]').popover({
   html: true
@@ -132,4 +153,4 @@ $('#jumpPage').on('blur', function () {
   } else {
     window.location.href = pageQueryUrl + 'page=' + jumpPage + '&perpage=' + currentPerPageCount;
   }
-})
+});

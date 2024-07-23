@@ -132,7 +132,6 @@ textarea {
 .form-error-message {
   min-height: @form-error-message-height ;
   line-height: @form-error-message-height ;
-  margin-bottom: 0;
   color: @brand-danger;
 }
 
@@ -140,9 +139,9 @@ textarea {
   position: relative;
   &:before {
     content: "*";
-    color: @brand-warning;
+    color: @brand-danger;
     position: absolute;
-    top: 4px;
+    top: 0px;
     left: -10px;
   }
 }

@@ -27,6 +27,8 @@ interface ClassroomService
 
     public function findActiveCoursesByClassroomId($classroomId);
 
+    public function findSortedCoursesByClassroomIdAndTitle(int $classroomId, string $title);
+
     // TODO refactor.
     public function findMembersByUserIdAndClassroomIds($userId, $classroomIds);
 
@@ -126,6 +128,14 @@ interface ClassroomService
      * @param $id
      *
      * @return mixed
+     * @Log(module="classroom",action="close",funcName="getClassroom")
+     */
+    public function unpublishedClassroom($id);
+
+    /**
+     * @param $id
+     *
+     * @return mixed
      * @Log(module="classroom",action="publish",funcName="getClassroom")
      */
     public function publishClassroom($id);
@@ -175,6 +185,10 @@ interface ClassroomService
     public function isClassroomHeadTeacher($classroomId, $userId);
 
     public function findTeacherCanManagerClassRoomCourseSet($classroomId);
+
+    public function updateMembers($conditions, $updateFields);
+
+    public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
 
     public function updateMember($id, $member);
 
@@ -228,6 +242,8 @@ interface ClassroomService
     public function getClassroomCourse($classroomId, $courseId);
 
     public function findCoursesByClassroomId($classroomId);
+
+    public function findSortedCoursesByClassroomIdAndCourseSetTitle(int $classroomId, string $title);
 
     public function getClassroomStudentCount($classroomId);
 
@@ -300,6 +316,8 @@ interface ClassroomService
 
     public function searchMembersSignStatistics($classroomId, array $conditions, array $orderBy, $start, $limit);
 
+    public function updateClassroomMembersFinishedStatusByLimit($classroomId, $start, $limit);
+
     public function updateClassroomMembersFinishedStatus($classroomId);
 
     public function updateClassroomMemberFinishedStatus($classroomId, $userId);
@@ -309,6 +327,8 @@ interface ClassroomService
     public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false);
 
     public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields);
+
+    public function updateClassroomMembersNoteAndThreadNumsByLimit($classroomId, $start, $limit);
 
     public function updateClassroomMembersNoteAndThreadNums($classroomId);
 }

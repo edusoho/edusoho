@@ -40,7 +40,7 @@ class TestpaperTest extends BaseTypeTestCase
         $activity = $type->create([
             'title' => 'title',
             'redoInterval' => 1,
-            'startTime' => 1,
+            'startTime' => time() + 10,
             'doTimes' => 1,
             'limitedTime' => 1,
             'testpaperId' => 2,
@@ -231,6 +231,10 @@ class TestpaperTest extends BaseTypeTestCase
             [
                 'functionName' => 'update',
                 'returnValue' => ['id' => 1],
+            ],
+            [
+                'functionName' => 'canStart',
+                'returnValue' => true,
             ],
         ]);
 

@@ -57,6 +57,8 @@ class CourseMemberImporter extends Importer
             }
         }
 
+        $this->getLogService()->warning('course', 'import_user', '导入学员数据');
+
         return ['existsUserCount' => $existsUserCount, 'successCount' => $successCount];
     }
 

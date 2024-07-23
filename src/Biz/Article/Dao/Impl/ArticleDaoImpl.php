@@ -123,6 +123,8 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
                 'sticky',
                 'hits',
                 'updatedTime',
+                'featured',
+                'promoted',
             ],
             'serializes' => [
                 'tagIds' => 'delimiter',

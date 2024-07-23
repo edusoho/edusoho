@@ -8,13 +8,9 @@ interface ActivityService
 {
     public function getActivity($id, $fetchMedia = false);
 
-    public function getActivityByCopyIdAndCourseSetId($copyId, $courseSetId);
-
     public function findActivities($ids, $fetchMedia = false, $showCloud = 1);
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false);
-
-    public function findActivitiesByCourseSetId($courseSetId);
 
     public function findActivitiesByCourseIdsAndType($courseIds, $type, $fetchMedia = false);
 
@@ -67,15 +63,13 @@ interface ActivityService
 
     public function trigger($activityId, $name, $data = []);
 
-    public function isFinished($activityId);
+    public function isFinished($activityId, $userId = 0);
 
     public function findActivitySupportVideoTryLook($courseIds);
 
     public function isLiveFinished($activityId);
 
     public function checkLiveStatus($courseId, $activityId);
-
-    public function findFinishedLivesWithinOneDay();
 
     public function getActivityFinishCondition($activity);
 
@@ -88,6 +82,8 @@ interface ActivityService
     public function findManageReplayActivityIds($conditions);
 
     public function getActivityByAnswerSceneId($answerSceneId);
+
+    public function getActivityByAnswerSceneIdAndMediaType($answerSceneId, $mediaType);
 
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId);
 }

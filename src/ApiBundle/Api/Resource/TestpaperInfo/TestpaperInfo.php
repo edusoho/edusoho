@@ -5,16 +5,18 @@ namespace ApiBundle\Api\Resource\TestpaperInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
-use Biz\Task\TaskException;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class TestpaperInfo extends AbstractResource
@@ -32,14 +34,11 @@ class TestpaperInfo extends AbstractResource
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
-        $testpaperWrapper = new TestpaperWrapper();
-        $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
-        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');
-        $testpaper['metas']['question_type_seq'] = array_keys($items);
-        $results = [
-            'testpaper' => $testpaper,
-            'items' => $this->filterTestpaperItems($items),
-        ];
+        if ('closed' == $assessment['status']) {
+            throw TestpaperException::CLOSED_TESTPAPER();
+        }
+
+        $results = $this->wrapTeatpaper($assessment);
 
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
@@ -58,11 +57,8 @@ class TestpaperInfo extends AbstractResource
     protected function handleTask($user, $taskId, &$results)
     {
         $task = $this->getTaskService()->tryTakeTask($taskId);
-        if (empty($task)) {
-            throw TaskException::NOTFOUND_TASK();
-        }
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ('testpaper' != $activity['mediaType']) {
+        if (ActivityMediaType::TESTPAPER != $activity['mediaType']) {
             throw TestpaperException::NOT_TESTPAPER_TASK();
         }
 
@@ -71,22 +67,31 @@ class TestpaperInfo extends AbstractResource
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
 
-        $testpaperWrapper = new TestpaperWrapper();
-        $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
-        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');
-        $testpaper['metas']['question_type_seq'] = array_keys($items);
-        $results = [
-            'testpaper' => $testpaper,
-            'items' => $this->filterTestpaperItems($items),
-        ];
+        if ($results['testpaper']['id'] != $assessment['id']) {
+            $results = $this->wrapTeatpaper($assessment);
+        }
 
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
-        $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
+        $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
+
+        if (empty($testpaperRecord) && $scene['end_time'] && $scene['end_time'] < time()) {
+            $this->getAnswerService()->batchAutoSubmit($scene['id'], $activity['ext']['mediaId'], [$user['id']]);
+
+            $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
+        }
+
+        $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $scene['id'], 'user_id' => $user['id']]);
+
+        $activity['ext']['remainderDoTimes'] = max($activity['ext']['doTimes'] - ($countTestpaperRecord ?: 0), 0);
 
         if (!empty($testpaperRecord)) {
-            $answerReport = $this->getAnswerReportService()->get($testpaperRecord['answer_report_id']);
+            if ($testpaperRecord['assessment_id'] != $assessment['id'] && AnswerRecordStatus::DOING == $testpaperRecord['status']) {
+                $assessment = $this->getAssessmentService()->showAssessment($testpaperRecord['assessment_id']);
+                $results = $this->wrapTeatpaper($assessment);
+            }
+            $answerReport = $this->getAnswerReportService()->getSimple($testpaperRecord['answer_report_id']);
             $testpaperWrapper = new TestpaperWrapper();
-            $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $testpaper, $scene, $answerReport);
+            $testpaperResult = $testpaperWrapper->wrapTestpaperResult($testpaperRecord, $results['testpaper'], $scene, $answerReport);
             $testpaperResult['courseId'] = $task['courseId'];
             $testpaperResult['lessonId'] = $task['id'];
             $results['testpaperResult'] = $testpaperResult;
@@ -96,6 +101,19 @@ class TestpaperInfo extends AbstractResource
 
         $results['testpaper']['limitedTime'] = empty($scene['limited_time']) ? '0' : $scene['limited_time'];
         $results['task'] = $this->filterFaceInspectionTask($task, $scene);
+    }
+
+    private function wrapTeatpaper($assessment)
+    {
+        $testpaperWrapper = new TestpaperWrapper();
+        $testpaper = $testpaperWrapper->wrapTestpaper($assessment);
+        $items = ArrayToolkit::groupIndex($testpaperWrapper->wrapTestpaperItems($assessment), 'type', 'id');
+        $testpaper['metas']['question_type_seq'] = array_keys($items);
+
+        return [
+            'testpaper' => $testpaper,
+            'items' => $this->filterTestpaperItems($items),
+        ];
     }
 
     private function filterTestpaperItems($items)
@@ -164,5 +182,13 @@ class TestpaperInfo extends AbstractResource
     protected function getAnswerReportService()
     {
         return $this->service('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->service('ItemBank:Answer:AnswerService');
     }
 }

@@ -10,6 +10,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\Question\Traits\QuestionFormulaImgTrait;
 use Biz\Task\Service\TaskService;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Biz\WrongBook\WrongBookException;
@@ -19,6 +20,8 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class WrongBookQuestionShow extends AbstractResource
 {
+    use QuestionFormulaImgTrait;
+
     public function search(ApiRequest $request, $poolId)
     {
         $pool = $this->getWrongQuestionService()->getPool($poolId);
@@ -52,6 +55,7 @@ class WrongBookQuestionShow extends AbstractResource
                 continue;
             }
             $item = $itemsWithQuestion[$wrongQuestion['item_id']];
+            $item = $this->convertFormulaToImg($item);
             $source = empty($sources[$wrongQuestion['item_id']]) ? [] : $sources[$wrongQuestion['item_id']];
             $this->handleImgTag($item['material']);
             $item['submit_time'] = $wrongQuestion['last_submit_time'];
@@ -88,6 +92,9 @@ class WrongBookQuestionShow extends AbstractResource
         preg_match_all($reg, $itemMaterial, $imgUrls);
         $imgs = array_unique($imgUrls[2]);
         foreach ($imgs as $imgUrl) {
+            if(preg_match("/^http(s)?:\\/\\/.+/", $imgUrl)) {
+                continue;
+            }
             $realUrl = AssetHelper::uriForPath($imgUrl);
             $itemMaterial = str_replace($imgUrl, $realUrl, $itemMaterial);
         }

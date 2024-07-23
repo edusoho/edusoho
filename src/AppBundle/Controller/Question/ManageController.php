@@ -2,20 +2,23 @@
 
 namespace AppBundle\Controller\Question;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Question\Service\QuestionService;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Task\Service\TaskService;
 use Biz\User\Service\TokenService;
+use Codeages\Biz\ItemBank\Item\ItemParser;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
 {
+    use QuestionImportTrait;
+    use QuestionAIAnalysisTrait;
+
     public function indexAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
@@ -33,34 +36,6 @@ class ManageController extends BaseController
         ]);
     }
 
-    public function showTasksAction(Request $request, $courseSetId)
-    {
-        $courseId = $request->request->get('courseId', 0);
-        if (empty($courseId)) {
-            return $this->createJsonResponse([]);
-        }
-
-        $this->getCourseService()->tryManageCourse($courseId);
-
-        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
-
-        return $this->createJsonResponse($courseTasks);
-    }
-
-    public function showQuestionTypesNumAction(Request $request, $courseSetId)
-    {
-        $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $conditions = $request->request->all();
-        $conditions['courseSetId'] = $courseSetId;
-        $conditions['parentId'] = 0;
-
-        $typesNum = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
-        $typesNum = ArrayToolkit::index($typesNum, 'type');
-
-        return $this->createJsonResponse($typesNum);
-    }
-
     public function reEditAction(Request $request, $token)
     {
         return $this->forward('AppBundle:Question/QuestionParser:reEdit', [
@@ -70,26 +45,107 @@ class ManageController extends BaseController
         ]);
     }
 
+    public function parseProgressAction($token)
+    {
+        $data = $this->getDataFromToken($token);
+        $result = $this->getParseResult($data['jobId']);
+        if ('failed' == $result['status']) {
+            return $this->createJsonResponse([
+                'status' => 'failed',
+                'errorHtml' => $this->renderView('question-manage/read-error.html.twig', ['error' => $result['error'], 'questionBank' => ['id' => $data['questionBankId']]]),
+            ]);
+        }
+        if ('finished' == $result['status']) {
+            try {
+                $questions = $this->getQuestionParseAdapter()->adapt($result['result']);
+                $questions = $this->getItemParser()->formatData($questions);
+                $questions = $this->wrapAIAnalysis($questions);
+            } catch (\Exception $e) {
+                return $this->createJsonResponse([
+                    'status' => 'failed',
+                    'errorHtml' => $this->renderView('question-manage/read-error.html.twig', ['questionBank' => ['id' => $data['questionBankId']]]),
+                ]);
+            }
+            $this->cacheQuestions($data['cacheFilePath'], $questions);
+        }
+
+        return $this->createJsonResponse([
+            'status' => $result['status'],
+            'progress' => $result['progress'],
+        ]);
+    }
+
     public function saveImportQuestionsAction(Request $request, $token)
     {
-        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
-        $data = $token['data'];
+        $data = $this->getDataFromToken($token);
         if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
             $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
-        $postData = json_decode($request->getContent(), true);
+        $content = $this->replaceRemoteImgToLocalImg($request->getContent());
+        $content = $this->replaceFormulaToLocalImg($content);
+        $postData = json_decode($content, true);
         $this->getItemService()->importItems($postData['items'], $questionBank['itemBankId']);
 
         return $this->createJsonResponse(['goto' => $this->generateUrl('question_bank_manage_question_list', ['id' => $data['questionBankId']])]);
     }
 
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
+    public function checkDuplicatedQuestionsAction(Request $request, $token)
     {
-        return $this->createService('Course:CourseService');
+        $data = $this->getDataFromToken($token);
+        if (!$this->getQuestionBankService()->canManageBank($data['questionBankId'])) {
+            $this->createNewException(QuestionBankException::FORBIDDEN_ACCESS_BANK());
+        }
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($data['questionBankId']);
+        $fields = json_decode($request->getContent(), true);
+
+        $duplicatedMaterialIds = $this->getItemService()->findDuplicatedMaterialIds($questionBank['itemBankId'], $fields['items']);
+
+        return $this->createJsonResponse([
+            'duplicatedIds' => $duplicatedMaterialIds,
+        ]);
+    }
+
+    private function getDataFromToken($token)
+    {
+        $token = $this->getTokenService()->verifyToken('upload.course_private_file', $token);
+
+        return $token['data'];
+    }
+
+    private function getParseResult($jobId)
+    {
+        $results = $this->getQuestionParseClient()->getJob($jobId);
+        $results = array_column($results, null, 'no');
+
+        return $results[$jobId];
+    }
+
+    private function wrapAIAnalysis($items)
+    {
+        foreach ($items as &$item) {
+            foreach ($item['questions'] as &$question) {
+                $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForTeacher($question, $item);
+            }
+        }
+
+        return $items;
+    }
+
+    private function cacheQuestions($cacheFilePath, $questions)
+    {
+        $fileSystem = new Filesystem();
+        $fileSystem->dumpFile($cacheFilePath, json_encode($questions));
+    }
+
+    /**
+     * @return ItemParser
+     */
+    protected function getItemParser()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['item_parser'];
     }
 
     /**
@@ -98,22 +154,6 @@ class ManageController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
-    /**
-     * @return TaskService
-     */
-    protected function getTaskService()
-    {
-        return $this->createService('Task:TaskService');
     }
 
     /**

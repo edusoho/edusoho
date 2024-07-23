@@ -58,7 +58,7 @@
     <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
         <div class="ct-top-logo hidden-xs">
-          <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
+          <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}</a>
         </div>
         <div class="navbar-header navbar-header--mobile visible-xs">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -73,7 +73,7 @@
           <ul class="cd-clearfix ct-layout-person__ul mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">
                 <a class="user-avatar-toggle" href="javascript:;">
-                  <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+                  <img class="cd-avatar cd-avatar-xs" style="padding: 1px;" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
                   <span class="cd-ml8">{{ app.user.nickname }}</span>
                 </a>
                 <div class="dropdown-menu user-dropdown">
@@ -97,7 +97,7 @@
               <i class="es-icon es-icon-site icon-home"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}
             </a>
             <div class="dropdown-menu" style="width: 392px;left: -212px;">
-              <div class="js-mall-card" style="position: absolute;top:0;left:0;z-index:1;padding: 24px;background-color: #fff;border-radius: 4px;">
+              <div class="js-mall-card" style="position: absolute;top:-2000px;left:0;z-index:1;padding: 24px;background-color: #fff;border-radius: 4px;">
                 <div style="display: flex;width: 300px;margin-bottom:20px;align-items:center;">
                   <div style="width: 124px;height:58px;text-align: center;">
                     <img src="{{ asset(setting('site.logo')|default('/static-dist/app/img/admin-v2/default-logo@2x.png')) }}" 
@@ -134,7 +134,7 @@
                   </div>
                   <div style="display: flex;border: 1px solid #E5E6EB;border-radius: 2px;line-height:32px;font-weight:400;">
                     <div class="text-overflow js-marketing-url" 
-                      style="width: 225px;height: 32px;padding:0 12px;border-right: 1px solid #E5E6EB;color: #1D2129;text-align:center;">
+                      style="width: 225px;height: 32px;padding:0 12px;border-right: 1px solid #E5E6EB;color: #1D2129;">
                     </div>
                     <div class="js-copy-link"
                       data-clipboard-text=""
@@ -252,6 +252,10 @@
     {% block faqSDK %}
       {% include 'admin-v2/faq/sdk.html.twig' %}
     {% endblock %}
+
+    {% if setting('copyright.thirdCopyright') != 1 and has_permission('admin_v2_cloud_center') %}
+      <input type="hidden" name="aiSurveyUrl" value="{{ path('admin_v2_ai_survey') }}">
+    {% endif %}
   </body>
 {% endblock %}
 </html>

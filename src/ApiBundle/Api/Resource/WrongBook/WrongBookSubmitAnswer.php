@@ -27,7 +27,7 @@ class WrongBookSubmitAnswer extends AbstractResource
 
         $assessment = $this->getAssessmentService()->showAssessment($exerciseRecord['assessment_id']);
         $answerRecord = $this->getAnswerService()->submitAnswer($assessmentResponse);
-        $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
         $scene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
         $testpaperWrapper = new TestpaperWrapper();
 

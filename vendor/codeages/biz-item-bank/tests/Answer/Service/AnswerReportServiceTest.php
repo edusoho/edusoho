@@ -157,14 +157,12 @@ class AnswerReportServiceTest extends IntegrationTestCase
         $this->assertEquals(count($answerReports), 1);
     }
 
-
     public function testCount()
     {
         $this->fakeAnswerReport();
-        $answerReports = $this->getAnswerReportService()->count(['answer_scene_id' => 1]);
-        $this->assertEquals(count($answerReports), 1);
+        $answerReportsCount = $this->getAnswerReportService()->count(['answer_scene_id' => 1]);
+        $this->assertEquals($answerReportsCount, 1);
     }
-
 
     protected function fakeAssessment()
     {
@@ -194,6 +192,7 @@ class AnswerReportServiceTest extends IntegrationTestCase
             'assessment_id' => 1,
             'answer_record_id' => 1,
             'answer_scene_id' => 1,
+            'user_id' => 1,
         ]);
 
         $answerQuestionReports = [
@@ -201,6 +200,7 @@ class AnswerReportServiceTest extends IntegrationTestCase
                 'id' => 1,
                 'identify' => '1_1',
                 'answer_record_id' => '1',
+                'assessment_id' => '1',
                 'total_score' => 2,
                 'section_id' => '1',
                 'item_id' => '1',
@@ -212,6 +212,7 @@ class AnswerReportServiceTest extends IntegrationTestCase
                 'id' => 2,
                 'identify' => '1_2',
                 'answer_record_id' => '1',
+                'assessment_id' => '1',
                 'total_score' => 2,
                 'section_id' => '1',
                 'item_id' => '2',
@@ -223,6 +224,7 @@ class AnswerReportServiceTest extends IntegrationTestCase
                 'id' => 3,
                 'identify' => '1_3',
                 'answer_record_id' => '1',
+                'assessment_id' => '1',
                 'total_score' => 2,
                 'section_id' => '1',
                 'item_id' => '2',
@@ -234,6 +236,7 @@ class AnswerReportServiceTest extends IntegrationTestCase
                 'id' => 4,
                 'identify' => '1_4',
                 'answer_record_id' => '1',
+                'assessment_id' => '1',
                 'total_score' => 2,
                 'section_id' => '1',
                 'item_id' => '2',
@@ -245,6 +248,7 @@ class AnswerReportServiceTest extends IntegrationTestCase
                 'id' => 5,
                 'identify' => '1_5',
                 'answer_record_id' => '1',
+                'assessment_id' => '1',
                 'total_score' => 2,
                 'section_id' => '1',
                 'item_id' => '2',

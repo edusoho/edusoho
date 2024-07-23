@@ -84,7 +84,7 @@ class Activity
         return true;
     }
 
-    public function isFinished($activityId)
+    public function isFinished($activityId, $userId = 0)
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         if ('time' === $activity['finishType']) {

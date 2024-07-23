@@ -18,6 +18,7 @@ use Biz\WeChat\Dao\SubscribeRecordDao;
 use Biz\WeChat\Dao\UserWeChatDao;
 use Biz\WeChat\Service\WeChatService;
 use Biz\WeChat\WeChatException;
+use Biz\WeChat\WechatNotificationType;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Event\Event;
@@ -25,6 +26,7 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use ESCloud\SDK\Service\NotificationService;
 use QiQiuYun\SDK\Constants\NotificationChannelTypes;
 use QiQiuYun\SDK\Constants\WeChatPlatformTypes;
+use Ramsey\Uuid\Uuid;
 
 class WeChatServiceImpl extends BaseService implements WeChatService
 {
@@ -44,7 +46,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function saveWeChatTemplateSetting($key, $fields, $notificationType)
     {
         $settingName = 'wechat';
-        if ('messageSubscribe' == $notificationType) {
+        if (WechatNotificationType::MESSAGE_SUBSCRIBE == $notificationType) {
             $settingName = 'wechat_notification';
         }
         $wechatSetting = $this->getSettingService()->get($settingName, []);
@@ -68,9 +70,9 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             return 'wechat';
         }
 
-        $notificationSetting = $this->getSettingService()->get('wechat_notification', ['notification_type' => 'serviceFollow']);
+        $notificationSetting = $this->getSettingService()->get('wechat_notification', ['notification_type' => WechatNotificationType::SERVICE_FOLLOW]);
 
-        return 'serviceFollow' === $notificationSetting['notification_type'] ? 'wechat_agent' : 'wechat_subscribe';
+        return WechatNotificationType::SERVICE_FOLLOW === $notificationSetting['notification_type'] ? 'wechat_agent' : 'wechat_subscribe';
     }
 
     public function getWeChatUser($id)
@@ -163,6 +165,11 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getUserWeChatDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function findWechatUsersByUserIds(array $userIds)
+    {
+        return $this->getUserWeChatDao()->findByUserIds($userIds);
+    }
+
     public function batchSyncOfficialWeChatUsers($nextOpenId = '')
     {
         $biz = $this->biz;
@@ -238,13 +245,49 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                     'openId' => $token['openid'],
                     'userId' => $user['id'],
                 ]);
-            } elseif ($weChatUser['id'] != $user['id']) {
+            } elseif ($weChatUser['userId'] != $user['id']) {
                 $this->updateWeChatUser($weChatUser['id'], [
                     'userId' => $user['id'],
                 ]);
             }
+            if (!empty($token['username'])) {
+                $this->getUserWeChatDao()->update(['userId' => $user['id']], [
+                    'nickname' => urlencode($token['username']),
+                ]);
+            }
         } catch (\Exception $e) {
-            $this->getLogger()->error('WeChatFreshOfficialUser_'.$e->getMessage(), $e->getTrace());
+            $this->getLogger()->error('WeChatFreshOfficialUser_' . $e->getMessage(), $e->getTrace());
+        }
+    }
+
+    public function freshOpenAppWeChatUserWhenLogin($user, $token)
+    {
+        if (empty($user)) {
+            return;
+        }
+
+        try {
+            $weChatUser = $this->getWeChatUserByTypeAndOpenId(WeChatService::OPEN_TYPE, $token['openid']);
+            if (empty($weChatUser)) {
+                $this->createWeChatUser([
+                    'type' => WeChatService::OPEN_TYPE,
+                    'appId' => $this->getSettingService()->node('login_bind.weixinweb_key', ''),
+                    'unionId' => $token['userId'],
+                    'openId' => $token['openid'],
+                    'userId' => $user['id'],
+                ]);
+            } elseif ($weChatUser['userId'] != $user['id']) {
+                $this->updateWeChatUser($weChatUser['id'], [
+                    'userId' => $user['id'],
+                ]);
+            }
+            if (!empty($token['username'])) {
+                $this->getUserWeChatDao()->update(['userId' => $user['id']], [
+                    'nickname' => urlencode($token['username']),
+                ]);
+            }
+        } catch (\Exception $e) {
+            $this->getLogger()->error('WeChatFreshWebUser_' . $e->getMessage(), $e->getTrace());
         }
     }
 
@@ -328,7 +371,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
     public function isSubscribeSmsEnabled($smsType = '')
     {
         $wechatSetting = $this->getSettingService()->get('wechat_notification', []);
-        if (empty($wechatSetting['is_authorization']) || 'messageSubscribe' !== $wechatSetting['notification_type']) {
+        if (empty($wechatSetting['is_authorization']) || WechatNotificationType::MESSAGE_SUBSCRIBE !== $wechatSetting['notification_type']) {
             return false;
         }
 
@@ -348,7 +391,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return !empty($wechatSetting['templates'][$smsType]['status']);
     }
 
-    public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = [])
+    public function sendSubscribeSms($smsType, array $userIds, $templateId, array $params = [], $batchId = 0)
     {
         if (empty($userIds)) {
             return [];
@@ -382,7 +425,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             return [];
         }
 
-        return $this->getNotificationService()->createSmsNotificationRecord($params, ['key' => $smsType, 'smsTemplateId' => $templateId, 'sendNum' => count($mobiles)], 'wechat_subscribe');
+        return $this->getNotificationService()->createSmsNotificationRecord($params, ['key' => $smsType, 'smsTemplateId' => $templateId, 'sendNum' => count($mobiles)], 'wechat_subscribe', $batchId);
     }
 
     public function sendSubscribeWeChatNotification($templateCode, $logName, $list, $batchId = 0)
@@ -404,6 +447,35 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         return $this->getNotificationService()->createWeChatNotificationRecord($result['sn'], $templateCode, $list[0]['template_args'], 'wechat_subscribe', $batchId);
     }
 
+    public function sendSubscribeWeChatNotificationLocal($templateCode, $logName, $notifications)
+    {
+        $client = $this->biz['wechat.subscribe_template_message_client'];
+        $successCount = 0;
+        $failReason = [];
+        foreach ($notifications as $notification) {
+            try {
+                $result = $client->sendMessage($notification['to_id'], $notification['template_id'], $notification['template_args'], ['url' => $notification['goto']['url']]);
+                if (empty($result['errcode'])) {
+                    $successCount++;
+                } else {
+                    $failReason[] = $result['errcode'];
+                }
+            } catch (\Exception $e) {
+                $this->getLogService()->error(AppLoggerConstant::NOTIFY, 'send_wechat_subscribe_notification', "{$logName}:发送微信订阅通知失败:template:{$templateCode}", ['error' => $e->getMessage()]);
+            }
+        }
+        $notificationBatch = $this->getNotificationService()->createWeChatNotificationRecord(Uuid::uuid4()->getHex(), $templateCode, $notifications[0]['template_args'], 'wechat_subscribe');
+        $this->getNotificationService()->updateEvent($notificationBatch['eventId'], [
+            'totalCount' => count($notifications),
+            'succeedCount' => $successCount,
+            'status' => 'finish',
+            'reason' => $failReason,
+        ]);
+        $this->getNotificationService()->updateBatch($notificationBatch['id'], ['status' => 'finished']);
+
+        return $notificationBatch;
+    }
+
     /**
      * @param $templateCode
      * templateCode 模板code
@@ -419,7 +491,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         $setting = $this->getSettingService()->get('wechat_notification', []);
-        if (empty($setting['is_authorization']) || 'messageSubscribe' !== $setting['notification_type']) {
+        if (empty($setting['is_authorization']) || WechatNotificationType::MESSAGE_SUBSCRIBE !== $setting['notification_type']) {
             return null;
         }
 
@@ -453,7 +525,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
-        if (empty($notificationSetting['is_authorization']) || 'serviceFollow' !== $notificationSetting['notification_type']) {
+        if (empty($notificationSetting['is_authorization']) || WechatNotificationType::SERVICE_FOLLOW !== $notificationSetting['notification_type']) {
             return null;
         }
 
@@ -490,7 +562,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         $templateParam = [];
         $settingName = 'wechat';
 
-        if ('messageSubscribe' == $notificationType) {
+        if (WechatNotificationType::MESSAGE_SUBSCRIBE == $notificationType) {
             $settingName = 'wechat_notification';
             $templateParam = [
                 'templateType' => 'subscribe',
@@ -507,7 +579,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 if (!empty($wechatSetting['is_authorization'])) {
                     $data = $this->getSDKWeChatService()->createNotificationTemplate($template['id'], $templateParam);
                 }
-                if (empty($wechatSetting['is_authorization']) && 'serviceFollow' == $notificationType) {
+                if (empty($wechatSetting['is_authorization']) && WechatNotificationType::SERVICE_FOLLOW == $notificationType) {
                     $data = $client->addTemplate($template['id']);
                 }
             } catch (\Exception $e) {
@@ -553,13 +625,13 @@ class WeChatServiceImpl extends BaseService implements WeChatService
         }
 
         $settingName = 'wechat';
-        if ('messageSubscribe' == $notificationType) {
+        if (WechatNotificationType::MESSAGE_SUBSCRIBE == $notificationType) {
             $settingName = 'wechat_notification';
         }
         $wechatSetting = $this->getSettingService()->get($settingName);
 
         if (!empty($wechatSetting['templates'][$key]['templateId'])) {
-            if ('serviceFollow' == $notificationType) {
+            if (WechatNotificationType::SERVICE_FOLLOW == $notificationType) {
                 if (!empty($wechatSetting['is_authorization'])) {
                     $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId']);
                 } else {
@@ -567,7 +639,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 }
             }
 
-            if ('messageSubscribe' == $notificationType) {
+            if (WechatNotificationType::MESSAGE_SUBSCRIBE == $notificationType) {
                 $data = $this->getSDKWeChatService()->deleteNotificationTemplate($wechatSetting['templates'][$key]['templateId'], ['templateType' => 'subscribe']);
             }
 
@@ -609,7 +681,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
                 $notificationSetting = $this->getSettingService()->get('wechat_notification', []);
                 $biz['ESCloudSdk.notification']->closeAccount();
                 $wechatChannel = $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT);
-                $subscribeChannel = empty($notificationSetting) || 'messageSubscribe' != $notificationSetting['notification_type'] ? true : $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE);
+                $subscribeChannel = empty($notificationSetting) || WechatNotificationType::MESSAGE_SUBSCRIBE != $notificationSetting['notification_type'] ? true : $biz['ESCloudSdk.notification']->closeChannel(NotificationChannelTypes::WECHAT_SUBSCRIBE);
                 $this->deleteJobs();
             }
         } catch (\RuntimeException $e) {
@@ -663,7 +735,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
             ['userIds' => $userIds],
             ['lastRefreshTime' => 'ASC'],
             0,
-            count($userIds),
+            PHP_INT_MAX,
             ['id', 'openId', 'unionId', 'userId']
         );
 
@@ -805,7 +877,7 @@ class WeChatServiceImpl extends BaseService implements WeChatService
 
     private function weChatUserFilter($fields)
     {
-        return ArrayToolkit::parts($fields, ['appId', 'type', 'userId', 'openId', 'unionId', 'data', 'lastRefreshTime']);
+        return ArrayToolkit::parts($fields, ['appId', 'type', 'userId', 'openId', 'unionId', 'isSubscribe', 'nickname', 'profilePicture', 'data', 'lastRefreshTime', 'subscribeTime']);
     }
 
     /**

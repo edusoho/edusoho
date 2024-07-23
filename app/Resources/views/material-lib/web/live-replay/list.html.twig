@@ -68,7 +68,7 @@
       <td>
         <div class="btn-group">
           {% if tab == 'my' %}
-            <a class="cd-btn btn cd-btn-primary {% if tab == 'my' %}btn-group--left{% endif %} js-detail-btn" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_live_replay_edit', {'liveActivityId':replay.id}) }}">
+            <a class="cd-btn btn cd-btn-primary {% if tab == 'my' %}btn-group--left{% endif %} js-detail-btn" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_live_replay_edit', {'activityId':replay.lessonId}) }}">
                 {{'material_lib.btn.edit'|trans}}
             </a>
             <button type="button" class="cd-btn cd-btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >

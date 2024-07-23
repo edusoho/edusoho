@@ -6,7 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
-use Biz\Course\Service\CourseService;
+use Biz\Course\CourseException;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -25,6 +25,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     public function update(ApiRequest $request, $courseId, $taskId, $event)
     {
+        $this->checkCourseCanLearn($courseId);
         $this->checkEvents($request, $event, $taskId, $courseId);
         $data = $request->request->all();
 
@@ -43,12 +44,17 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function start(ApiRequest $request, $courseId, $taskId, $data)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $sign = date('YmdHis').'-'.$user['id'].'-'.$activity['id'].'-'.substr(md5($user['id'].$data['client'].microtime()), 0, 6);
-        list($canCreate, $denyReason) = $this->getLearnControlService()->checkCreateNewFlow($user['id'], $request->request->get('lastSign', ''));
-        if (!$canCreate) {
+        if ($this->needLearnControl($task['type'])) {
+            list($canCreate, $denyReason) = $this->getLearnControlService()->checkCreateNewFlow($user['id'], $request->request->get('lastSign', ''));
+        } else {
+            list($canCreate, $denyReason) = [true, ''];
+        }
+        if (!$canCreate || $this->getTaskService()->isTaskLocked($taskId)) {
             return [
                 'taskResult' => null,
                 'nextTask' => null,
@@ -110,13 +116,14 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function doing(ApiRequest $request, $courseId, $taskId, $data)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        if (in_array($task['type'], ['live', 'testpaper', 'homework'])) {
-            list($canDoing, $denyReason) = [true, ''];
+        if ($this->needLearnControl($task['type'])) {
+            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
         } else {
-            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 1));
+            list($canDoing, $denyReason) = [true, ''];
         }
         if (!empty($data['watchData'])) {
             $watchData = $data['watchData'];
@@ -191,6 +198,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function finish(ApiRequest $request, $courseId, $taskId, $data)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $course = $this->getCourseService()->getCourse($courseId);
@@ -227,6 +235,22 @@ class CourseTaskEventV2 extends AbstractResource
             ],
         ];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_FINISH, $triggerData);
+
+        if (!$this->getTaskService()->isFinished($taskId) && empty($course['enableFinish'])) {
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+
+            return [
+                'taskResult' => $taskResult,
+                'nextTask' => null,
+                'completionRate' => null,
+                'record' => $record,
+                'learnControl' => [
+                    'allowLearn' => $canDoing,
+                    'denyReason' => $denyReason,
+                ],
+                'learnedTime' => $this->getMyLearnedTime($activity),
+            ];
+        }
         if ($course['enableFinish']) {
             $result = $this->getTaskService()->finishTaskResult($taskId);
         }
@@ -255,6 +279,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function watching(ApiRequest $request, $courseId, $taskId, $data, $record)
     {
+        $this->checkCourseCanLearn($courseId);
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         if ('video' !== $task['type']) {
@@ -294,6 +319,19 @@ class CourseTaskEventV2 extends AbstractResource
             'taskResult' => $result,
             'record' => $record,
         ];
+    }
+
+    private function needLearnControl($type)
+    {
+        return !in_array($type, ['live', 'testpaper', 'homework']);
+    }
+
+    protected function checkCourseCanLearn($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if ('0' == $course['canLearn']) {
+            throw CourseException::CLOSED_COURSE();
+        }
     }
 
     protected function checkEvents(ApiRequest $request, $eventName, $taskId, $courseId)

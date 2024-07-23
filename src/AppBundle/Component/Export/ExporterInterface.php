@@ -28,4 +28,6 @@ interface ExporterInterface
      * @return array
      */
     public function getContent($start, $limit);
+
+    public function postExport();
 }

@@ -1,4 +1,4 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'admin.user.manage.user_show.fields.heading_title'|trans}}{% endblock %}
 
@@ -98,9 +98,11 @@
     <th>{{'user.fields.mobile_label'|trans}}</th>
     <td>
       {% if user.verifiedMobile %}
-        {{ user.verifiedMobile|default('')}}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span> 
+        {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+        <span class="text-success">({{ 'user.fields.mobile_label.bind'|trans }})</span>
       {% elseif profile.mobile %}
-        {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
+        {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
+        <span class="text-danger">({{ 'user.fields.mobile_label.no_bind'|trans }})</span>
       {% else %}
         {{ profile.mobile|default('admin.user.fields.empty'|trans) }}
       {% endif %}

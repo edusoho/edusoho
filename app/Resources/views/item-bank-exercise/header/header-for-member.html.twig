@@ -1,4 +1,4 @@
-{% extends 'item-bank-exercise/header/header-layout.html.twig' %}
+{% extends 'item-bank-exercise/header/header-for-member-layout.html.twig' %}
 
 {% set page_type = 'member' %}
 
@@ -21,6 +21,10 @@
           </span>
         </div>
       </div>
+      <a href="javascript:;" class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#modal" 
+        data-url="{{ path('course_exit_modal', { action: path('item_bank_exercise_exit', { exerciseId: exercise.id }), type: 'itemBank' }) }}">
+        <i class="es-icon es-icon-exit"></i>
+		  </a>
       <div class="exercise-header-qrcode">
         <div class="tip">
           {{ 'site.tips.exercise_qrcode_tips'|trans }}

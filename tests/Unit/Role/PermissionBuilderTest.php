@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Tests;
+namespace Tests\Unit\Role;
 
 use Biz\BaseTestCase;
 use Biz\CloudPlatform\Service\AppService;
@@ -17,6 +17,7 @@ class PermissionBuilderTest extends BaseTestCase
         $expected = [
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin.yml',
             $rootDir.'/../src/AppBundle/Resources/config/menus_admin_v2.yml',
+            $rootDir.'/../src/MarketingMallBundle/Resources/config/menus_admin_v2.yml',
         ];
 
         $this->assertEquals($expected, PermissionBuilder::instance()->getPermissionConfig());

@@ -140,7 +140,7 @@ export default class Deadline {
           },
           day: function () {
             return $('[name=day]').val();
-          },
+          }
         }
       },
       messages: {

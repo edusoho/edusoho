@@ -22,6 +22,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -94,6 +95,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     public function onAnswerFinished(Event $event)
     {
         $answerReport = $event->getSubject();
+        $answerReport = $this->getAnswerReportService()->getSimple($answerReport['id']);
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
         if (empty($activity)) {
@@ -948,6 +950,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     public function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
     }
 
     /**

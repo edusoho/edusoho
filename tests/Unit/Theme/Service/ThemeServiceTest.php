@@ -13,7 +13,7 @@ class ThemeServiceTest extends BaseTestCase
 
         $isAllowed = $this->getThemeService()->isAllowedConfig();
 
-        $this->assertFalse($isAllowed);
+        $this->assertTrue($isAllowed);
     }
 
     public function testIsAllowedConfigWithEmptyCurrentTheme()
@@ -30,7 +30,7 @@ class ThemeServiceTest extends BaseTestCase
         );
         $isAllowed = $this->getThemeService()->isAllowedConfig();
 
-        $this->assertFalse($isAllowed);
+        $this->assertTrue($isAllowed);
     }
 
     public function testIsAllowedConfigWithTrue()
@@ -223,7 +223,10 @@ class ThemeServiceTest extends BaseTestCase
 
         $config = $this->getThemeService()->resetConfig();
 
-        $this->assertEquals([], $config['config']);
+        $this->assertEquals('default', $config['config']['maincolor']);
+        $this->assertEquals('default', $config['config']['navigationcolor']);
+        $this->assertEquals(9, count($config['config']['blocks']['left']));
+        $this->assertEquals('simple', $config['config']['bottom']);
     }
 
     public function testResetCurrentConfig()
@@ -233,7 +236,10 @@ class ThemeServiceTest extends BaseTestCase
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals([], $config['config']);
+        $this->assertEquals('default', $config['config']['maincolor']);
+        $this->assertEquals('default', $config['config']['navigationcolor']);
+        $this->assertEquals(9, count($config['config']['blocks']['left']));
+        $this->assertEquals('simple', $config['config']['bottom']);
     }
 
     public function testResetCurrentConfigWithEmpty()
@@ -252,7 +258,10 @@ class ThemeServiceTest extends BaseTestCase
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals([], $config['config']);
+        $this->assertEquals('default', $config['config']['maincolor']);
+        $this->assertEquals('default', $config['config']['navigationcolor']);
+        $this->assertEquals(9, count($config['config']['blocks']['left']));
+        $this->assertEquals('simple', $config['config']['bottom']);
     }
 
     public function testResetCurrentConfigWithNotExistThemeSetting()
@@ -273,7 +282,10 @@ class ThemeServiceTest extends BaseTestCase
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals([], $config['config']);
+        $this->assertEquals('default', $config['config']['maincolor']);
+        $this->assertEquals('default', $config['config']['navigationcolor']);
+        $this->assertEquals(9, count($config['config']['blocks']['left']));
+        $this->assertEquals('simple', $config['config']['bottom']);
     }
 
     public function testResetCurrentConfigWithNotExistThemeAndConfig()
@@ -292,7 +304,10 @@ class ThemeServiceTest extends BaseTestCase
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals([], $config['config']);
+        $this->assertEquals('default', $config['config']['maincolor']);
+        $this->assertEquals('default', $config['config']['navigationcolor']);
+        $this->assertEquals(9, count($config['config']['blocks']['left']));
+        $this->assertEquals('simple', $config['config']['bottom']);
     }
 
     public function testChangeThemeWithEmptyTheme()

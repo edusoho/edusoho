@@ -1,4 +1,4 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'admin_v2.user.destroy_account_record.detail'|trans}}{% endblock %}
 
@@ -8,7 +8,13 @@
     <div class="col-md-3 control-label">
       <label>{{ 'admin_v2.user.destroy_account_record.origin_mobile'|trans }}</label>
     </div>
-    <div class="col-md-8 controls pts">{{ record.mobile|default('--') }}</div>
+    <div class="col-md-8 controls pts">
+      {% if record.mobile|default() %}
+        {% include 'user-mobile-mask.html.twig' with { mobile: record.mobile } %}
+      {% else %}
+        --
+      {% endif %}
+    </div>
   </div>
   <div class="form-group">
     <div class="col-md-3 control-label">

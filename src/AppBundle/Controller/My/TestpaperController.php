@@ -10,7 +10,6 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Testpaper\Service\TestpaperService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -186,14 +185,6 @@ class TestpaperController extends BaseController
             'activities' => $activities,
             'nav' => 'testpaper',
         ]);
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

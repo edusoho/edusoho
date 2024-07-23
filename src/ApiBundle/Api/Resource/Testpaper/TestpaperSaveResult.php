@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Testpaper\TestpaperException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -25,7 +26,7 @@ class TestpaperSaveResult extends AbstractResource
             throw TestpaperException::FORBIDDEN_ACCESS_TESTPAPER();
         }
 
-        if ($testpaperRecord && !in_array($testpaperRecord['status'], ['doing', 'paused'])) {
+        if ($testpaperRecord && !in_array($testpaperRecord['status'], [AnswerRecordStatus::DOING, AnswerRecordStatus::PAUSED])) {
             throw TestpaperException::FORBIDDEN_DUPLICATE_COMMIT();
         }
 

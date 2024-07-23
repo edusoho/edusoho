@@ -36,6 +36,7 @@ use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Order\Service\OrderService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
@@ -106,6 +107,44 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($classroomCourses as $key => $classroomCourse) {
             $sortedCourses[$key] = $courses[$classroomCourse['courseId']];
             $sortedCourses[$key]['classroom_course_id'] = $classroomCourse['id'];
+        }
+
+        return $sortedCourses;
+    }
+
+    public function findSortedCoursesByClassroomIdAndTitle(int $classroomId, string $title)
+    {
+        $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
+        if (empty($classroomCourses)) {
+            return [];
+        }
+
+        $courses = $this->getCourseService()->findCoursesByIdsAndCourseSetTitle(ArrayToolkit::column($classroomCourses, 'courseId'), $title);
+        if (empty($courses)) {
+            return [];
+        }
+
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
+        $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
+        foreach ($courses as &$course) {
+            $curCourseSet = $courseSets[$course['courseSetId']];
+            $course['courseSet'] = $curCourseSet;
+            $course['courseNum'] = $courseNums[$curCourseSet['id']]['courseNum'];
+            $course['parentCourseSetId'] = $curCourseSet['parentId'];
+        }
+
+        $sortedCourses = [];
+        $courses = ArrayToolkit::index($courses, 'id');
+        foreach ($classroomCourses as $key => $classroomCourse) {
+            if (in_array($classroomCourse['courseId'], $courseIds)) {
+                $sortedCourses[$key] = $courses[$classroomCourse['courseId']];
+                $sortedCourses[$key]['classroom_course_id'] = $classroomCourse['id'];
+            }
         }
 
         return $sortedCourses;
@@ -440,6 +479,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $tagIds = empty($fields['tagIds']) ? [] : $fields['tagIds'];
         $this->updateClassroomTags($id, $tagIds);
+        if (!empty($fields['covers'])) {
+            $this->changePicture($id, $fields['covers']);
+        }
         $this->dispatchEvent('classroom.info.update', ['id' => $id]);
 
         return $this->updateClassroom($id, $fields);
@@ -516,6 +558,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'maxRate',
             'buyable',
             'showable',
+            'canLearn',
             'orgCode',
             'orgId',
             'expiryMode',
@@ -584,7 +627,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($classroomId);
 
-        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date . ' 23:59:59');
+        $date = TimeMachine::isTimestamp($date) ? $date : strtotime($date.' 23:59:59');
         if ($this->checkDeadlineForUpdateDeadline($classroomId, $userIds, $date)) {
             $members = $this->findMembersByClassroomIdAndUserIds($classroomId, $userIds);
             $updateDeadlines = [];
@@ -704,29 +747,33 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     /**
      * @param $id
+     *
      * @return bool|mixed
+     *
      * @throws \Exception
      */
     public function deleteClassroom($id)
     {
+        $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+        }
+
+        if ('published' === $classroom['status']) {
+            $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
+        }
+        $this->tryManageClassroom($id, 'admin_classroom_delete');
+        if ('error' === $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom')) {
+            throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
+        }
+
         try {
             $this->beginTransaction();
-            $classroom = $this->getClassroom($id);
-            if (empty($classroom)) {
-                $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
-            }
-
-            if ('published' === $classroom['status']) {
-                $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
-            }
-            $this->tryManageClassroom($id, 'admin_classroom_delete');
-            if ($this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom') === 'error') {
-                throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
-            }
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
             $this->getClassroomGoodsMediator()->onDelete($classroom);
             $this->dispatchEvent('classroom.delete', $classroom);
+            $this->dispatchEvent('wrong_question_pool.delete', ['target_id' => $id, 'target_type' => 'classroom']);
 
             $this->commit();
         } catch (\Exception $exception) {
@@ -802,9 +849,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (0 == $classroom['courseNum']) {
             $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
         }
-        $classroom = $this->updateClassroom($id, ['status' => 'published']);
+        $classroom = $this->updateClassroom($id, ['status' => 'published', 'canLearn' => '1']);
 
         $this->getClassroomGoodsMediator()->onPublish($classroom);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->canLearningByIds($courseIds);
         $this->dispatchEvent('classroom.publish', new Event($classroom));
 
         return $classroom;
@@ -814,8 +863,22 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
-        $classroom = $this->updateClassroom($id, ['status' => 'closed']);
+        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+        $this->getCourseSetService()->banLearningByIds($courseIds);
+        $this->dispatchEvent('classroom.close', new Event($classroom));
+
+        return $classroom;
+    }
+
+    public function unpublishedClassroom($id)
+    {
+        $this->tryManageClassroom($id, 'admin_classroom_close');
+
+        $classroom = $this->updateClassroom($id, ['status' => 'unpublished']);
+        $this->getClassroomGoodsMediator()->onClose($classroom);
+        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->dispatchEvent('classroom.close', new Event($classroom));
 
         return $classroom;
@@ -836,9 +899,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $fileIds = ArrayToolkit::index($data, 'type');
         $version = ClassroomService::COVER_SIZE_VERSION;
         $fields = [
-            'smallPicture' => $files[$fileIds['small']['id']]['uri'] . "?version={$version}",
-            'middlePicture' => $files[$fileIds['middle']['id']]['uri'] . "?version={$version}",
-            'largePicture' => $files[$fileIds['large']['id']]['uri'] . "?version={$version}",
+            'smallPicture' => $files[$fileIds['small']['id']]['uri']."?version={$version}",
+            'middlePicture' => $files[$fileIds['middle']['id']]['uri']."?version={$version}",
+            'largePicture' => $files[$fileIds['large']['id']]['uri']."?version={$version}",
         ];
 
         $this->deleteNotUsedPictures($classroom);
@@ -889,11 +952,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         try {
             $this->beginTransaction();
+            $classroomCouresIds = $courseIdsArray = [];
             foreach ($courses as $course) {
                 $classroomRef = $this->getClassroomCourse($classroomId, $course['id']);
                 if (empty($classroomRef)) {
                     continue;
                 }
+                $classroomCouresIds[] = $classroomRef['id'];
+                $courseIdsArray[] = $course['id'];
                 // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
                 if (0 != $classroomRef['parentCourseId']) {
                     $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
@@ -901,24 +967,28 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if ($real) {
                     $this->getCourseSetService()->deleteCourseSet($course['courseSetId']);
                 }
-                $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
-                $infoData = [
-                    'classroomId' => $classroom['id'],
-                    'title' => $classroom['title'],
-                    'courseSetId' => $course['id'],
-                    'courseSetTitle' => $course['courseSetTitle'],
-                ];
                 $this->getLogService()->info(
                     'classroom',
                     'delete_course',
                     "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})",
-                    $infoData
-                );
-                $this->dispatchEvent(
-                    'classroom.course.delete',
-                    new Event($classroom, ['deleteCourseId' => $course['id']])
+                    [
+                        'classroomId' => $classroom['id'],
+                        'title' => $classroom['title'],
+                        'courseSetId' => $course['courseSetId'],
+                        'courseSetTitle' => $course['courseSetTitle'],
+                    ]
                 );
             }
+            //批量执行删除操作
+            if ($classroomCouresIds) {
+                $this->getClassroomCourseDao()->deleteByIds($classroomCouresIds);
+            }
+
+            $this->dispatchEvent(
+                'classroom.courses.delete',
+                new Event($classroom, ['deleteCourseIds' => $courseIdsArray])
+            );
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -958,7 +1028,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
         }
 
-        $fields = ['remark' => empty($remark) ? '' : (string)$remark];
+        $fields = ['remark' => empty($remark) ? '' : (string) $remark];
 
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
@@ -985,6 +1055,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             foreach ($member['role'] as $key => $value) {
                 if ('student' == $value) {
                     unset($member['role'][$key]);
+                } elseif ('assistant' == $value) {
+                    unset($member['role'][$key]);
                 }
             }
 
@@ -1004,7 +1076,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'type' => 'remove',
         ];
         $user = $this->getUserService()->getUser($member['userId']);
-        $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
+        if (isset($info['reason_type']) && 'remove' == $info['reason_type']) {
+            $this->getNotificationService()->notify($user['id'], 'classroom-student', $message);
+        }
 
         $infoData = [
             'classroomId' => $classroom['id'],
@@ -1103,7 +1177,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
         }
 
-        if (!in_array($classroom['status'], ['published', 'closed'])) {
+        if (!in_array($classroom['status'], ['published', 'closed', 'unpublished'])) {
             $this->createNewException(ClassroomException::UNPUBLISHED_CLASSROOM());
         }
 
@@ -1276,7 +1350,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $user = $this->getUserService()->getUser($userId);
         if (empty($user)) {
             $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1437,6 +1511,32 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $sortedCourses;
     }
 
+    public function findSortedCoursesByClassroomIdAndCourseSetTitle(int $classroomId, string $title)
+    {
+        $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIdsAndCourseSetTitle($courseIds, $title);
+        $courses = ArrayToolkit::index($courses, 'id');
+        $coursesIds = ArrayToolkit::column($courses, 'id');
+
+        $sortedCourses = [];
+        $int = 0;
+        foreach ($classroomCourses as $classroomCourse) {
+            if (!in_array($classroomCourse['courseId'], $coursesIds)) {
+                continue;
+            }
+            $sortedCourses[$int] = $courses[$classroomCourse['courseId']];
+            if (empty($sortedCourses[$int]['drainage'])) {
+                $sortedCourses[$int]['drainage'] = ['enabled' => 0, 'image' => '', 'text' => ''];
+            }
+            ++$int;
+        }
+
+        unset($courses);
+
+        return $sortedCourses;
+    }
+
     public function getClassroomStudentCount($classroomId)
     {
         return $this->getClassroomMemberDao()->countStudents($classroomId);
@@ -1582,7 +1682,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (empty($user)) {
             $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1630,7 +1730,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (empty($user)) {
             $user = $this->getUserService()->getUserByUUID($userId);
-            if(empty($user)) {
+            if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
         }
@@ -1672,7 +1772,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if (empty($user)) {
                 $user = $this->getUserService()->getUserByUUID($userId);
-                if(empty($user)) {
+                if (empty($user)) {
                     $this->createNewException(UserException::NOTFOUND_USER());
                 }
             }
@@ -1720,7 +1820,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $intList = ['buyable', 'showable'];
         foreach ($intList as $key) {
             if (isset($conditions[$key])) {
-                $conditions[$key] = (int)$conditions[$key];
+                $conditions[$key] = (int) $conditions[$key];
             }
         }
 
@@ -2092,7 +2192,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $id,
             [
                 'recommended' => 1,
-                'recommendedSeq' => (int)$number,
+                'recommendedSeq' => (int) $number,
                 'recommendedTime' => time(),
             ]
         );
@@ -2154,6 +2254,18 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function findUserJoinedClassroomIds($userId)
     {
         return $this->getClassroomMemberDao()->findByUserId($userId);
+    }
+
+    public function updateMembers($conditions, $updateFields)
+    {
+        return $this->getClassroomMemberDao()->update($conditions, $updateFields);
+    }
+
+    public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
+    {
+        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+
+        return $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
     }
 
     public function updateMember($id, $member)
@@ -2219,17 +2331,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         ]);
     }
 
-    public function updateClassroomMembersFinishedStatus($classroomId)
+    public function updateClassroomMembersFinishedStatusByLimit($classroomId, $start, $limit = 2000)
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
             return;
         }
-        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId, 'role' => '%student%']);
-        if (empty($classroomMembersCount)) {
-            return;
-        }
-        $classroomMembers = $this->findClassroomStudents($classroomId, 0, $classroomMembersCount);
+        $classroomMembers = $this->findClassroomStudents($classroomId, $start, $limit);
 
         $courses = $this->findCoursesByClassroomId($classroomId);
         $courseIds = ArrayToolkit::column($courses, 'id');
@@ -2252,6 +2360,35 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'learnedElectiveTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedElectiveTaskNum')),
             ]);
         }
+    }
+
+    public function updateClassroomMembersFinishedStatus($classroomId)
+    {
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId, 'role' => '%student%']);
+        if (empty($classroomMembersCount)) {
+            return;
+        }
+        if ($classroomMembersCount > 2000) {
+            $this->createUpdateClassroomMembersFinishedStatusJob($classroomId);
+
+            return;
+        }
+        $this->updateClassroomMembersFinishedStatusByLimit($classroomId, 0, $classroomMembersCount);
+    }
+
+    private function createUpdateClassroomMembersFinishedStatusJob($classroomId)
+    {
+        $startJob = [
+            'name' => 'UpdateClassroomMembersFinishedStatusJob'.'_'.$classroomId,
+            'expression' => time() - 100,
+            'class' => 'Biz\Classroom\Job\UpdateClassroomMembersFinishedStatusJob',
+            'misfire_threshold' => 10 * 60,
+            'args' => [
+                'classroomId' => $classroomId,
+                'start' => 0,
+            ],
+        ];
+        $this->getSchedulerService()->register($startJob);
     }
 
     public function countCoursesByClassroomId($classroomId)
@@ -2287,12 +2424,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $parentCourseIds = ArrayToolkit::column($courses, 'parentId');
 
-        $coursesMember = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+        $coursesMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+        $coursesMembers = array_filter($coursesMembers, function ($courseMember) {
+            return 0 == $courseMember['deadline'] || $courseMember['deadline'] > time();
+        });
 
-        $paidCourseIds = ArrayToolkit::column($coursesMember, 'courseId');
+        $paidCourseIds = ArrayToolkit::column($coursesMembers, 'courseId');
         $paidCourses = $this->getCourseService()->findCoursesByIds($paidCourseIds);
 
-        $orderIds = ArrayToolkit::column($coursesMember, 'orderId');
+        $orderIds = ArrayToolkit::column($coursesMembers, 'orderId');
 
         if (!$orderIds) {
             return [[], []];
@@ -2563,19 +2703,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return array_column($classrooms, null, 'id');
     }
 
-    public function updateClassroomMembersNoteAndThreadNums($classroomId)
+    public function updateClassroomMembersNoteAndThreadNumsByLimit($classroomId, $start, $limit)
     {
         $classroom = $this->getClassroom($classroomId);
         if (empty($classroom)) {
             return;
         }
 
-        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
-        if (empty($classroomMembersCount)) {
-            return;
-        }
-
-        $classroomMembers = $this->searchMembers(['classroomId' => $classroomId], [], 0, $classroomMembersCount, ['id', 'userId']);
+        $classroomMembers = $this->searchMembers(['classroomId' => $classroomId], [], $start, $limit, ['id', 'userId']);
         $classroomCourses = $this->findCoursesByClassroomId($classroomId);
         $classroomCourseIds = array_column($classroomCourses, 'courseId');
 
@@ -2586,6 +2721,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'questionNum' => $this->getClassroomMemberThreadNum($classroomId, $member['userId'], $classroomCourseIds, 'question'),
             ]);
         }
+    }
+
+    public function updateClassroomMembersNoteAndThreadNums($classroomId)
+    {
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
+        if (empty($classroomMembersCount)) {
+            return;
+        }
+        if ($classroomMembersCount > 2000) {
+            $this->createUpdateClassroomMembersFinishedStatusJob($classroomId);
+
+            return;
+        }
+        $this->updateClassroomMembersNoteAndThreadNumsByLimit($classroomId, 0, $classroomMembersCount);
     }
 
     public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields)
@@ -2849,9 +2998,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     /**
      * @return ProductMallGoodsRelationService
      */
-
     protected function getProductMallGoodsRelationService()
     {
         return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

@@ -38,11 +38,11 @@ use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\Theme\Service\ThemeService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -93,6 +93,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('plain_text_with_p_tag', [$this, 'plainTextWithPTagFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('sub_text', [$this, 'subTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('wrap_text', [$this, 'wrapTextFilter'], ['is_safe' => ['html']]),
+            new \Twig_SimpleFilter('sub_html_text', [$this, 'subHtmlTextFilter'], ['is_safe' => ['html']]),
             new \Twig_SimpleFilter('duration', [$this, 'durationFilter']),
             new \Twig_SimpleFilter('duration_text', [$this, 'durationTextFilter']),
             new \Twig_SimpleFilter('tags_join', [$this, 'tagsJoinFilter']),
@@ -344,10 +345,10 @@ class WebExtension extends \Twig_Extension
 
     public function userPath($params)
     {
-        $id = $params['id']??0;
+        $id = $params['id'] ?? 0;
         $user = $this->getUserService()->getUser($id);
 
-        return $this->container->get('router')->generate('user_show', ['id' => $user['uuid']??$id]);
+        return $this->container->get('router')->generate('user_show', ['id' => $user['uuid'] ?? $id]);
     }
 
     /**
@@ -1543,7 +1544,11 @@ class WebExtension extends \Twig_Extension
         } else {
             $url = $uri;
         }
-        $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').'/'.$url;
+
+        $pathPrefix = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /');
+        if (0 !== strpos($url, $pathPrefix)) {
+            $url = $pathPrefix.'/'.$url;
+        }
 
         return $this->addHost($url, $absolute, $package);
     }
@@ -1814,6 +1819,33 @@ class WebExtension extends \Twig_Extension
         }
 
         return $text;
+    }
+
+    public function subHtmlTextFilter($text, $length)
+    {
+        if (mb_strlen($text) <= $length) {
+            return $text;
+        }
+        $textLength = 0;
+
+        return preg_replace_callback('/(<[a-z]+>)(.+?)(<\/[a-z]+>)|([^<>]+)/', function ($matches) use (&$textLength, $length) {
+            if ($textLength >= $length) {
+                return '';
+            }
+            if (!empty($matches[2])) {
+                $textLength += mb_strlen($matches[2]);
+
+                return $matches[1].$matches[2].$matches[3];
+            }
+            if (!empty($matches[4])) {
+                $subText = mb_substr($matches[4], 0, $length - $textLength);
+                $textLength += mb_strlen($subText);
+
+                return $subText;
+            }
+
+            return '';
+        }, $text).'...';
     }
 
     public function getFileType($fileName, $string = null)
@@ -2642,5 +2674,13 @@ class WebExtension extends \Twig_Extension
     protected function getMallService()
     {
         return $this->createService('Mall:MallService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

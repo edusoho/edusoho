@@ -10,6 +10,7 @@ use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\PluginBundle\Event\LazyDispatcher;
 use CustomBundle\Biz\CustomServiceProvider;
+use MarketingMallBundle\Biz\MarketingMallServiceProvider;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -122,6 +123,7 @@ class BaseTestCase extends TestCase
         $biz['migration.directories'] = $oldBiz['migration.directories'];
         $biz['autoload.aliases'] = $oldBiz['autoload.aliases'];
         $biz->register(new CustomServiceProvider());
+        $biz->register(new MarketingMallServiceProvider());
 
         $this->biz = $biz;
         $biz['dispatcher'] = function () use ($container, $biz) {
@@ -456,6 +458,10 @@ class TestCaseLazyDispatcher extends LazyDispatcher
     {
         if (null === $event) {
             $event = new Event();
+        }
+
+        if (!empty($this->biz['@noEvent'])) {
+            return $event;
         }
 
 //        $event->setDispatcher($this);

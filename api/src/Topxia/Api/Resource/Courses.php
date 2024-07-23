@@ -14,6 +14,7 @@ class Courses extends BaseResource
         $conditions = $request->query->all();
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
+        unset($conditions['start'], $conditions['limit']);
         $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $courses = $this->assemblyCourses($courses);
         $courses = $this->filter($courses);

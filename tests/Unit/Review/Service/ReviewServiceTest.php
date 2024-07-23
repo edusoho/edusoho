@@ -31,7 +31,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testTryCreateCourseReview_whenCannotTakeCourse_thenThrowException()
+    public function testTryCreateCourseReviewWhenCannotTakeCourseThenThrowException()
     {
         $this->expectException(ReviewException::class);
         $this->expectExceptionMessage('exception.review.forbidden_create_review');
@@ -62,7 +62,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testTryCreateClassroomReview_whenCannotTakeClassroom_thenThrowException()
+    public function testTryCreateClassroomReviewWhenCannotTakeClassroomThenThrowException()
     {
         $this->expectException(ReviewException::class);
         $this->expectExceptionMessage('exception.review.forbidden_create_review');
@@ -93,7 +93,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testCreateReview_whenUserIdNotExist_thenThrowException()
+    public function testCreateReviewWhenUserIdNotExistThenThrowException()
     {
         $this->expectException(CommonException::class);
         $this->expectExceptionMessage('exception.common_parameter_missing');
@@ -102,7 +102,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->getReviewService()->createReview($review);
     }
 
-    public function testCreateReview_whenRatingNotExist_thenThrowException()
+    public function testCreateReviewWhenRatingNotExistThenThrowException()
     {
         $this->expectException(CommonException::class);
         $this->expectExceptionMessage('exception.common_parameter_missing');
@@ -111,7 +111,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->getReviewService()->createReview($review);
     }
 
-    public function testCreateReview_whenTargetTypeNotExist_thenThrowException()
+    public function testCreateReviewWhenTargetTypeNotExistThenThrowException()
     {
         $this->expectException(CommonException::class);
         $this->expectExceptionMessage('exception.common_parameter_missing');
@@ -120,7 +120,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->getReviewService()->createReview($review);
     }
 
-    public function testCreateReview_whenTargetIdNotExist_thenThrowException()
+    public function testCreateReviewWhenTargetIdNotExistThenThrowException()
     {
         $this->expectException(CommonException::class);
         $this->expectExceptionMessage('exception.common_parameter_missing');
@@ -129,7 +129,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->getReviewService()->createReview($review);
     }
 
-    public function testCreateReview_whenContentNotExist_thenThrowException()
+    public function testCreateReviewWhenContentNotExistThenThrowException()
     {
         $this->expectException(CommonException::class);
         $this->expectExceptionMessage('exception.common_parameter_missing');
@@ -138,7 +138,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->getReviewService()->createReview($review);
     }
 
-    public function testCreateReview_whenRatingInvalid_thenThrowException()
+    public function testCreateReviewWhenRatingInvalidThenThrowException()
     {
         $this->expectException(ReviewException::class);
         $this->expectExceptionMessage('exception.review.rating_limit');
@@ -149,8 +149,31 @@ class ReviewServiceTest extends BaseTestCase
 
     public function testCreateReview()
     {
-        $result = $this->getReviewService()->createReview($this->mockDefaultReview());
+        $mock = $this->mockBiz('Goods:GoodsService');
 
+        $mock->shouldReceive('findGoodsSpecsByGoodsId')
+            ->once()
+            ->with(1)
+            ->andReturn([
+                ['targetId' => 1],
+            ]);
+
+        $mock->shouldReceive('getGoods')
+            ->once()
+            ->with(1)
+            ->andReturn([
+                ['type' => null, 'targetId' => 1],
+            ]);
+
+        $this->mockBiz('Course:CourseService')
+            ->shouldReceive('canTakeCourse')
+            ->once()
+            ->with(1)
+            ->andReturn(true);
+
+        $this->biz['@noEvent'] = true;
+
+        $result = $this->getReviewService()->createReview($this->mockDefaultReview());
         $expected = $this->getReviewService()->getReview(1);
         $this->assertEquals($expected, $result);
     }
@@ -165,7 +188,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($review, $result);
     }
 
-    public function testUpdateReview_whenNotAllowed_thenThrowException()
+    public function testUpdateReviewWhenNotAllowedThenThrowException()
     {
         $this->expectException(ReviewException::class);
         $this->expectExceptionMessage('exception.review.forbidden_operate_review');
@@ -190,7 +213,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals('test update', $result['content']);
     }
 
-    public function testDelete_whenNotAllowed_thenThrowException()
+    public function testDeleteWhenNotAllowedThenThrowException()
     {
         $this->expectException(ReviewException::class);
         $this->expectExceptionMessage('exception.review.forbidden_operate_review');
@@ -260,7 +283,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals(2, $count4);
     }
 
-    public function testSearchReview_withDifferentConditions()
+    public function testSearchReviewWithDifferentConditions()
     {
         $review1 = $this->createReview();
         $review2 = $this->createReview(['userId' => 23]);
@@ -290,7 +313,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals($expected4, $result4);
     }
 
-    public function testSearchReview_withDifferentOrderByAndLimits()
+    public function testSearchReviewWithDifferentOrderByAndLimits()
     {
         $review1 = $this->createReview();
         $review2 = $this->createReview(['userId' => 23]);
@@ -314,7 +337,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals([$review2], $result4);
     }
 
-    public function testSearchReview_withDifferentColumns()
+    public function testSearchReviewWithDifferentColumns()
     {
         $review1 = $this->createReview();
         $review2 = $this->createReview(['userId' => 23]);
@@ -429,7 +452,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals(6, $result5);
     }
 
-    public function testSearchCourseReview_withDifferentConditions()
+    public function testSearchCourseReviewWithDifferentConditions()
     {
         list($course1, $review1) = $this->createCourseReviews();
         list($course1, $review2) = $this->createCourseReviews($course1, ['content' => 'review2', 'userId' => 1000]);
@@ -457,7 +480,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals([$review1, $review2, $review4, $review5, $review6, $review7], $result5);
     }
 
-    public function testSearchCourseReview_withDifferentOrderByAndLimits()
+    public function testSearchCourseReviewWithDifferentOrderByAndLimits()
     {
         list($course1, $review1) = $this->createCourseReviews();
         list($course1, $review2) = $this->createCourseReviews($course1, ['content' => 'review2', 'userId' => 1000]);
@@ -510,7 +533,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals(4, $result5);
     }
 
-    public function testSearchClassroomReview_withDifferentConditions()
+    public function testSearchClassroomReviewWithDifferentConditions()
     {
         list($classroom1, $review1) = $this->createClassroomReviews();
         list($classroom1, $review2) = $this->createClassroomReviews($classroom1, ['content' => 'review2', 'userId' => 1000]);
@@ -535,7 +558,7 @@ class ReviewServiceTest extends BaseTestCase
         $this->assertEquals([$review1, $review2, $review4, $review5], $result5);
     }
 
-    public function testSearchClassroomReview_withDifferentOrderByAndLimit()
+    public function testSearchClassroomReviewWithDifferentOrderByAndLimit()
     {
         list($classroom1, $review1) = $this->createClassroomReviews();
         list($classroom1, $review2) = $this->createClassroomReviews($classroom1, ['content' => 'review2', 'userId' => 1000]);

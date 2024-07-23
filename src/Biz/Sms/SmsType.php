@@ -5,7 +5,7 @@ namespace Biz\Sms;
 class SmsType
 {
     /**
-     * 导入用户云短信模版id  您的账号已创建成功，您可使用手机号来登录网校： $url。密码：$password。为了您的账号安全，请在登录后及时修改密码
+     * 导入用户云短信模版id  您的账号已创建成功，您可使用手机号来登录网校： ${url}。密码：$password。为了您的账号安全，请在登录后及时修改密码
      */
     const IMPORT_USER = 1746;
 
@@ -90,4 +90,29 @@ class SmsType
      * 评语修改通知短信模板id  课程：《{$course}》-学习任务：[{$task}{$type}任务]的教师评语已修改，点击查看[{$url}]
      */
     const COMMENT_MODIFY_NOTIFY = 2312;
+
+    /**
+     * 开团成功通知短信模板id 你参与的${title}已开团成功，拼团价为${price}元，需${num}人成团，拼团结束时间为${endAt}，快复制链接邀请微信好友一起参与吧${url}
+     */
+    const GROUPON_CREATE = 2513;
+
+    /**
+     * 参团成功通知短信模板id 你参与的${title}已参团成功，拼团价为${price}元，还剩${remain}人成团，拼团结束时间为${endAt}，快复制链接邀请微信好友一起参与吧${url}
+     */
+    const GROUPON_JOIN = 2516;
+
+    /**
+     * 拼团成功通知短信模板id 你参与的${grouponTitle}已成团，拼团价为${grouponPrice}元，快复制链接到微信中去学习吧${url}
+     */
+    const GROUPON_SUCCESS = 2511;
+
+    /**
+     * 拼团失败通知短信模板id 你参与的${grouponTitle}拼团失败，可复制链接到微信内重新参与拼团${url}
+     */
+    const GROUPON_FAIL = 2510;
+
+    /**
+     * 退款通知短信模板id 你参与的${grouponTitle}拼团失败，发起退款，退款金额为${refundAmount}元，复制链接至微信查看退款详情${url}
+     */
+    const GROUPON_ORDER_REFUND = 2504;
 }

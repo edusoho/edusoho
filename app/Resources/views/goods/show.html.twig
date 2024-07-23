@@ -1,10 +1,18 @@
 {% extends 'layout.html.twig' %}
 
-{% do script(['libs/vue.js', 'libs/jquery-countdown.js', 'app/js/goods/show/index.js', 'app/js/courseset/show/tasks/index.js']) %}
+{% do script(['libs/jquery-countdown.js', 'app/js/goods/show/index.js']) %}
 
 {% block title %}{{ goods.title|raw }} - {{ parent() }}{% endblock %}
 {% block full_content %}
-  
+<style>
+.description-content > ul {
+  list-style: disc !important;
+}
+
+.description-content > ol {
+  list-style: auto !important;
+}
+</style>
   {% include 'common/anti-brush-captcha.html.twig' %}
 
   <div id="show-product-page" class="" style=""

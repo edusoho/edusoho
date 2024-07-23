@@ -18,6 +18,7 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
     {
         $builder = $this->createQueryBuilder($fields)
             ->select('sum(`item_num`) as sum_wrong_num,user_id,target_type')
+            ->andStaticWhere("if( target_type = 'exercise', target_type = 'exercise' and target_id in (select questionBankId from `item_bank_exercise_member` where userId = {$fields['user_id']}), target_type in ('course','classroom'))")
             ->groupBy('target_type');
 
         return $builder->execute()->fetchAll();
@@ -38,6 +39,7 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         $table = $this->getTableName($conditions);
         $field = $this->getTableJoinCondition($conditions);
         $conditions['keyWord'] = isset($conditions['keyWord']) ? $conditions['keyWord'] : '';
+
         $builder = $this->createQueryBuilder($conditions)
             ->leftJoin('biz_wrong_question_book_pool', $table, 't', "t.{$field} = biz_wrong_question_book_pool.target_id")
             ->select('biz_wrong_question_book_pool.*')
@@ -57,7 +59,8 @@ class WrongQuestionBookPoolDaoImpl extends AdvancedDaoImpl implements WrongQuest
         $builder = $this->createQueryBuilder($conditions)
             ->leftJoin('biz_wrong_question_book_pool', $table, 't', "t.{$field} = biz_wrong_question_book_pool.target_id")
             ->select('COUNT(*)')
-            ->andWhere('title like :keyWord');
+            ->andWhere('title like :keyWord')
+            ->andWhere('target_id in (:target_ids)');
 
         return $builder->execute()->fetchColumn(0);
     }

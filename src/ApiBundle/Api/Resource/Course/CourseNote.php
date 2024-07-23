@@ -5,19 +5,28 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\CourseException;
+use Biz\Course\CourseNoteException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\User\UserException;
 
 class CourseNote extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $noteId)
     {
+        $userId = $this->getCurrentUser()->getId();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         if ('published' !== $course['status']) {
             throw CourseException::UNPUBLISHED_COURSE();
         }
         $note = $this->getCourseNoteService()->getNote($noteId);
+        if (empty($note)) {
+            throw CourseNoteException::NOTFOUND_NOTE();
+        }
+        if ($note['userId'] != $userId && empty($note['status'])) {
+            throw UserException::PERMISSION_DENIED();
+        }
         $this->getOCUtil()->single($note, ['userId']);
         $this->getOCUtil()->single($note, ['taskId'], 'task');
         $user = $this->getCurrentUser();

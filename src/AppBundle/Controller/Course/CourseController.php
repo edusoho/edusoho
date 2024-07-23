@@ -129,6 +129,11 @@ class CourseController extends CourseBaseController
         );
     }
 
+    public function closedAction(Request $request)
+    {
+        return $this->render('closed/index.html.twig');
+    }
+
     protected function isGoods($course)
     {
         return 0 == $course['parentId'] && 'self' == $course['platform'] && 'reservation' != $course['type'];
@@ -899,9 +904,11 @@ class CourseController extends CourseBaseController
     public function exitModalAction(Request $request)
     {
         $action = $request->query->get('action');
+        $type = $request->query->get('type');
 
         return $this->render('course/exit-modal.html.twig', [
             'action' => $action,
+            'type' => $type,
         ]);
     }
 

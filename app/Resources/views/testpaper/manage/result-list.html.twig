@@ -10,6 +10,7 @@
     <tr>
       <th>{{'course.homework_check.review.name'|trans}}</th>
       <th>{{'course.homework_check.review.score'|trans}}</th>
+      <th>{{'course.homework_check.review.begin_time'|trans}}</th>
       <th>{{'course.homework_check.review.submit_time'|trans}}</th>
       <th>{% if activity.mediaType == 'testpaper' %}{{'course.testpaper_check.review.submit_num'|trans}}{% else %}{{'course.homework_check.review.submit_num'|trans}}{% endif %}</th>
       <th>{{'course.homework_check.review.status'|trans}}</th>
@@ -25,12 +26,13 @@
         <td>
           {% if answerRecord.status == 'finished' %}
             {% if activity.mediaType == 'testpaper' %}
-              {{ answerReports[answerRecord.answer_report_id].score }}/{{ assessment.total_score }}
+              {{ answerReports[answerRecord.answer_report_id].score }}/{{ answerReports[answerRecord.answer_report_id].total_score }}
             {% else %}
               {{ dict_text('passedStatus', answerReports[answerRecord.answer_report_id].grade) }}
             {% endif %}
           {% else %} -- {% endif %}
         </td>
+        <td>{{ answerRecord.begin_time|date('Y-m-d H:i:s') }}</td>
         <td>{% if answerRecord.status != 'doing' %}{{ answerRecord.end_time|date('Y-m-d H:i:s') }}{% else %}--{% endif %}</td>
         <td>{{ 'course.homework_check.review.submit_num_detail'|trans({'%num%':answerRecord.submit_num}) }}</td>
         <td>

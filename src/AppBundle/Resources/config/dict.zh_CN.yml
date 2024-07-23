@@ -1,12 +1,14 @@
 searchResultType:
     course: 课程
     classroom: 班级
+    itemBankExercise: 题库练习
     teacher: 教师
     thread: 小组话题
     article: 资讯
 
 courseStatus:
     draft: 未发布
+    unpublished: 已下架
     published: 已发布
     closed: 已关闭
 
@@ -31,6 +33,7 @@ openCourseCategory:
 
 classroomStatus:
     draft: 未发布
+    unpublished: 已下架
     published: 已发布
     closed: 已关闭
 
@@ -67,10 +70,12 @@ orderItemType:
     course: 教学计划
     classroom: 班级
     vip: 会员
+    item_bank_exercise: 题库
 
 refundItemType:
     course: 教学计划
     classroom: 班级
+    item_bank_exercise: 题库
 
 orderDisplayStatus:
     notPaid: 未付款
@@ -232,6 +237,7 @@ boughtType:
 
 userKeyWordType:
     nickname: 学员名
+    wechatNickname: 微信昵称
     verifiedMobile: 手机号
     email: 邮件地址
     loginIp: 登录IP
@@ -239,6 +245,7 @@ userKeyWordType:
 
 staffKeyWordType:
   nickname: 员工名
+  wechatNickname: 微信昵称
   verifiedMobile: 手机号
   email: 邮件地址
   loginIp: 登录IP
@@ -294,6 +301,11 @@ userType:
     marketing: 微营销
     distributor: 分销
     marketing_mall: 网校商城注册
+
+userStatus:
+    all: 全部
+    locked: 封禁
+    unlock: 未封禁
 
 userKeyWordTypes:
     nickname: 学员名
@@ -471,7 +483,6 @@ courseSerializeMode:
     finished: 已完结
 
 refund_reason:
-    reason: --请选择退学原因--
     bad_content: 课程内容质量差
     bad_teacher_attitude: 老师服务态度不好
     other: 其他

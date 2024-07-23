@@ -56,6 +56,7 @@ define(function (require, exports, module) {
         Notify.success(Translator.trans('admin.user.change_roles_success_hint'));
         var $tr = $(html);
         $('#' + $tr.attr('id')).replaceWith($tr);
+        window.location.reload();
       }).error(function () {
         Notify.danger(Translator.trans('admin.user.change_roles_fail_hint'));
       });

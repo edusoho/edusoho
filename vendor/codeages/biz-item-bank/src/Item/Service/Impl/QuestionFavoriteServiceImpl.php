@@ -3,6 +3,7 @@
 namespace Codeages\Biz\ItemBank\Item\Service\Impl;
 
 use Codeages\Biz\ItemBank\BaseService;
+use Codeages\Biz\ItemBank\Item\Dao\QuestionFavoriteDao;
 use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Exception\QuestionException;
@@ -55,6 +56,14 @@ class QuestionFavoriteServiceImpl extends BaseService implements QuestionFavorit
         return $this->getQuestionFavoriteDao()->deleteByQuestionFavorite($questionFavorite);
     }
 
+    public function deleteByItemIds(array $itemIds)
+    {
+        if (empty($itemIds)) {
+            return;
+        }
+        $this->getQuestionFavoriteDao()->batchDelete(['item_ids' => $itemIds]);
+    }
+
     public function search($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getQuestionFavoriteDao()->search($conditions, $orderBys, $start, $limit, $columns);
@@ -70,6 +79,9 @@ class QuestionFavoriteServiceImpl extends BaseService implements QuestionFavorit
         return $this->biz->dao('ItemBank:Item:QuestionDao');
     }
 
+    /**
+     * @return QuestionFavoriteDao
+     */
     protected function getQuestionFavoriteDao()
     {
         return $this->biz->dao('ItemBank:Item:QuestionFavoriteDao');

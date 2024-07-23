@@ -5,7 +5,13 @@ namespace AppBundle\Controller\ItemBankExercise;
 use AppBundle\Controller\BaseController;
 use Biz\Accessor\AccessorInterface;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
+use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AnswerController extends BaseController
@@ -21,16 +27,20 @@ class AnswerController extends BaseController
 
         $latestAnswerRecord = $this->getItemBankAssessmentExerciseRecordService()->getLatestRecord($moduleId, $assessmentId, $user['id']);
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
+            if (!$this->checkStartAssessmentExercise($assessmentId)) {
+                return $this->redirectToRoute('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'assessment']);
+            }
             $latestAnswerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer($moduleId, $assessmentId, $user['id']);
         }
 
-        if (AnswerService::ANSWER_RECORD_STATUS_REVIEWING == $latestAnswerRecord['status']) {
+        if (AnswerRecordStatus::REVIEWING == $latestAnswerRecord['status']) {
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
                 'successGotoUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId]),
                 'role' => 'student',
             ]);
-        } elseif (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+        }
+        if (AnswerRecordStatus::FINISHED == $latestAnswerRecord['status']) {
             return $this->render(
                 'item-bank-exercise/answer/report.html.twig',
                 [
@@ -38,16 +48,15 @@ class AnswerController extends BaseController
                     'restartUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId, 'action' => 'redo']),
                 ]
             );
-        } else {
-            $this->getAnswerService()->continueAnswer($latestAnswerRecord['answerRecordId']);
-
-            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
-                'answerRecordId' => $latestAnswerRecord['answerRecordId'],
-                'submitGotoUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId]),
-                'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
-                'showHeader' => 1,
-            ]);
         }
+        $this->getAnswerService()->continueAnswer($latestAnswerRecord['answerRecordId']);
+
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
+            'answerRecordId' => $latestAnswerRecord['answerRecordId'],
+            'submitGotoUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId]),
+            'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+            'showHeader' => 1,
+        ]);
     }
 
     public function categoryAnswerAction(Request $request, $exerciseId, $moduleId, $categoryId)
@@ -60,17 +69,28 @@ class AnswerController extends BaseController
         }
 
         $latestAnswerRecord = $this->getItemBankChapterExerciseRecordService()->getLatestRecord($moduleId, $categoryId, $user['id']);
+        if ($latestAnswerRecord) {
+            $answerRecord = $this->getAnswerRecordService()->get($latestAnswerRecord['answerRecordId']);
+            if (ExerciseMode::SUBMIT_SINGLE == $answerRecord['exercise_mode'] && AnswerRecordStatus::DOING == $answerRecord['status']) {
+                return $this->render('item-bank-exercise/answer/not-support-submit-single.html.twig', ['exerciseId' => $exerciseId]);
+            }
+        }
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
+            if (!$this->checkStartChapterExercise($exerciseId, $categoryId)) {
+                return $this->redirectToRoute('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']);
+            }
             $latestAnswerRecord = $this->getItemBankChapterExerciseService()->startAnswer($moduleId, $categoryId, $user['id']);
         }
 
-        if (AnswerService::ANSWER_RECORD_STATUS_REVIEWING == $latestAnswerRecord['status']) {
+        if (AnswerRecordStatus::REVIEWING == $latestAnswerRecord['status']) {
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
                 'successGotoUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId]),
                 'role' => 'student',
+                'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
             ]);
-        } elseif (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+        }
+        if (AnswerRecordStatus::FINISHED == $latestAnswerRecord['status']) {
             return $this->render(
                 'item-bank-exercise/answer/report.html.twig',
                 [
@@ -78,16 +98,70 @@ class AnswerController extends BaseController
                     'restartUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId, 'action' => 'redo']),
                 ]
             );
-        } else {
-            $this->getAnswerService()->continueAnswer($latestAnswerRecord['answerRecordId']);
-
-            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
-                'answerRecordId' => $latestAnswerRecord['answerRecordId'],
-                'submitGotoUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId]),
-                'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
-                'showHeader' => 1,
-            ]);
         }
+
+        $this->getAnswerService()->continueAnswer($latestAnswerRecord['answerRecordId']);
+
+        return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
+            'answerRecordId' => $latestAnswerRecord['answerRecordId'],
+            'submitGotoUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId]),
+            'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+            'showHeader' => 1,
+        ]);
+    }
+
+    public function categoryInfoModalAction(Request $request, $exerciseId, $moduleId, $categoryId)
+    {
+        $access = $this->getItemBankExerciseService()->canLearnExercise($exerciseId);
+        if (AccessorInterface::SUCCESS != $access['code']) {
+            $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
+        }
+
+        $category = $this->getItemBankChapterExerciseService()->getChapter($categoryId);
+        $items = $this->getItemService()->searchItems(['bank_id' => $category['bank_id'], 'category_id' => $categoryId], [], 0, PHP_INT_MAX);
+
+        return $this->render('item-bank-exercise/answer/category-info-modal.html.twig', [
+            'typesNum' => $this->getItemService()->countItemTypesNum($items),
+            'total' => $category['item_num'],
+            'chapterName' => $category['name'],
+            'categoryId' => $category['id'],
+            'moduleId' => $moduleId,
+            'exerciseId' => $exerciseId,
+        ]);
+    }
+
+    public function notSupportSubmitSingleAction()
+    {
+        return $this->render('item-bank-exercise/answer/not-support-submit-single-modal.html.twig');
+    }
+
+    private function checkStartAssessmentExercise($assessmentId)
+    {
+        if ($this->getAssessmentService()->isEmptyAssessment($assessmentId)) {
+            $this->setFlashException(AssessmentException::ASSESSMENT_EMPTY());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function checkStartChapterExercise($exerciseId, $categoryId)
+    {
+        $chapter = $this->getItemBankChapterExerciseService()->getChapter($categoryId);
+        if (empty($chapter['item_num'])) {
+            $this->setFlashException(AssessmentException::ASSESSMENT_EMPTY());
+
+            return false;
+        }
+        $exercise = $this->getItemBankExerciseService()->get($exerciseId);
+        if (in_array($chapter['id'], $exercise['hiddenChapterIds'])) {
+            $this->setFlashException(ItemBankExerciseException::ANSWER_UNPUBLISHED_CHAPTER());
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -136,5 +210,29 @@ class AnswerController extends BaseController
     protected function getAnswerService()
     {
         return $this->createService('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->createService('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerRecordService');
     }
 }

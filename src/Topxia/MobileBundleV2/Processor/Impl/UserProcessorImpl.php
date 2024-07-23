@@ -2,20 +2,20 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\MathToolkit;
-use AppBundle\Common\SmsToolkit;
-use AppBundle\Common\SimpleValidator;
-use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
+use AppBundle\Common\ExtensionManager;
+use AppBundle\Common\FileToolkit;
+use AppBundle\Common\MathToolkit;
+use AppBundle\Common\SimpleValidator;
+use AppBundle\Common\SmsToolkit;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Pay\Service\AccountService;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
-use Topxia\MobileBundleV2\Controller\MobileBaseController;
+use Topxia\Service\Common\ServiceKernel;
 
 class UserProcessorImpl extends BaseProcessor implements UserProcessor
 {
@@ -67,6 +67,16 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $profile = $this->request->request->get('profile');
 
+        /**
+         * 校验用户名输入是否存在敏感词关键词
+         */
+        if (isset($profile['nickname'])) {
+            $textBind = $this->getSensitiveService()->scanText(trim($profile['nickname']));
+            if ($textBind) {
+                return $this->createErrorResponse('error', '用户名存在敏感词'.$textBind);
+            }
+        }
+
         try {
             $fileId = $this->getParam('fileId', 0);
             $this->updateNickname($user, $profile['nickname']);
@@ -83,7 +93,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     private function createImgCropOptions($naturalSize, $scaledSize)
     {
-        $options = array();
+        $options = [];
 
         $options['x'] = 0;
         $options['y'] = 0;
@@ -92,10 +102,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $options['w'] = $naturalSize->getWidth();
         $options['h'] = $naturalSize->getHeight();
 
-        $options['imgs'] = array();
-        $options['imgs']['large'] = array(200, 200);
-        $options['imgs']['medium'] = array(120, 120);
-        $options['imgs']['small'] = array(48, 48);
+        $options['imgs'] = [];
+        $options['imgs']['large'] = [200, 200];
+        $options['imgs']['medium'] = [120, 120];
+        $options['imgs']['small'] = [48, 48];
         $options['width'] = $naturalSize->getWidth();
         $options['height'] = $naturalSize->getHeight();
 
@@ -111,6 +121,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $options = $this->createImgCropOptions($naturalSize, $scaledSize);
         $record = $this->getFileService()->getFile($fileId);
+        if ($record['userId'] !== $user['id']) {
+            throw new \RuntimeException('No permission to operate on files');
+        }
         if (empty($record)) {
             throw new \RuntimeException('Error file not exists');
         }
@@ -118,20 +131,20 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $filePaths = FileToolKit::cropImages($parsed['fullpath'], $options);
 
-        $fields = array();
+        $fields = [];
         foreach ($filePaths as $key => $value) {
             $file = $this->getFileService()->uploadFile('user', new File($value));
-            $fields[] = array(
+            $fields[] = [
                 'type' => $key,
                 'id' => $file['id'],
-            );
+            ];
         }
 
         if (isset($options['deleteOriginFile']) && 0 == $options['deleteOriginFile']) {
-            $fields[] = array(
+            $fields[] = [
                 'type' => 'origin',
                 'id' => $record['id'],
-            );
+            ];
         } else {
             $this->getFileService()->deleteFileByUri($record['uri']);
         }
@@ -170,11 +183,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $balance = $this->getAccountService()->getUserBalanceByUserId($user['id']);
 
-        return array(
+        return [
             'id' => $balance['id'],
             'userId' => $balance['user_id'],
             'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
-        );
+        ];
     }
 
     public function sendMessage()
@@ -240,13 +253,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         return $messages;
 
-        return $this->render('TopxiaWebBundle:Message:conversation-show.html.twig', array(
+        return $this->render('TopxiaWebBundle:Message:conversation-show.html.twig', [
             'conversation' => $conversation,
             'messages' => $messages,
             'receiver' => $this->getUserService()->getUser($conversation['fromId']),
             'form' => $form->createView(),
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function getUserMessages()
@@ -302,11 +315,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             unset($notification);
         }
 
-        return array(
+        return [
             'start' => $start,
             'total' => $total,
             'limit' => $limit,
-            'data' => $notifications, );
+            'data' => $notifications, ];
     }
 
     private function coverNotifyContent($notification)
@@ -336,7 +349,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $userId = $this->getParam('userId');
         $user = $this->controller->getUserService()->getUser($userId);
         if (empty($user)) {
-            return array();
+            return [];
         }
         $userProfile = $this->controller->getUserService()->getUserProfile($userId);
         $userProfile = $this->filterUserProfile($userProfile);
@@ -353,11 +366,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $user = $this->controller->getUserByToken($this->request);
             $device = $this->controller->getPushDeviceService()->getPushDeviceByUserId($user['id']);
             if (!empty($device)) {
-                $device = $this->controller->getPushDeviceService()->updatePushDevice($device['id'], array('userId' => 0));
+                $device = $this->controller->getPushDeviceService()->updatePushDevice($device['id'], ['userId' => 0]);
                 $this->controller->getPushDeviceService()->getPushSdk()->setDeviceActive($device['regId'], 0);
             }
-            $this->log('user_logout', '用户退出', array(
-                'userToken' => $user, )
+            $this->log('user_logout', '用户退出', [
+                'userToken' => $user, ]
             );
         }
         $this->controller->getUserService()->deleteToken(MobileBaseController::TOKEN_TYPE, $token);
@@ -387,8 +400,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function smsSend()
     {
-        $auth = $this->getSettingService()->get('auth', array());
-        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], array('mobile', 'email_or_mobile')))) {
+        $auth = $this->getSettingService()->get('auth', []);
+        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], ['mobile', 'email_or_mobile']))) {
             return $this->createErrorResponse('register_mode_closed', '网校未开启手机注册');
         }
 
@@ -396,14 +409,14 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         try {
             $this->request->request->set('to', $phoneNumber);
             $this->request->request->set('sms_type', 'sms_registration');
-            $response = $this->controller->forward('AppBundle:EduCloud:smsSend', array());
+            $response = $this->controller->forward('AppBundle:EduCloud:smsSend', []);
             $content = $response->getContent();
             $content = json_decode($content);
             if (!empty($content) && isset($content->error)) {
                 return $this->createErrorResponse('error', $content->error);
             }
 
-            return array('code' => '200', 'msg' => '发送成功');
+            return ['code' => '200', 'msg' => '发送成功'];
         } catch (Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
@@ -437,7 +450,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     private function getCloudSmsKey($key)
     {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
+        $setting = $this->getSettingService()->get('cloud_sms', []);
         if (isset($setting[$key])) {
             return $setting[$key];
         }
@@ -447,11 +460,11 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     private function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
+        if (!in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'])) {
             throw new \RuntimeException('不存在的sms Type');
         }
 
-        if ((!$user->isLogin()) && (in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_forget_pay_password')))) {
+        if ((!$user->isLogin()) && (in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_forget_pay_password']))) {
             throw new \RuntimeException('用户未登录');
         }
 
@@ -478,13 +491,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $this->request->getHost());
         }
 
-        if (empty($registeredWay) || !in_array(strtolower($registeredWay), array('ios', 'android'))) {
+        if (empty($registeredWay) || !in_array(strtolower($registeredWay), ['ios', 'android'])) {
             $registeredWay = $this->guessDeviceFromUserAgent($this->request->headers->get('user-agent'));
         }
 
-        $result = array('meta' => null);
+        $result = ['meta' => null];
 
-        $auth = $this->getSettingService()->get('auth', array());
+        $auth = $this->getSettingService()->get('auth', []);
         if (isset($auth['register_enabled']) && 'closed' == $auth['register_enabled']) {
             return $this->createErrorResponse('register_closed', '系统暂时关闭注册，请联系管理员');
         }
@@ -514,15 +527,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
             $registTypeName = 'email' == $auth['register_mode'] ? 'email' : 'emailOrMobile';
             try {
-                $user = $this->controller->getAuthService()->register(array(
+                $user = $this->controller->getAuthService()->register([
                     $registTypeName => $email,
                     'nickname' => $nickname,
                     'password' => $password,
                     'registeredWay' => $registeredWay,
                     'createdIp' => $this->request->getClientIp(),
-                ));
+                ]);
 
-                $this->getLogService()->info('mobile', 'register', '用户{$nickname}通过手机注册成功', array('userId' => $user['id']));
+                $this->getLogService()->info('mobile', 'register', '用户{$nickname}通过手机注册成功', ['userId' => $user['id']]);
             } catch (\Exception $e) {
                 return $this->createErrorResponse('register_invalid', $e->getMessage());
             }
@@ -534,7 +547,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 return $this->createErrorResponse('phone_exist', '该手机号码已被其他用户绑定');
             }
             if ('1' == $this->controller->setting('cloud_sms.sms_enabled')) {
-                $requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
+                $requestInfo = ['sms_code' => $smsCode, 'mobile' => $phoneNumber];
 
                 $limiterResult = SmsToolkit::smsCheckRatelimiter($this->request, 'sms_registration', $smsCode);
                 if (!$limiterResult['success']) {
@@ -545,13 +558,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 if ($result) {
                     $registTypeName = 'mobile' == $auth['register_mode'] ? 'mobile' : 'emailOrMobile';
                     try {
-                        $user = $this->controller->getAuthService()->register(array(
+                        $user = $this->controller->getAuthService()->register([
                             $registTypeName => $sessionField['to'],
                             'nickname' => $nickname,
                             'password' => $password,
                             'registeredWay' => $registeredWay,
                             'createdIp' => $this->request->getClientIp(),
-                        ));
+                        ]);
                     } catch (\Exception $e) {
                         return $this->createErrorResponse('register_invalid', $e->getMessage());
                     }
@@ -571,12 +584,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         if (!empty($user) && !isset($user['currentIp'])) {
             $user['currentIp'] = '127.0.0.1';
         }
-        $this->log('user_regist', '用户注册', array('user' => $user));
+        $this->log('user_regist', '用户注册', ['user' => $user]);
 
-        return array(
+        return [
             'user' => $this->controller->filterUser($user),
             'token' => $token,
-        );
+        ];
     }
 
     private function smsCheck($request, $mobileInfo, $scenario)
@@ -589,7 +602,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $result = $this->checkSms($sessionField, $requestField, $scenario);
 
-        return array($result, $sessionField);
+        return [$result, $sessionField];
     }
 
     private function checkSms($sessionField, $requestField, $scenario, $allowedTime = 1800)
@@ -632,18 +645,18 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     private function clearSmsSession($request, $scenario)
     {
-        $request->getSession()->set($scenario, array(
+        $request->getSession()->set($scenario, [
             'to' => '',
             'sms_code' => '',
             'sms_last_time' => '',
             'sms_type' => '',
-        ));
+        ]);
     }
 
     public function loginWithToken()
     {
         $version = $this->request->query->get('version', 1);
-        $mobile = $this->controller->getSettingService()->get('mobile', array());
+        $mobile = $this->controller->getSettingService()->get('mobile', []);
         if (empty($mobile['enabled'])) {
             return $this->createErrorResponse('client_closed', '没有搜索到该网校！');
         }
@@ -659,17 +672,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if ($user['locked']) {
                 return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
             }
-            $userProfile = $this->controller->getUserService()->getUserProfile($oldToken['userId']);
+            $userProfile = $this->controller->getUserService()->getUserProfile($user['id']);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
             $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
             $this->getTokenService()->deleteTokenByTypeAndUserId(MobileBaseController::TOKEN_TYPE, $user['id']);
 
-            $newToken = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, array(
+            $newToken = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, [
                 'userId' => $user['id'],
                 'duration' => 3600 * 24 * 30,
-            ));
+            ]);
 
             $this->controller->setCurrentUser($user['id'], $this->request);
             $this->controller->getUserService()->markLoginInfo('app');
@@ -678,13 +691,13 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $biz['dispatcher']->dispatch('user.login', new Event($user));
         }
 
-        $result = array(
+        $result = [
             'token' => is_null($newToken) ? null : $newToken['token'],
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request, $version),
-        );
+        ];
 
-        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", array('qrCodeToken' => $oldToken, 'loginToken' => $newToken, 'loginUser' => $user));
+        $this->getLogService()->info('mobile', 'user_login', "{$user['nickname']}使用二维码登录", ['qrCodeToken' => $oldToken, 'loginToken' => $newToken]);
 
         return $result;
     }
@@ -722,10 +735,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $user = array_merge($user, $userProfile);
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
-        $result = array(
+        $result = [
             'token' => $token,
             'user' => $this->controller->filterUser($user),
-        );
+        ];
 
         $this->controller->getUserService()->markLoginInfo('app');
 
@@ -782,7 +795,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }
         $followings = $this->controller->getUserService()->findUserFollowing($userId, $start, $limit);
         $followIds = ArrayToolkit::column($followings, 'id');
-        $result = array();
+        $result = [];
         $index = 0;
         foreach ($followIds as $followingId) {
             $user = $this->controller->getUserService()->getUser($followingId);
@@ -823,7 +836,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     {
         $userId = $this->getParam('userId');
         $toId = $this->getParam('toId');
-        $followingIds = array($toId);
+        $followingIds = [$toId];
         $result = $this->controller->getUserService()->filterFollowingIds($userId, $followingIds);
 
         if (!$result || empty($result)) {
@@ -864,9 +877,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('error', $e->getMessage());
         }
 
-        $message = array('userId' => $user['id'],
+        $message = ['userId' => $user['id'],
             'userName' => $user['nickname'],
-            'opration' => 'unfollow', );
+            'opration' => 'unfollow', ];
         $this->getNotificationService()->notify($toId, 'user-follow', $message);
 
         return $result;
@@ -879,7 +892,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $result = $this->getMessageService()->getConversationByFromIdAndToId($fromId, $toId);
         if (!empty($result)) {
             $fromUser = $this->controller->getUserService()->getUser($fromId);
-            $result['fromUserName'] = ($fromUser['destroyed'] == 1) ? '帐号已注销' : $fromUser['nickname'];
+            $result['fromUserName'] = (1 == $fromUser['destroyed']) ? '帐号已注销' : $fromUser['nickname'];
         }
 
         return $result;
@@ -892,10 +905,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，无法获取信息数据');
         }
 
-        $conditions = array(
+        $conditions = [
             'userId' => $user['id'],
             'type' => 'question',
-        );
+        ];
         $total = $this->controller->getThreadService()->searchThreadCount($conditions);
         $threads = $this->controller->getThreadService()->searchThreads(
             $conditions,
@@ -907,10 +920,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
         $threadSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        $conditions = array(
+        $conditions = [
             'userId' => $user['id'],
             'type' => 'discussion',
-        );
+        ];
         $totalDiscussion = $this->controller->getThreadService()->searchThreadCount($conditions);
         $discussion = $this->controller->getThreadService()->searchThreads(
             $conditions,
@@ -925,10 +938,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $discussionSum = $this->controller->getThreadService()->searchThreadCountInCourseIds($conditions);
 
-        $conditions = array(
+        $conditions = [
             'userId' => $user['id'],
             'noteNumGreaterThan' => 0.1,
-        );
+        ];
 
         $total = $this->controller->getCourseService()->searchMemberCount($conditions);
 
@@ -943,10 +956,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
         $testSum = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
-        return array('thread' => $threadSum,
+        return ['thread' => $threadSum,
             'discussion' => $discussionSum,
             'note' => $noteSum,
-            'test' => $testSum, );
+            'test' => $testSum, ];
     }
 
     public function getCourseTeachers()
@@ -983,5 +996,15 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     protected function getAccountService()
     {
         return ServiceKernel::instance()->createService('Pay:AccountService');
+    }
+
+    /**
+     * 获取敏感词的服务类
+     *
+     * @return mixed
+     */
+    protected function getSensitiveService()
+    {
+        return ServiceKernel::instance()->createService('Sensitive:SensitiveService');
     }
 }

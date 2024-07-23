@@ -95,7 +95,7 @@ define(function(require, exports, module) {
 		        validator.addItem({
 		        	element: '[name="minus-rate"]',
 		        	required: true,
-		        	rule:'currency min{min:0.01}'
+		        	rule:'currency min{min:0.01} max{max:1000000}'
 		        });
                 validator.removeItem('[name="discount-rate"]');
             } else if (type == 'discount') {

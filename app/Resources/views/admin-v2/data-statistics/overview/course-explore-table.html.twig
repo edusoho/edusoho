@@ -10,9 +10,9 @@
   {% for memberCount in memberCounts %}
     <tr>
       <td>{{ loop.index }}</td>
-      <td>
+      <td data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ courseSets[memberCount.courseSetId].title|raw }}">
         <a class="link-primary"
-           target="_blank" href="{{ path('course_show', {id: courseSets[memberCount.courseSetId].defaultCourseId}) }}">{{ courseSets[memberCount.courseSetId].title|raw }}</a>
+          target="_blank" href="{{ path('course_show', {id: courseSets[memberCount.courseSetId].defaultCourseId}) }}">{{ courseSets[memberCount.courseSetId].title|raw }}</a>
       </td>
       <td class="pull-right prl">{{ memberCount.count }}</td>
     </tr>
@@ -21,3 +21,8 @@
   {% endfor %}
   </tbody>
 </table>
+<script>
+$('[data-toggle="tooltip"]').tooltip({
+  html: true,
+});
+</script>

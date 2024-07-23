@@ -7,25 +7,35 @@
   {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
   {% set graphUrl = path('classroom_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
   {% set analysisUrl = path('classroom_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
-  {% set taskTitle = courses[task.courseId].title|default(null) ~ ' ' ~ taskTitle %}
 {% else %}
   {% set checkUrl = path('course_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
   {% set graphUrl = path('course_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
   {% set analysisUrl = path('course_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
 {% endif %}
 
-<div class="clearfix testpaper-mark-list">
+<div class="clearfix testpaper-mark-list" style="display: flex;">
   <div class="testpaper-mark-info col-md-8">
     <div class="row">
       <div class="col-md-8">
-        <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
+        <div class="testpaper-mark-info__title" style="width: 392px; line-height: 22px;" title="{{ courses[task.courseId].title|default(null) ~ ' ' ~ taskTitle }}">
+          <div>{{ courses[task.courseId].title|default(null) }}</div>
+          <div style="font-size: 14px; margin-top: 10px;">{{ taskTitle }}</div>
+        </div>
         <div class="testpaper-mark-info__name">
-          <span class="text-overflow">
-              {% if 'testpaper' == type|default('') %}
-                {% if testpaper %}{{ 'course.testpaper_manage.create.name'|trans }}： {{ testpaper.name|default('') }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
-              {% elseif 'homework' == type|default('') %}
-                {% if testpaper %}{{ 'course.homework_check.create.name'|trans }}： {{ testpaper.name|default('') }}{% else %}{{ 'course.homework_check.homework_delete'|trans }}{% endif %}
+          <span>
+            {% if 'testpaper' == type|default('') %}
+              {% if testpaper %}
+                {{ 'course.testpaper_manage.create.name'|trans }}： <div style="display: inline-flex; width: 300px; align-items: flex-start;">{{ testpaper.name|default('') }}</div>
+              {% else %}
+                {{ 'course.testpaper_check.testpaper_delete'|trans }}
               {% endif %}
+            {% elseif 'homework' == type|default('') %}
+              {% if testpaper %}
+                {{ 'course.homework_check.create.name'|trans }}： <div style="display: inline-flex; width: 300px; align-items: flex-start;">{{ testpaper.name|default('') }}</div>
+              {% else %}
+                {{ 'course.homework_check.homework_delete'|trans }}
+              {% endif %}
+            {% endif %}
           </span>
           {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
             <div class="mbm mtm color-gray">
@@ -53,7 +63,7 @@
               <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ graphUrl }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-chart"></i></a>
             </div>
             <div class="col-xs-3 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-list"></i></a></div>
-            
+
             <div class="col-xs-3 text-center mt10">
               {% if targetResultInfo.reviewing|default(0) > 0 %}
                 <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check"></i></a>
@@ -70,7 +80,7 @@
     </div>
   </div>
 
-  <div class="testpaper-mark-status col-md-4 text-center">
+  <div class="testpaper-mark-status col-md-4 text-center" style="height: auto;">
     {% if testpaper %}
       <div class="row">
         <div class="col-xs-4">

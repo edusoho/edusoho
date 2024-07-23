@@ -35,6 +35,13 @@ class MarketingController extends BaseController
         return $this->redirect($activityUri['url']);
     }
 
+    public function weixinPayAction(Request $request)
+    {
+        $params = $request->query->all();
+
+        return $this->render('marketing-weixin-pay/index.html.twig', []);
+    }
+
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');

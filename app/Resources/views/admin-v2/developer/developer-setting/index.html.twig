@@ -36,14 +36,6 @@
       <input class="form-control" type="text" name="cloud_api_server" value="{{ developerSetting.cloud_api_server|default('') }}">
     </div>
   </div>
-  <div class="form-group">
-    <div class="col-md-3 control-label">
-      <label>{{'admin.developer_xapi_address'|trans}}</label>
-    </div>
-    <div class="controls col-md-8 radios">
-      <input class="form-control" type="text" name="xapi_url" value="{{ developerSetting.xapi_url|default('') }}">
-    </div>
-  </div>
 
   <div class="form-group">
     <div class="col-md-3 control-label">
@@ -236,6 +228,24 @@
     </div>
     <div class="controls col-md-8 radios">
       <input class="form-control" type="text" name="es_live_api_server" value="{{ developerSetting.es_live_api_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.question_parse_api_server'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="question_parse_api_server" value="{{ developerSetting.question_parse_api_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.ai_api_server'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="ai_api_server" value="{{ developerSetting.ai_api_server|default('') }}">
     </div>
   </div>
 

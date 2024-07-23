@@ -36,6 +36,10 @@ export default {
   /deep/ p {
     margin: 0;
   }
+
+  /deep/ .analysis-content img {
+    max-width: 100%!important;
+  }
 }
 
 @media (max-width: 767px) {

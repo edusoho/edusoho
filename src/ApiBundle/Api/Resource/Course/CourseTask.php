@@ -6,15 +6,11 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Course\CourseException;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CourseTask extends AbstractResource
@@ -30,7 +26,7 @@ class CourseTask extends AbstractResource
             throw CourseException::NOTFOUND_COURSE();
         }
 
-        return $this->service('Task:TaskService')->findTasksByCourseId($courseId);
+        return $this->getTaskService()->findTasksByCourseId($courseId);
     }
 
     public function get(ApiRequest $request, $courseId, $taskId)
@@ -103,37 +99,5 @@ class CourseTask extends AbstractResource
     private function getHomeworkActivityService()
     {
         return $this->service('Activity:HomeworkActivityService');
-    }
-
-    /**
-     * @return ExerciseActivityService
-     */
-    private function getExerciseActivityService()
-    {
-        return $this->service('Activity:ExerciseActivityService');
-    }
-
-    /**
-     * @return AnswerRecordService
-     */
-    protected function getAnswerRecordService()
-    {
-        return $this->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    /**
-     * @return AnswerService
-     */
-    protected function getAnswerService()
-    {
-        return $this->service('ItemBank:Answer:AnswerService');
-    }
-
-    /**
-     * @return AssessmentService
-     */
-    protected function getAssessmentService()
-    {
-        return $this->service('ItemBank:Assessment:AssessmentService');
     }
 }

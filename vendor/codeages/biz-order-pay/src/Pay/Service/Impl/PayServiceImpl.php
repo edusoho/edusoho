@@ -208,9 +208,11 @@ class PayServiceImpl extends BaseService implements PayService
 
     public function rechargeByIap($data)
     {
+        $this->getTargetlogService()->log(TargetlogService::INFO, 'iap_recharge.data', empty($data['transaction_id']) ? '' : $data['transaction_id'], 'iap充值', $data);
         list($data, $result) = $this->getPayment('iap')->converterNotify($data);
 
         if ('failure' == $result) {
+            $this->getTargetlogService()->log(TargetlogService::ERROR, 'iap_recharge.failure', '', 'iap充值失败, 错误信息: '.($data['msg'] ?? ''), $data);
             throw new \Exception($data['msg']);
         }
 

@@ -45,5 +45,7 @@ interface QuestionBankService
 
     public function canManageBank($bankId);
 
+    public function canManageBankCategory($categoryId);
+
     public function findUserManageBanks();
 }

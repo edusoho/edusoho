@@ -88,8 +88,8 @@
       </template>
     </a-table>
 
-    <a-modal title="教师详细信息" :visible="visible" @cancel="close">
-      <userInfoTable :user="user" />
+    <a-modal title="教师详细信息" :visible="visible" @cancel="close" :afterClose="afterModalClose">
+      <userInfoTable v-if="userInfoVisible" :user="user" />
 
       <template slot="footer">
         <a-button key="back" @click="close"> 关闭 </a-button>
@@ -214,6 +214,7 @@ export default {
       setNumId: 0,
       promotedSeq: undefined,
       modalVisible: false,
+      userInfoVisible: true,
       form: this.$form.createForm(this, { name: 'set_number' }),
       qualificationVisible: false, // 编辑教师资质
       currentTeacherUserId: 0, // 用于教师上传教师资质的 userId
@@ -227,6 +228,9 @@ export default {
   },
 
   methods: {
+    afterModalClose() {
+      this.userInfoVisible = false;
+    },
     async getSetting(){
       const status = await Setting.get('qualification');
       this.showEditorSualification = Boolean(status.qualification);
@@ -279,6 +283,8 @@ export default {
     },
 
     async edit(id) {
+      this.user = {};
+      this.userInfoVisible = true;
       this.user = await UserProfiles.get(id);
       this.visible = true;
     },

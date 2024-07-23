@@ -14,6 +14,7 @@ class DestroyAccountController extends BaseController
     public function recordIndexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         $paginator = new Paginator(
             $request,
@@ -119,6 +120,7 @@ class DestroyAccountController extends BaseController
 
         unset($conditions['keyword']);
         unset($conditions['keywordType']);
+        unset($conditions['page']);
 
         return $conditions;
     }

@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -19,6 +20,8 @@ use Biz\WrongBook\WrongBookException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Codeages\Biz\ItemBank\Item\Type\EssayItem;
+use Codeages\Biz\ItemBank\Item\Type\MaterialItem;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -36,11 +39,11 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
     public function onWrongQuestionPoolDelete(Event $event)
     {
-        $contions = $event->getSubject();
-        if (empty($contions['target_id'])) {
+        $conditions = $event->getSubject();
+        if (empty($conditions['target_id'])) {
             throw WrongBookException::WRONG_QUESTION_BOOK_POOL_TARGET_ID_REQUIRE();
         }
-        $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType($contions['target_id'], $contions['target_type']);
+        $wrongPools = $this->getWrongQuestionBookPoolDao()->findPoolsByTargetIdAndTargetType($conditions['target_id'], $conditions['target_type']);
         if (empty($wrongPools)) {
             return;
         }
@@ -49,22 +52,35 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         try {
             $db->beginTransaction();
 
-            $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType($contions['target_id'], $contions['target_type']);
+            $this->getWrongQuestionBookPoolDao()->deleteWrongPoolByTargetIdAndTargetType($conditions['target_id'], $conditions['target_type']);
             $collecIds = $this->getWrongQuestionCollectDao()->getCollectIdsBYPoolIds($wrongPoolIds);
             $this->getWrongQuestionCollectDao()->deleteCollectByPoolIds($wrongPoolIds);
             $collecIds = ArrayToolkit::column($collecIds, 'id');
-            $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
-            $this->getLogService()->info(
-                'wrong_question',
-                'delete_wrong_question',
-                "删除课程#{$contions['target_id']}错题池"
-            );
+            if ($collecIds) {
+                $this->getWrongQuestionDao()->batchDelete(['collect_ids' => $collecIds]);
+            }
+            $this->logDeleteWrongQuestionPool($conditions['target_type'], $conditions['target_id']);
 
             $db->commit();
         } catch (\Exception $e) {
             $db->rollback();
             throw $e;
         }
+    }
+
+    protected function logDeleteWrongQuestionPool($targetType, $targetId)
+    {
+        $typeNames = [
+            'classroom' => '班级',
+            'course' => '课程',
+        ];
+        $typeName = $typeNames[$targetType];
+
+        $this->getLogService()->info(
+            'wrong_question',
+            'delete_wrong_question_pool',
+            "删除{$typeName}#{$targetId}错题池"
+        );
     }
 
     public function onAnswerSubmitted(Event $event)
@@ -81,7 +97,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
-            'statues' => ['wrong', 'no_answer'],
+            'statues' => ['wrong', 'no_answer', 'part_right'],
         ], [], 0, PHP_INT_MAX);
 
         $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
@@ -89,7 +105,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
@@ -116,7 +132,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         $correctItems = $this->getItemService()->findItemsByIds(ArrayToolkit::column($correctAnswerQuestionReports, 'item_id'));
         $correctQuestions = [];
         foreach ($correctItems as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $correctQuestions[] = $correctAnswerQuestionReports[$item['id']];
             }
         }
@@ -133,7 +149,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         //===== wrong=====
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
-            'statues' => ['wrong', 'no_answer'],
+            'statues' => ['wrong', 'no_answer', 'part_right'],
         ], [], 0, PHP_INT_MAX);
 
         $wrongAnswerQuestionReports = ArrayToolkit::index($wrongAnswerQuestionReports, 'item_id');
@@ -141,7 +157,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
         $wrongQuestion = [];
         foreach ($items as $item) {
-            if ('material' !== $item['type']) {
+            if (!in_array($item['type'], [MaterialItem::TYPE, EssayItem::TYPE])) {
                 $wrongQuestion[] = $wrongAnswerQuestionReports[$item['id']];
             }
         }
@@ -189,12 +205,29 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
 
     protected function getWrongQuestionSource($answerRecord)
     {
+        $chapterExerciseRecord = $this->getItemBankChapterExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+        if ($chapterExerciseRecord) {
+            $bankExercise = $this->getItemBankExerciseService()->get($chapterExerciseRecord['exerciseId']);
+
+            return [
+                'exercise', $bankExercise['questionBankId'] ?? 0, 'item_bank_chapter', $chapterExerciseRecord['exerciseId'],
+            ];
+        }
+        $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseRecordService()->getByAnswerRecordId($answerRecord['id']);
+        if ($assessmentExerciseRecord) {
+            $bankExercise = $this->getItemBankExerciseService()->get($assessmentExerciseRecord['exerciseId']);
+
+            return [
+                'exercise', $bankExercise['questionBankId'] ?? 0, 'item_bank_assessment', $assessmentExerciseRecord['exerciseId'],
+            ];
+        }
+
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
 
         if (!empty($activity) && in_array($activity['mediaType'], ['testpaper', 'homework', 'exercise'])) {
             $courseSet = $this->getCourseSetService()->getCourseSet($activity['fromCourseSetId']);
-            if ($courseSet['parentId'] > 0) {
-                $classCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+            $classCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
+            if ($classCourse) {
                 $targetType = 'classroom';
                 $targetId = $classCourse['classroomId'];
             } else {
@@ -218,7 +251,7 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
         }
 
         return [
-             $targetType, $targetId, $sourceType, $sourceId,
+            $targetType, $targetId, $sourceType, $sourceId,
         ];
     }
 
@@ -316,6 +349,14 @@ class WrongQuestionSubscriber extends EventSubscriber implements EventSubscriber
     protected function getItemBankChapterExerciseRecordService()
     {
         return $this->getBiz()->service('ItemBankExercise:ChapterExerciseRecordService');
+    }
+
+    /**
+     * @return AssessmentExerciseRecordService
+     */
+    protected function getItemBankAssessmentExerciseRecordService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseRecordService');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ContentToolkit;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Group\ThreadException;
@@ -30,6 +31,9 @@ class ClassroomThread extends AbstractResource
 
         $total = $this->getThreadService()->searchThreadCount($conditions);
         $threads = $this->getThreadService()->searchThreads($conditions, $sort, $offset, $limit);
+        foreach ($threads as &$thread) {
+            $this->extractImgs($thread);
+        }
         $this->getOCUtil()->multiple($threads, ['userId']);
 
         return $this->makePagingObject($threads, $total, $offset, $limit);
@@ -45,6 +49,7 @@ class ClassroomThread extends AbstractResource
         if (empty($thread)) {
             throw ThreadException::NOTFOUND_THREAD();
         }
+        $this->extractImgs($thread);
 
         $this->getOCUtil()->single($thread, ['userId']);
         $this->getOCUtil()->single($thread, ['targetId'], 'classroom');
@@ -64,12 +69,28 @@ class ClassroomThread extends AbstractResource
             'targetId' => $classroomId,
             'type' => $request->request->get('type'),
             'targetType' => 'classroom',
+            'imgs' => $request->request->get('imgs', []),
         ];
+
+        if (isset($thread['imgs'])) {
+            $thread['content'] = ContentToolkit::appendImgs($thread['content'], $thread['imgs']);
+        }
 
         $thread = $this->getThreadService()->createThread($thread);
         $this->getOCUtil()->single($thread, ['userId']);
 
         return $thread;
+    }
+
+    protected function extractImgs(&$thread)
+    {
+        $thread['imgs'] = [];
+        if (empty($thread['content'])) {
+            return;
+        }
+
+        $thread['imgs'] = ContentToolkit::extractImgs($thread['content']);
+        $thread['content'] = ContentToolkit::filterImgs($thread['content']);
     }
 
     /**

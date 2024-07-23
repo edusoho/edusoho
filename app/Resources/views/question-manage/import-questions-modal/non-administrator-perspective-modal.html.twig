@@ -1,0 +1,20 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog non-administrator-perspective-modal' %}
+
+{% do script(['app/js/question-manage/non-administrator/index.js']) %}
+
+{% block body %}
+  <div>
+    <div class="non-administrator-content">
+      <img class="" src="{{ asset('static-dist/app/img/question-manage/non-administrator-tip-img.png') }}" alt="non-administrator"/>
+    </div>
+    <div class="non-administrator-tip">
+      {{ 'question_manage.import.non-administrator-tip'|trans }}
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <a class="i-know-btn js-close-modal" href="javascript:;">{{ 'question_manage.import.non.administrator.close.btn'|trans }}</a>
+{% endblock %}

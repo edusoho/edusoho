@@ -58,8 +58,11 @@ class DumpInitDataCommand extends BaseCommand
         --ignore-table={$database}.sessions \
         --ignore-table={$database}.log \
         --ignore-table={$database}.session2 \
+        --ignore-table={$database}.biz_session \
         --ignore-table={$database}.user_token \
         --ignore-table={$database}.status \
+        --ignore-table={$database}.cache \
+        --ignore-table={$database}.setting \
         --ignore-table={$database}.log_v8 \
         --ignore-table={$database}.biz_scheduler_job_fired \
         --ignore-table={$database}.biz_scheduler_job_log \

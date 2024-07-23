@@ -3,10 +3,13 @@
 namespace Codeages\Biz\ItemBank\Item\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
+use Codeages\Biz\Framework\Dao\SoftDelete;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 
 class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
 {
+    use SoftDelete;
+
     protected $table = 'biz_question';
 
     public function findByItemId($itemId)
@@ -40,6 +43,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
                 'id = :id',
                 'id in (:ids)',
                 'item_id = :item_id',
+                'item_id in (:item_ids)',
             ],
             'serializes' => [
                 'answer' => 'json',

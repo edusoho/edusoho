@@ -15,6 +15,7 @@ interface LiveReplayService
     const REPLAY_GENERATING_STATUS = 'generating';
     const REPLAY_VIDEO_GENERATE_STATUS = 'videoGenerated';
     const REPLAY_GENERATE_STATUS = 'generated';
+    const REPLAY_FAILURE_STATUS = 'failure';
 
     /**
      * @before getCourseLessonReplay

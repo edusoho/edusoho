@@ -20,7 +20,7 @@ export default class Base {
       ajax: true,
       rules: {
         title: {
-          byte_maxlength: 200,
+          byte_maxlength: 100,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));
@@ -30,7 +30,7 @@ export default class Base {
           course_title: true
         },
         subtitle: {
-          maxlength: 50,
+          byte_maxlength: 100,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));

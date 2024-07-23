@@ -4,6 +4,7 @@ namespace Codeages\Biz\Invoice\Service\Impl;
 
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Codeages\Biz\Framework\Service\BaseService;
+use Codeages\Biz\Invoice\Dao\InvoiceDao;
 use Codeages\Biz\Invoice\Service\InvoiceService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
@@ -43,6 +44,33 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $apply;
     }
 
+    public function getRefundActualAmount($trades)
+    {
+        $user = $this->biz['user'];
+        $refundedTrades = array_filter($trades,function ($trade){
+            return $trade['status'] == 'refunded';
+        });
+        $orders = $this->getOrderService()->findOrdersBySns(ArrayToolkit::column($refundedTrades,'order_sn'));
+        $orders = ArrayToolkit::index($orders,'id');
+        if(ArrayToolkit::column($orders,'id')){
+            $orderRefunds = $this->getOrderRefundService()->searchRefunds(['user_id' => $user['id'], 'order_ids' => ArrayToolkit::column($orders,'id'), 'status' => 'refunded'], array(), 0, PHP_INT_MAX);
+            if (!empty($orderRefunds)){
+                foreach ($orderRefunds as &$orderRefund){
+                    $order = $orders[$orderRefund['order_id']];
+                    $orderRefund['order_sn'] = $order['sn'];
+                }
+                $orderRefundGroups= ArrayToolkit::group($orderRefunds,'order_sn');
+                foreach ($trades as &$trade){
+                    if (!empty($orderRefundGroups[$trade['order_sn']])){
+                        $trade['cash_amount'] -=  array_sum(ArrayToolkit::column($orderRefundGroups[$trade['order_sn']],'refund_cash_amount'));
+                    }
+                }
+            }
+        }
+
+        return $trades;
+    }
+
     protected function prepareApply($apply)
     {
         $user = $this->biz['user'];
@@ -70,6 +98,8 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         $user = $this->biz['user'];
 
         $money = 0;
+        $trades = $this->getRefundActualAmount($trades);
+
         foreach ($trades as $key => $trade) {
             if ($user['id'] != $trade['user_id']) {
                 throw new AccessDeniedException('order owner is invalid');
@@ -127,6 +157,7 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
             'receiver' => '',
             'status' => 'unchecked',
             'review_user_id' => 0,
+            'trade_sns' => array(),
             'number' => '',
             'post_number' => '',
             'post_name' => '',
@@ -165,6 +196,9 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
         return $this->biz->service('Pay:PayService');
     }
 
+    /**
+     * @return InvoiceDao
+     */
     protected function getInvoiceDao()
     {
         return $this->biz->dao('Invoice:InvoiceDao');
@@ -176,5 +210,13 @@ class InvoiceServiceImpl extends BaseService implements InvoiceService
     protected function getInvoiceTemplateService()
     {
         return $this->biz->service('Invoice:InvoiceTemplateService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Order\Service\Impl\OrderRefundServiceImpl
+     */
+    protected function getOrderRefundService()
+    {
+        return $this->biz->service('Order:OrderRefundService');
     }
 }

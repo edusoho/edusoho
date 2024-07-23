@@ -15,6 +15,7 @@ use Biz\Task\TaskException;
 use Biz\Testpaper\HomeworkException;
 use Biz\Testpaper\Wrapper\AssessmentResponseWrapper;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -31,7 +32,7 @@ class HomeworkResult extends AbstractResource
         $targetType = $request->request->get('targetType');
         $targetId = $request->request->get('targetId');
 
-        $homework = $this->getAssessmentService()->showAssessment($homeworkId);
+        $homework = $this->getAssessmentService()->getAssessment($homeworkId);
         if (empty($homework) || '0' != $homework['displayable']) {
             throw HomeworkException::NOTFOUND_HOMEWORK();
         }
@@ -54,7 +55,7 @@ class HomeworkResult extends AbstractResource
 
         $homeworkRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $user['id']);
 
-        if (empty($homeworkRecord) || 'finished' == $homeworkRecord['status']) {
+        if (empty($homeworkRecord) || AnswerRecordStatus::FINISHED == $homeworkRecord['status']) {
             if ('draft' == $homework['status']) {
                 throw HomeworkException::DRAFT_HOMEWORK();
             }
@@ -63,19 +64,21 @@ class HomeworkResult extends AbstractResource
             }
 
             $homeworkRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $homework['id'], $user['id']);
-        } elseif ('reviewing' == $homeworkRecord['status']) {
+        } elseif (AnswerRecordStatus::REVIEWING == $homeworkRecord['status']) {
             throw HomeworkException::REVIEWING_HOMEWORK();
         } else {
             $homeworkRecord = $this->getAnswerService()->continueAnswer($homeworkRecord['id']);
         }
+        $homework = $this->getAssessmentService()->showAssessment($homeworkRecord['assessment_id']);
 
         $testpaperWrapper = new TestpaperWrapper();
         $scene = $this->getAnswerSceneService()->get($homeworkRecord['answer_scene_id']);
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
-        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($homeworkRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
         $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
         $homeworkResult['courseId'] = $course['id'];
+
         return $homeworkResult;
     }
 
@@ -103,7 +106,7 @@ class HomeworkResult extends AbstractResource
         }
 
         $testpaperWrapper = new TestpaperWrapper();
-        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($homeworkRecord['answer_report_id']);
 
         return $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $assessment, $scene, $answerReport);
     }
@@ -136,9 +139,10 @@ class HomeworkResult extends AbstractResource
 
         $testpaperWrapper = new TestpaperWrapper();
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($homeworkRecord['id']);
-        $answerReport = $this->getAnswerReportService()->get($homeworkRecord['answer_report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($homeworkRecord['answer_report_id']);
         $homeworkResult = $testpaperWrapper->wrapTestpaperResult($homeworkRecord, $homework, $scene, $answerReport);
         $homeworkResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($homework, $questionReports));
+        $homeworkResult['items'] = $testpaperWrapper->wrapAIAnalysis($homeworkResult['items']);
         $homeworkResult['items'] = $this->fillItems($homeworkResult['items'], $questionReports);
         $homeworkResult['rightRate'] = $this->getRightRate($homeworkResult['items']);
 

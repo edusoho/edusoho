@@ -26,7 +26,7 @@
 
     <tr>
       <td>{{ 'admin.reports_status.php_version'|trans }} （<a href="{{ path('admin_v2_report_status_php') }}">{{ 'admin.reports_status.more_info'|trans }}</a>）</td>
-      <td>7.1.x</td>
+      <td>7.3.x</td>
       <td>
         {% if env.phpVersionOk %}
           <span class="text-success">√ {{ env.phpVersion }}</span>
@@ -34,12 +34,12 @@
           <span class="text-danger">X {{ env.phpVersion }}</span>
         {% endif %}
       </td>
-      <td>7.0.0</td>
+      <td>7.1.3</td>
     </tr>
 
     <tr>
       <td>{{ 'admin.reports_status.php_run_user'|trans }}</td>
-      <td>-</td>
+      <td>{{ env.user }}</td>
       <td>
         <span class="text-success">√ {{ env.user }}</span>
       </td>
@@ -77,7 +77,7 @@
         {{ 'admin.reports_status.upload_file_size'|trans }}
         <div class="text-muted">{{ 'admin.reports_status.upload_file_size_tips'|trans }}</div>
       </td>
-      <td>{{ 'admin.reports_status.upload_file_size_greater_than_200m'|trans }}</td>
+      <td>{{ 'admin.reports_status.upload_file_size_greater_than_2048m'|trans }}</td>
       <td>
         {% if env.uploadMaxFilesizeOk %}
           <span class="text-success">√ {{ env.uploadMaxFilesize }}</span>
@@ -109,7 +109,7 @@
         {{ 'admin.reports_status.php_max_run_time'|trans }}
         <div class="text-muted">{{ 'admin.reports_status.php_max_run_time_tips'|trans }}</div>
       </td>
-      <td>{{ 'admin.reports_status.upload_file_size_greater_than_300m'|trans }}</td>
+      <td>{{ 'admin.reports_status.upload_file_size_greater_than_30s'|trans }}</td>
       <td>
         {% if env.maxExecutionTimeOk %}
           <span class="text-success">√ {{'admin.reports_status.php_max_execution_time'|trans({'%maxExecutionTime%': env.maxExecutionTime})}}</span>
@@ -178,14 +178,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <td>{{ 'admin.reports_status.system_communication_with_discuz'|trans }}</td>
-      <td><span class="text-muted js-ucenter-check" data-url="{{ path('admin_v2_report_status_ucenter') }}">{{ 'admin.reports_status.system_checking'|trans }}</span></td>
-    </tr>
     {% if setting("cloud_email.status")|default("disable") == "disable" %}
       <tr>
-        <td>{{ 'admin.reports_status.system_email_send'|trans }} <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top" title="{{ 'admin.reports_status.system_email_send_tips'|trans }}"></i></td>
-        <td><span class="text-muted js-email-send-check" data-url="{{ path('admin_v2_report_status_email_send') }}">{{ 'admin.reports_status.system_checking'|trans }}</span>
+        <td>
+          {{ 'admin.reports_status.system_email_send'|trans }}
+          <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top" title="{{ 'admin.reports_status.system_email_send_tips'|trans }}"></i>
+
+        </td>
+        <td><span class="text-muted js-email-send-check" data-url="{{ path('admin_v2_report_status_email_send') }}">
+             <a href="jvascript:;" id="js-email-send-detection">{{ 'admin.reports_status.system_email_send_detection'|trans }}</a>
+          </span>
         </td>
       </tr>
     {% endif %}

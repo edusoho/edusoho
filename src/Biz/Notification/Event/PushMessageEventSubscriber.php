@@ -20,7 +20,6 @@ use Biz\IM\Service\ConversationService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
@@ -58,6 +57,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'classroom.quit' => 'onClassroomQuit',
 
             'classroom.update' => 'onClassroomUpdate',
+            'classroom.hide' => 'onClassroomUpdate',
 
             //小组开启/关闭（云搜索支持小组话题搜索）
             'group.open' => 'onGroupOpen',
@@ -2262,14 +2262,6 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return TestpaperService
-     */
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

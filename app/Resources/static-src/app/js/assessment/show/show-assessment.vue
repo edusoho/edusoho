@@ -25,6 +25,11 @@
         fileId: 0,
       };
     },
+    provide() {
+      return {
+        modeOrigin: 'do'
+      }
+    },
     created() {
        const assessment = JSON.parse($('[name=assessment]').val());
        this.assessment = assessment;

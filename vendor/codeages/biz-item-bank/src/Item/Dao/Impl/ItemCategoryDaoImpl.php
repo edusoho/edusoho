@@ -16,7 +16,9 @@ class ItemCategoryDaoImpl extends AdvancedDaoImpl implements ItemCategoryDao
 
     public function findByBankId($bankId)
     {
-        return $this->findByFields(['bank_id' => $bankId]);
+        $sql = "SELECT * FROM {$this->table} WHERE bank_id = ? ORDER BY `seq` ASC";
+
+        return $this->db()->fetchAll($sql, [$bankId]);
     }
 
     public function resetItemNumAndQuestionNumByBankId($bankId)

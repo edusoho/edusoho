@@ -19,7 +19,7 @@ class YoukuVideoItemParserTest extends BaseTestCase
             [
                 [
                     'functionName' => 'fetchUrl',
-                    'withParams' => ['http://v.youku.com/v_show/id_XNTgxOTA5ODg0.html'],
+                    'withParams' => ['https://v.youku.com/v_show/id_XNTgxOTA5ODg0.html'],
                     'returnValue' => [
                         'code' => 200,
                         'content' => $youkuResponse,
@@ -29,7 +29,7 @@ class YoukuVideoItemParserTest extends BaseTestCase
         );
 
         $parser = ReflectionUtils::setProperty($parser, 'mockedSender', $mockedSender);
-        $video = $parser->parse('http://v.youku.com/v_show/id_XNTgxOTA5ODg0.html');
+        $video = $parser->parse('https://v.youku.com/v_show/id_XNTgxOTA5ODg0.html');
 
         $this->assertEquals('video', $video['type']);
         $this->assertEquals('youku', $video['source']);

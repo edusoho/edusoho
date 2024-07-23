@@ -16,13 +16,20 @@ class LiveActivityServiceTest extends BaseTestCase
             'mediaType' => 'live',
             'fromCourseId' => 1,
             'fromCourseSetId' => 1,
-            'fromUserId' => '1',
+            'fromUserId' => 1,
             'startTime' => time() + 1000,
             'endTime' => time() + 3000,
             'length' => 2000,
             '_base_url' => 'url...',
             'roomType' => 'small',
         ];
+        $this->mockBiz('User:UserService', [
+            [
+                'functionName' => 'getUser',
+                'withParams' => [1],
+                'returnValue' => ['nickname' => 'speaker'],
+            ],
+        ]);
         $savedActivity = $this->getLiveActivityService()->createLiveActivity($live);
         $this->assertNotNull($savedActivity['id']);
         $this->assertNotNull($savedActivity['liveId']);
@@ -160,41 +167,6 @@ class LiveActivityServiceTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @expectedException \Biz\Activity\LiveActivityException
-     * @expectedExceptionMessage exception.live_activity.live_status_invalid
-     */
-    public function testUpdateLiveStatusActivityEmpty()
-    {
-        $result = $this->getLiveActivityService()->updateLiveStatus(1, 'closed');
-        $this->assertNull($result);
-
-        $this->mockBiz('Activity:LiveActivityDao', [
-            [
-                'functionName' => 'get',
-                'returnValue' => ['id' => 1],
-            ],
-        ]);
-        $result = $this->getLiveActivityService()->updateLiveStatus(1, 'created');
-    }
-
-    public function testUpdateLiveStatus()
-    {
-        $this->mockBiz('Activity:LiveActivityDao', [
-            [
-                'functionName' => 'get',
-                'returnValue' => ['id' => 1, 'progressStatus' => 'created'],
-            ],
-            [
-                'functionName' => 'update',
-                'returnValue' => ['id' => 1, 'progressStatus' => 'closed'],
-            ],
-        ]);
-        $result = $this->getLiveActivityService()->updateLiveStatus(1, 'closed');
-
-        $this->assertEquals('closed', $result['progressStatus']);
-    }
-
     public function testSearch()
     {
         $this->mockBiz('Activity:LiveActivityDao', [
@@ -242,6 +214,13 @@ class MockEdusohoLiveClient
 {
     public function __contruct()
     {
+    }
+
+    public function getLiveAccount()
+    {
+        return [
+            'provider' => rand(1, 10),
+        ];
     }
 
     public function createLive($live)

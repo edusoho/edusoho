@@ -6,7 +6,6 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\DeviceToolkit;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
@@ -55,6 +54,28 @@ class OpenCourseLiveTicket extends AbstractResource
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
 
         return $this->getLiveService()->createLiveTicket($lesson['mediaId'], $params);
+    }
+
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function get(ApiRequest $request, $lessonId, $liveTicket)
+    {
+        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        if (empty($lesson)) {
+            throw OpenCourseException::NOTFOUND_LESSON();
+        }
+
+        if ('liveOpen' != $lesson['type']) {
+            throw OpenCourseException::LESSON_TYPE_INVALID();
+        }
+
+        $liveTicket = $this->getLiveService()->getLiveTicket($lesson['mediaId'], $liveTicket);
+        if (empty($liveTicket)) {
+            throw OpenCourseException::NOTFOUND_TICKET();
+        }
+
+        return $liveTicket;
     }
 
     protected function getRandomString($length, $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')

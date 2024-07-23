@@ -27,6 +27,8 @@
 // 常用class
 @import "mixins/index.less";
 
+@import '~katex/dist/katex.css';
+
 // 插件
 @import "plugin/select2-new.less";
 @import "plugin/select2.less";         //下拉框
@@ -94,6 +96,8 @@
 
 @import "component/reviews.less";
 
+@import "component/mobile-mask.less";
+
 // 模块---------------------------------------------------------------//
 @import "module/class-serve.less";    // 班级服务
 @import "module/course.less";         // 课程
@@ -160,6 +164,7 @@
 @import "page/goods/index.less"; // 商品页
 @import "page/goods-min-screen/index.less";
 @import "page/out-focus-mask.less";
+@import "page/closed/index.less";
 
 @import "page/item-bank-exercise/index.less";
 @import "page/item-bank-exercise/chapter-exercise-header.less";
@@ -167,7 +172,10 @@
 @import "page/item-bank-exercise/exercise-show/assessment.less";
 @import "page/item-bank-exercise/exercise-show/chapter.less";
 @import "page/item-bank-exercise/exercise-show/advanced.less";
-
+@import "page/question-manage/questions-import-modal.less"; // 导入题目模态框样式
+@import "page/question-manage/administrator-import-modal.less"; // 管理员视角弹框
+@import "page/question-manage/non-administrator-perspective-modal.less"; // 非管理员视角
+@import "page/task/app-modal.less";
 // 针对国际化的样式修改
 @import "es-en/es-en.less";
 @import "page/information-collect.less";
@@ -176,3 +184,5 @@
 
 @import "page/teaching.less";
 @import "page/testpaper-score.less";
+@import 'page/class/class-detail-main-color.less';
+@import 'page/question-bank/ai-analysis-intro-modal.less';

@@ -36,9 +36,9 @@
         {% endif %}
       </div>
 
-        <div class="mlm">
+        <div>
           {% if setting('qualifications.icp') %}
-            <a class="mlm" href={{ setting('qualifications.icpUrl')|default('https://beian.miit.gov.cn') }} target="_blank">
+            <a href={{ setting('qualifications.icpUrl')|default('https://beian.miit.gov.cn') }} target="_blank">
               {{ setting('qualifications.icp') }}
             </a>
           {% endif %}
@@ -62,12 +62,11 @@
         <div>
           {% if permit.name and permit.record_number %}
             {% if permit.picture %}
-              <a class="mlm"
-                 href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
+              <a href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
               <a class="mlm"
                  href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
             {% else %}
-              <a class="mlm">{{ permit.name }}</a>
+              <a>{{ permit.name }}</a>
               <a class="mlm">{{ permit.record_number }}</a>
             {% endif %}
           {% endif %}

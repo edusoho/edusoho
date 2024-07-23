@@ -7,7 +7,7 @@ use ApiBundle\Api\Util\AssetHelper;
 
 class MallUserFilter extends Filter
 {
-    protected $simpleFields = ['id', 'nickname', 'email', 'verifiedMobile', 'password', 'smallAvatar', 'title', 'about'];
+    protected $simpleFields = ['id', 'nickname', 'email', 'verifiedMobile', 'password', 'smallAvatar', 'title', 'about', 'locked'];
 
     protected function simpleFields(&$data)
     {

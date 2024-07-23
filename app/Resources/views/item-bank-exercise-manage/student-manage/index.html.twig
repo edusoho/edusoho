@@ -21,14 +21,39 @@
         <div class="clearfix"></div>
       </form>
       {% if students|length > 0 %}
-        <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
-        <button id="batch-remove" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('item_bank_exercise_manage_remove_students', {exerciseId: exercise.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
+        <button id="batch-remove" type="button" class="cd-btn cd-btn-default mr8" data-url="{{ path('item_bank_exercise_manage_remove_students', {exerciseId: exercise.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
+
+        <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+          <button type="button" class="cd-btn cd-btn-default dropdown-toggle">
+            {{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}
+            <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a id="batch-update-expiry-day"
+                 class="clearfix"
+                 href="javascript:;"
+                 data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">
+                {{ 'classroom.student_batch_update_expiry_date'|trans }}
+              </a>
+            </li>
+            <li>
+              <a id="all-update-expiry-day"
+                 class="clearfix"
+                 href="javascript:;"
+                 data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">
+                {{ 'course.members_manage.official_student.all_update_deadline'|trans }}
+              </a>
+            </li>
+          </ul>
+        </div>
       {% endif %}
       <table class="table table-striped" id="course-student-list">
         <thead>
           <tr>
             <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
             <th>{{'site.default.student'|trans}}</th>
+            <th>{{'site.default.mobile'|trans}}</th>
             <th>{{'join.time'|trans}}</th>
             <th>{{'course.expiry_date'|trans}}</th>
             <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>
@@ -37,6 +62,7 @@
         <tbody>
           {% for student in students if student %}
             {% set user = users[student.userId]|default(null) %}
+            {% set userProfile = userProfiles[student.userId]|default(null) %}
             {% include 'item-bank-exercise-manage/student-manage/tr-v2.html.twig' %}
           {% else %}
             <tr class="empty"><td colspan="20">{{'course.members_manage.official_student.empty'|trans}}</td></tr>
@@ -49,3 +75,4 @@
       </nav>
     </div>
 {% endblock %}
+

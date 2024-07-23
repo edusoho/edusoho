@@ -3,6 +3,8 @@
     <item-review
       :role="role"
       :activity="activity"
+      :isDownload="isDownload"
+      :metaActivity="metaActivity"
       :assessment="assessment"
       :answerReport="answerReport"
       :answerRecord="answerRecord"
@@ -43,7 +45,8 @@
         mediaType: $('[name=media_type]').val(),
         finishType: $('[name=finishType]').val(),
         activity: {},
-        submitList: []
+        submitList: [],
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
     created() {
@@ -61,6 +64,7 @@
           }
         }).done(function (res) {
           that.activity = res.activity;
+          that.metaActivity = res.metaActivity;
           that.answerRecord = res.answer_record;
           if ('finished' == that.answerRecord.status) {
             location.href = $('[name=success_goto_url]').val();
@@ -71,6 +75,11 @@
           that.answerScene = res.answer_scene;
         })
         this.getAnswerRecord();
+    },
+    provide() {
+      return {
+        modeOrigin: 'do'
+      }
     },
     methods: {
       getReviewData(reviewReport) {

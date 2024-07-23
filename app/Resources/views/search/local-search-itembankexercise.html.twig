@@ -1,0 +1,58 @@
+{% extends 'search/local-search.html.twig' %}
+
+{% block searchType %}
+  <li role="presentation" class="{% if not filter %}active{% endif %}">
+    <a href="{{ path('search', {q: keywords, type: type}) }}">{{ 'search.all_item_bank_exercise'|trans }}</a>
+  </li>
+  <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+    <a href="{{ path('search', {filter: 'free', q: keywords, type: type}) }}">{{ 'search.free_item_bank_exercise'|trans }}</a>
+  </li>
+{% endblock %}
+
+{% block mobileType %}
+  <button type="button" class="cd-btn cd-btn-primary pull-right dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',filter|default('all')) }}
+    <span class="caret"></span></button>
+
+  <ul class="dropdown-menu" role="menu">
+    <li role="presentation" class="{% if not filter %}active{% endif %}">
+      <a href="{{ path('search', {q: keywords, type: type}) }}">{{ 'search.all_item_bank_exercise'|trans }}</a>
+    </li>
+    <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+      <a href="{{ path('search', {filter: 'free', q: keywords, type: type}) }}">{{ 'search.free_item_bank_exercise'|trans }}</a>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block tip %}
+  <div class="cd-mb16">
+    {% if keywords %}
+      {{ 'search.relative_item_bank_exercises_result'|trans({'%count%': count, '%keywords%': keywords})|raw }}
+    {% else %}
+      {{ 'search.result_item_bank_exercises_copy'|trans({'%count%': count})|raw }}
+    {% endif %}
+  </div>
+{% endblock %}
+
+
+{% block content %}
+  <!-- 题库练习列表 -->
+  {% set itemBankExercises = itemBankExercises|default(results) %}
+  <div class="course-list course-list-new cd-mt8">
+    <div class="row">
+      {% if itemBankExercises %}
+        {% for itemBankExercise in itemBankExercises %}
+          <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+            {% include 'item-bank-exercise/explore/exercise-grid.html.twig' with {exercise: itemBankExercise} %}
+          </div>
+        {% endfor %}
+
+      {% else %}
+        <div class="empty">{{ 'search.empty'|trans({'%name%':'site.default.item.bank.exercise'|trans}) }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

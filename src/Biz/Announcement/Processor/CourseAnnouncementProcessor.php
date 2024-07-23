@@ -5,8 +5,8 @@ namespace Biz\Announcement\Processor;
 use Biz\CloudPlatform\QueueJob\PushJob;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Biz\User\Service\NotificationService;
+use Codeages\Biz\Framework\Queue\Service\QueueService;
 
 class CourseAnnouncementProcessor extends AnnouncementProcessor
 {
@@ -31,21 +31,22 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         return 'course_show';
     }
 
-    public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl)
+    public function announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement)
     {
-        $conditions = array(
+        $conditions = [
             'courseId' => $targetId,
             'role' => 'student',
-        );
+        ];
         $count = $this->getCourseMemberService()->countMembers($conditions);
         $members = $this->getCourseMemberService()->findCourseStudents($targetId, 0, $count);
 
         $result = false;
         if ($members) {
             $this->courseAnnouncementPush($targetId);
-            $message = array('title' => $targetObject['title'],
+            $message = ['title' => $targetObject['courseSetTitle'].'-'.(empty($targetObject['title']) ? '默认计划' : $targetObject['title']),
                 'url' => $targetObjectShowUrl,
-                'type' => 'course', );
+                'type' => 'course',
+                'announcement_id' => $announcement['id'], ];
             foreach ($members as $member) {
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
@@ -64,41 +65,41 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
         $conv = $this->getConversationService()->getConversationByTarget($course['id'], 'course-push');
 
-        $from = array(
+        $from = [
             'id' => $course['id'],
             'type' => 'course',
-        );
+        ];
 
-        $to = array(
+        $to = [
             'type' => 'course',
             'id' => 'all',
             'convNo' => $conv['no'],
-        );
+        ];
 
-        $body = array(
+        $body = [
             'type' => 'course.announcement.create',
             'courseId' => $course['id'],
             'title' => "《{$course['title']}》",
             'message' => "[课程公告] 你正在学习的课程《{$course['title']}》有一个新的公告，快去看看吧",
-        );
+        ];
 
         $this->createPushJob($from, $to, $body);
     }
 
     private function createPushJob($from, $to, $body)
     {
-        $pushJob = new PushJob(array(
+        $pushJob = new PushJob([
             'from' => $from,
             'to' => $to,
             'body' => $body,
-        ));
+        ]);
 
         $this->getQueueService()->pushJob($pushJob);
     }
 
     public function isIMEnabled()
     {
-        $setting = $this->getSettingService()->get('app_im', array());
+        $setting = $this->getSettingService()->get('app_im', []);
 
         if (empty($setting) || empty($setting['enabled'])) {
             return false;
@@ -121,11 +122,11 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
     public function getActions($action)
     {
-        $config = array(
+        $config = [
             'create' => 'AppBundle:Course/Announcement:create',
             'edit' => 'AppBundle:Course/Announcement:edit',
             'list' => 'AppBundle:Course/Announcement:list',
-        );
+        ];
 
         return $config[$action];
     }

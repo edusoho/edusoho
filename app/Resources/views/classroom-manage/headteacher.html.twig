@@ -16,7 +16,7 @@
         <div class="col-md-8 controls">
           {% set url = path('classroom_headteacher_match', {classroomId:classroom.id})%}
           <div id="classroom-head-teacher" data-url="{{ url }}" data-teacher="{{ headTeacher|json_encode }}"></div>
-          <p class="help-block">{{'classroom.set_head_teacher_tips'|trans({'%name%':setting('classroom.name','classroom'|trans)})}}</p>
+          <p class="help-block">{{'classroom.set_head_teacher_tips'|trans}}</p>
         </div>  
       </div>
       <div class="form-group">

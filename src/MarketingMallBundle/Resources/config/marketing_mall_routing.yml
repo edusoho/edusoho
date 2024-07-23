@@ -2,3 +2,8 @@ marketing_mall_callback:
   path: /marketing/mall/callback
   defaults:
     _controller: 'MarketingMallBundle:Callback:index'
+
+marketing_mall:
+  path: /mall
+  defaults:
+    _controller: 'MarketingMallBundle:Mall:index'

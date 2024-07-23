@@ -26,7 +26,7 @@
         @change="handleChange"
       >
         <a-select-option v-for="course in data" :key="course.id">
-          {{ course.title || course.courseSetTitle }}
+          {{ course.displayedTitle }}
         </a-select-option>
       </a-select>
     </div>
@@ -51,7 +51,7 @@ import { Course } from 'common/vue/service/index.js';
 const columns = [
   {
     title: Translator.trans('decorate.course_title'),
-    dataIndex: 'title',
+    dataIndex: 'displayedTitle',
     width: '40%',
     customRender: function(text, record) {
       return text ? text : record.courseSetTitle;
@@ -92,7 +92,6 @@ export default {
       columns
     }
   },
-
   methods: {
     showModal() {
       this.visible = true;

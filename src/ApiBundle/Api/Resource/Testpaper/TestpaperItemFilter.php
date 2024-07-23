@@ -6,9 +6,11 @@ use ApiBundle\Api\Resource\Filter;
 
 class TestpaperItemFilter extends Filter
 {
-    protected $publicFields = array('id', 'type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'target',
+    protected $publicFields = [
+        'id', 'type', 'stem', 'score', 'answer', 'analysis', 'metas', 'categoryId', 'difficulty', 'target',
         'courseId', 'lessonId', 'parentId', 'subCount', 'finishedTimes', 'passedTimes', 'createdUserId', 'updatedUserId', 'courseSetId',
-        'seq', 'missScore', 'missScore', 'subs', 'testResult', 'isDeleted', );
+        'seq', 'missScore', 'missScore', 'subs', 'testResult', 'isDeleted', 'attachments', 'sectionId', 'itemId', 'aiAnalysisEnable',
+    ];
 
     protected function publicFields(&$data)
     {
@@ -34,17 +36,17 @@ class TestpaperItemFilter extends Filter
                 }
             }
         } else {
-            $data['testResult'] = (object) array();
+            $data['testResult'] = (object) [];
         }
 
         if (!empty($data['type'])) {
-            if (in_array($data['type'], array('essay')) && !empty($data['answer']) && is_array($data['answer'])) {
+            if (in_array($data['type'], ['essay']) && !empty($data['answer']) && is_array($data['answer'])) {
                 foreach ($data['answer'] as &$answer) {
                     $answer = $this->convertAbsoluteUrl($answer);
                 }
             }
 
-            if (in_array($data['type'], array('fill')) && !empty($data['answer']) && is_array($data['answer'])) {
+            if (in_array($data['type'], ['fill']) && !empty($data['answer']) && is_array($data['answer'])) {
                 foreach ($data['answer'] as &$answer) {
                     if (is_array($answer)) {
                         $answer = implode('|', $answer);
@@ -52,7 +54,7 @@ class TestpaperItemFilter extends Filter
                 }
             }
 
-            if (in_array($data['type'], array('single_choice', 'choice', 'uncertain_choice'))
+            if (in_array($data['type'], ['single_choice', 'choice', 'uncertain_choice'])
                 && !empty($data['metas'])
                 && !empty($data['metas']['choices'])
                 && is_array($data['metas']['choices'])) {
@@ -61,7 +63,7 @@ class TestpaperItemFilter extends Filter
                 }
             }
 
-            if (in_array($data['type'], array('material'))) {
+            if (in_array($data['type'], ['material'])) {
                 $data['subs'] = array_values($data['subs']);
                 foreach ($data['subs'] as &$question) {
                     self::filter($question);

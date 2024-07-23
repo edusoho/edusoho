@@ -157,6 +157,7 @@ class TaskManageController extends BaseController
 
         if ('POST' == $request->getMethod()) {
             $task = $request->request->all();
+            $task['length'] = $this->prepareLimitedTime($task['length']);
             $task['redoInterval'] = empty($task['redoInterval']) ? 0 : $task['redoInterval'] * 60;
             if (!isset($task['fromCourseSetId'])) {
                 $task['fromCourseSetId'] = $course['courseSetId'];
@@ -320,6 +321,13 @@ class TaskManageController extends BaseController
 
     protected function parseTimeFields($fields)
     {
+        if ('normal' == $fields['testMode'] && isset($fields['startTime'])) {
+            $fields['startTime'] = 0;
+            $fields['endTime'] = 0;
+
+            return $fields;
+        }
+
         if (!empty($fields['startTime'])) {
             $fields['startTime'] = strtotime($fields['startTime']);
         }

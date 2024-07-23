@@ -19,10 +19,51 @@
     color: #333;
     font-weight: bold;
   }
-  
+
 .document-import-intro-title {
     margin-bottom: 16px;
     font-size: 18px;
     line-height: 1;
     text-align: center;
   }
+
+.testpaper-mode {
+  float: left;
+  height: 102px;
+  padding: 16px;
+  font-size: 14px;
+  border: 1px solid #E6E7E8;
+  border-radius: 3px;
+  cursor: default;
+
+  &__title {
+    margin-bottom: 4px;
+    font-weight: 500;
+    line-height: 22px;
+    color: #1D2129;
+  }
+
+  &__rule {
+    position: relative;
+    padding-left: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #999;
+
+    &::before {
+      content: '·';
+      position: absolute;
+      left: 2px;
+      top: 0;
+      color: #999;
+    }
+  }
+}
+
+.testpaper-mode.active {
+  border: 2px solid #67B86A;
+
+  .testpaper-mode__title {
+    color: #67B86A;
+  }
+}

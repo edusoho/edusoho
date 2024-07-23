@@ -91,6 +91,8 @@ class FileController extends BaseController
             $fields[] = [
                 'type' => $key,
                 'id' => $file['id'],
+                'url' => $this->getWebExtension()->getFilePath($file['uri']),
+                'uri' => $file['uri'],
             ];
         }
 

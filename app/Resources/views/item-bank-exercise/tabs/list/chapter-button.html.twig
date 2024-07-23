@@ -1,16 +1,36 @@
 {% if member|default(null) and previewAs|default(null) == 'member' %}
     {% if record %}
       <div class="col-xs-4 col-md-2 content-right" style="color:#999">
-        <span>{{ record.doneQuestionNum }}/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': record.questionNum}) }}</span>
+          <span>{{ record.doneQuestionNum }}/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': record.questionNum}) }}</span>
       </div>
       <div class="col-xs-2 content-left hidden-xs" style="color:#999">
         <span>{{ 'item_bank_exercise.accuracy'|trans }}{{ record.rightRate }}%</span>
       </div>
       <div class="col-xs-2 content-right" style="color:#999">
-        {% if record.status == 'doing' or record.status == 'paused' %}
-          <a id="btn-default" class="cd-btn cd-btn-primary content-right" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.continue_btn'|trans }}</a>
-        {% elseif record.status == 'reviewing' or record.status == 'finished' %}
-          <a id="btn-view" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.view_btn'|trans }}</a>
+        {% if member.locked|default("1") == "0" %}
+          {% if record.status == 'doing' or record.status == 'paused' %}
+            {% if record.exercise_mode == '1' %}
+              <a id="btn-default" class="cd-btn cd-btn-primary content-right 
+              {% if exercise.status == 'closed' %}
+              {% if member | default(false) %}
+                js-handleExerciseOnMessage
+              {% else %}
+                js-handleExerciseClosed
+              {% endif %}
+            {% endif %}" href="#modal" data-toggle="modal" data-url="{{ path('item_bank_exercise_submit_single_mode_not_support_modal') }}">{{ 'item_bank_exercise.chapter.exercise.continue_btn'|trans }}</a>
+            {% else %}
+              <a id="btn-default" class="cd-btn cd-btn-primary content-right 
+              {% if exercise.status == 'closed' %}
+              {% if member | default(false) %}
+                js-handleExerciseOnMessage
+              {% else %}
+                js-handleExerciseClosed
+              {% endif %}
+            {% endif %}" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.continue_btn'|trans }}</a>
+            {% endif %}
+          {% elseif record.status == 'reviewing' or record.status == 'finished' %}
+            <a id="btn-view" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.view_btn'|trans }}</a>
+          {% endif %}
         {% endif %}
       </div>
     {% else %}
@@ -22,7 +42,16 @@
           <span>{{ 'item_bank_exercise.accuracy'|trans }}0.0%</span>
         </div>
         <div class="col-xs-2 content-right" style="color:#999">
-          <a id="btn-default" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
+          {% if member.locked|default("1") == "0" %}
+            <a id="btn-default" class="cd-btn cd-btn-ghost-primary 
+            {% if exercise.status == 'closed' %}
+              {% if member | default(false) %}
+                js-handleExerciseOnMessage
+              {% else %}
+                js-handleExerciseClosed
+              {% endif %}
+            {% endif %}" href="#modal" {% if exercise.status != 'closed' %} data-toggle="modal" {% endif %} data-url="{{ path('item_bank_exercise_category_info_modal', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
+          {% endif %}
         </div>
       {% endif %}
     {% endif %}

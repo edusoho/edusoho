@@ -69,6 +69,11 @@ class ExportHelp
         if(empty($fileName)) {
             return new JsonResponse('empty fileName', 200);
         }
+
+        if(empty($request->query->get('fileName'))) {
+            return new JsonResponse('empty fileName', 200);
+        }
+
         $filePath = self::getFilePath($request->query->get('fileName'));
         if (empty($filePath) || !file_exists($filePath)) {
             return new JsonResponse('empty file', 200);

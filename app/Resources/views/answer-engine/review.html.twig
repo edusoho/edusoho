@@ -32,10 +32,13 @@
     <input type="hidden" name="success_continue_goto_url" value='{{ successContinueGotoUrl }}'>
     <input type="hidden" name="goto_back_url" value='{{ goBackUrl }}'>
     <input type="hidden" name="role" value='{{ role }}'>
+    <input type="hidden" name="question_bank_attachment_setting" value="{{ setting('question_bank_attachment_setting')|json_encode }}">
+    {% if activity %}
     <input type="hidden" name="media_type" value='{{ activity.mediaType }}'>
     <input type="hidden" name="finishType" value='{{ activity.finishType }}'>
+    {% endif %}
 
-    {% block footer %}
+  {% block footer %}
         {% if showHeader|default(1) %}{{ parent() }}{% endif %}
     {% endblock %}
 {% endblock %}

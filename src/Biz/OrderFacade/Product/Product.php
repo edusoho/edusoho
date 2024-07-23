@@ -6,6 +6,8 @@ use AppBundle\Common\MathToolkit;
 use AppBundle\Common\StringToolkit;
 use AppBundle\Component\Notification\WeChatTemplateMessage\MessageSubscribeTemplateUtil;
 use Biz\AppLoggerConstant;
+use Biz\ItemBankExercise\Service\MemberOperationRecordService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Currency;
 use Biz\Sms\Service\SmsService;
@@ -226,7 +228,12 @@ abstract class Product extends BizAware implements OrderStatusCallback
             'refund_id' => $orderRefund['id'],
             'reason_type' => 'refund',
         ];
-        $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
+        if ($orderItem['target_type'] == 'item_bank_exercise'){
+            $record['refundId'] = $orderRefund['id'];
+            $this->getItemBankExerciseMemberOperationRecord()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
+        }else{
+            $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
+        }
     }
 
     public function getCreateExtra()
@@ -308,6 +315,9 @@ abstract class Product extends BizAware implements OrderStatusCallback
         return $this->biz->service('OrderFacade:OrderRefundService');
     }
 
+    /**
+     * @return MemberOperationService
+     */
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
@@ -319,5 +329,13 @@ abstract class Product extends BizAware implements OrderStatusCallback
     protected function getWeChatService()
     {
         return $this->biz->service('WeChat:WeChatService');
+    }
+
+    /**
+     * @return MemberOperationRecordService
+     */
+    protected function getItemBankExerciseMemberOperationRecord()
+    {
+        return $this->biz->service('ItemBankExercise:MemberOperationRecordService');
     }
 }

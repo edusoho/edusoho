@@ -6,12 +6,13 @@ use Biz\BaseTestCase;
 use Biz\Importer\SensitiveImporter;
 use Biz\Sensitive\Dao\SensitiveDao;
 use Biz\User\CurrentUser;
+use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 class SensitiveImporterTest extends BaseTestCase
 {
-    public function testImport_whenEmptyImportData_thenReturn0()
+    public function testImportWhenEmptyImportDataThenReturn0()
     {
         $request = new Request([], [
             'importData' => [],
@@ -45,15 +46,16 @@ class SensitiveImporterTest extends BaseTestCase
         $this->assertTrue(true);
     }
 
-    public function testTryImport_returnTrue()
+    public function testTryImportReturnTrue()
     {
         $request = new Request([], []);
         $import = new SensitiveImporter($this->getBiz());
 
-        $this->assertTrue($import->tryImport($request));
+        $import->tryImport($request);
+        $this->assertTrue(true);
     }
 
-    public function testTryImport_returnFalse()
+    public function testTryImportReturnFalse()
     {
         $request = new Request([], []);
         $currentUser = new CurrentUser();
@@ -67,11 +69,14 @@ class SensitiveImporterTest extends BaseTestCase
         ]);
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
+        $this->expectException(UserException::class);
+        $this->expectExceptionCode(UserException::PERMISSION_DENIED);
+
         $import = new SensitiveImporter($this->getBiz());
-        $this->assertFalse($import->tryImport($request));
+        $import->tryImport($request);
     }
 
-    public function testCheck_whenDataRepeat_thenReturnErrorResponse()
+    public function testCheckWhenDataRepeatThenReturnErrorResponse()
     {
         $importer = new SensitiveImporter($this->getBiz());
         $request = new Request([], [], [], [], [
@@ -80,10 +85,10 @@ class SensitiveImporterTest extends BaseTestCase
 
         $result = $importer->check($request);
 
-        $this->assertEquals(['第1列重复:<br>第4行    屏蔽敏感词<br>第5行    屏蔽敏感词<br>'], $result['errorInfo']);
+        $this->assertEquals(['第1列重复，重复内容如下:<br>第4行：屏蔽敏感词<br>第5行：屏蔽敏感词<br>'], $result['errorInfo']);
     }
 
-    public function testCheck_whenImportDataError_thenReturnErrorResponse()
+    public function testCheckWhenImportDataErrorThenReturnErrorResponse()
     {
         $importer = new SensitiveImporter($this->getBiz());
         $request = new Request([], [], [], [], [

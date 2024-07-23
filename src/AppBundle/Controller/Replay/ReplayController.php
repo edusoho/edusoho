@@ -16,6 +16,11 @@ class ReplayController extends BaseController
 {
     public function listAction(Request $request)
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '请先登录！', '', 5, $this->generateUrl('login'));
+        }
+
         $conditions = $request->query->all();
         $conditions['replayTagId'] = empty($conditions['tagId']) ? '' : $conditions['tagId'];
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
@@ -47,14 +52,23 @@ class ReplayController extends BaseController
         if (empty($replays)) {
             return [];
         }
+        $currentUser = $this->getCurrentUser();
         $activityIds = ArrayToolkit::column($replays, 'lessonId');
         $liveActivities = $this->getActivityService()->findActivities($activityIds, true);
         $liveActivities = ArrayToolkit::index($liveActivities, 'id');
 
+        $exts = ArrayToolkit::column($liveActivities, 'ext');
+        $anchorIds = ArrayToolkit::column($exts, 'anchorId');
+        $users = ArrayToolkit::index($this->getUserService()->findUsersByIds($anchorIds), 'id');
+
         $activitiesList = [];
         foreach ($replays as $replay) {
             $activity = $liveActivities[$replay['lessonId']];
-            $user = $this->getUserService()->getUser($activity['ext']['anchorId']);
+            $anchorId = $activity['ext']['anchorId'];
+            if (!$this->isCanViewReplay($activity, $currentUser)) {
+                continue;
+            }
+
             $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
             $activitiesList[] = [
                 'id' => $activity['id'],
@@ -62,7 +76,7 @@ class ReplayController extends BaseController
                 'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
                 'liveTime' => empty($liveTime) ? '-' : round($liveTime / 60, 1),
                 'liveSecond' => $liveTime,
-                'anchor' => empty($user['nickname']) ? '-' : $user['nickname'],
+                'anchor' => empty($users[$anchorId]['nickname']) ? '-' : $users[$anchorId]['nickname'],
             ];
         }
 
@@ -75,6 +89,27 @@ class ReplayController extends BaseController
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');
+    }
+
+    /**
+     * @param $ext
+     */
+    public function isCanViewReplay($activity, \Biz\User\CurrentUser $currentUser): bool
+    {
+        if ($currentUser->isAdmin()) {
+            return true;
+        }
+
+        if ($activity['ext']['anchorId'] ?? 0 && $currentUser->getId() == $activity['ext']['anchorId']) {
+            return true;
+        }
+
+        // 开启"直播回放共享"，但不是主讲人
+        if (1 == $activity['ext']['replayPublic'] && $currentUser->isTeacher()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

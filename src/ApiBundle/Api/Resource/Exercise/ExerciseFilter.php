@@ -6,9 +6,9 @@ use ApiBundle\Api\Resource\Filter;
 
 class ExerciseFilter extends Filter
 {
-    protected $publicFields = array(
-        'id', 'name', 'itemCount', 'latestExerciseResult', 'createdTime', 'updatedTime',
-    );
+    protected $publicFields = [
+        'id', 'name', 'itemCount', 'latestExerciseResult', 'createdTime', 'updatedTime', 'lastExerciseResult', 'itemCounts',
+    ];
 
     protected function publicFields(&$data)
     {
@@ -16,6 +16,12 @@ class ExerciseFilter extends Filter
             $exerciseResultFilter = new ExerciseResultFilter();
             $exerciseResultFilter->setMode(Filter::SIMPLE_MODE);
             $exerciseResultFilter->filter($data['latestExerciseResult']);
+        }
+
+        if (isset($data['lastExerciseResult'])) {
+            $exerciseResultFilter = new ExerciseResultFilter();
+            $exerciseResultFilter->setMode(Filter::SIMPLE_MODE);
+            $exerciseResultFilter->filter($data['lastExerciseResult']);
         }
     }
 }

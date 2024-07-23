@@ -1,7 +1,7 @@
 {% set questionTypes = getQuestionTypes() %}
 
 <div>
-  <form class="form-inline js-search-form" novalidate>
+  {# <form class="form-inline js-search-form" novalidate>
     <div class="form-group">
       <select class="form-control" name="difficulty" data-role="search-conditions">
         <option value="" {% if not app.request.get('difficulty', '') %}selected{% endif %}>{{'course.question_manage.manage.difficulty'|trans}}</option>
@@ -35,8 +35,10 @@
       </a>
       {% include 'question-bank/question/create-question-btn-group.html.twig' %}
     </div>
-  </div>
-
+  </div> #}
+  <input type="hidden" class="js-questionBank-id" value="{{ questionBank.id }}">
+  <input type="hidden" class="js-list-header-import" value="{{ path('question_bank_manage_question_import', {id: questionBank.id}) }}">
+  <input type="hidden" class="js-export-value" value="{{ path('question_bank_manage_question_export', {id: questionBank.id}) }}">
   <div role="courseset-manage-question">
     <div id="quiz-table-container" class="js-question-html" data-url="{{ path('question_bank_manage_question_show_ajax', {id: questionBank.id}) }}">
       {% include 'question-bank/question/question-list-table.html.twig' %}

@@ -31,6 +31,10 @@ class SettingsController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
         if ('POST' === $request->getMethod()) {
+            $avatars = $request->request->get('covers');
+            if (!empty($avatars)) {
+                $this->getUserService()->changeAvatar($user['id'], json_decode($avatars, true));
+            }
             $profile = $request->request->get('profile');
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile, false);
@@ -68,7 +72,7 @@ class SettingsController extends BaseController
 
             if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024
                 || !FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)
-                || getimagesize($faceImg) == false || getimagesize($backImg) == false) {
+                || false == getimagesize($faceImg) || false == getimagesize($backImg)) {
                 $this->setFlashMessage('danger', 'user.settings.verification.photo_require_tips');
 
                 return $this->render('settings/approval.html.twig', [
@@ -884,11 +888,7 @@ class SettingsController extends BaseController
                     'params' => [
                         'sitename' => $site['name'],
                         'siteurl' => $site['url'],
-                        'verifyurl' => $this->generateUrl(
-                            'auth_email_confirm',
-                            ['token' => $token],
-                            UrlGeneratorInterface::ABSOLUTE_URL
-                        ),
+                        'verifyurl' => $this->getHttpHost().'/auth/email/confirm?token='.$token,
                         'nickname' => $user['nickname'],
                     ],
                 ];
@@ -925,11 +925,8 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
-        $verifyurl = $this->generateUrl(
-            'register_email_verify',
-            ['token' => $token],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
+        $verifyurl = $this->getHttpHost().'/register/email/verify/'.$token;
+
         $site = $this->setting('site', []);
         try {
             $mailOptions = [
@@ -1004,7 +1001,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $this->checkBindsName($type);
-        $userBinds = $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
+        $this->getUserService()->unBindUserByTypeAndToId($type, $user->id);
 
         return $this->createJsonResponse(['message' => 'user.settings.unbind_success']);
     }
@@ -1012,6 +1009,8 @@ class SettingsController extends BaseController
     public function bindAction(Request $request, $type)
     {
         $this->checkBindsName($type);
+        $state = uniqid('edusoho');
+        $this->get('session')->set('login_bind.credential', $state);
         $callback = $this->generateUrl(
             'settings_binds_bind_callback',
             ['type' => $type],
@@ -1020,8 +1019,9 @@ class SettingsController extends BaseController
         $settings = $this->setting('login_bind');
         $config = ['key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']];
         $client = OAuthClientFactory::create($type, $config);
+        $credential = (string) $this->get('session')->get('login_bind.credential');
 
-        return $this->redirect($client->getAuthorizeUrl($callback));
+        return $this->redirect($client->getAuthorizeUrl($callback, $credential));
     }
 
     public function bindCallbackAction(Request $request, $type)
@@ -1037,14 +1037,25 @@ class SettingsController extends BaseController
 
         if (!empty($bind)) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.duplicate_bind');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
         }
 
         $code = $request->query->get('code');
 
         if (empty($code)) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
+        }
+
+        //校验参数
+        $oAuthClient = $this->createOAuthClient($type);
+        $result = $oAuthClient->verifyCredential($request, $this->get('session')->get('login_bind.credential'));
+        if (!$result) {
+            $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.state.authentication_fail');
+
+            return $this->redirect($this->generateUrl('settings_binds'));
         }
 
         $callbackUrl = $this->generateUrl(
@@ -1052,24 +1063,29 @@ class SettingsController extends BaseController
             ['type' => $type],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+
         try {
-            $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
+            $token = $oAuthClient->getAccessToken($code, $callbackUrl);
         } catch (\Exception $e) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
+        }
+
+        if ('weixinweb' == $type) {
+            $this->getWeChatService()->freshOpenAppWeChatUserWhenLogin($this->getCurrentUser(), $token);
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 
         if (!empty($bind)) {
             $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.exist_account');
-            goto response;
+
+            return $this->redirect($this->generateUrl('settings_binds'));
         }
 
         $this->getUserService()->bindUser($type, $token['userId'], $user['id'], $token);
         $this->setFlashMessage('success', 'user.settings.security.oauth_bind.success');
-
-        response:
 
         return $this->redirect($this->generateUrl('settings_binds'));
     }

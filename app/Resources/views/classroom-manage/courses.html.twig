@@ -24,13 +24,15 @@
         <div class="form-group" id="courses-form-group">
           <div class="col-md-12 controls">
             <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" data-sort-url="{{path('classroom_manage_items_sort',{id:classroom.id})}}">
-
               {% for course in courses %}
 
               <li class="course-item item-{{course.id}} clearfix" data-role="item" >
               <input type="hidden" name="courseIds[]" value="{{course.id}}" />
               <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
-              <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              <a class="course-picture-link relative" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              <span class="course-status {% if course.status == 'published' %} course-status-active {% endif %}">
+              {% if course.status == 'closed' %} {{'course.status.closed'|trans}} {% else %} {{'course.status.published'|trans}} {% endif %}
+              </span>
               {% if course.type == 'live' %}
                 <span class="tags">
                   <span class="tag-live"></span>
@@ -70,18 +72,46 @@
                       {% endif %}
                     </div>
 
-                    <h4 class="course-title text-overflow mv0">
+                    <h4 class="course-title mv0" style="width: 529px;">
                       {% if course.serializeMode=='serialized' %}
                         <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
                       {% elseif course.serializeMode=='finished' %}
                         <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
                       {% endif %}
-                      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title|raw }}</a>
+                      <a class="text-overflow" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ course.courseSet.title|raw }}" href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title|raw }}</a>
 
-                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20)|raw }}</div>{% endif %}
+                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|raw }}</div>{% endif %}
                     </h4>
-                    <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
-
+                    <div class="btn-group course-manage-btn" data-toggle="cd-dropdown" data-trigger="hover">
+                      <a class="btn btn-default btn-sm"
+                            href="{{path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'})}}"
+                          target="_blank">{{ 'admin.course_manage.manage.manage_btn'|trans }}</a>
+                          <div class="cd-dropdown btn-group " data-toggle="cd-dropdown" data-trigger="hover">
+                          <a href="#" type="button" class="cd-link-major btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                          </a>
+                      <ul class="dropdown-menu courses-operation-dropdown" style="top: 30px !important; left: -60px;">
+                        {% if course.status == 'published' %}
+                        <li>
+                          <a
+                          class="js-manage-course-close"
+                            href="javascript:;"
+                            data-url="{{ path('course_set_manage_close', {id: course.courseSet.id}) }}">
+                            {{ 'classroom.closed.course'|trans }}</a>
+                        </li>
+                        {% else %}
+                        <li>
+                          <a
+                          class="js-manage-course-open"
+                            href="javascript:;"
+                            data-url="{{ path('course_set_manage_publish', {id: course.courseSet.id}) }}">
+                            {{ 'classroom.open.course'|trans }}</a>
+                        </li>
+                        {% endif %}
+                      </ul>
+                      </div>
+                    </div>
+                    {# <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div> #}
                     <div class="course-footer clearfix">
                       {% set teacher = users[course.teacherIds|first]|default(null) %}
                       {% if teacher %}

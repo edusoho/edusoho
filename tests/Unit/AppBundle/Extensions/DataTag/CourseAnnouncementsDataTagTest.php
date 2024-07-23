@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
-use Biz\BaseTestCase;
-use AppBundle\Extensions\DataTag\CourseAnnouncementsDataTag;
 use AppBundle\Common\TimeMachine;
+use AppBundle\Extensions\DataTag\CourseAnnouncementsDataTag;
+use Biz\BaseTestCase;
 
 class CourseAnnouncementsDataTagTest extends BaseTestCase
 {
@@ -14,54 +14,55 @@ class CourseAnnouncementsDataTagTest extends BaseTestCase
 
         $this->mockBiz(
             'Announcement:AnnouncementService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchAnnouncements',
-                    'returnValue' => array(
-                        array(
+                    'returnValue' => [
+                        [
                             'id' => 1,
                             'userId' => 1,
                             'targetType' => 'course',
                             'url' => 'http://www.dev-edusoho.com/course/1',
                             'contents' => 'course contents 11',
-                        ),
-                        array(
+                        ],
+                        [
                             'id' => 2,
                             'userId' => 1,
                             'targetType' => 'course',
                             'url' => 'http://www.dev-edusoho.com/course/1',
                             'contents' => 'course contents 12',
-                        ),
-                    ),
-                    'withParams' => array(
-                        array(
+                        ],
+                    ],
+                    'withParams' => [
+                        [
                             'targetType' => 'course',
-                            'endTime' => $mockedTime,
+                            'endTime_GTE' => $mockedTime,
+                            'startTime_LTE' => $mockedTime,
                             'targetId' => 1,
-                        ),
-                        array('createdTime' => 'DESC'),
+                        ],
+                        ['createdTime' => 'DESC'],
                         0,
                         2,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
 
-        $arguments = array(
+        $arguments = [
             'count' => 2,
             'courseId' => 1,
-        );
+        ];
         $dataTag = new CourseAnnouncementsDataTag();
         TimeMachine::setMockedTime($mockedTime);
         $announcementsData = $dataTag->getData($arguments);
 
-        $expect = array(
+        $expect = [
             'id' => 1,
             'userId' => 1,
             'targetType' => 'course',
             'url' => 'http://www.dev-edusoho.com/course/1',
             'contents' => 'course contents 11',
-        );
+        ];
         $this->assertEquals(2, count($announcementsData));
         $this->assertArrayEquals($expect, $announcementsData[0]);
     }

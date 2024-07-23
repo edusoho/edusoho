@@ -20,6 +20,8 @@ interface CourseDao extends GeneralDaoInterface
 
     public function findCoursesByIds($ids);
 
+    public function findCoursesByIdsAndCourseSetTitleLike($ids, $title);
+
     public function findCoursesByCategoryIds($categoryIds);
 
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds);
@@ -42,6 +44,10 @@ interface CourseDao extends GeneralDaoInterface
 
     public function updateCategoryByCourseSetId($courseSetId, $fields);
 
+    public function updateByCourseSetId($courseSetId, $fields);
+
+    public function canLearningByCourseSetId($courseSetId);
+
     public function countGroupByCourseSetIds($courseSetIds);
 
     public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit);
@@ -53,4 +59,8 @@ interface CourseDao extends GeneralDaoInterface
     public function countWithJoinCourseSet($conditions);
 
     public function findCourseByCourseSetTitleLike($courseSetTitle);
+
+    public function canLearningByCourseSetIds($courseSetIds);
+
+    public function banLearningByCourseSetIds($courseSetIds);
 }

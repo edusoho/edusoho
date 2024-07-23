@@ -22,7 +22,7 @@ class Creator {
       },
       rules: {
         title: {
-          maxlength: 10,
+          byte_maxlength: 100,
           required: true,
           trim: true,
           course_title: true

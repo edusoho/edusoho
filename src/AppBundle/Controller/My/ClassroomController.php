@@ -80,8 +80,11 @@ class ClassroomController extends BaseController
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
 
         $status = ['publish' => 'published', 'unPublish' => 'draft', 'closed' => 'closed'];
-
-        return ['classroomIds' => $classroomIds, 'status' => $status[$tab]];
+        if ('closed' == $tab) {
+            return ['classroomIds' => $classroomIds, 'includeStatus' => ['closed', 'unpublished']];
+        } else {
+            return ['classroomIds' => $classroomIds, 'status' => $status[$tab]];
+        }
     }
 
     public function classroomAction()
@@ -93,12 +96,22 @@ class ClassroomController extends BaseController
             'userId' => $user->id,
         ], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
 
+        $auditors = $this->getClassroomService()->searchMembers([
+            'role' => 'auditor',
+            'userId' => $user->id,
+        ], null, 0, PHP_INT_MAX);
+
+        $students = $this->getClassroomService()->searchMembers([
+            'role' => 'student',
+            'userId' => $user->id,
+        ], null, 0, PHP_INT_MAX);
+
         $assistants = $this->getClassroomService()->searchMembers([
             'role' => 'assistant',
             'userId' => $user->id,
         ], null, 0, PHP_INT_MAX);
 
-        $members = array_merge($members, $assistants);
+        $members = array_merge($auditors, $students, $assistants);
         $members = ArrayToolkit::index($members, 'classroomId');
         $classroomIds = ArrayToolkit::column($members, 'classroomId');
         $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);

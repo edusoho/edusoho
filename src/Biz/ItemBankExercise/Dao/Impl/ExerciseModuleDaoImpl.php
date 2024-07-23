@@ -23,7 +23,7 @@ class ExerciseModuleDaoImpl extends GeneralDaoImpl implements ExerciseModuleDao
 
     public function findByExerciseIdAndType($exerciseId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE exerciseId = ? and type=? ORDER BY seq ASC, id ASC;";
+        $sql = "SELECT * FROM {$this->table} WHERE exerciseId = ? and `type` = ? ORDER BY seq ASC, id ASC;";
 
         return $this->db()->fetchAll($sql, [$exerciseId, $type]);
     }

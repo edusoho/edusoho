@@ -5,9 +5,9 @@ namespace Tests\Unit\Activity\Service;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Common\TimeMachine;
+use Biz\Activity\Dao\ActivityLearnLogDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseTestCase;
-use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 
 class ActivityServiceTest extends BaseTestCase
@@ -96,6 +96,10 @@ class ActivityServiceTest extends BaseTestCase
             'Course:CourseService',
             [
                 [
+                    'functionName' => 'getCourse',
+                    'returnValue' => ['id' => 1],
+                ],
+                [
                     'functionName' => 'tryManageCourse',
                     'returnValue' => 1,
                 ],
@@ -131,8 +135,7 @@ class ActivityServiceTest extends BaseTestCase
         $result = $this->getActivityService()->trigger(-1, 'start', $data);
         $this->assertEquals($result, false);
         $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
-        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $activity = $this->getActivityLearnLogDao()->getLastestByActivityIdAndUserId($savedTask['activityId'], 1);
         $this->assertEquals($activity['event'], 'start');
         $this->assertEquals($activity['learnedTime'], 0);
     }
@@ -166,8 +169,7 @@ class ActivityServiceTest extends BaseTestCase
         ];
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
-        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
+        $activity = $this->getActivityLearnLogDao()->getLastestByActivityIdAndUserId($savedTask['activityId'], 1);
         $this->assertEquals($activity['event'], 'doing');
         $this->assertEquals($activity['learnedTime'], 60);
     }
@@ -203,8 +205,7 @@ class ActivityServiceTest extends BaseTestCase
         ];
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
-        $learnLogs = $this->getActivityLearnLogService()->search(
+        $learnLogs = $this->getActivityLearnLogDao()->search(
             ['activityId' => $savedTask['activityId'], 'userId' => 1],
             ['createdTime' => 'DESC'],
             0,
@@ -262,10 +263,9 @@ class ActivityServiceTest extends BaseTestCase
         );
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'doing', $data);
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
-        $activity = $this->getActivityLearnLogService()->getLastestLearnLogByActivityIdAndUserId($savedTask['activityId'], 1);
-        $this->assertEquals($activity['event'], 'finish');
-        $this->assertEquals($activity['learnedTime'], 0);
+        $activity = $this->getActivityLearnLogDao()->getLastestByActivityIdAndUserId($savedTask['activityId'], 1);
+        $this->assertEquals('finish', $activity['event']);
+        $this->assertEquals(0, $activity['learnedTime']);
     }
 
     protected function handleTriggerData()
@@ -323,9 +323,8 @@ class ActivityServiceTest extends BaseTestCase
             'fromCourseSetId' => 1,
             'categoryId' => 1,
         ];
-        $savedTask = $this->getTaskService()->createTask($task);
 
-        return $savedTask;
+        return $this->getTaskService()->createTask($task);
     }
 
     public function testSearch()
@@ -436,24 +435,6 @@ class ActivityServiceTest extends BaseTestCase
         );
 
         $activity = $this->getActivityService()->getActivity(1);
-
-        $this->assertEquals(['id' => 111, 'title' => 'title'], $activity);
-    }
-
-    public function testGetActivityByCopyIdAndCourseSetId()
-    {
-        $this->mockBiz(
-            'Activity:ActivityDao',
-            [
-                [
-                    'functionName' => 'getByCopyIdAndCourseSetId',
-                    'returnValue' => ['id' => 111, 'title' => 'title'],
-                    'withParams' => [1, 1],
-                ],
-            ]
-        );
-
-        $activity = $this->getActivityService()->getActivityByCopyIdAndCourseSetId(1, 1);
 
         $this->assertEquals(['id' => 111, 'title' => 'title'], $activity);
     }
@@ -1044,22 +1025,6 @@ class ActivityServiceTest extends BaseTestCase
         $this->assertEquals($result[0]['link'], 'www.edusoho.com1');
     }
 
-    public function testfindFinishedLivesWithinOneDay()
-    {
-        $this->mockBiz('Activity:ActivityDao', [
-            [
-                'functionName' => 'findFinishedLivesWithinOneDay',
-                'returnValue' => [['id' => 1, 'mediaId' => 1, 'mediaType' => 'live', 'startTime' => time() - 3600, 'endTime' => time() - 1800]],
-            ],
-        ]);
-
-        $results = $this->getActivityService()->findFinishedLivesWithinOneDay();
-
-        $this->assertEquals(1, count($results));
-        $this->assertEquals('live', $results[0]['mediaType']);
-        $this->assertLessThan(7200, time() - $results[0]['endTime']);
-    }
-
     /**
      * @return ActivityService
      */
@@ -1077,23 +1042,10 @@ class ActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @return TaskResultService
+     * @return ActivityLearnLogDao
      */
-    protected function getTaskResultService()
+    protected function getActivityLearnLogDao()
     {
-        return $this->createService('Task:TaskResultService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    protected function getActivityLearnLogService()
-    {
-        return $this->createService('Activity:ActivityLearnLogService');
+        return $this->createDao('Activity:ActivityLearnLogDao');
     }
 }

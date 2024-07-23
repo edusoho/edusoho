@@ -30,7 +30,7 @@ parameters:
         host: "%database_host%"
         port: "%database_port%"
         driver: pdo_mysql
-        charset: UTF8
+        charset: utf8mb4
 
 
 

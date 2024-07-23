@@ -6,6 +6,8 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Question\Traits\QuestionImportTrait;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -17,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseController
 {
+    use QuestionImportTrait;
+
     public function indexAction(Request $request, $id)
     {
         if (!$this->getQuestionBankService()->canManageBank($id)) {
@@ -24,6 +28,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $conditions = [
             'bank_id' => $questionBank['itemBankId'],
@@ -59,6 +66,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         $conditions = [
             'bank_id' => $questionBank['itemBankId'],
@@ -109,6 +119,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         if ($request->isMethod('POST')) {
             $assessment = $request->request->get('baseInfo', []);
@@ -135,7 +148,6 @@ class TestpaperController extends BaseController
         }
 
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
-            'types' => $this->getQuestionTypes(),
             'questionBank' => $questionBank,
             'showBaseInfo' => '1',
         ]);
@@ -177,6 +189,9 @@ class TestpaperController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
@@ -223,24 +238,24 @@ class TestpaperController extends BaseController
             return $this->createMessageResponse('error', 'testpaper not found');
         }
 
-        if ('draft' != $assessment['status']) {
-            return $this->createMessageResponse('error', '已发布或已关闭的试卷不能再修改题目');
-        }
-
         if ($request->isMethod('POST')) {
             $assessment = $request->request->get('baseInfo', []);
-            $sections = $request->request->get('sections', []);
+            $sections = $request->request->get('sections', '');
 
+            $sections = json_decode($sections, true);
             if (empty($sections)) {
-                return $this->createMessageResponse('error', '试卷模块不能为空！');
+                return $this->createJsonResponse(['error' => '试卷模块不能为空!']);
             }
-            $assessment['sections'] = json_decode($sections, true);
+
+            $assessment['sections'] = $sections;
 
             if ($this->calculateItemCount($assessment['sections']) > 2000) {
-                return $this->createMessageResponse('error', '试卷题目数量不能超过2000！');
+                return $this->createJsonResponse(['error' => '试卷题目数量不能超过2000!']);
             }
             $assessment['sections'] = $this->processAssessmentSections($assessment['sections']);
             $this->getAssessmentService()->updateAssessment($assessmentId, $assessment);
+
+            $this->getLogService()->info('question_bank', 'edit_testpaper', "用户{$this->getCurrentUser()->nickname}修改了{$questionBank['name']}名为{$assessment['name']}的试卷");
 
             return $this->createJsonResponse([
                 'goto' => $this->generateUrl('question_bank_manage_testpaper_list', ['id' => $id]),
@@ -347,15 +362,18 @@ class TestpaperController extends BaseController
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
         $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
         if (!$assessment || $assessment['bank_id'] != $questionBank['itemBankId']) {
-            return $this->createMessageResponse('error', 'testpaper not found');
+            return $this->createMessageResponse('error', '试卷不存在');
         }
 
         if ('closed' === $assessment['status']) {
-            return $this->createMessageResponse('warning', 'testpaper already closed');
+            return $this->createMessageResponse('warning', '试卷已关闭');
+        }
+        if (empty($assessment['item_count'])) {
+            return $this->createMessageResponse('warning', '当前试卷所有题目内容均已被删除');
         }
 
         return $this->render('testpaper/manage/preview.html.twig', [
-            'assessment' => $assessment,
+            'assessment' => $this->addArrayEmphasisStyle($assessment),
         ]);
     }
 
@@ -369,7 +387,7 @@ class TestpaperController extends BaseController
         $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
 
         if (empty($assessment) || $assessment['bank_id'] != $questionBank['itemBankId']) {
-            return $this->createMessageResponse('error', 'testpaper not found');
+            return $this->createMessageResponse('error', '试卷不存在');
         }
 
         $imgRootDir = $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web';
@@ -558,7 +576,7 @@ class TestpaperController extends BaseController
         $data = $request->request->all();
         $data['itemBankId'] = $questionBank['itemBankId'];
 
-        $result = $result = $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($data);
+        $result = $this->getBiz()['testpaper_builder.random_testpaper']->canBuild($data);
 
         return $this->createJsonResponse($result);
     }
@@ -603,7 +621,6 @@ class TestpaperController extends BaseController
             $types[$type] = [
                 'name' => $typeConfig['name'],
                 'hasMissScore' => $typeConfig['hasMissScore'],
-                'seqNum' => $typeConfig['seqNum'],
             ];
         }
 

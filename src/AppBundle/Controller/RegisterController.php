@@ -17,7 +17,6 @@ use Biz\User\UserException;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class RegisterController extends BaseController
 {
@@ -71,6 +70,11 @@ class RegisterController extends BaseController
                     }
                 }
 
+                //获取POST参数验证码
+                if (!isset($registration['invitedCode']) || empty($registration['invitedCode'])) {
+                    //获取GET地址的邀请码
+                    $registration['invitedCode'] = trim($request->get('inviteCode', ''));
+                }
                 $registration['createdIp'] = $request->getClientIp();
                 $registration['registeredWay'] = 'web';
                 if ($this->isPluginInstalled('Drp')) {
@@ -487,6 +491,11 @@ class RegisterController extends BaseController
         return $this->render('register/analysis.html.twig', []);
     }
 
+    public function agreementAction()
+    {
+        return $this->render('register/agreement.html.twig');
+    }
+
     public function captchaAction(Request $request)
     {
         $imgBuilder = new CaptchaBuilder();
@@ -557,7 +566,7 @@ class RegisterController extends BaseController
     {
         try {
             $site = $this->getSettingService()->get('site', []);
-            $verifyurl = $this->generateUrl('register_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
+            $verifyurl = $this->getHttpHost().'/register/email/verify/'.$token;
             $mailOptions = [
                 'to' => $user['email'],
                 'template' => 'email_registration',

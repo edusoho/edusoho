@@ -23,12 +23,19 @@ class AssessmentSectionDaoImpl extends AdvancedDaoImpl implements AssessmentSect
         return $this->db()->executeUpdate($sql, [$assessmentId]);
     }
 
+    public function findByAssessmentIds($assessmentIds)
+    {
+        return $this->findInField('assessment_id', $assessmentIds);
+    }
+
     public function declares()
     {
         return array(
             'orderbys' => [
                 'id',
                 'created_time',
+                'assessment_id',
+                'seq',
             ],
             'timestamps' => [
                 'created_time',
@@ -36,6 +43,7 @@ class AssessmentSectionDaoImpl extends AdvancedDaoImpl implements AssessmentSect
             ],
             'conditions' => [
                 'id = :id',
+                'id in (:ids)',
                 'assessment_id in (:assessmentIds)',
             ],
         );

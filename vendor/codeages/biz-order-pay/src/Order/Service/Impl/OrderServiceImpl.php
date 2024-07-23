@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Order\Dao\OrderDao;
+use Codeages\Biz\Order\Dao\OrderItemDao;
 use Codeages\Biz\Order\Dao\OrderItemDeductDao;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Service\BaseService;
@@ -269,6 +270,9 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->biz->dao('Order:OrderDao');
     }
 
+    /**
+     * @return OrderItemDao
+     */
     protected function getOrderItemDao()
     {
         return $this->biz->dao('Order:OrderItemDao');

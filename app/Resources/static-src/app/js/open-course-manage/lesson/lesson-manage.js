@@ -19,14 +19,20 @@ export default class LessonManage {
 
   publishLesson(event) {
     const $btn = $(event.target);
+    const $tagTitle = $('.js-cd-tag-title')
+    const $tagIcon = $('.js-cd-tag-icon')
     const message = Translator.trans('open_course.publish_lesson_hint');
     this.togglePublish($btn, message);
+    $tagIcon.hasClass("tage-left-ml") ? $tagIcon.removeClass('tage-left-ml') : ''
+    $tagTitle.hasClass('cd-tag-title-ml') ? $tagTitle.removeClass('cd-tag-title-ml') : ''
   }
 
   cancelPublishLesson(event) {
     const $btn = $(event.target);
     const message = Translator.trans('open_course.unpublish_success_hint');
     this.togglePublish($btn, message);
+    $('.js-cd-tag-icon').addClass('tage-left-ml')
+    $('.js-cd-tag-title').addClass('cd-tag-title-ml');
   }
 
   togglePublish($target, message) {

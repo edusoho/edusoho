@@ -4,6 +4,7 @@ namespace Tests\Unit\ItemBankExercise\Service;
 
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
+use Biz\ItemBankExercise\OperateReason;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Role\Util\PermissionBuilder;
@@ -141,7 +142,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $result = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $user['id']);
         $this->assertEquals(false, $result);
 
-        $this->getExerciseMemberService()->becomeStudent($exercise['id'], $user['id'], ['remark' => '123']);
+        $this->getExerciseMemberService()->becomeStudent($exercise['id'], $user['id'], ['remark' => '123', 'reason' => OperateReason::JOIN_BY_IMPORT, 'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE, 'source' => 'outside']);
         $result = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $user['id']);
         $this->assertEquals(true, $result);
     }

@@ -19,6 +19,7 @@ class CouponBatchController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if (isset($conditions['name'])) {
             $conditions['nameLike'] = $conditions['name'];

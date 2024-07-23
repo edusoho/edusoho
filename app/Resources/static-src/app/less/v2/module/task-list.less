@@ -6,10 +6,8 @@
   border-left: 2px solid #f1f1f1;
   .item-content {
     float: left;
-    padding: 0 24px 0 24px;
+    padding: 20px 24px;
     width: 100%;
-    height: 56px;
-    line-height: 56px;
     background: @cd-bg-light;
     .cd-border-radius;
     color: @cd-dark-major;
@@ -26,6 +24,9 @@
       top: 0;
       right: 24px;
     }
+    .one-level-item-actions {
+      margin-right:130px;
+    }
   }
   .task-manage-unit {
     margin-left: 16px;
@@ -35,6 +36,9 @@
     }
     .item-actions {
       right: 56px;
+    }
+    .two-level-item-actions {
+      margin-right: 98px;
     }
   }
   .task-manage-lesson {
@@ -48,6 +52,9 @@
     .item-content {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+    }
+    .three-level-item-actions {
+      margin-right: 98px;
     }
   }
   .task-manage-lesson-tasks {
@@ -118,6 +125,38 @@
     display: inline-block;
     height: 21px;
   }
+  
+  .item-publish-btn {
+    position: absolute;
+    right: 24px;
+    padding-right: 0;
+    height: 56px;
+    line-height: 56px;
+    font-size: 16px;
+    color: @brand-primary;
+  }
+
+  .chapter-status-published {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 1px 8px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    border-radius: 6px;
+    background: @brand-primary;
+  }
+
+  .chapter-status-unpublished {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 1px 8px;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    border-radius: 6px;
+    background: #D2D3D4;
+  }
 }
 
 .task-list-header {
@@ -163,7 +202,7 @@
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
   &.fixed {
     position: fixed;
-    bottom: 20px;
+    bottom: 0px;
     width: 915px;
     z-index: 1000;
   }
@@ -187,5 +226,17 @@
 .task-manage-batch-delete {
   button[data-toggle="cd-confirm-ok"] {
     color: @brand-danger;
+  }
+}
+
+.task-manage-footer-option {
+  .chapter-operation {
+    margin-bottom: 12px;
+  }
+  .task-manage-num-clear {
+    display: inline-block;
+    margin: 0 10px 0 8px;
+    color: @brand-primary;
+    cursor: pointer;
   }
 }

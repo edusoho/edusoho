@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %}
+{% do script(['app/js/closed/index.js']) %}
+
+{% block body %}
+<div class="closed-page-container">
+    <img class="closed-img" src="/static-dist/app/img/closed.png" alt="">
+    <div class="closed-page-title js-closed-title"></div>
+    <div class="closed-page-content">{{ 'exception.not_continue.look'|trans }}</div>
+    <a class="closed-page-goHome btn" href="/">{{ 'exception.go_home'|trans }}</a>
+</div>
+{% endblock %}

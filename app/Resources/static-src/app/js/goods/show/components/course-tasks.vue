@@ -6,7 +6,6 @@
 </template>
 
 <script>
-    import axios from "axios";
     import PagedCourseTask from 'app/js/courseset/show/paged-course-task-list';
 
     export default {
@@ -38,7 +37,7 @@
                 $('.js-tasks-show').data('url', this.renderUrl);
                 $('.js-tasks-show').html('');
                 try {
-                    this.pagedCourseTask._destroy();
+                  this.pagedCourseTask && this.pagedCourseTask._destroy();
                 } catch (e) {
                     console.log('destroy undefined');
                 }
@@ -79,7 +78,7 @@
                 return 'es-icon ml5';
             },
         },
-        created() {
+        mounted() {
             this.getTasksListInfo();
         },
         watch: {

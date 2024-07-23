@@ -13,6 +13,7 @@ class UserApprovalController extends BaseController
     public function approvalsAction(Request $request, $approvalStatus)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
 
         $conditions = array(
             'roles' => '',
@@ -21,6 +22,7 @@ class UserApprovalController extends BaseController
             'approvalStatus' => $approvalStatus,
         );
         $conditions = array_merge($conditions, $fields);
+        $conditions = array_filter($conditions);
         $conditions = $this->fillOrgCode($conditions);
 
         $conditions['startApprovalTime'] = !empty($fields['startDateTime']) ? strtotime($fields['startDateTime']) : '';

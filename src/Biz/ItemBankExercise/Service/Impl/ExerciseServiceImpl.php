@@ -19,6 +19,7 @@ use Biz\ItemBankExercise\Dao\MemberOperationRecordDao;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\OperateReason;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -299,11 +300,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
             $this->getExerciseQuestionRecordDao()->deleteByExerciseId($exerciseId);
 
-            if ($this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$exerciseId],'questionBank') === 'error') {
+            if ('error' === $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$exerciseId], 'questionBank')) {
                 throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
             }
 
-            $this->dispatchEvent('questionBankProduct.delete',new Event(['id'=>$exerciseId]));
+            $this->dispatchEvent('questionBankProduct.delete', new Event(['id' => $exerciseId]));
 
             $user = $this->getCurrentUser();
             $this->getLogService()->info('item_bank_exercise', 'delete_exercise', "删除练习{$user['nickname']}(#{$user['id']})");
@@ -373,6 +374,18 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         $user = $this->getCurrentUser();
         $this->getLogService()->info('item_bank_exercise', 'close_exercise', "关闭练习{$user['nickname']}(#{$user['id']})");
+
+        return $exercise;
+    }
+
+    public function unpublishedExercise($exerciseId)
+    {
+        $this->tryManageExercise($exerciseId);
+
+        $exercise = $this->getExerciseDao()->update($exerciseId, ['status' => 'unpublished']);
+
+        $user = $this->getCurrentUser();
+        $this->getLogService()->info('item_bank_exercise', 'close_exercise', "下架练习{$user['nickname']}(#{$user['id']})");
 
         return $exercise;
     }
@@ -514,6 +527,50 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return [$exercise, $member];
     }
 
+    public function publishExerciseChapter($exerciseId, $ids)
+    {
+        if (empty($ids)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $exercise = $this->tryManageExercise($exerciseId);
+
+        $chapters = $this->getItemBankChapterExerciseService()->findChaptersByIds($ids);
+        $parentIds = array_unique(array_column($chapters, 'parent_id'));
+
+        $hiddenChapterIds = array_diff($exercise['hiddenChapterIds'], $ids);
+        if (array_intersect($hiddenChapterIds, $parentIds)) {
+            throw ItemBankExerciseException::UNPUBLISHED_PARENT_CHAPTER();
+        }
+
+        if (empty(array_intersect($exercise['hiddenChapterIds'], $ids))) {
+            return;
+        }
+        $this->update($exerciseId, ['hiddenChapterIds' => $hiddenChapterIds]);
+
+        $this->dispatchEvent('itemBankExercise.chapter.publish', new Event($exercise));
+        $this->getLogService()->info('item_bank_exercise', 'publish_exercise_chapter', "管理员{$this->getCurrentUser()->nickname}发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
+    }
+
+    public function unpublishExerciseChapter($exerciseId, $ids)
+    {
+        if (empty($ids)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $exercise = $this->tryManageExercise($exerciseId);
+
+        $childrenIds = $this->getItemBankChapterExerciseService()->findChapterChildrenIds($exercise['questionBankId'], $ids);
+        $hiddenChapterIds = array_unique(array_merge($exercise['hiddenChapterIds'], $ids, $childrenIds));
+
+        if (empty(array_diff($hiddenChapterIds, $exercise['hiddenChapterIds']))) {
+            return;
+        }
+        $this->update($exerciseId, ['hiddenChapterIds' => $hiddenChapterIds]);
+
+        $this->dispatchEvent('itemBankExercise.chapter.unpublish', new Event($exercise));
+        $this->getLogService()->info('item_bank_exercise', 'unpublish_exercise_chapter', "管理员{$this->getCurrentUser()['nickname']}取消发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
+    }
+
     /**
      * @return ExerciseDao
      */
@@ -624,5 +681,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     private function getProductMallGoodsRelationService()
     {
         return $this->createService('MarketingMallBundle:ProductMallGoodsRelation:ProductMallGoodsRelationService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ChapterExerciseService');
     }
 }

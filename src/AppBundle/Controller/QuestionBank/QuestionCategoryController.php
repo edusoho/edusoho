@@ -4,7 +4,7 @@ namespace AppBundle\Controller\QuestionBank;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
-use Biz\Question\Service\CategoryService;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -19,6 +19,10 @@ class QuestionCategoryController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         $categories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
 
         return $this->render('question-bank/question-category/index.html.twig', [
@@ -30,6 +34,10 @@ class QuestionCategoryController extends BaseController
 
     public function batchCreateAction(Request $request, $id)
     {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
         if ($request->isMethod('POST')) {
             $categoryNames = $request->request->get('categoryNames');
             $categoryNames = trim($categoryNames);
@@ -37,6 +45,9 @@ class QuestionCategoryController extends BaseController
             $categoryNames = array_filter($categoryNames);
             $parentId = $request->request->get('parentId');
             $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+            if (empty($questionBank['itemBank'])) {
+                $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+            }
 
             $this->getItemCategoryService()->createItemCategories($questionBank['itemBankId'], $parentId, $categoryNames);
 
@@ -51,6 +62,10 @@ class QuestionCategoryController extends BaseController
 
     public function editAction(Request $request, $id)
     {
+        if (!$this->getQuestionBankService()->canManageBankCategory($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
         if ($request->isMethod('POST')) {
             $name = $request->request->get('name', '');
 
@@ -76,6 +91,10 @@ class QuestionCategoryController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
+        if (!$this->getQuestionBankService()->canManageBankCategory($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
         $this->getItemCategoryService()->deleteItemCategory($id);
 
         return $this->createJsonResponse(['success' => true]);
@@ -97,6 +116,33 @@ class QuestionCategoryController extends BaseController
         }
 
         return $this->createJsonResponse($categories);
+    }
+
+    public function sortAction(Request $request, $id)
+    {
+        $ids = $request->request->get('ids');
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createJsonResponse([
+                'success' => false,
+                'message' => '您不是该题库管理者，不能对分类进行排序',
+            ]);
+        }
+
+        $categories = $this->getItemCategoryService()->findItemCategoriesByIds($ids);
+        $parentIds = array_unique(array_column($categories, 'parent_id'));
+        if (count($parentIds) > 1) {
+            return $this->createJsonResponse([
+                'success' => false,
+                'message' => '非同一父分类下的分类，不可排序',
+            ]);
+        }
+
+        $this->getItemCategoryService()->sortItemCategories($ids);
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        $this->getLogService()->info('question_bank', 'sort_question_category', "管理员{$this->getCurrentUser()['nickname']}修改题库《{$questionBank['name']}》的题目分类排序");
+
+        return $this->createJsonResponse(['success' => true]);
     }
 
     /**

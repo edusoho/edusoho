@@ -214,7 +214,7 @@ class StudentExporterTest extends BaseTestCase
                 'title',
                 '-',
                 'weibo',
-                '111',
+                '111'."\t",
             ],
             [
                 'nickname2',
@@ -234,7 +234,7 @@ class StudentExporterTest extends BaseTestCase
                 'title2',
                 '-',
                 'weibo2',
-                '222',
+                '222'."\t",
             ],
         ], $result);
     }

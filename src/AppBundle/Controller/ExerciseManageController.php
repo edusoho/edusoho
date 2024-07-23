@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use Biz\QuestionBank\Service\QuestionBankService;
-use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,21 +36,6 @@ class ExerciseManageController extends BaseController
         }
 
         return $this->createJsonResponse(true);
-    }
-
-    protected function getExerciseConfig()
-    {
-        $biz = $this->getBiz();
-
-        return $biz['activity_type.exercise'];
-    }
-
-    /**
-     * @return AssessmentService
-     */
-    protected function getAssessmentService()
-    {
-        return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
     /**

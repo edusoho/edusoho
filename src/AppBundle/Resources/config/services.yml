@@ -434,3 +434,12 @@ services:
         tags:
             -
                 name: twig.extension
+    web.twig.mobile_mask_extension:
+        class: AppBundle\Twig\MobileExtension
+        arguments:
+            - '@service_container'
+            - '@biz'
+        public: true
+        tags:
+            -
+                name: twig.extension

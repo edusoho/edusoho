@@ -18,6 +18,7 @@ class GroupController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
+        unset($fields['page']);
 
         $conditions = [
             'status' => '',
@@ -28,6 +29,7 @@ class GroupController extends BaseController
         if (!empty($fields)) {
             $conditions = $fields;
         }
+        $conditions = array_filter($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -412,6 +414,7 @@ class GroupController extends BaseController
         if (empty($conditions['status'])) {
             unset($conditions['status']);
         }
+        unset($conditions['page']);
 
         return $conditions;
     }

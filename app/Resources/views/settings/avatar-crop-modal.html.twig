@@ -18,7 +18,14 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-primary pull-right" id="upload-avatar-btn"
+  <button type="button" class="btn btn-primary pull-right" 
+    id="upload-avatar-btn" 
+    data-large-width="400"
+    data-large-height="400"
+    data-medium-width="120"
+    data-medium-height="120"
+    data-small-width="48"
+    data-small-height="48"
     data-url="{{ path('settings_avatar_crop_modal') }}" data-toggle="form-submit"
     data-target="#avatar-crop-form" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>

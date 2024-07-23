@@ -145,7 +145,9 @@
         >
           <a slot="name" slot-scope="name, record" @click="viewStudentInfo(record.user)">{{ record.user.nickname }}<span v-if="record.user.truename">({{ record.user.truename }})</span></a>
 
-          <template slot="phone" slot-scope="phone, record">{{ record.user.verifiedMobile || '--' }}</template>
+          <template slot="phone" slot-scope="phone, record">
+            <mobile-ice :mobile="record.user.verifiedMobile" :encryptedMobile="record.user.encryptedMobile" />
+          </template>
 
           <a slot="learningProgressPercent" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${multiClass.course.courseSetId}/manage/course/${multiClass.course.id}/students/${record.user.id}/process`" slot-scope="value, record">{{ value }}%</a>
 

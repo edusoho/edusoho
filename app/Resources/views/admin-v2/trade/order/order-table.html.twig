@@ -52,7 +52,13 @@
       {% if has_permission('admin_v2_user_manage') %}
         <td>
           <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_user_show', {id:buyer.uuid|default(0)}) }}">{{ buyer.nickname|default('--') }}</a>
-          <p class="color-gray">{{ buyer.verifiedMobile|default('--') }}</p>
+          <p class="color-gray">
+            {% if buyer.verifiedMobile|default() %}
+              {% include 'user-mobile-mask.html.twig' with { mobile: buyer.verifiedMobile } %}
+            {% else %}
+              --
+            {% endif %}
+          </p>
         </td>
       {% else %}
         <td>

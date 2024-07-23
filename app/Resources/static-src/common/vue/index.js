@@ -3,6 +3,7 @@ import _ from 'lodash';
 import 'moment';
 import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
+import MobileIce from './components/MobileIce.vue'
 // import './mock';
 import VueLazyload from 'vue-lazyload';
 
@@ -10,7 +11,7 @@ import { Menu, Button, Table, Select, Form, AutoComplete, Upload,
   FormModel, DatePicker, Input, Modal, Col, Row, Radio, Switch, Icon, Checkbox,
   Pagination, Spin, Popconfirm, Dropdown, Space, Descriptions, Tag, Tooltip,
   Divider, Message, Notification, Tabs, Tree, TimePicker, InputNumber, Breadcrumb,
-  Empty, PageHeader, TreeSelect, Popover, Avatar, Card, Cascader
+  Empty, PageHeader, TreeSelect, Popover, Avatar, Card, Cascader, Alert
 } from '@codeages/design-vue';
 import Clipboard from 'v-clipboard';
 
@@ -54,6 +55,7 @@ if (!window.Vue) {
   Vue.use(Card)
   Vue.use(Clipboard)
   Vue.use(Cascader)
+  Vue.use(Alert)
 
   Vue.prototype.$message = Message;
   Vue.prototype.$notification = Notification;
@@ -69,6 +71,7 @@ if (!window.Vue) {
   });
 
   Vue.component('svg-icon', SvgIcon);
+  Vue.component('mobile-ice', MobileIce);
   Vue.use(VueLazyload);
 }
 

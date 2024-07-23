@@ -4,6 +4,8 @@ namespace Biz\Testpaper\Event;
 
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
@@ -33,7 +35,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 return;
             }
             $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
-            $user = $this->getBiz()['user'];
+            $user = $this->getUserService()->getUser($answerRecord['user_id']);
             $message = [
                 'id' => $answerRecord['id'],
                 'courseId' => $activity['fromCourseId'],
@@ -65,10 +67,12 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         }
         $this->processAnswerReportPassed($activity, $answerRecord);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
         $user = $this->getBiz()['user'];
         $message = [
             'id' => $answerRecord['id'],
             'courseId' => $activity['fromCourseId'],
+            'taskId' => $task['id'],
             'name' => $assessment['name'],
             'userId' => $user['id'],
             'userName' => $user['nickname'],
@@ -76,8 +80,14 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
             'testpaperType' => $activity['mediaType'],
         ];
 
-        $result = $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
-        $this->notify($answerRecord);
+        $this->getNotificationService()->notify($answerRecord['user_id'], 'test-paper', $message);
+
+        /**
+         * 存在评论才去创建消息
+         */
+        if ($answerReport['comment']) {
+            $this->notify($answerRecord);
+        }
     }
 
     protected function processAnswerReportPassed($activity, $answerRecord)
@@ -88,6 +98,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         if ('homework' == $activity['mediaType']) {
             if ('submit' === $activity['finishType'] && in_array($answerRecord['status'], [AnswerService::ANSWER_RECORD_STATUS_REVIEWING, AnswerService::ANSWER_RECORD_STATUS_FINISHED])) {
                 $this->getAnswerReportService()->update($answerRecord['answer_report_id'], ['grade' => 'passed']);
+
                 return;
             }
             $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
@@ -117,7 +128,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     {
         if ('testpaper' == $activity['mediaType'] && $testPaper = $this->getTestpaperActivityService()->getActivity($activity['mediaId'])) {
             $comment = '';
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             foreach ($testPaper['customComments'] as $customComment) {
                 if ($customComment['start'] <= $answerReport['score'] && $answerReport['score'] <= $customComment['end']) {
                     $comment = $customComment['comment'];
@@ -163,29 +174,22 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         return $this->getBiz()->service('Activity:ActivityService');
     }
 
-    public function getTestpaperService()
-    {
-        return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    public function getCourseService()
+    protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
     }
 
-    public function getNotificationService()
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
+    }
+
+    protected function getNotificationService()
     {
         return $this->getBiz()->service('User:NotificationService');
-    }
-
-    public function getClassroomService()
-    {
-        return $this->getBiz()->service('Classroom:ClassroomService');
-    }
-
-    public function getStatusService()
-    {
-        return $this->getBiz()->service('User:StatusService');
     }
 
     /**
@@ -207,7 +211,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
     /**
      * @return AnswerRecordService
      */
-    public function getAnswerRecordService()
+    protected function getAnswerRecordService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
     }

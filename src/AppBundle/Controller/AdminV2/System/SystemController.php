@@ -5,7 +5,6 @@ namespace AppBundle\Controller\AdminV2\System;
 use AppBundle\Common\StringToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\SettingService;
-use Biz\User\AuthProvider\DiscuzAuthProvider;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,23 +23,6 @@ class SystemController extends BaseController
         phpinfo();
 
         return new Response();
-    }
-
-    public function ucenterAction()
-    {
-        $setting = $this->getSettingService()->get('user_partner', []);
-
-        if (!empty($setting['mode']) && 'discuz' === $setting['mode']) {
-            $discuzProvider = new DiscuzAuthProvider($this->getBiz());
-
-            if ($discuzProvider->checkConnect()) {
-                return $this->createJsonResponse(['status' => true, 'message' => '通信成功']);
-            }
-
-            return $this->createJsonResponse(['status' => false, 'message' => '通信失败']);
-        } else {
-            return $this->createJsonResponse(['status' => true, 'message' => '未开通Ucenter']);
-        }
     }
 
     public function emailSendCheckAction()
@@ -68,9 +50,10 @@ class SystemController extends BaseController
 
             return $this->createJsonResponse(['status' => true, 'message' => '邮件发送正常']);
         } catch (\Exception $e) {
-            $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$e->getMessage());
+            $message = $this->trans($e->getMessage());
+            $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$message);
 
-            return $this->createJsonResponse(['status' => false, 'message' => '邮件发送异常']);
+            return $this->createJsonResponse(['status' => false, 'message' => $message]);
         }
     }
 
@@ -170,6 +153,7 @@ class SystemController extends BaseController
         return array_map(function ($array) {
             $name = $array['name'];
             $dir = $array['dir'];
+
             $total = disk_total_space($dir);
             $free = disk_free_space($dir);
             $rate = (string) number_format($free / $total, 2) * 100 .'%';

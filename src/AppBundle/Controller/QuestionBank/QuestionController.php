@@ -6,6 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
+use Biz\Question\QuestionParseClient;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
+use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -15,14 +18,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class QuestionController extends BaseController
 {
+    use QuestionImportTrait;
+    use QuestionAIAnalysisTrait;
+
     public function indexAction(Request $request, $id)
     {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            return $this->createMessageResponse('error', 'exception.question_bank.not_found_bank', '', '30');
+        }
+
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
-        }
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
         $conditions = $request->query->all();
@@ -42,7 +49,7 @@ class QuestionController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'ASC', 'id' => 'ASC'],
+            ['updated_time' => 'DESC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -61,8 +68,23 @@ class QuestionController extends BaseController
         ]);
     }
 
+    public function importIntroAction()
+    {
+        return $this->render('question-bank/question/import-intro-modal.html.twig');
+    }
+
+    public function aiAnalysisIntroAction()
+    {
+        return $this->render('question-bank/question/ai-analysis-intro-modal.html.twig');
+    }
+
     public function importAction(Request $request, $id)
     {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
@@ -70,19 +92,31 @@ class QuestionController extends BaseController
         return $this->forward('AppBundle:Question/QuestionParser:read', [
             'request' => $request,
             'type' => 'item',
-            'questionBank' => $this->getQuestionBankService()->getQuestionBank($id),
+            'questionBank' => $questionBank,
         ]);
+    }
+
+    public function downloadImportTemplateAction(Request $request, $id, $type)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '没有题库管理权限');
+        }
+        $downloadUrl = $this->getQuestionParseClient()->getTemplateFileDownloadUrl($type, $request->isSecure());
+
+        return $this->redirect($downloadUrl);
     }
 
     public function createAction(Request $request, $id, $type)
     {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
         }
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
+
         $categoryId = $request->query->get('categoryId', 0);
 
         $goto = $request->query->get('goto', $this->generateUrl('question_bank_manage_question_list', ['id' => $id]));
@@ -93,18 +127,13 @@ class QuestionController extends BaseController
             $fields['bank_id'] = $questionBank['itemBankId'];
             $fields['category_id'] = empty($fields['category_id']) ? $categoryId : $fields['category_id'];
             $item = $this->getItemService()->createItem($fields);
-            
+
             if ('continue' === $fields['submission']) {
                 $urlParams = ArrayToolkit::parts($item, ['difficulty']);
                 $urlParams['id'] = $id;
                 $urlParams['type'] = $type;
                 $urlParams['goto'] = $goto;
-
-                return $this->createJsonResponse(
-                    [
-                        'goto' => $this->generateUrl('question_bank_manage_question_create', $urlParams),
-                    ]
-                );
+                $goto = $this->generateUrl('question_bank_manage_question_create', $urlParams);
             }
 
             return $this->createJsonResponse(['goto' => $goto]);
@@ -127,7 +156,7 @@ class QuestionController extends BaseController
         }
 
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
+        if (empty($questionBank['itemBank'])) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
@@ -144,7 +173,8 @@ class QuestionController extends BaseController
         $goto = $this->filterRedirectUrl($goto);
 
         if ($request->isMethod('POST')) {
-            $this->getItemService()->updateItem($item['id'], json_decode($request->getContent(), true));
+            $content = $this->replaceFormulaToLocalImg($request->getContent());
+            $this->getItemService()->updateItem($item['id'], json_decode($content, true));
 
             return $this->createJsonResponse(['goto' => $goto]);
         }
@@ -153,7 +183,7 @@ class QuestionController extends BaseController
         return $this->render('question-manage/question-form-layout.html.twig', [
             'mode' => 'edit',
             'questionBank' => $questionBank,
-            'item' => $item,
+            'item' => $this->addArrayEmphasisStyle($item),
             'type' => $item['type'],
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
             'goto' => $goto,
@@ -173,6 +203,7 @@ class QuestionController extends BaseController
                 $question['scoreType'] = $question['score_rule']['scoreType'];
                 $question['otherScore'] = $question['score_rule']['otherScore'];
             }
+            $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForTeacher($question, $item);
         }
 
         return $item;
@@ -180,12 +211,13 @@ class QuestionController extends BaseController
 
     public function getQuestionsHtmlAction(Request $request, $id)
     {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
-        }
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
         $conditions = $request->query->all();
@@ -208,7 +240,7 @@ class QuestionController extends BaseController
 
         $questions = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'ASC', 'id' => 'ASC'],
+            ['updated_time' => 'DESC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -227,13 +259,15 @@ class QuestionController extends BaseController
 
     public function deleteAction(Request $request, $id, $itemId)
     {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         if (!$this->getQuestionBankService()->canManageBank($id)) {
             throw $this->createAccessDeniedException();
         }
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
-            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
-        }
+
         $item = $this->getItemService()->getItem($itemId);
         if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
@@ -256,6 +290,67 @@ class QuestionController extends BaseController
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    public function checkQuestionDuplicativeAction(Request $request, $id)
+    {
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+        $data = json_decode($request->getContent(), true);
+
+        if ($this->getItemService()->isMaterialDuplicative($questionBank['itemBankId'], $data['material'], $data['items'] ?? [], $data['itemId'] ?? 0)) {
+            return $this->createJsonResponse(true);
+        } else {
+            return $this->createJsonResponse(false);
+        }
+    }
+
+    public function checkDuplicativeQuestionsAction(Request $request, $id)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            throw $this->createAccessDeniedException();
+        }
+        $categoryId = $request->query->get('categoryId', '');
+        if ($categoryId) {
+            $category = $this->getItemCategoryService()->getItemCategory($categoryId);
+        }
+
+        return $this->render('question-manage/duplicative-questions.html.twig', [
+            'questionBankId' => $id,
+            'categoryId' => $categoryId,
+            'categoryName' => $category['name'] ?? '',
+        ]);
+    }
+
+    public function updateDuplicativeQuestionAction(Request $request, $id, $questionId)
+    {
+        if (!$this->getQuestionBankService()->canManageBank($id)) {
+            return $this->createMessageResponse('error', '您不是该题库管理者，不能查看此页面！');
+        }
+
+        $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($questionBank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
+        $item = $this->getItemService()->getItemWithQuestions($questionId, true);
+        if (empty($item) || $item['bank_id'] != $questionBank['itemBankId']) {
+            $this->createNewException(QuestionException::NOTFOUND_QUESTION());
+        }
+        $item = $this->wrapperItem($item);
+
+        return $this->render('question-manage/update-duplicative-question.html.twig', [
+            'questionBank' => $questionBank,
+            'item' => $this->addArrayEmphasisStyle($item),
+            'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($item['bank_id']),
+            'goto' => $this->generateUrl('question_bank_manage_check_duplicative_questions', ['id' => $id]),
+        ]);
     }
 
     public function deleteQuestionsAction(Request $request, $id)
@@ -311,7 +406,7 @@ class QuestionController extends BaseController
             throw $this->createAccessDeniedException();
         }
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
+        if (empty($questionBank['itemBank'])) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
@@ -320,6 +415,7 @@ class QuestionController extends BaseController
         if (!$item || $item['bank_id'] != $questionBank['itemBankId']) {
             $this->createNewException(QuestionException::NOTFOUND_QUESTION());
         }
+        $item = $this->addArrayEmphasisStyle($item);
 
         $template = $request->query->get(
             'isNew'
@@ -337,6 +433,10 @@ class QuestionController extends BaseController
         }
 
         $bank = $this->getQuestionBankService()->getQuestionBank($id);
+        if (empty($bank['itemBank'])) {
+            $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
+        }
+
         $fileName = $this->getExportFileName($id);
         $path = $this->get('kernel')->getContainer()->getParameter(
                 'topxia.disk.local_directory'
@@ -402,7 +502,14 @@ class QuestionController extends BaseController
         }
 
         if (isset($conditions['categoryId']) && '' != $conditions['categoryId']) {
-            $conditions['category_ids'] = [$conditions['categoryId']];
+            //查询是否有子分类
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds((int) $conditions['categoryId']);
+            if ($categoryIds) {
+                $categoryIds[] = $conditions['categoryId'];
+                $conditions['category_ids'] = $categoryIds;
+            } else {
+                $conditions['category_ids'] = [$conditions['categoryId']];
+            }
             unset($conditions['categoryId']);
         }
 
@@ -416,7 +523,7 @@ class QuestionController extends BaseController
     protected function getExportFileName($id)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBank($id);
-        if (empty($questionBank)) {
+        if (empty($questionBank['itemBank'])) {
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
@@ -439,6 +546,11 @@ class QuestionController extends BaseController
         $push(['children' => $categoryTree]);
 
         return $categoryTreeArray;
+    }
+
+    private function getQuestionParseClient()
+    {
+        return new QuestionParseClient();
     }
 
     /**

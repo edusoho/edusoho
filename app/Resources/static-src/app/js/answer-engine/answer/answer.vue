@@ -2,6 +2,7 @@
   <div id="app" class="ibs-vue">
     <div id="cd-modal"></div>
     <item-engine
+      :metaActivity="metaActivity"
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
@@ -10,13 +11,19 @@
       :assessmentResponse="assessmentResponse"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :isDownload="isDownload"
       :uploadSDKInitData="uploadSDKInitData"
       :deleteAttachmentCallback="deleteAttachmentCallback"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       :getCurrentTime="getCurrentTime"
+      :courseId="courseId"
+      :exerciseId="exerciseId"
+      :type="type"
+      :assessmentResponses="assessmentResponses"
       @getAnswerData="getAnswerData"
       @saveAnswerData="saveAnswerData"
+      @exitAnswer="returnToCourseDetail"
       @timeSaveAnswerData="timeSaveAnswerData"
       @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
       @deleteAttachment="deleteAttachment"
@@ -36,7 +43,7 @@
   import dataURLToBlob from "dataurl-to-blob";
   import {checkBrowserCompatibility} from '../../face-inspection/util';
   import { Modal } from 'ant-design-vue';
-  
+
   const commonConfig = { keyboard: false, centered: true, footer: false, class: 'error-modal' }
 
   export default {
@@ -44,6 +51,9 @@
       let inspectionOpen = $('[name=token]').length > 0 && $('[name=token]').val() !== '';
       let comp = checkBrowserCompatibility();
       return {
+        courseId: '',
+        exerciseId: '',
+        type: '',
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
@@ -62,7 +72,11 @@
           finishUrl: $('[name=upload_finish_url]').val(),
           accept: JSON.parse($('[name=upload_accept]').val()),
           fileSingleSizeLimit: $('[name=upload_size_limit]').val(),
-          locale: document.documentElement.lang
+          locale: document.documentElement.lang,
+          ui: 'batch',
+          multiple: true,
+          multitaskNum: 3,
+          fileNumLimit: 3,
         },
         fileId: 0,
         inspectionOpen: inspectionOpen,
@@ -90,12 +104,29 @@
         },
         ajaxTimeOut: null,
         isReachTime: false,
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
+        assessmentResponses: {}
       };
     },
+    provide() {
+      return {
+        modeOrigin: 'do'
+      }
+    },
     created() {
+      if(this.getCourseId(window.top.location.href)) {
+        this.courseId = this.getCourseId(window.top.location.href);
+        this.type = 'course';
+      }
+
+      if(this.getExerciseId(window.top.location.href)) {
+        this.exerciseId = this.getExerciseId(window.top.location.href);
+        this.type = 'exercise';
+      }
+
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
-        
+
 
       $.ajax({
         url: '/api/continue_answer',
@@ -104,18 +135,46 @@
         headers: {
           'Accept':'application/vnd.edusoho.v2+json'
         },
-        data: {answer_record_id: $("[name='answer_record_id']").val()},
+        data: {
+          answer_record_id: $("[name='answer_record_id']").val(),
+          exerciseId: this.exerciseId,
+          courseId: this.courseId
+      },
         beforeSend(request) {
           request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         },
       }).done((res) => {
+        this.metaActivity = res.metaActivity;
         this.assessment = res.assessment;
         this.answerRecord = res.answer_record;
         this.answerScene = res.answer_scene;
         this.assessmentResponse = res.assessment_response;
+        this.assessmentResponses = res.assessment_response;
+      }).error((err) => {
+        if(this.exerciseId) {
+          window.location.href = `/my/item_bank_exercise/${this.exerciseId}/assessment/${$('[name=answer_record]').val()}?previewAs=member`;
+        }
       })
     },
     methods: {
+      getCourseId(path) {
+          const match = path.match(/\/course\/\d+/);
+
+          if (match) {
+              return match[0].split('/').pop();
+          }
+
+          return null;
+      },
+      getExerciseId(path) {
+          const match = path.match(/\/item_bank_exercise\/\d+/);
+
+          if (match) {
+              return match[0].split('/').pop();
+          }
+
+          return null;
+      },
       getAnswerData(assessmentResponse) {
         const that = this;
         $.ajax({
@@ -138,6 +197,12 @@
 
           const { code: errorCode } = result.responseJSON.error;
 
+          if (errorCode == '5001620') {
+            this.$message.error('课程已关闭，无法继续学习')
+            this.returnToCourseDetail()
+            return
+          }
+
           if (errorCode == '50095204') {
             // 试卷已提交 -- 退出答题
             Modal.error({
@@ -154,6 +219,9 @@
         })
       },
       reachTimeSubmitAnswerData(assessmentResponse) {
+        if (this.answerRecord.exam_mode == '1') {
+          return;
+        }
         const that = this;
         this.isReachTime = true;
         $.ajax({
@@ -186,20 +254,19 @@
         this.postAnswerData(assessmentResponse)
       },
       saveAnswerData(assessmentResponse){
-        this.postAnswerData(assessmentResponse).done(() => {
-          this.returnToCourseDetail()
-        })
+        this.postAnswerData(assessmentResponse)
       },
       postAnswerData(assessmentResponse) {
         if (this.isReachTime) return
-        
+
         if (!this.ajaxTimeOut) {
           this.ajaxTimeOut = setTimeout(() => {
             this.networkError(assessmentResponse);
             this.ajaxTimeOut = null
           }, 10 * 1000)
         }
-
+        assessmentResponse.courseId = this.courseId;
+        assessmentResponse.exerciseId = this.exerciseId;
         assessmentResponse.admission_ticket = this.answerRecord.admission_ticket;
         return $.ajax({
           url: '/api/save_answer',
@@ -236,6 +303,12 @@
               okText: '退出答题',
               onOk: () => this.returnToCourseDetail()
             })
+            return
+          }
+
+          if (errorCode == '5001620') {
+            this.$message.error('课程已关闭，无法继续学习')
+            this.returnToCourseDetail()
             return
           }
 
@@ -278,10 +351,8 @@
       returnToCourseDetail() {
         parent.location.href = $('[name=save_goto_url]').val();
       },
-      deleteAttachment(fileId, flag) {
-        if (flag) {
-          this.fileId = fileId;
-        }
+      deleteAttachment(fileId) {
+        this.fileId = fileId;
       },
       previewAttachment(fileId) {
         this.fileId = fileId;
@@ -326,6 +397,7 @@
       },
       deleteAttachmentCallback() {
         let self = this;
+
         return new Promise(resolve => {
           $.ajax({
             url: $('[name=delete-attachment-url]').val(),

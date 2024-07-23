@@ -56,6 +56,7 @@ class ClassroomController extends BaseController
             'targetType' => 'classroom',
             'targetId' => $classroom['id'],
             'typeExcludes' => $typeExcludes,
+            'excludeAuditStatus' => 'illegal',
         ]);
 
         return $this->render('classroom/dashboard-nav.html.twig', [
@@ -372,9 +373,8 @@ class ClassroomController extends BaseController
 
     public function classroomStatusBlockAction($classroom, $count = 10)
     {
-        $conditions['onlyClassroomId'] = $classroom['id'];
         $learns = $this->getStatusService()->searchStatuses(
-            $conditions,
+            ['onlyClassroomId' => $classroom['id']],
             ['createdTime' => 'DESC'],
             0,
             $count
@@ -389,6 +389,9 @@ class ClassroomController extends BaseController
             foreach ($learns as $key => $learn) {
                 $learns[$key]['user'] = $owners[$learn['userId']];
                 $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
+                if ('closed' == $classroom['status']) {
+                    $learns[$key]['message'] = str_replace('link-dark', 'link-dark js-handleLearnContentOnMessage', $learns[$key]['message']);
+                }
                 unset($learn);
             }
         }
@@ -627,12 +630,8 @@ class ClassroomController extends BaseController
             return false;
         }
 
-        $courseIds = ArrayToolkit::column($courses, 'parentId');
-        //        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
-        $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($user['id'], $courseIds);
+        list($courses) = $this->getClassroomService()->findUserPaidCoursesInClassroom($user['id'], $classroom['id']);
 
-        $isJoinedCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
-        $courses = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
         $priceType = 'RMB';
 
         $coinSetting = $this->getSettingService()->get('coin');
@@ -680,6 +679,10 @@ class ClassroomController extends BaseController
 
         if (!$classroom) {
             $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+        }
+
+        if ('closed' == $classroom['status']) {
+            $this->createNewException(ClassroomException::CLOSED_CLASSROOM());
         }
 
         if ('published' != $classroom['status']) {

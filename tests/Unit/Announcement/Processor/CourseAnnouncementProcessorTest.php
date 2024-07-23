@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Announcement\Processor;
 
-use Biz\BaseTestCase;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
+use Biz\BaseTestCase;
 
 class CourseAnnouncementProcessorTest extends BaseTestCase
 {
@@ -11,12 +11,12 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'tryManageCourse',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
         $result = $processor->checkManage(1);
         $this->assertTrue($result);
@@ -34,12 +34,12 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'canTakeCourse',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
         $result = $processor->checkTake(1);
         $this->assertTrue($result);
@@ -57,32 +57,32 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('Course:MemberService', array(
-            array(
+        $this->mockBiz('Course:MemberService', [
+            [
                 'functionName' => 'countMembers',
                 'returnValue' => 2,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'findCourseStudents',
-                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
-            ),
-        ));
+                'returnValue' => [['userId' => 1], ['userId' => 2]],
+            ],
+        ]);
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 0),
-            ),
-        ));
+                'returnValue' => ['enabled' => 0],
+            ],
+        ]);
 
-        $this->mockBiz('User:NotificationService', array(
-            array(
+        $this->mockBiz('User:NotificationService', [
+            [
                 'functionName' => 'notify',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
-        $result = $processor->announcementNotification(1, array('title' => 'announcement'), 'showurl');
+        $result = $processor->announcementNotification(1, ['title' => 'announcement'], 'showurl', ['id' => 1]);
         $this->assertTrue($result);
     }
 
@@ -90,53 +90,53 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('Course:MemberService', array(
-            array(
+        $this->mockBiz('Course:MemberService', [
+            [
                 'functionName' => 'countMembers',
                 'returnValue' => 2,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'findCourseStudents',
-                'returnValue' => array(array('userId' => 1), array('userId' => 2)),
-            ),
-        ));
+                'returnValue' => [['userId' => 1], ['userId' => 2]],
+            ],
+        ]);
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 1, 'title' => 'course title'),
-            ),
-        ));
+                'returnValue' => ['id' => 1, 'title' => 'course title'],
+            ],
+        ]);
 
-        $this->mockBiz('IM:ConversationService', array(
-            array(
+        $this->mockBiz('IM:ConversationService', [
+            [
                 'functionName' => 'getConversationByTarget',
-                'returnValue' => array('no' => '1234567890'),
-            ),
-        ));
+                'returnValue' => ['no' => '1234567890'],
+            ],
+        ]);
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 1),
-            ),
-        ));
+                'returnValue' => ['enabled' => 1],
+            ],
+        ]);
 
-        $this->mockBiz('User:NotificationService', array(
-            array(
+        $this->mockBiz('User:NotificationService', [
+            [
                 'functionName' => 'notify',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->mockBiz('Queue:QueueService', array(
-            array(
+        $this->mockBiz('Queue:QueueService', [
+            [
                 'functionName' => 'pushJob',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
-        $result = $processor->announcementNotification(1, array('title' => 'announcement'), 'showurl');
+        $result = $processor->announcementNotification(1, ['title' => 'announcement'], 'showurl', ['id' => 1]);
         $this->assertTrue($result);
     }
 
@@ -144,12 +144,12 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 1),
-            ),
-        ));
+                'returnValue' => ['enabled' => 1],
+            ],
+        ]);
 
         $result = $processor->isIMEnabled();
 
@@ -160,12 +160,12 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('System:SettingService', array(
-            array(
+        $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array('enabled' => 0),
-            ),
-        ));
+                'returnValue' => ['enabled' => 0],
+            ],
+        ]);
 
         $result = $processor->isIMEnabled();
 
@@ -176,12 +176,12 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'tryManageCourse',
                 'returnValue' => true,
-            ),
-        ));
+            ],
+        ]);
 
         $result = $processor->tryManageObject(1);
 
@@ -192,12 +192,12 @@ class CourseAnnouncementProcessorTest extends BaseTestCase
     {
         $processor = $this->_createCourseProcessor();
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'returnValue' => array('id' => 1),
-            ),
-        ));
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
 
         $result = $processor->getTargetObject(1);
 

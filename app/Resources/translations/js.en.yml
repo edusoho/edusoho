@@ -40,7 +40,8 @@ site.video.quality.quota: Video
 site.video.quality.low: Smooth
 site.video.quality.normal: Standard
 site.video.quality.high: High Definition
-
+site.tips: Tips
+site.tips.delist: Confirm removal?
 site.incorrect.password: Incorrect password
 user.settings.security.mobile_bind.success: Bind mobile successfully
 user.settings.security.mobile_bind.fail: Bind mobile fail
@@ -110,6 +111,7 @@ uploader.error_hint: Upload failed, please try again!
 uploader.num_limit_hint: Add too many files!
 uploader.size_limit_hint: File is too large, please upload a smaller file!
 uploader.size_2m_limit_hint: File too large, please upload files under 2M.
+uploader.size_5m_limit_hint: File too large, please upload files under 5M.
 uploader.type_denied_limit_hint: File type is wrong!
 uploader.error.bad_file.hint: Your source file may be damaged, please check and re-upload
 uploader.btn.batch_paused: Paused All
@@ -326,6 +328,7 @@ activity.testpaper_manage.media_required: Please select the testpapers
 activity.testpaper_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
 activity.testpaper_manage.positive_integer_error_hint: Must be a positive integer
 activity.testpaper_manage.media_error_hint: Please select the testpapers
+activity.testpaper_manage.required.number: Please enter at least one digit
 activity.testpaper_manage.input_title_hint: Please enter the testpaper title
 activity.testpaper_manage.question_scope: Please select a range of questions
 activity.testpaper_manage.question_num_error: The number of qeustions in this range is insufficient
@@ -376,6 +379,9 @@ activity.video_manage.other_finish_detail: Learn till the last (do not support w
 activity.video_manage.length_required_error_hint: Please enter a non negative integer, where seconds can only be between 0-59
 activity.video_manage.media_error_hint: Please upload or select a video file
 activity.video.try_watch_finish_hint: Free trial end, purchase and watch the complete video
+activity.video.only_can_app_title: The configuration has changed and the course cannot be played
+activity.video.only_can_app_desc: Please go to the App to continue learning
+
 activity.video.file_limit_size: File size cannot exceed %size%
 
 activity.manage.choose_teacher_hint: Please choose a teacher
@@ -412,6 +418,10 @@ auth.register.password_required_error_hint: Please input password
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
 
+user.login.read.agree.policy.and.user.terms: Please read and check the 《User Service Agreement》 and 《Privacy Policy》
+user.login.read.user.terms: Please read and check 《User Service Agreement》
+user.login.read.agree.policy: Please read and check the 《Privacy Policy》
+
 card.card_receive_success_hint: Learning card has been used, recharge%coinAmount%%coinName%  success, you can go to the [account center] - [my account] to check the situation.
 card.card_receive_failed_hint: Failed!
 
@@ -447,6 +457,13 @@ course.chapter: '%chapter_name% %number% %colon% %title%'
 course.unit: '%part_name% %number% %colon% %title%'
 course.lesson: '%part_name% %number% : %title%'
 course.catalogue.task_status.task: '%taskName%.%taskNumber%:%taskTitle%'
+
+created.question.confirm.ok.btn: Continue editing
+created.question.confirm.close.btn: Direct creation
+created.question.confirm.import.close.btn: Direct import
+created.question.confirm.title: The same topic already exists. Do you want to create another one?
+created.question.confirm.import.title: If the same topic already exists, determine whether to continue importing?
+
 
 course.thread_replay_failed_hint: Posted reply failed, please try again
 course.thread_delete_hint: Do you really want to delete this reply?
@@ -538,12 +555,15 @@ course.manage.max_student_num_error_hint: Please enter the number of courses
 course.manage.max_year_error_hint: Please enter a value less than 7300 (20 years)
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
-course.manage.publish_title: Publish teaching plan
+course.manage.publish_title: Confirm the release?
 course.manage.publish_success_hint: The program was published successfully
 course.manage.publish_fail_hint: Publish program failed
-course.manage.close_hint: Are you sure to close the program?
+course.manage.close_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation
+course.manage.hide_hint: After the program is removed, it will not be displayed at the front desk, and students will not be able to view it on the home page and list page
 course.manage.close_success_hint: closed successfully
 course.manage.close_fail_hint: Close failed
+course.manage.show_success_hint: Enabled successfully
+course.manage.show_fail_hint: Enable failed
 course.manage.copy_title: Copy teaching plan
 course.manage.max_course_number_tip: Allowed to create 10 plans, if you need to add more, please add after the original plan is deleted.
 course.manage.delete_hint: Are you sure you want to delete the plan?
@@ -552,6 +572,7 @@ course.manage.task_batch_delete_hint: After deleting the selected lesson, the co
 course.manage.chapter_delete_hint: Are you sure you want to delete this %name%?
 course.manage.chapter_batch_delete_hint: %length% chapters have been selected, are you sure to delete?
 course.manage.task_publish_success_hint: Published successfully
+course.manage.item_task_unpublish_success_hint: Cancel successfully
 course.manage.task_publish_fail_hint: Publish failed
 course.manage.task_unpublish_success_hint: Publish cancelled successful
 course.manage.task_unpublish_fail_hint: Cancel publish failed
@@ -572,6 +593,7 @@ course.manage.reward_point_required_hint: please input the reward point
 course.manage.task_reward_point_required_hint: please input the task reward point
 course.manage.max_point_error_hint: Please input an integer from 0-10000000
 course.manage.student_expiry_day_hint: The validity period can be manually increased only by the learning expiration date set by the number of days.
+course.plan_task.activity_manage.testpaper.mock_tips4: 'Duration must be greater than 0 '
 member.delete_success_hint: Remove successful
 member.delete_fail_hint: Remove failed
 
@@ -611,8 +633,10 @@ course.question.create.choose_min_num_hint: Maximum %minNum% options
 course.question.create_hint: Added options
 course.question.right_answer_hint: Correct answer
 course.question.right_answer_content_hint: Please enter the option content
+course.question.by.question.type: By question type
 course.question.type.single_choice: single choice
 course.question.type.uncertain_choice: uncertain choice
+course.question.type.uncertain_choices: uncertain choice
 course.question.type.choice: choice
 course.question.type.determine: determine
 course.question.type.essay: essay
@@ -643,6 +667,8 @@ item_bank_exercise.module.switch.danger: At the time of publication of the item 
 classroom.manage.tag_required_hint: Please enter a tag
 classroom.manage.delete_course_hint: Do you want to remove the course from the class?
 classroom.manage.delete_course_hint_title: Course removal
+classroom.manage.close_course_hint_title: Course closed
+classroom.manage.close_course_hint_content: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation
 classroom.manage.delete_course_success_hint: The course was removed successfully
 classroom.manage.delete_course_fail_hint: Course removal failed
 classroom.manage.expiry_mode_days_error_hint: Please enter the number of valid days
@@ -768,15 +794,20 @@ homework_manage.result_graph.max_status_num: Number of max result
 intro.confirm_hint: Finish
 
 
-
-
 validate.required.message: Please input %display%
+validate.valid_enter.retest.interval: Retest interval
+course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
+validate.valid_enter_a_positive.integer: Please enter a positive integer from 1 to 100
+validate.valid_rangetime.required: Please select a date range
+validate.valid_starttime.required: Please select a start time
+validate.valid_endtime.required: Please select an end time
 validate.valid_email_input.message: Please enter a valid email address.
+validate.valid_idcard_formate.message: Please enter a valid ID card number.
 validate.valid_url_input.message: Please enter a valid URL.
 validate.valid_date_input.message: Please enter a valid date.
 validate.valid_date_iso_input.message: Please enter a valid date  (ISO)
 validate.valid_number_input.message: Please enter a valid number
-validate.valid_digits_input.message: Please enter only digits
+validate.valid_digits_input.message: Please enter a positive integer
 validate.valid_creditcard_input.message: Please enter a valid credit card number.
 validate.valid_equal_to_input.message: Please enter the same value again
 validate.valid_extension_input.message: Please enter a valid suffix
@@ -799,6 +830,7 @@ validate.course_title.message: Do not support typing <,> characters
 validate.float_input.message: Please enter the correct decimals, leaving only TWO decimal places.
 validate.open_live_course_title.message: Do not support typing <,>, \ ", &, ',',", "characters
 validate.currency.message: Please enter a valid price, up to two decimal places, no more than 8 digits!
+validate.max_effective_time.message: Supports up to 8 bits integers！
 validate.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
 validate.max_year.message: The maximum validity period can not exceed 99,999 days
 validate.before_date.message: The start date should be earlier than the end date
@@ -817,6 +849,7 @@ validate.valid_image_input.message: Can only upload pictures
 validate.limit_size.message: Size can not exceed 2M
 validate.next_day.message: The start time should be later than the current time
 validate.chinese_alphanumeric.message: Only supports Chinese characters, English letters, numbers and _ . ·
+validate.truename_chinese_alphanumeric.message: Names do not support special symbols
 validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.only_alphanumeric.message: Please enter numbers or English letters
 validate.raty_star.message: Please score
@@ -847,6 +880,10 @@ validate.title_required_hint: Please enter a title, it cannot be empty.
 validate.mobile_or_email_message: please input the right mobile/email
 validate.success: Verified successfully
 validate.fail: Failed to verify
+validate.course.closed: The course is closed and cannot be continued
+validate.classroom.closed: The classroom is closed and cannot be continued
+validate.exercise.closed: The exercise is closed and cannot be continued
+validate.learn_content.closed: The learning content has been closed and you cannot continue studying
 validate.expiry_days_required_hint: please input the expiry days
 validate.empty_content_hint: please input content!
 validate.no_number_first_hint: URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits
@@ -857,6 +894,11 @@ validate.check_password_high.message: 8-32 letters or numbers, , including lette
 validate.custom_integer.message: Please enter the correct integer
 validate.int.message: up to 9 integers
 validate.float.message: up to two decimal places, and the integer digits should not exceed 8 digits!
+validate.endTime.validity: The current exam is over, please re-select the exam
+
+exception.course.closed.content: The current course is closed.
+exception.classroom.closed.content: The current classroom is closed.
+exception.exercise.closed.content: The current question bank is closed.
 
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
@@ -951,7 +993,7 @@ validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and 
 validate_old.alphabet_underline.message: %display% must begin with an English letter or an underscore
 validate_old.byte_minlength.message: %display% must be greater than or equal to %min%, a Chinese word is 2 characters
 validate_old.currency_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
-validate_old.currency.message: %display% must be less than or equal to% max%, and one Chinese word is 2 characters
+validate_old.currency.message: You can only enter up to %max% characters，one Chinese word counts as two characters.
 validate_old.idcard.message: %display% is not formatted correctly
 validate_old.password.message: %display% can only be composed of 4-20 characters
 validate_old.second_range.message: Seconds can only be between 0-59
@@ -1026,6 +1068,7 @@ lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 
 Bad credentials.: Bad credentials
+The presented password cannot be empty.: The presented password cannot be empty.
 User account is locked.: The account is blocked.
 
 cloud_search.network.error_message: Due to the poor network condition, you are switched to simple search mode.
@@ -1046,7 +1089,8 @@ admin.index.finished_task_count: finished task count
 admin.index.notify_teacher_success: remind the teacher's notice and send it successfully!
 admin.index.upgrade_acceptance_hint: Upgrade acceptance
 admin.user.cloude_sms_enable_hint: please go to【Admin】-【App Cente】-【Cloud service】-【Cloud Sms Setting】open cloud sms first.
-
+admin.courseSet.delist.success_hint: The plan was removed successfully
+admin.courseSet.delist.fail_hint: The plan was not removed successfully
 admin.account_center.cash_income: cash income
 admin.account_center.coin_income: coin income
 admin.analysis.classroom_income: classroom income
@@ -1125,6 +1169,13 @@ admin.classroom.choose_success_hint: Choose classroom success
 admin.classroom.operation_success_hint: successfully！
 admin.classroom.operation_fail_hint: failure
 admin.classroom.operation_hint: ？
+admin.classroom.confirm_publish_hint: Confirm release？
+admin.classroom.hide_hint: Closing the classroom will completely hide it, and students will not be able to view it on the front desk.
+admin.classroom.delist_hint: After the class is removed, it will not be displayed at the front desk, and students will not be able to view it on the home page and list page.
+admin.classroom.close_hint: After closing, students who are still within the validity period will not be able to continue learning. Please operate with caution.
+admin.classroom.hide_success_hint: The page display has been closed.
+admin.classroom.delist_success_hint: The class has been removed from the front desk.
+admin.classroom.show_success_hint: The page display has been turned on.
 admin.classroom.delete_hint: Deleting a class will delete the chapters, class hours, students and other information of all courses in the class. Are you sure you want to delete this class?
 admin.classroom.delete_success_hint: successfully deleted!
 admin.classroom.cancel_recommend_hint: "%title% ?"
@@ -1159,13 +1210,25 @@ admin.course.choose_success_hint: choose course success
 admin.course.copy_success_hint: Copy course successfully
 admin.course.copy_fail_hint: Copy course failed
 admin.course.delete_success_hint: Delete course successfully
+admin.course.publish_success_hint: Course published successfully
+admin.course.publish_failed_hint: Failed to publish the course
+admin.course.close_success_hint: Course closed successfully
+admin.course.close_failed_hint: Failed to close the course
 admin.course.delete_failed_hint: Delete course failed
 admin.course.delete_course.check_password_fail_hint: Verify password error
 admin.course.validate_old.password_required_hint: password
 admin.course.cancel_recommend_success_hint: Course recommendation has been cancelled!
-admin.course.close_course_hint: Are you sure you want to close this class? After the course is closed, students who are still in the validity period will be able to continue their studies.
+admin.course.close_course_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation.
+admin.close.btn.confirm_close: Confirm close?
+admin.close.btn.confirm_hide: Confirm removal?
+admin.close.btn.confirm_publish: Confirm release?
 admin.course.close_success_hint: Course was closed successfully!
-admin.course.publish_hint: Are you sure you want to publish this course?
+admin.course.hide_course_hint: After the course is removed, it will not be displayed at the front desk, and students will not be able to view it on the home page and list page.
+admin.course.delist_course_hint: After the course is removed, it will not be displayed at the front desk and students will not be able to view it
+admin.course.hide_success_hint: Course hidden successfully!
+admin.course.show_success_hint: Page enabled!
+admin.course.delist_success_hint: Course removed successfully!
+admin.course.publish_hint: Confirm the release?
 admin.course.publish_success_hint: The course was published successfully!
 admin.course.unknow_error_hint: unknown mistake
 admin.course.delete_hint: Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?
@@ -1429,6 +1492,7 @@ admin.user.import_fail_hint: %title% failure：
 admin.user.import_completed_hint: %title% completed
 admin.user.import_error_hint: %title%, An unknown error has occurred.
 admin.user.lock_operational_hint: Really want %title%?
+admin.user.lock_operational_hint_new: %title%,it cannot be restored
 admin.user.lock_operational_success_hint: %title% successfully！
 admin.user.lock_operational_fail_hint: %title% failed
 admin.user.sending_passwordreset_email_hint: A password reset verification email is being sent, please wait a moment.
@@ -1457,12 +1521,17 @@ admin.util.item_delete.delete_success_hint: Delete %name% successfully
 admin.shortcut_add_success_hint: The current page has been added as a popular link!
 admin.shortcut_delete_success_hint: Delete frequently used links successfully!
 
-admin.item_bank_exercise.exercise.close_hint: Are you sure you want to close the current exercise? After the itembank exercise is closed, students who are still in the validity period will be able to continue their studies.
+admin.item_bank_exercise.exercise.hide_hint: Question bank exercises will not be displayed at the front desk after they are removed from the shelves, and students cannot view them on the home page and list page.
 admin.item_bank_exercise.exercise.close_success_hint: Close successfully
+admin.item_bank_exercise.exercise.close_hint: Students who are still valid after closing cannot continue learning. Exercise caution when performing this operation.
+admin.item_bank_exercise.exercise.delist_hint: After the question bank contact is removed from the shelves, it will not be displayed at the front desk, and students can not view it.
+admin.item_bank_exercise.exercise.hide_success_hint: Item bank exercise display hidden successfully.
+admin.item_bank_exercise.exercise.show_success_hint: Item bank exercise display enabled successfully.
+admin.item_bank_exercise.exercise.delist_success_hint: The question bank has been removed.
 admin.item_bank_exercise.exercise.recommend_success_hint: Successfully set recommended item bank!
 admin.item_bank_exercise.exercise.recommend_fail_hint: Failed to set recommended item bank!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: The item bank exercise recommendation has been cancelled!
-admin.item_bank_exercise.exercise.publish_hint: Are you sure you want to publish the current exercise?
+admin.item_bank_exercise.exercise.publish_hint: Confirm the release?
 admin.item_bank_exercise.exercise.publish_success_hint: The item bank exercise recommendation has been published!
 admin.item_bank_exercise.exercise.delete_hint: Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?
 
@@ -1597,7 +1666,7 @@ queston_bank.testpaper.empty_tips: 'There is no testpaper in this question bank'
 
 #新后台
 admin_v2.user.cloude_sms_enable_hint: please go to【Admin】-【App Cente】-【Cloud service】-【Cloud Sms】open cloud sms first.
-admin_v2.homepage.quick_entrance.hint: Set up to 7 quick entries
+admin_v2.homepage.quick_entrance.hint: Set up to 8 quick entries
 admin_v2.homepage.mini_program.title: Scan code to open the miniprogram
 admin.switch_old_version.permission_error: Please contact super administrator or administrator operation
 admin.switch_old_version.title: Toggle backstage
@@ -1644,7 +1713,9 @@ classroom.upload_picture_btn: 'Upload an image'
 
 classroom.marketing_setting: Marketing Setting
 classroom.price_label: Price
-classroom.show_label: "Show %name%\n"
+classroom.show_label: "Show %name%"
+classroom.show_page_label: Page Display
+classroom.show_page_tips: After closing, the classroom will be completely hidden and cannot be viewed on the front-end.
 classroom.buy_label: Buy %name%
 classroom.expiry_mode_label: 'Expired on'
 classroom.watch_expiry_mode_rule: 'View the rule'
@@ -1659,6 +1730,8 @@ classroom.amount: "Equals to "
 
 
 site.open: Open
+site.show: Display
+site.hide: Hide
 site.date.day: Day
 course.marketing_setup.services.provide_services: Services
 course.marketing_setup.services.course_list_display: Task List With Goods
@@ -1747,10 +1820,15 @@ course.marketing_setup: 'Markets'
 site.currency.CNY: CNY
 s2b2c.product.cooperation_price: Cooperation Price
 s2b2c.product.suggestion_price: Suggestion Price
-s2b2c.resource.sync.prev_price.notify: 上个版本价格为
+s2b2c.resource.sync.prev_price.notify: The price of the previous version was
 site.price: Price
 course.marketing_setup.setup.can_join: Can join
 course.marketing_setup.setup.can_not_join: Can not join
+course.marketing_setup.setup.is_show_label: Page display
+course.marketing_setup.setup.can_show: Enable
+course.marketing_setup.setup.can_hide: Disable
+item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
+course.marketing_setup.rule.show: After closure, the course plan will be completely hidden and cannot be viewed at the front desk.
 course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
@@ -1798,6 +1876,7 @@ course.plan_setup.mode.locked: 'Lock'
 course.plan_setup.mode.tips: 'Free:Learn freely<br>Lock:Unlock lessons step by step'
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
+course.plan_setup.learn_mode_hint: 'The learn mode cannot be modified after plan is published'
 course.plan_setup.finish_rule: '%taskName% rules'
 course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
@@ -1828,6 +1907,9 @@ goods.show_page.tab.catalogue.empty: After purchasing, you can view the course c
 goods.show_page.tab.reviews: Reviews
 goods.show_page.tab.reviews_empty_tips: No Reviews
 goods.show_page.tab.summary_empty_tips: No Summary
+goods.show_page.tab.course.closed_tip: Course is closed, unable to purchase/study.
+goods.show_page.tab.classroom.closed_tip: Classroom is closed, unable to purchase/study.
+goods.show_page.tab.exercise.closed_tip: Question bank is closed, unable to purchase/study.
 goods.show_page.authentication_certificate: Authentication Certificate
 site.favorited: Favorited
 site.favorite: Favorite
@@ -1852,6 +1934,7 @@ goods.show_page.vip_free_learn_new: Free exchange for vip
 goods.show_page.vip_buy: %vipName% free learn
 goods.show_page.vip_upgrade: Upgrade to %vipName% free learn
 goods.show_page.unpublished_tips: The product has not been released. It is not allowed to join or purchase
+goods.show_page.closed_tips: The product is closed, not allowed to join and purchase
 goods.show_page.course_not_buyable_tips: Sorry, this course cannot be learned, please contact the study teacher
 goods.show_page.classroom_not_buyable_tips: Sorry, this classroom cannot be learned, please contact  the study teacher
 goods.show_page.join_expiry_tips: Sorry, this product has expired. Please contact customer service
@@ -1860,6 +1943,7 @@ goods.show_page.free_join_btn: Free Join
 goods.show_page.buy_btn: Buy
 classroom.go_inside: Go to preview
 course.base.title.placeholder: Please insert course title
+course.search.placeholder: Please enter the course name
 course.unname_title: Unnamed plan
 
 course.task.out_focus_mask.continue_studying: Continue studying
@@ -1871,7 +1955,8 @@ course.task.out_focus_mask.anti_brush.tips: >
 
 classroom.manage.data_statistics.echarts.student_increase_num: Student Increasement
 classroom.manage.data_statistics.echarts.auditor_increase_num: Auditor Increasement
-
+classroom.empty.course: There are currently no courses available
+classroom.search.empty.course: There are currently no suitable courses available~
 course.intro.wechat_subscribe: Please click here to subscribe to the course related notice
 admin_v2.operation.report_content_audit.batch_operate_tips: Please select the content to be operated in batches first
 admin_v2.operation.report_content_audit.batch_operate_success_tips: Success
@@ -1909,6 +1994,8 @@ form.label.share: Share
 
 placeholder.playback_label: Playback labe
 placeholder.enter_keyword: Please enter keyword
+placeholder.task.name: Please enter a task name
+placeholder.class.name: Class name
 placeholder.course_category: Course category
 
 radio.share_to_live_playback: Share to live playback (other teachers can view, preview and reference this playback)
@@ -2189,3 +2276,62 @@ live.chooser.video: Please set up live video
 
 cloud.sms_enable_hint: Cloud SMS is not enabled. Please go to <a href="%cloudSmsSettingUrl%" target="_blank">[Cloud SMS Settings]</a> to enable it
 admin_v2.homepage.school_info.enter.copy_success: Link copied successfully
+admin_v2.homepage.wechat_come: Welcome to EduSoho enterprise products
+admin_v2.homepage.wechat_code.m: Join the open source product use learning exchange group, small partners are waiting for you
+
+del.role.theater.hover.title: This user does not have instructor rights. After removal, it will not be displayed on mobile
+upgrade.cloud.capabilities.to.experience: >
+  <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">Upgrade cloud capabilities to experience more powerful import capabilities</div>
+next.skip.intro.text: >
+  <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">To upgrade the cloud capability and experience more powerful import functions, contact the super administrator</div>
+skip.i.know: I know(2/2)
+skip.upgrade.btn: Upgrade now(2/2)
+question.bank.name: Question bank name
+question.bank.expoet: Derived problem
+question.bank.check: Item reexamination
+question.bank.add: Add topic
+question.bank.import: Lead-in topic
+question.bank.difficulty.default: Difficulty
+question.bank.difficulty.simple: Simple
+question.bank.difficulty.normal: Normal
+question.bank.difficulty: Hard
+question.bank.reset.btn: Reset
+
+question.bank.check.tip: Checking for duplicates...
+question.bank.check.result.category.noData: No questions in this category.
+question.bank.check.result.noData: No duplicate questions found.
+question.bank.check.result.noData.title: No Duplicate Questions Found
+question.bank.check.result.noData.btn: Back to List
+question.bank.all_question: All Questions
+question.bank.no_category: Uncategorized
+question.bank.common.repeated: Number of duplicate questions
+question.bank.unit: times
+question.bank.topic.comparison: Question Comparison
+question.bank.next_label: Next Step (1/2)
+question.bank.skip_label: Skip
+question.bank.finish_label: Got it (2/2)
+question.bank.check.guide.one: <p class="title cd-dark-major">Question Overview</p><div class="cd-dark-minor cd-text-md">Displays the number of duplicate questions and the corresponding number of repetitions for each question.</div>
+question.bank.check.guide.two: <p class="title cd-dark-major">Question Comparison</p><div class="cd-dark-minor cd-text-md">Click on the numerical button to switch between questions, which will be displayed in the preview area below.</div>
+question.bank.error.tip.title: Question not found
+question.bank.error.tip.content: The question may have been edited on the question management page.
+question.bank.type: Type
+question.bank.update_time: Update Date
+question.bank.none: None
+question.bank.delete.tip.title: Are you sure you want to delete this question?
+question.bank.delete.tip.content: Deleting a question may affect the practice session of a lesson. Please proceed with caution!
+question.bank.head.edit: Title editing
+
+classroom.category.choose.text: Please select a classroom category,
+course.category.choose.text: Please select a course category,
+classroom.services.choose.train: Practice,
+classroom.services.choose.try: Tryout,
+classroom.services.choose.ask: Ask,
+classroom.services.choose.suspected: Inquiry,
+classroom.services.choose.dynamic: Activity,
+classroom.services.choose.industry: Industry,
+classroom.vip.category.text: VIP Classroom,
+course.vip.category.text: VIP Course,
+course.live: Live Course,
+course.appointment: Appointment Course,
+course.try.look: Preview,
+certificate: Certificate

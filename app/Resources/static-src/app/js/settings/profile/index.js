@@ -20,7 +20,7 @@ $('#user-profile-form').validate({
       required: true,
       chinese_alphanumeric: true,
       byte_minlength: 4,
-      byte_maxlength: 18,
+      byte_maxlength: 36,
       nickname: true,
       es_remote: {
         type: 'get',

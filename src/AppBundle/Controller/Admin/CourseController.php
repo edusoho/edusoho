@@ -14,6 +14,7 @@ class CourseController extends BaseController
     public function indexAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         if ('normal' == $filter) {
             $conditions['parentId'] = 0;
         }

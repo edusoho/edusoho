@@ -9,9 +9,9 @@
     </div>
     <div class="col-md-8 controls pts">
       {% if destroyUser.verifiedMobile %}
-        {{ destroyUser.verifiedMobile }}
+        {% include 'user-mobile-mask.html.twig' with { mobile: destroyUser.verifiedMobile } %}
       {% elseif destroyUser.mobile %}
-        {{ destroyUser.mobile }}
+        {% include 'user-mobile-mask.html.twig' with { mobile: destroyUser.mobile } %}
       {% else %}
         --
       {% endif %}
@@ -63,4 +63,5 @@
     <button class="btn btn-primary pull-right" id="audit-submit-btn" data-submiting-text="{{ 'form.btn.confirm'|trans }}" data-toggle="form-submit" data-target="#audit-modal" data-url="{{ path('admin_v2_destroy_account_record_audit', {id: record.id}) }}">{{ 'form.btn.confirm'|trans }}</button>
   </div>
   <script>app.load('destroy-account/audit-modal');</script>
+  {% include 'js_loader_async.html.twig' %}
 {% endblock %}

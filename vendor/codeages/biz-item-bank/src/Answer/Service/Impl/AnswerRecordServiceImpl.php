@@ -2,6 +2,8 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerRecordDao;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException;
@@ -30,6 +32,10 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'assessment_id' => ['integer', ['min', 0]],
             'user_id' => ['integer', ['min', 0]],
             'admission_ticket' => ['required'],
+            'exam_mode' => ['integer'],
+            'limited_time' => ['integer'],
+            'is_items_seq_random' => ['integer'],
+            'is_options_seq_random' => ['integer'],
         ]);
 
         if ($answerRecord['user_id'] <= 0) {
@@ -87,6 +93,11 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
             'answer_report_id' => ['integer'],
             'end_time' => ['integer'],
             'admission_ticket' => [],
+            'exam_mode' => ['integer'],
+            'limited_time' => ['integer'],
+            'id' => ['integer'],
+            'exercise_mode' => [['in', [0, 1]]],
+            'isTag' => [['in', [0, 1]]],
         ]);
 
         return $this->getAnswerRecordDao()->update($id, $answerRecord);
@@ -107,6 +118,42 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
         return $this->getAnswerRecordDao()->countGroupByAnswerSceneId($conditions);
     }
 
+    public function batchCreateAnswerRecords($answerRecords)
+    {
+        return $this->getAnswerRecordDao()->batchCreate($answerRecords);
+    }
+
+    public function batchUpdateAnswerRecord($ids, $updateColumnsList)
+    {
+        return $this->getAnswerRecordDao()->batchUpdate($ids, $updateColumnsList);
+    }
+
+    public function replaceAssessmentsWithSnapshotAssessments($assessmentSnapshots)
+    {
+        if (empty($assessmentSnapshots)) {
+            return;
+        }
+        $update = [];
+        foreach ($assessmentSnapshots as $assessmentSnapshot) {
+            $update[$assessmentSnapshot['origin_assessment_id']] = [
+                'assessment_id' => $assessmentSnapshot['snapshot_assessment_id'],
+            ];
+        }
+        $this->getAnswerRecordDao()->batchUpdate(array_keys($update), $update, 'assessment_id');
+    }
+
+    public function findByIds($ids)
+    {
+        $answerRecords = $this->getAnswerRecordDao()->findByIds($ids);
+
+        return ArrayToolkit::index($answerRecords, 'id');
+    }
+
+    public function countByAssessmentId($assessmentId)
+    {
+       return $this->getAnswerRecordDao()->count(['assessment_id' => $assessmentId]);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService
      */
@@ -123,6 +170,9 @@ class AnswerRecordServiceImpl extends BaseService implements AnswerRecordService
         return $this->biz->service('ItemBank:Assessment:AssessmentService');
     }
 
+    /**
+     * @return AnswerRecordDao
+     */
     protected function getAnswerRecordDao()
     {
         return $this->biz->dao('ItemBank:Answer:AnswerRecordDao');

@@ -66,9 +66,16 @@ class CaptureController extends BaseController
             return $this->createJsonResponse(false);
         }
         $user = $this->getCurrentUser();
+        if(!$user->isLogin()) {
+            return $this->createJsonResponse(false);
+        }
+
         $userFace = $this->getFaceInspectionService()->getUserFaceByUserId($user->getId());
         if (!empty($_FILES['picture'])) {
             $path = FileToolkit::saveBlobImage($_FILES['picture']);
+            if($path == false) {
+                return $this->createJsonResponse(false);
+            }
 
             if (empty($userFace)) {
                 $this->getFaceInspectionService()->createUserFace(['capture_code' => $code, 'user_id' => $user->getId(), 'picture' => $path]);
@@ -108,7 +115,12 @@ class CaptureController extends BaseController
         if (!empty($_FILES['picture'])) {
             $data = $request->request->all();
             $userId = $this->getCurrentUser()->getId();
-            $data['picture_path'] = FileToolkit::saveBlobImage($_FILES['picture'], 'face_inspection');
+            $path = FileToolkit::saveBlobImage($_FILES['picture'], 'face_inspection');
+            if($path == false) {
+                return $this->createJsonResponse(false);
+            }
+
+            $data['picture_path'] = $path;
             $data['answer_scene_id'] = $record['answer_scene_id'];
             $data['answer_record_id'] = $recordId;
             $data['user_id'] = $userId;

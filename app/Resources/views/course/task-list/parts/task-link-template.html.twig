@@ -3,10 +3,9 @@
 {% set canBuy = can_buy_course(course) %}
 <tmp hide-if="{isItemDisplayedAsUnpublished}">
   {% if member %}
-    <a hide-if="{isTaskLocked}" class="title" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
+    <a hide-if="{isTaskLocked}" class="{taskItemClass}" href="{{ path('course_task_show',{courseId:course.id, id: '{taskId}'}) }}">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </a>
-
     <span display-if="{isTaskLocked}" class="title">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </span>
@@ -19,7 +18,7 @@
          data-notify-message="{{ 'course.task.notify_message.join_and_buy'|trans }}"
          style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
     {% else %}
-      <a hide-if="{isTaskShowModal}"  class="title" href="#modal" data-toggle="modal"
+      <a hide-if="{isTaskShowModal}" class="title" href="#login-modal" data-toggle="modal"
          data-url="{{ path('login_ajax') }}"
          style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
     {% endif %}

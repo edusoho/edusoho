@@ -37,7 +37,12 @@
                 <a class="cdv2-text-sm link-primary" target="_blank" href="{{ user_show_path({ id:user.id }) }}">
                 {{ user.nickname }}</a>
               {% endif %}
-              <br/>{% if user.verifiedMobile %}{{ user.verifiedMobile }}{% else %}{{ userProfiles[user.id].mobile }}{% endif %}
+              <br/>
+              {% if user.verifiedMobile|default() %}
+                {% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}
+              {% elseif userProfiles[user.id].mobile|default() %}
+                {% include 'user-mobile-mask.html.twig' with { mobile: userProfiles[user.id].mobile } %}
+              {% endif %}
             </td>
             <td class="text-right prl">
             {% if cash.type =="inflow" %}

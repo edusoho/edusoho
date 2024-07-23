@@ -2,16 +2,9 @@
 
 namespace Tests\Unit\MultiClass\Service;
 
-use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseTestCase;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\MultiClass\Dao\MultiClassProductDao;
 use Biz\MultiClass\Service\MultiClassGroupService;
-use Biz\MultiClass\Service\MultiClassProductService;
-use Biz\MultiClass\Service\MultiClassService;
-use Biz\User\Dao\UserDao;
-use Biz\User\Service\UserService;
 
 class MultiClassGroupServiceTest extends BaseTestCase
 {
@@ -44,7 +37,133 @@ class MultiClassGroupServiceTest extends BaseTestCase
 
     public function testCreateMultiClassGroups()
     {
-        $multiClass = $this->createMultiClass();
+        $multiClass = [
+            'id' => 1,
+            'type' => 'group',
+            'group_limit_num' => 3,
+        ];
+        $this->mockBiz('Course:MemberService', [
+            [
+                'functionName' => 'findGroupUserIdsByCourseIdAndRoles',
+                'runTimes' => 1,
+                'withParams' => [3, ['student', 'assistant']],
+                'returnValue' => [
+                    'student' => [
+                        ['userId' => 1],
+                        ['userId' => 2],
+                        ['userId' => 3],
+                        ['userId' => 4],
+                        ['userId' => 5],
+                        ['userId' => 6],
+                        ['userId' => 7],
+                    ],
+                ],
+            ],
+        ]);
+        $this->mockBiz('MultiClass:MultiClassGroupDao', [
+            [
+                'functionName' => 'create',
+                'runTimes' => 1,
+                'withParams' => [[
+                    'student_num' => 3,
+                    'name' => '分组1',
+                    'seq' => 1,
+                    'course_id' => 3,
+                    'multi_class_id' => 1,
+                    'assistant_id' => 0,
+                ]],
+                'returnValue' => ['id' => 1],
+            ],
+            [
+                'functionName' => 'create',
+                'runTimes' => 1,
+                'withParams' => [[
+                    'student_num' => 3,
+                    'name' => '分组2',
+                    'seq' => 2,
+                    'course_id' => 3,
+                    'multi_class_id' => 1,
+                    'assistant_id' => 0,
+                ]],
+                'returnValue' => ['id' => 2],
+            ],
+            [
+                'functionName' => 'create',
+                'runTimes' => 1,
+                'withParams' => [[
+                    'student_num' => 1,
+                    'name' => '分组3',
+                    'seq' => 3,
+                    'course_id' => 3,
+                    'multi_class_id' => 1,
+                    'assistant_id' => 0,
+                ]],
+                'returnValue' => ['id' => 3],
+            ],
+        ]);
+        $this->mockBiz('Assistant:AssistantStudentDao', [
+            [
+                'functionName' => 'batchCreate',
+                'runTimes' => 1,
+                'withParams' => [[
+                    [
+                        'studentId' => 1,
+                        'courseId' => 3,
+                        'multiClassId' => 1,
+                        'group_id' => 1,
+                    ],
+                    [
+                        'studentId' => 2,
+                        'courseId' => 3,
+                        'multiClassId' => 1,
+                        'group_id' => 1,
+                    ],
+                    [
+                        'studentId' => 3,
+                        'courseId' => 3,
+                        'multiClassId' => 1,
+                        'group_id' => 1,
+                    ],
+                ]],
+            ],
+            [
+                'functionName' => 'batchCreate',
+                'runTimes' => 1,
+                'withParams' => [[
+                    [
+                        'studentId' => 4,
+                        'courseId' => 3,
+                        'multiClassId' => 1,
+                        'group_id' => 2,
+                    ],
+                    [
+                        'studentId' => 5,
+                        'courseId' => 3,
+                        'multiClassId' => 1,
+                        'group_id' => 2,
+                    ],
+                    [
+                        'studentId' => 6,
+                        'courseId' => 3,
+                        'multiClassId' => 1,
+                        'group_id' => 2,
+                    ],
+                ]],
+            ],
+            [
+                'functionName' => 'batchCreate',
+                'runTimes' => 1,
+                'withParams' => [[
+                    [
+                        'studentId' => 7,
+                        'courseId' => 3,
+                        'multiClassId' => 1,
+                        'group_id' => 3,
+                    ],
+                ]],
+            ],
+        ]);
+        $this->biz['@noEvent'] = true;
 
         $result = $this->getMultiClassGroupService()->createMultiClassGroups(3, $multiClass);
 
@@ -62,12 +181,33 @@ class MultiClassGroupServiceTest extends BaseTestCase
 
     public function testGetLiveGroupByUserIdAndCourseId()
     {
-        $this->createAssistantStudent();
-        $this->createMultiClassLiveGroup();
-
+        $this->mockBiz('MultiClass:MultiClassService', [
+            [
+                'functionName' => 'getMultiClassByCourseId',
+                'runTimes' => 1,
+                'withParams' => [2],
+                'returnValue' => ['id' => 3],
+            ],
+        ]);
+        $this->mockBiz('Assistant:AssistantStudentService', [
+            [
+                'functionName' => 'getByStudentIdAndMultiClassId',
+                'runTimes' => 1,
+                'withParams' => [1, 3],
+                'returnValue' => ['group_id' => 5],
+            ],
+        ]);
+        $this->mockBiz('MultiClass:MultiClassLiveGroupDao', [
+            [
+                'functionName' => 'getByGroupId',
+                'runTimes' => 1,
+                'withParams' => [5],
+                'returnValue' => ['live_code' => 'test'],
+            ],
+        ]);
         $result = $this->getMultiClassGroupService()->getLiveGroupByUserIdAndCourseId(1, 2, 1);
 
-        $this->assertEquals(1, $result['id']);
+        $this->assertEquals('test', $result['live_code']);
     }
 
     public function testCreateLiveGroup()
@@ -86,8 +226,52 @@ class MultiClassGroupServiceTest extends BaseTestCase
 
     public function testSetGroupNewStudent()
     {
-        $multiClass = $this->createMultiClass();
-
+        $multiClass = [
+            'id' => 1,
+            'type' => 'group',
+            'group_limit_num' => 3,
+            'courseId' => 3,
+        ];
+        $this->mockBiz('MultiClass:MultiClassGroupDao', [
+            [
+                'functionName' => 'getNoFullGroup',
+                'runTimes' => 1,
+                'withParams' => [1, 3],
+                'returnValue' => [
+                    'id' => 2,
+                    'student_num' => 1,
+                ],
+            ],
+            [
+                'functionName' => 'update',
+                'runTimes' => 1,
+                'withParams' => [2, ['student_num' => 2]],
+                'returnValue' => [
+                    'id' => 2,
+                    'assistant_id' => 5,
+                ],
+            ],
+        ]);
+        $this->mockBiz('Assistant:AssistantStudentDao', [
+            [
+                'functionName' => 'create',
+                'runTimes' => 1,
+                'withParams' => [[
+                    'studentId' => 1,
+                    'courseId' => 3,
+                    'multiClassId' => 1,
+                    'group_id' => 2,
+                    'assistantId' => 5,
+                ]],
+            ],
+        ]);
+        $this->mockBiz('Assistant:AssistantStudentService', [
+            [
+                'functionName' => 'setGroupAssistantAndStudents',
+                'runTimes' => 1,
+                'withParams' => [3, 1],
+            ],
+        ]);
         $result = $this->getMultiClassGroupService()->setGroupNewStudent($multiClass, 1);
 
         $this->assertTrue($result);
@@ -95,7 +279,30 @@ class MultiClassGroupServiceTest extends BaseTestCase
 
     public function testDeleteMultiClassGroup()
     {
-        $this->batchCreateGroup();
+        $this->mockBiz('MultiClass:MultiClassGroupDao', [
+            [
+                'functionName' => 'delete',
+                'runTimes' => 1,
+                'withParams' => [1],
+                'returnValue' => 1,
+            ],
+        ]);
+        $this->mockBiz('MultiClass:MultiClassLiveGroupDao', [
+            [
+                'functionName' => 'getByGroupId',
+                'runTimes' => 1,
+                'withParams' => [1],
+                'returnValue' => [
+                    'id' => 3,
+                ],
+            ],
+            [
+                'functionName' => 'delete',
+                'runTimes' => 1,
+                'withParams' => [3],
+            ],
+        ]);
+        $this->biz['@noEvent'] = true;
 
         $result = $this->getMultiClassGroupService()->deleteMultiClassGroup(1);
 
@@ -135,11 +342,75 @@ class MultiClassGroupServiceTest extends BaseTestCase
 
     public function testBatchUpdateGroupAssistant()
     {
-        $this->batchCreateGroup();
-        $multiClass = $this->createMultiClass();
-        $this->createAssistantStudent();
+        $this->mockBiz('MultiClass:MultiClassGroupDao', [
+            [
+                'functionName' => 'findByIds',
+                'runTimes' => 1,
+                'withParams' => [[1]],
+                'returnValue' => [1 => ['id' => 1, 'seq' => 1]],
+            ],
+            [
+                'functionName' => 'batchUpdate',
+                'runTimes' => 1,
+                'withParams' => [[1], [['id' => 1, 'assistant_id' => 1]]],
+            ],
+        ]);
+        $this->mockBiz('Assistant:AssistantStudentService', [
+            [
+                'functionName' => 'findAssistantStudentsByGroupIds',
+                'runTimes' => 1,
+                'withParams' => [[1]],
+                'returnValue' => [['id' => 3, 'studentId' => 5, 'group_id' => 1]],
+            ],
+        ]);
+        $this->mockBiz('Assistant:AssistantStudentDao', [
+            [
+                'functionName' => 'batchUpdate',
+                'runTimes' => 1,
+                'withParams' => [[3], [['id' => 3, 'assistantId' => 1]]],
+            ],
+        ]);
+        $this->mockBiz('MultiClass:MultiClassService', [
+            [
+                'functionName' => 'getMultiClass',
+                'runTimes' => 1,
+                'withParams' => [1],
+                'returnValue' => ['title' => 'test'],
+            ],
+        ]);
+        $this->mockBiz('User:UserService', [
+            [
+                'functionName' => 'getUser',
+                'runTimes' => 1,
+                'withParams' => [1],
+                'returnValue' => ['nickname' => 'test'],
+            ],
+        ]);
+        $this->mockBiz('MultiClass:MultiClassRecordService', [
+            [
+                'functionName' => 'makeSign',
+                'runTimes' => 1,
+                'returnValue' => 'test',
+            ],
+        ]);
+        $this->mockBiz('MultiClass:MultiClassRecordDao', [
+            [
+                'functionName' => 'batchCreate',
+                'runTimes' => 1,
+                'withParams' => [[
+                    [
+                        'user_id' => 5,
+                        'assistant_id' => 1,
+                        'multi_class_id' => 1,
+                        'data' => ['title' => '加入班课', 'content' => '加入班课(test)的分组1, 分配助教(test)'],
+                        'sign' => 'test',
+                        'is_push' => 0,
+                    ],
+                ]],
+            ],
+        ]);
 
-        $result = $this->getMultiClassGroupService()->batchUpdateGroupAssistant($multiClass['id'], [1], 1);
+        $result = $this->getMultiClassGroupService()->batchUpdateGroupAssistant(1, [1], 1);
 
         $this->assertTrue($result);
     }
@@ -155,110 +426,6 @@ class MultiClassGroupServiceTest extends BaseTestCase
         ];
 
         return $this->getMulticlassLiveGroupDao()->create($fields);
-    }
-
-    public function createAssistantStudent()
-    {
-        $fields = [
-            'id' => '1',
-            'courseId' => 2,
-            'studentId' => 1,
-            'assistantId' => 1,
-            'multiClassId' => 1,
-            'group_id' => 1,
-            'createdTime' => time(),
-            'updatedTime' => time(),
-        ];
-
-        return $this->getAssistantStudentService()->create($fields);
-    }
-
-    protected function createMultiClass()
-    {
-        $product = $this->createMultiClassProduct();
-        $this->createCourse();
-        $this->createCourseMember();
-        $teacher = $this->createUser(['ROLE_TEACHER', 'ROLE_USER']);
-        $assistant1 = $this->createUser(['ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT']);
-        $assistant2 = $this->createUser(['ROLE_TEACHER', 'ROLE_USER', 'ROLE_TEACHER_ASSISTANT']);
-
-        $fields = [
-            'title' => 'multi class 1',
-            'courseId' => 1,
-            'productId' => $product['id'],
-            'copyId' => 0,
-            'type' => 'group',
-            'teacherId' => $teacher['id'],
-            'assistantIds' => [$assistant1['id'], $assistant2['id']],
-            'maxStudentNum' => 10,
-            'isReplayShow' => 1,
-            'group_limit_num' => 10,
-        ];
-
-        return $this->getMultiClassService()->createMultiClass($fields);
-    }
-
-    protected function createUser($role)
-    {
-        $userInfo = [
-            'nickname' => 'test_nickname'.rand(0, 99999),
-            'password' => 'test_password',
-            'email' => rand(0, 99999).'@email.com',
-        ];
-        $user = $this->getUserService()->register($userInfo);
-        $this->getUserDao()->update($user['id'], ['roles' => $role]);
-
-        return $user;
-    }
-
-    public function createMultiClassProduct($fields = [])
-    {
-        $baseFields = [
-            'title' => 'multi product 1',
-            'type' => 'normal',
-        ];
-        $multiClassProduct = array_merge($baseFields, $fields);
-
-        return $this->getMultiClassProductService()->createProduct($multiClassProduct);
-    }
-
-    protected function createCourseMember()
-    {
-        $defaultFields = [
-            'id' => 3,
-            'courseId' => 3,
-            'classroomId' => 0,
-            'multiClassId' => 1,
-            'joinedType' => 'course',
-            'userId' => 1,
-            'role' => 'student',
-            'learnedCompulsoryTaskNum' => 1,
-            'courseSetId' => 1,
-        ];
-
-        return $this->getCourseMemberDao()->create($defaultFields);
-    }
-
-    protected function createCourse()
-    {
-        $courseSetFields = [
-            'id' => 3,
-            'title' => '课程1',
-            'type' => 'normal',
-        ];
-        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
-
-        $courseFields = [
-            'id' => 3,
-            'title' => '课程1',
-            'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'forever',
-            'learnMode' => 'freeMode',
-            'isDefault' => 1,
-            'courseType' => 'normal',
-        ];
-
-        return $this->getCourseService()->createCourse($courseFields);
     }
 
     protected function batchCreateGroup()
@@ -309,38 +476,6 @@ class MultiClassGroupServiceTest extends BaseTestCase
     }
 
     /**
-     * @return AssistantStudentService
-     */
-    private function getAssistantStudentService()
-    {
-        return $this->createService('Assistant:AssistantStudentService');
-    }
-
-    /**
-     * @return MultiClassProductService
-     */
-    protected function getMultiClassProductService()
-    {
-        return $this->createService('MultiClass:MultiClassProductService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
      * @return MultiClassGroupService
      */
     protected function getMultiClassGroupService()
@@ -354,34 +489,5 @@ class MultiClassGroupServiceTest extends BaseTestCase
     protected function getMulticlassGroupDao()
     {
         return $this->createDao('MultiClass:MultiClassGroupDao');
-    }
-
-    /**
-     * @return MultiClassService
-     */
-    protected function getMultiClassService()
-    {
-        return $this->createService('MultiClass:MultiClassService');
-    }
-
-    protected function getCourseMemberDao()
-    {
-        return $this->createDao('Course:CourseMemberDao');
-    }
-
-    /**
-     * @return UserService
-     */
-    protected function getUserService()
-    {
-        return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return UserDao
-     */
-    protected function getUserDao()
-    {
-        return $this->createService('User:UserDao');
     }
 }

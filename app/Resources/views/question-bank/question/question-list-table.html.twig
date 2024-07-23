@@ -1,6 +1,7 @@
 {% import 'macro.html.twig' as web_macro %}
 {% set questionTypesDict = getQuestionTypes() %}
 <input type="hidden" id="select_category" value="{{ categoryId|default(0) }}">
+<input type="hidden" name="question_count" value="{{ (questions|length)|default(0) }}">
 <table class="table table-striped table-hover" id="quiz-table">
   <thead>
   <tr>
@@ -80,5 +81,5 @@
   <span class="pull-right color-gray">{{'course.question_manage.count'|trans({'%getItemCount()%': paginator.getItemCount() })}}</span>
 </div>
 <nav class="text-center">
-  {{ web_macro.ajax_paginator(paginator) }}
+  {{ web_macro.skip_paginator(paginator) }}
 </nav>

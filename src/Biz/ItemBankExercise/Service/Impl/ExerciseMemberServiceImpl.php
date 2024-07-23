@@ -170,11 +170,20 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
 
             $user = $this->getUserService()->getUser($userId);
-            $this->getLogService()->info(
-                'item_bank_exercise',
-                'remove_student',
-                "《{$exercise['title']}》(#{$exercise['id']})，移除学员{$user['nickname']}(#{$user['id']})}"
-            );
+
+            if (isset($reason['reasonType']) && 'exit' === $reason['reasonType']) {
+                $this->getLogService()->info(
+                    'item_bank_exercise',
+                    'exit_item_bank_exercise',
+                    "学员{$user['nickname']}(#{$user['id']})退出了教学计划《{$exercise['title']}》(#{$exercise['id']})"
+                );
+            } else {
+                $this->getLogService()->info(
+                    'item_bank_exercise',
+                    'remove_student',
+                    "《{$exercise['title']}》(#{$exercise['id']})，移除学员{$user['nickname']}(#{$user['id']})}"
+                );
+            }
 
             $this->commit();
         } catch (\Exception $e) {
@@ -190,6 +199,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         }
 
         return true;
+    }
+
+    public function batchUpdateMembers($updateFields)
+    {
+        return $this->getExerciseMemberDao()->batchUpdate(array_keys($updateFields), $updateFields);
     }
 
     public function getExerciseMember($exerciseId, $userId)
@@ -305,6 +319,18 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     public function findByUserIdAndRole($userId, $role)
     {
         return $this->getExerciseMemberDao()->findByUserIdAndRole($userId, $role);
+    }
+
+    public function updateMembers($conditions, $updateFields)
+    {
+        return $this->getExerciseMemberDao()->update($conditions, $updateFields);
+    }
+
+    public function changeMembersDeadlineByExerciseId($exerciseId, $day, $waveType)
+    {
+        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+
+        return $this->getExerciseMemberDao()->changeMembersDeadlineByExerciseId($exerciseId, $updateDate);
     }
 
     public function updateMasteryRate($exerciseId, $userId)

@@ -13,6 +13,7 @@
 
 <tr class="hide">
   <td class="js-paginator">
+    <nav class="admin-pagination {{ class|default('text-center') }}">
     {% if paginator.lastPage > 1 %}
       <ul class="pagination">
         {% if paginator.currentPage != paginator.firstPage %}
@@ -28,6 +29,17 @@
           <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">{{ 'paginator.endPage'|trans }}</a></li>
         {% endif %}
       </ul>
+      <span class="page-num">
+				{{ (paginator.currentPage - 1) * paginator.perPageCount + 1 }}
+      	-
+	      {% if paginator.currentPage == paginator.lastPage %}
+          {{ paginator.itemCount }}
+        {% else %}
+          {{ paginator.currentPage * paginator.perPageCount }}
+        {% endif %}
+	      / {{ paginator.itemCount }}
+	    </span>
     {% endif %}
+    </nav>
   </td>
 </tr>

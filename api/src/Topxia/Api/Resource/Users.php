@@ -12,6 +12,7 @@ class Users extends BaseResource
     public function get(Application $app, Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['start'], $conditions['limit']);
 
         if (empty($conditions)) {
             return array();

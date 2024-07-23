@@ -199,6 +199,14 @@ interface CourseSetService
      * @return mixed
      * @Log(module="course",action="close",funcName="getCourseSet")
      */
+    public function unpublishedCourseSet($id);
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     * @Log(module="course",action="close",funcName="getCourseSet")
+     */
     public function closeCourseSet($id);
 
     public function findProductIdAndGoodsIdsByIds($ids);
@@ -297,4 +305,10 @@ interface CourseSetService
     public function resetParentIdByCourseId($courseId);
 
     public function updateCourseSetRatingNum($id, $fields);
+
+    public function banLearningByIds($ids);
+
+    public function canLearningByIds($ids);
+
+    public function updateDefaultCourse($courseSetId, $courseId);
 }

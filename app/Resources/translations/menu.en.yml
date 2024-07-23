@@ -507,6 +507,7 @@ admin_v2.course.basic.basic_tab.close_btn: Close
 admin_v2.course.basic.basic_tab.publish_submit_btn: Publish
 admin_v2.course.basic.basic_tab.clone_btn: Clone
 admin_v2.course.basic.basic_tab.delete_submit_btn: Delete
+admin_v2.course.basic_tab.unpublished_btn: unpublished
 admin_v2.course.basic.basic_tab.s2b2c_submit_btn: Remove
 
 # 教学模块-课程管理-班级管理
@@ -518,6 +519,7 @@ admin_v2.course.classroom.basic_tab.create_btn: Add
 admin_v2.course.classroom.basic_tab.recommend_btn: Recommend
 admin_v2.course.classroom.basic_tab.close_btn: Close
 admin_v2.course.classroom.basic_tab.publish_submit_btn: Publish
+admin_v2.course.classroom.basic_tab.unpublished_btn: unpublished
 admin_v2.course.classroom.basic_tab.delete_submit_btn: Delete
 
 # 教学-课程管理-直播模块
@@ -536,6 +538,7 @@ admin_v2.course.item_bank_exercise.basic_tab.manage_btn: Manage
 admin_v2.course.item_bank_exercise.basic_tab.recommend_btn: Recommend
 admin_v2.course.item_bank_exercise.basic_tab.close_btn: Close
 admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: Publish
+admin_v2.course.item_bank_exercise.basic_tab.unpublished_btn: unpublished
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: Delete
 
 #公开课模块
@@ -589,6 +592,7 @@ admin_v2.question_bank.basic_tab: Question Bank
 admin_v2.question_bank.basic_tab.create_btn: Create
 admin_v2.question_bank.category_tab: Question Bank Category
 admin_v2.question_bank.category_tab.create_btn: Create
+admin_v2.question.ai_analysis_tab: AI Question Analysis
 
 # 通用按钮
 admin_v2.btn.sms_send_btn: Notify the publish
@@ -963,6 +967,13 @@ admin_v2.system.security_menu: Security Setting
 admin_v2.system.blacklist_tab: IP Blacklist
 admin_v2.system.security_tab: Whitelist Domain
 admin_v2.system.post_num_tab: Post Setting
+admin_v2.system.anti_fraud_reminder_tab: APP anti-fraud pop-up window settings
+
+# 系统-系统管理-短信防御管理
+admin_v2.system.sms_defence_menu: Sms Defence
+admin_v2.sms.request.log.list_tab: Sms Request Log
+admin_v2.sms.ip.black.list_tab: Sms IP Black List
+
 
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: Data Overview
@@ -978,9 +989,6 @@ admin_v2.system.queue_failed_tab: Queue Failed Log
 # 隐藏模块
 admin_v2.nav.developer_module: Developer
 admin_v2.nav.developer_module.basic_group: Developer Setting
-admin_v2.developer.xapi_manage: xAPI Manage
-admin_v2.developer.xapi_setting: xAPI Setting
-admin_v2.developer.xapi_statement: xAPI Statement
 
 admin_v2.developer.cdn_manage: CDN Manage
 admin_v2.developer.cdn_setting: CDN Setting
@@ -1046,3 +1054,4 @@ admin.wap_setting.find: 'Discovery page settings'
 admin.wap_setting.version_setting: 'Version setting'
 admin.wap_setting.pay_setting: 'Payment setting'
 admin_v2.cloud.question_bank.attachment.basic_tab: Question Attachment
+admin_v2.cloud.question_bank.attachment_setting.basic_tab: Question Attachment Setting

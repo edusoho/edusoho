@@ -119,7 +119,7 @@ class CloudController extends BaseController
 
     protected function checkSign($server, $sign, $secretKey)
     {
-        return md5($server.$secretKey) == $sign;
+        return md5($server.$secretKey) === $sign;
     }
 
     /**

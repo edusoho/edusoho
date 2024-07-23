@@ -103,9 +103,10 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
         $matchs = [];
         $matcheds = 0;
+        $untaggedText = strip_tags($text);
         foreach ($chunkKeywords as $chunkKeyword) {
             $pattern = '/('.implode('|', $chunkKeyword).')/i';
-            $matched = preg_match_all($pattern, $text, $match);
+            $matched = preg_match_all($pattern, $untaggedText, $match);
             if ($matched) {
                 $matchs = array_merge($matchs, $match[0]);
             }

@@ -38,7 +38,6 @@ class ExploreController extends BaseController
         if (isset($conditions['ids']) && empty($conditions['ids'])) {
             $conditions['ids'] = [-1];
         }
-
         list($conditions, $orderBy) = $this->getCourseSetSearchOrderBy($conditions);
         $conditions = $this->getCourseSetFilterType($conditions);
 
@@ -131,6 +130,8 @@ class ExploreController extends BaseController
                 'categoryParent' => $categoryParent,
                 'levels' => $this->findEnabledVipLevels(),
                 'tags' => $tags,
+                'isWxClient' => $this->isWxClient(),
+                'isMobileClient' => $this->isMobileClient(),
             ]
         );
     }
@@ -251,7 +252,6 @@ class ExploreController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
-        $conditions['showable'] = 1;
 
         list($conditions, $tags) = $this->getConditionsByTags($conditions);
         $conditions = $this->getClassroomConditionsByTags($conditions);
@@ -287,6 +287,8 @@ class ExploreController extends BaseController
                 'filter' => $filter,
                 'levels' => $this->findEnabledVipLevels(),
                 'tags' => $tags,
+                'isWxClient' => $this->isWxClient(),
+                'isMobileClient' => $this->isMobileClient(),
             ]
         );
     }

@@ -79,7 +79,7 @@ class UserEventSubscriber extends BaseEventSubscriber
         $data = $this->getSyncListService()->getSyncDataId($userId);
 
         foreach ($data as $value) {
-            if($value['id'] && $value['type'] == 'userUpdate' && $value['status'] == 'new') {
+            if ($value['id'] && $value['type'] == 'userUpdate' && $value['status'] == 'new') {
                 return;
             }
         }

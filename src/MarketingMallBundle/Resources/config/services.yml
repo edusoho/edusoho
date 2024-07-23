@@ -1,8 +1,12 @@
 services:
-  api_token_header_listener:
+  api_marketing_mall_token_header_listener:
     class: MarketingMallBundle\Security\Firewall\MallAuthTokenAuthenticationListener
     arguments:
       - '@service_container'
+
+  marketing_mall.logout.success_handler:
+    class: MarketingMallBundle\Handler\LogoutSuccessHandler
+    parent: topxia.logout.success_handler
 
   marketing_mall_user_event_subscriber:
     class: MarketingMallBundle\Event\UserEventSubscriber
@@ -45,3 +49,45 @@ services:
     arguments: [ '@biz' ]
     tags:
     - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_auth_setting_event_subscriber:
+    class: MarketingMallBundle\Biz\AuthSetting\Event\AuthSettingEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+  marketing_mall_cloud_sms_setting_event_subscriber:
+    class: MarketingMallBundle\Biz\AuthSetting\Event\AuthSettingEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_wechat_notification_event_subscriber:
+    class: MarketingMallBundle\Biz\MallWechatNotification\Event\WechatNotificationEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  marketing_mall_mall_trade_event_subscriber:
+    class: MarketingMallBundle\Biz\MallTrade\Event\MallTradeEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  mall_wechat_template.extension:
+    class: MarketingMallBundle\Extension\WeChatTemplateExtension
+    public: true
+    calls:
+      -
+        - setBiz
+        -
+          - '@biz'
+    tags:
+      -
+        name: extension
+        priority: 11
+
+security:
+  firewalls:
+    main:
+      logout:
+        success_handler: marketing_mall.logout.success_handler

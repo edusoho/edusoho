@@ -9,11 +9,18 @@ use Codeages\Biz\ItemBank\ErrorCode;
 use Codeages\Biz\ItemBank\Item\Dao\ItemDao;
 use Codeages\Biz\ItemBank\Item\Dao\QuestionDao;
 use Codeages\Biz\ItemBank\Item\Exception\ItemException;
+use Codeages\Biz\ItemBank\Item\ItemParser;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Item\Type\ChoiceItem;
+use Codeages\Biz\ItemBank\Item\Type\DetermineItem;
+use Codeages\Biz\ItemBank\Item\Type\EssayItem;
+use Codeages\Biz\ItemBank\Item\Type\FillItem;
 use Codeages\Biz\ItemBank\Item\Type\Item;
+use Codeages\Biz\ItemBank\Item\Type\MaterialItem;
+use Codeages\Biz\ItemBank\Item\Type\SingleChoiceItem;
+use Codeages\Biz\ItemBank\Item\Type\UncertainChoiceItem;
 use Codeages\Biz\ItemBank\Item\Wrapper\ExportItemsWrapper;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
@@ -37,7 +44,8 @@ class ItemServiceImpl extends BaseService implements ItemService
         try {
             $item = $this->getItemDao()->create($item);
             if (!empty($arguments['attachments'])) {
-                $this->updateAttachments($arguments['attachments'], $item['id'], AttachmentService::ITEM_TYPE);
+                $attachments = $this->sortAttachments($arguments['attachments']);
+                $this->updateAttachments($attachments, $item['id'], AttachmentService::ITEM_TYPE);
             }
 
             $this->createQuestions($item['id'], $questions);
@@ -75,7 +83,6 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($bankId);
             $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($bankId);
-//            $this->dispatch('item.import', $savedItems);
             $this->dispatchEvent('item.import', new Event($savedItems));
             $this->commit();
 
@@ -92,16 +99,13 @@ class ItemServiceImpl extends BaseService implements ItemService
         if (!empty($resourcePath)) {
             $options = ['resourceTmpPath' => $resourcePath];
         }
-        $parser = $this->biz['item_parser'];
 
-        return $parser->read($wordPath, $options);
+        return $this->getItemParser()->read($wordPath, $options);
     }
 
     public function parseItems($text)
     {
-        $parser = $this->biz['item_parser'];
-
-        return $parser->parse($text);
+        return $this->getItemParser()->parse($text);
     }
 
     public function updateItem($id, $item)
@@ -123,7 +127,8 @@ class ItemServiceImpl extends BaseService implements ItemService
             $item['question_num'] = $this->getQuestionDao()->count(['item_id' => $id]);
             $item = $this->getItemDao()->update($id, $item);
             if (!empty($arguments['attachments'])) {
-                $this->updateAttachments($arguments['attachments'], $id, AttachmentService::ITEM_TYPE);
+                $attachments = $this->sortAttachments($arguments['attachments']);
+                $this->updateAttachments($attachments, $id, AttachmentService::ITEM_TYPE);
             }
 
             $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
@@ -155,6 +160,11 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function getItem($id)
     {
         return $this->getItemDao()->get($id);
+    }
+
+    public function getItemIncludeDeleted($id)
+    {
+        return $this->getItemDao()->getIncludeDeleted($id);
     }
 
     public function getItemWithQuestions($id, $withAnswer = false)
@@ -190,6 +200,25 @@ class ItemServiceImpl extends BaseService implements ItemService
         return ArrayToolkit::index($items, 'id');
     }
 
+    public function findItemsByIdsIncludeDeleted($ids, $withQuestions = false)
+    {
+        $items = $this->getItemDao()->findByIdsIncludeDeleted($ids);
+        if ($withQuestions) {
+            $questions = $this->getQuestionDao()->findByItemsIdsIncludeDeleted(array_column($items, 'id'));
+            $questions = ArrayToolkit::group($questions, 'item_id');
+            foreach ($items as &$item) {
+                $item['questions'] = empty($questions[$item['id']]) ? [] : $questions[$item['id']];
+            }
+        }
+        $that = $this;
+        array_walk($items, function (&$item) use ($that) {
+            $item['includeImg'] = $that->hasImg($item['material']);
+            $item = $that->biz['item_attachment_wrapper']->wrap($item);
+        });
+
+        return ArrayToolkit::index($items, 'id');
+    }
+
     public function searchItems($conditions, $orderBys, $start, $limit, $columns = [])
     {
         $conditions = $this->filterItemConditions($conditions);
@@ -204,6 +233,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
 
         return $items;
+    }
+
+    public function searchItemsIncludeDeleted($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getItemDao()->searchIncludeDeleted($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countItems($conditions)
@@ -309,7 +343,7 @@ class ItemServiceImpl extends BaseService implements ItemService
     {
         $reviewResults = [];
 
-        $items = $this->getItemDao()->findByIds(array_column($itemResponses, 'item_id'));
+        $items = $this->getItemDao()->findByIdsIncludeDeleted(array_column($itemResponses, 'item_id'));
         $items = ArrayToolkit::index($items, 'id');
         foreach ($itemResponses as $itemResponse) {
             $itemType = empty($items[$itemResponse['item_id']]['type']) ? ChoiceItem::TYPE : $items[$itemResponse['item_id']]['type'];
@@ -329,6 +363,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
 
         $conditions['bank_id'] = $bankId;
+        if (!empty($conditions['category_id']) && $conditions['category_id'] !== 0) {
+            $conditions['category_ids'] = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['category_id']);
+            $conditions['category_ids'][] = $conditions['category_id'];
+            unset($conditions['category_id']);
+        }
         $items = $this->searchItems($conditions, ['created_time' => 'DESC'], 0, $this->countItems($conditions));
         if (empty($items)) {
             return false;
@@ -348,6 +387,13 @@ class ItemServiceImpl extends BaseService implements ItemService
         return ArrayToolkit::index($questions, 'id');
     }
 
+    public function findQuestionsByQuestionIdsIncludeDeleted($questionIds)
+    {
+        $questions = $this->getQuestionDao()->findQuestionsByQuestionIdsIncludeDeleted($questionIds);
+
+        return ArrayToolkit::index($questions, 'id');
+    }
+
     public function countQuestionsByBankId($bankId)
     {
         return $this->getItemDao()->countItemQuestionNumByBankId($bankId);
@@ -358,16 +404,24 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getItemDao()->countItemQuestionNumByCategoryId($categoryId);
     }
 
+    public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getQuestionDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
     protected function createQuestions($itemId, $questions)
     {
         if (empty($questions)) {
             return;
         }
+        $questionAttachments = [];
         foreach ($questions as $question) {
             $question['item_id'] = $itemId;
             $question['created_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $question['updated_user_id'] = $question['created_user_id'];
-            $attachments = $question['attachments'];
+            if(!empty($question['attachments'])) {
+                $attachments = $this->sortAttachments($question['attachments']);
+            }
             unset($question['attachments']);
             $itemQuestion = $this->getQuestionDao()->create($question);
             if (!empty($attachments)) {
@@ -390,8 +444,10 @@ class ItemServiceImpl extends BaseService implements ItemService
             }
             if (in_array($question['id'], $originQuestionIds)) {
                 $question['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-
-                $questionAttachments[] = ['id' => $question['id'], 'attachments' => $question['attachments']];
+                if(!empty($question['attachments'])) {
+                    $attachments = $this->sortAttachments($question['attachments']);
+                    $questionAttachments[] = ['id' => $question['id'], 'attachments' => $attachments];
+                }
                 unset($question['attachments']);
 
                 $updateQuestions[] = $question;
@@ -419,6 +475,19 @@ class ItemServiceImpl extends BaseService implements ItemService
         }
     }
 
+    protected function sortAttachments($sortAttachments)
+    {
+        $attachments = [];
+        $seq = 1;
+        foreach ($sortAttachments as $sortAttachment) {
+            $sortAttachment['seq'] = $seq;
+            $attachments[] = $sortAttachment;
+            ++$seq;
+        }
+
+        return $attachments;
+    }
+
     protected function updateAttachments($attachments, $targetId, $targetType)
     {
         foreach ($attachments as $attachment) {
@@ -426,6 +495,7 @@ class ItemServiceImpl extends BaseService implements ItemService
                 'target_id' => $targetId,
                 'target_type' => $targetType,
                 'module' => $attachment['module'],
+                'seq' => $attachment['seq'],
             ]);
         }
     }
@@ -436,11 +506,133 @@ class ItemServiceImpl extends BaseService implements ItemService
         $questions = $this->getQuestionDao()->search($conditions, [], 0, $questionCount);
 
         $result = $this->getQuestionDao()->batchDelete($conditions);
-        if (!empty($questions)){
+        if (!empty($questions)) {
             $this->getAttachmentService()->batchDeleteAttachment(['target_ids' => ArrayToolkit::column($questions, 'id'), 'target_type' => 'question']);
         }
 
         return $result;
+    }
+
+    public function getQuestionIncludeDeleted($questionId)
+    {
+        return $this->getQuestionDao()->getIncludeDeleted($questionId);
+    }
+
+    public function getQuestion($questionId)
+    {
+        return $this->getQuestionDao()->get($questionId);
+    }
+
+    public function countItemTypesNum($items)
+    {
+        $typesNum = [
+            SingleChoiceItem::TYPE => 0,
+            ChoiceItem::TYPE => 0,
+            UncertainChoiceItem::TYPE => 0,
+            DetermineItem::TYPE => 0,
+            FillItem::TYPE => 0,
+            EssayItem::TYPE => 0,
+            MaterialItem::TYPE => 0,
+        ];
+
+        foreach ($items as $item) {
+            ++$typesNum[$item['type']];
+        }
+
+        return $typesNum;
+    }
+
+    public function findDuplicatedMaterialIds($itemBankId, $items)
+    {
+        $materialHashes = [];
+        $materials = [];
+        foreach ($items as $item) {
+            $item['bank_id'] = $itemBankId;
+            $item = $this->getItemProcessor($item['type'])->process($item);
+            $materialHashes[] = md5($item['material']);
+            $materials[] = $item['material'];
+        }
+
+        $selfDuplicatedIdsGroup = [];
+        foreach (array_count_values($materials) as $value => $count) {
+            if ($count > 1) {
+                $selfDuplicatedIdsGroup[] = array_keys($materials, $value);
+            }
+        }
+
+        $allDuplicatedIds = [];
+        foreach ($selfDuplicatedIdsGroup as $selfDuplicatedIds) {
+            foreach ($selfDuplicatedIds as $selfDuplicatedId) {
+                $allDuplicatedIds[$selfDuplicatedId]['local'] = array_values(array_diff($selfDuplicatedIds, [$selfDuplicatedId]));
+            }
+        }
+
+        $duplicatedMaterials = array_column($this->getItemDao()->findMaterialByMaterialHashes($itemBankId, $materialHashes), 'material');
+        $duplicatedIds = array_keys(array_intersect($materials, $duplicatedMaterials));
+        foreach ($duplicatedIds as $duplicatedId) {
+            $allDuplicatedIds[$duplicatedId]['remote'] = true;
+        }
+
+        return $allDuplicatedIds;
+    }
+
+    public function isMaterialDuplicative($itemBankId, $material, $items = [], $itemId = 0)
+    {
+        $material = $this->purifyHtml(trim($material));
+        $material = preg_replace('/\[\[.*?\]\]/', '[[]]', $material);
+        $materialHash = md5($material);
+
+        if ($items) {
+            foreach ($items as $item) {
+                $item['bank_id'] = $itemBankId;
+                $item = $this->getItemProcessor($item['type'])->process($item);
+                if ($material == $item['material']) {
+                    return true;
+                }
+            }
+        }
+
+        $items = $this->getItemDao()->search(['bank_id' => $itemBankId, 'material_hash' => $materialHash], [], 0, PHP_INT_MAX, ['id', 'material']);
+        $items = array_filter($items, function ($item) use ($material, $itemId) {
+            return $material == $item['material'] && $item['id'] != $itemId;
+        });
+        if ($items) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function findDuplicatedMaterials($bankId, $categoryId = 0)
+    {
+        $categoryIds = [];
+        if ('' != $categoryId) {
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds($categoryId);
+            $categoryIds[] = $categoryId;
+        }
+        $duplicatedMaterialHashes = $this->getItemDao()->findDuplicatedMaterialHashes($bankId, $categoryIds);
+        if (empty($duplicatedMaterialHashes)) {
+            return [];
+        }
+
+        return $this->getItemDao()->findDuplicatedMaterials($bankId, $categoryIds, array_column($duplicatedMaterialHashes, 'material_hash'));
+    }
+
+    public function findDuplicatedMaterialItems($bankId, $categoryId, $material)
+    {
+        $material = str_replace('\n', PHP_EOL, $material);
+        $conditions = ['bank_id' => $bankId, 'material_hash' => md5($material)];
+        if ('' != $categoryId) {
+            $categoryIds = $this->getItemCategoryService()->findCategoryChildrenIds($categoryId);
+            $categoryIds[] = $categoryId;
+            $conditions['category_ids'] = $categoryIds;
+        }
+        $items = $this->getItemDao()->search($conditions, [], 0, PHP_INT_MAX, ['id', 'material']);
+        $items = array_filter($items, function ($item) use ($material) {
+            return $item['material'] == $material;
+        });
+
+        return array_values($this->findItemsByIds(array_column($items, 'id'), true));
     }
 
     protected function findQuestionsByItemId($itemId)
@@ -448,7 +640,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getQuestionDao()->findByItemId($itemId);
     }
 
-    public function findQuestionsByItemIds($itemIds)
+    protected function findQuestionsByItemIds($itemIds)
     {
         return $this->getQuestionDao()->findByItemsIds($itemIds);
     }
@@ -472,6 +664,11 @@ class ItemServiceImpl extends BaseService implements ItemService
         return false;
     }
 
+    protected function purifyHtml($html)
+    {
+        return $this->biz['item_bank_html_helper']->purify($html);
+    }
+
     /**
      * @param $imgRootDir
      *
@@ -493,6 +690,14 @@ class ItemServiceImpl extends BaseService implements ItemService
     protected function getItemProcessor($type)
     {
         return $this->biz['item_type_factory']->create($type);
+    }
+
+    /**
+     * @return ItemParser
+     */
+    protected function getItemParser()
+    {
+        return $this->biz['item_parser'];
     }
 
     /**

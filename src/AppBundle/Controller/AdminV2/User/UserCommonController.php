@@ -1,6 +1,5 @@
 <?php
 
-
 namespace AppBundle\Controller\AdminV2\User;
 
 use AppBundle\Common\ArrayToolkit;
@@ -19,9 +18,7 @@ use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
-use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Biz\WeChat\Service\WeChatService;
 
 class UserCommonController extends BaseController
 {
@@ -30,6 +27,7 @@ class UserCommonController extends BaseController
     public function index($fields, $conditions, $indexTwigUrl)
     {
         $conditions = array_merge($conditions, $fields);
+        $conditions = $this->fillUserStatus($conditions);
         $conditions = $this->fillOrgCode($conditions);
 
         $userCount = $this->getUserService()->countUsers($conditions);
@@ -47,26 +45,31 @@ class UserCommonController extends BaseController
         );
 
         //根据mobile或者idcard查询user_profile获得userIds
-        if (isset($conditions['keywordType']) && in_array($conditions['keywordType'], $this->keywordType) || !empty($conditions['keyword'])) {
-            $preConditions = $this->getUserProfileConditions($conditions);
-            $profilesCount = $this->getUserService()->searchUserProfileCount($preConditions);
-            $userProfiles = $this->getUserService()->searchUserProfiles(
-                $preConditions,
-                ['id' => 'DESC'],
-                0,
-                $profilesCount
-            );
+        if (!empty($conditions['keywordType']) && !empty($conditions['keyword'])) {
+            if (in_array($conditions['keywordType'], $this->keywordType)) {
+                $preConditions = $this->getUserProfileConditions($conditions);
+                $userProfiles = $this->getUserService()->searchUserProfiles(
+                    $preConditions,
+                    ['id' => 'DESC'],
+                    0,
+                    $this->getUserService()->searchUserProfileCount($preConditions)
+                );
 
-            $userIds = ArrayToolkit::column($userProfiles, 'id');
+                $userIds = ArrayToolkit::column($userProfiles, 'id');
+            }
+            if ('wechatNickname' == $conditions['keywordType']) {
+                $wechatUsers = $this->getWeChatService()->searchWeChatUsers(['wechatname' => str_replace('%', '\%', urlencode($conditions['keyword']))], [], 0, PHP_INT_MAX, ['userId']);
+                $userIds = array_column($wechatUsers, 'userId');
+            }
 
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
                 $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
-            } elseif ('idcard' == $conditions['keywordType']) {
+            } elseif (in_array($conditions['keywordType'], ['idcard', 'wechatNickname'])) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
-                $conditions['userIds'] = empty($userIds) ? [0] : $userIds;
+                $conditions['userIds'] = [0];
             }
 
             $userCount = $this->getUserService()->countUsers($conditions);
@@ -84,26 +87,21 @@ class UserCommonController extends BaseController
             );
         }
 
-        $app = $this->getAppService()->findInstallApp('UserImporter');
-
-        $showUserExport = false;
-
-        if (!empty($app) && array_key_exists('version', $app)) {
-            $showUserExport = version_compare($app['version'], '1.0.2', '>=');
-        }
-
         $userIds = ArrayToolkit::column($users, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-        $allRoles = $this->getAllRoles();
-
+        $wechatUsers = $this->getWeChatService()->findWechatUsersByUserIds($userIds);
+        foreach ($wechatUsers as &$wechatUser) {
+            $wechatUser['nickname'] = urldecode($wechatUser['nickname']);
+        }
 
         return $this->render($indexTwigUrl, [
             'users' => $users,
             'userCount' => $userCount,
-            'allRoles' => $allRoles,
+            'allRoles' => $this->getAllRoles(),
             'paginator' => $paginator,
             'profiles' => $profiles,
-            'showUserExport' => $showUserExport,
+            'wechatUsers' => array_column($wechatUsers, null, 'userId'),
+            'showUserExport' => $this->showUserExport(),
         ]);
     }
 
@@ -174,8 +172,8 @@ class UserCommonController extends BaseController
             $formData['type'] = 'import';
             $registration = $this->getRegisterData($formData, $request->getClientIp());
 
-            if ($isStaff == true) {
-                if (count($formData['roles']) == 1) {
+            if ($isStaff) {
+                if (1 == count($formData['roles'])) {
                     throw UserException::MUST_SELECT_A_STAFFROLE();
                 }
 
@@ -204,7 +202,6 @@ class UserCommonController extends BaseController
             $this->getLogService()->info('user', 'add', "管理员添加新学员 {$user['nickname']} ({$user['id']})");
 
             return $this->redirect($this->generateUrl($route));
-
         }
 
         return $this->render($this->getCreateUserModal($isStaff));
@@ -247,32 +244,29 @@ class UserCommonController extends BaseController
     {
         $auth = $this->getSettingService()->get('auth');
 
-        if (isset($auth['register_enabled']) && 'closed' === $auth['register_enabled']) {
-            if ($isStaff == true) {
+        if (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-or-email-modal.html.twig';
             }
-            return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
-        } elseif (isset($auth['register_mode']) && 'email_or_mobile' == $auth['register_mode']) {
-            if ($isStaff == true) {
-                return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-or-email-modal.html.twig';
-            }
+
             return 'admin-v2/user/user-manage/create-by-mobile-or-email-modal.html.twig';
         } elseif (isset($auth['register_mode']) && 'mobile' == $auth['register_mode']) {
-            if ($isStaff == true) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-by-mobile-modal.html.twig';
             }
+
             return 'admin-v2/user/user-manage/create-by-mobile-modal.html.twig';
         } else {
-            if ($isStaff == true) {
+            if ($isStaff) {
                 return 'admin-v2/user/user-manage/staff-manage/create-modal.html.twig';
             }
+
             return 'admin-v2/user/user-manage/create-modal.html.twig';
         }
     }
 
     public function edit($request, $id, $route, $editTwigUrl)
     {
-
         $user = $this->getUserService()->getUser($id);
 
         $profile = $this->getUserService()->getUserProfile($user['id']);
@@ -345,10 +339,11 @@ class UserCommonController extends BaseController
 
         if ('POST' === $request->getMethod()) {
             $roles = $request->request->get('roles');
+            $isStudent = (int) (count($roles) === 1 && $roles[0] === 'ROLE_USER');
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             if ($studentToStaff) {
-                $this->getUserService()->updateUser($user['id'], ['isStudent' => 2]);
+                $this->getUserService()->updateUser($user['id'], ['isStudent' => $isStudent]);
             }
 
             if (!empty($roles)) {
@@ -565,7 +560,7 @@ class UserCommonController extends BaseController
                 'template' => 'email_reset_password',
                 'params' => [
                     'nickname' => $user['nickname'],
-                    'verifyurl' => $this->generateUrl('password_reset_update', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'verifyurl' => $this->getHttpHost() . '/password/reset/update?token=' . $token,
                     'sitename' => $site['name'],
                     'siteurl' => $site['url'],
                 ],
@@ -596,8 +591,7 @@ class UserCommonController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'));
 
         $site = $this->getSettingService()->get('site', []);
-        $verifyurl = $this->generateUrl('register_email_verify', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-
+        $verifyurl = $this->getHttpHost() . '/register/email/verify/' . $token;
         try {
             $mailOptions = [
                 'to' => $user['email'],
@@ -618,6 +612,7 @@ class UserCommonController extends BaseController
             $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 {$user['nickname']}({$user['id']}) 发送Email验证邮件失败：" . $e->getMessage());
             throw $e;
         }
+
         return $this->createJsonResponse(true);
     }
 
@@ -653,6 +648,16 @@ class UserCommonController extends BaseController
         return $this->render($changePasswordTwigUrl, [
             'user' => $user,
         ]);
+    }
+
+    private function showUserExport()
+    {
+        $app = $this->getAppService()->findInstallApp('UserImporter');
+        if (!empty($app) && array_key_exists('version', $app)) {
+            return version_compare($app['version'], '1.0.2', '>=');
+        }
+
+        return false;
     }
 
     protected function kickUserLogout($userId)
@@ -768,5 +773,13 @@ class UserCommonController extends BaseController
     protected function getOrgService()
     {
         return $this->createService('Org:OrgService');
+    }
+
+    /**
+     * @return WeChatService
+     */
+    protected function getWeChatService()
+    {
+        return $this->createService('WeChat:WeChatService');
     }
 }

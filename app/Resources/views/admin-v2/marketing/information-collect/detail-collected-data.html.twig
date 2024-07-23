@@ -20,13 +20,15 @@
       {% set resultItems = resultData[result.id] %}
       <tr>
         <td>{{ user.nickname }}</td>
-        <td>{{ profile.mobile }}</td>
+        <td>{% if profile.mobile %}{% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}{% endif %}</td>
         <td>{{ result.createdTime|date('Y-m-d H:i:s') }}</td>
         {% for label in labels if labels|default('') %}
           {% set resultItem = resultItems[label.code]|default('') %}
           <td>
             {% if label.code == 'province_city_area' %}
               {{ resultItem.value|default('')|join('') }}
+            {% elseif label.code == 'phone' and resultItem.value|default('') %}
+              {% include 'user-mobile-mask.html.twig' with { mobile: resultItem.value } %}
             {% else %}
               {{ resultItem.value|default('') }}
             {% endif %}

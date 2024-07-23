@@ -8,12 +8,14 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
 use Biz\Sensitive\Service\SensitiveService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
 class ReviewServiceImpl extends BaseService implements ReviewService
 {
@@ -24,6 +26,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         'course' => 'tryCreateCourseReview',
         'classroom' => 'tryCreateClassroomReview',
         'item_bank_exercise' => 'tryCreateItemBankExerciseReview',
+        'goods' => 'tryCreateGoodsReview',
     ];
 
     public function getReview($id)
@@ -114,6 +117,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $this->getReviewDao()->deleteByUserId($userId);
     }
 
+    public function deleteReviewsByTargetTypeAndTargetId($targetType, $targetId)
+    {
+        return $this->getReviewDao()->deleteByTargetTypeAndTargetId($targetType, $targetId);
+    }
+
     public function countReviews($conditions)
     {
         return $this->getReviewDao()->count($conditions);
@@ -176,6 +184,31 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         ];
     }
 
+    public function canReviewBySelf($reportId, $userId)
+    {
+        //判断当前批阅是不是题库练习或考试练习
+        $answerReport = $this->getAnswerReportService()->getSimple($reportId);
+        if (empty($answerReport)) {
+            return false;
+        }
+        // 查询场次是否在activity_homework
+        $activityHomework = $this->getHomeworkActivityService()->getByAnswerSceneId($answerReport['answer_scene_id']);
+        if (!empty($activityHomework)) {
+            return false;
+        }
+        // 查询场次是否在activity_testpaper
+        $activityTestpaper = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
+        if (!empty($activityTestpaper)) {
+            return false;
+        }
+        // 只能批阅自己
+        if ($answerReport['user_id'] != $userId) {
+            return false;
+        }
+
+        return true;
+    }
+
     protected function tryOperateReview($review)
     {
         if ($review['userId'] != $this->getCurrentUser()->getId() && !$this->getCurrentUser()->isAdmin()) {
@@ -191,6 +224,62 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         }
 
         return $review;
+    }
+
+    protected function tryCreateGoodsReview($review)
+    {
+        $goods = $this->getGoodsService()->getGoods($review['targetId']);
+        if (empty($goods)) {
+            throw ReviewException::NOT_FOUND_REVIEW();
+        }
+        $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($review['targetId']);
+        if (empty($specs)) {
+            throw ReviewException::NOT_FOUND_REVIEW();
+        }
+
+        switch ($goods['type']) {
+            case 'classroom':
+                $this->canTakeClassRoomReview($specs);
+                break;
+            case 'course':
+            default:
+                $this->canTakeCourseReview($specs);
+                break;
+        }
+
+        return $review;
+    }
+
+    /**
+     * 是否能够评价课程 对于课程ID是通过goods_specs表的targetId获取的
+     */
+    private function canTakeCourseReview($specs)
+    {
+        $courseIds = array_column($specs, 'targetId');
+        $canTakeCourse = false;
+        foreach ($courseIds as $courseId) {
+            if ($this->getCourseService()->canTakeCourse($courseId)) {
+                $canTakeCourse = true;
+                break;
+            }
+        }
+
+        if (!$canTakeCourse) {
+            throw ReviewException::FORBIDDEN_CREATE_REVIEW();
+        }
+    }
+
+    /**
+     * 是否能够评价班級 对于班级ID是通过goods_specs表的targetId获取的
+     */
+    private function canTakeClassRoomReview($specs)
+    {
+        //班级有且仅有一个
+        if ($this->getClassroomService()->canTakeClassroom($specs[0]['targetId'])) {
+            return;
+        }
+
+        $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
     }
 
     //    TODO: 商品剥离暂时兼容班级
@@ -259,5 +348,37 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getItemBankExerciseService()
     {
         return $this->createService('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return HomeworkActivityService
+     */
+    protected function getHomeworkActivityService()
+    {
+        return $this->createService('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return AnswerReportService
+     */
+    protected function getAnswerReportService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

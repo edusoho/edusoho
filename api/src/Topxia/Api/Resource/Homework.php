@@ -3,9 +3,12 @@
 namespace Topxia\Api\Resource;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Constant\ActivityMediaType;
+use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -51,21 +54,16 @@ class Homework extends BaseResource
         }
 
         $homeworkActivity = $this->getHomeworkActivityService()->getByAssessmentId($assessment['id']);
-        $conditions = [
-            'mediaId' => $homeworkActivity['id'],
-            'mediaType' => 'homework',
-        ];
-        $activities = $this->getActivityService()->search($conditions, null, 0, 1);
-        if (!$activities) {
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], ActivityMediaType::HOMEWORK);
+        if (empty($activity)) {
             return $this->error('404', '该作业任务不存在!');
         }
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($activities[0]['fromCourseId']);
-        if (!$canTakeCourse) {
+        if (!$this->getCourseService()->canTakeCourse($activity['fromCourseId'])) {
             return $this->error('500', '无权限访问!');
         }
 
-        $course = $this->getCourseService()->getCourse($activities[0]['fromCourseId']);
+        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $testpaperWrapper = new TestpaperWrapper();
         $scene = $this->getAnswerSceneService()->get($homeworkActivity['answerSceneId']);
         $homework = $testpaperWrapper->wrapTestpaper($assessment, $scene);
@@ -94,31 +92,25 @@ class Homework extends BaseResource
             return $this->error('404', '作业任务不存在！');
         }
 
-        $conditions = [
-            'mediaId' => $homeworkActivity['id'],
-            'mediaType' => 'homework',
-        ];
-        $activities = $this->getActivityService()->search($conditions, null, 0, 1);
-        if (!$activities) {
+        $activity = $this->getActivityService()->getByMediaIdAndMediaType($homeworkActivity['id'], ActivityMediaType::HOMEWORK);
+        if (empty($activity)) {
             return $this->error('404', '作业任务不存在!');
         }
-        $activity = $activities[0];
 
-        $assessment = $this->getAssessmentService()->showAssessment($homeworkActivity['assessmentId']);
+        $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
             return $this->error('404', '作业不存在！');
         }
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
-        if (!$canTakeCourse) {
+        if (!$this->getCourseService()->canTakeCourse($activity['fromCourseId'])) {
             return $this->error('500', '无权限访问!');
         }
 
-        if (empty($currentUser) || ('doing' === $answerRecord['status'] && ($answerRecord['user_id'] != $currentUser['id']))) {
+        if (empty($currentUser) || (AnswerRecordStatus::DOING === $answerRecord['status'] && ($answerRecord['user_id'] != $currentUser['id']))) {
             return $this->error('500', '不能查看该作业结果！');
         }
 
-        if (!in_array($answerRecord['status'], ['finished', 'reviewing'])) {
+        if (!in_array($answerRecord['status'], [AnswerRecordStatus::FINISHED, AnswerRecordStatus::REVIEWING])) {
             return $this->error('500', '作业还未做完！');
         }
 
@@ -281,6 +273,9 @@ class Homework extends BaseResource
         return $this->getServiceKernel()->createService('Task:TaskService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->getServiceKernel()->createService('Activity:ActivityService');

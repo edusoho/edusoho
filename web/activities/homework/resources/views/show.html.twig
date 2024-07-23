@@ -3,9 +3,13 @@
   {% include '@activity/homework/resources/views/show/preview.html.twig' %}
 {% else %}
   {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
-  
+
   {% if not latestAnswerRecord %}
-    {% include('@activity/homework/resources/views/show/index.html.twig') %}
+    {% if homework.assessment.item_count == 0 %}
+      {% include('@activity/homework/resources/views/show/empty-assessment.html.twig') %}
+    {% else %}
+      {% include('@activity/homework/resources/views/show/index.html.twig') %}
+    {% endif %}
   {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
     {{ render(controller('AppBundle:Homework:showResult', {answerRecordId: latestAnswerRecord.id, type: 'activity'})) }}
   {% else %}

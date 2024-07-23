@@ -130,8 +130,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                     'mch_id' => $paymentSetting['wxpay_account'],
                     'key' => $paymentSetting['wxpay_key'],
                     'secret' => $paymentSetting['wxpay_secret'],
-                    'cert_path' => '',
-                    'key_path' => '',
+                    'cert_path' => $paymentSetting['wxpay_cert_path'] ?? '',
+                    'key_path' => $paymentSetting['wxpay_key_path'] ?? '',
                 ];
             }
 

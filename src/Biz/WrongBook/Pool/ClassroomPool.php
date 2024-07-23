@@ -110,6 +110,9 @@ class ClassroomPool extends AbstractPool
         }
 
         $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        if (empty($classroomCourses)) {
+            return [];
+        }
         $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
         if ($manage) {
             $courseSetIds = $this->teacherManagerClassroomCourseSet($courseSetIds, $classroomId);
@@ -240,6 +243,9 @@ class ClassroomPool extends AbstractPool
 
     protected function findActivatesByTestPaperAndHomeworkAndExerciseAndCourseSetIds($courseSetIds)
     {
+        if (empty($courseSetIds)) {
+            return [];
+        }
         $activityTestPapers = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'testpaper', true);
         $activityHomeWorks = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'homework', true);
         $activityExercises = $this->getActivityService()->findActivitiesByCourseSetIdsAndType($courseSetIds, 'exercise', true);
@@ -280,7 +286,7 @@ class ClassroomPool extends AbstractPool
      */
     protected function getWrongQuestionService()
     {
-        return  $this->biz->service('WrongBook:WrongQuestionService');
+        return $this->biz->service('WrongBook:WrongQuestionService');
     }
 
     /**
@@ -288,7 +294,7 @@ class ClassroomPool extends AbstractPool
      */
     protected function getActivityService()
     {
-        return  $this->biz->service('Activity:ActivityService');
+        return $this->biz->service('Activity:ActivityService');
     }
 
     /**

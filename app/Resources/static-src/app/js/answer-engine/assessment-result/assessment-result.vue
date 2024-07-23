@@ -1,10 +1,12 @@
 <template>
   <div id="app" class="ibs-vue">
     <assessment-result
+      :metaActivity="metaActivity"
       :answerReport="answerReport"
       :assessment="assessment"
       :answerRecord="answerRecord"
       :answerScene="answerScene"
+			:isDownload="isDownload"
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
@@ -34,6 +36,8 @@
         cdnHost: $('[name=cdn_host]').val(),
         isErrorCorrection: $('[name=is_error_correction]').val(),
         fileId: 0,
+        metaActivity: {},
+        isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1'
       };
     },
     created() {
@@ -50,6 +54,7 @@
             request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
           }
         }).done(function (res) {
+          that.metaActivity = res.metaActivity;
           that.assessment = res.assessment;
           that.answerReport = res.answer_report;
           that.answerRecord = res.answer_record;

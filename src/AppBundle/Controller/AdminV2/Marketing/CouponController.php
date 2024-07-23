@@ -24,6 +24,7 @@ class CouponController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
 
         if (isset($conditions['name'])) {
             $conditions['nameLike'] = $conditions['name'];
@@ -56,6 +57,7 @@ class CouponController extends BaseController
     public function queryIndexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $paginator = new Paginator(
             $request,
             $this->getCouponService()->searchCouponsCount($conditions),

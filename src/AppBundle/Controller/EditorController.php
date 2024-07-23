@@ -62,7 +62,7 @@ class EditorController extends BaseController
             if ($isWebuploader) {
                 return $this->createJsonResponse(['url' => $url]);
             } else {
-                $funcNum = $request->query->get('CKEditorFuncNum');
+                $funcNum = $this->purifyHtml($request->query->get('CKEditorFuncNum'));
 
                 if ('image' == $token['type']) {
                     $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', function(){ this._.dialog.getParentEditor().insertHtml('<img src=\"{$url}\">'); this._.dialog.hide(); return false; });</script>";
@@ -78,7 +78,7 @@ class EditorController extends BaseController
             if ($isWebuploader) {
                 return $this->createJsonResponse(['message' => $message]);
             } else {
-                $funcNum = $request->query->get('CKEditorFuncNum');
+                $funcNum = $this->purifyHtml($request->query->get('CKEditorFuncNum'));
                 $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>";
 
                 return new Response($response);
@@ -152,7 +152,7 @@ class EditorController extends BaseController
             $this->createNewException(CommonException::EXPIRED_UPLOAD_TOKEN());
         }
 
-        $name = date('Ymdhis').'_formula.jpg';
+        $name = FileToolkit::generateFilename('formula.jpg');
         $path = $this->get('service_container')->getParameter('topxia.upload.public_directory').'/tmp/'.$name;
 
         $imageData = CurlToolkit::request('POST', $url, [], ['contentType' => 'plain']);
@@ -162,6 +162,7 @@ class EditorController extends BaseController
         fclose($tp);
         $record = $this->getFileService()->uploadFile($token['group'], new File($path));
         $url = $this->get('web.twig.extension')->getFilePath($record['uri']);
+        $url = strstr($url, '?', true);
 
         return new Response($url);
     }

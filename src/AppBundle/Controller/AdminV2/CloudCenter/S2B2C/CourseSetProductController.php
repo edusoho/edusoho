@@ -75,6 +75,7 @@ class CourseSetProductController extends ProductController
     {
         $pageSize = 16;
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $offset = ($request->query->get('page', 1) - 1) * $pageSize;
 
         $result = $this->getS2B2CFacadeService()->getS2B2CService()->searchDistribute($conditions, ['createdTime' => 'desc'], $offset, $pageSize);

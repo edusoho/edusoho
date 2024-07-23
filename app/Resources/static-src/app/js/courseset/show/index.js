@@ -11,7 +11,16 @@ if ($('.js-attachment-list').length > 0) {
   new AttachmentActions($('.js-attachment-list'));
 }
 
-buyBtn($('.js-buy-btn'));
+const isLogin = $('meta[name=is-login]').attr('content');
+if (isLogin == 1) {
+  buyBtn($('.js-buy-btn'));
+} else {
+  $('.js-buy-btn').click(() => {
+    $.get($('#login-modal').data('url')).then(resp => {
+      $('#login-modal').modal('show').html(resp);
+    });
+  });
+}
 buyBtn($('.js-task-buy-btn'));
 
 function initTaskLearnChart() {

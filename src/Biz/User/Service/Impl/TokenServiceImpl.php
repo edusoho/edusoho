@@ -4,17 +4,18 @@ namespace Biz\User\Service\Impl;
 
 use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
+use Biz\User\Dao\TokenDao;
 use Biz\User\Service\TokenService;
 use Ramsey\Uuid\Uuid;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
-    public function makeToken($type, array $args = array())
+    public function makeToken($type, array $args = [])
     {
-        if($type == 'mobile_login') {
+        if ('mobile_login' == $type) {
             $args['duration'] = TimeMachine::ONE_MONTH * 6;
         }
-        $token = array();
+        $token = [];
         $token['type'] = $type;
         $token['token'] = $this->_makeTokenValue();
         $token['data'] = !isset($args['data']) ? '' : $args['data'];
@@ -22,9 +23,27 @@ class TokenServiceImpl extends BaseService implements TokenService
         $token['remainedTimes'] = $token['times'];
         $token['userId'] = empty($args['userId']) ? 0 : $args['userId'];
         $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
-        $token['createdTime'] = time();
 
         return $this->getTokenDao()->create($token);
+    }
+
+    public function makeTokens($type, array $argsGroup = [])
+    {
+        $tokens = [];
+        foreach ($argsGroup as $args) {
+            $tokens[] = [
+                'type' => $type,
+                'token' => $this->_makeTokenValue(),
+                'data' => !isset($args['data']) ? '' : $args['data'],
+                'times' => empty($args['times']) ? 0 : (int) $args['times'],
+                'remainedTimes' => empty($args['times']) ? 0 : (int) $args['times'],
+                'userId' => empty($args['userId']) ? 0 : $args['userId'],
+                'expiredTime' => empty($args['duration']) ? 0 : time() + $args['duration'],
+            ];
+        }
+        $this->getTokenDao()->batchCreate($tokens);
+
+        return $this->getTokenDao()->findByTokens(array_column($tokens, 'token'));
     }
 
     //length 被多处调用，length参数可认为是无效,插件等外部调用清除后，去掉length参数
@@ -33,8 +52,11 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $this->_makeTokenValue();
     }
 
-    public function verifyToken($type, $value, array $data = array())
+    public function verifyToken($type, $value, array $data = [])
     {
+        if (empty($value)) {
+            return false;
+        }
         $token = $this->getTokenDao()->getByToken($value);
 
         if (empty($token)) {
@@ -50,11 +72,11 @@ class TokenServiceImpl extends BaseService implements TokenService
         }
 
         if ($token['remainedTimes'] > 1) {
-            $this->getTokenDao()->wave(array($token['id']), array('remainedTimes' => -1));
+            $this->getTokenDao()->wave([$token['id']], ['remainedTimes' => -1]);
         }
 
         if (!empty($data)) {
-            $token = $this->getTokenDao()->update($token['id'], array('data' => $data));
+            $token = $this->getTokenDao()->update($token['id'], ['data' => $data]);
         }
 
         $this->_gcToken($token);
@@ -123,6 +145,9 @@ class TokenServiceImpl extends BaseService implements TokenService
         return $uuid->getHex();
     }
 
+    /**
+     * @return TokenDao
+     */
     protected function getTokenDao()
     {
         return $this->createDao('User:TokenDao');

@@ -4,8 +4,6 @@ namespace Tests\Unit\ItemBankExercis\Member;
 
 use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Member\StudentMember;
-use Biz\ItemBankExercise\Service\ExerciseMemberService;
-use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 
@@ -13,7 +11,51 @@ class StudentMemberTest extends BaseTestCase
 {
     public function testJoin()
     {
-        $exercise = $this->createExercise();
+        $this->mockBiz('ItemBankExercise:ExerciseService', [
+            [
+                'functionName' => 'get',
+                'runTimes' => 2,
+                'withParams' => [1],
+                'returnValue' => [
+                    'id' => 1,
+                    'title' => 'test',
+                    'questionBankId' => 1,
+                    'status' => 'published',
+                    'expiryMode' => 'forever',
+                    'expiryDays' => 0,
+                ],
+            ],
+        ]);
+        $this->mockBiz('ItemBankExercise:ExerciseMemberDao', [
+            [
+                'functionName' => 'create',
+                'runTimes' => 1,
+                'withParams' => [
+                    [
+                        'exerciseId' => 1,
+                        'questionBankId' => 1,
+                        'userId' => 3,
+                        'deadline' => 0,
+                        'role' => 'student',
+                        'remark' => 'test',
+                        'orderId' => 0,
+                    ],
+                ],
+                'returnValue' => [
+                    'id' => 5,
+                    'exerciseId' => 1,
+                    'userId' => 3,
+                    'role' => 'student',
+                    'orderId' => 0,
+                ],
+            ],
+            [
+                'functionName' => 'getByExerciseIdAndUserId',
+                'runTimes' => 1,
+                'withParams' => [1, 3],
+                'returnValue' => [],
+            ],
+        ]);
         $currentUser = new CurrentUser();
         $currentUser->fromArray([
             'id' => 3,
@@ -26,39 +68,7 @@ class StudentMemberTest extends BaseTestCase
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $studentMember = new StudentMember($this->biz);
-        $studentMember->join($exercise['id'], $currentUser->getId(), ['remark' => 'test']);
-        $res = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $currentUser->getId());
-        $this->assertEquals(true, $res);
-    }
-
-    private function createExercise()
-    {
-        return $this->getExerciseService()->create(
-            [
-                'id' => 1,
-                'title' => 'test',
-                'questionBankId' => 1,
-                'categoryId' => 1,
-                'seq' => 1,
-                'expiryMode' => 'forever',
-                'status' => 'published',
-            ]
-        );
-    }
-
-    /**
-     * @return ExerciseService
-     */
-    protected function getExerciseService()
-    {
-        return $this->createService('ItemBankExercise:ExerciseService');
-    }
-
-    /**
-     * @return ExerciseMemberService
-     */
-    protected function getExerciseMemberService()
-    {
-        return $this->createService('ItemBankExercise:ExerciseMemberService');
+        $res = $studentMember->join(1, $currentUser->getId(), ['remark' => 'test', 'reason' => 'test', 'reasonType' => 'test']);
+        $this->assertEquals(5, $res['id']);
     }
 }

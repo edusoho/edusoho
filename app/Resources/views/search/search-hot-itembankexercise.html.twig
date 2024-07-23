@@ -1,0 +1,48 @@
+<div class="panel panel-default live-course-body">
+	<div class="panel-heading">
+        <h3 class="panel-title">{{'cloud_search.itemBankExercise.recommend.content_title'|trans}}</h3>
+    </div>
+    <div class="panel-body es-live-recommend">
+        {% set itemBankExercises = data('RecommendItemBankExercise',{'count':10,'notFill':true}) %}
+        {% for itemBankExercise in itemBankExercises if itemBankExercises %}
+	    <div class="media">
+	      <div class="media-left">
+          <a href="{{ path('item_bank_exercise_show', {id: itemBankExercise.id}) }}" target="_blank">
+            {{ lazy_img(filepath(itemBankExercise.cover.large|default(null), 'item_bank_exercise.png'), 'img-responsive', itemBankExercise.title) }}
+          </a>
+
+	      </div>
+	      <div class="media-body">
+	        <div class="title"  data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ itemBankExercise.title }}" target="_blank">
+			  <a href="{{ path('item_bank_exercise_show', {id: itemBankExercise.id}) }}"
+          class="gray-darker"
+          style="word-break: break-all;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                display:-webkit-box;
+                -webkit-box-orient:vertical;
+                -webkit-line-clamp:2;"
+          title="{{ itemBankExercise.title }}"
+          target="_blank">{{ itemBankExercise.title}}</a>
+	        </div>
+	        <div class="metas">
+            {% set exercise = itemBankExercise|wrap('itemBankExercise.price') %}
+
+            <span class="course-price-widget">
+                <span class="
+                  {% if exercise.price == 0 %}
+                        free
+                  {% else %}
+                        price
+                  {% endif %}">
+                  {{ exercise.priceWrapper.priceText }}
+                </span>
+            </span>
+          </div>
+	      </div>
+	    </div>
+    {% else %}
+    	<div class="empty">{{'cloud_search.itemBankExercise.recommend.empty'|trans}}</div>
+    {% endfor %}
+    </div>
+</div>

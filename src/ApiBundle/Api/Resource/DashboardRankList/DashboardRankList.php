@@ -54,6 +54,9 @@ class DashboardRankList extends AbstractResource
 
     protected function getReviewData($allMultiClasses)
     {
+        if(empty($allMultiClasses)) {
+            return ['ascSort' => [], 'descSort' => []];
+        }
         $courseIds = ArrayToolkit::column($allMultiClasses, 'courseId');
         $activities = $this->getActivityService()->findActivitiesByCourseIdsAndTypes($courseIds, ['homework', 'testpaper'], true);
         $answerSceneIds = [];
@@ -102,6 +105,9 @@ class DashboardRankList extends AbstractResource
 
     protected function getFinishedRateList($allMultiClasses)
     {
+        if(empty($allMultiClasses)) {
+            return ['ascSort' => [], 'descSort' => []];
+        }
         $conditions = [
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
             'finishedTime_GE' => strtotime('yesterday'),
@@ -132,6 +138,9 @@ class DashboardRankList extends AbstractResource
 
     protected function getQuestionAnswerRateList($allMultiClasses)
     {
+        if(empty($allMultiClasses)) {
+            return ['ascSort' => [], 'descSort' => []];
+        }
         $conditions = [
             'courseIds' => ArrayToolkit::column($allMultiClasses, 'courseId'),
             'postNumLargerThan' => 0,

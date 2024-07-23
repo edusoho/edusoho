@@ -7,7 +7,6 @@
 /app/config/parameters.yml
 /app/config/parameters_test.yml
 /app/config/menu_blacklist.yml
-/app/config/uc_client_config.php
 /app/config/routing_plugins.yml
 /app/config/sentry.yml
 /app/config/session_redis.yml

@@ -68,7 +68,10 @@ class Course extends AbstractResource
         } else {
             $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
         }
-
+        if (!empty($course['drainage']['image'])) {
+            $course['drainage']['image'] = preg_replace('/^.+\/files\//', '/files/', $course['drainage']['image']);
+            $course['drainage']['image'] = $this->getWebExtension()->getFurl($course['drainage']['image']);
+        }
         $course = $this->convertFields($course);
 
         return $course;

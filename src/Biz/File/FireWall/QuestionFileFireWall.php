@@ -13,14 +13,4 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
 
         return false;
     }
-
-    protected function getQuestionService()
-    {
-        return $this->biz->service('Question:QuestionService');
-    }
-
-    protected function getTestpaperService()
-    {
-        return $this->biz->service('Testpaper:TestpaperService');
-    }
 }

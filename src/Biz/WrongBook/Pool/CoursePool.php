@@ -121,11 +121,20 @@ class CoursePool extends AbstractPool
         $conditions = $this->handleConditions($conditions);
         $tasks = $this->getCourseTaskService()->searchTasks($conditions, [], 0, PHP_INT_MAX);
         $pools = $this->getWrongQuestionService()->searchWrongBookPool(['target_type' => 'course', 'target_id' => $targetId], [], 0, PHP_INT_MAX);
-        $poolIds = empty($pools) ? [-1] : ArrayToolkit::column($pools, 'id');
+        if(empty($pools)) {
+            return (object)[];
+        }
+        $poolIds = ArrayToolkit::column($pools, 'id');
 
         $collects = $this->getWrongQuestionCollectDao()->search(['pool_ids' => $poolIds], [], 0, PHP_INT_MAX);
+        if(empty($collects)) {
+            return (object)[];
+        }
         $collectIds = array_unique(ArrayToolkit::column($collects, 'id'));
         $wrongQuestions = $this->getWrongQuestionService()->searchWrongQuestion(['collect_ids' => $collectIds], [], 0, PHP_INT_MAX);
+        if(empty($wrongQuestions)) {
+            return (object)[];
+        }
         $answerSceneIds = array_unique(ArrayToolkit::column($wrongQuestions, 'answer_scene_id'));
 
         $activitys = [];

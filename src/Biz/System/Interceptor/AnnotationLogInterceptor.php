@@ -3,11 +3,11 @@
 namespace Biz\System\Interceptor;
 
 use Biz\System\Service\LogService;
+use Biz\System\Util\LogDataUtils;
 use Codeages\Biz\Framework\Context\AbstractInterceptor;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Targetlog\Annotation\Log;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\System\Util\LogDataUtils;
 
 class AnnotationLogInterceptor extends AbstractInterceptor
 {
@@ -24,7 +24,6 @@ class AnnotationLogInterceptor extends AbstractInterceptor
     /**
      * AnnotationInterceptor constructor.
      *
-     * @param Biz $biz
      * @param $className
      *
      * @throws \Doctrine\Common\Annotations\AnnotationException
@@ -44,13 +43,13 @@ class AnnotationLogInterceptor extends AbstractInterceptor
      */
     public function beforeExec($funcName, $args)
     {
-        $result = array();
+        $result = [];
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
             $service = $this->biz->service($log['service']);
             $formatFuncName = $this->getFormatFuncName($funcName, $log);
             if (false !== $formatFuncName) {
-                $formatReturn = array();
+                $formatReturn = [];
                 if (!empty($log['funcParam'])) {
                     $formatParam = $this->getFormatParam($args, $log);
                     $formatReturn = $this->getFormatReturn($service, $formatFuncName, $formatParam, $log);
@@ -68,7 +67,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
      * @param $result
      * @param array $beforeResult
      */
-    public function afterExec($funcName, $args, $result, $beforeResult = array())
+    public function afterExec($funcName, $args, $result, $beforeResult = [])
     {
         if (!empty($this->interceptorData[$funcName])) {
             $log = $this->interceptorData[$funcName];
@@ -78,16 +77,15 @@ class AnnotationLogInterceptor extends AbstractInterceptor
 
             if ('update' == $this->getFuncType($action)) {
                 if (empty($beforeResult)) {
-                    $beforeResult = array();
+                    $beforeResult = [];
                 }
                 $service = $this->biz->service($log['service']);
                 $formatParam = $this->getFormatParam($args, $log);
                 $formatFuncName = $this->getFormatFuncName($funcName, $log);
                 $formatReturn = $this->getFormatReturn($service, $formatFuncName, $formatParam, $log);
-                $courseChangeFields = LogDataUtils::serializeChanges($beforeResult, $formatReturn);
-                $context = $courseChangeFields;
+                $context = LogDataUtils::serializeChanges($beforeResult, $formatReturn);
             }
-            $message = ServiceKernel::instance()->trans('log.action.'.$module.'.'.$action, array(), null, null);
+            $message = ServiceKernel::instance()->trans('log.action.'.$module.'.'.$action, [], null, null);
             if (!empty($context)) {
                 if (is_array($context)) {
                     $this->getLogService()->info($module, $action, $message, $context);
@@ -107,7 +105,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         if (!empty($log['funcName'])) {
             $formatFuncName = $log['funcName'];
         } else {
-            $keyArray = array('delete', 'update');
+            $keyArray = ['delete', 'update'];
             foreach ($keyArray as $key) {
                 if (false !== strpos($funcName, $key)) {
                     $formatFuncName = str_replace($key, 'get', $funcName);
@@ -124,12 +122,12 @@ class AnnotationLogInterceptor extends AbstractInterceptor
         if (false !== strpos($action, 'password')) {
             return 'password';
         }
-        $config = array(
+        $config = [
             'add' => 'create',
             'generate' => 'create',
             'create' => 'create',
             'delete' => 'delete',
-        );
+        ];
         foreach ($config as $key => $value) {
             if (false !== strpos($action, $key)) {
                 return $value;
@@ -141,7 +139,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
 
     private function getFuncNeedParams($funcParams, $indexs, $args)
     {
-        $funcNeedParams = array();
+        $funcNeedParams = [];
         foreach ($indexs as $index) {
             foreach ($funcParams as $key => $funcParam) {
                 if ($funcParam == $index) {
@@ -191,7 +189,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
 
     private function getFormatReturn($service, $formatFuncName, $formatParam, $log)
     {
-        $formatReturn = array();
+        $formatReturn = [];
         try {
             $paramCount = count($formatParam);
             if (1 == $paramCount) {
@@ -211,7 +209,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
 
     private function exceptionToArray(\Exception $exception)
     {
-        $exceptionArray = array(
+        $exceptionArray = [
             'code' => $exception->getCode(),
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
@@ -219,7 +217,7 @@ class AnnotationLogInterceptor extends AbstractInterceptor
             'previous' => $exception->getPrevious(),
             'trace' => $exception->getTrace(),
             'traceAsString' => $exception->getTraceAsString(),
-        );
+        ];
 
         return $exceptionArray;
     }

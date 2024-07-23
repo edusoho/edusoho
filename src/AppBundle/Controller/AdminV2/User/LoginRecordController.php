@@ -2,11 +2,6 @@
 
 namespace AppBundle\Controller\AdminV2\User;
 
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\ConvertIpToolkit;
-use AppBundle\Common\Paginator;
-use AppBundle\Controller\AdminV2\BaseController;
-use Biz\System\Service\LogService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LoginRecordController extends LoginRecordCommonController
@@ -18,9 +13,10 @@ class LoginRecordController extends LoginRecordCommonController
             'keywordType' => $request->query->get('keywordType'),
             'keyword' => $request->query->get('keyword'),
             'orgCode' => $request->query->get('orgCode'),
-            'isStudent' => 0,
-            'roles' => 'ROLE_USER'
+            'isStudent' => 1,
+            'roles' => 'ROLE_USER',
         ];
+
         return $this->index($request, $userConditions, $indexTwigUrl);
     }
 

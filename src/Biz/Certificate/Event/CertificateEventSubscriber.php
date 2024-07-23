@@ -25,6 +25,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
             'course.task.finish' => 'onCourseTaskFinish',
             'certificate.publish' => 'onCertificatePublish',
             'classroom.course.delete' => 'onClassroomCourseDelete',
+            'classroom.courses.delete' => 'onClassroomCourseDelete',
             'course.task.delete' => 'onCourseTaskDelete',
             'course.lesson.setOptional' => 'onLessonSetOptional',
             'course.task.update.sync' => 'onCourseTaskUpdateSync',
@@ -136,7 +137,6 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         $task = $event->getSubject();
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
-        $certificates = [];
         if (empty($course['parentId'])) {
             $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($task['courseId'], 'course');
         } else {

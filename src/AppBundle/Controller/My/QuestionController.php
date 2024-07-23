@@ -22,7 +22,7 @@ class QuestionController extends BaseController
 
         $conditions = [
             'user_id' => $user['id'],
-            'target_types' => ['assessment', 'exercise', 'homework'],
+            'target_types' => ['assessment', 'exercise', 'homework', 'testpaper'],
         ];
 
         $paginator = new Paginator(
@@ -94,7 +94,7 @@ class QuestionController extends BaseController
 
         $conditions = [
             'user_id' => $user['id'],
-            'target_type' => 'assessment',
+            'target_types' => ['assessment', 'exercise', 'homework', 'testpaper'],
         ];
 
         $favoriteItems = $this->getQuestionFavoriteService()->search(
@@ -123,11 +123,6 @@ class QuestionController extends BaseController
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
-    }
-
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     /**

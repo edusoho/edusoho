@@ -3,13 +3,23 @@
 namespace Biz\ItemBankExercise\Job;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\ItemBankExercise\Service\AssessmentExerciseService;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseQuestionRecordService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class UpdateMemberMasteryRateJob extends AbstractJob
 {
-    public $questionNum = 0;
+    private $questionNum = 0;
 
-    public $exerciseId = 0;
+    private $exerciseId = 0;
+
+    private $itemIds = [];
 
     public function execute()
     {
@@ -20,11 +30,20 @@ class UpdateMemberMasteryRateJob extends AbstractJob
 
     protected function setParams()
     {
-        $itemBankExericse = $this->getItemBankExerciseService()->get($this->args['itemBankExericseId']);
-        $this->exerciseId = $itemBankExericse['id'];
+        $itemBankExercise = $this->getItemBankExerciseService()->get($this->args['itemBankExerciseId']);
+        $this->exerciseId = $itemBankExercise['id'];
 
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($itemBankExericse['questionBankId']);
-        $this->questionNum = $questionBank['itemBank']['question_num'];
+        $items = [];
+        if ($itemBankExercise['chapterEnable']) {
+            $items = array_merge($items, $this->getChapterItems($itemBankExercise['questionBankId']));
+        }
+        if ($itemBankExercise['assessmentEnable']) {
+            $items = array_merge($items, $this->getAssessmentItems());
+        }
+
+        $items = ArrayToolkit::index($items, 'id');
+        $this->itemIds = array_column($items, 'id');
+        $this->questionNum = array_sum(array_column($items, 'question_num'));
     }
 
     protected function updateData()
@@ -35,11 +54,8 @@ class UpdateMemberMasteryRateJob extends AbstractJob
             return;
         }
 
-        $sql = 'SELECT userId, `status`, count(*) AS num from item_bank_exercise_question_record WHERE exerciseId = ? GROUP BY userId, `status`;';
-        $rightNumWrongNumGroups = ArrayToolkit::group(
-            $this->biz['db']->fetchAll($sql, [$this->exerciseId]),
-            'userId'
-        );
+        $rightNumWrongNums = $this->getItemBankExerciseQuestionRecordService()->countQuestionRecordStatus($this->exerciseId, $this->itemIds);
+        $rightNumWrongNumGroups = ArrayToolkit::group($rightNumWrongNums, 'userId');
 
         $updateMembers = [];
         $members = $this->biz['db']->fetchAll('SELECT id, userId from item_bank_exercise_member WHERE exerciseId = ?;', [$this->exerciseId]);
@@ -51,8 +67,7 @@ class UpdateMemberMasteryRateJob extends AbstractJob
                     'right' == $rightNumWrongNumGroup['status'] && $rightQuestionNum += $rightNumWrongNumGroup['num'];
                 }
             }
-            $updateMembers[] = [
-                'id' => $member['id'],
+            $updateMembers[$member['id']] = [
                 'doneQuestionNum' => $doneQuestionNum,
                 'rightQuestionNum' => $rightQuestionNum,
                 'masteryRate' => round($rightQuestionNum / $this->questionNum * 100, 1),
@@ -61,20 +76,40 @@ class UpdateMemberMasteryRateJob extends AbstractJob
         }
 
         if (count($members)) {
-            $this->getItemBankExerciseMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
+            $this->getExerciseMemberService()->batchUpdateMembers($updateMembers);
         }
     }
 
-    /**
-     * @return \Biz\QuestionBank\Service\QuestionBankService
-     */
-    protected function getQuestionBankService()
+    private function getChapterItems($questionBankId)
     {
-        return $this->biz->service('QuestionBank:QuestionBankService');
+        $chapters = $this->getItemBankChapterExerciseService()->getPublishChapterTreeList($questionBankId);
+        if (empty($chapters)) {
+            return [];
+        }
+
+        return $this->getItemService()->findItemsByCategoryIds(array_column($chapters, 'id'));
+    }
+
+    private function getAssessmentItems()
+    {
+        $modules = $this->getItemBankExerciseModuleService()->findByExerciseIdAndType($this->exerciseId, ExerciseModuleService::TYPE_ASSESSMENT);
+        if (empty($modules)) {
+            return [];
+        }
+        $assessmentExercises = $this->getItemBankAssessmentExerciseService()->findByModuleIds(array_column($modules, 'id'));
+        if (empty($assessmentExercises)) {
+            return [];
+        }
+        $assessmentItems = $this->getSectionItemService()->findSectionItemsByAssessmentIds(array_column($assessmentExercises, 'assessmentId'));
+        if (empty($assessmentItems)) {
+            return [];
+        }
+
+        return $this->getItemService()->findItemsByIds(array_column($assessmentItems, 'item_id'));
     }
 
     /**
-     * @return \Biz\ItemBankExercise\Service\ExerciseService
+     * @return ExerciseService
      */
     protected function getItemBankExerciseService()
     {
@@ -82,15 +117,58 @@ class UpdateMemberMasteryRateJob extends AbstractJob
     }
 
     /**
-     * @return \Biz\ItemBankExercise\Service\ExerciseModuleService
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ExerciseQuestionRecordService
+     */
+    protected function getItemBankExerciseQuestionRecordService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseQuestionRecordService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return AssessmentExerciseService
+     */
+    protected function getItemBankAssessmentExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:AssessmentExerciseService');
+    }
+
+    /**
+     * @return ExerciseModuleService
      */
     protected function getItemBankExerciseModuleService()
     {
         return $this->biz->service('ItemBankExercise:ExerciseModuleService');
     }
 
-    protected function getItemBankExerciseMemberDao()
+    /**
+     * @return AssessmentSectionItemService
+     */
+    protected function getSectionItemService()
     {
-        return $this->biz->dao('ItemBankExercise:ExerciseMemberDao');
+        return $this->biz->service('ItemBank:Assessment:AssessmentSectionItemService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:ChapterExerciseService');
     }
 }

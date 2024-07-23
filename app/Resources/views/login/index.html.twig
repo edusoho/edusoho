@@ -18,17 +18,7 @@
     <div class="login-main js-login-main">
       <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
 
-        {% if error %}
-          <div class="alert alert-danger">
-            {% if error.message == 'Bad credentials.' %}
-              {{ 'site.user_password.error_tips'|trans }}
-            {% elseif error.message == 'User account is locked.' %}
-              {{ 'exception.user_lock'|trans }}
-            {% else %}
-              {{ error.message|trans }}
-            {% endif %}
-          </div>
-        {% endif %}
+        <div class="alert alert-danger" style="display:none;"></div>
         {{ web_macro.flash_messages() }}
         <div class="form-group mbl">
           <label class="control-label" for="login_username">{{ 'user.login.account_label'|trans }}</label>
@@ -66,6 +56,33 @@
         <input type="hidden" name="_target_path" value="{{ _target_path }}">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
+
+			<div class="mbl">
+				{% if setting('auth.user_terms') == 'opened' and setting('auth.privacy_policy') == 'opened' %}
+					<div class="form-group mbl">
+						<div class="controls">
+							<input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
+							<a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+							{{ 'site.default.and'|trans }}
+							<a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+						</div>
+					</div>
+				{% elseif setting('auth.user_terms') == 'opened' %}
+					<div class="form-group mbl">
+						<div class="controls">
+							<input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
+							<a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+						</div>
+					</div>
+				{% elseif setting('auth.privacy_policy') == 'opened' %}
+					<div class="form-group mbl">
+						<div class="controls">
+							<input type="checkbox" name="agree_policy"> {{ 'user.register.read_agree'|trans }}
+							<a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+						</div>
+					</div>
+				{% endif %}
+			</div>
 
       <div class="mbl">
         <a class="link-primary" href="{{ path('password_reset') }}">{{ 'user.login.find_password'|trans }}</a>

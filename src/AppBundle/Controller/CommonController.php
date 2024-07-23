@@ -23,7 +23,7 @@ class CommonController extends BaseController
         $qrCodeFilter = $this->get('qrcode_whitelist_filter');
         $inWhitelist = $qrCodeFilter->isInWhiteList($text);
 
-        if (!$inWhitelist && 0 !== strpos($text, $request->getUriForPath(''))) {
+        if (!$inWhitelist && 0 !== strpos($text, $request->getUriForPath('/'))) {
             $text = $this->generateUrl('homepage', array(), UrlGeneratorInterface::ABSOLUTE_URL);
         }
 

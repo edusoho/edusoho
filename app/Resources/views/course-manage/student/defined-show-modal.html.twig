@@ -1,4 +1,4 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'student.profile'|trans}}{% endblock %}
 
@@ -55,7 +55,7 @@
 			<th>{{'student.profile.mobile'|trans}}</th>
 			<td>
 				{% if profile.mobile %}
-					{{ profile.mobile }}
+          {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
 				{% else %}
 					{{'student.profile.field.empty'|trans}}
 				{% endif %}

@@ -8,6 +8,7 @@ use Biz\CloudPlatform\Service\BaseFacade;
 use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
+use Topxia\Service\Common\ServiceKernel;
 
 class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeService
 {
@@ -44,7 +45,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             }
         }
         if (!DeviceToolkit::isMobileClient()) {
-            $payload['hlsClefEncryptVersion'] = 3;
+            $payload['hlsClefEncryptVersion'] = rand(4, 10);
         }
 
         $client = DeviceToolkit::getClient($userAgent);
@@ -66,6 +67,10 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         if (false !== strpos($userAgent, 'Feishu')) {
             $payload['encrypt'] = 0;
         }
+
+        $user = ServiceKernel::instance()->getCurrentUser();
+        $payload['uid'] = (string) $user['id'] ?? '';
+        $payload['uname'] = $user['nickname'] ?? '';
 
         $context['token'] = 'cloud' == $file['storage'] ? $this->makePlayToken($file, 600, $payload) : '';
         $context['resNo'] = $file['globalId'];

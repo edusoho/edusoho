@@ -3,42 +3,47 @@
 namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\TokenDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
+class TokenDaoImpl extends AdvancedDaoImpl implements TokenDao
 {
     protected $table = 'user_token';
 
-    public function get($id, array $options = array())
+    public function get($id, array $options = [])
     {
-        $lock = isset($options['lock']) && $options['lock'] === true;
+        $lock = isset($options['lock']) && true === $options['lock'];
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
 
-        return $this->db()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->db()->fetchAssoc($sql, [$id]) ?: null;
     }
 
     public function getByToken($token)
     {
         $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
 
-        return $this->db()->fetchAssoc($sql, array($token)) ?: null;
+        return $this->db()->fetchAssoc($sql, [$token]) ?: null;
+    }
+
+    public function findByTokens(array $tokens)
+    {
+        return $this->findInField('token', $tokens);
     }
 
     public function findByUserIdAndType($userId, $type)
     {
-        return $this->findByFields(array('userId' => $userId, 'type' => $type));
+        return $this->findByFields(['userId' => $userId, 'type' => $type]);
     }
 
     public function destroyTokensByUserId($userId)
     {
-        return $this->db()->delete($this->table, array('userId' => $userId));
+        return $this->db()->delete($this->table, ['userId' => $userId]);
     }
 
     public function getByType($type)
     {
         $sql = "SELECT * FROM {$this->table} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";
 
-        return $this->db()->fetchAssoc($sql, array($type, time())) ?: null;
+        return $this->db()->fetchAssoc($sql, [$type, time()]) ?: null;
     }
 
     public function deleteTopsByExpiredTime($expiredTime, $limit)
@@ -46,19 +51,20 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         $limit = (int) $limit;
         $sql = "DELETE FROM {$this->table} WHERE expiredTime < ? LIMIT {$limit} ";
 
-        return $this->db()->executeQuery($sql, array($expiredTime));
+        return $this->db()->executeQuery($sql, [$expiredTime]);
     }
 
     public function deleteByTypeAndUserId($type, $userId)
     {
-        return $this->db()->delete($this->table, array('type' => $type, 'userId' => $userId));
+        return $this->db()->delete($this->table, ['type' => $type, 'userId' => $userId]);
     }
 
     public function declares()
     {
-        return array(
-            'conditions' => array('type = :type'),
-            'serializes' => array('data' => 'php'),
-        );
+        return [
+            'conditions' => ['type = :type'],
+            'serializes' => ['data' => 'php'],
+            'timestamps' => ['createdTime'],
+        ];
     }
 }

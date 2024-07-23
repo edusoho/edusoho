@@ -21,6 +21,11 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
         return $this->db()->fetchAll($sql, [$assessmentId]);
     }
 
+    public function findByAssessmentIds($assessmentIds)
+    {
+        return $this->findInField('assessment_id', $assessmentIds);
+    }
+
     public function deleteByAssessmentId($assessmentId)
     {
         $sql = "DELETE FROM {$this->table} WHERE assessment_id = ?";
@@ -34,15 +39,13 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
             'orderbys' => [
                 'id',
                 'created_time',
+                'assessment_id',
+                'seq',
             ],
             'serializes' => [
                 'score_rule' => 'json',
                 'answer_mode' => 'json',
                 'question_scores' => 'json',
-            ],
-            'orderbys' => [
-                'id',
-                'created_time',
             ],
             'timestamps' => [
                 'created_time',
@@ -50,8 +53,12 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
             ],
             'conditions' => [
                 'id = :id',
+                'id in (:ids)',
+                'id > :id_GT',
                 'assessment_id = :assessment_id',
                 'assessment_id in (:assessmentIds)',
+                'item_id = :item_id',
+                'item_id in (:item_ids)',
             ],
         );
     }

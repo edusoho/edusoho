@@ -26,6 +26,7 @@ class ExportItemsWrapper
         foreach ($items as &$item) {
             $item['num'] = $num++;
             $item = ('material' == $item['type']) ? $this->wrapMaterialItem($item) : $this->wrapNotMaterialItem($item);
+            $item = $this->convertFormulaToImg($item);
             $item = $this->num($item);
             $item = $this->stem($item);
             $item = $this->options($item);
@@ -66,6 +67,15 @@ class ExportItemsWrapper
         $item['answer_mode'] = $question['answer_mode'];
 
         return $item;
+    }
+
+    protected function convertFormulaToImg($item)
+    {
+        $item = preg_replace_callback('/<span( data-display)?([^>]*?) data-tex=\\\\"(.*?)\\\\"( data-display)? data-img=\\\\"(.*?)\\\\"><\\\\\/span>/', function ($match) {
+            return "<img src=\\\"$match[5]\\\">";
+        }, json_encode($item));
+
+        return json_decode($item, true);
     }
 
     protected function num($item)
@@ -110,6 +120,7 @@ class ExportItemsWrapper
     protected function answer($item)
     {
         if ('essay' == $item['type']) {
+            $item['answer'] = str_replace('&nbsp;', ' ', $item['answer']);
             $item['answer'] = $this->stripTags(implode($item['answer']));
             $item['answer'] = $this->explodeTextAndImg($item['answer']);
         } elseif ('determine' == $item['type']) {
@@ -169,11 +180,11 @@ class ExportItemsWrapper
         $elements = [];
         $result = preg_split('/(<img [^>]*?>)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
         foreach ($result as $content) {
-            if (preg_match('/<img .*src=[\'\"](.*?)[\'\"].*>/', $content, $matches)) {
+            if (preg_match('/<img .*src=[\'\"](https?:\/\/[^\/]+)?(.*?)[\'\"].*>/', $content, $matches)) {
                 if (empty($this->imgRootDir)) {
                     continue;
                 }
-                $imgSrc = $this->imgRootDir.$matches[1];
+                $imgSrc = $this->imgRootDir.$matches[2];
                 if (!is_file($imgSrc) || false !== strpos($imgSrc, '.emf')) {
                     continue;
                 }

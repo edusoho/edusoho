@@ -7,14 +7,17 @@ use AppBundle\Common\Paginator;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\Testpaper\Service\TestpaperService;
+use Biz\Question\Traits\QuestionImportTrait;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TestpaperController extends BaseActivityController implements ActivityActionInterface
 {
+    use QuestionImportTrait;
+
     public function showAction(Request $request, $activity, $preview = 0)
     {
         if ($preview) {
@@ -24,6 +27,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $user = $this->getUser();
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperActivity['mediaId'], $activity['mediaType']);
+        $answerScene = $this->getAnswerSceneService()->get($testpaper['answerSceneId']);
 
         if (!$testpaper) {
             return $this->render('activity/testpaper/preview.html.twig', [
@@ -40,6 +44,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
                 'testpaperResult' => $testpaperResult,
                 'testpaper' => $testpaper,
                 'courseId' => $activity['fromCourseId'],
+                'exam_mode' => $answerScene['exam_mode'],
             ]);
         } elseif ('finished' === $testpaperResult['status']) {
             return $this->forward('AppBundle:Testpaper/Testpaper:showResult', [
@@ -65,7 +70,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $assessment = $this->getAssessmentService()->showAssessment($testpaperActivity['mediaId']);
 
         return $this->render('activity/testpaper/preview.html.twig', [
-            'assessment' => $assessment,
+            'assessment' => $this->addArrayEmphasisStyle($assessment),
         ]);
     }
 
@@ -238,6 +243,14 @@ class TestpaperController extends BaseActivityController implements ActivityActi
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerSceneService');
     }
 
     /**

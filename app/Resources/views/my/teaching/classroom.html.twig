@@ -27,6 +27,9 @@
             {% elseif classroom.status=='published' %}
               <span
                 class="course-publish-status course-publish-status--published">{{ 'classroom.status.published'|trans }}</span>
+            {% elseif classroom.status=='unpublished' %}
+              <span
+                class="course-publish-status course-publish-status--unpublished">{{ 'common.classroomStatus.unpublished'|trans }}</span>
             {% endif %}
 
             <div class="courseset-manage-header-info">

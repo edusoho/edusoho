@@ -1,0 +1,38 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/vue.js', 'libs/item-bank/lib/itemBank.umd.min.js', 'app/js/question-bank/update-duplicative-question/index.js'])  %}
+{% set lang = app.request.getLocale() %}
+
+
+{% set currentTheme = current_theme() %}
+{% set themeConfig = app.request.get('themeEditing')|default(false) ? currentTheme.config  : currentTheme.confirmConfig %}
+{% set maincolor = themeConfig.maincolor|default('default') %}
+{% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+  {% do css(['libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css']) %}
+{% else %}
+  {% do css(['libs/item-bank/lib/styles/item-bank.css']) %}
+{% endif %}
+
+
+{% block body %}
+
+{% verbatim %}
+    <div id="app">
+    </div>
+  {% endverbatim %}
+  <input type="hidden" name="question_bank_attachment_setting" value="{{ setting('question_bank_attachment_setting')|json_encode }}">
+  <input type="hidden" name="bank_id" value="{{ questionBank.id }}">
+  <input type="hidden" name="item" value="{{ item|json_encode }}">
+  <input type="hidden" name="back_url" value="{{ path('question_bank_manage_check_duplicative_questions', {id: questionBank.id}) }}">
+  <input type="hidden" name="category" value="{{ categoryTree|json_encode }}">
+  <input type="hidden" name="ckeditor_path" value="{{ asset('static-dist/libs/es-ckeditor/ckeditor.js') }}">
+  <input type="hidden" name="ckeditor_image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
+  <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
+  <input type="hidden" name="jquery_path" value="{{ asset('static-dist/libs/jquery/dist/jquery.min.js') }}">
+  <input type="hidden" name="type" value="{{ item.type }}">
+  <input type="hidden" name="check_duplicative_url" value="{{ path('question_bank_manage_check_question_duplicative', {id: questionBank.id}) }}">
+  <input type="hidden" name="update_url" value="{{ path('question_bank_manage_question_update', app.request.query.all|merge({id: questionBank.id, questionId: item.id})) }}">
+
+
+
+  {% include 'attachment-upload/upload-data.html.twig'  %}
+{% endblock %}

@@ -11,6 +11,7 @@ class QuestionBankController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        unset($conditions['page']);
         $conditions = $this->fillOrgCode($conditions);
         $count = $this->getQuestionBankService()->countQuestionBanks($conditions);
         $paginator = new Paginator($this->get('request'), $count, 20);

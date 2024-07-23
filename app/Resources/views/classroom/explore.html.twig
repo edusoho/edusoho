@@ -17,6 +17,14 @@
 
 {% block top_content %}
 
+  <div id="app"></div>
+  <input type="hidden" name="isWeixin" id="isWeixin" value="{{ isWxClient }}">
+  <input type="hidden" name="isMobile" id="isMobile" value="{{ isMobileClient }}">
+  <input type="hidden" name="categoryId" id="categoryId" value="{{ app.request.query.get('categoryId') }}">
+  <input type="hidden" name="sort" id="sort" value="{{ app.request.query.get('sort', 'recommendedSeq') }}">
+  <input type="hidden" name="vipLevelId" id="vipLevelId" value="{{ app.request.query.get('vipLevelId') }}">
+  <input type="hidden" name="page" id="page" value="{{ app.request.query.get('page', 1)}}">
+
   <div class="es-banner">
     <div class="container">
       <div class="title">
@@ -44,7 +52,7 @@
 
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'classroom'})) }}
 
-  <div class="es-filter">
+  <div class="es-filter pc-es-filter">
     <ul class="nav nav-sort">
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li>
       <li><a href="{{ path('classroom_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}" class="{% if (orderBy == 'hotSeq') %} active {% endif %}">{{'site.datagrid.filter.hotest'|trans}}</a></li>
@@ -127,7 +135,7 @@
       <div class="empty">{{'explore.classroom.empty'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</div>
     {% endif %}
   </div>
-  <nav class="text-center">
+  <nav class="text-center mobile-pagination-hide">
     {{ web_macro.paginator(paginator) }}
   </nav>
 {% endblock %}

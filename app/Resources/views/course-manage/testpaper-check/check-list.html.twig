@@ -3,10 +3,22 @@
 {% block title %}{{'course.testpaper_check'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'testpaper-check' %}
 
-{% block page_title %}{{ 'course.testpaper_check'|trans }}{% endblock %}
+{% do script(['libs/vue.js', 'app/js/course-manage/testpaper-check/index.js']) %}
+
+{% block main_heading %}
+  <div class="cd-main__title">
+    {% block page_title %}{{ 'course.testpaper_check'|trans }}{% endblock %}
+  </div>
+  <div class="testpaper-check-title">
+    <div id="app"></div>
+  </div>
+  <input type="hidden" value="course" class="js-testpaper-check-header">
+  <input type="hidden" value="{{course.id}}" class="js-testpaper-check-targetid">
+  <input type="hidden" value="testpaper" class="js-testpaper-check-type">
+{% endblock %}
 
 {% block main_body %}
-  <div>
+  <div class="js-task-list">
     {% if not hasCourseManageRole %}
       <span class="color-danger">{{'course.testpaper_check.no_permission_tips'|trans}}</span>
     {% endif %}

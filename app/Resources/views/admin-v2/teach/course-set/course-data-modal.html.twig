@@ -54,7 +54,7 @@
             <td>{{ student.nickname }}</td>
             <td>
               {% if student.mobile|default() %}
-                {{ student.mobile }}
+                {% include 'user-mobile-mask.html.twig' with { mobile: student.mobile } %}
               {% else %}
                 ----
               {% endif %}
@@ -87,4 +87,5 @@
 
   <script>app.load('course-set/data-detail.js');</script>
   <script>app.load('widget/tooltip-widget');</script>
+  {% include 'js_loader_async.html.twig' %}
 {% endblock %}

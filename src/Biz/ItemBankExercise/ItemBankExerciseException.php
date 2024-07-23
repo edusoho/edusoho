@@ -50,6 +50,12 @@ class ItemBankExerciseException extends AbstractException
 
     const EXERCISE_EXISTS = 5007521;
 
+    const EXERCISE_NOT_ARRIVING = 5007522;
+
+    const UNPUBLISHED_PARENT_CHAPTER = 4007523;
+
+    const ANSWER_UNPUBLISHED_CHAPTER = 4007524;
+
     public $messages = [
         4037501 => 'exception.item_bank_exercise.forbidden_learn',
         5007502 => 'exception.item_bank_exercise.chapter_answer_is_doing',
@@ -72,5 +78,8 @@ class ItemBankExerciseException extends AbstractException
         4037519 => 'exception.item_bank_exercise.forbidden_take_exercise',
         4037520 => 'exception.item_bank_exercise.module.switch.danger',
         5007521 => 'exception.item_bank_exercise.exercise.is_exists',
+        5007522 => 'exception.item_bank_exercise.exercise.not_arrive',
+        4007523 => 'exception.item_bank_exercise.parent_chapter_unpublish',
+        4007524 => 'exception.item_bank_exercise.answer_unpublish_chapter',
     ];
 }

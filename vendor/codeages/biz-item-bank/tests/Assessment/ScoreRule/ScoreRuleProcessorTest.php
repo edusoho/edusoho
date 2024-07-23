@@ -32,6 +32,7 @@ class ScoreRuleProcessorTest extends IntegrationTestCase
     {
         $questionResult = [
             'question_id' => 1,
+            'answer_mode' => 'choice',
             'result' => 'wrong',
             'response_points_result' => [
                 'right',
@@ -41,10 +42,10 @@ class ScoreRuleProcessorTest extends IntegrationTestCase
             ],
         ];
         $rules = [
-            ['name' => 'all_right', 'score' => 2],
-            ['name' => 'part_right', 'score' => 1],
-            ['name' => 'no_answer', 'score' => 0],
-            ['name' => 'wrong', 'score' => 0],
+            ['name' => 'all_right', 'score' => 2, 'score_rule' => ['score' => 2, 'scoreType' => 'question', 'otherScore' => 1]],
+            ['name' => 'part_right', 'score' => 1, 'score_rule' => ['score' => 2, 'scoreType' => 'question', 'otherScore' => 1]],
+            ['name' => 'no_answer', 'score' => 0, 'score_rule' => ['score' => 2, 'scoreType' => 'question', 'otherScore' => 1]],
+            ['name' => 'wrong', 'score' => 0, 'score_rule' => ['score' => 2, 'scoreType' => 'question', 'otherScore' => 1]],
         ];
         $result = $this->getProcessor()->review($questionResult, $rules);
 
@@ -124,6 +125,7 @@ class ScoreRuleProcessorTest extends IntegrationTestCase
     {
         $question = [
             'id' => 1,
+            'answer_mode' => 'choice',
             'score' => 2,
             'miss_score' => 1,
         ];
@@ -132,7 +134,7 @@ class ScoreRuleProcessorTest extends IntegrationTestCase
         $this->assertEquals(
             [
                 ['name' => 'all_right', 'score' => 2],
-                ['name' => 'part_right', 'score' => 1],
+                ['name' => 'part_right', 'score' => 1, 'score_rule' => []],
                 ['name' => 'no_answer', 'score' => 0],
                 ['name' => 'wrong', 'score' => 0],
             ],

@@ -10,6 +10,25 @@
     background: #eee;
 }
 
+.choose-course-title {
+  word-break: break-all;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+}
+
+.add-course-plan-name {
+  width: 226px;
+  text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 </style>
 <table class="table table-striped">
   <thead>
@@ -33,7 +52,7 @@
           <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title|raw }}" width="100">
         </a>
         <div class="mlm">
-          <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title|raw }}</a>
+          <a class="link-primary choose-course-title" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title|raw }}</a>
           {% if courseSet.serializeMode == 'serialized' %}
             <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
           {% elseif courseSet.serializeMode == 'finished' %}
@@ -41,10 +60,10 @@
           {% endif %}
         </div>
       </td>
-      <td>
+      <td class="relative">
         {% if courseSet.courses|default(null)|length == 1 %}
           {% for course in courseSet.courses %}
-            {{course.title|raw}}
+            <label class="add-course-plan-name" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{course.title|raw}}">{{course.title|raw}}</label>
           {% endfor %}
           <select class="form-control js-course-select width-150 hidden" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
             {% if courseSet.courses %}
@@ -55,10 +74,11 @@
             {% endif %}
           </select>
         {% else %}
-          <select class="form-control js-course-select width-150" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
+          <select class="form-control text-overflow js-course-select width-150" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
             {% if courseSet.courses|default(null) %}
               {% for course in courseSet.courses %}
                   {{course.title|raw}}
+                  <div style="position: absolute; width: 100px; height: 24px; top: 0; left: 0; z-index: 999;" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{course.title|raw}}">123123</div>
                   <option value="{{course.id}}" 
                     data-price="{% include 'course/widgets/classroom-course-price.html.twig' with { price : course.price } %}">
                     {{course.title|raw}}

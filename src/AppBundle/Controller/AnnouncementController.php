@@ -3,10 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Announcement\Processor\AnnouncementProcessor;
+use Biz\Announcement\Service\AnnouncementService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Announcement\Service\AnnouncementService;
-use Biz\Announcement\Processor\AnnouncementProcessor;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AnnouncementController extends BaseController
@@ -17,19 +18,19 @@ class AnnouncementController extends BaseController
         $processor = $this->getAnnouncementProcessor($announcement['targetType']);
         $targetObject = $processor->getTargetObject($targetId);
 
-        return $this->render('announcement/announcement-show-modal.html.twig', array(
+        return $this->render('announcement/announcement-show-modal.html.twig', [
             'announcement' => $announcement,
             'targetObject' => $targetObject,
-        ));
+        ]);
     }
 
     public function globalShowAction(Request $request, $id)
     {
         $announcement = $this->getAnnouncementService()->getAnnouncement($id);
 
-        return $this->render('announcement/announcement-global-show-modal.html.twig', array(
+        return $this->render('announcement/announcement-global-show-modal.html.twig', [
             'announcement' => $announcement,
-        ));
+        ]);
     }
 
     public function listAction(Request $request, $targetType, $targetId)
@@ -37,34 +38,34 @@ class AnnouncementController extends BaseController
         $processor = $this->getAnnouncementProcessor($targetType);
         $controller = $processor->getActions('list');
 
-        return $this->forward($controller, array(
+        return $this->forward($controller, [
             'request' => $request,
             'targetId' => $targetId,
-        ));
+        ]);
     }
 
     public function showAllAction(Request $request, $targetType, $targetId)
     {
-        $conditions = array(
+        $conditions = [
             'targetType' => $targetType,
             'targetId' => $targetId,
-        );
+        ];
 
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime' => 'DESC'), 0, 10000);
+        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, ['createdTime' => 'DESC'], 0, 10000);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($announcements, 'userId'));
 
-        return $this->render('announcement/announcement-show-all-modal.html.twig', array(
+        return $this->render('announcement/announcement-show-all-modal.html.twig', [
             'announcements' => $announcements,
             'users' => $users,
-        ));
+        ]);
     }
 
     public function manageAction(Request $request, $targetType, $targetId)
     {
-        return $this->render('announcement/announcement-manage-modal.html.twig', array(
+        return $this->render('announcement/announcement-manage-modal.html.twig', [
             'targetId' => $targetId,
             'targetType' => $targetType,
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $targetType, $targetId)
@@ -73,11 +74,11 @@ class AnnouncementController extends BaseController
         $targetObject = $processor->tryManageObject($targetId);
         $controller = $processor->getActions('create');
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $data['targetType'] = $targetType;
 
-            if ($targetType == 'course') {
+            if ('course' == $targetType) {
                 $data['targetId'] = empty($data['targetId']) ? $targetId : $data['targetId'];
             } else {
                 $data['targetId'] = $targetId;
@@ -88,20 +89,32 @@ class AnnouncementController extends BaseController
 
             $announcement = $this->getAnnouncementService()->createAnnouncement($data);
 
-            if ($request->request->get('notify') == 'notify') {
+            if ('notify' == $request->request->get('notify')) {
                 $targetObjectShowRout = $processor->getTargetShowUrl();
-                $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, array('id' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL);
+                $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
+                if ($announcement['startTime'] <= time()) {
+                    $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl, $announcement);
 
-                $result = $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
+                    return $this->createJsonResponse(true);
+                }
+
+                $this->getSchedulerService()->register([
+                    'name' => 'announcement_notify_'.$announcement['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => intval($announcement['startTime']),
+                    'class' => 'Biz\Announcement\Job\AnnouncementNotifyJob',
+                    'args' => ['targetId' => $targetId, 'targetType' => $targetType, 'params' => ['targetObject' => $targetObject, 'targetObjectShowUrl' => $targetObjectShowUrl, 'announcement' => $announcement]],
+                    'misfire_threshold' => 60 * 60,
+                ]);
             }
 
             return $this->createJsonResponse(true);
         }
 
-        return $this->forward($controller, array(
+        return $this->forward($controller, [
             'request' => $request,
             'targetId' => $targetId,
-        ));
+        ]);
     }
 
     public function updateAction(Request $request, $id, $targetType, $targetId)
@@ -114,11 +127,11 @@ class AnnouncementController extends BaseController
             return $this->createMessageResponse('error', "Announcement(#{$id}) not found");
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
 
             $data['targetType'] = $targetType;
-            if ($targetType == 'course') {
+            if ('course' == $targetType) {
                 $data['targetId'] = empty($data['targetId']) ? $targetId : $data['targetId'];
             } else {
                 $data['targetId'] = $targetId;
@@ -126,17 +139,33 @@ class AnnouncementController extends BaseController
             $data['startTime'] = isset($data['startTime']) ? strtotime($data['startTime']) : time();
             $data['endTime'] = isset($data['endTime']) ? strtotime($data['endTime']) : time();
 
-            $this->getAnnouncementService()->updateAnnouncement($id, $data);
+            $announcement = $this->getAnnouncementService()->updateAnnouncement($id, $data);
+
+            $targetObjectShowRout = $processor->getTargetShowUrl();
+            $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, ['id' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $job = $this->getSchedulerService()->getJobByName('announcement_notify_'.$id);
+            if (!empty($job)) {
+                $this->getSchedulerService()->deleteJob($job['id']);
+                $this->getSchedulerService()->register([
+                    'name' => 'announcement_notify_'.$announcement['id'],
+                    'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                    'expression' => intval($announcement['startTime']),
+                    'class' => 'Biz\Announcement\Job\AnnouncementNotifyJob',
+                    'args' => ['targetId' => $targetId, 'targetType' => $targetType, 'params' => ['targetObject' => $targetObject, 'targetObjectShowUrl' => $targetObjectShowUrl, 'announcement' => $announcement]],
+                    'misfire_threshold' => 60 * 60,
+                ]);
+            }
 
             return $this->createJsonResponse(true);
         }
 
         $controller = $processor->getActions('edit');
 
-        return $this->forward($controller, array(
+        return $this->forward($controller, [
             'announcementId' => $announcement['id'],
             'targetId' => $targetId,
-        ));
+        ]);
     }
 
     public function deleteAction(Request $request, $id, $targetType, $targetId)
@@ -176,5 +205,10 @@ class AnnouncementController extends BaseController
     protected function getUserService()
     {
         return $this->get('biz')->service('User:UserService');
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

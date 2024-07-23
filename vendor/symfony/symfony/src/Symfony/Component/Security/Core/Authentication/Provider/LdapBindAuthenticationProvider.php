@@ -103,7 +103,7 @@ class LdapBindAuthenticationProvider extends UserAuthenticationProvider
 
             $this->ldap->bind($dn, $password);
         } catch (ConnectionException $e) {
-            throw new BadCredentialsException('The presented password is invalid.');
+            throw new BadCredentialsException('Bad credentials.');
         }
     }
 }

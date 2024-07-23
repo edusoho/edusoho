@@ -16,9 +16,9 @@
         <td>{{ admin_macro.user_link(data) }}</td>
         <td>
           {% if data.verifiedMobile %}
-          {{ data.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
+            {% include 'user-mobile-mask.html.twig' with { mobile: data.verifiedMobile } %}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
           {% elseif userSumProfiles[data.id].mobile %}
-          {{ userSumProfiles[data.id].mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
+            {% include 'user-mobile-mask.html.twig' with { mobile: userSumProfiles[data.id].mobile } %}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
           {% else %}
           --
           {% endif %}
@@ -37,8 +37,6 @@
           {% elseif data.type=="weibo" %}{{'admin.operation_analysis.register.weibo'|trans}}
           {% elseif data.type=="qq" %}{{'admin.operation_analysis.register.qq'|trans}}
           {% elseif data.type=="renren" %}{{'admin.operation_analysis.register.renren'|trans}}
-          {% elseif data.type=="discuz" %}{{'admin.operation_analysis.register.discuz'|trans}}
-          {% elseif data.type=="phpwind" %}{{'admin.operation_analysis.register.phpwind'|trans}}
           {% elseif data.type=="weixinweb" or data.type=="weixinmob" or data.type=="weixin" %}{{'admin.operation_analysis.register.weixin'|trans}}
           {% elseif data.type=="import" %}{{'admin.operation_analysis.register.import'|trans}}
           {% else %}{{'admin.operation_analysis.register.other'|trans}}

@@ -7,15 +7,15 @@ use ApiBundle\Api\Resource\Testpaper\TestpaperItemFilter;
 
 class ExerciseResultFilter extends Filter
 {
-    protected $publicFields = array(
+    protected $publicFields = [
         'id', 'paperName', 'testId', 'userId', 'score', 'objectiveScore', 'subjectiveScore', 'teacherSay', 'rightItemCount', 'passedStatus',
         'limitedTime', 'beginTime', 'endTime', 'status', 'checkTeacherId', 'checkedTime', 'usedTime', 'migrateResultId', 'items', 'rightRate',
-        'admission_ticket', 'courseId'
-    );
+        'admission_ticket', 'courseId', 'exerciseMode', 'reviewedCount', 'submittedQuestions',
+    ];
 
-    protected $simpleFields = array(
+    protected $simpleFields = [
         'id', 'status', 'beginTime', 'endTime',
-    );
+    ];
 
     protected function publicFields(&$data)
     {

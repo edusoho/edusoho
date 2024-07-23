@@ -71,8 +71,9 @@ class ExportController extends BaseController
         }
         $fileNames = $request->query->get('fileNames');
         $customFileName = $request->query->get('customFileName');
-
-        list($path, $name) = $this->container->get('batch_exporter')->exportFile($name, $fileNames, $customFileName);
+        $batchExporter = $this->container->get('batch_exporter');
+        $batchExporter->findExporter([$name], []);
+        list($path, $name) = $batchExporter->exportFile($name, $fileNames, $customFileName);
 
         if (!file_exists($path)) {
             return $this->createJsonResponse(['success' => 0, 'message' => 'empty file']);
@@ -85,6 +86,7 @@ class ExportController extends BaseController
             'Content-Type' => FileToolkit::getMimeTypeByExtension($ext),
             'Content-Disposition' => 'attachment; filename='.$name,
         ];
+        $batchExporter->postExport();
 
         return new BinaryFileResponse($path, 200, $headers);
     }

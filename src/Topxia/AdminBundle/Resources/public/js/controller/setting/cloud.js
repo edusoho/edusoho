@@ -25,7 +25,7 @@ define(function(require, exports, module) {
             },
             success: function(response) {
                 response = $.parseJSON(response);
-                $("#cloud-video-watermark-container").html('<img src="' + response.url + '">');
+                $("#cloud-video-watermark-container").html('<img style="max-width: 400px;" src="' + response.url + '">');
                 $form.find('[name=video_watermark_image]').val(response.path);
                 $("#cloud-video-watermark-remove").show();
                 Notify.success(Translator.trans('admin.setting.cloud.upload_cloud_video_watermark_success_hint'));

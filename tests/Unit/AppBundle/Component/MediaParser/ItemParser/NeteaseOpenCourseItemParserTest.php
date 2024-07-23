@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\AppBundle\Component\MediaParser\ItemParser;
 
-use Biz\BaseTestCase;
 use AppBundle\Component\MediaParser\ItemParser\NeteaseOpenCourseItemParser;
+use Biz\BaseTestCase;
 
 class NeteaseOpenCourseItemParserTest extends BaseTestCase
 {
@@ -26,9 +26,9 @@ class NeteaseOpenCourseItemParserTest extends BaseTestCase
 
     public function testDetect()
     {
-        $this->assertEquals(1, $this->createParser()->detect('http://v.163.com/movie/abc.html'));
-        $this->assertEquals(1, $this->createParser()->detect('http://open.163.com/movie/a.html'));
-        $this->assertEquals(0, $this->createParser()->detect('http://open.164.com/movie/a.html'));
+        $this->assertTrue($this->createParser()->detect('https://v.163.com/movie/abc.html'));
+        $this->assertTrue($this->createParser()->detect('https://open.163.com/movie/a.html'));
+        $this->assertFalse($this->createParser()->detect('https://open.164.com/movie/a.html'));
     }
 
     private function createParser()

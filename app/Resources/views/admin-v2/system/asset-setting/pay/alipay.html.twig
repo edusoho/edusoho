@@ -66,7 +66,7 @@
                         <span id="js-private-key"></span> <a data-toggle="modal" data-target="#privateKeyModal">{{ 'admin.payment_setting.developer_private_secret.add'|trans }}</a>
                     {% endif %}
                 </p>
-                <input type="hidden" name="rsa_private_key">
+                <input type="hidden" name="rsa_private_key" {% if payment.rsa_private_key %}disabled="disabled"{% endif %} >
             </div>
         </div>
         <div class="form-group">

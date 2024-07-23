@@ -1,5 +1,6 @@
 import Item from './item';
 import { Browser } from 'common/utils';
+import 'app/common/katex-render';
 
 Vue.config.productionTip = false;
 if (app.lang == 'en') {

@@ -19,8 +19,10 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         return [
             'classroom.course.delete' => 'onClassroomCourseDelete',
+            'classroom.courses.delete' => 'onClassroomCoursesDelete',
             'review.create' => 'onReviewChanged',
             'review.delete' => 'onReviewChanged',
+            'goods.delete' => 'onGoodsDelete',
         ];
     }
 
@@ -35,7 +37,7 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
         $goods = $this->getGoodsService()->getGoods($review['targetId']);
 
         if (empty($goods)) {
-            return  true;
+            return true;
         }
 
         $reviewCount = $this->getReviewService()->countReviews([
@@ -60,6 +62,32 @@ class GoodsEventSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
         $this->getCourseSpecsMediator()->onCreate($course);
         $this->getCourseSpecsMediator()->onUpdateNormalData($course);
+    }
+
+    public function onClassroomCoursesDelete(Event $event)
+    {
+        $defaultCourseIds = $event->getArgument('deleteCourseIds');
+        $courses = $this->getCourseService()->findCoursesByIds($defaultCourseIds);
+        if (empty($courses)) {
+            return;
+        }
+        $courseSetIds = array_column($courses, 'courseSetId');
+        $courseSetArray = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        foreach ($courses as $course) {
+            if (isset($courseSetArray[$course['courseSetId']])) {
+                $this->getCourseSetGoodsMediator()->onCreate($courseSetArray[$course['courseSetId']]);
+                $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSetArray[$course['courseSetId']]);
+            }
+            $this->getCourseSpecsMediator()->onCreate($course);
+            $this->getCourseSpecsMediator()->onUpdateNormalData($course);
+        }
+    }
+
+    public function onGoodsDelete(Event $event)
+    {
+        $goodsId = $event->getSubject();
+        $this->getReviewService()->deleteReviewsByTargetTypeAndTargetId('goods', $goodsId);
     }
 
     /**

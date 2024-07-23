@@ -56,7 +56,7 @@
 			<th>{{'user.fields.mobile_label'|trans}}</th>
 			<td>
 				{% if profile.mobile %}
-					{{ profile.mobile }}
+          {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
 				{% else %}
 					{{'site.data.empty'|trans}}
 				{% endif %}

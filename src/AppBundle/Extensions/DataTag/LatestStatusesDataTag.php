@@ -61,10 +61,17 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $manager = ExtensionManager::instance();
-
+        $courses = [];
+        if (!empty($conditions['courseIds'])) {
+            $courses = $this->getCourseService()->searchCourses(['ids' => $conditions['courseIds']], [], 0, PHP_INT_MAX);
+            $courses = ArrayToolkit::index($courses, 'id');
+        }
         foreach ($statuses as &$status) {
             $status['user'] = $users[$status['userId']];
             $status['message'] = $manager->renderStatus($status, $arguments['mode']);
+            if (!empty($courses) && 0 == $courses[$status['courseId']]['canLearn']) {
+                $status['message'] = str_replace('link-dark', 'link-dark js-handleLearnContentOnMessage', $status['message']);
+            }
             unset($status);
         }
 

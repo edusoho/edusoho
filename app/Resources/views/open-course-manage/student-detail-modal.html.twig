@@ -1,4 +1,4 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}{{'student.profile'|trans}}{% endblock %}
 
@@ -38,9 +38,9 @@
   <tr>
     <th>{{'student.profile.gender'|trans}}</th>
     <td>
-      {% if profile.gender == 'mail' %}
+      {% if profile.gender == 'male' %}
         {{'student.profile.gender.male'|trans}}
-      {% elseif profile.gender == 'femail' %}
+      {% elseif profile.gender == 'female' %}
         {{'student.profile.gender.female'|trans}}
       {% else %}
         {{'student.profile.field.empty'|trans}}
@@ -85,10 +85,10 @@
     <th>{{'user.fields.phone_label'|trans}}</th>
     <td>
     {% if profile.mobile %}
-        {{ profile.mobile }}
-      {% else %}
+      {% include 'user-mobile-mask.html.twig' with { mobile: profile.mobile } %}
+    {% else %}
         {{'student.profile.field.empty'|trans}}
-      {% endif %}
+    {% endif %}
     </td>
   </tr>
 

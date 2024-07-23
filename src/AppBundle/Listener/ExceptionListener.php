@@ -27,7 +27,6 @@ class ExceptionListener
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
         $statusCode = $this->getStatusCode($exception);
 
@@ -60,16 +59,6 @@ class ExceptionListener
             }
 
             $event->setException($exception);
-
-            return;
-        }
-
-        if ($problem && !empty($problem['content'])) {
-            ob_start();
-            eval($problem['content']);
-            $result = ob_get_contents();
-            ob_end_clean();
-            $event->setResponse(new JsonResponse(['result' => $result]));
 
             return;
         }

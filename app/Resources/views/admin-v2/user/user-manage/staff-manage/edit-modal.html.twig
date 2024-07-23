@@ -49,7 +49,7 @@
           <label for="mobile">{{'user.fields.mobile_label'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
-          <div class="control-text"> {{user.verifiedMobile|default('')}}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span> </div>
+          <div class="control-text"> {% if user.verifiedMobile|default('') %}{% include 'user-mobile-mask.html.twig' with { mobile: user.verifiedMobile } %}{% endif %}<span class="text-success">({{ 'user.fields.mobile_label.bind'|trans }})</span> </div>
        </div>
       </div>
     {% else %}
@@ -202,4 +202,5 @@
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
   
   <script>app.load('user/staff/edit-modal');</script>
+  {% include 'js_loader_async.html.twig' %}
 {% endblock %}

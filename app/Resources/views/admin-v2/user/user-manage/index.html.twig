@@ -37,8 +37,14 @@
     </div>
 
     <div class="form-group">
+      <select id="keywordUserType" name="userStatus" class="form-control">
+        {{ select_options(dict('userStatus'), app.request.query.get('userStatus'), 'admin.user.manage.form.user_status_option.default'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
       <select id="keywordType" name="keywordType" class="form-control">
-        {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'nickname') }}
+        {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType') ?: 'nickname') }}
       </select>
     </div>
 
@@ -51,8 +57,10 @@
 
     {% if is_plugin_installed('UserImporter') and has_permission('admin_v2_user_export') %}
       <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal"
-         data-url="{{ path('admin_v2_user_export') }}">{{ 'plugin.admin.user.manage.form.user_export_btn'|trans }}</a>
+         data-url="{{ path('admin_v2_user_export') }}">{{ 'plugin.admin.user.manage.form.user_student_export_btn'|trans }}</a>
     {% endif %}
+
+    <input type="hidden" name="isStaff" value="0">
 
   </form>
 
@@ -62,8 +70,9 @@
         {% if setting('magic.enable_org','0') %}
           <th><input type="checkbox"  data-role="batch-select"></th>
         {% endif %}
-      <th>{{ 'user.fields.username_student_label'|trans }}</th>
+      <th width="15%">{{ 'user.fields.username_student_label'|trans }}</th>
         {% include 'org/parts/table-thead-tr.html.twig' %}
+      <th>{{ 'admin.user.manage.fields.wechat_nickname'|trans }}</th>
       <th>{{ 'admin.user.manage.fields.mobile_label'|trans }}</th>
       <th>Email</th>
       <th>{{ 'admin.user.fields.register_date_label'|trans }}</th>

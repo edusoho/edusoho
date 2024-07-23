@@ -6,6 +6,17 @@
 
 {% block main %}
 
+<style>
+.audit-content-beforeOpen  img {
+  width: 100px;
+  height: 100px;
+}
+
+.audit-content-open  img {
+  max-width: 100%;
+}
+</style>
+
   <form id="audit-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
     <div class="form-group">
@@ -57,13 +68,13 @@
       <thead>
       <tr>
         <th width="4%"><input type="checkbox" data-role="batch-select"></th>
-        <th width="40%">{{ 'admin_v2.operation.user_content_audit.content_th'|trans }}</th>
-        <th width="20%">{{ 'admin_v2.operation.user_content_audit.contain_sensitive_words_th'|trans }}</th>
-        <th>{{ 'admin_v2.operation.user_content_audit.type_th'|trans }}</th>
-        <th>{{ 'admin_v2.operation.user_content_audit.author_time_th'|trans }}</th>
-        <th>{{ 'admin_v2.operation.user_content_audit.status_th'|trans }}</th>
-        <th>{{ 'admin_v2.operation.user_content_audit.auditor_th'|trans }}</th>
-        <th>{{ 'admin_v2.operation.user_content_audit.operation_th'|trans }}</th>
+        <th width="30%" style="min-width: 300px;">{{ 'admin_v2.operation.user_content_audit.content_th'|trans }}</th>
+        <th width="14%" style="min-width: 100px;">{{ 'admin_v2.operation.user_content_audit.contain_sensitive_words_th'|trans }}</th>
+        <th width="14%" style="min-width: 100px;">{{ 'admin_v2.operation.user_content_audit.type_th'|trans }}</th>
+        <th width="14%" style="min-width: 100px;">{{ 'admin_v2.operation.user_content_audit.author_time_th'|trans }}</th>
+        <th width="14%" style="min-width: 100px;">{{ 'admin_v2.operation.user_content_audit.status_th'|trans }}</th>
+        <th width="14%" style="min-width: 100px;">{{ 'admin_v2.operation.user_content_audit.auditor_th'|trans }}</th>
+        <th style="min-width: 160px;">{{ 'admin_v2.operation.user_content_audit.operation_th'|trans }}</th>
       </tr>
       </thead>
       <tbody>
@@ -74,11 +85,11 @@
           <td><input type="checkbox" value="{{ audit.id }}" data-role="batch-item"></td>
           <td>
             <div class="short-long-text">
-              <div class="short-text">
+              <div class="short-text audit-content-beforeOpen">
                 {{ audit.short_content|raw }} <span
                   class="text-muted trigger">({{ 'admin_v2.operation.user_content_audit.expand_td'|trans }})</span>
               </div>
-              <div class="long-text">{{ audit.content|raw }} <span
+              <div class="long-text audit-content-open">{{ audit.content|raw }} <span
                   class="text-muted trigger">({{ 'admin_v2.operation.user_content_audit.collapse_td'|trans }})</span>
               </div>
             </div>

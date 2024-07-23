@@ -22,6 +22,7 @@ class GoodsDaoImpl extends AdvancedDaoImpl implements GoodsDao
                 'id NOT IN (:excludeIds)',
                 'creator = :creator',
                 'categoryId = :categoryId',
+                'categoryId IN (:categoryIds)',
                 'productId = :productId',
                 'productId IN (:productIds)',
                 'title = :title',

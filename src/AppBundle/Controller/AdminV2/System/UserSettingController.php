@@ -6,10 +6,10 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\SettingService;
+use Biz\User\Service\UserAuthSettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserFieldException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class UserSettingController extends BaseController
 {
@@ -95,7 +95,7 @@ class UserSettingController extends BaseController
             }
 
             $auth = array_merge($auth, $authUpdate);
-            $this->getSettingService()->set('auth', $auth);
+            $this->getUserAuthSettingService()->update($auth);
 
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -161,62 +161,6 @@ class UserSettingController extends BaseController
         return $this->render('admin-v2/system/user-setting/login-connect.html.twig', [
             'loginConnect' => $loginConnect,
             'clients' => $clients,
-        ]);
-    }
-
-    public function userCenterAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('user_partner', []);
-
-        $default = [
-            'mode' => 'default',
-            'nickname_enabled' => 0,
-            'avatar_alert' => 'none',
-            'email_filter' => '',
-            'partner_config' => [
-                'discuz' => [],
-                'phpwind' => [
-                    'conf' => [],
-                    'database' => [],
-                ],
-            ],
-        ];
-
-        $setting = array_merge($default, $setting);
-
-        if ('POST' == $request->getMethod()) {
-            $data = $request->request->all();
-            $data['email_filter'] = trim(str_replace(["\n\r", "\r\n", "\r"], "\n", $data['email_filter']));
-            $setting['mode'] = $data['mode'];
-            $setting['email_filter'] = $data['email_filter'];
-
-            $setting['partner_config']['discuz'] = $data['discuzConfig'];
-
-            if ('phpwind' == $setting['mode']) {
-                $setting['partner_config']['phpwind'] = $data['phpwind_config'];
-                $phpwindConfig = $data['phpwind_config'];
-                $configDirectory = $this->getParameter('kernel.root_dir').'/config/';
-                $phpwindConfigPath = $configDirectory.'windid_client_config.php';
-                if (!file_exists($phpwindConfigPath) || !is_writable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', $this->get('translator')->trans('admin.user_center.user_center.config_error', ['%path%' => $phpwindConfigPath]));
-                    goto response;
-                }
-
-                file_put_contents($phpwindConfigPath, $phpwindConfig);
-            }
-
-            $this->getSettingService()->set('user_partner', $setting);
-            $this->setFlashMessage('success', 'site.save.success');
-        }
-
-        response:
-        $discuzConfig = $setting['partner_config']['discuz'];
-        $phpwindConfig = empty($setting['partner_config']['phpwind']) ? '' : $setting['partner_config']['phpwind'];
-
-        return $this->render('admin-v2/system/user-setting/user-center.html.twig', [
-            'setting' => $setting,
-            'discuzConfig' => $discuzConfig,
-            'phpwindConfig' => $phpwindConfig,
         ]);
     }
 
@@ -569,5 +513,13 @@ class UserSettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return UserAuthSettingService
+     */
+    protected function getUserAuthSettingService()
+    {
+        return $this->createService('User:UserAuthSettingService');
     }
 }

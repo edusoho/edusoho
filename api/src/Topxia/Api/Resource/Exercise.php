@@ -42,7 +42,7 @@ class Exercise extends BaseResource
             $exerciseTask = $exerciseTasks[0];
 
             $activity = $this->getActivityService()->getActivity($exerciseTask['activityId'], true);
-            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
+            $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
             $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         } else {
@@ -66,7 +66,7 @@ class Exercise extends BaseResource
             }
             $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($exerciseActivity['answerSceneId'], $user['id']);
             if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-                $assessment = $this->createAssessment($activity['title'], $exerciseActivity['drawCondition']['range'], [$exerciseActivity['drawCondition']['section']]);
+                $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
                 $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
             } else {
                 $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
@@ -149,24 +149,6 @@ class Exercise extends BaseResource
         $exercise['items'] = $this->filterItem($items, $questionReports);
 
         return $this->filterResult($exercise);
-    }
-
-    protected function createAssessment($name, $range, $sections)
-    {
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = [
-            'name' => $name,
-            'displayable' => 0,
-            'description' => '',
-            'bank_id' => $range['bank_id'],
-            'sections' => $sections,
-        ];
-
-        $assessment = $this->getAssessmentService()->createAssessment($assessment);
-
-        $this->getAssessmentService()->openAssessment($assessment['id']);
-
-        return $assessment;
     }
 
     private function filterItem($items, $itemSetResults)

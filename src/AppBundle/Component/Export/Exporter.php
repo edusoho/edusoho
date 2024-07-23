@@ -2,6 +2,7 @@
 
 namespace AppBundle\Component\Export;
 
+use Biz\System\Service\LogService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -48,7 +49,7 @@ abstract class Exporter implements ExporterInterface
         list($start, $limit) = $this->getPageConditions();
 
         $fileName = empty($this->parameter['start']) ? $this->generateExportName() : $this->parameter['fileName'];
-        $filePath = $this->exportFileRootPath().$fileName;
+        $filePath = $this->exportFileRootPath() . $fileName;
 
         $data = $this->getContent($start, $limit);
 
@@ -84,6 +85,10 @@ abstract class Exporter implements ExporterInterface
         return $parameter;
     }
 
+    public function postExport()
+    {
+    }
+
     protected function addContent($data, $start, $filePath)
     {
         if (0 == $start) {
@@ -95,14 +100,14 @@ abstract class Exporter implements ExporterInterface
 
     private function generateExportName()
     {
-        return 'export_'.time().rand();
+        return 'export_' . time() . rand();
     }
 
     protected function updateFilePaths($path, $page)
     {
         $content = file_exists($path) ? file_get_contents($path) : '';
         $content = unserialize($content);
-        $partPath = $path.$page;
+        $partPath = $path . $page;
         $content[] = $partPath;
         file_put_contents($path, serialize($content));
 
@@ -136,7 +141,7 @@ abstract class Exporter implements ExporterInterface
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $rootPath = $biz['topxia.upload.private_directory'].'/tmp/';
+        $rootPath = $biz['topxia.upload.private_directory'] . '/tmp/';
         if (!$filesystem->exists($rootPath)) {
             $filesystem->mkdir($rootPath);
         }
@@ -159,6 +164,14 @@ abstract class Exporter implements ExporterInterface
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->getBiz()->service('System:LogService');
     }
 
     protected function getBiz()

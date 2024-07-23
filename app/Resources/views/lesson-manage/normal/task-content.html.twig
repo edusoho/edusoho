@@ -12,12 +12,14 @@
     {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}<span class="number mls">{{ taskNum }}</span>：
 {% endif %}
 
+<div style="width: 460px; display: inline-block; vertical-align: top;">
 <span class="display-text {% if isShowText %}hidden{% endif %}">
   {% if displayText|default('') != '' %}
     {{displayText|raw}}
   {% endif %}
 </span>
-<span class="{% if task.tasks|default() %}title{% endif %}">{{task.title|sub_text(30)}}</span>
+  <span class="{% if task.tasks|default() %}title{% endif %}">{{task.title}}</span>
+</div>
 
 <span>
   {% if file and file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}

@@ -546,8 +546,8 @@ class TestpaperForm {
       return;
     }
 
-    $target.button('loading').addClass('disabled');
-
+    $target.addClass('disabled').text(Translator.trans('task.plugin_redmine_save_hint'))
+        
     let baseInfo = {
       name: this.$form.find('#name-field').val(),
       description: this.$form.find('#description-field').val(),
@@ -557,6 +557,10 @@ class TestpaperForm {
     $.post(this.$form.data('url'),{baseInfo: baseInfo, sections: sections},function(result) {
       if (result.goto) {
         window.location.href = result.goto;
+      }
+      if (result.error) {
+        notify('danger', result.error);
+        $target.removeClass('disabled').text(Translator.trans('site.confirm'))
       }
     });
   }

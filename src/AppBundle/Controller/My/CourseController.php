@@ -36,9 +36,11 @@ class CourseController extends CourseBaseController
         $currentUser = $this->getUser();
 
         $members = $this->getCourseMemberService()->searchMembers(['userId' => $currentUser['id'], 'role' => 'student'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
+        $members = ArrayToolkit::index($members, 'courseId');
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = ArrayToolkit::sortPerArrayValue($courses, 'createdTime', false);
         $courses = ArrayToolkit::group($courses, 'courseSetId');
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
         foreach ($members as &$member) {
@@ -46,7 +48,6 @@ class CourseController extends CourseBaseController
         }
         array_multisort(ArrayToolkit::column($members, 'lastLearnTime'), SORT_DESC, $members);
         $members = ArrayToolkit::index($members, 'courseId');
-
         $conditions = [
             'types' => [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE],
             'ids' => $learningCourseSetIds,
@@ -57,12 +58,12 @@ class CourseController extends CourseBaseController
             $this->getCourseSetService()->countCourseSets($conditions),
             12
         );
-
+        $conditions['ids'] = array_splice($conditions['ids'], $paginator->getOffsetCount(), $paginator->getOffsetCount() + $paginator->getPerPageCount());
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
             [],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            0,
+            PHP_INT_MAX
         );
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
@@ -195,6 +196,7 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'tasks')
     {
         $course = $this->getCourseService()->getCourse($id);
+
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
             return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
@@ -209,7 +211,7 @@ class CourseController extends CourseBaseController
             }
         }
         // 非班级课程，点击介绍跳转到概览商品页
-        if (empty($member) || (0 === (int)$course['parentId'] && 'summary' === $tab)) {
+        if (empty($member) || (0 === (int) $course['parentId'] && 'summary' === $tab)) {
             return $this->redirect($this->generateUrl('course_show', ['id' => $id, 'tab' => $tab]));
         }
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
@@ -368,9 +370,9 @@ class CourseController extends CourseBaseController
         if (empty($groupCourses)) {
             return [[-1], [-1]];
         }
-
-        $learnedCourseSetIds = [-1];
-        $learningCourseSetIds = [-1];
+        $members = ArrayToolkit::index($members, 'courseId');
+        $learnedCourseSetIds = [];
+        $learningCourseSetIds = [];
         foreach ($groupCourses as $courseSetId => $courses) {
             $isLearned = 1;
             array_map(function ($course) use ($members, &$isLearned) {
@@ -387,7 +389,7 @@ class CourseController extends CourseBaseController
             }
         }
 
-        return [$learnedCourseSetIds, $learningCourseSetIds];
+        return [$learnedCourseSetIds ?: [-1], $learningCourseSetIds ?: [-1]];
     }
 
     /**
@@ -481,5 +483,10 @@ class CourseController extends CourseBaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    protected function getCourseThreadService()
+    {
+        return $this->createService('Course:ThreadService');
     }
 }

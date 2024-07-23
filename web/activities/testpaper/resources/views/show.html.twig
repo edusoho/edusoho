@@ -2,14 +2,33 @@
 {% if app.request.get('preview') %}
   {{ render(controller('AppBundle:Activity/Testpaper:preview', {task: {courseId: activity.fromCourseId, activityId: activity.id}})) }}
 {% else %}
-    {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
+  {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
 
+  {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
+    {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
+  {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
+    {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
+  {% else %}
     {% if not latestAnswerRecord %}
       {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
-    {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
-      {{ render(controller('AppBundle:Testpaper/Testpaper:showResult', {answerRecordId: latestAnswerRecord.id, type: 'activity'})) }}
     {% else %}
-      {% include('@activity/testpaper/resources/views/show/do-testpaper.html.twig') %}
+      {% if latestAnswerRecord.status == 'reviewing' %}
+        {{ render(controller('AppBundle:Testpaper/Testpaper:showResult', {answerRecordId: latestAnswerRecord.id, type: 'activity'})) }}
+      {% elseif latestAnswerRecord.status == 'finished' %}
+        {% if app.request.get('doAgain')|default(false) == '1' %}
+          {% if activity.ext.remainderDoTimes|default(0) == 0 and activity.ext.isLimitDoTimes == 1 %}
+            {{ render(controller('AppBundle:Testpaper/Testpaper:showResult', {answerRecordId: latestAnswerRecord.id, type: 'activity'})) }}
+          {% else %}
+            {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
+          {% endif %}
+        {% else %}
+          {{ render(controller('AppBundle:Testpaper/Testpaper:showResult', {answerRecordId: latestAnswerRecord.id, type: 'activity'})) }}
+        {% endif %}
+      {% else %}
+        {% include('@activity/testpaper/resources/views/show/do-testpaper.html.twig') %}
+      {% endif %}
     {% endif %}
-    
+  {% endif %}
+
+
 {% endif %}

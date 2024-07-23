@@ -11,8 +11,8 @@
 	        {% if testpaper.status == 'open' %}
 		        <div class="content">
 		        	{% if testpaperActivity.testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
-			          <div class="text-16 ">
-                  {{'course.plan_task.activity_manage.testpaper.will_begin_tips'|trans({'%startTime%':activity.startTime|date('Y-m-d H:i:s')})}}
+			          <div class="text-16">
+                  {{'course.plan_task.activity_manage.testpaper.will_begin_tips'|trans({'%startTime%':activity.startTime|date('Y-m-d H:i:s')})|raw}}
 			          </div>
 		          {% else %}
 								<div class="text-16 ">

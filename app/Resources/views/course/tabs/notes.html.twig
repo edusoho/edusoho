@@ -30,7 +30,7 @@
           {% for task in tasks %}
             <li class="{% if task.id == selectedTaskId %} active {% endif %}">
               <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: task.id, selectedCourse: selectedCourseId }) }}#notes" title="{{ task.title }}">
-                {{ task.title|sub_text(16) }}
+                {{ task.title }}
               </a>
             </li>
           {% endfor %}
@@ -97,7 +97,7 @@
             · <span>{{ note.updatedTime|smart_time }}</span>
             {% if task %}
               · {% if member %}
-              <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}" class="period"
+              <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}" class="period {% if courseSet.status == 'closed' %}js-handleLearnOnMessage{% endif %}"
                 target="_blank">
                 {{ task.title }}
               </a>
@@ -120,7 +120,7 @@
                    data-url="{{ path('common_report_tags_modal', {targetType: 'course_note', targetId: note.id, modalTarget: 'js-course-note-modal-'~ note.id, contentTarget: 'js-course-note-after-' ~ note.id }) }}">举报</a>&nbsp;&nbsp;&nbsp;&nbsp;
               {% endif %}
               <span class="icon-favour">
-                <a href="javascript:;" class="js-like {% if note.id in likeNoteIds %}color-primary{% endif %}"
+                <a href="javascript:;" class="{% if courseSet.status != 'closed' %}js-like{% else %}js-handleLearnOnMessage{% endif %} {% if note.id in likeNoteIds %}color-primary{% endif %}"
                   data-like-url="{{ path('note_like', {id: note.id}) }}"
                   data-cancel-like-url="{{ path('note_cancel_like', {id: note.id}) }}">
                   <i class="es-icon es-icon-thumbup"></i>

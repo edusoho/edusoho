@@ -13,7 +13,7 @@
 <tbody>
 {% for orderRefund in orderRefunds %}
   <tr id="order_refund-table-{{orderRefund.id}}">
-    <td>{{ orderRefund.title }}</td>
+    <td style="font-size: 14px;">{{ orderRefund.title }}</td>
     <td>{{ orders[orderRefund.order_id].sn }}<br>{{ orderRefund.sn }}</td>
     <td class="text-right">{{ orderRefund.amount|to_cash(0) }}  {{ 'site.currency.CNY'|trans }}</td>
     <td>{{ orderRefund.created_time|date('Y-n-d') }}</td>

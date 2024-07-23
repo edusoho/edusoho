@@ -70,6 +70,7 @@ site.default.all: 所有
 site.default.user: 用户
 site.default.course: 课程
 site.default.question.bank: 题库
+site.default.item.bank.exercise: 题库练习
 site.default.plan: 计划
 site.default.more: 更多
 site.default.manage: 管理
@@ -82,9 +83,11 @@ site.default.times: 次
 site.default.detail: 明细
 site.default.program_name: 默认教学计划
 site.default.plan_setting: 默认计划设置
+site.default.mobile: 手机号
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示
+site.tips.delist: 确认下架？
 site.qrcode_tips: 扫一扫
 site.tips.scan_qrcode_tips: 扫二维码继续学习 二维码时效为半小时
 site.tips.exercise_qrcode_tips: 扫描右侧二维码 前往移动端学习
@@ -309,7 +312,7 @@ user.fields.phone_label: 电话
 user.fields.sign_label: 个人签名
 user.fields.introduction_label: 自我介绍
 user.fields.web_site_label: 个人网站
-user.fileds.wechat: 微信
+user.fileds.wechat: 微信号
 user.fileds.qq: QQ
 user.fields.gender.male: 男
 user.fields.gender.female: 女
@@ -398,6 +401,7 @@ form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
 form.btn.upload: 上传
+form.btn.reupload: 重新上传
 form.btn.picture_crop: 选择要上传的图片
 form.btn.remove: 移除
 form.btn.comment: 发表评论
@@ -648,7 +652,9 @@ order.paid_course.minus: 抵扣
 order.refund: 退出学习
 order.refund.item_type: 商品类型
 order.refund.reason: 退出原因
-order.refund.reason_tips: 请输入您的退学原因
+order.refund.reason_tips: 请输入退出原因
+order.refund.reason_warning: 退出后将无法继续学习，需重新加入或购买！
+order.refund.reason_select_tips: 请选择退出原因
 order.refund.apply_for_btn: 申请退款
 order.refund.refund_is_not_supported: 暂不支持退款，如有疑问，请联系客服。
 order.refund.buy_price: （购买时的价格：%amount%元）
@@ -960,7 +966,7 @@ buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商�
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
-course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。
+course.remove_students_tips: 课程已关闭无法学习，若希望课程不对外展示但学员仍可继续学习，可将课程发布后设置“下架”
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
@@ -1002,7 +1008,7 @@ course.teaching_plan.sort.save: 保存排序
 course.teaching_plan.sort.cancel: 取消排序
 course.teaching_plan.create.max_plan_number: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.teaching_plan.create.new_plan_name: 新计划名称
-course.teaching_plan.create.create_tips: 教学计划创建后“学习模式”将不能修改。
+course.teaching_plan.create.create_tips: 计划发布后“学习模式”无法修改。
 course.teaching_plan.create.name: 名称
 course.teaching_plan.create.mode: 学习模式
 course.teaching_plan.create.mode.free: >
@@ -1016,7 +1022,7 @@ course.teaching_plan.create.status: 状态
 course.teaching_plan.create.operation: 操作
 course.teaching_plan.edit.copy: 复制%title%为一个新的教学计划
 course.teaching_plan.expiry_date: 学习有效期
-course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再更改模式。
+course.teaching_plan.expiry_date.not_change_tips: 计划首次发布后“学习有效期”不能再更改模式。
 course.teaching_plan.expiry_date.anytime: >
   <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
 course.teaching_plan.expiry_date.real_time: >
@@ -1029,6 +1035,8 @@ course.teaching_plan.expiry_date.end_date_mode: 按截止日期
 course.teaching_plan.expiry_date.days_mode: 按有效天数
 course.teaching_plan.publish_btn: 发布计划
 course.teaching_plan.manage: 计划管理
+course.teaching_plan.show_page: 开启前台展示
+course.teaching_plan.hide_page: 下架
 course.teaching_plan.delete_btn: 删除
 course.teaching_plan.copy_btn: 复制
 course.teaching_plan.preview_btn: 预览
@@ -1048,6 +1056,7 @@ course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成
 course.plan_setup.finish_rule.nothing: 无限制
+course.plan_setup.finish_rule.indefinite.duration: 无限期
 course.plan_setup.member_numbers: 课程人数
 course.plan_setup.member_numbers.view_rule_btn: 【查看直播课程细则】
 course.plan_setup.summary: 计划简介
@@ -1065,6 +1074,9 @@ course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
+course.marketing_setup.setup.is_show_label: 前台展示
+course.marketing_setup.setup.can_show: 开启
+course.marketing_setup.setup.can_hide: 关闭
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
 course.marketing_setup.price.free: 免费
 course.marketing_setup.price.not_free: 收费
@@ -1078,7 +1090,7 @@ course.marketing_setup.rule: 学习规则
 course.marketing_setup.rule.expiry_date: 学习有效期
 course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划下架后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
@@ -1112,6 +1124,7 @@ course.members_manage.export.field_learn_time: 累加学习时长
 course.members_manage.official_student: 正式学员
 course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
+course.members_manage.official_student.all_update_deadline: 全员修改有效期
 course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
 course.members_manage.official_student.seq: 序号
@@ -1230,12 +1243,17 @@ item_bank_exercise.assessment_exercise.add_new_module: 添加新模块
 item_bank_exercise.assessment_exercise.add_assessment: 添加试卷
 item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
 item_bank_exercise.chapter_exercise.category_empty: 当前题库练习还未添加章节
+item_bank_exercise.chapter_exercise.item: 项
+item_bank_exercise.chapter_exercise.batch.release: 批量发布
+item_bank_exercise.chapter_exercise.batch.cancellation: 批量取消
+item_bank_exercise.chapter_exercise.batch.num.clear: 清除
 item_bank_exercise.chapter_exercise.empty: 什么都没有，快去开启章节练习吧
 item_bank_exercise.assessment_exercise.empty: 什么都没有，快去开启试卷练习吧
 item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学员提供刷题练习
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.marketing_setup.rule.show: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
@@ -1244,11 +1262,13 @@ item_bank_exercise.my_teaching_notice: 题库练习，请前往 <a class="alert-
 exercise.answers.done_num: 累计答题数
 exercise.answers.completion_rate: 答题率
 exercise.answers.mastery_rate: 掌握率
+item_bank_exercise.continue.back-btn: 返回章节目录
 
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
 course.testpaper_check.empty: 暂无数据
+course.testpaper_check.tips: 暂无相关内容
 course.testpaper_check.start_date: '开始日期：'
 course.testpaper_check.status.check: 已批
 course.testpaper_check.status.not_check: 未批
@@ -1276,6 +1296,7 @@ course.homework_check.review_btn: 批阅
 course.homework_check.review.empty: 暂无数据
 course.homework_check.review.name: 姓名
 course.homework_check.review.score: 成绩
+course.homework_check.review.begin_time: 开考时间
 course.homework_check.review.submit_time: 提交时间
 course.homework_check.review.submit_num: 作业次数
 course.homework_check.review.submit_num_detail: 第%num%次
@@ -1446,6 +1467,7 @@ course.status.followed: 已收藏
 course.status.follow: 收藏
 course.status.closed: 已关闭
 course.status.unpublished: 未发布
+course.status.delist: 已下架
 course.status.serialized: 更新中
 course.status.finished: 已完结
 course.status.published: 已发布
@@ -1464,9 +1486,10 @@ course.share: 分享
 course.belong_to_classroom_tips: >
   该课程属于
   <a href="%classroomUrl%">%classroomTitle%</a>
-  请加入后再学习
+  <div>请加入后再学习</div>
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
 item_bank_exercise.course_limited_tips: 抱歉，该题库练习为限制题库练习，请联系客服
+goods.show_page.closed_tips: 商品已关闭，不允许加入和购买
 course.course_closed_tips: 抱歉，教学计划%title%已关闭！
 course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
@@ -1744,6 +1767,11 @@ course.question_manage.manage.material: 材料
 course.question_manage.manage.belong_change_tips: 此题目若被引用，更改从属是可能会影响会课时的练习，请谨慎操作！
 course.question_manage.edit: 编辑题目
 course.question_manage.import.btn: 导入题目
+course.question_manage.start.import: 开始导入
+course.question_manage.new.import.instructions: 新版导入说明
+course.question_manage.guide.message: 一种全新的题目导入方式，支持公式、表格、特殊字符批量识别导入，提高管理运营效率。新版题目导入分为【简单版】和【完整版】。
+course.question_manage.guide.message.tip1: 1.【简单版】可在之前的word模板上增加导入模式和说明（复制新模板上的文案粘贴到旧模板上），自动识别题型，“简单版”仅支持单选题、多选题、填空题、判断题、问答题。
+course.question_manage.guide.message.tip2: 2.【完整版】在“简单版”基础上增加不定项选择题、材料题，需下载新模板使用。
 course.question_manage.import.modal_title: 题目导入
 course.question_manage.import.new_hint: 上传文档前， 请先仔细阅读
 course.question_manage.import.drag_document_hint: 或将文档拖拽至此
@@ -1751,14 +1779,35 @@ course.question_manage.import.docx_support_hint: 文档仅支持DOCX格式，
 course.question_manage.import.download_template: 模板下载
 course.question_manage.import.doc_to_docx_hint: DOC如何转换成DOCX?
 question_manage.import.doc_to_docx_hint.tutorial: 查看教程
+question_manage.import.click: 单击
+question_manage.import.description.supported: 导入说明：支持上传
+question_manage.import.easy: (简单)
+question_manage.import.integrity: (完整)
+question_manage.import.easy.tips: 可在之前的word模版上增加导入模式和说明（复制新模版上的文案粘贴），自动识别提醒，仅支持单选、多选、填空、 判断、问答题
+question_manage.import.easy.integrity: 需每题标明题型，且支特单选、多选、不定项选择、填空、判断、问答题材料题
+question_manage.import.formate.text: 格式文档
+question_manage.import.format.conversion: 格式转换
+question_manage.import.new.version.introduction: 新版导入功能介绍
+question_manage.import.administrator.tip1: 支持常见公式、表格、特殊字符等内容识别导入
+question_manage.import.administrator.tip2: 提升导入识别准确率，让题目导入更简单
+question_manage.import.non-administrator-tip: 升级云能力可使用导入功能，需联系超级管理员进行操作
+question_manage.import.non.administrator.close.btn: 我知道了
+question_manage.ai_analysis.introduction: 【AI 题目解析助手】新功能上线！
+question_manage.ai_analysis.introduction.content: 我是您的 AI 题目助手，点击“AI 解析”查看我为您搜寻的题目解析，解析内容仅供参考。
+question_manage.ai_analysis.introduction.tip1: <b>解析能力：</b>仅针对文字的题目内容生成题目解析，含图片和视频类的题目不展示生成AI解析入口。
+question_manage.ai_analysis.introduction.tip2: <b>教师端：</b>创建题目时增加AI解析按钮，导入题目时，无解析的题目增加AI解析按钮，可单独生成题目解析。
+question_manage.ai_analysis.introduction.tip3: <b>学员端：</b>查看解析页面中，无解析的题目将为学员提供AI解析功能。
+question_manage.ai_analysis.introduction.close: 我知道了
 course.question_manage.import.upload_document: 上传文档
-course.question_manage.import.reupload_document: 重新上传文档
+course.question_manage.import.reupload_document: 重新上传
+course.question_manage.import.Successful: 上传成功
 course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
 course.question_manage.import.filename_length_limit: 文件名称不能超过50个字符
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
 course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
+course.question_manage.import.text.rule.tip: 请上传DOCX或XLSX格式的文档
 course.question_manage.import.rule: 导入规则说明
 course.question_manage.export_hint: (当前题目导出仅支持新模板)
 course.question_manage.export_btn: 导出题目
@@ -1800,6 +1849,7 @@ course.testpaper_manage.close_btn: 关闭试卷
 course.testpaper_manage.close_tips: 真的要关闭试卷%name%吗？
 course.testpaper_manage.testpaper_quoted_close_tips: 该试卷已被%taskName%引用，关闭试卷可能会导致学员无法参与考试，请勿关闭试卷
 course.testpaper_manage.edit_btn: 编辑试卷信息
+course.testpaper_manage.edit_tips: 当前试卷可能已被应用在考试中，修改试卷内容，可能会对学员答题记录、答题成绩等产生影响，是否继续？
 course.testpaper_manage.manage_btn: 管理题目
 course.testpaper_manage.repead_btn: 重新生成题目
 course.testpaper_manage.export: 导出试卷
@@ -1985,7 +2035,7 @@ course.plan_task.live_finish_tips: 直播已经结束
 course.plan_task.converting: 转码中
 course.plan_task.convert_failed: 转码失败
 course.plan_task.which_chapter: >
-  </i>第<span class="number">%chapterNumber%</span>%chapter%<span class="colon">%colon%</span><span class="title">%title%</span>
+  </i>第%chapterNumber%%chapter%%colon%%title%
 course.plan_task.which_lesson: >
   </i>课时<span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>
 course.plan_task.create_btn: 添加
@@ -2122,6 +2172,20 @@ course.plan_task.activity_manage.exercise.info_tips: >
   本次练习随机生成<span class="color-success">%itemCount%题</span>
 course.plan_task.activity_manage.exercise.info_tips.question_lack: 题目数与老师设定不一致，请联系老师处理！
 course.plan_task.activity_manage.exercise.total_questions: 共%itemCount%题
+course.plan_task.activity_manage.exercise.single_choice: 单选题
+course.plan_task.activity_manage.exercise.choice: 多选题
+course.plan_task.activity_manage.exercise.uncertain_choice: 不定项选择题
+course.plan_task.activity_manage.exercise.determine: 判断题
+course.plan_task.activity_manage.exercise.fill: 填空题
+course.plan_task.activity_manage.exercise.essay: 问答题
+course.plan_task.activity_manage.exercise.material: 材料题
+course.plan_task.activity_manage.exercise.questions: '%itemCount% 题'
+course.plan_task.activity_manage.exercise.selective.answer.mode: 选择答题模式
+course.plan_task.activity_manage.exercise.test.mode: 测验模式
+course.plan_task.activity_manage.exercise.one.question.one.answer.mode: 一题一答模式
+course.plan_task.activity_manage.exercise.currently.not.supported.on.pc: （暂不支持PC端）
+course.plan_task.activity_manage.exercise.continue.tips-title: 当前练习模式为【一题一答】，PC端暂不支持，请移步手机端继续答题
+course.plan_task.activity_manage.exercise.continue.back-btn: 返回课程目录
 course.plan_task.activity_manage.exercise.confirm_submit: 确认提交
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.exercise.finished_condition: 提交练习
@@ -2182,28 +2246,42 @@ course.plan_task.activity_manage.testpaper.default_comment3: 你真棒！我为�
 course.plan_task.activity_manage.testpaper.default_comment4: 有点松懈了吧？继续加油吧！
 course.plan_task.activity_manage.testpaper.default_comment5: 用心、专注、坚持，你能做的更好的！
 course.plan_task.activity_manage.testpaper.comment_remove: 移除
+course.plan_task.activity_manage.testpaper.validity.period.of.examination: 考试有效期
+course.plan_task.activity_manage.testpaper.please.enter.endtime: 请输入结束时间
+course.plan_task.activity_manage.testpaper.number.of.remaining.tests: 剩余考试次数
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 course.plan_task.activity_manage.testpaper.times: 考试次数
+course.plan_task.activity_manage.testpaper.mode: 考试模式
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
-course.plan_task.activity_manage.testpaper.times.once: 单次
+course.plan_task.activity_manage.testpaper.times.once: 限制
 course.plan_task.activity_manage.testpaper.times.always: 不限
 course.plan_task.activity_manage.testpaper.show_answer: 合格之后显示答案和解析
 course.plan_task.activity_manage.testpaper.show_answer_tips: 考试次数不限时，设置生效。
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
+course.plan_task.activity_manage.testpaper.topic.out.of.order: 题目乱序
+course.plan_task.activity_manage.testpaper.option.out.of.order: 选项乱序
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
-course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
+course.plan_task.activity_manage.testpaper.question.disorder: 开启后，学员进入考试时，对应大题内所有小题将随机排序
+course.plan_task.activity_manage.testpaper.option.disorder: 开启后，学员进入考试时，所有选择题选项将随机排序
+course.plan_task.activity_manage.testpaper.rangedate: "<div>1、不限：没有时间限制，永久有效；</div>2、指定日期区间：有固定开始和结束时间，在此以为外的时间无法参加考试；<div>3、指定开始时间：仅指定开始时间，不指定结束时间，永久有效，未到开始时间无法参加考试；</div>"
+course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制，考试次数设置为1次时，“重考间隔”不生效。
 course.plan_task.activity_manage.testpaper.time_length_tips: 0分钟，表示无限制
 course.plan_task.activity_manage.testpaper.time: 考试时间
 course.plan_task.activity_manage.testpaper.time_tips: 学员只能在时间范围内参加考试！
 course.plan_task.activity_manage.testpaper.mode.always: 不限
 course.plan_task.activity_manage.testpaper.mode.realTime: 指定
+course.plan_task.activity_manage.testpaper.mode.realTimeRange: 指定日期区间
+course.plan_task.activity_manage.testpaper.mode.startTime: 指定开始时间
 course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
 course.plan_task.activity_manage.testpaper.score_pass: 考试合格
 course.plan_task.activity_manage.homework.score_pass: 作业合格
 course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
-course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
+course.plan_task.activity_manage.testpaper.not_start_tips: 考试未开始
+course.plan_task.activity_manage.testpaper.end_tips: 考试已结束
+course.plan_task.activity_manage.testpaper.start_time_tips: 开考时间
+course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始\n 请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
   本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
 course.plan_task.activity_manage.testpaper.pass_score: >
@@ -2212,10 +2290,29 @@ course.plan_task.activity_manage.testpaper.answer: >
   请在<span class="color-primary">%limitedTime%分钟</span>内作答。
 course.plan_task.activity_manage.testpaper.once_trance: >
   仅有<span class="color-danger">一次</span>考试机会。
-course.plan_task.activity_manage.testpaper.limit_tips: 
-  <span class="color-warning">温馨提示：考试一旦开始，倒计时结束后将自动交卷。</span>
+course.plan_task.activity_manage.testpaper.limit_tips:
+  温馨提示：考试一旦开始，倒计时结束后将自动交卷。
+course.plan_task.activity_manage.testpaper.enddate.limit_tips: 温馨提示：当前考试已结束，请点击按钮查看考试结果
+course.plan_task.activity_manage.testpaper.limit_tips1:
+  <span class="color-gray">温馨提示：本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
+course.plan_task.activity_manage.testpaper.one_limit_tips:
+  <span class="color-gray">温馨提示：仅有一次考试机会，考试一旦开始，倒计时结束后将自动交卷。</span>
+course.plan_task.activity_manage.testpaper.one_limit_tips1:
+  <span class="color-gray">温馨提示：仅有一次考试机会，本次考试不自动交卷，实时显示考试用时，中途离开不计时。</span>
+course.plan_task.activity_manage.testpaper.questionNum: 题目数
+course.plan_task.activity_manage.testpaper.questionCount: 题
+course.plan_task.activity_manage.testpaper.questionScore: 分
 course.plan_task.activity_manage.testpaper.start_exam: 开始考试
 course.plan_task.activity_manage.testpaper.close_tips: 该考试已关闭，请联系教师！
+course.plan_task.activity_manage.testpaper.mock_type: 模拟考试
+course.plan_task.activity_manage.testpaper.mock_tips1: 倒计时结束自动交卷
+course.plan_task.activity_manage.testpaper.mock_tips2: 考试中离开，倒计时不会停止
+course.plan_task.activity_manage.testpaper.mock_tips3: 模拟考试时长必须 >0
+course.plan_task.activity_manage.testpaper.practise_type: 练习考试
+course.plan_task.activity_manage.testpaper.practise_tips1: 不限制考试用时，不自动交卷
+course.plan_task.activity_manage.testpaper.practise_tips2: 考试中离开不计考试用时
+course.plan_task.activity_manage.testpaper.practise_tips3: 考试时长不影响学员答卷时间
+
 course.plan_task.activity_manage.video: 视频
 course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕
@@ -2447,6 +2544,7 @@ open_course.lesson.create_error: 课时创建失败
 # 班级
 classroom: 班级
 column: 专栏
+classroom.search.empty.course: 暂时没有合适的课程~
 classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
 classroom.buy_classroom.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%avatarSettingUrl%" class="alert-link" target="_blank">点击设置</a>
@@ -2813,7 +2911,7 @@ classroom.answer_questions_tips: 对于提问做到有问必答，帮您扫清�
 classroom.testpaper_review: 24小时阅卷点评
 classroom.testpaper_review_tips: 24小时内批阅您提交的试卷，给予有针对性的点评
 classroom.homework_review: 24小时作业批阅
-classroom.set_head_teacher_tips: 班主任负责管理整个%name%，班主任只有一位，并且必须要由老师来担任。
+classroom.set_head_teacher_tips: 班主任负责管理整个班级，班主任只有一位，并且必须要由老师来担任。
 classroom.set_teacher: 设置教师
 classroom.set_teacher_tips: >
   <div>相关页面中的老师列举将会按照这里设定的顺序显示。</div>
@@ -2830,6 +2928,8 @@ classroom.add_course_tips: 班级数据处理中，请耐心等待。
 classroom.delete_btn: 删除
 classroom.free_course: 免费
 classroom.teach_plan: 教学计划
+classroom.closed.course: 关闭课程
+classroom.open.course: 发布课程
 classroom.live_course_playing: 正在直播中
 classroom.live: 直播
 classroom.task_num: >
@@ -3045,6 +3145,9 @@ user.init.password_placeholder: 请输入您的密码
 user.init.password_placeholder_again: 请再输入一遍您的密码
 user.init.password.confirm.password: 确认提交
 user.init.password.submit.password.loading: 提交中...
+register.read.and.agree: 阅读并同意
+register.agree.and.register: 同意并注册
+register.agree.and.sign.in: 同意并登录
 
 # 用户第三方登录
 user.oauth.login_by_email: 邮箱
@@ -3094,6 +3197,7 @@ user.settings.oauth_menu: 第三方登录
 user.settings.avatar: >
   <strong>您还没有头像</strong>。拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="%setAvatar%" class="alert-link" target="_blank">点击设置</a>
 user.settings.upload.img.tip: 请上传jpg, gif, png格式的图片, 建议图片大小不超过2MB
+user.settings.upload.img.tips: 请上传JPG/GIF/PNG格式的图片，大小不超过5MB，建议尺寸为400X400
 user.settings.upload.qrcode.tip: 助教请务必上传二维码
 user.settings.scrm: 销客助手绑定
 user.settings.scrm.tips: 可同步助教信息到企业微信，方便助教在微信群管理学员并进行社群服务
@@ -3248,7 +3352,7 @@ user.settings.security.oauth_bind.success: 帐号绑定成功
 user.settings.security.oauth_bind.exist_account: 该第三方帐号已经被其他帐号绑定，不能重复绑定。
 user.settings.security.oauth_bind.authentication_fail: 授权失败，请重试绑定。
 user.settings.security.oauth_bind.duplicate_bind: 您已经绑定了该第三方网站的帐号，不能重复绑定。
-
+user.settings.security.oauth_bind.state.authentication_fail: 令牌校验失败。
 
 # 个人设置模块-基础信息
 user.settings.basic_info: 基础信息
@@ -3598,8 +3702,10 @@ search.empty: 没有搜到相关%name%，请换个关键词试试！
 search.content_title: 搜索
 search.relative_courses_result: 共找到<span class="color-danger phm">%count%</span>门<span class="color-danger phm">“%keywords%”</span>相关课程
 search.relative_classrooms_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关%classroom%
+search.relative_item_bank_exercises_result: 共找到<span class="color-danger phm">%count%</span>个<span class="color-danger phm">“%keywords%”</span>相关题库练习
 search.result_course_copy: 共找到<span class="color-danger phm">%count%</span>门课程
 search.result_classrooms_copy: 共找到<span class="color-danger phm">%count%</span>个%classroom%
+search.result_item_bank_exercises_copy: 共找到<span class="color-danger phm">%count%</span>个题库练习
 search.all_courses: 全部课程
 search.vip_courses: 会员课程
 search.free_courses: 免费课程
@@ -3608,6 +3714,8 @@ search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
 search.free_item_bank: 免费题库
+search.all_item_bank_exercise: 全部题库练习
+search.free_item_bank_exercise: 免费题库练习
 
 
 #云资源
@@ -3751,6 +3859,13 @@ cloud_search.thread.recommend.content_title: 热门小组
 cloud_search.article: 资讯
 cloud_search.article.result: >
   为您找到资讯结果约 <span class="color-danger">%counts%</span>个
+
+cloud_search.itemBankExercise: 题库练习
+cloud_search.itemBankExercise.result: >
+  为您找到题库练习结果约 <span class="color-danger">%counts%</span>个
+cloud_search.itemBankExercise.evaluate: %ratingNum%人评价
+cloud_search.itemBankExercise.recommend.content_title: 推荐题库练习
+cloud_search.itemBankExercise.recommend.empty: 暂无推荐题库练习
 
 # 小组
 group: 小组频道
@@ -4074,7 +4189,7 @@ share.qzone_share: 分享到QQ空间
 
 # 移动端
 mobile.page_title: 移动学习
-mobile.app_name: 阔知学堂
+mobile.app_name: 知享学堂
 mobile.app_tips: 将学校装进口袋，移动学习，随时随地。
 mobile.app_download_btn: 下载APP
 mobile.app_download_tips: >
@@ -4088,8 +4203,18 @@ mobile.step_one_tips: 扫描二维码，下载手机APP。
 mobile.Android_client: Android 客户端
 mobile.iPhone_client: iPhone客户端
 mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+  <span class="member">2</span>第二步: 打开知享学堂APP，扫描网校二维码。
 mobile.vip_free_study: 会员免费买
+
+mobile.middle_page.top: 把学校装进口袋
+mobile.middle_page.open: 点击打开
+mobile.middle_page.browser: 点击右上角...在"浏览器中打开"继续跳转
+task.app_modal.title: 仅支持 APP 学习
+task.app_modal.intro: 请下载 / 打开 
+task.app_modal.app: APP
+task.app_modal.learning: 后继续学习
+task.app_modal.use: 使用手机
+task.app_modal.sweep: 扫一扫
 
 # 客服
 customer_service: 在线客户服务
@@ -4475,7 +4600,7 @@ my.teaching.open_course.material.upload_time: 上传于
 my.teaching.question_bank.create: 创建题库
 my.teaching.question_bank.instructions: 使用说明
 my.teaching.question_bank.list: 题库列表
-my.teaching.question_bank.name_tip: 最多输入30个字符
+my.teaching.question_bank.name_tip: 最多输入100个字符
 my.teaching.question_bank.info: 题库信息
 my.teaching.question_bank.exercise_set: 题库练习设置
 my.teaching.question_bank.name_label: 题库名称
@@ -4593,6 +4718,7 @@ my.learning.thread.target_course_deleted: 课程已删除
 my.learning.course: 我的课程
 my.learning.course.learning: 学习中
 my.learning.course.learned: 已学完
+my.learning.course.expired: 已过期
 my.learning.course.favorite: 收藏
 my.learning.course.favorited: 已收藏
 my.learning.course.favorite_empty: 暂无已收藏的课程
@@ -4814,8 +4940,10 @@ change_log: 更新日志
 common.courseStatus.draft: 未发布
 common.courseStatus.published: 已发布
 common.courseStatus.closed: 已关闭
+common.courseStatus.unpublished: 已下架
 common.classroomStatus.draft: 未发布
 common.classroomStatus.published: 已发布
+common.classroomStatus.unpublished: 已下架
 common.classroomStatus.closed: 已关闭
 common.fileType.video: 视频
 common.fileType.audio: 音频
@@ -5126,8 +5254,10 @@ admin.course_manage.manage.published_count: >
   已发布：<strong class="inflow-num">%publishedNum%</strong>个
 admin.course_manage.manage.closed_count: >
   已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.course_manage.manage.draft_count: >
+  未发布：<strong class="inflow-num">%draftNum%</strong>个
 admin.course_manage.manage.unpublish_count: >
-  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+  已下架：<strong class="inflow-num">%unPublishedNum%</strong>个
 admin.course_set_manage.recommend.tips: 优先按推荐序号由小至大排序，未推荐的按创建时间倒序
 admin.course_set_manage.manage.number: 课程编号
 admin.course_manage_modal.manage.number: 计划编号
@@ -5309,6 +5439,9 @@ admin.user.statistics.data_detail.active_chart: 活跃度
 admin.user.statistics.data_detail.teaching_plan_name: 计划名
 admin.user.statistics.data_detail.learn_detail: 学习详情
 admin.user.statistics.data_detail.student_trend_ninety_days: 90天
+admin.user.statistics.data_detail.student_trend_one_year: 1年
+admin.user.statistics.data_detail.student_trend_two_year: 2年
+admin.user.statistics.data_detail.student_trend_three_year: 3年
 admin.user.statistics.data_detail.plan_progress_tip: 平均计划进度为所有计划的平均数
 admin.user.statistics.data_detail.task_progress_tip: %taskName%完成比为已完成%taskName%数比总%taskName%数
 admin.user.statistics.data_detail.from_classroom: 来自班级
@@ -5525,8 +5658,10 @@ admin.classroom_manage.manage.published_count: >
   已发布：<strong class="inflow-num">%publishedNum%</strong>个
 admin.classroom_manage.manage.closed_count: >
   已关闭：<strong class="inflow-num">%closedNum%</strong>个
+admin.classroom_manage.manage.draft_count: >
+  未发布：<strong class="inflow-num">%draftNum%</strong>个
 admin.classroom_manage.manage.unpublish_count: >
-  未发布：<strong class="inflow-num">%unPublishedNum%</strong>个
+  已下架：<strong class="inflow-num">%unPublishedNum%</strong>个
 admin.classroom_manage.manage.number_th: %title%编号
 admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
@@ -5534,6 +5669,7 @@ admin.classroom_manage.manage.student_number_th: 学员数
 admin.classroom_manage.manage.price_th: 价格
 admin.classroom_manage.manage.creator: 创建者/时间
 admin.classroom_manage.manage.status_th: 状态
+admin.classroom_manage.manage.showable: 前台展示
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
 admin.classroom_manage.manage.category: 分类
@@ -5543,7 +5679,8 @@ admin.classroom_manage.manage.price: %price%元
 admin.classroom_manage.manage.origin_price: 原价 %priceAll%元
 admin.classroom_manage.manage.published: 已发布
 admin.classroom_manage.manage.closed: 已关闭
-admin.classroom_manage.manage.unpublished: 未发布
+admin.classroom_manage.manage.unpublished: 已下架
+admin.classroom_manage.manage.draft: 未发布
 admin.classroom_manage.manage.manage_btn: 管理
 admin.classroom_manage.manage.coin_price: 原价 %coinPriceAll% %coinname%
 
@@ -5825,6 +5962,11 @@ admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo
 admin.setting.site.icp.help_block: 根据《非经营性互联网信息服务备案管理办法》（原信息产业部令第33号令）规定，备案成功后需将工信部下发的主体备案号放置在网页底部并链接至工信部网址:<a href="http://beian.miit.gov.cn" target=_blank>beian.miit.gov.cn</a>供公众查询核对。若违反相关部门规定，会存在违法风险。
 admin.setting.site.public_security.help_block: 依据 《计算机信息网络国际联网安全保护管理办法》相关规定，各网站在工信部备案成功后，需在网站开通之日起30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>提交公安联网备案申请。公安联网备案审核通过后，您需在30日内登录<a href="http://www.beian.gov.cn/" target=_blank>全国互联网安全管理服务平台</a>，在您的已备案网站详情中，将网站公安机关备案号及图标信息编辑放置在网页底部。
 admin.setting.site.logo.view_btn: 点击查看
+admin.setting.table.status.tooltip:
+  <div style="text-align:left;">未发布：学员不可加入</div>
+  <div style="text-align:left;">已发布：学员可加入、可学习</div>
+  <div style="text-align:left;">已下架：学员前台不可见、可加入、可学习</div>
+  <div style="text-align:left;">已关闭：学员前台不可见、不可学习</div>
 admin.setting.site.favicon: 浏览器图标
 admin.setting.site.favicon.help_block: 建议上传ico格式的图标文件，支持 ico, jpg, gif, png等格式, 建议尺寸 32×32px。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.setting.site.seo_keywords: SEO关键词
@@ -6247,7 +6389,8 @@ admin.mobile_manage.discovery_upgrade.transfer_btn: '去使用'
 
 # 微信通知管理
 admin.wechat_notification.switch: 微信通知设置
-admin.wechat_notification.template: 微信通知模板
+admin.wechat_notification.template: 服务号通知模板
+admin.wechat_notification.message_subscribe.template: 订阅通知模板
 admin.wechat_notification.template_name: 模板名称
 admin.wechat_notification.template_content_sample: 模板内容示例
 admin.wechat_notification.send_object: 发送对象
@@ -6267,7 +6410,7 @@ admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前�
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
 admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 admin.wechat.notification.go_authorizer: 立即授权
-admin.wechat_notification.message_subscribe.template_content_sample: 微信模板内容示例
+admin.wechat_notification.message_subscribe.template_content_sample: 订阅通知模板内容示例
 admin.wechat_notification.message_subscribe.template_subscribe_position: 订阅位置
 admin.wechat_notification.message_subscribe.sms_template_content_sample: 短信模板内容示例
 admin.wechat_notification.message_subscribe.disable_tip: 注意：第一次使用需要授权网站生成微信通知模板
@@ -6296,8 +6439,6 @@ admin.operation_analysis.register.web_mobile: 网站手机注册
 admin.operation_analysis.register.web_email: 网站邮箱注册
 admin.operation_analysis.register.weibo: 新浪微博
 admin.operation_analysis.register.qq: QQ
-admin.operation_analysis.register.discuz: discuz
-admin.operation_analysis.register.phpwind: phpwind
 admin.operation_analysis.register.weixin: 微信
 admin.operation_analysis.register.import: 手动导入
 admin.operation_analysis.register.other: 其他
@@ -6734,8 +6875,13 @@ admin.user.manage.form.time_option.register: 注册时间
 admin.user.manage.form.time_option.default: --时间类型--
 admin.user.manage.form.role_option.default: --所有角色--
 admin.user.manage.form.user_type_option.default: --注册来源--
+admin.user.manage.form.user_status_option.default: --学员状态--
+admin.user.manage.form.staff_status_option.default: --员工状态--
 plugin.admin.user.manage.form.user_export_btn: 导出搜索结果
+plugin.admin.user.manage.form.user_student_export_btn: 导出搜索结果
+plugin.admin.user.manage.form.user_staff_export_btn: 导出员工数据
 admin.user.manage.fields.mobile_label: 手机号
+admin.user.manage.fields.wechat_nickname: 微信昵称
 admin.user.manage.fields.recent_login_label: 最近登录
 admin.user.manage.fields.user_total_num_label: 用户总数：
 admin.user.manage.fields.student_total_num_label: 学员总数：
@@ -7260,6 +7406,8 @@ admin.edu_cloud.edu_sms.validation_type: 验证类
 admin.edu_cloud.edu_sms.bind_mobile: 手机绑定
 admin.edu_cloud.edu_sms.login: 手机短信快捷登录
 admin.edu_cloud.edu_sms.verification_code_tips: 您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效。
+admin.edu_cloud.edu_sms.shipping_notify: 发货通知
+admin.edu_cloud.edu_sms.shipping_notify_tips: 您在《网校商城名称》购买的《商品名称》已发货。
 admin.edu_cloud.edu_sms.singel_user: 单个用户
 admin.edu_cloud.edu_sms.auto_singel_send: 自动单发
 admin.edu_cloud.edu_sms.default_open: 默认开启
@@ -7557,6 +7705,7 @@ admin.edu_cloud.edu_attachment.attachment_tips: >
   </h4><p>“云附件管理”提供完善的附件资源管理功能，您可以从附件的使用途径、上传时间、资源类型等多个维度对资源进行管理，
   帮助您轻松掌控全站的附件资源，再也不用担心过期资源占用存储空间了</p>
 admin.edu_cloud.edu_attachment.function: 附件功能
+admin.edu_cloud.edu_attachment.download_setting: 题库附件下载设置
 admin.edu_cloud.edu_attachment.open_radio: 开启
 admin.edu_cloud.edu_attachment.close_radio: 关闭
 admin.edu_cloud.edu_attachment.service_setting: 业务设置
@@ -7596,6 +7745,12 @@ admin.edu_cloud.key_update.key_update_hint: 请谨慎更换授权码。如有疑
 admin.edu_cloud.key_update.ask_apply_key: 还没有授权码?
 admin.edu_cloud.key_update.key_apply_btn: 申请授权码
 admin.edu_cloud.key_update.key_apply.submiting: 正在申请授权码，请稍等...
+
+#题库附件设置
+admin.question_bank.file.download.setting.enable.tips: 移动端暂不提供下载题库附件功能，不受设置影响
+admin.question_bank.file.download.setting.disable.tips: 开启下载权限后老师和学生均可下载附件，反之均不可下载附件
+admin.question_bank.question_bank_attachment.open_radio: 开启
+admin.question_bank.question_bank_attachment.close_radio: 关闭
 
 # 用户设置
 admin.user_auth.sign_up_settings: 注册设置
@@ -7686,7 +7841,7 @@ admin.login_connect.client_login_restrictions: 设备终端登录限制
 admin.login_connect.closed: 关闭
 admin.login_connect.open: 开启
 admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
-admin.login_connect.client_login_restrictions.help_block: 开启后，同一帐号同时只能在APP或WEB一个设备终端上进行登录
+admin.login_connect.client_login_restrictions.help_block: 开启后，相同类型的设备一个账号同时只能在一个设备上登录，设备包括APP和WEB
 admin.login_connect.Third_party_login: 第三方登录
 admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
 admin.login_connect.User_login_protection: 用户登录保护
@@ -7726,21 +7881,6 @@ admin.login_connect.verifcation_loging_interface: 登录接口验证代码
 admin.login_connect.verifcation_code: 验证代码
 admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口时，会要求验证您的网站域名。请把相关验证代码粘到此处，然后提交保存。
 admin.user_center.admin_sync_btn: 管理员帐号同步
-admin.user_center.user_center.title: 用户中心
-admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1/X3.2的用户中心
-admin.user_center.user_center.uc_connect.help_block: 提示：由于discuz使用mysql_connect连接，高版本php已废弃，建议不要填写mysql，留空即可
-admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
-admin.user_center.Configration: 配置
-admin.user_center.Configration.help_block: 如何配置？
-admin.user_center.WindId_Configration: WindId配置
-admin.user_center.WindId_Configration.help_block: 如使用phpwind (WindID)的用户中心，请填写此项配置。
-admin.user_center.filtr_email_list: 过滤邮箱地址清单
-admin.user_center.filtr_email_list.help_block: 每行输入一个邮箱地址。名单中的邮箱地址如果出现在第三方登录的过程中，则会给该用户随机生成一个邮箱
-admin.user_center.tips: >
-  <p>1.若通讯失败，注册和登录将提示<strong class="user-center-copys-darken">输入不合法</strong>或通讯失败需管理员配置。</p>
-  <p>2.通讯成功，Discuz<strong class="user-center-copys-darken">所有注册用户</strong>，用户的用户名（需满足ES注册规则，否则无法同步）、密码、邮箱信息，无论通讯前还是通讯后注册都可以登录并同步到网站。</p>
-  <p>3.通讯成功，只有<strong class="user-center-copys-darken">通讯之后</strong>在ES注册的新用户，<strong class="user-center-copys-darken">才能</strong>登录并同步到Discuz，<strong class="user-center-copys-darken">通讯之前</strong>的注册用户，<strong class="user-center-copys-darken">不能</strong>登录和同步。</p>
-  <p>4.由于<strong class="user-center-copys-darken">密码加密机制</strong>不同，Discuz的注册用户，无法批量导入到网站；网站的注册用户，也无法批量导入到Discuz。</p>
 admin.user_fields.add_field_btn: 添加字段
 admin.user_fields.customer_fields_setting: 自定义字段设置
 admin.user_fields.fields_title: 字段名称
@@ -7861,6 +8001,10 @@ admin.setting_course.doc_task_water_mark: 文档任务水印
 admin.setting_course.doc_task_water_mark_info: 文档水印信息
 admin.setting_course.doc_task_water_mark_info_tips: 为了用户体验效果更佳,建议最多组合2项信息显示.注意:若用户的真实姓名和手机号没有则显示为-
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
+admin.setting_course.Only_available_for_learning_on_APP: 仅限在APP学习
+admin.setting_course.Only_available_for_learning_on_APP_tips: 开启后用户仅限在APP观看音视频、直播、直播回放、智能直播任务。
+admin.setting_course.app_content_theft_prevention: APP内容防盗
+admin.setting_course.app_content_theft_prevention_tips: 开启后，用户在APP观看音视频任务时无法录屏，另外安卓系统无法截屏，IOS系统无法投屏。
 admin.setting_course.course_operation_mode: 课程运营模式
 admin.setting_course.course_comments_manage: 课程学习页内容管理
 admin.setting_course.course_review: 评价
@@ -7920,7 +8064,7 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开�
 admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>当用户多开时，以后开的学习页面为主，踢掉前次学习页面。</p>
-  <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时。</p>
+  <p>为保证学习数据实时上传，作业课时/考试课时/直播课时默认禁止多开且不可更改。</p>
   <p>注：需要终端升级至PC端V20.4.6，APP端V4.9.3</p>
 admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入学习页面
 admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微网校中仅对启航主题生效。
@@ -7987,6 +8131,11 @@ admin.setting_wechat_auth.re_authorization_btn: 重新授权
 admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
 admin.setting_wechat_auth.authorization_success: 已成功授权
 admin.setting_wechat_auth.message_template: 消息模板
+admin.setting_wechat_pay.cert_key: 微信商户平台私钥
+admin.setting_wechat_pay.cert_key_hint: 微信商户平台私钥文件需要在【微信商户平台】-【账号中心】-【API安全】-【API证书】中申请，如已申请，直接把文件夹中的【apiclient_key.pem】文件上传至ES即可 <a target="_blank" href="https://pay.weixin.qq.com">申请API证书</a>
+admin.setting_wechat_pay.cert: 微信商户平台证书
+admin.setting_wechat_pay.cert_hint: 微信商户平台证书文件需要在【微信商户平台】-【账号中心】-【API安全】-【API证书】中申请，如已申请，直接把文件夹中的【apiclient_cert.pem】文件上传至ES即可 <a target="_blank" href="https://pay.weixin.qq.com">申请API证书</a>
+admin.setting_wechat_pay.cert_uploaded: 已上传
 
 #开发者设置
 admin.developer_setting.cloud_notification_api: 通知服务API
@@ -7997,7 +8146,8 @@ admin.developer_setting.content_title: 开发者设置
 admin.developer_setting.debug_label: 调试
 admin.developer_setting.app_center_api_address: 应用中心API地址
 admin.developer_setting.es_live_api_server: 自研直播API地址
-admin.developer_xapi_address: XAPI 推送地址
+admin.developer_setting.question_parse_api_server: 题目解析API地址
+admin.developer_setting.ai_api_server: AI API地址
 admin.developer_face_address: 人脸识别API地址
 admin.developer_push_address: 消息推送API地址
 admin.developer_setting.cloud_api_server_address: 云服务API地址
@@ -8053,7 +8203,6 @@ admin.magic_setting.export_limit: 订单单次导出数量
 admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
-admin.magic_setting.uc_phpwind: 是否开启phpwind设置
 admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.file_single_size_limit: 单个文件设置上传大小
 admin.magic_setting.file_single_size_limit_tip: M为单位，目前仅用于富文本文件上传
@@ -8067,6 +8216,8 @@ admin.magic_setting.live_entry_time_tip: 秒为单位
 admin.magic_setting.biz_answer_scene_report_threshold: 考试、作业人数*场次的试卷答案分数阈值
 admin.magic_setting.biz_answer_scene_report_threshold_tip: 默认值15000
 admin.magic_setting.security_video_player: 安全播放器开关
+admin.magic_setting.enable_marketing_mall_alpha_test: 商城内测开关
+admin.magic_setting.enable_marketing_mall_license: 商业授权开关
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -8184,6 +8335,25 @@ admin.post_num_rules.post_num: 发帖次数
 admin.post_num_rules.post_num_tips: 发帖次数必须大于或者等于0的整数，0表示不限制
 admin.post_num_rules.same_user_rule: 同一用户，5分钟内最多发帖次数（包含回复数）
 
+#APP防诈骗弹窗设置
+admin.anti_fraud_reminder.setting: APP防诈骗弹窗设置
+admin.anti_fraud_reminder.open_radio: 开启
+admin.anti_fraud_reminder.close_radio: 关闭
+admin.anti_fraud_reminder.setting.enable.tips: 开启后，用户进入APP时给出防诈骗弹窗提醒
+admin.anti_fraud_reminder.reminder_frequency: 提醒频率
+admin.anti_fraud_reminder.alert_the_object: 提醒对象
+admin.anti_fraud_reminder.visible_to_all_users: 全部用户可见
+admin.anti_fraud_reminder.visible_only_to_paid_users: 仅付费用户可见
+admin.anti_fraud_reminder.to_paid_users_tips: 付费用户指在机构内支付金额≥0.01的用户
+admin.anti_fraud_reminder.view_reminder_example: 查看提醒示例
+admin.anti_fraud_reminder.tips.title: 【反诈提醒】
+admin.anti_fraud_reminder.tips.content_one: 近期，我们发现有不法分子冒充阔知或网校工作人员，以“阔知学堂/网校退费”的名义实施诈骗！如您收到相关的短信和电话，请勿相信！！！
+admin.anti_fraud_reminder.tips.content_two: 我们为您准备了一份防诈骗防骚扰教程，点击下方按钮了解详情。
+admin.anti_fraud_reminder.tips.detail: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.tips.app.button: 查看防骚扰设置教程 >
+admin.anti_fraud_reminder.every: 每
+admin.anti_fraud_reminder.every_day_reminder: 天提醒一次
+
 # 系统自检
 admin.reports_status.environmental_detection: 环境检测
 admin.reports_status.recommend_config: 推荐配置
@@ -8204,6 +8374,7 @@ admin.reports_status.no_install_mysql_pdo: 尚未安装MySQL_PDO
 admin.reports_status.upload_file_size: 文件上传大小
 admin.reports_status.upload_file_size_tips: 该值决定可以上传视频的最大大小
 admin.reports_status.upload_file_size_greater_than_200m: 大于200M
+admin.reports_status.upload_file_size_greater_than_2048m: 大于2048M
 admin.reports_status.form_data_size: 表单数据大小
 admin.reports_status.form_data_size_tips: 该值不能小于文件上传大小的值
 admin.reports_status.php_max_run_time: PHP脚本最大执行时间
@@ -8211,6 +8382,7 @@ admin.reports_status.php_max_run_time_tips: 该值决定上传视频时，最长
 admin.reports_status.php_max_execution_time: >
   %maxExecutionTime%秒'
 admin.reports_status.upload_file_size_greater_than_300m: 大于300M
+admin.reports_status.upload_file_size_greater_than_30s: 大于30s
 admin.reports_status.upload_file_execution_time_30s: 30秒
 admin.reports_status.php_extend: PHP扩展
 admin.reports_status.php__mbstring_extend_tips: 该扩展用于处理中文字符
@@ -8218,9 +8390,9 @@ admin.reports_status.php__curl_extend_tips: 该扩展用于远程读取文件
 admin.reports_status.php__gd_extend_tips: 该扩展用于处理图片
 admin.reports_status.system_communication: 通信情况
 admin.reports_status.system_status: 状态
-admin.reports_status.system_communication_with_discuz: 与Discuz Ucenter的连接
 admin.reports_status.system_checking: 正在检测.....
 admin.reports_status.system_email_send: 邮件发送
+admin.reports_status.system_email_send_detection: 立即检测
 admin.reports_status.system_email_send_tips: 每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看
 admin.reports_status.system_file_and_catalog_authority: 系统文件、目录权限检查
 admin.reports_status.system_file_and_catalog_authority_available: 文件目录权限正常
@@ -8513,7 +8685,7 @@ admin.payment_setting.alipay_api_type.direct.hint: >
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_api_type.mobile: 手机网站支付接口
 admin.payment_setting.alipay_api_type.mobile.hint: >
-  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">阔知学堂</span>支付，需前往支付宝开通，查看
+  开通此接口后支持<span class="warning-state">手机浏览器</span>和<span class="warning-state">知享学堂</span>支付，需前往支付宝开通，查看
   <a href="%aliApiHelpUrl%" target="_blank">开通教程</a>
 admin.payment_setting.alipay_md5_secret: MD5密钥
 admin.payment_setting.alipay_secret: 支付宝公钥
@@ -8587,7 +8759,7 @@ admin.finance_refund.failed_notification: 退款审核未通过通知
 admin.finance_refund.failed_notification_hint: 管理员审核退款未通过时，发送给用户的站内通知。
 admin.finance_refund.notification_variable_description: 通知变量说明
 admin.finance_refund.refund_amount: 退款金额
-admin.finance_refund.refund_course_or_classroom: 需退款的课程或班级
+admin.finance_refund.refund_course_or_classroom: 需退款的题库、课程或班级
 
 admin.mobile_setting.discovery_tips: 注：使用发现页配置功能，app版本需要升级到4.5.39及以上
 admin.mobile_setting.client_open_or_close: 是否开启客户端
@@ -8919,20 +9091,6 @@ admin.wechat_app.flow_entrance_introduction_title: 自带流量
 admin.wechat_app.flow_entrance_introduction_content: 微信9亿月活跃用户，附近的小程序、微信搜索等功能，让你轻松获取流量，抓住客户
 admin.wechat_app.easy_promotion_introduction_title: 超轻推广
 admin.wechat_app.easy_promotion_introduction_content: 流畅体验，降低用户门槛，还能方便用户在微信里快速传播，宣传推广低成本高转化
-
-admin.xapi.title: 推送详情
-admin.xapi.id: 推送id
-admin.xapi.status: 推送状态
-admin.xapi.version: xAPI版本
-admin.xapi.body: 推送主体
-admin.xapi.verb: 推送行为
-admin.xapi.target_type: 推送类型
-admin.xapi.time: 推送时间
-admin.xapi.created_time: 创建时间
-admin.xapi.operation: 操作
-admin.xapi.enable_label: 开启xAPI
-admin.xapi.push_url_label: 设置xAPI地址
-admin.xapi.default_url: 默认地址是：https://lrs.qiqiuyun.net/v1/xapi/
 
 user.card_show_following: 关注
 user.card_show_followed: 已关注
@@ -9297,6 +9455,7 @@ my.reward_points_message: ￥%num%现金，%reward%使用后，申请退款时�
 my.reward_points_instructions: %reward%说明
 
 task.learn_data_detail.nickname: 用户名
+task.learn_data_detail.mobile: 手机号
 task.learn_data_detail.createdTime: 任务开始时间
 task.learn_data_detail.join_time: 任务开始时间
 task.learn_data_detail.finishedTime: 任务完成时间
@@ -9361,6 +9520,8 @@ log.module.destroy_account_record: 帐号注销
 log.module.item_bank_exercise: 题库练习
 log.module.multi_class_assistant: 班课助教
 log.module.multi_class: 班课
+log.module.wrong_question: 错题
+log.module.ai: AI
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -9623,6 +9784,8 @@ log.action.question_bank.create_category: 创建题库分类
 log.action.question_bank.delete_category: 删除题库分类
 log.action.question_bank.update_category: 更新题库分类
 log.action.question_bank.delete_question: 删除题库题目
+log.action.question_bank.sort_question_category: 题库分类排序
+log.action.question_bank.edit_testpaper: 编辑试卷
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
@@ -9633,6 +9796,8 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.item_bank_exercise.publish_exercise_chapter: 发布题库练习章节
+log.action.item_bank_exercise.unpublish_exercise_chapter: 取消发布题库练习章节
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板
@@ -10521,7 +10686,6 @@ exception.article.category_code_invalid: 编码含有非法字符，保存栏目
 exception.article.category_numeric_code: 编码不能全为数字，保存栏目失败
 exception.user.unlogin: 未登陆，请登陆后操作!
 exception.user.message_forbidden: 不支持向该用户发送私信!
-exception.user.discuz_user_reset_password: 请通过论坛找回密码！
 exception.user.not_found: 找不到该用户！
 exception.form.expire: 页面已过期，请重新提交数据！
 exception.form..drag.expire: 验证码已过期，请刷新页面重新提交！
@@ -10532,6 +10696,7 @@ exception.user.not_match_auth: 用户不匹配
 exception.user.mobile_not_found: 用户手机号码不存在
 exception.user.user_is_destroyed: 用户已注销
 exception.user.email_password_error: 邮箱密码错误
+exception.user.already_bind: 用户已绑定
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10651,6 +10816,7 @@ exception.batch_notification.published: 全站通知已发布
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 exception.lesson.not_found: 课时不存在
+exception.open_course_live_ticket.not_found: 公开课直播间令牌不存在
 exception.lesson.parameter_missing: 缺少课时编号
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 exception.task.not_found: 任务不存在
@@ -10754,6 +10920,7 @@ exception.category.code_invalid: 编码含有非法字符，保存分类失败
 exception.category.code_digit_invalid: 编码不能全为数字，保存分类失败
 exception.category.code_unavailable: 编码不可用，保存分类失败
 exception.category.not_found_parent_category: 父分类不存在，保存分类失败
+exception.category.code_length_too_long: 编码长度过长，保存分类失败
 exception.testpaper.not_found: 试卷不存在
 exception.testpaper.draft: 该试卷未发布，如有疑问请联系老师！
 exception.testpaper.closed: 该试卷已关闭，如有疑问请联系老师！
@@ -10769,6 +10936,13 @@ exception.testpaper.modify_committed_testpaper: 已经交卷的试卷不能修�
 exception.testpaper.doing: 试卷还未提交
 exception.testpaper.redo_interval_exist: 教师设置了重考间隔
 exception.testpaper.forbidden_delete_open_testpaper: 已发布试卷无法删除
+exception.testpaper.do_times_more_than_100: 考试次数超过最大值
+exception.testpaper.start_time_earlier_than_current: 考试已开始，无法修改
+exception.testpaper.end_time_earlier_than_start_time: 结束时间不能早于或等于开始时间
+exception.testpaper.no_do_times: 当前考试次数已用完，请重新选择考试
+exception.testpaper.end_of_exam: 当前考试已结束，请重新选择考试
+exception.testpaper.exam_not_started: 当前考试未开始
+exception.testpaper.start_time_earlier_than_current_time: 开始时间不能早于当前时间
 exception.homework.not_found: 作业不存在
 exception.homework.draft: 该作业未发布，如有疑问请联系老师！
 exception.homework.closed: 该作业已关闭，如有疑问请联系老师！
@@ -10782,6 +10956,9 @@ exception.exercise.closed: 该练习已关闭，如有疑问请联系老师！
 exception.exercise.forbidden_access_exercise: 不可以访问其他学生的练习!
 exception.exercise.forbidden_duplicate_commit_exercise: 练习已经做完，不能重复提交!
 exception.exercise.not_found_result: 练习结果不存在
+exception.exercise.exercise_is_doing: 已存在练习记录，请重新开始答题
+exception.exercise.exercise_not_do: 该练习不能进行答题，请退出重新开始
+exception.exercise.lack_question: 题目数与老师设定不一致，请联系老师处理！
 exception.uploadfile.file_not_found: 文件不存在
 exception.uploadfile.forbidden_manage_file: 没有权限管理资源
 exception.uploadfile.error_status: 状态不正确
@@ -10952,6 +11129,7 @@ exception.question_bank.forbidden_delete_category: 分类或子分类下有所�
 exception.question_bank.not_found_bank: 题库不存在
 exception.question_bank.forbidden_access_bank: 没有访问该题库的权限
 
+exception.item_bank_exercise.chapter_answer_is_doing: 已存在练习记录，请重新开始答题
 exception.item_bank_exercise.forbidden_learn: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 exception.item_bank_exercise.exercise.not_found: 题库练习不存在
 exception.item_bank_exercise.exercise.forbidden_manage_exercise: 没有管理题库练习的权限
@@ -10974,9 +11152,14 @@ exception.item_bank_exercise.member.non_expired: 学员未过期
 exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
+exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
+exception.item_bank_exercise.parent_chapter_unpublish: 请先发布上一级章节
+exception.item_bank_exercise.answer_unpublish_chapter: 当前章节已取消发布，无法继续答题~
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
-
+exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
+exception.exercise.closed.tips.title: 题库练习已关闭，无法购买/学习
+exception.exercise.closed.tips.content: 题库练习结果可查看
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
 exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
@@ -10997,6 +11180,9 @@ exception.certificate.reject.forbidden_audit: 审核驳回失败
 
 exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.closed: 用户信息采集已关闭
+exception.not_continue.look: 无法继续查看
+exception.go_home: 回到首页
+
 
 course.unname_title: 未命名计划
 
@@ -11270,6 +11456,7 @@ coupon.status.receive: 已领取
 coupon.status.used: 已使用
 
 coupon.generate_num: 生成数量
+coupon.deduction_amount_range: 折价金额必须在0.01~1000000之间
 coupon.generate_num_hint: 生成数量必须在1～100之间
 coupon.generate_num_unit: 个
 coupon.prefix: 优惠券前缀
@@ -11399,7 +11586,7 @@ admin_v2.homepage.cloud_notice: '欢迎使用,试用将于<strong> %endTime% </s
 admin_v2.homepage.quick_entrance: 常用入口
 admin_v2.edit_quick_entrance.btn: 编辑入口
 admin_v2.quick_entrance_setting: 设置常用入口
-admin_v2.quick_entrance_setting.tips: (最多设置7个快捷入口位）
+admin_v2.quick_entrance_setting.tips: (最多设置8个快捷入口位）
 
 ##分类标签
 admin_v2.course.tag: 标签管理
@@ -11421,8 +11608,10 @@ admin_v2.homepage.school_info.system_status.has_upgrade: 有更新
 admin_v2.homepage.school_info.system_status.upgraded: 已更新
 admin_v2.homepage.school_info.system_version: 系统版本
 admin_v2.homepage.school_info.access_web: 访问首页
-admin_v2.homepage.school_info.access_mobile_app: 访问App
-admin_v2.homepage.school_info.access_wechat_app: 访问小程序
+admin_v2.homepage.school_info.access_mobile_web: 微网校
+admin_v2.homepage.school_info.access_mobile_app: App
+admin_v2.homepage.school_info.access_wechat_app: 小程序
+admin_v2.homepage.school_info.no_access: 未开通
 admin_v2.homepage.school_info.level.none: 开源版
 admin_v2.homepage.school_info.level.saas: SaaS版
 admin_v2.homepage.school_info.level.license: 商业授权
@@ -11496,9 +11685,10 @@ admin_v2.wechat_official_account.title: 公众号
 admin_v2.wechat_official_account.text: 关注EduSoho公众号 获取最新教育资讯
 admin_v2.homepage.announcement_from_platform: 站长公告
 admin_v2.homepage.application_intro: 应用推荐
-admin_v2.homepage.application_intro.more_btn: 逛逛营销应用
+admin_v2.homepage.quick_custom: 自定义
+admin_v2.homepage.application_intro.more_btn: 营销应用
 admin_v2.business_advice.title: 经营建议
-admin_v2.buiness_advice.goto_qiqiuyu: 前去EduSoho商学院
+admin_v2.buiness_advice.goto_qiqiuyu: 商学院
 
 admin_v2.notice.upgrade_notice: 新后台对插件进行了全新适配，为了便于您的后台管理，需要手动升级全部已安装插件
 admin_v2.notice.go_to_upgrade: 前往升级
@@ -12192,8 +12382,9 @@ admin.multi_class_copy.failure.notify: 您的新班课《%newTitle%》从原班�
 
 course.task_manage.no_permission_tips: 抱歉，您无权管理课程课时，如有需要请联系网站管理员！
 
-exception.wrong_book.wrong_book.wrong_question.data_fields_missing: 错题本参数缺失
-exception.wrong_book.wrong_book.wrong_question.not_exist: 错题本题目不存在
+exception.wrong_book.wrong_question.data_fields_missing: 错题本参数缺失
+exception.wrong_book.wrong_question.not_exist: 错题本题目不存在
+exception.wrong_book.wrong_question_num.limit: 超出输入范围
 
 course.replay_manage.no_permission_tips: 抱歉，您无权管理课程录播，如有需要请联系网站管理员！
 course.teacher_manage.no_permission_tips: 抱歉，您无权管理课程教师，如有需要请联系网站管理员！
@@ -12244,6 +12435,7 @@ course.homework.score_set.select.option2: 每项正确得分
 course.homework.score.tip: 注：有作业合格要求时，需要设置题目分值
 course.homework.score.finish.tip: 注：得分仅作为作业合格的判断依据，不对学员展示
 testpaper.score_set.option: 每题分值
+course.placeholder.name: 请输入课程名称
 
 course.lesson.display: '%part_name% %number% : %title%'
 course.task.display: '%taskName%%taskNumber%： %taskTitle%'
@@ -12274,3 +12466,48 @@ live_course.record_replay.select3: 只录制课件
 live_course.record_replay.btn: 去录制
 live_course.record_replay.show_btn: 本地录制
 live_course.record_replay.safair_tip: Safair 浏览器可能会被拦截，请使用其他浏览器
+exception.sms_request.abnormal_sms_sending: 短信发送异常
+
+#短信防御
+sms.defence.request.log.fingerprint: 行为指纹
+sms.defence.request.log.coordinate: 坐标
+sms.defence.request.log.ip: ip
+sms.defence.request.log.mobile: 手机号
+sms.defence.request.log.userAgent: userAgent
+sms.defence.request.log.is_illegal: 是非法记录
+sms.defence.request.log.disable_type: 禁用类型
+sms.defence.request.log.created_time: 创建时间
+sms.defence.request.log.view_record_label: 查看
+smd.defence.black.ip.list.ip: ip
+smd.defence.black.ip.list.expire_time: 过期时间
+smd.defence.black.ip.list.created_time: 创建时间
+smd.defence.black.ip.unlock: 解封IP
+sms.defence.request.log.is_illegal.yes: 是
+sms.defence.request.log.is_illegal.no: 否
+sms.defence.request.log.disable_type.ip: 同一ip多次请求
+sms.defence.request.log.disable_type.coordinate: 同一坐标多次请求
+sms.defence.request.log.disable_type.none: 无
+
+course.start_answer.all_question_deleted: 全部题目已被删除，请联系教师或管理员
+item_bank.access_cloud: 立即升级
+next.skip: '下一步 (1/2)'
+
+#外部应用
+external.application.ip_white_list.title: 外部应用IP白名单
+external.application.ip_white_list.tips: 需添加外部应用服务器出口IP，可换行支持多个
+external.application.top.one.tips: 通过外部应用对接可以实现获取EduSoho各业务数据以及实现外部应用账号对EduSoho免登。
+external.application.top.two.tips: 更多相关对接说明
+external.application.login.status: API设置开关
+external.application.login.open: 开启
+external.application.login.closed: 关闭
+admin.system.api_setting.tips: AppKey与SecretKey 用于外部应用调用 EduSoho 教培系统 API接口鉴权
+admin.setting.api_secret.reset_confirm_message: 重置后旧SecretKey将失效
+admin_v2.question.ai_analysis.teacher_ebable: AI题目解析（教师端）
+admin_v2.question.ai_analysis.teacher_ebable.tip: 开启后，教师创建/导入题目时支持AI生成题目解析，生成的内容支持编辑修改。
+admin_v2.question.ai_analysis.student_ebable: AI题目解析（学员端）
+admin_v2.question.ai_analysis.student_ebable.tip: 开启后，教师未设置解析的题目，学员可自主生成AI解析。
+admin_v2.question.ai_analysis.Upgrade: 升级云能力
+admin_v2.question.ai_analysis.experience: , 体验强大的
+admin_v2.question.ai_analysis.problem: 题目解析
+admin_v2.question.ai_analysis.tittle: 构筑智慧教育新高地，云能力全面升级，引领深度互动与精准解析的Al题库新时代，开启个性化学习无限可能
+admin_v2.question.ai_analysis.upgrade_now: 立即升级

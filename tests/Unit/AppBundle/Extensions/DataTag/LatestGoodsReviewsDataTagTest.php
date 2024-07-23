@@ -26,21 +26,21 @@ class LatestGoodsReviewsDataTagTest extends BaseTestCase
             'createdIp' => '127.0.0.1',
         ]);
 
-        $review1 = $this->getReviewService()->createReview([
+        $review1 = $this->getReviewDao()->create([
             'targetType' => 'goods',
             'targetId' => 1,
             'userId' => $user1['id'],
-            'title' => 'review1',
             'content' => 'content1',
             'rating' => 4,
+            'auditStatus' => 'pass',
         ]);
-        $review2 = $this->getReviewService()->createReview([
+        $review2 = $this->getReviewDao()->create([
             'targetType' => 'goods',
             'targetId' => 1,
             'userId' => $user2['id'],
-            'title' => 'review2',
             'content' => 'content2',
             'rating' => 4,
+            'auditStatus' => 'pass',
         ]);
 
         $dataTag = new LatestGoodsReviewsDataTag();
@@ -50,28 +50,13 @@ class LatestGoodsReviewsDataTagTest extends BaseTestCase
         self::assertEquals($review2['targetId'], $reviews[$review2['id']]['targetId']);
     }
 
-    public function getReviewService()
+    private function getReviewDao()
     {
-        return $this->createService('Review:ReviewService');
-    }
-
-    public function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    public function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
+        return $this->createDao('Review:ReviewDao');
     }
 
     public function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    protected function getCourseMemberService()
-    {
-        return $this->createService('Course:MemberService');
     }
 }

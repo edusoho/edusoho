@@ -32,7 +32,7 @@ class InformationCollectController extends BaseController
         return $this->render('information-collection/form.html.twig', [
             'event' => $event,
             'inOrder' => $inOrder,
-            'goto' => $request->query->get('goto', ''),
+            'goto' => $this->filterRedirectUrl($request->query->get('goto', '')),
         ]);
     }
 

@@ -21,6 +21,7 @@ class LessonManageController extends BaseController
         $this->getCourseLessonService()->isLessonCountEnough($course['id']);
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
+            $formData['length'] = $this->prepareLimitedTime($formData['length']);
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
@@ -45,7 +46,14 @@ class LessonManageController extends BaseController
 
         if ('video' === $mediaType) {
             $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
-            $finishType = empty($setting) ? 'end' : ('playing' === $setting['statistical_dimension'] ? 'watchTime' : 'time');
+            $finishType = $setting['statistical_dimension'] ?? 'end';
+            if ('playing' === $finishType) {
+                $finishType = 'watchTime';
+            }
+            if ('page' === $finishType) {
+                $finishType = 'time';
+            }
+
             $activityFinishConditions = array_column($activityConfig['finish_condition'], null, 'type');
             $finishCondition = $activityFinishConditions[$finishType];
         } else {
@@ -187,7 +195,7 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'published');
+        $lessons = $this->getCourseLessonService()->batchPublishLesson($courseId, $lessonIds);
 
         if (empty($lessons)) {
             return $this->createJsonResponse(['success' => true]);
@@ -204,7 +212,7 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'unpublished');
+        $lessons = $this->getCourseLessonService()->batchUnpublishLesson($courseId, $lessonIds);
 
         if (empty($lessons)) {
             return $this->createJsonResponse(['success' => true]);

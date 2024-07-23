@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class ActivityFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition',
+        'id', 'remark', 'ext', 'mediaType', 'mediaId', 'startTime', 'content', 'title', 'finishData', 'finishType', 'finishCondition', 'exam_mode', 'endTime', 'validPeriodMode', 'canDoAgain', 'fromCourseId'
     ];
 
     protected function publicFields(&$data)
@@ -45,10 +45,22 @@ class ActivityFilter extends Filter
                 $data['testpaperInfo']['redoInterval'] = $data['ext']['redoInterval']; //分钟
                 $data['testpaperInfo']['doTimes'] = $data['ext']['doTimes'];
                 $data['testpaperInfo']['startTime'] = !empty($data['startTime']) ? $data['startTime'] : null;
+                $data['testpaperInfo']['examMode'] = !empty($data['ext']['answerScene']['exam_mode']) ? $data['ext']['answerScene']['exam_mode'] : '0';
+                /**
+                 * @see \ApiBundle\Api\Resource\Course\CourseItemWithLesson::search()
+                 */
+                $data['testpaperInfo']['answerRecordId'] = !empty($data['ext']['answerRecordId']) ? $data['ext']['answerRecordId'] : '0';
+                $data['testpaperInfo']['endTime'] = !empty($data['endTime']) ? $data['endTime'] : null;
+                $data['testpaperInfo']['remainderDoTimes'] = $data['ext']['remainderDoTimes'] ?? 0;
+                $data['testpaperInfo']['isLimitDoTimes'] = !empty($data['ext']['isLimitDoTimes']) ? $data['ext']['isLimitDoTimes'] : '0';
+                $data['testpaperInfo']['validPeriodMode'] = !empty($data['ext']['validPeriodMode']) ? $data['ext']['validPeriodMode'] : '0';
+                $data['testpaperInfo']['canDoAgain'] = !empty($data['ext']['canDoAgain']) ? $data['ext']['canDoAgain'] : '0';
             }
+        }
+        if ('download' == $data['mediaType']) {
+            $data['content'] = null;
         }
 
         unset($data['ext']);
-        unset($data['mediaType']);
     }
 }

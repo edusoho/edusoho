@@ -316,7 +316,6 @@ admin.system.site.security_tab: 安全
 ##用户设置模块
 admin.system.user.auth_tab: 注册
 admin.system.user.login_bind_tab: 登录
-admin.system.user.user_center_tab: 用户中心
 admin.system.user.user_fields_tab: 用户信息设置
 admin.system.user.avatar_tab: 默认头像
 admin.system.user.message: 私信
@@ -500,6 +499,7 @@ admin_v2.course.basic.basic_tab.close_btn: 关闭课程
 admin_v2.course.basic.basic_tab.publish_submit_btn: 发布课程
 admin_v2.course.basic.basic_tab.clone_btn: 复制课程
 admin_v2.course.basic.basic_tab.delete_submit_btn: 删除课程
+admin_v2.course.basic_tab.unpublished_btn: 下架课程
 admin_v2.course.basic.basic_tab.remove_submit_btn: 移除课程
 
 # 教学-课程管理-班级管理
@@ -512,6 +512,7 @@ admin_v2.course.classroom.basic_tab.create_btn: 创建班级
 admin_v2.course.classroom.basic_tab.recommend_btn: 推荐班级
 admin_v2.course.classroom.basic_tab.close_btn: 关闭班级
 admin_v2.course.classroom.basic_tab.publish_submit_btn: 发布班级
+admin_v2.course.classroom.basic_tab.unpublished_btn: 下架班级
 admin_v2.course.classroom.basic_tab.delete_submit_btn: 删除班级
 
 # 教学-课程管理-直播模块
@@ -530,6 +531,7 @@ admin_v2.course.item_bank_exercise.basic_tab.manage_btn: 管理题库练习
 admin_v2.course.item_bank_exercise.basic_tab.recommend_btn: 推荐题库练习
 admin_v2.course.item_bank_exercise.basic_tab.close_btn: 关闭题库练习
 admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: 发布题库练习
+admin_v2.course.item_bank_exercise.basic_tab.unpublished_btn: 下架题库练习
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: 删除题库练习
 
 # 教学-课程管理-公开课模块
@@ -585,6 +587,7 @@ admin_v2.question_bank.basic_tab: 题库管理
 admin_v2.question_bank.basic_tab.create_btn: 创建题库
 admin_v2.question_bank.category_tab: 题库分类管理
 admin_v2.question_bank.category_tab.create_btn: 添加分类
+admin_v2.question.ai_analysis_tab: AI题目解析
 
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐
@@ -758,7 +761,7 @@ admin_v2.user.basic.login_record_tab: 登录日志
 
 admin_v2.user.basic.basic_tab.create_btn: '添加学员'
 admin_v2.user.basic.basic_tab.edit_btn: '编辑学员信息'
-admin_v2.user.basic.basic_tab.setting_roles_btn: '设置员工'
+admin_v2.user.basic.basic_tab.setting_roles_btn: '转为员工'
 admin_v2.user.basic.basic_tab.update_avatar_btn: '修改学员头像'
 admin_v2.user.basic.basic_tab.update_assistant_qrcode_btn: '修改助教二维码'
 admin_v2.user.basic.basic_tab.change_nickname_btn: '修改学员名'
@@ -768,7 +771,7 @@ admin_v2.user.basic.basic_tab.send_emailverify_email_btn: '发送Email验证邮�
 admin_v2.user.basic.basic_tab.lock_btn: '封禁学员'
 admin_v2.user.basic.basic_tab.unlock_btn: '解禁学员'
 admin_v2.user.basic.basic_tab.delete_btn: '删除学员'
-admin_v2.user.basic.basic_tab.org_update_btn: '修改用户组织机构'
+admin_v2.user.basic.basic_tab.org_update_btn: '修改学员组织机构'
 
 admin_v2.user.staff.basic_tab.create_btn: '添加员工'
 admin_v2.user.staff.basic_tab.edit_btn: '编辑员工信息'
@@ -783,7 +786,7 @@ admin_v2.user.staff.basic_tab.lock_btn: '封禁员工'
 admin_v2.user.staff.basic_tab.unlock_btn: '解禁员工'
 admin_v2.user.staff.basic_tab.delete_btn: '删除员工'
 admin_v2.user.staff.basic_tab.turn_into_student_btn: '转为学员'
-admin_v2.user.staff.basic_tab.org_update_btn: '修改用户组织机构'
+admin_v2.user.staff.basic_tab.org_update_btn: '修改员工组织机构'
 #用户-用户管理-实名认证
 admin_v2.user.approval_menu: 实名认证
 admin_v2.user.approval.basic_tab.cancel_btn: 撤销
@@ -947,7 +950,6 @@ admin_v2.system.asset.refund_tab: 退款
 
 #系统-通用管理-用户设置
 admin_v2.system.user_menu: 用户设置
-admin_v2.system.user.user_center_tab: 用户中心
 admin_v2.system.user.login_bind_tab: 登录
 admin_v2.system.user.user_fields_tab: 用户信息设置
 admin_v2.system.user.avatar_tab: 默认头像
@@ -988,11 +990,21 @@ admin_v2.system.logs_menu: 系统日志
 admin_v2.system.logs.logs_query_tab: 系统操作日志
 admin_v2.system.logs.logs_prod_tab: 程序运行日志
 
+# 系统-系统管理-系统API设置
+admin_v2.system.api_setting_menu: API设置
+admin_v2.system.api_setting_basic_tab: API设置
+
 # 系统-系统管理-安全设置
 admin_v2.system.security_menu: 安全设置
 admin_v2.system.blacklist_tab: IP黑名单
 admin_v2.system.security_tab: 白名单域名
 admin_v2.system.post_num_tab: 发帖限制
+admin_v2.system.anti_fraud_reminder_tab: APP防诈骗弹窗设置
+
+# 系统-系统管理-短信防御管理
+admin_v2.system.sms_defence_menu: 短信防御
+admin_v2.sms.request.log.list_tab: 短信请求日志
+admin_v2.sms.ip.black.list_tab: 短信IP黑名单
 
 # 数据-数据概览
 admin_v2.data_statistics.overview.menu: 数据概览
@@ -1009,9 +1021,6 @@ admin_v2.system.queue_failed_tab: 队列错误日志
 # 隐藏模块
 admin_v2.nav.developer_module: 开发者
 admin_v2.nav.developer_module.basic_group: 开发者设置
-admin_v2.developer.xapi_manage: xAPI管理
-admin_v2.developer.xapi_setting: xAPI设置
-admin_v2.developer.xapi_statement: xAPI报表
 
 admin_v2.developer.cdn_manage: CDN管理
 admin_v2.developer.cdn_setting: CDN设置
@@ -1077,3 +1086,4 @@ admin.wap_setting.find: 发现页设置
 admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
 admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件
+admin_v2.cloud.question_bank.attachment_setting.basic_tab: 题库附件设置

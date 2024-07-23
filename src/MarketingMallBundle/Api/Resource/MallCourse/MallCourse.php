@@ -13,7 +13,8 @@ class MallCourse extends BaseResource
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        $conditions['excludeStatus'] = 'draft';
+        $conditions['status'] = 'published';
+        $conditions['courseSetStatus'] = 'published';
         $conditions['parentId'] = 0;
         //过滤约排课
         $conditions['excludeTypes'] = ['reservation'];
@@ -26,7 +27,7 @@ class MallCourse extends BaseResource
         $conditions['excludeIds'] = ArrayToolkit::column($relations, 'productId');
 
         list($offset, $limit) = $this->preparePageCondition($conditions);
-        $courses = $this->getCourseService()->searchCourses($conditions, $sort, $offset, $limit, ['id', 'courseSetId', 'title', 'price', 'cover']);
+        $courses = $this->getCourseService()->searchWithJoinCourseSet($conditions, $sort, $offset, $limit, ['id', 'courseSetId', 'title', 'price', 'cover']);
         $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
 

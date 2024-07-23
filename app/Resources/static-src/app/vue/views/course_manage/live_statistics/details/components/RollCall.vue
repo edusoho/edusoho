@@ -23,6 +23,9 @@
       :loading="loading"
       @change="handleTableChange"
     >
+      <template slot="mobile" slot-scope="mobile, record">
+        <mobile-ice :mobile="record.mobile" :encryptedMobile="record.encryptedMobile" />
+      </template>
       <span slot="checkin" slot-scope="text">
         {{ (text == '1' ? 'site.yes' : 'site.no') | trans  }}
       </span>
@@ -40,7 +43,8 @@ const columns = [
   },
   {
     title: Translator.trans('live_statistics.mobile'),
-    dataIndex: 'mobile'
+    dataIndex: 'mobile',
+    scopedSlots: { customRender: 'mobile' }
   },
   {
     title: Translator.trans('live_statistics.email'),

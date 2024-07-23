@@ -5,6 +5,10 @@ $(document).ready(()=>{
   }
 });
 
+$('[data-toggle="tooltip"]').tooltip({
+  html: true,
+});
+
 $('.js-model-close').click(()=>{
   $('#questionBankModal').modal('hide');
 });

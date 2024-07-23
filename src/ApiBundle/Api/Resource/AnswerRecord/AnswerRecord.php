@@ -8,10 +8,14 @@ use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Activity\Type\Testpaper;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 
 class AnswerRecord extends AbstractResource
 {
+    use QuestionAIAnalysisTrait;
+
     public function get(ApiRequest $request, $id)
     {
         $answerRecord = $this->getAnswerRecordService()->get($id);
@@ -27,33 +31,81 @@ class AnswerRecord extends AbstractResource
         if (empty($assessment)) {
             throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
-        if ('open' !== $assessment['status']) {
-            throw AssessmentException::ASSESSMENT_NOTOPEN();
-        }
+
+        /**
+         * 如果在考试中 已关闭的试卷 仍然能进行考试不会强行结束
+         * if ('open' !== $assessment['status']) {
+            }
+         */
+        $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
-
+        $assessmentResponse = $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']);
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
+        // 之前业务中只有考试需要做特殊处理，应该用到customComments字段
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
 
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
+
+        $user = $this->getCurrentUser();
+        $activity['isOnlyStudent'] = $user['roles'] == ['ROLE_USER'];
+        $resultShow = empty($testpaperActivity) || $this->getResultShow($answerRecord, $answerScene, $answerReport);
+        if ($resultShow) {
+            $assessment = $this->wrapAIAnalysis($assessment, $answerRecord);
+        }
 
         return [
             'answer_report' => $answerReport,
             'answer_record' => $this->wrapperAnswerRecord($answerRecord),
+            'assessment_response' => $assessmentResponse,
             'assessment' => $assessment,
             'answer_scene' => $this->wrapperAnswerScene($answerScene),
-            'resultShow' => empty($testpaperActivity) ? true : $this->getResultShow($answerRecord, $answerScene, $answerReport),
-            'activity' => empty($testpaperActivity) ? (object)[] : $testpaperActivity,
+            'resultShow' => $resultShow,
+            'activity' => empty($testpaperActivity) ? (object) [] : $testpaperActivity,
+            'metaActivity' => empty($activity) ? (object) [] : $activity,
         ];
+    }
+
+    private function wrapAIAnalysis($assessment, $answerRecord)
+    {
+        $user = $this->getCurrentUser();
+        foreach ($assessment['sections'] as &$section) {
+            foreach ($section['items'] as &$item) {
+                foreach ($item['questions'] as &$question) {
+                    $question['aiAnalysisEnable'] = $answerRecord['user_id'] == $user['id'] && $this->canGenerateAIAnalysisForStudent($question, $item);
+                }
+            }
+        }
+
+        return $assessment;
     }
 
     protected function wrapperAnswerScene($answerScene)
     {
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerScene['id']);
         $answerScene['fromType'] = $activity['mediaType'];
-        $answerScene['reviewType'] =  $activity['mediaType'] == 'testpaper' || $activity['finishType'] == 'score'  ? 'score' : 'true_false';
+        $answerScene['reviewType'] = 'testpaper' == $activity['mediaType'] || 'score' == $activity['finishType'] ? 'score' : 'true_false';
+        $answerScene['isLimitDoTimes'] = empty($answerScene['do_times']) ? '0' : '1';
+        $countTestpaperRecord = $this->getAnswerRecordService()->count(['answer_scene_id' => $answerScene['id'], 'user_id' => $this->getCurrentUser()->getId()]);
+        $answerScene['remainderDoTimes'] = max($answerScene['do_times'] - ($countTestpaperRecord ?: 0), 0);
+        $answerScene['validPeriodMode'] = $this->preValidPeriodMode($answerScene);
+        $answerScene['canDoAgain'] = $this->getAnswerSceneService()->canStart($answerScene['id'], $this->getCurrentUser()->getId()) ? '1' : '0';
+
         return $answerScene;
+    }
+
+    protected function preValidPeriodMode($scene)
+    {
+        if (!empty($scene['start_time']) && !empty($scene['end_time'])) {
+            $validPeriodMode = Testpaper::VALID_PERIOD_MODE_RANGE;
+        } elseif (!empty($scene['start_time']) && empty($scene['end_time'])) {
+            $validPeriodMode = Testpaper::VALID_PERIOD_MODE_ONLY_START;
+        } else {
+            $validPeriodMode = Testpaper::VALID_PERIOD_MODE_NO_LIMIT;
+        }
+
+        return $validPeriodMode;
     }
 
     protected function wrapperAnswerRecord($answerRecord)
@@ -112,6 +164,14 @@ class AnswerRecord extends AbstractResource
     protected function getAnswerSceneService()
     {
         return $this->service('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return AnswerRandomSeqService
+     */
+    protected function getAnswerRandomSeqService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRandomSeqService');
     }
 
     protected function getAssessmentService()

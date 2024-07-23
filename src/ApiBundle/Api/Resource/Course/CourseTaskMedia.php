@@ -6,9 +6,11 @@ use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\FileToolkit;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\ExerciseActivityService;
 use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
@@ -20,16 +22,19 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
-use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
 use Biz\User\UserException;
+use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Exception\ItemException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -63,11 +68,43 @@ class CourseTaskMedia extends AbstractResource
         }
         $media = $this->$method($course, $task, $activity, $request->getHttpRequest(), $ssl);
 
+        list($watermarkSetting, $fingerPrintSetting) = $this->fingerPrintWatermark();
+
         return [
             'mediaType' => $activity['mediaType'],
             'media' => $media,
             'format' => $request->query->get('format', 'common'),
+            'watermarkSetting' => $watermarkSetting,
+            'fingerPrintSetting' => $fingerPrintSetting,
         ];
+    }
+
+    protected function fingerPrintWatermark()
+    {
+        $storageSetting = $this->getSettingService()->get('storage');
+        $fingerPrintSetting = [
+            'video_fingerprint' => '',
+        ];
+        $watermarkSetting = [
+            'video_watermark' => '0',
+        ];
+
+        if (!empty($storageSetting)) {
+            $fingerPrintSetting = ArrayToolkit::parts($storageSetting, [
+                'video_fingerprint',
+                'video_fingerprint_time',
+            ]);
+            $fingerPrintSetting['video_fingerprint'] = empty($fingerPrintSetting['video_fingerprint']) ? '' : $this->getWebExtension()->getFingerprint();
+
+            $watermarkSetting = ArrayToolkit::parts($storageSetting, [
+                'video_watermark',
+                'video_watermark_image',
+                'video_embed_watermark_image',
+                'video_watermark_position',
+            ]);
+        }
+
+        return [$watermarkSetting, $fingerPrintSetting];
     }
 
     protected function checkPreview($course, $task)
@@ -250,7 +287,7 @@ class CourseTaskMedia extends AbstractResource
         if (empty($answerRecord)) {
             $activity['ext']['latestHomeworkResult'] = null;
         } else {
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             $activity['ext']['latestHomeworkResult'] = $testpaperWrapper->wrapTestpaperResult(
                 $answerRecord,
                 $assessment,
@@ -268,42 +305,42 @@ class CourseTaskMedia extends AbstractResource
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerScene['id'], $user['id']);
         $testpaperWrapper = new TestpaperWrapper();
-        if (empty($answerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
-            $assessment = $this->createAssessment($activity['title'], $activity['ext']['drawCondition']['range'], [$activity['ext']['drawCondition']['section']]);
-            $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+        if (empty($answerRecord) || AnswerRecordStatus::FINISHED == $answerRecord['status']) {
+            try {
+                $assessment = $this->getExerciseActivityService()->createExerciseAssessment($activity);
+                $assessment = $this->getAssessmentService()->showAssessment($assessment['id']);
+            } catch (ItemException $e) {
+                if (ErrorCode::ITEM_NOT_ENOUGH == $e->getCode()) {
+                    if (empty($answerRecord)) {
+                        throw ExerciseException::LACK_QUESTION();
+                    }
+                    $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
+                }
+            }
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = null;
         } else {
             $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
-            $answerReport = $this->getAnswerReportService()->get($answerRecord['answer_report_id']);
+            $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
             $activity['ext'] = $testpaperWrapper->wrapTestpaper($assessment, $answerScene);
             $activity['ext']['latestExerciseResult'] = $testpaperWrapper->wrapTestpaperResult(
                 $answerRecord,
                 $assessment,
                 $answerScene,
-                $answerReport
+                $answerReport ?? []
             );
         }
 
+        $activity['ext']['lastExerciseResult'] = empty($answerRecord) ? null : $testpaperWrapper->wrapTestpaperResult(
+            $answerRecord,
+            $assessment,
+            $answerScene,
+            $answerReport ?? []
+        );
+
+        $activity['ext']['itemCounts'] = $activity['ext']['metas']['counts'] ?: (object) [];
+
         return $activity['ext'];
-    }
-
-    protected function createAssessment($name, $range, $sections)
-    {
-        $sections = $this->getAssessmentService()->drawItems($range, $sections);
-        $assessment = [
-            'name' => $name,
-            'displayable' => 0,
-            'description' => '',
-            'bank_id' => $range['bank_id'],
-            'sections' => $sections,
-        ];
-
-        $assessment = $this->getAssessmentService()->createAssessment($assessment);
-
-        $this->getAssessmentService()->openAssessment($assessment['id']);
-
-        return $assessment;
     }
 
     protected function getAudio($course, $task, $activity, $request, $ssl = false)
@@ -358,7 +395,7 @@ class CourseTaskMedia extends AbstractResource
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
             $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
 
-            return  $this->getResourceFacadeService()->getPlayerContext($file);
+            return $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
@@ -377,7 +414,7 @@ class CourseTaskMedia extends AbstractResource
         $file = $this->getUploadFileService()->getFullFile($ppt['mediaId']);
 
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
-            return  $this->getResourceFacadeService()->getPlayerContext($file);
+            return $this->getResourceFacadeService()->getPlayerContext($file);
         }
 
         list($result, $error) = $this->getPlayerService()->getPptFilePlayer($ppt, $ssl);
@@ -537,5 +574,13 @@ class CourseTaskMedia extends AbstractResource
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ExerciseActivityService
+     */
+    protected function getExerciseActivityService()
+    {
+        return $this->service('Activity:ExerciseActivityService');
     }
 }

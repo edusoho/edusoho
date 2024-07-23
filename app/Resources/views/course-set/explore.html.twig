@@ -4,7 +4,7 @@
 {% set bodyClass = 'course-list-page ' %}
 {% set siteNav = 'course/explore' %}
 
-{% do script(['app/js/course/explore/index.js']) %}
+{% do script(['libs/vue.js','app/js/course/explore/index.js']) %}
 
 {% block keywords %}
   {{ categoryArray.name|default('category.all_category'|trans) }}
@@ -19,6 +19,15 @@
 {% endblock %}
 
 {% block top_content %}
+  <div id="app"></div>
+  <input type="hidden" name="isWeixin" id="isWeixin" value="{{ isWxClient }}">
+  <input type="hidden" name="isMobile" id="isMobile" value="{{ isMobileClient }}">
+  <input type="hidden" name="categoryId" id="categoryId" value="{{ app.request.query.get('categoryId') }}">
+  <input type="hidden" name="type" id="type" value="{{ app.request.query.get('type', 'all') }}">
+  <input type="hidden" name="sort" id="sort" value="{{ app.request.query.get('sort', 'recommendedSeq') }}">
+  <input type="hidden" name="vipLevelId" id="vipLevelId" value="{{ app.request.query.get('vipLevelId') }}">
+  <input type="hidden" name="page" id="page" value="{{ app.request.query.get('page', 1)}}">
+
   <div class="es-banner">
     <div class="container">
       <div class="title">
@@ -53,10 +62,9 @@
   {% set path = app.request.get('_route') %}
   {% set subCategory = app.request.query.get('subCategory', '') %}
   {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
-
   {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'course'})) }}
 
-  <div class="es-filter">
+  <div class="es-filter pc-es-filter">
     <ul class="nav nav-sort clearfix">
       <li>
         <a
@@ -123,7 +131,7 @@
     </div>
   </div>
 
-  <div class="course-list course-list-new">
+  <div class="course-list course-list-new pc-course-list">
     <div class="row">
       {% if courseSets %}
         {% for courseSet in courseSets %}
@@ -136,7 +144,7 @@
       {% endif %}
     </div>
   </div>
-  <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  <nav class="text-center mobile-pagination-hide">{{ web_macro.paginator(paginator) }}</nav>
 {% endblock %}
 
 {% block bottom %}

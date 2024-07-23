@@ -1,33 +1,27 @@
-{% extends 'my/my-teaching.html.twig' %}
+{% extends 'question-bank/question/layout.html.twig' %}
+{% do script(['libs/select2.js', 'libs/jquery-intro.js' , 'app/js/question-bank/question/index.js' , 'app/js/question-bank/list-header/index.js'])  %}
 
-{% block title %}{{ 'my.teaching.question_bank.question.manage'|trans }} - {{ parent() }}{% endblock %}
-{% set side_nav = 'my-question-bank' %}
-{% set active_tab = 'question-list' %}
-
-{% do script(['libs/select2.js', 'app/js/question-bank/question/index.js' ,'app/js/question-category/import/index.js'])  %}
-
-{% block main %}
+{% block container %}
   <div class="panel panel-default panel-col">
-    <div class="question-bank-heading">{{ questionBank.name }}</div>
-  </div>
-
-  <div>
-    {% include 'question-bank/header-navbar.html.twig' %}
-    {% block container %}
-      <div class="panel panel-default panel-col">
-        <div class="panel-body question-list-container js-question-container">
-          <div class="mtl category-list-content js-category-content">
-            {% include 'question-bank/question/category-list.html.twig' %}
-          </div>
-          <div class="mtl question-list-content">
-            {% include 'question-bank/question/question-list.html.twig' %}
-          </div>
-        </div>
+    <div class="panel-body question-list-container js-question-container">
+      <div class="mtl category-list-content js-category-content">
+        {% include 'question-bank/question/category-list.html.twig' %}
       </div>
-    {% endblock %}
+      <div class="mtl question-list-content">
+        <div id="app">
+        </div>
+        {% include 'question-bank/question/question-list.html.twig' %}
+      </div>
+      <input type="hidden" name="questionBankId" value="{{ questionBank.id }}">
+      <input type="hidden" name="accessCloud" value="{{ cloudStatus() }}">
+      <input type="hidden" name="canManageCloud" value="{{ has_permission('admin_v2_cloud_center') }}">
+      <input type="hidden" name="introModalUrl" value="{{ path('question_bank_manage_import_intro') }}">
+      <input type="hidden" name="aiAnalysisIntroUrl" value="{{ path('question_bank_manage_ai_analysis_intro') }}">
+    </div>
+    <a class="js-skip-btn hidden" target="_blank" href="{{ path('admin_v2_app_center') }}">{{ 'item_bank.access_cloud'|trans }}</a>
   </div>
+{% endblock %}
 
-  {% block question_category_modal %}
-    {% include 'question-bank/question/category-set-modal.html.twig' %}
-  {% endblock %}
+{% block question_category_modal %}
+  {% include 'question-bank/question/category-set-modal.html.twig' %}
 {% endblock %}

@@ -13,7 +13,7 @@ class ItemBankExerciseReviewReport extends AbstractResource
         $user = $this->getCurrentUser();
 
         $reviewReport = $request->request->all();
-        $answerReport = $this->getAnswerReportService()->get($reviewReport['report_id']);
+        $answerReport = $this->getAnswerReportService()->getSimple($reviewReport['report_id']);
         if (empty($answerReport) || $this->getCurrentUser()['id'] != $answerReport['user_id']) {
             throw CommonException::ERROR_PARAMETER();
         }

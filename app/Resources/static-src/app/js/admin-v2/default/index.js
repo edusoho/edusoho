@@ -1,4 +1,7 @@
 import Cookies from 'js-cookie';
+import qs from 'qs';
+import Clipboard from 'clipboard';
+import notify from 'common/notify';
 
 let localUpgradeNotice = window.localStorage.getItem('upgradeNotice') ? window.localStorage.getItem('upgradeNotice') : '';
 if ($('.js-notice').val() == true && localUpgradeNotice != 1) {
@@ -13,6 +16,17 @@ $('.js-show-toggle').on('click', (event) => {
   $('.js-toggle-text').text(value);
   $target.find('i').toggleClass('es-icon-keyboardarrowup es-icon-keyboardarrowdown');
 });
+
+$('.js-ai-notice').on('click', event => {
+  let $modal = $('#modal');
+  $modal.load($('[name=aiSurveyUrl]').val());
+  $modal.modal('show');
+});
+
+$('.js-ai-notice-close').on('click',event => {
+  event.stopPropagation();
+  $('.js-ai-notice').hide();
+})
 
 const showAdImage = ($cloudAd, img, res) => {
   const $img = $(img);
@@ -92,6 +106,12 @@ const loadFirst = () => {
     $.get($infoDom.data('url'), (html) => {
       $infoDom.html(html);
       const src = $('.js-mini-program').data('src');
+      $('#js-marketing-qrcode3').attr('src', '' + '/common/qrcode?'+qs.stringify({text: window.location.origin+'/h5/index.html'}));
+      $('.js-copy-school_link').attr('data-clipboard-text', window.location.origin+'/h5/index.html')
+      let clipboard = new Clipboard('.js-copy-school_link');
+      clipboard.on('success', function(e) {
+        notify('success', Translator.trans('admin_v2.homepage.school_info.enter.copy_success'));
+      });
       $('.js-mini-program').popover({
         trigger: 'hover',
         placement: 'bottom',

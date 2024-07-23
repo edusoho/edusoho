@@ -28,23 +28,22 @@ class TestpaperExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('parse_exercise_range', array($this, 'parseRange')),
-        );
+        return [
+            new \Twig_SimpleFilter('parse_exercise_range', [$this, 'parseRange']),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('get_features', array($this, 'getFeatures')),
-            new \Twig_SimpleFunction('show_answers', array($this, 'canShowAnswers')),
-            new \Twig_SimpleFunction('get_testpaper', array($this, 'getTestPaper')),
-        );
+        return [
+            new \Twig_SimpleFunction('get_features', [$this, 'getFeatures']),
+            new \Twig_SimpleFunction('show_answers', [$this, 'canShowAnswers']),
+        ];
     }
 
     public function parseRange($range)
     {
-        $rangeDefault = array('bankId' => 0);
+        $rangeDefault = ['bankId' => 0];
         $range = empty($range) ? $rangeDefault : $range;
 
         if (is_array($range)) {
@@ -56,14 +55,9 @@ class TestpaperExtension extends \Twig_Extension
         return $rangeDefault;
     }
 
-    public function getTestPaper($id)
-    {
-        return $this->getTestpaperService()->getTestpaper($id);
-    }
-
     public function getFeatures()
     {
-        return $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+        return $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : [];
     }
 
     public function canShowAnswers($testpaperResult)
@@ -72,7 +66,7 @@ class TestpaperExtension extends \Twig_Extension
             return false;
         }
 
-        if (!in_array($testpaperResult['status'], array('reviewing', 'finished'))) {
+        if (!in_array($testpaperResult['status'], ['reviewing', 'finished'])) {
             return false;
         }
 

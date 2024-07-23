@@ -1,0 +1,73 @@
+<style>
+  .modal-layout {
+    position: relative;
+    top: 24%;
+    width: 340px;
+    height: 206px;
+    margin: 0 auto;
+    padding-top: 20px;
+    border-radius: 4px;
+    background: #fff;
+    text-align: center;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+  }
+  .modal-layout .title {
+    margin-bottom: 24px;
+    color: #272e3b;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+  .modal-layout .line {
+    margin-top: 32px;
+    width: 340px;
+    height: 1px;
+    background: #f2f3f5;
+  }
+  .modal-layout .footer {
+    margin: 4px 0;
+  }
+  .modal-layout .footer .modal-btn {
+    padding: 8px 12px;
+    color: #272e3b;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  .modal-layout .footer .modal-btn:hover {
+    background: #f2f3f5;
+  }
+</style>
+
+<div class="modal-layout">
+  <div class="title">{{ 'register.read.and.agree'|trans }}</div>
+
+  {% if setting('auth.user_terms') == 'opened' and setting('auth.privacy_policy') == 'opened' %}
+    <div class="form-group mbl">
+      <div class="controls">
+        <a href="{{ path('user_terms') }}" target="_blank">《{{ 'user.register.user_service_protocol'|trans }}》</a>
+        <a href="{{ path('privacy_policy') }}" target="_blank">《{{ 'user.register.privacy_policy'|trans }}》</a>
+      </div>
+    </div>
+  {% elseif setting('auth.user_terms') == 'opened' %}
+    <div class="form-group mbl">
+      <div class="controls">
+        <a href="{{ path('user_terms') }}" target="_blank">《{{ 'user.register.user_service_protocol'|trans }}》</a>
+      </div>
+    </div>
+  {% elseif setting('auth.privacy_policy') == 'opened' %}
+    <div class="form-group mbl">
+      <div class="controls">
+        <a href="{{ path('privacy_policy') }}" target="_blank">《{{ 'user.register.privacy_policy'|trans }}》</a>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="line"></div>
+
+  <div class="footer">
+    <div class="modal-btn js-agree-register">{{ 'register.agree.and.sign.in'|trans }}</div>
+    <div class="modal-btn js-close-modal">{{ 'form.btn.cancel'|trans }}</div>
+  </div>
+</div>

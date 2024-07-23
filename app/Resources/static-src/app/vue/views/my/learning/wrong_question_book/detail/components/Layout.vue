@@ -92,10 +92,29 @@ export default {
       color: #666;
 
       .choose-answer-text {
+        width: 100%;
         display: table-cell;
 
         p {
           margin: 0;
+        }
+
+        img {
+          max-width: 100%!important;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          text-align: center;
+
+          td {
+            border: 1px solid #333;
+          }
+
+          th {
+            border: 1px solid #333;
+          }
         }
       }
     }

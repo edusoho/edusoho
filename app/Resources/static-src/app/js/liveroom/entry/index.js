@@ -140,6 +140,7 @@ class Live {
       this.pushing = false;
       this._clearInterval();
       cd.message({type: 'danger', message: Translator.trans('task_show.user_login_protect_tip')});
+      window.location.href = `/my/course/${this.courseId}`
     });
   }
 

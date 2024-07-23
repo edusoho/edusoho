@@ -5,16 +5,15 @@ namespace MarketingMallBundle\Common\GoodsContentBuilder;
 use AppBundle\Common\ArrayToolkit;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
-use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class QuestionBankBuilder extends AbstractBuilder
 {
-
     public function build($id)
     {
         $exercise = $this->getExerciseService()->get($id);
@@ -22,6 +21,7 @@ class QuestionBankBuilder extends AbstractBuilder
         if (empty($exercise)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
+
         return [
                 'bankId' => $id,
                 'title' => $exercise['title'],
@@ -50,19 +50,17 @@ class QuestionBankBuilder extends AbstractBuilder
             ]);
         }
 
-         return $goodsContent;
-
+        return $goodsContent;
     }
 
     protected function buildChapterExercise($exercise)
     {
-        $questionBank = $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']);
-        $list = $exercise['chapterEnable'] ? $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']) : [];
+        $list = $exercise['chapterEnable'] ? $this->getItemBankChapterExerciseService()->getPublishChapterTree($exercise['questionBankId']) : [];
         $list = $this->buildChapterList($list);
-        $num = $this->getItemService()->countItems(['bank_id' => $exercise['id'], 'category_id' => 0]);
+        $num = $this->getItemService()->countItems(['bank_id' => $exercise['questionBankId'], 'category_id' => 0]);
         if ($num > 0) {
             $list[] = ['title' => '未分类',
-                'questionCount' => $num];
+                'questionCount' => $num, ];
         }
 
         return [
@@ -133,14 +131,6 @@ class QuestionBankBuilder extends AbstractBuilder
     }
 
     /**
-     * @return ItemCategoryService
-     */
-    protected function getItemCategoryService()
-    {
-        return $this->biz->service('ItemBank:Item:ItemCategoryService');
-    }
-
-    /**
      * @return ItemService
      */
     protected function getItemService()
@@ -170,5 +160,13 @@ class QuestionBankBuilder extends AbstractBuilder
     protected function getAssessmentService()
     {
         return $this->biz->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:ChapterExerciseService');
     }
 }

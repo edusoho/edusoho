@@ -10,6 +10,7 @@
   </div>
   <label class="image-upload-label">
     <input type="file" name="file" class="js-upload-input hidden"
+    id="{{ coversName|default('covers') }}"
     accept="{% if app.request.headers.get('User-Agent') matches '/MicroMessenger/' %}image/*{% else %}image/bmp,image/jpeg,image/png,image/jpg{% endif %}"
     data-token="{{ upload_token( uploadToken|default('default'), 'image') }}"
     data-file-upload="{{path('file_upload')}}"
@@ -19,4 +20,5 @@
     data-crop-width="{{ cropWidth }}"
     data-crop-height="{{ cropHeight }}" />
   </label>
+  <input type="hidden" name="{{ coversName|default('covers') }}" value="">
 </div>

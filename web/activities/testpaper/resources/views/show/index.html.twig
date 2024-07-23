@@ -1,54 +1,153 @@
 {% extends 'layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/jquery-nouislider.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'testpaperactivity/js/show/index.js'], 300) %}
+
 {% block body %}
+  {% set canStartTestpaper = (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
+  
   <div class="iframe-parent-content">
-    <div  class="modal show iframe-modal">
-      <div class="modal-dialog ">
+    <div class="modal show iframe-modal">
+      <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-body task-state-modal">
-            <div class="title font-blod">
-              <i class="es-icon es-icon-xinxi color-info"></i>{{'course.plan_task.activity_manage.testpaper.info'|trans}}
+          <div class="modal-body task-state-modal 4">
+            <div class="title text-37393D">
+              {# 不同标题显示 #}
+              {% if testpaper.item_count|default(0) == 0 %}
+                {{ 'site.tips'|trans }}
+              {% elseif testpaper and testpaper.status == 'open' %}
+                {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
+                  {{ 'course.plan_task.activity_manage.testpaper.not_start_tips'|trans }}
+                {% elseif canStartTestpaper %}
+                  {{ 'course.plan_task.activity_manage.testpaper.info'|trans }}
+                {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
+                  {{ 'course.plan_task.activity_manage.testpaper.end_tips'|trans }}
+                {% endif %}
+              {% endif %}
             </div>
             {% set testMode = activity.ext.answerScene.start_time > 0 ? 'realTime' : 'normal' %}
-            {% if testpaper and testpaper.status == 'open' %}
+            {% if testpaper.item_count|default(0) == 0 %}
               <div class="content">
-                {% if testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
-                  <div class="text-16 ">
-                    {{'course.plan_task.activity_manage.testpaper.will_begin_tips'|trans({'%startTime%':activity.startTime|date('Y-m-d H:i:s')})}}
+                <div class="text-16">{{ 'course.start_answer.all_question_deleted'|trans }}</div>
+              </div>
+            {% elseif testpaper and testpaper.status == 'open' %}
+              <div class="content">
+                {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
+                  {# 未开始 #}
+                  <div class="text-14">
+                    <span class="text-919399">{{ 'course.plan_task.activity_manage.testpaper.validity.period.of.examination'|trans }}</span>
+                    <span class="pull-right text-37393D">
+                      {{ activity.startTime|date('Y/m/d H:i:s') }}
+                      -{% if activity.endTime == '0' %}
+                        {{ 'course.plan_setup.finish_rule.nothing'|trans }}
+                      {% else %}
+                        {{ activity.endTime|date('Y/m/d H:i:s') }}
+                      {% endif %}
+                    </span>
                   </div>
-                {% else %}
-                  <div class="text-16 ">
-                    {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.item_count, '%score%':testpaper.total_score})|raw}}
-                    {% if activity.finishType|default('') == 'score' %}
-                      {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%': activity.ext.finishCondition.finishScore })|raw}}
-                    {% endif %}
-                    {% if activity.ext.answerScene.limited_time %}
-                      <div class="mt5">
-                        {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%': activity.ext.answerScene.limited_time})|raw}}
+                {% elseif canStartTestpaper %}
+                  {# 已开始或者不限 #}
+                  <div class="text-14">
+                    <div class="text-919399">
+                      {{ 'course.plan_task.activity_manage.testpaper.questionNum'|trans }}
+                      <span class="pull-right text-37393D">
+                        {{ testpaper.item_count }}
+                        {{ 'course.plan_task.activity_manage.testpaper.questionCount'|trans }}
+                      </span>
+                    </div>
+
+                    <div class="mv16 border-bottom-line"></div>
+
+                    <div class="text-919399">
+                      {{ 'item_bank_exercise.assessment.total_score'|trans }}
+                      <span class="pull-right text-37393D">
+                        {{ testpaper.total_score }}
+                        {{ 'course.plan_task.activity_manage.testpaper.questionScore'|trans }}
+                      </span>
+                    </div>
+
+                    <div class="mv16 border-bottom-line"></div>
+                      <div class="text-919399">
+                        {{ 'course.live_lesson_manage.live_length.input_placeholder'|trans }}
+                        <span class="pull-right text-37393D">
+													{% if activity.ext.answerScene.limited_time %}
+														{{ activity.ext.answerScene.limited_time }}
+                          	{{ 'course.live_lesson_manage.live_length.minutes'|trans }}
+													{% else %}
+                          	{{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+													{% endif %}
+                        </span>
                       </div>
-                    {% endif %}
-                    {% if activity.ext.answerScene.do_times %}
-                      {{'course.plan_task.activity_manage.testpaper.once_trance'|trans|raw}}
-                    {% endif %}
+
+                    <div class="mv16 border-bottom-line"></div>
+
+                    <div class="text-919399">
+                      {{ 'course.plan_task.activity_manage.testpaper.number.of.remaining.tests'|trans }}
+                      <span class="pull-right text-37393D">
+                        {% if activity.ext.doTimes == '0' %}
+                          {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+                        {% else %}
+                          {{ activity.ext.remainderDoTimes }}
+                          {{ 'site.default.times'|trans }}
+                        {% endif %}
+                      </span>
+                    </div>
+
+                    <div class="mv16 border-bottom-line"></div>
+
+                    <div class="text-919399">
+                      {{ 'course.plan_task.activity_manage.testpaper.validity.period.of.examination'|trans }}
+                      <span class="pull-right text-37393D">
+                        {% if activity.ext.validPeriodMode == '0' %}
+                          {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+                        {% elseif activity.ext.validPeriodMode == '2' %}
+                          {{ activity.startTime|date('Y/m/d H:i:s') }}
+                          -
+                          {{ 'course.plan_setup.finish_rule.indefinite.duration'|trans }}
+                        {% elseif activity.ext.validPeriodMode == '1' %}
+                          {{ activity.startTime|date('Y/m/d H:i:s') }}
+                          -
+                          {{ activity.endTime|date('Y/m/d H:i:s') }}
+                        {% endif %}
+                      </span>
+                    </div>
                   </div>
-                {% endif %}
-                {% if activity.ext.limitedTime > 0 %} 
-                  <div class="text-center">
-                    {{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans|raw }}
+                {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
+                  {# 已结束 #}
+                  <div class="text-14">
+                    {{ 'course.plan_task.activity_manage.testpaper.validity.period.of.examination'|trans }}
+                    <span class="pull-right text-37393D">
+                      {{ activity.startTime|date('Y/m/d H:i:s') }}
+                      -
+                      {{ activity.endTime|date('Y/m/d H:i:s') }}
+                    </span>
                   </div>
                 {% endif %}
               </div>
-              <div class="text-right mtl">
-                {#
-                # @deprecated activity.startTime
-                # @refactor with answerScene.start_time
-                #}
-                {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= "now"|date("U")) %}
-                  <a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId: testpaper.id})}}">{{'course.plan_task.activity_manage.testpaper.start_exam'|trans}}</a>
-                {% endif %}
-              </div>
+
+              {# 开始考试 或 查看详情 #}
+              {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
+              {% elseif canStartTestpaper %}
+                <div class="mt24 mb8 footer-btn">
+                  <span class="text-919399 {% if activity.ext.answerScene.exam_mode == '1' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.testpaper.limit_tips'|trans }}</span>
+                  <span class="pull-right inline-block text-right">
+                    {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
+										  <a class="btn btn-primary js-start-exam" href="{{ path('testpaper_do', { lessonId: activity.id, testId: testpaper.id }) }}">{{ 'course.plan_task.activity_manage.testpaper.start_exam'|trans }}</a>
+                    {% endif %}
+                  </span>
+                </div>
+              {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
+                <div class="mt24 mb8 footer-btn">
+                  <span class="text-919399 {% if activity.ext.answerScene.exam_mode == '1' %} hidden {% endif %}">{{ 'course.plan_task.activity_manage.testpaper.enddate.limit_tips'|trans }}</span>
+                  <span class="pull-right inline-block text-right">
+                    {% if not activity.startTime or testMode == 'normal' or (testMode == 'realTime' and activity.startTime and activity.startTime <= ('now'|date('U'))) %}
+                      {% set blankAssessmentAnswerRecord = data('BlankAssessmentAnswerRecord', {answerSceneId: activity.ext.answerSceneId, assessmentId: activity.ext.mediaId, userId: app.user.id}) %}
+                      <a class="btn btn-primary" href="{{ path('testpaper_result_show', { answerRecordId: blankAssessmentAnswerRecord.id, type: 'activity' }) }}">{{ 'admin.live_manage.show_detail'|trans }}</a>
+                    {% endif %}
+                  </span>
+                </div>
+              {% endif %}
             {% else %}
               <div class="content">
-                <div class="text-16 ">{{'course.plan_task.activity_manage.testpaper.close_tips'|trans}}</div>
+                <div class="text-16">{{ 'course.plan_task.activity_manage.testpaper.close_tips'|trans }}</div>
               </div>
             {% endif %}
           </div>
@@ -57,4 +156,5 @@
     </div>
   </div>
   <div class="modal-backdrop in"></div>
+	<input type="hidden" name="endTime" value="{{activity.endTime}}">
 {% endblock %}

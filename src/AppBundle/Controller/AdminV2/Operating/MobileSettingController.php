@@ -80,7 +80,7 @@ class MobileSettingController extends BaseController
             return $this->render('admin-v2/operating/mobile-setting/mobile.setting.error.html.twig');
         }
 
-        $mobileCode = ((array_key_exists('mobileCode', $result) && !empty($result['mobileCode'])) ? $result['mobileCode'] : 'edusohov3');
+        $mobileCode = ((array_key_exists('mobileCode', $result) && !empty($result['mobileCode'])) ? $result['mobileCode'] : 'zhixiang');
 
         //是否拥有定制app
         $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;

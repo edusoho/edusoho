@@ -2,198 +2,76 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\CloudPlatform\Service\AppService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\ThreadService;
+use Biz\Common\CommonException;
+use Biz\Search\Constant\CloudSearchType;
+use Biz\Search\Constant\LocalSearchType;
 use Biz\Search\Service\SearchService;
+use Biz\Search\Strategy\ClassroomLocalSearchStrategy;
+use Biz\Search\Strategy\CourseLocalSearchStrategy;
+use Biz\Search\Strategy\ItemBankExerciseLocalSearchStrategy;
+use Biz\Search\Strategy\LocalSearchStrategy;
 use Biz\System\Service\SettingService;
-use Biz\Taxonomy\Service\CategoryService;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\Request;
-use VipPlugin\Biz\Vip\Service\LevelService;
-use VipPlugin\Biz\Vip\Service\VipService;
 
 class SearchController extends BaseController
 {
     public function indexAction(Request $request)
     {
         $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
-        $type = $request->query->get('type', 'course');
+        $keywords = $this->filterKeyWord($keywords);
+        $type = $request->query->get('type', LocalSearchType::COURSE);
         $page = $request->query->get('page', 1);
 
-        $cloud_search_setting = $this->getSettingService()->get('cloud_search', []);
-        $cloud_search_restore_time = $this->getSettingService()->get('_cloud_search_restore_time', 0);
-
-        if (isset($cloud_search_setting['search_enabled']) && $cloud_search_setting['search_enabled'] && 'ok' == $cloud_search_setting['status'] && $cloud_search_restore_time < time()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'cloud_search',
-                    [
-                        'q' => $keywords,
-                        'type' => $type,
-                    ]
-                )
+        if ($this->getSearchService()->isCloudSearchUsable()) {
+            return $this->redirectToRoute(
+                'cloud_search',
+                [
+                    'q' => $keywords,
+                    'type' => $type,
+                ]
             );
         }
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        if (!in_array($type, ['course', 'classroom'])) {
-            $type = 'course';
+        if (!in_array($type, [LocalSearchType::COURSE, LocalSearchType::CLASSROOM, LocalSearchType::ITEM_BANK_EXERCISE])) {
+            $type = LocalSearchType::COURSE;
         }
-
-        return $this->forward(
-            "AppBundle:Search:{$type}Search",
-            [
-                'request' => $request,
-            ],
-            $request->query->all()
-        );
-    }
-
-    public function classroomSearchAction(Request $request)
-    {
-        $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
-        $type = 'classroom';
         $filter = $request->query->get('filter');
-
-        $conditions = [
-            'status' => 'published',
-            'titleLike' => $keywords,
-            'showable' => 1,
-        ];
-
-        if ('free' == $filter) {
-            $conditions['price'] = '0.00';
-        }
-
-        $count = $this->getClassroomService()->countClassrooms($conditions);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $count, 12
-        );
-
-        $classrooms = $this->getClassroomService()->searchClassrooms(
-            $conditions,
-            ['updatedTime' => 'desc'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $searchStrategy = $this->createLocalSearchStrategy($type, $keywords, $filter);
+        $paginator = new Paginator($request, $searchStrategy->count(), 12);
+        $results = $searchStrategy->search($paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         return $this->render(
             'search/index.html.twig',
             [
                 'type' => $type,
-                'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
-                'filter' => $filter,
-                'count' => $count,
                 'paginator' => $paginator,
                 'keywords' => $keywords,
-            ]
-        );
-    }
-
-    public function courseSearchAction(Request $request)
-    {
-        $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
-        $type = 'course';
-        $currentUser = $this->getCurrentUser();
-        $vip = $this->getAppService()->findInstallApp('Vip');
-
-        $isShowVipSearch = $vip && version_compare($vip['version'], '1.0.7', '>=');
-
-        $currentUserVipLevel = '';
-        $vipLevelIds = '';
-
-        if ($isShowVipSearch) {
-            $currentUserVip = $this->getVipService()->getMemberByUserId($currentUser['id']);
-            if (!empty($currentUserVip) && isset($currentUserVip['levelId'])) {
-                $currentUserVipLevel = $this->getLevelService()->getLevel($currentUserVip['levelId']);
-                $vipLevels = $this->getLevelService()->findAllLevelsLessThanSeq($currentUserVipLevel['seq']);
-                $vipLevelIds = ArrayToolkit::column($vipLevels, 'id');
-            }
-        }
-
-        $parentId = 0;
-        $categories = $this->getCategoryService()->findAllCategoriesByParentId($parentId);
-
-        $categoryIds = [];
-
-        foreach ($categories as $key => $category) {
-            $categoryIds[$key] = $category['name'];
-        }
-
-        $categoryId = $request->query->get('categoryIds');
-        $filter = $request->query->get('filter');
-
-        $conditions = [
-            'status' => 'published',
-            'title' => $keywords,
-            'categoryId' => $categoryId,
-            'parentId' => 0,
-        ];
-
-        if ('vip' == $filter) {
-            $conditions['vipLevelIds'] = $vipLevelIds;
-        } elseif ('live' == $filter) {
-            $conditions['type'] = 'live';
-        } elseif ('free' == $filter) {
-            $conditions['minCoursePrice'] = '0.00';
-        }
-
-        $conditions = $this->filterCourseConditions($conditions);
-
-        $count = $this->getCourseSetService()->countCourseSets($conditions);
-        $paginator = new Paginator(
-            $this->get('request'),
-            $count, 12
-        );
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            ['updatedTime' => 'desc'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return $this->render(
-            'search/index.html.twig',
-            [
-                'type' => $type,
-                'courseSets' => $courseSets,
-                'paginator' => $paginator,
-                'keywords' => $keywords,
-                'isShowVipSearch' => $isShowVipSearch,
-                'currentUserVipLevel' => $currentUserVipLevel,
-                'categoryIds' => $categoryIds,
                 'filter' => $filter,
-                'count' => $count,
+                'count' => $paginator->getItemCount(),
+                'results' => $results,
             ]
         );
     }
 
     public function cloudSearchAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('cloud_search');
-        if (empty($setting['search_enabled'])) {
+        if (!$this->getSearchService()->isCloudSearchUsable()) {
             return $this->redirectToRoute('search');
         }
         $pageSize = 10;
         $keywords = $request->query->get('q');
-        $keywords = $this->filterKeyWord(trim($keywords));
+        $keywords = $this->filterKeyWord($keywords);
 
-        $type = $request->query->get('type', 'course');
+        $type = $request->query->get('type', CloudSearchType::COURSE);
         $page = $request->query->get('page', '1');
 
         $this->dispatchSearchEvent($keywords, $type, $page);
 
-        if (!$this->isTypeUseable($type)) {
+        if (!$this->isTypeUsable($type)) {
             return $this->render('TwigBundle:Exception:error403.html.twig');
         }
 
@@ -204,6 +82,22 @@ class SearchController extends BaseController
                     'keywords' => $keywords,
                     'type' => $type,
                     'errorMessage' => '在上方搜索框输入关键词进行搜索.',
+                ]
+            );
+        }
+        if (CloudSearchType::ITEM_BANK_EXERCISE == $type) {
+            $searchStrategy = $this->createLocalSearchStrategy($type, $keywords, '');
+            $paginator = new Paginator($request, $searchStrategy->count(), $pageSize);
+            $resultSet = $searchStrategy->search($paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+            return $this->render(
+                'search/cloud-search.html.twig',
+                [
+                    'keywords' => $keywords,
+                    'type' => $type,
+                    'resultSet' => $resultSet,
+                    'counts' => $paginator->getItemCount(),
+                    'paginator' => $paginator,
                 ]
             );
         }
@@ -225,18 +119,16 @@ class SearchController extends BaseController
         try {
             list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
         } catch (\Exception $e) {
-            return $this->redirect(
-                $this->generateUrl(
+            return $this->redirectToRoute(
                 'search',
-                    [
-                        'q' => $keywords,
-                        'errorType' => 'cloudSearchError',
-                    ]
-                )
+                [
+                    'q' => $keywords,
+                    'errorType' => 'cloudSearchError',
+                ]
             );
         }
 
-        $paginator = new Paginator($this->get('request'), $counts, $pageSize);
+        $paginator = new Paginator($request, $counts, $pageSize);
 
         return $this->render(
             'search/cloud-search.html.twig',
@@ -250,7 +142,7 @@ class SearchController extends BaseController
         );
     }
 
-    protected function isTypeUseable($type)
+    protected function isTypeUsable($type)
     {
         $cloudSearchSetting = $this->getSettingService()->get('cloud_search');
 
@@ -269,15 +161,7 @@ class SearchController extends BaseController
 
     private function filterKeyWord($keyword)
     {
-        $keyword = str_replace('<', '', $keyword);
-        $keyword = str_replace('>', '', $keyword);
-        $keyword = str_replace("'", '', $keyword);
-        $keyword = str_replace('"', '', $keyword);
-        $keyword = str_replace('=', '', $keyword);
-        $keyword = str_replace('&', '', $keyword);
-        $keyword = str_replace('/', '', $keyword);
-
-        return $keyword;
+        return str_replace(['<', '>', "'", '"', '=', '&', '/'], '', trim($keyword));
     }
 
     private function dispatchSearchEvent($keyword, $type, $page)
@@ -297,66 +181,24 @@ class SearchController extends BaseController
         ]));
     }
 
-    protected function filterCourseConditions($conditions)
+    /**
+     * @return LocalSearchStrategy
+     */
+    private function createLocalSearchStrategy($type, $keyword, $filter)
     {
-        if (!$this->isPluginInstalled('Reservation')) {
-            $conditions['excludeTypes'] = ['reservation'];
+        $searchStrategies = [
+            LocalSearchType::COURSE => CourseLocalSearchStrategy::class,
+            LocalSearchType::CLASSROOM => ClassroomLocalSearchStrategy::class,
+            LocalSearchType::ITEM_BANK_EXERCISE => ItemBankExerciseLocalSearchStrategy::class,
+        ];
+        if (empty($searchStrategies[$type])) {
+            throw CommonException::ERROR_PARAMETER();
         }
+        $searchStrategy = new $searchStrategies[$type]();
+        $searchStrategy->setBiz($this->getBiz());
+        $searchStrategy->buildSearchConditions($keyword, $filter);
 
-        return $conditions;
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->getBiz()->service('Course:CourseService');
-    }
-
-    protected function getCourseSetService()
-    {
-        return $this->getBiz()->service('Course:CourseSetService');
-    }
-
-    /**
-     * @return ThreadService
-     */
-    protected function getThreadService()
-    {
-        return $this->getBiz()->service('Course:ThreadService');
-    }
-
-    /**
-     * @return AppService
-     */
-    protected function getAppService()
-    {
-        return $this->getBiz()->service('CloudPlatform:AppService');
-    }
-
-    /**
-     * @return LevelService
-     */
-    protected function getLevelService()
-    {
-        return $this->getBiz()->service('VipPlugin:Vip:LevelService');
-    }
-
-    /**
-     * @return VipService
-     */
-    protected function getVipService()
-    {
-        return $this->getBiz()->service('VipPlugin:Vip:VipService');
-    }
-
-    /**
-     * @return CategoryService
-     */
-    protected function getCategoryService()
-    {
-        return $this->getBiz()->service('Taxonomy:CategoryService');
+        return $searchStrategy;
     }
 
     /**
@@ -364,7 +206,7 @@ class SearchController extends BaseController
      */
     protected function getSearchService()
     {
-        return $this->getBiz()->service('Search:SearchService');
+        return $this->createService('Search:SearchService');
     }
 
     /**
@@ -372,14 +214,6 @@ class SearchController extends BaseController
      */
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    protected function getClassroomService()
-    {
-        return $this->createService('Classroom:ClassroomService');
+        return $this->createService('System:SettingService');
     }
 }
