@@ -75,6 +75,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         ];
 
         $assessment = array_merge($defaultAssessment, $assessment);
+        $totalScore = $assessment['total_score'] ?? 0;
         $assessment = $this->getValidator()->validate($assessment, [
             'bank_id' => ['required', 'integer', ['min', 1]],
             'name' => ['required', ['lengthBetween', 1, 255]],
@@ -96,7 +97,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
         $assessment['created_user_id'] = empty($assessment['created_user_id']) ? empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'] : $assessment['created_user_id'];
         $assessment['updated_user_id'] = $assessment['created_user_id'];
-
+        $assessment['total_score'] = $totalScore;
         $assessment = $this->getAssessmentDao()->create($assessment);
 
         if (1 == $assessment['displayable']) {
