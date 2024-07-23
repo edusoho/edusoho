@@ -2308,7 +2308,7 @@ question.bank.paper.random: 随机卷
 question.bank.paper.operation: 操作
 question.bank.paper.num: 试卷数量
 question.bank.paper.numberOfItems/score: 题数/分数
-question.bank.paper.creator/createdAt: 创建人/创建时间
+question.bank.paper.updatePerson/updatedAt: 更新人/更新时间
 question.bank.paper.selectAll: 全选
 question.bank.paper.selectedItems: 选择 %select% 项
 question.bank.paper.pageTotal: 共 %total% 项

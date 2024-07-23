@@ -36,7 +36,7 @@ const columns = [
     align: 'right',
   },
   {
-    title: Translator.trans('question.bank.paper.creator/createdAt'),
+    title: Translator.trans('question.bank.paper.updatePerson/updatedAt'),
     scopedSlots: {customRender: 'creatorAndCreatedAt'},
     width: 160,
   },

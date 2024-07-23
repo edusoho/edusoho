@@ -2340,6 +2340,7 @@ question.bank.paper.random: Random
 question.bank.paper.operation: Operation
 question.bank.paper.num: Amount
 question.bank.paper.numberOfItems/score: Number of items/Score
+question.bank.paper.updatePerson/updatedAt: Update Person/Updated Time
 question.bank.paper.creator/createdAt: Creator/Created Time
 question.bank.paper.selectAll: Select All
 question.bank.paper.selectedItems: Selected %select% items
