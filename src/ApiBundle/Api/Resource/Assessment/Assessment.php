@@ -87,7 +87,7 @@ class Assessment extends AbstractResource
             'bank_id' => $fields['itemBankId'],
             'created_user_id' => $this->getCurrentUser()->getId(),
             'item_count' => array_sum(array_values($counts)),
-            // question_count 并不准确，受材料题子题数量影响，这里直接设置为0
+            // question_count 并不准确，受材料题子题数量影响，这里直接设置为question_count
             'question_count' => array_sum(array_values($counts)),
             'displayable' => '1',
             'total_score' => $total_sum,
