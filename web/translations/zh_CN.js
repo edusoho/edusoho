@@ -2060,7 +2060,7 @@ t.add("question.bank.paper.random", "\u968f\u673a\u5377", "js", "zh_CN");
 t.add("question.bank.paper.operation", "\u64cd\u4f5c", "js", "zh_CN");
 t.add("question.bank.paper.num", "\u8bd5\u5377\u6570\u91cf", "js", "zh_CN");
 t.add("question.bank.paper.numberOfItems\/score", "\u9898\u6570\/\u5206\u6570", "js", "zh_CN");
-t.add("question.bank.paper.creator\/createdAt", "\u521b\u5efa\u4eba\/\u521b\u5efa\u65f6\u95f4", "js", "zh_CN");
+t.add("question.bank.paper.updatePerson\/updatedAt", "\u66f4\u65b0\u4eba\/\u66f4\u65b0\u65f6\u95f4", "js", "zh_CN");
 t.add("question.bank.paper.selectAll", "\u5168\u9009", "js", "zh_CN");
 t.add("question.bank.paper.selectedItems", "\u9009\u62e9 %select% \u9879", "js", "zh_CN");
 t.add("question.bank.paper.pageTotal", "\u5171 %total% \u9879", "js", "zh_CN");
