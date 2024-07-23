@@ -76,6 +76,7 @@
                   'testpaperName',
                   { initialValue: testpaperName, rules: [{ required: true, message: '请输入试卷名称' }] },
                 ]"
+                :maxLength="50"
               />
               <span class="max-num">{{ testpaperName ? testpaperName.length : 0 }}/50</span>
             </a-form-item>
