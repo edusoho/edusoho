@@ -140,7 +140,7 @@
                 </span>
                 <span class="question-type-display-cell-number-total"
                       v-show="questionCounts[type.type].total === 0">{{ questionCounts[type.type].total }}</span>
-                <span class="question-type-display-cell-number-total">/{{ questionCounts[type.type].total }}</span>
+                <span class="question-type-display-cell-number-total" :class="countErrorClass(type.type)">/{{ questionCounts[type.type].total }}</span>
               </div>
               <div class="question-type-display-cell-score" :class="{'row-editing': editingRow === 'score'}">
                 <input type="number" v-model="scores.questionType[type.type]" @focus="editingRow = 'score'" @blur="onInputScoreBlur(type.type)"/>
@@ -396,6 +396,11 @@ export default {
     isPersonalTestPaper() {
       return this.testPaperFormState.type === 'aiPersonality';
     },
+    countErrorClass() {
+      return type => {
+        return this.questionCounts[type].choose > this.questionCounts[type].total ? 'question-type-display-cell-number-total-error' : '';
+      };
+    }
   },
   mounted() {
     this.fetchLastQuestionTypeDisplaySettings();
@@ -565,10 +570,10 @@ export default {
     onQuestionTypeDisplaySettingUpdate(settingKey, displaySetting) {
       this.$set(this.questionTypeDisplaySettings, settingKey, displaySetting);
     },
-    onQuestionConfigsUpdate(questionConfigs) {
-      Object.keys(questionConfigs).forEach(type => {
-        this.scores.questionTypeCategory[type] = questionConfigs[type].score;
-        this.questionCounts[type].categoryCounts = questionConfigs[type].count.choose;
+    onQuestionConfigsUpdate(questionCounts, scores) {
+      Object.keys(questionCounts).forEach(type => {
+        this.scores.questionTypeCategory[type] = scores[type];
+        this.questionCounts[type].categoryCounts = questionCounts[type].choose;
       });
     },
     onDescriptionInputFocus() {
