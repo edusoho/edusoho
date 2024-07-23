@@ -9,7 +9,7 @@
 
     <div class="test-create-content">
       <a-alert
-        v-if="isPersonalTestPaper()"
+        v-if="isPersonalTestPaper"
         message="个性卷 —— 个性化纠错练习，提升学员对知识的全面掌握，错题，新题优先作答，错误率较高的知识点反个性习，提升掌握度！"
         type="success"
         closable
@@ -61,7 +61,7 @@
           </a-form-item>
         </div>
 
-        <div v-if="!isPersonalTestPaper()"
+        <div v-if="!isPersonalTestPaper"
              class="test-paper-save-form-item test-paper-save-form-item-align-flex-start">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-required">*</span>
@@ -102,7 +102,7 @@
               </div>
               <a-radio-group v-model="testPaperFormState.generateType">
                 <a-radio value="questionType">按题型抽题</a-radio>
-                <a-radio v-if="!isPersonalTestPaper()" value="questionTypeCategory">按题型+分类抽题</a-radio>
+                <a-radio v-if="!isPersonalTestPaper" value="questionTypeCategory">按题型+分类抽题</a-radio>
               </a-radio-group>
             </div>
             <question-type-display-set-menu
@@ -171,7 +171,7 @@
           </div>
         </div>
 
-        <div v-if="isPersonalTestPaper()" class="test-paper-save-form-item">
+        <div v-if="isPersonalTestPaper" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">错题比例</span>
           </div>
@@ -192,14 +192,14 @@
           </div>
         </div>
 
-        <div v-if="!isPersonalTestPaper()" class="test-paper-save-form-item">
+        <div v-if="!isPersonalTestPaper" class="test-paper-save-form-item">
           <div class="test-paper-save-form-item-label">
             <span class="test-paper-save-form-item-label-text">难度调节</span>
           </div>
           <a-switch v-model="difficultyVisible" checked-children="开启" un-checked-children="关闭"/>
         </div>
 
-        <div v-if="!isPersonalTestPaper()" class="test-paper-difficulty" v-show="difficultyVisible">
+        <div v-if="!isPersonalTestPaper" class="test-paper-difficulty" v-show="difficultyVisible">
           <div class="test-paper-save-form-item">
             <div class="test-paper-save-form-item-label">
               <span class="test-paper-save-form-item-label-text">试卷难度</span>
@@ -392,7 +392,10 @@ export default {
     },
     paperScore() {
       return this.sumChooseQuestionScore();
-    }
+    },
+    isPersonalTestPaper() {
+      return this.testPaperFormState.type === 'aiPersonality';
+    },
   },
   mounted() {
     this.fetchLastQuestionTypeDisplaySettings();
@@ -580,9 +583,6 @@ export default {
     onQuestionCategoriesSelected(categories) {
       this.selectedQuestionCategories = categories;
     },
-    isPersonalTestPaper() {
-      return this.testPaperFormState.type === 'aiPersonality';
-    },
     saveTestPaper() {
       if (this.fetching) {
         return;
@@ -648,7 +648,7 @@ export default {
             }
             await this.$router.push({
               name: 'list',
-              query: {tab: this.isPersonalTestPaper() ? 'ai_personality' : 'all'}
+              query: {tab: this.isPersonalTestPaper ? 'ai_personality' : 'all'}
             });
             if (isCreate) {
               this.$message.success('创建成功');

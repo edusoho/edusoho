@@ -22,6 +22,7 @@ export default {
     :footer="null"
     title="试卷说明"
     @cancel="handleCancel"
+    :wrapClassName="'paper-description'"
   >
     <div v-html="description"></div>
   </a-modal>
