@@ -747,8 +747,13 @@ export default {
       this.editingRow = null;
       if (this.scores.questionType[type] === '') {
         this.scores.questionType[type] = 2;
-      } else if (!Number.isInteger(Number(this.scores.questionType[type]))) {
-        this.scores.questionType[type] = Number(this.scores.questionType[type]).toFixed(1);
+      } else {
+        let score = Number(this.scores.questionType[type]);
+        score = score <= 0 ? 2 : score;
+        if (!Number.isInteger(score)) {
+          score = score.toFixed(1);
+        }
+        this.scores.questionType[type] = score;
       }
     },
   },
@@ -759,54 +764,57 @@ export default {
       this.testPaperFormState.name = paper.name;
       this.testPaperFormState.type = paper.type;
       this.testPaperFormState.description = paper.description;
-      this.testPaperFormState.num = paper.assessmentGenerateRule.num;
+      this.testPaperFormState.num = 0;
       this.testPaperFormState.itemBankId = paper.bank_id;
-      this.testPaperFormState.generateType = paper.assessmentGenerateRule.type;
-      this.testPaperFormState.wrongQuestionRate = paper.assessmentGenerateRule.wrong_question_rate;
-      const displayTypes = Object.keys(paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts);
       let questionTypeDisplaySetting = this.getDefaultQuestionTypeDisplaySetting(false);
-      questionTypeDisplaySetting.forEach(type => {
-        if (-1 !== displayTypes.indexOf(type.type)) {
-          type.checked = true;
-        }
-      });
-      this.questionTypeDisplaySettings[this.testPaperFormState.generateType] = questionTypeDisplaySetting;
-      displayTypes.forEach(type => {
-        this.scores[this.testPaperFormState.generateType][type] = paper.assessmentGenerateRule.question_setting.scores[type];
-      });
-      if (this.testPaperFormState.generateType === 'questionType') {
+
+      if (paper.assessmentGenerateRule) {
+        this.testPaperFormState.generateType = paper.assessmentGenerateRule.type;
+        this.testPaperFormState.wrongQuestionRate = paper.assessmentGenerateRule.wrong_question_rate;
+        const displayTypes = Object.keys(paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts);
+        questionTypeDisplaySetting.forEach(type => {
+          if (-1 !== displayTypes.indexOf(type.type)) {
+            type.checked = true;
+          }
+        });
+        this.questionTypeDisplaySettings[this.testPaperFormState.generateType] = questionTypeDisplaySetting;
         displayTypes.forEach(type => {
-          this.questionCounts[type].choose = paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts[type];
+          this.scores[this.testPaperFormState.generateType][type] = paper.assessmentGenerateRule.question_setting.scores[type];
         });
-      } else {
-        const categories = await apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/map`);
-        paper.assessmentGenerateRule.question_setting.questionCategoryCounts.forEach(questionCategoryCount => {
+        if (this.testPaperFormState.generateType === 'questionType') {
           displayTypes.forEach(type => {
-            this.questionCounts[type].categoryCounts = this.questionCounts[type].categoryCounts || {};
-            this.questionCounts[type].categoryCounts[questionCategoryCount.categoryId] = questionCategoryCount.counts[type];
+            this.questionCounts[type].choose = paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts[type];
           });
-          this.selectedQuestionCategories.push({
-            id: categories[questionCategoryCount.categoryId].id,
-            name: categories[questionCategoryCount.categoryId].name,
-            level: {
-              1: '一级分类',
-              2: '二级分类',
-              3: '三级分类',
-            }[categories[questionCategoryCount.categoryId].depth],
+        } else {
+          const categories = await apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/map`);
+          paper.assessmentGenerateRule.question_setting.questionCategoryCounts.forEach(questionCategoryCount => {
+            displayTypes.forEach(type => {
+              this.questionCounts[type].categoryCounts = this.questionCounts[type].categoryCounts || {};
+              this.questionCounts[type].categoryCounts[questionCategoryCount.categoryId] = questionCategoryCount.counts[type];
+            });
+            this.selectedQuestionCategories.push({
+              id: categories[questionCategoryCount.categoryId].id,
+              name: categories[questionCategoryCount.categoryId].name,
+              level: {
+                1: '一级分类',
+                2: '二级分类',
+                3: '三级分类',
+              }[categories[questionCategoryCount.categoryId].depth],
+            });
           });
-        });
+        }
+
+        const difficulty = paper.assessmentGenerateRule.difficulty;
+        if (difficulty.simple && difficulty.normal && difficulty.difficulty) {
+          this.difficultyVisible = true;
+          this.difficultyScales.simple.scale = Number.parseInt(`${difficulty.simple}`);
+          this.difficultyScales.normal.scale = Number.parseInt(`${difficulty.normal}`);
+          this.difficultyScales.difficulty.scale = Number.parseInt(`${difficulty.difficulty}`);
+        }
       }
 
       if (this.testPaperFormState.description) {
         this.onDescriptionInputFocus();
-      }
-
-      const difficulty = paper.assessmentGenerateRule.difficulty;
-      if (difficulty.simple && difficulty.normal && difficulty.difficulty) {
-        this.difficultyVisible = true;
-        this.difficultyScales.simple.scale = Number.parseInt(`${difficulty.simple}`);
-        this.difficultyScales.normal.scale = Number.parseInt(`${difficulty.normal}`);
-        this.difficultyScales.difficulty.scale = Number.parseInt(`${difficulty.difficulty}`);
       }
     }
   }

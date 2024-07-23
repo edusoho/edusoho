@@ -179,10 +179,15 @@ export default {
       this.editingRow = null;
       if (this.questionConfigs[type].score === '') {
         this.questionConfigs[type].score = 2;
-      } else if (!Number.isInteger(Number(this.questionConfigs[type].score))) {
-        this.questionConfigs[type].score = Number(this.questionConfigs[type].score).toFixed(1);
+      } else {
+        let score = Number(this.questionConfigs[type].score);
+        score = score <= 0 ? 2 : score;
+        if (!Number.isInteger(score)) {
+          score = score.toFixed(1);
+        }
+        this.questionConfigs[type].score = score;
       }
-    }
+    },
   },
   watch: {
     drawerVisible: function (val) {
