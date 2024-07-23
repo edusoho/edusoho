@@ -69,6 +69,7 @@
           <div class="question-category-choose-selected-header">
             <span class="question-category-choose-selected-header-selected">已选</span>
             <a-popconfirm
+              v-show="clearOperateVisible"
               title="确定要清空全部吗？"
               placement="bottomRight"
               ok-text="确定"
@@ -77,6 +78,7 @@
             >
               <span class="question-category-choose-selected-header-clear">清空</span>
             </a-popconfirm>
+            <span v-show="!clearOperateVisible" class="question-category-choose-selected-header-clear-disable">清空</span>
           </div>
           <div class="question-category-choose-selected-body">
             <div v-for="category in categories" v-show="checkedCategories[category.id]"
@@ -171,6 +173,15 @@ export default {
         }
       }
       return this.categories.length > 0;
+    },
+    clearOperateVisible() {
+      for (const category of this.categories) {
+        if (this.checkedCategories[category.id]) {
+          return true;
+        }
+      }
+
+      return false;
     },
   },
   methods: {
