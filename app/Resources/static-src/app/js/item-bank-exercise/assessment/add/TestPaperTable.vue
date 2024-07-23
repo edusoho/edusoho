@@ -116,7 +116,7 @@ export default {
       pagination.pageSize = Number(paging.limit);
 
       this.loading = false;
-      this.pageData = data.map(a => a.assessment);
+      this.pageData = data.map(a => Object.assign(a.assessment, {id: a.id}));
       this.pagination = pagination;
     },
     getTableTotal(total) {
@@ -136,7 +136,7 @@ export default {
         okText: "删除",
         cancelText: Translator.trans("site.cancel"),
         onOk: async () => {
-          await Testpaper.deleteExercise({ids: this.selectedRowKeys});
+          await Testpaper.deleteExercise({exerciseId: this.exerciseId, ids: this.selectedRowKeys});
           this.$message.success('删除成功');
           const params = {
             limit: this.pagination.pageSize,
@@ -156,7 +156,7 @@ export default {
         centered: true,
         onOk: async () => {
           try {
-            await Testpaper.deleteExercise({ids: [paper.id]});
+            await Testpaper.deleteExercise({exerciseId: this.exerciseId, ids: [paper.id]});
             this.$message.success('移除成功');
             const params = {
               limit: this.pagination.pageSize,
