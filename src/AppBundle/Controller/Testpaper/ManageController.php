@@ -22,6 +22,7 @@ use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\TokenService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentGenerateRuleService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -461,6 +462,7 @@ class ManageController extends BaseController
         if ('random' == $assessment['type']) {
             return $this->render('testpaper/manage/random-item-get-table.html.twig', [
                 'assessment' => $assessment,
+                'assessmentGenerateRule' => $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($assessmentId),
             ]);
         } else {
             return $this->render('testpaper/manage/item-get-table.html.twig', [
@@ -954,6 +956,14 @@ class ManageController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return AssessmentGenerateRuleService
+     */
+    private function getAssessmentGenerateRuleService()
+    {
+        return $this->createService('ItemBank:Assessment:AssessmentGenerateRuleService');
     }
 
     /**
