@@ -218,7 +218,9 @@ export default {
                class="question-type-category-display-header-normal"
                :class="{'row-editing': editingRow === index}">
             <div class="question-type-category-display-header-normal-level">{{ category.level }}</div>
-            <span class="category-name">{{ category.name }}</span>
+            <a-tooltip placement="top" :title="category.name">
+              <span class="category-name">{{ category.name }}</span>
+            </a-tooltip>
           </div>
           <div class="question-type-category-display-header-score" :class="{'row-editing': editingRow === categories.length}">
             <span class="question-type-category-display-header-top-content">按题型设置分值</span>

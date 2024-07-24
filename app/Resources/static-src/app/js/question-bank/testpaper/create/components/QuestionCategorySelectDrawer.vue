@@ -84,7 +84,9 @@
             <div v-for="category in categories" v-show="checkedCategories[category.id]"
                  class="question-category-choose-selected-body-item">
               <div class="question-category-choose-selected-body-item-text">
-                <div class="question-category-choose-selected-body-item-text-name">{{ category.name }}</div>
+                <a-tooltip placement="top" :title="category.name">
+                  <div class="question-category-choose-selected-body-item-text-name">{{ category.name }}</div>
+                </a-tooltip>
                 <span class="question-category-choose-selected-body-item-text-level">{{ category.level }}</span>
               </div>
               <img
