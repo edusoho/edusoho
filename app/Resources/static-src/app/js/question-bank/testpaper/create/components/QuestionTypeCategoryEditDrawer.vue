@@ -75,7 +75,7 @@ export default {
     },
     countErrorClass() {
       return (categoryId, type) => {
-        return this.questionCounts[type].choose[categoryId] > this.questionCounts[type].total[categoryId] ? 'question-type-category-display-cell-number-total-error' : '';
+        return Number(this.questionCounts[type].choose[categoryId]) > this.questionCounts[type].total[categoryId] ? 'question-type-category-display-cell-number-total-error' : '';
       }
     },
   },

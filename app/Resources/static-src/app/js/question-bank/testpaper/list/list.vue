@@ -211,6 +211,14 @@ export default {
         },
       });
     },
+    async handleRegenerate(paper) {
+      await Testpaper.regenerate(paper.id);
+      const params = {
+        limit: this.pagination.pageSize,
+        offset: (this.pagination.current - 1) * this.pagination.pageSize
+      };
+      await this.fetchTestPaper(params);
+    },
     exportPaper(paper) {
       window.open(`/question_bank/${this.itemBankId}/testpaper/${paper.id}/export`, '_blank')
     },
@@ -373,6 +381,7 @@ export default {
         <a-badge v-if="status === 'draft'" color="gray" :text="'question.bank.paper.draft'|trans"/>
         <a-badge v-if="status === 'open'" color="green" :text="'question.bank.paper.published'|trans"/>
         <a-badge v-if="status === 'closed'" color="red" :text="'question.bank.paper.closed'|trans"/>
+        <a-badge v-if="status === 'failure'" color="red" :text="'question.bank.paper.fail'|trans"/>
         <a-badge v-if="status === 'generating'" color="orange" :text="'question.bank.paper.generating'|trans"/>
       </template>
       <template slot="numberOfItemsAndScore" slot-scope="record">
@@ -394,7 +403,7 @@ export default {
           >
             {{ 'question.bank.paper.preview'|trans }}
           </a-button>
-          <a-button v-if="['generating', 'fail', 'closed'].includes(record.status)"
+          <a-button v-if="['generating', 'closed'].includes(record.status)"
                     type="link"
                     :disabled="true"
           >
@@ -412,7 +421,7 @@ export default {
                     class="operation-group-button-active"
                     @click="publish(record)">{{ 'question.bank.paper.publish'|trans }}
           </a-button>
-          <a-button v-if="['generating', 'fail'].includes(record.status)"
+          <a-button v-if="['generating'].includes(record.status)"
                     type="link"
                     :disabled="true">
             {{ 'question.bank.paper.publish'|trans }}
@@ -422,12 +431,26 @@ export default {
                     :disabled="true">
             {{ 'question.bank.paper.edit'|trans }}
           </a-button>
-          <a-button v-else
+          <a-button v-else-if="record.status !== 'failure'"
                     type="link"
                     class="operation-group-button-active"
                     @click="handleEdit(record)"
           >
             {{ 'question.bank.paper.edit'|trans }}
+          </a-button>
+          <a-button v-if="record.status === 'failure'"
+                    type="link"
+                    class="operation-group-button-active"
+                    @click="handleRegenerate(record)"
+          >
+            重新生成
+          </a-button>
+          <a-button v-if="record.status === 'failure'"
+                    type="link"
+                    class="operation-group-button-active"
+                    @click="handleDelete(record)"
+          >
+            删除
           </a-button>
           <a-dropdown v-if="['closed', 'draft'].includes(record.status) || record.type === 'regular'"
                       :trigger="['click']"

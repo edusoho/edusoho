@@ -84,7 +84,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
 
     private function getSectionsByAiPersonality(array $fields)
     {
-        list($range, $sections) = $this->getRangeAndSections($fields);
+        list($range, $sections) = $this->getRangeAndSectionsByQuestionTypeCategory($fields, $fields['questionCategoryCounts'][0]);
         if (!empty($fields['itemIds'])) {
             $this->getRangeAndSectionsByWrongItems($sections, $fields['itemIds']);
         }

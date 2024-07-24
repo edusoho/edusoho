@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
+use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Testpaper\Builder\RandomTestpaperBuilder;
@@ -21,7 +22,9 @@ class Assessment extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $assessment = $this->getAssessmentService()->getAssessment($id);
-        $assessment['assessmentGenerateRule'] = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($id);
+        if ('regular' != $assessment['type']) {
+            $assessment['assessmentGenerateRule'] = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($id);
+        }
 
         return $assessment;
     }
@@ -109,7 +112,7 @@ class Assessment extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
         $methodName = 'update'.ucfirst($fields['type']).'Assessment';
-        $this->$methodName($request);
+        $this->$methodName($request, $id);
 
         return ['ok' => true];
     }
@@ -135,10 +138,10 @@ class Assessment extends AbstractResource
         }
     }
 
-    private function updateAiPersonalityAssessment($request)
+    private function updateAiPersonalityAssessment($request, $id)
     {
         $fields = $request->request->all();
-        $assessment = $this->getAssessmentService()->getAssessment($fields['id']);
+        $assessment = $this->getAssessmentService()->getAssessment($id);
         $counts = $fields['questionCategoryCounts'][0]['counts'];
         $scores = $fields['scores'];
         $totalSum = array_sum(array_map(function ($key) use ($counts, $scores) {
@@ -164,6 +167,10 @@ class Assessment extends AbstractResource
         $conditions['displayable'] = 1;
         $conditions['parent_id'] = 0;
         $conditions['bank_id'] = $conditions['itemBankId'];
+        if (isset($conditions['exerciseId']) && isset($conditions['moduleId'])) {
+            $assessmentIds = $this->getAssessmentExerciseService()->search(['exerciseId' => $conditions['exerciseId'], 'moduleId' => $conditions['moduleId']], [], 0, PHP_INT_MAX, ['id']);
+            $conditions['notInIds'] = array_column($assessmentIds, 'id');
+        }
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $total = $this->getAssessmentService()->countAssessments($conditions);
         if (!empty($conditions['createdUser'])) {
@@ -298,6 +305,14 @@ class Assessment extends AbstractResource
         ];
 
         return $assessmentGenerateRule;
+    }
+
+    /**
+     * @return AssessmentExerciseService
+     */
+    protected function getAssessmentExerciseService()
+    {
+        return $this->service('ItemBankExercise:AssessmentExerciseService');
     }
 
     /**

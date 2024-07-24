@@ -42,7 +42,6 @@ class AssessmentDaoImpl extends AdvancedDaoImpl implements AssessmentDao
                 'status = :status',
                 'displayable = :displayable',
                 'type = :type',
-                'parent_id = :parent_id',
                 'parent_id IN (:parent_ids)',
                 'created_user_id in (:created_user_ids)'
             ],

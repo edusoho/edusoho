@@ -69,9 +69,12 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
                     'displayable' => '0',
                 ];
             $userId = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-            $AnswerRecordIds = $this->getAnswerRecordService()->search(['assessmentId' => $assessmentId, 'userId' => $userId], [], 0, PHP_INT_MAX, ['id']);
-            $answerQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_ids' => array_column($AnswerRecordIds, 'id'), 'status' => 'wrong'], [], 0, PHP_INT_MAX);
-            if (empty($answerQuestionReports)) {
+            $assessmentIds = $this->getAssessmentService()->searchAssessments(['parent_id' => $assessmentId], [], 0, PHP_INT_MAX, ['id']);
+            $assessmentIds = array_column($assessmentIds, 'id');
+            $assessmentIds = array_merge($assessmentIds, [$assessmentId]);
+            $answerRecordIds = $this->getAnswerRecordService()->search(['assessment_ids' => $assessmentIds, 'userId' => $userId], [], 0, PHP_INT_MAX, ['id']);
+            $answerQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_ids' => array_column($answerRecordIds, 'id'), 'status' => 'wrong'], [], 0, PHP_INT_MAX);
+            if (empty($answerQuestionReports) || empty($answerRecordIds)) {
                 $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
             } else {
                 $assessmentParams['itemIds'] = array_column($answerQuestionReports, 'item_id');
