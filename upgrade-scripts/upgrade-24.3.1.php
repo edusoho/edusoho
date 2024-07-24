@@ -88,9 +88,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 KEY `idx_bank_id` (`bank_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='试卷生成规则表';
         ");
+            $this->logger('info', '创建表biz_assessment_generate_rule成功');
         }
-
-        $this->logger('info', '创建表biz_assessment_generate_rule成功');
 
         return 1;
     }
@@ -104,9 +103,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 ADD COLUMN `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '随机卷父试卷的ID' AFTER `type`,
                 ADD INDEX `idx_parent_id` (`parent_id`);
             ");
-        }
 
-        $this->logger('info', '更新表biz_assessment字段成功');
+            $this->logger('info', '更新表biz_assessment字段成功');
+        }
 
         return 1;
     }
