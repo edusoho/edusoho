@@ -38,6 +38,11 @@ class SaveAnswer extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
 
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentResponse['assessment_id']);
+        if (empty($assessment)) {
+            throw new AnswerException('试卷已删除', ErrorCode::ASSESSMENT_NOTFOUND);
+        }
+
         if (empty($assessmentResponse['admission_ticket'])) {
             throw new AnswerException('答题保存功能已升级，请更新客户端版本', ErrorCode::ANSWER_OLD_VERSION);
         }

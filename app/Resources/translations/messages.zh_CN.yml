@@ -10677,6 +10677,7 @@ exception.common_not_found_api: API资源不存在
 
 exception.assessment_check_failed: 试卷创建检查失败
 exception.assessment_status_error: 试卷状态错误
+exception.assessment_status_closed: 试卷已关闭
 
 exception.article.notfound: 资讯不存在!
 exception.article.not_found_category: 文章分类不存在,操作失败！
