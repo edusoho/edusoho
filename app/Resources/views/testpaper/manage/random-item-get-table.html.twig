@@ -17,7 +17,7 @@
       <td >{{ section.item_count|default(0) }}</td>
       <td >{{ section.total_score|default(0) }}</td>
       {% if first %}
-        <td rowspan="{{ assessment.sections|length }}" style="vertical-align: middle">100</td>
+        <td rowspan="{{ assessment.sections|length }}" style="vertical-align: middle">{{ assessmentGenerateRule.num }}</td>
         {% set first = false %}
       {% endif %}
     </tr>
