@@ -57,10 +57,10 @@ class ContinueAnswer extends AbstractResource
         if ('0' != $assessment['parent_id']) {
             $assessmentParent = $this->getAssessmentService()->getAssessment($assessment['parent_id']);
             if (empty($assessmentParent)) {
-                throw \ApiBundle\Api\Resource\Assessment\AssessmentException::ASSESSMENT_DELETED();
+                throw AssessmentException::ASSESSMENT_NOTEXIST();
             }
             if ('closed' == $assessmentParent['status']) {
-                throw \ApiBundle\Api\Resource\Assessment\AssessmentException::ASSESSMENT_CLOSED();
+                throw AssessmentException::ASSESSMENT_NOTOPEN();
             }
         }
         if ('open' !== $assessment['status']) {
