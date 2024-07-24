@@ -466,7 +466,11 @@ class TestpaperController extends BaseController
                 'score' => $testPaper['total_score'],
             ];
         }
-        $assessmentType = array_column($this->getAssessmentService()->findAssessmentTypes(), 'type');
+        $assessmentTypes = $this->getAssessmentService()->findAssessmentTypes();
+        $filteredAssessmentTypes = array_filter($assessmentTypes, function ($assessment) {
+            return 'aiPersonality' !== $assessment['type'];
+        });
+        $assessmentType = array_column($filteredAssessmentTypes, 'type');
 
         return $this->createJsonResponse([
             'testPapers' => $testPapers,

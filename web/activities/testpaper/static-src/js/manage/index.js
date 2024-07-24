@@ -93,6 +93,7 @@ class Testpaper {
     dateFormat();
     this.setValidateRule();
     this.initQuestionBankSelector();
+    this.initTestPaperTypeSelector();
     this.initTestPaperSelector();
     this.initSelectTestPaper(this.$testpaperSelector.select2('data'));
     this.initEvent();
@@ -449,7 +450,7 @@ class Testpaper {
         let testPaperType = $('#testPaperType').val();
         let data = {
           id: element.val(),
-          text: testPaperType ? testPaperType : Translator.trans('activity.testpaper_manage.media_type_required'),
+          text: testPaperType ? Translator.trans('activity.testpaper_'+testPaperType) : Translator.trans('activity.testpaper_manage.media_type_required'),
         };
 
         callback(data);
@@ -528,6 +529,14 @@ class Testpaper {
         width: ''
       },
     });
+  }
+
+  initTestPaperTypeSelector() {
+    if ($('#testPaperName').val()) {
+      this.initAjaxTestPaperTypeSelector();
+    } else {
+      this.initEmptyTestPaperTypeSelector();
+    }
   }
 
   initTestPaperSelector() {
