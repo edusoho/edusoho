@@ -83,6 +83,8 @@ export default {
       const {data, paging} = await Testpaper.search({
         limit: 20,
         itemBankId: this.itemBankId,
+        exerciseId: this.exerciseId,
+        moduleId: this.moduleId,
         status: 'open',
         ...params
       });
@@ -219,9 +221,9 @@ export default {
         </template>
         <template slot="creatorAndCreatedAt" slot-scope="record">
           <div>
-            <span>{{ record.created_user.nickname }}</span>
+            <span>{{ record.updated_user.nickname }}</span>
             <br/>
-            <span class="created_time">{{ $dateFormat(record.created_time, 'YYYY-MM-DD HH:mm:ss') }}</span>
+            <span class="created_time">{{ $dateFormat(record.updated_time, 'YYYY-MM-DD HH:mm:ss') }}</span>
           </div>
         </template>
       </a-table>
