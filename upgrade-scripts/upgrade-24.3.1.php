@@ -70,23 +70,26 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function createbizAssessmentGenerateRuleTable()
     {
-        $this->getConnection()->exec("
-          CREATE TABLE IF NOT EXISTS `biz_assessment_generate_rule` (
-            `id` int(10) NOT NULL AUTO_INCREMENT,
-            `num` int(10) NOT NULL COMMENT '试卷份数',
-            `type` varchar(255) NOT NULL COMMENT '抽题方式(按题型抽题questionType，题型分类questionTypeCategory)',
-            `assessment_id` int(10) NOT NULL COMMENT '试卷编号',
-            `bank_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
-            `question_setting` text NOT NULL COMMENT '题目设置',
-            `difficulty` varchar(255) NULL COMMENT '难度调节',
-            `wrong_question_rate` int(10) NULL COMMENT '错题比例',
-            `created_time` int(10) NULL,
-            `updated_time` int(10) NULL,
-            PRIMARY KEY (`id`),
-            KEY `idx_assessment_id` (`assessment_id`),
-            KEY `idx_bank_id` (`bank_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='试卷生成规则表';
+        if (!$this->isTableExist('biz_assessment_generate_rule')) {
+            $this->getConnection()->exec("
+              CREATE TABLE IF NOT EXISTS `biz_assessment_generate_rule` (
+                `id` int(10) NOT NULL AUTO_INCREMENT,
+                `num` int(10) NOT NULL COMMENT '试卷份数',
+                `type` varchar(255) NOT NULL COMMENT '抽题方式(按题型抽题questionType，题型分类questionTypeCategory)',
+                `assessment_id` int(10) NOT NULL COMMENT '试卷编号',
+                `bank_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
+                `question_setting` text NOT NULL COMMENT '题目设置',
+                `difficulty` varchar(255) NULL COMMENT '难度调节',
+                `wrong_question_rate` int(10) NULL COMMENT '错题比例',
+                `created_time` int(10) NULL,
+                `updated_time` int(10) NULL,
+                PRIMARY KEY (`id`),
+                KEY `idx_assessment_id` (`assessment_id`),
+                KEY `idx_bank_id` (`bank_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='试卷生成规则表';
         ");
+        }
+
         $this->logger('info', '创建表biz_assessment_generate_rule成功');
 
         return 1;
@@ -94,12 +97,15 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function alterTableAssessment()
     {
-        $this->getConnection()->exec("
-          ALTER TABLE `biz_assessment`
-            ADD COLUMN `type` varchar(255) NOT NULL DEFAULT 'regular' COMMENT 'regular(固定卷),random(随机卷),ai_personality(AI个性卷)' AFTER `name`,
-            ADD COLUMN `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '随机卷父试卷的ID' AFTER `type`,
-            ADD INDEX `idx_parent_id` (`parent_id`);
-        ");
+        if (!$this->isFieldExist('biz_assessment', 'type') && !$this->isFieldExist('biz_assessment', 'parent_id')) {
+            $this->getConnection()->exec("
+              ALTER TABLE `biz_assessment`
+                ADD COLUMN `type` varchar(255) NOT NULL DEFAULT 'regular' COMMENT 'regular(固定卷),random(随机卷),ai_personality(AI个性卷)' AFTER `name`,
+                ADD COLUMN `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '随机卷父试卷的ID' AFTER `type`,
+                ADD INDEX `idx_parent_id` (`parent_id`);
+            ");
+        }
+
         $this->logger('info', '更新表biz_assessment字段成功');
 
         return 1;
