@@ -597,8 +597,7 @@ class Testpaper {
     }
     let typeSelected = this.$testpaperTypeSelector.select2('data');
     let type = typeSelected.id;
-    let url = this.$testpaperTypeSelector.data('url');
-    url = url.replace(/[0-9]/, bankId)+'?type='+type;
+    let url = this.$testpaperTypeSelector.data('url')+'?type='+type;
     let self = this;
     $.post(url, function (resp) {
       if (resp.totalCount === 0) {
