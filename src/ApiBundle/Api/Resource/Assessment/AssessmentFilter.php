@@ -28,7 +28,7 @@ class AssessmentFilter extends Filter
         'updated_time',
         'sections',
         'type',
-        'created_user',
+        'updated_user',
         'num',
     ];
 

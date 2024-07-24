@@ -181,15 +181,14 @@ class Assessment extends AbstractResource
             $limit
         );
 
-        $userIds = array_values(array_unique(array_column($assessments, 'created_user_id')));
+        $userIds = array_values(array_unique(array_column($assessments, 'updated_user_id')));
         $users = $this->getUserService()->findUsersByIds($userIds);
         $ids = array_column($assessments, 'id');
         $assessmentGenerateRules = $this->getAssessmentGenerateRuleService()->findAssessmentGenerateRuleByAssessmentIds($ids);
         $assessmentRulesMap = array_column($assessmentGenerateRules, 'num', 'assessment_id');
         foreach ($assessments as &$assessment) {
+            $assessment['updated_user'] = $users[$assessment['updated_user_id']] ?? null;
             if (isset($assessment['type']) && 'random' === $assessment['type']) {
-                $userId = $assessment['created_user_id'];
-                $assessment['created_user'] = $users[$userId] ?? null;
                 $assessment['num'] = $assessmentRulesMap[$assessment['id']] ?? null;
             }
         }
