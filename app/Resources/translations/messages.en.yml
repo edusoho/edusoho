@@ -9352,6 +9352,7 @@ exception.common_not_found_api: 'API not found'
 exception.assessment_check_failed: 'Test paper creation check failed'
 exception.assessment_status_error: 'Assessment status error'
 exception.assessment_status_closed: 'Assessment closed'
+exception.assessment_status_deleted: 'Assessment deleted'
 
 exception.article.notfound: 'The article doesn''t exist'
 exception.article.not_found_category: Category is not exist
