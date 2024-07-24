@@ -93,6 +93,7 @@ class Testpaper {
     dateFormat();
     this.setValidateRule();
     this.initQuestionBankSelector();
+    this.initTestPaperTypeSelector();
     this.initTestPaperSelector();
     this.initSelectTestPaper(this.$testpaperSelector.select2('data'));
     this.initEvent();
@@ -449,7 +450,7 @@ class Testpaper {
         let testPaperType = $('#testPaperType').val();
         let data = {
           id: element.val(),
-          text: testPaperType ? testPaperType : Translator.trans('activity.testpaper_manage.media_type_required'),
+          text: testPaperType ? Translator.trans('activity.testpaper_'+testPaperType) : Translator.trans('activity.testpaper_manage.media_type_required'),
         };
 
         callback(data);
@@ -530,6 +531,14 @@ class Testpaper {
     });
   }
 
+  initTestPaperTypeSelector() {
+    if ($('#testPaperName').val()) {
+      this.initAjaxTestPaperTypeSelector();
+    } else {
+      this.initEmptyTestPaperTypeSelector();
+    }
+  }
+
   initTestPaperSelector() {
     if ($('#testPaperName').val()) {
       this.initAjaxTestPaperSelector();
@@ -588,8 +597,7 @@ class Testpaper {
     }
     let typeSelected = this.$testpaperTypeSelector.select2('data');
     let type = typeSelected.id;
-    let url = this.$testpaperTypeSelector.data('url');
-    url = url.replace(/[0-9]/, bankId)+'?type='+type;
+    let url = this.$testpaperTypeSelector.data('url')+'?type='+type;
     let self = this;
     $.post(url, function (resp) {
       if (resp.totalCount === 0) {

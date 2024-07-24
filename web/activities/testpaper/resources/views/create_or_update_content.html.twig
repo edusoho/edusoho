@@ -120,8 +120,8 @@
         </div>
         <div class="col-sm-3 controls">
           <input id="testpaper-type" class="form-control hidden" name="type" value="{{ type|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}" >
-          {% if type|default() %}
-            <input type="hidden" id="testPaperType" value="{{type}}">
+          {% if testpaper.type|default() %}
+            <input type="hidden" id="testPaperType" value="{{testpaper.type}}">
           {% endif %}
         </div>
         <div class="col-sm-3 controls">
