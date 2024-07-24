@@ -36,7 +36,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = [
             'createbizAssessmentGenerateRuleTable',
-            'registerAIQuestionAnalysisLogReportJob',
+            'alterTableAssessment',
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -92,7 +92,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function registerAIQuestionAnalysisLogReportJob()
+    protected function alterTableAssessment()
     {
         $this->getConnection()->exec("
           ALTER TABLE `biz_assessment`
