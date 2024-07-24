@@ -22,7 +22,9 @@ class Assessment extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $assessment = $this->getAssessmentService()->getAssessment($id);
-        $assessment['assessmentGenerateRule'] = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($id);
+        if ('regular' != $assessment['type']) {
+            $assessment['assessmentGenerateRule'] = $this->getAssessmentGenerateRuleService()->getAssessmentGenerateRuleByAssessmentId($id);
+        }
 
         return $assessment;
     }
