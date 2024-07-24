@@ -23,6 +23,12 @@ class ItemBankExerciseAssessmentExerciseRecord extends AbstractResource
         if ($assessment['status'] == 'closed') {
             throw AssessmentException::ASSESSMENT_CLOSED();
         }
+        if ('0' != $assessment['parent_id']) {
+            $assessmentParent = $this->getAssessmentService()->getAssessment($assessment['parent_id']);
+            if ('closed' == $assessmentParent['status']) {
+                throw AssessmentException::ASSESSMENT_CLOSED();
+            }
+        }
         if ('aiPersonality' == $assessment['type'] && 0 != $assessment['parent_id']) {
             $assessmentId = $assessment['parent_id'];
         }

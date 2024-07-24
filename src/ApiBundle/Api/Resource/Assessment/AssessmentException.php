@@ -13,6 +13,6 @@ class AssessmentException extends AbstractException
     public $messages = [
         4004001 => 'exception.assessment_check_failed',
         4004002 => 'exception.assessment_status_error',
-        4004003 => 'exception.assessment_closed',
+        4004003 => 'exception.assessment_status_closed',
     ];
 }
