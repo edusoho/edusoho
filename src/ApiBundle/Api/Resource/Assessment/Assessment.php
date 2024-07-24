@@ -109,7 +109,7 @@ class Assessment extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
         $methodName = 'update'.ucfirst($fields['type']).'Assessment';
-        $this->$methodName($request);
+        $this->$methodName($request, $id);
 
         return ['ok' => true];
     }
@@ -135,10 +135,10 @@ class Assessment extends AbstractResource
         }
     }
 
-    private function updateAiPersonalityAssessment($request)
+    private function updateAiPersonalityAssessment($request, $id)
     {
         $fields = $request->request->all();
-        $assessment = $this->getAssessmentService()->getAssessment($fields['id']);
+        $assessment = $this->getAssessmentService()->getAssessment($id);
         $counts = $fields['questionCategoryCounts'][0]['counts'];
         $scores = $fields['scores'];
         $totalSum = array_sum(array_map(function ($key) use ($counts, $scores) {

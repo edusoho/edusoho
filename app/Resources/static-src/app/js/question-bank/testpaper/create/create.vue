@@ -289,7 +289,10 @@ export default {
         language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang
       },
       difficultyVisible: false,
-      questionTypeDisplaySettings: {},
+      questionTypeDisplaySettings: {
+        questionType: this.getDefaultQuestionTypeDisplaySetting(),
+        questionTypeCategory: this.getDefaultQuestionTypeDisplaySetting(),
+      },
       questionCounts: {
         single_choice: {
           choose: 0,
@@ -363,9 +366,9 @@ export default {
       },
       form: this.$form.createForm(this, {name: 'save-test-paper'}),
       testPaperFormState: {
-        name: '',
+        name: this.$route.query.name || '',
         description: '',
-        type: 'random',
+        type: this.$route.query.type || 'random',
         itemBankId: null,
         num: 20,
         generateType: 'questionType',
@@ -390,22 +393,53 @@ export default {
       }
     },
     paperQuestionCount() {
-      return this.sumChooseQuestionCount();
+      let count = 0;
+      this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
+        if (!type.checked) {
+          return;
+        }
+        if (this.testPaperFormState.generateType === 'questionType') {
+          count += Number(this.questionCounts[type.type].choose);
+        } else if (this.questionCounts[type.type].categoryCounts) {
+          this.selectedQuestionCategories.forEach(category => {
+            if (this.questionCounts[type.type].categoryCounts[category.id]) {
+              count += Number(this.questionCounts[type.type].categoryCounts[category.id]);
+            }
+          });
+        }
+      });
+
+      return count;
     },
     paperScore() {
-      return this.sumChooseQuestionScore();
+      let score = 0;
+      this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
+        if (!type.checked) {
+          return;
+        }
+        if (this.testPaperFormState.generateType === 'questionType') {
+          score += Number(this.questionCounts[type.type].choose) * this.scores.questionType[type.type];
+        } else if (this.questionCounts[type.type].categoryCounts) {
+          this.selectedQuestionCategories.forEach(category => {
+            if (this.questionCounts[type.type].categoryCounts[category.id]) {
+              score += Number(this.questionCounts[type.type].categoryCounts[category.id]) * this.scores.questionTypeCategory[type.type];
+            }
+          });
+        }
+      });
+
+      return score.toFixed(1);
     },
     isPersonalTestPaper() {
       return this.testPaperFormState.type === 'aiPersonality';
     },
     countErrorClass() {
       return type => {
-        return this.questionCounts[type].choose > this.questionCounts[type].total ? 'question-type-display-cell-number-total-error' : '';
+        return Number(this.questionCounts[type].choose) > this.questionCounts[type].total ? 'question-type-display-cell-number-total-error' : '';
       };
     }
   },
   mounted() {
-    this.fetchLastQuestionTypeDisplaySettings();
     this.fetchQuestionCounts();
     this.$nextTick(() => {
       loadScript(this.CKEditorConfig.jqueryPath, err => {
@@ -419,15 +453,6 @@ export default {
         });
       });
     });
-
-    const routeName = this.$route.name;
-    if (routeName === 'create') {
-      const type = this.$route.query.type;
-      this.testPaperFormState.type = type || 'random';
-
-      const name = this.$route.query.name;
-      this.testPaperFormState.name = name || '';
-    }
 
     document.addEventListener('click', this.handleRouterSkip);
   },
@@ -486,12 +511,6 @@ export default {
         this.form.validateFields(['description'], async () => {
         });
       });
-    },
-    fetchLastQuestionTypeDisplaySettings() {
-      this.questionTypeDisplaySettings = {
-        questionType: this.getDefaultQuestionTypeDisplaySetting(),
-        questionTypeCategory: this.getDefaultQuestionTypeDisplaySetting(),
-      };
     },
     fetchQuestionCounts() {
       apiClient.get('/api/item/questionType/count', {
@@ -597,7 +616,7 @@ export default {
       }
       this.form.validateFields(async (err) => {
         if (!err) {
-          if (this.sumChooseQuestionCount() === 0) {
+          if (this.paperQuestionCount === 0) {
             this.$message.error('请至少选择 1 道题目');
             return;
           }
@@ -675,50 +694,6 @@ export default {
         }
       });
     },
-    sumChooseQuestionCount() {
-      let count = 0;
-      if (!this.questionTypeDisplaySettings[this.testPaperFormState.generateType]) {
-        return count;
-      }
-      this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
-        if (!type.checked) {
-          return;
-        }
-        if (this.testPaperFormState.generateType === 'questionType') {
-          count += Number(this.questionCounts[type.type].choose);
-        } else if (this.questionCounts[type.type].categoryCounts) {
-          this.selectedQuestionCategories.forEach(category => {
-            if (this.questionCounts[type.type].categoryCounts[category.id]) {
-              count += Number(this.questionCounts[type.type].categoryCounts[category.id]);
-            }
-          });
-        }
-      });
-
-      return count;
-    },
-    sumChooseQuestionScore() {
-      let score = 0;
-      if (!this.questionTypeDisplaySettings[this.testPaperFormState.generateType]) {
-        return score.toFixed(1);
-      }
-      this.questionTypeDisplaySettings[this.testPaperFormState.generateType].forEach(type => {
-        if (!type.checked) {
-          return;
-        }
-        if (this.testPaperFormState.generateType === 'questionType') {
-          score += Number(this.questionCounts[type.type].choose) * this.scores.questionType[type.type];
-        } else if (this.questionCounts[type.type].categoryCounts) {
-          this.selectedQuestionCategories.forEach(category => {
-            if (this.questionCounts[type.type].categoryCounts[category.id]) {
-              score += Number(this.questionCounts[type.type].categoryCounts[category.id]) * this.scores.questionTypeCategory[type.type];
-            }
-          });
-        }
-      });
-
-      return score.toFixed(1);
-    },
     handleChangeNum(value) {
       this.testPaperFormState.num = Number.parseInt(value) || 1;
       this.$nextTick(() => {
@@ -766,6 +741,7 @@ export default {
     },
   },
   async beforeMount() {
+    let assessmentGenerateRule;
     if (this.$route.name === 'update') {
       const paper = await Testpaper.get(this.id);
 
@@ -773,57 +749,62 @@ export default {
       this.testPaperFormState.type = paper.type;
       this.testPaperFormState.description = paper.description;
       this.testPaperFormState.itemBankId = paper.bank_id;
-      let questionTypeDisplaySetting = this.getDefaultQuestionTypeDisplaySetting(false);
-
-      if (paper.assessmentGenerateRule) {
-        this.testPaperFormState.num = paper.assessmentGenerateRule.num;
-        this.testPaperFormState.generateType = paper.assessmentGenerateRule.type;
-        this.testPaperFormState.wrongQuestionRate = paper.assessmentGenerateRule.wrong_question_rate;
-        const displayTypes = Object.keys(paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts);
-        questionTypeDisplaySetting.forEach(type => {
-          if (-1 !== displayTypes.indexOf(type.type)) {
-            type.checked = true;
-          }
-        });
-        this.questionTypeDisplaySettings[this.testPaperFormState.generateType] = questionTypeDisplaySetting;
-        displayTypes.forEach(type => {
-          this.scores[this.testPaperFormState.generateType][type] = paper.assessmentGenerateRule.question_setting.scores[type];
-        });
-        if (this.testPaperFormState.generateType === 'questionType') {
-          displayTypes.forEach(type => {
-            this.questionCounts[type].choose = paper.assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts[type];
-          });
-        } else {
-          this.questionCountVisible = true;
-          const categories = await apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/map`);
-          paper.assessmentGenerateRule.question_setting.questionCategoryCounts.forEach(questionCategoryCount => {
-            displayTypes.forEach(type => {
-              this.questionCounts[type].categoryCounts = this.questionCounts[type].categoryCounts || {};
-              this.questionCounts[type].categoryCounts[questionCategoryCount.categoryId] = questionCategoryCount.counts[type];
-            });
-            this.selectedQuestionCategories.push({
-              id: categories[questionCategoryCount.categoryId].id,
-              name: categories[questionCategoryCount.categoryId].name,
-              level: {
-                1: '一级分类',
-                2: '二级分类',
-                3: '三级分类',
-              }[categories[questionCategoryCount.categoryId].depth],
-            });
-          });
-        }
-
-        const difficulty = paper.assessmentGenerateRule.difficulty;
-        if (difficulty.simple && difficulty.normal && difficulty.difficulty) {
-          this.difficultyVisible = true;
-          this.difficultyScales.simple.scale = Number.parseInt(`${difficulty.simple}`);
-          this.difficultyScales.normal.scale = Number.parseInt(`${difficulty.normal}`);
-          this.difficultyScales.difficulty.scale = Number.parseInt(`${difficulty.difficulty}`);
-        }
-      }
+      assessmentGenerateRule = paper.assessmentGenerateRule;
 
       if (this.testPaperFormState.description) {
         this.onDescriptionInputFocus();
+      }
+    } else {
+      const res = await apiClient.get(`/api/item_bank/${this.bankId}/assessment_generate_template/${this.testPaperFormState.type}`);
+      if (res.id) {
+        assessmentGenerateRule = res;
+      }
+    }
+    if (assessmentGenerateRule) {
+      this.testPaperFormState.num = assessmentGenerateRule.num;
+      this.testPaperFormState.generateType = assessmentGenerateRule.type;
+      this.testPaperFormState.wrongQuestionRate = assessmentGenerateRule.wrong_question_rate;
+      const displayTypes = Object.keys(assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts);
+      const questionTypeDisplaySetting = this.getDefaultQuestionTypeDisplaySetting(false);
+      questionTypeDisplaySetting.forEach(type => {
+        if (-1 !== displayTypes.indexOf(type.type)) {
+          type.checked = true;
+        }
+      });
+      this.questionTypeDisplaySettings[this.testPaperFormState.generateType] = questionTypeDisplaySetting;
+      displayTypes.forEach(type => {
+        this.scores[this.testPaperFormState.generateType][type] = assessmentGenerateRule.question_setting.scores[type];
+      });
+      if (this.testPaperFormState.generateType === 'questionType') {
+        displayTypes.forEach(type => {
+          this.questionCounts[type].choose = assessmentGenerateRule.question_setting.questionCategoryCounts[0].counts[type];
+        });
+      } else {
+        this.questionCountVisible = true;
+        const categories = await apiClient.get(`/api/item_bank/${this.bankId}/item_category_transform/map`);
+        assessmentGenerateRule.question_setting.questionCategoryCounts.forEach(questionCategoryCount => {
+          displayTypes.forEach(type => {
+            const categoryCounts = this.questionCounts[type].categoryCounts || {};
+            categoryCounts[questionCategoryCount.categoryId] = questionCategoryCount.counts[type];
+            this.$set(this.questionCounts[type], 'categoryCounts', categoryCounts);
+          });
+          this.selectedQuestionCategories.push({
+            id: categories[questionCategoryCount.categoryId].id,
+            name: categories[questionCategoryCount.categoryId].name,
+            level: {
+              1: '一级分类',
+              2: '二级分类',
+              3: '三级分类',
+            }[categories[questionCategoryCount.categoryId].depth],
+          });
+        });
+      }
+      const difficulty = assessmentGenerateRule.difficulty;
+      if (difficulty.simple && difficulty.normal && difficulty.difficulty) {
+        this.difficultyVisible = true;
+        this.difficultyScales.simple.scale = Number.parseInt(`${difficulty.simple}`);
+        this.difficultyScales.normal.scale = Number.parseInt(`${difficulty.normal}`);
+        this.difficultyScales.difficulty.scale = Number.parseInt(`${difficulty.difficulty}`);
       }
     }
   }

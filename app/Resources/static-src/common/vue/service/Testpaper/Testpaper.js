@@ -30,4 +30,7 @@ export const Testpaper = _.assignIn(baseService, {
   async deleteExercise(params) {
     return await apiClient.delete(`/api/assessmentExercise`, {data: params});
   },
+  async regenerate(id) {
+    return await apiClient.post(`/api/assessment/${id}/regenerate`);
+  }
 });
