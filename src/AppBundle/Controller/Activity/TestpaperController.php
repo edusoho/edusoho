@@ -68,9 +68,27 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $assessment = $this->getAssessmentService()->showAssessment($testpaperActivity['mediaId']);
+        $assessmentChildIds = [];
+        if ('random' == $assessment['type']) {
+            if ('generating' == $assessment['status']) {
+                return $this->createMessageResponse('warning', '试卷生成中，请稍后再试');
+            }
+            $parentId = 0 == $assessment['parent_id'] ? $assessment['id'] : $assessment['parent_id'];
+            $assessmentChildIds = $this->getAssessmentService()->searchAssessments(
+                ['parent_id' => $parentId],
+                ['id' => 'ASC'],
+                0,
+                PHP_INT_MAX,
+                ['id']
+            );
+
+            $assessmentChildIds = array_column($assessmentChildIds, 'id');
+            array_unshift($assessmentChildIds, $parentId);
+        }
 
         return $this->render('activity/testpaper/preview.html.twig', [
             'assessment' => $this->addArrayEmphasisStyle($assessment),
+            'assessmentChildIds' => $assessmentChildIds,
         ]);
     }
 
