@@ -51,7 +51,7 @@ class Assessment extends AbstractResource
     private function generateRandomAssessment($fields)
     {
         $fields = array_merge($fields, [
-            'status' => 'generating',
+            'status' => \Codeages\Biz\ItemBank\Assessment\Constant\AssessmentStatus::GENERATING,
         ]);
         if (!$this->check($fields)) {
             throw AssessmentException::CHECK_FAILED();
