@@ -48,8 +48,26 @@ export default {
       module: state => state.ItemBankModules,
     }),
   },
-  watch: {},
-  created() {},
+  watch: {
+    module(value) {
+      if (value) {
+        this.module.forEach((module, index) => {
+          if (module.id === this.$route.query.moduleId) {
+            this.checkedTab(module, index);
+          }
+        });
+      }
+    },
+  },
+  created() {
+    if (this.module) {
+      this.module.forEach((module, index) => {
+        if (module.id === this.$route.query.moduleId) {
+          this.checkedTab(module, index);
+        }
+      });
+    }
+  },
   methods: {
     checkedTab(item, index) {
       this.activeIndex = index;

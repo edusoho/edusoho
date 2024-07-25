@@ -599,7 +599,15 @@ export default {
               }
             })
             .catch(err => {
-              Toast.fail(err.message);
+              if (err.code === 4032203) {
+                Dialog.alert({
+                  title: '试卷已关闭',
+                  confirmButtonText: '确定',
+                  confirmButtonColor: '#00BE63',
+                });
+              } else {
+                Toast.fail(err.message);
+              }
             });
 
           break;
