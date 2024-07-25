@@ -27,7 +27,6 @@ class TestpaperInfo extends AbstractResource
         if (!$user->isLogin()) {
             throw UserException::UN_LOGIN();
         }
-
         $assessment = $this->getAssessmentService()->showAssessment($testId);
 
         if (empty($assessment)) {
