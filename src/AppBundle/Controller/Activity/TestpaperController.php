@@ -60,14 +60,15 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
     public function previewAction(Request $request, $task)
     {
-        return $this->previewTestpaper($task['activityId'], $task['courseId']);
+        return $this->previewTestpaper($task['activityId'], $task['courseId'], $task['assessmentId']);
     }
 
-    public function previewTestpaper($id, $courseId)
+    public function previewTestpaper($id, $courseId, $assessmentId)
     {
         $activity = $this->getActivityService()->getActivity($id);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-        $assessment = $this->getAssessmentService()->showAssessment($testpaperActivity['mediaId']);
+        $assessmentId = empty($assessmentId) ? $testpaperActivity['mediaId'] : $assessmentId;
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentId);
         $assessmentChildIds = [];
         if ('random' == $assessment['type']) {
             if ('generating' == $assessment['status']) {

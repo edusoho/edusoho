@@ -1,4 +1,10 @@
 .test-paper-list-container {
+  .ant-btn-link:hover, .ant-btn-link:focus {
+    color: fade(@brand-primary, 50%) !important;
+  }
+  .ant-btn-link[disabled].ant-btn-link:hover, .ant-btn-link:focus {
+    color: #bebebe !important;
+  }
   .test-paper-list-header {
     display: flex;
     justify-content: space-between;
@@ -6,6 +12,10 @@
     align-self: stretch;
 
     .testpaper-title-left {
+
+      div {
+        cursor: pointer;
+      }
       display: flex;
       padding: 2px;
       align-items: center;

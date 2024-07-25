@@ -8,7 +8,8 @@ const columns = [
     title: Translator.trans('question.bank.paper.name'),
     dataIndex: 'name',
     ellipsis: true,
-    width: 240,
+    scopedSlots: {customRender: 'name'},
+    width: 270,
   },
   {
     title: Translator.trans('question.bank.paper.paper.type'),
@@ -32,8 +33,8 @@ const columns = [
   {
     title: Translator.trans('question.bank.paper.numberOfItems/score'),
     scopedSlots: {customRender: 'numberOfItemsAndScore'},
-    width: 100,
     align: 'right',
+    width: 130,
   },
   {
     title: Translator.trans('question.bank.paper.updatePerson/updatedAt'),
@@ -137,9 +138,24 @@ export default {
       await this.handleTableChange(this.pagination);
     },
     async publish(record) {
-      await Testpaper.changeStatus(record.id, 'open');
-      record.status = 'open';
-      this.$message.success(Translator.trans('question.bank.paper.publish.success'));
+      if (record.type === 'random') {
+        this.$confirm({
+          title: '随机卷发布后不支持编辑，是否立即发布？',
+          icon: 'exclamation-circle',
+          okText: '发布',
+          cancelText: '取消',
+          centered: true,
+          onOk: async () => {
+            await Testpaper.changeStatus(record.id, 'open');
+            record.status = 'open';
+            this.$message.success(Translator.trans('question.bank.paper.publish.success'));
+          },
+        });
+      } else {
+        await Testpaper.changeStatus(record.id, 'open');
+        record.status = 'open';
+        this.$message.success(Translator.trans('question.bank.paper.publish.success'));
+      }
     },
     async close(record) {
       this.$confirm({
@@ -371,6 +387,11 @@ export default {
       :row-selection="rowSelection"
       @change="handleTableChange"
     >
+      <template slot="name" slot-scope="name">
+        <a-tooltip :title="name">
+          <span>{{ name }}</span>
+        </a-tooltip>
+      </template>
       <template slot="type" slot-scope="type">
         <test-paper-type-tag :type="type"/>
       </template>
@@ -426,11 +447,17 @@ export default {
                     :disabled="true">
             {{ 'question.bank.paper.publish'|trans }}
           </a-button>
-          <a-button v-if="['generating'].includes(record.status) || ['closed', 'open'].includes(record.status) && record.type === 'random'"
-                    type="link"
-                    :disabled="true">
-            {{ 'question.bank.paper.edit'|trans }}
-          </a-button>
+          <a-tooltip v-if="['generating'].includes(record.status) || ['closed', 'open'].includes(record.status) && record.type === 'random'">
+            <template slot="title">
+              随机卷发布后不可编辑
+            </template>
+            <div>
+              <a-button type="link"
+                        :disabled="true">
+                {{ 'question.bank.paper.edit'|trans }}
+              </a-button>
+            </div>
+          </a-tooltip>
           <a-button v-else-if="record.status !== 'failure'"
                     type="link"
                     class="operation-group-button-active"

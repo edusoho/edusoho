@@ -7,6 +7,7 @@ const columns = [
   {
     title: Translator.trans('question.bank.paper.name'),
     dataIndex: 'name',
+    scopedSlots: {customRender: 'name'},
     ellipsis: true,
     width: 340,
   },
@@ -89,6 +90,8 @@ export default {
     preview(record) {
       if (record.type === 'aiPersonality') {
         window.location.href = `${window.location.origin}/question_bank/${this.itemBankId}/testpapers#/preview/${record.id}`
+      } else {
+        window.location.href = `${window.location.origin}/question_bank/${this.itemBankId}/testpaper/${record.id}/preview`
       }
     },
     onSelectChange(selectedRowKeys) {
@@ -192,6 +195,11 @@ export default {
       :loading="loading"
       :row-selection="rowSelection"
     >
+      <template slot="name" slot-scope="name">
+        <a-tooltip :title="name">
+          <span>{{ name }}</span>
+        </a-tooltip>
+      </template>
       <template slot="type" slot-scope="type">
         <testpaper-type-tag :type="type"/>
       </template>
