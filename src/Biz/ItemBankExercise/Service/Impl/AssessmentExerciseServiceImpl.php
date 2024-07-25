@@ -9,6 +9,8 @@ use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseQuestionRecordService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Testpaper\Builder\RandomTestpaperBuilder;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -69,15 +71,18 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
                     'displayable' => '0',
                 ];
             $userId = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
-            $assessmentIds = $this->getAssessmentService()->searchAssessments(['parent_id' => $assessmentId], [], 0, PHP_INT_MAX, ['id']);
+            $assessmentIds = $this->getAssessmentService()->searchAssessments(['bank_id' => $assessment['bank_id']], [], 0, PHP_INT_MAX, ['id']);
             $assessmentIds = array_column($assessmentIds, 'id');
-            $assessmentIds = array_merge($assessmentIds, [$assessmentId]);
-            $answerRecordIds = $this->getAnswerRecordService()->search(['assessment_ids' => $assessmentIds, 'userId' => $userId], [], 0, PHP_INT_MAX, ['id']);
+            $answerRecordIds = $this->getAnswerRecordService()->search(['assessment_ids' => $assessmentIds, 'userId' => $userId], ['created_time' => 'DESC'], 0, 20, ['id']);
             $answerQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_ids' => array_column($answerRecordIds, 'id'), 'status' => 'wrong'], [], 0, PHP_INT_MAX);
-            if (empty($answerQuestionReports) || empty($answerRecordIds)) {
+            $exerciseIds = $this->getExerciseService()->search(['questionBankId' => $assessment['bank_id']], [], PHP_INT_MAX, ['id']);
+            $itemBankExerciseQuestionRecords = $this->getItemBankExerciseQuestionRecordService()->search(['exerciseIds' => $exerciseIds, 'userId' => $userId, 'status' => 'wrong'], ['createdTime' => 'DESC'], 0, 400);
+            if ((empty($answerQuestionReports) || empty($answerRecordIds)) && empty($itemBankExerciseQuestionRecords)) {
                 $assessment = $this->getRandomTestPaperBuilder()->build($assessmentParams);
             } else {
-                $assessmentParams['itemIds'] = array_column($answerQuestionReports, 'item_id');
+                $itemBankExerciseQuestionRecordsItems = array_column($itemBankExerciseQuestionRecords, 'item_id');
+                $answerQuestionReportsItems = array_column($answerQuestionReports, 'item_id');
+                $assessmentParams['itemIds'] = array_merge($itemBankExerciseQuestionRecordsItems, $answerQuestionReportsItems);
                 $items = $this->getItemService()->findItemsByIds($assessmentParams['itemIds']);
                 // 查询所有的题目类型、每种类型按答错次数排序，然后计算是否欠缺
                 // 创建一个空数组用于存储每题的错误次数
@@ -394,5 +399,21 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
     protected function getItemService()
     {
         return $this->biz->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ExerciseQuestionRecordService
+     */
+    protected function getItemBankExerciseQuestionRecordService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseQuestionRecordService');
     }
 }
