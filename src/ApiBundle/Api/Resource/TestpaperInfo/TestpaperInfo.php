@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
@@ -27,8 +28,8 @@ class TestpaperInfo extends AbstractResource
         if (!$user->isLogin()) {
             throw UserException::UN_LOGIN();
         }
-
-        $assessment = $this->getAssessmentService()->showAssessment($testId);
+        $activity = $this->getTestpaperActivityService()->getActivity($testId);
+        $assessment = $this->getAssessmentService()->showAssessment($activity['mediaId']);
 
         if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
@@ -190,5 +191,13 @@ class TestpaperInfo extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->service('Activity:TestpaperActivityService');
     }
 }
