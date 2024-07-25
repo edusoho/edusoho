@@ -32,7 +32,7 @@ class RandomAssessmentCreateJob extends AbstractJob
             for ($i = 0; $i < $assessmentGenerateRule['num'] - 1; ++$i) {
                 $this->biz['testpaper_builder.random_testpaper']->build($assessmentParams);
             }
-            $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'draft']);
+            $this->getAssessmentService()->updateAssessment($assessment['id'], ['status' => 'draft', 'updated_user_id' => $assessment['updated_user_id']]);
             $this->getAssessmentService()->updateBasicAssessmentByParentId($assessment['id'], ['status' => 'draft']);
             $this->biz['db']->commit();
         } catch (\Exception $e) {
