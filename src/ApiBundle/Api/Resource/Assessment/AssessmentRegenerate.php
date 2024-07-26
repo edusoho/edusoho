@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Codeages\Biz\ItemBank\Assessment\Constant\AssessmentType;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 
 class AssessmentRegenerate extends AbstractResource
@@ -14,7 +15,7 @@ class AssessmentRegenerate extends AbstractResource
     public function add(ApiRequest $request, $id)
     {
         $assessment = $this->getAssessmentService()->getAssessment($id);
-        if (empty($assessment) || 'random' != $assessment['type']) {
+        if (empty($assessment) || AssessmentType::RANDOM != $assessment['type']) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -23,7 +24,7 @@ class AssessmentRegenerate extends AbstractResource
         }
         try {
             $this->biz['db']->beginTransaction();
-            $this->getAssessmentService()->updateAssessment($id, ['status' => 'generating']);
+            $this->getAssessmentService()->updateAssessment($id, ['status' => \Codeages\Biz\ItemBank\Assessment\Constant\AssessmentStatus::GENERATING]);
             $this->getAssessmentService()->deleteAssessmentByParentId($id);
             $this->getSchedulerService()->register([
                 'name' => 'RandomAssessmentCreateJob_'.$id,
