@@ -140,7 +140,8 @@ export default {
     async publish(record) {
       if (record.type === 'random') {
         this.$confirm({
-          title: '随机卷发布后不支持编辑，是否立即发布？',
+          title: '确定要发布该试卷吗？',
+          content: '试卷发布后无论是否关闭都将无法修改',
           icon: 'exclamation-circle',
           okText: '发布',
           cancelText: '取消',
