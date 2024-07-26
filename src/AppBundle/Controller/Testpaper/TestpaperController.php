@@ -46,6 +46,12 @@ class TestpaperController extends BaseController
 
         $user = $this->getCurrentUser();
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
+        if ($latestAnswerRecord['assessment_id'] != $testpaperActivity['mediaId']) {
+            $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($latestAnswerRecord['assessment_id']);
+            if (empty($assessmentSnapshot) || $assessmentSnapshot['origin_assessment_id'] != $testpaperActivity['mediaId']) {
+                $latestAnswerRecord = null;
+            }
+        }
         if (empty($latestAnswerRecord) || AnswerRecordStatus::FINISHED == $latestAnswerRecord['status']) {
             if (Testpaper::VALID_PERIOD_MODE_RANGE == $activity['ext']['validPeriodMode'] && $activity['endTime'] < time()) {
                 return $this->createMessageResponse('error', '当前考试已结束，请重新选择考试', '', 3, $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]));
