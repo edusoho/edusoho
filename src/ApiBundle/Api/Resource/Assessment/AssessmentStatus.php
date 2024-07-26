@@ -16,7 +16,7 @@ class AssessmentStatus extends AbstractResource
         $this->validate($status, $assessment);
         try {
             $this->biz['db']->beginTransaction();
-            $this->getAssessmentService()->updateAssessment($id, ['status' => $status]);
+            $this->getAssessmentService()->updateBasicAssessment($id, ['status' => $status]);
             if ('random' == $assessment['type']) {
                 $this->getAssessmentService()->updateBasicAssessmentByParentId($assessment['id'], ['status' => $status]);
             }
