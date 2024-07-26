@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AnswerEngineController extends BaseController
 {
-    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0, $showSaveProgressBtn = 1)
+    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0, $showSaveProgressBtn = 1, $returnUrl = '')
     {
         return $this->render('answer-engine/answer.html.twig', [
             'answerRecord' => $this->getAnswerRecordService()->get($answerRecordId),
@@ -27,6 +27,7 @@ class AnswerEngineController extends BaseController
             'saveGotoUrl' => $saveGotoUrl,
             'showHeader' => $showHeader,
             'showSaveProgressBtn' => $showSaveProgressBtn,
+            'returnUrl' => $returnUrl,
         ]);
     }
 

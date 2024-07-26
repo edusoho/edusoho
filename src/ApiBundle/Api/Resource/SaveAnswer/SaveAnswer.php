@@ -40,7 +40,7 @@ class SaveAnswer extends AbstractResource
         }
 
         $assessment = $this->getAssessmentService()->getAssessment($assessmentResponse['assessment_id']);
-        if (empty($assessment) || ('0' != $assessment['parent_id'] && empty($this->getAssessmentService()->getAssessment($assessment['parent_id'])))) {
+        if (empty($assessment) || (!empty($assessment['parent_id']) && empty($this->getAssessmentService()->getAssessment($assessment['parent_id'])))) {
             throw AssessmentException::ASSESSMENT_DELETED();
         }
 

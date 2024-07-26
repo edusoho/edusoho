@@ -57,6 +57,7 @@ class TestpaperController extends BaseController
             'answerRecordId' => $latestAnswerRecord['id'],
             'submitGotoUrl' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
             'saveGotoUrl' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
+            'returnUrl' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
         ]);
     }
 
