@@ -31,11 +31,12 @@ class AnswerEngineController extends BaseController
         ]);
     }
 
-    public function messageAction($message, $returnUrl)
+    public function messageAction($message, $returnUrl, $showHeader = 1)
     {
         return $this->render('answer-engine/message.html.twig', [
             'message' => $message,
             'returnUrl' => $returnUrl,
+            'showHeader' => $showHeader,
         ]);
     }
 

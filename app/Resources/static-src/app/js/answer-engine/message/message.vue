@@ -9,7 +9,7 @@ export default {
       okText: '确定',
       centered: true,
       onOk: () => {
-        window.location.href = document.getElementById('returnUrl').value;
+        parent.location.href = document.getElementById('returnUrl').value;
       },
     });
   }

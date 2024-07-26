@@ -4,7 +4,7 @@
 
 {% block body %}
   {% block header %}
-    {{ parent() }}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
   <style>
     html, body {
@@ -16,6 +16,6 @@
   <input type="hidden" id="errorMessage" value="{{ message }}">
   <input type="hidden" id="returnUrl" value="{{ returnUrl }}">
   {% block footer %}
-    {{ parent() }}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 {% endblock %}
