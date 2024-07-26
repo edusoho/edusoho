@@ -160,7 +160,19 @@ export default {
       });
     },
     doAgainEvent(data) {
-      location.href = $("[name=restart_url]").val();
+      const assessmentStatus = $('[name=assessment_status]').length > 0 ? $('[name=assessment_status]').val() : '';
+      if (assessmentStatus === 'closed') {
+        this.$error({
+          title: '试卷已关闭',
+          okText: '确定',
+          centered: true,
+          onOk: () => {
+            window.location.href = $('[name=return_url]').val();
+          },
+        });
+      } else {
+        location.href = $("[name=restart_url]").val();
+      }
     },
     cancelFavoriteEvent(favorite) {
       $.ajax({

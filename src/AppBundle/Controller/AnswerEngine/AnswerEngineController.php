@@ -30,6 +30,14 @@ class AnswerEngineController extends BaseController
         ]);
     }
 
+    public function messageAction($message, $returnUrl)
+    {
+        return $this->render('answer-engine/message.html.twig', [
+            'message' => $message,
+            'returnUrl' => $returnUrl,
+        ]);
+    }
+
     public function reportAction(Request $request, $answerRecordId, $restartUrl, $answerShow = 'show', $collect = true, $options = [])
     {
         return $this->render('answer-engine/report.html.twig', [
@@ -39,6 +47,8 @@ class AnswerEngineController extends BaseController
             'collect' => true === $collect ? 1 : 0,
             'showDoAgainBtn' => isset($options['showDoAgainBtn']) ? $options['showDoAgainBtn'] : 1,
             'submitReturnUrl' => isset($options['submitReturnUrl']) ? $options['submitReturnUrl'] : '',
+            'returnUrl' => $options['returnUrl'] ?? '',
+            'assessmentStatus' => $options['assessmentStatus'] ?? '',
         ]);
     }
 

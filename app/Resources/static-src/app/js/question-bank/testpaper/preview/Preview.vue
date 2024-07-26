@@ -1,12 +1,12 @@
 <script>
 
-import TestpaperTypeTag from '../TestpaperTypeTag.vue';
+import TestPaperTypeTag from '../TestPaperTypeTag.vue';
 import {Testpaper} from 'common/vue/service';
 import QuestionTypePreviewDisplay from '../create/components/QuestionTypePreviewDisplay.vue'
 import PaperDescriptionViewModal from './PaperDescriptionViewModal.vue'
 
 export default {
-  components: {QuestionTypePreviewDisplay, TestpaperTypeTag, PaperDescriptionViewModal},
+  components: {QuestionTypePreviewDisplay, TestPaperTypeTag, PaperDescriptionViewModal},
   props: {
     itemBankId: null,
     id: null,
@@ -92,7 +92,8 @@ export default {
         <span class="test-preview-content-title-explanation">（按题型抽题）</span>
       </div>
       <div class="test-preview-content-question-type-display">
-        <question-type-preview-display v-for="(type) in questionTypes"
+        <question-type-preview-display v-for="type in questionTypes"
+                                       :key="type"
                                        :type="type"
                                        v-if="paper.assessmentGenerateRule['question_setting'].questionCategoryCounts[0].counts[type]"
                                        :score="paper.assessmentGenerateRule['question_setting'].scores[type]"
