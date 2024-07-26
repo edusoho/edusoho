@@ -449,7 +449,7 @@ export default {
           </a-button>
           <a-tooltip v-if="['generating'].includes(record.status) || ['closed', 'open'].includes(record.status) && record.type === 'random'">
             <template slot="title">
-              随机卷发布后不可编辑
+              随机试卷仅草稿状态可编辑
             </template>
             <div>
               <a-button type="link"
