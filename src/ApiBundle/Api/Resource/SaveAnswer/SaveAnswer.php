@@ -33,15 +33,15 @@ class SaveAnswer extends AbstractResource
                 throw ExerciseException::CLOSED_EXERCISE();
             }
         }
-        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-        $userId = $this->getCurrentUser()->getId();
-        if (empty($answerRecord) || $userId != $answerRecord['user_id']) {
-            throw CommonException::ERROR_PARAMETER();
-        }
 
         $assessment = $this->getAssessmentService()->getAssessment($assessmentResponse['assessment_id']);
         if (empty($assessment) || (!empty($assessment['parent_id']) && empty($this->getAssessmentService()->getAssessment($assessment['parent_id'])))) {
             throw AssessmentException::ASSESSMENT_DELETED();
+        }
+
+        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+        if (empty($answerRecord) || $this->getCurrentUser()->getId() != $answerRecord['user_id']) {
+            throw CommonException::ERROR_PARAMETER();
         }
 
         if (empty($assessmentResponse['admission_ticket'])) {
