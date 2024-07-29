@@ -32,8 +32,8 @@ class TestpaperInfo extends AbstractResource
         if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
-
-        if ('closed' == $assessment['status']) {
+        $answerRecord = $this->getAnswerRecordService()->search(['userId' => $user['id'], 'assessment_id' => $assessment['id']], ['created_time' => 'desc'], 0, 1);
+        if ('closed' == $assessment['status'] && 'doing' != $answerRecord['status']) {
             throw TestpaperException::CLOSED_TESTPAPER();
         }
 
