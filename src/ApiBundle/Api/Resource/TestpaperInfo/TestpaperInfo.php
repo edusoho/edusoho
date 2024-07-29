@@ -43,7 +43,7 @@ class TestpaperInfo extends AbstractResource
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $user = $this->getCurrentUser();
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
-        if ('closed' == $assessment['status'] && (!empty($latestAnswerRecord) && 'doing' != $latestAnswerRecord['status'])) {
+        if ('closed' == $assessment['status'] && empty($latestAnswerRecord)) {
             throw TestpaperException::CLOSED_TESTPAPER();
         }
 
