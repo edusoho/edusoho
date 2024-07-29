@@ -38,7 +38,7 @@ class TestpaperInfo extends AbstractResource
         if (empty($targetType) || empty($targetId)) {
             throw CommonException::ERROR_PARAMETER();
         }
-        $courseTask = $this->getCourseTaskService()->getTask($targetId);
+        $courseTask = $this->getTaskService()->getTask($targetId);
         $activity = $this->getActivityService()->getActivity($courseTask['activityId'], true);
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $user = $this->getCurrentUser();
@@ -194,21 +194,5 @@ class TestpaperInfo extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
-    }
-
-    /**
-     * @return TestpaperActivityService
-     */
-    protected function getTestpaperActivityService()
-    {
-        return $this->service('Activity:TestpaperActivityService');
-    }
-
-    /**
-     * @return \Biz\Task\Service\TaskService
-     */
-    protected function getCourseTaskService()
-    {
-        return $this->service('Task:TaskService');
     }
 }

@@ -30,16 +30,17 @@ class ContinueAnswer extends AbstractResource
                 throw CourseException::CLOSED_COURSE();
             }
         }
+        if (!empty($assessmentResponse['exerciseId'])) {
+            $exercise = $this->getExerciseService()->get($assessmentResponse['exerciseId']);
+            if ('closed' == $exercise['status']) {
+                throw ExerciseException::CLOSED_EXERCISE();
+            }
+        }
         $answerRecord = $this->getAnswerRecordService()->get($request->request->get('answer_record_id'));
         if (empty($answerRecord) || $this->getCurrentUser()['id'] != $answerRecord['user_id']) {
             throw CommonException::ERROR_PARAMETER();
         }
-        if (!empty($assessmentResponse['exerciseId'])) {
-            $exercise = $this->getExerciseService()->get($assessmentResponse['exerciseId']);
-            if ('closed' == $exercise['status'] && 'doing' != $answerRecord['status']) {
-                throw ExerciseException::CLOSED_EXERCISE();
-            }
-        }
+
         $answerRecord = $this->getAnswerService()->continueAnswer($request->request->get('answer_record_id'));
 
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
