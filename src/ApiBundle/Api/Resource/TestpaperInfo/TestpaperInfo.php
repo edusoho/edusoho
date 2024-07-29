@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
@@ -32,18 +33,22 @@ class TestpaperInfo extends AbstractResource
         if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
-        $answerRecord = $this->getAnswerRecordService()->search(['userId' => $user['id'], 'assessment_id' => $assessment['id']], ['created_time' => 'desc'], 0, 1);
-        if ('closed' == $assessment['status'] && (!empty($answerRecord) && 'doing' != $answerRecord['status'])) {
-            throw TestpaperException::CLOSED_TESTPAPER();
-        }
-
-        $results = $this->wrapTeatpaper($assessment);
-
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         if (empty($targetType) || empty($targetId)) {
             throw CommonException::ERROR_PARAMETER();
         }
+        $courseTask = $this->getCourseTaskService()->getTask($targetId);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($courseTask['activityId']);
+
+        $user = $this->getCurrentUser();
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
+        if ('closed' == $assessment['status'] && (!empty($latestAnswerRecord) && 'doing' != $latestAnswerRecord['status'])) {
+            throw TestpaperException::CLOSED_TESTPAPER();
+        }
+
+        $results = $this->wrapTeatpaper($assessment);
+
         $method = 'handle'.$targetType;
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
@@ -189,5 +194,21 @@ class TestpaperInfo extends AbstractResource
     protected function getAnswerService()
     {
         return $this->service('ItemBank:Answer:AnswerService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->service('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return \Biz\Task\Service\TaskService
+     */
+    protected function getCourseTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 }
