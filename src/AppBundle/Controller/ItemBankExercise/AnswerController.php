@@ -45,6 +45,14 @@ class AnswerController extends BaseController
                     'returnUrl' => $returnUrl,
                 ]);
             }
+            if (!empty($latestAnswerRecord) && 'doing' == $latestAnswerRecord['status']) {
+                return $this->redirectToRoute('item_bank_exercise_assessment_answer', [
+                    'exerciseId' => $exerciseId,
+                    'moduleId' => $moduleId,
+                    'assessmentId' => $assessmentId,
+                ]);
+            }
+
             $latestAnswerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer($moduleId, $assessmentId, $user['id']);
         }
 
