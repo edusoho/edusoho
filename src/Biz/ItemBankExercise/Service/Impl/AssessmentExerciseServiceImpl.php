@@ -263,14 +263,11 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
                 foreach ($items as $item) {
                     $itemId = $item['id'];
                     $type = $item['type'];
-                    $count = $itemIdCounts[$itemId]; // 获取 itemId 出现的次数
-
                     if (!isset($wrongCountsByType[$type])) {
                         $wrongCountsByType[$type] = [];
                     }
-
                     // 直接赋值错误次数
-                    $wrongCountsByType[$type][$itemId] = $count;
+                    $wrongCountsByType[$type][$itemId] = $itemIdCounts[$itemId];
                 }
 
                 // 对每个类型的错误次数进行降序排序
