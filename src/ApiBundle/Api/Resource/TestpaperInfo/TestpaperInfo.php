@@ -39,10 +39,10 @@ class TestpaperInfo extends AbstractResource
             throw CommonException::ERROR_PARAMETER();
         }
         $courseTask = $this->getCourseTaskService()->getTask($targetId);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($courseTask['activityId']);
-
+        $activity = $this->getActivityService()->getActivity($courseTask['activityId'], true);
+        $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $user = $this->getCurrentUser();
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['answerSceneId'], $user['id']);
         if ('closed' == $assessment['status'] && (!empty($latestAnswerRecord) && 'doing' != $latestAnswerRecord['status'])) {
             throw TestpaperException::CLOSED_TESTPAPER();
         }
