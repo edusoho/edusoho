@@ -174,6 +174,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
 
             $this->processBatchDeleteAssessment($assessmentIds);
+            $this->updateItemBankAssessmentNum($assessments);
 
             $this->dispatch('assessment.batch.delete', $assessmentIds);
 
@@ -238,6 +239,20 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             $this->rollback();
             throw $e;
         }
+    }
+
+    protected function updateItemBankAssessmentNum($assessments)
+    {
+        if (empty($assessments)) {
+            return;
+        }
+        $diff = 0;
+        foreach ($assessments as $assessment) {
+            if (1 == $assessment['displayable']) {
+                $diff++;
+            }
+        }
+        $this->getItemBankService()->updateAssessmentNum(current($assessments)['bank_id'], -$diff);
     }
 
     protected function processBatchDeleteAssessment($assessmentIds){
