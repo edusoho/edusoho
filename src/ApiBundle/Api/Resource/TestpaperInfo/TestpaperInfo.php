@@ -37,14 +37,6 @@ class TestpaperInfo extends AbstractResource
         if (empty($targetType) || empty($targetId)) {
             throw CommonException::ERROR_PARAMETER();
         }
-        $courseTask = $this->getTaskService()->getTask($targetId);
-        $activity = $this->getActivityService()->getActivity($courseTask['activityId'], true);
-        $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
-        $user = $this->getCurrentUser();
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
-        if ('closed' == $assessment['status'] && empty($latestAnswerRecord)) {
-            throw TestpaperException::CLOSED_TESTPAPER();
-        }
 
         $results = $this->wrapTeatpaper($assessment);
 
@@ -76,7 +68,9 @@ class TestpaperInfo extends AbstractResource
 
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
-
+        if ('closed' == $assessment['status'] && empty($testpaperRecord)) {
+            throw TestpaperException::CLOSED_TESTPAPER();
+        }
         if (empty($testpaperRecord) && $scene['end_time'] && $scene['end_time'] < time()) {
             $this->getAnswerService()->batchAutoSubmit($scene['id'], $activity['ext']['mediaId'], [$user['id']]);
 
