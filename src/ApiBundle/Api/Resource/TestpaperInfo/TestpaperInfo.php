@@ -7,7 +7,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Constant\ActivityMediaType;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\TestpaperException;
