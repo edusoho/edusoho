@@ -250,33 +250,27 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             ];
             $userId = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
             $assessmentIds = $this->getAssessmentService()->searchAssessments(['bank_id' => $assessment['bank_id']], [], 0, PHP_INT_MAX, ['id']);
-            $answerRecordIds = $this->getAnswerRecordService()->search(['assessment_ids' => array_column($assessmentIds, 'id'), 'userId' => $userId], ['created_time' => 'DESC'], 0, 20, ['id']);
+            $answerRecordIds = $this->getAnswerRecordService()->search(['assessment_ids' => array_column($assessmentIds, 'id'), 'userId' => $userId], ['created_time' => 'DESC'], 0, PHP_INT_MAX, ['id']);
             $answerQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_ids' => array_column($answerRecordIds, 'id'), 'status' => 'wrong'], [], 0, PHP_INT_MAX);
             $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($assessment['bank_id']);
             $exerciseIds = $this->getExerciseService()->search(['questionBankId' => $questionBank['id']], [], PHP_INT_MAX, ['id']);
             $itemBankExerciseQuestionRecords = $this->getItemBankExerciseQuestionRecordService()->search(['exerciseIds' => $exerciseIds, 'userId' => $userId, 'status' => 'wrong'], ['createdTime' => 'DESC'], 0, 400);
             if (!empty($answerQuestionReports) && !empty($answerRecordIds) || !empty($itemBankExerciseQuestionRecords)) {
                 $assessmentParams['itemIds'] = array_merge(array_column($itemBankExerciseQuestionRecords, 'item_id'), array_column($answerQuestionReports, 'item_id'));
-                $items = $this->getItemService()->findItemsByIds($assessmentParams['itemIds']);
-                // 查询所有的题目类型、每种类型按答错次数排序，然后计算是否欠缺
-                // 创建一个空数组用于存储每题的错误次数
+                $itemIdCounts = array_count_values($assessmentParams['itemIds']);
+                $items = $this->getItemService()->findItemsByIds(array_keys($itemIdCounts));
                 $wrongCountsByType = [];
-
-                // 遍历答题报告，统计每题的错误次数
                 foreach ($items as $item) {
                     $itemId = $item['id'];
                     $type = $item['type'];
+                    $count = $itemIdCounts[$itemId]; // 获取 itemId 出现的次数
 
-                    // 如果类型不存在于数组中，则添加类型键
                     if (!isset($wrongCountsByType[$type])) {
                         $wrongCountsByType[$type] = [];
                     }
 
-                    // 直接添加或更新错误次数，但只保存itemId和计数
-                    if (!isset($wrongCountsByType[$type][$itemId])) {
-                        $wrongCountsByType[$type][$itemId] = 0;
-                    }
-                    ++$wrongCountsByType[$type][$itemId];
+                    // 直接赋值错误次数
+                    $wrongCountsByType[$type][$itemId] = $count;
                 }
 
                 // 对每个类型的错误次数进行降序排序

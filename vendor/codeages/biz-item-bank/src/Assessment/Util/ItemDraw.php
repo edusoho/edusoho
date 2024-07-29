@@ -174,8 +174,10 @@ class ItemDraw
         });
 
         // 从 filteredItems 中随机抽取 neededItemCount 个元素
-        $additionalItems = array_slice($filteredItems, 0, $neededItemCount);
-
+        $randomKeys = array_rand($filteredItems, $neededItemCount);
+        $additionalItems = array_map(function($key) use ($filteredItems) {
+            return $filteredItems[$key];
+        }, $randomKeys);
         // 从 items 中取出对应的 wrongItemIds 的数据
         $wrongItems = array_filter($items, function($item) use ($wrongItemIds) {
             return in_array($item['id'], $wrongItemIds);
