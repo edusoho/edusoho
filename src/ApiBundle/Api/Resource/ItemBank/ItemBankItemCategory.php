@@ -22,7 +22,7 @@ class ItemBankItemCategory extends AbstractResource
         }
         $categoryNames = $request->request->get('names');
         $categoryNames = trim($categoryNames);
-        $categoryNames = explode("\r\n", $categoryNames);
+        $categoryNames = explode("\n", $categoryNames);
         $categoryNames = array_filter($categoryNames);
         $this->getItemCategoryService()->createItemCategories($bankId, 0, $categoryNames);
 
