@@ -9,6 +9,7 @@ use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Constant\AssessmentStatus;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -24,12 +25,34 @@ class AnswerController extends BaseController
         if (AccessorInterface::SUCCESS != $access['code']) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        $returnUrl = $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'tab' => 'assessment', 'moduleId' => $moduleId]);
+        if (empty($assessment)) {
+            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:message', [
+                'message' => '试卷已删除',
+                'returnUrl' => $returnUrl,
+            ]);
+        }
 
         $latestAnswerRecord = $this->getItemBankAssessmentExerciseRecordService()->getLatestRecord($moduleId, $assessmentId, $user['id']);
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
             if (!$this->checkStartAssessmentExercise($assessmentId)) {
                 return $this->redirectToRoute('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'assessment']);
             }
+            if (AssessmentStatus::CLOSED == $assessment['status']) {
+                return $this->forward('AppBundle:AnswerEngine/AnswerEngine:message', [
+                    'message' => '试卷已关闭',
+                    'returnUrl' => $returnUrl,
+                ]);
+            }
+            if (!empty($latestAnswerRecord) && 'doing' == $latestAnswerRecord['status']) {
+                return $this->redirectToRoute('item_bank_exercise_assessment_answer', [
+                    'exerciseId' => $exerciseId,
+                    'moduleId' => $moduleId,
+                    'assessmentId' => $assessmentId,
+                ]);
+            }
+
             $latestAnswerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer($moduleId, $assessmentId, $user['id']);
         }
 
@@ -46,6 +69,8 @@ class AnswerController extends BaseController
                 [
                     'answerRecordId' => $latestAnswerRecord['answerRecordId'],
                     'restartUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId, 'action' => 'redo']),
+                    'returnUrl' => $returnUrl,
+                    'assessmentStatus' => $assessment['status'],
                 ]
             );
         }
@@ -55,6 +80,7 @@ class AnswerController extends BaseController
             'answerRecordId' => $latestAnswerRecord['answerRecordId'],
             'submitGotoUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId]),
             'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+            'returnUrl' => $returnUrl,
             'showHeader' => 1,
         ]);
     }

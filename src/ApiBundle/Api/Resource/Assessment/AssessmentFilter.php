@@ -4,11 +4,12 @@ namespace ApiBundle\Api\Resource\Assessment;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\Item\ItemFilter;
+use ApiBundle\Api\Resource\User\UserFilter;
 
 class AssessmentFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'name', 'description', 'question_count', 'total_score',
+        'id', 'name', 'description', 'question_count', 'total_score', 'assessmentGenerateRule',
     ];
 
     protected $publicFields = [
@@ -26,15 +27,24 @@ class AssessmentFilter extends Filter
         'created_time',
         'updated_time',
         'sections',
+        'type',
+        'updated_user',
+        'num',
     ];
 
     protected function publicFields(&$assessment)
     {
         $itemFilter = new ItemFilter();
         $assessment['description'] = $this->convertAbsoluteUrl($assessment['description']);
-        foreach ($assessment['sections'] as &$section) {
-            $itemFilter->filters($section['items']);
+        if (!empty($assessment['sections'])) {
+            foreach ($assessment['sections'] as &$section) {
+                $itemFilter->filters($section['items']);
+            }
         }
+
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filter($assessment['created_user']);
     }
 
     protected function simpleFields(&$assessment)

@@ -1,12 +1,15 @@
 {% extends 'item-bank-exercise-manage/exercise-set/layout.html.twig' %}
 
 {% block title %}{{'item_bank_exercise.testpaper_practice'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
-{% do script(['app/js/item-bank-exercise/assessment/index.js']) %}
+{% do script(['app/js/item-bank-exercise/assessment/index.js', 'app/js/item-bank-exercise/assessment/add/index.js']) %}
 {% set course_side_nav = 'assessment' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 
 {% block main %}
   <div class="cd-main">
+    <input type="hidden" value="{{ exercise.id }}" id="exerciseId">
+    <input type="hidden" value="{{ moduleId }}" id="moduleId">
+    <input type="hidden" value="{{ questionBank.itemBankId }}" id="itemBankId">
     <div class="cd-main__body">
       <div class="task-list-header clearfix">
         <label class="switch-title">{{ 'item_bank_exercise.testpaper_practice.open'|trans }}</label>
@@ -36,42 +39,13 @@
                 <a href="#modal" data-toggle="modal" data-url="{{ path('item_bank_exercise_manage_assessment_module_create', {exerciseId: exercise.id}) }}"><i class="cd-icon cd-icon-add"></i>{{ 'item_bank_exercise.assessment_exercise.add_new_module'|trans }}</a>
               </li>
             </ul>
-            <div class="col-sm-3 pull-right">
-              <a href="#modal" data-toggle="modal" id="add-testpaper" data-url="{{ path('item_bank_exercise_manage_assessment_add_list', {exerciseId: exercise.id, moduleId: moduleId, isPage: 0}) }}" class="cd-btn cd-btn-ghost-primary">{{ 'item_bank_exercise.assessment_exercise.add_assessment'|trans }}</a>
-              <button class="cd-btn cd-btn-ghost-primary mlm js-batch-delete" data-url="{{ path('item_bank_exercise_manage_batch_delete_assessment', {exerciseId: exercise.id}) }}" style="color: rgba(255,72,32,1); border-color: rgba(255,72,32,1);">{{ 'item_bank_exercise.assessment_exercise.remove_assessment'|trans }}</button>
+            <div class="pull-right">
+              <input type="hidden" id="add-test-paper-drawer-visible" value="{{ false }}">
+              <div id="addTestPaper"></div>
             </div>
           </div>
           <div class="js-assessment-container">
-            <table class="table cd-table">
-              <thead>
-                <tr>
-                  <th width="10%"><input type="checkbox" autocomplete="off" data-role="batch-select"></th>
-                  <th width="50%" class="text-center">{{ 'course.testpaper_manage.create.name'|trans }}</th>
-                  <th width="20%" class="text-center">{{ 'question.nums'|trans }}/{{ 'item_bank_exercise.assessment.total_score'|trans }}</th>
-                  <th width="20%" class="text-center">{{ 'operation'|trans }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for assessment in assessments if assessments %}
-                  <tr>
-                    <td><input class="js-checkbox" value="{{ assessmentExercises[assessment.id].id }}" data-id="{{ assessment.id }}" type="checkbox" autocomplete="off" data-role="batch-item"></td>
-                    <td class="text-center">{{ assessment.name }}</td>
-                    <td class="text-center">{{'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count})}}/{{'course.testpaper_manage.score'|trans({'%score%': assessment.total_score})}}</td>
-                    <td class="text-center">
-                      <a href="{{ path('question_bank_manage_testpaper_preview', {id: questionBank.id, assessmentId: assessment.id}) }}" class="cd-btn cd-btn-link-primary" target="_blank">{{ 'course.btn.preview'|trans }}</a>
-                      <button class="cd-btn cd-btn-link-primary js-delete-single" data-url="{{ path('item_bank_exercise_manage_delete_assessment', {exerciseId: exercise.id, id: assessmentExercises[assessment.id].id }) }}" style="color: rgba(255,72,32,1);">{{ 'form.btn.remove'|trans }}</button>
-                    </td>
-                  </tr>
-                {% else %}
-                  <tr>
-                    <td colspan="20">
-                      <div class="cd-empty">{{ 'my.teaching.question_bank.testpaper.empty'|trans }}</div>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            {{ web_macro.paginator(paginator) }}
+            <div id="assessment-list"></div>
           </div>
         </div>
       {% else %}

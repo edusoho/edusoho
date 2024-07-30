@@ -371,9 +371,27 @@ class TestpaperController extends BaseController
         if (empty($assessment['item_count'])) {
             return $this->createMessageResponse('warning', '当前试卷所有题目内容均已被删除');
         }
+        $assessmentChildIds = [];
+        if ('random' == $assessment['type']) {
+            if ('generating' == $assessment['status']) {
+                return $this->createMessageResponse('warning', '试卷生成中，请稍后再试');
+            }
+            $parentId = 0 == $assessment['parent_id'] ? $assessmentId : $assessment['parent_id'];
+            $assessmentChildIds = $this->getAssessmentService()->searchAssessments(
+                ['parent_id' => $parentId],
+                ['id' => 'ASC'],
+                0,
+                PHP_INT_MAX,
+                ['id']
+            );
+
+            $assessmentChildIds = array_column($assessmentChildIds, 'id');
+            array_unshift($assessmentChildIds, $parentId);
+        }
 
         return $this->render('testpaper/manage/preview.html.twig', [
             'assessment' => $this->addArrayEmphasisStyle($assessment),
+            'assessmentChildIds' => $assessmentChildIds,
         ]);
     }
 
@@ -421,6 +439,8 @@ class TestpaperController extends BaseController
             'bank_id' => $questionBank['itemBankId'],
             'displayable' => 1,
             'keyword' => $request->query->get('keyword', ''),
+            'type' => $request->query->get('type', ''),
+            'parent_id' => 0,
         ];
         $totalCount = $this->getAssessmentService()->countAssessments($conditions);
         $conditions['status'] = 'open';
@@ -446,11 +466,17 @@ class TestpaperController extends BaseController
                 'score' => $testPaper['total_score'],
             ];
         }
+        $assessmentTypes = $this->getAssessmentService()->findAssessmentTypes();
+        $filteredAssessmentTypes = array_filter($assessmentTypes, function ($assessment) {
+            return 'aiPersonality' !== $assessment['type'];
+        });
+        $assessmentType = array_column($filteredAssessmentTypes, 'type');
 
         return $this->createJsonResponse([
             'testPapers' => $testPapers,
             'totalCount' => $totalCount,
             'openCount' => $openCount,
+            'assessmentType' => $assessmentType,
         ]);
     }
 
