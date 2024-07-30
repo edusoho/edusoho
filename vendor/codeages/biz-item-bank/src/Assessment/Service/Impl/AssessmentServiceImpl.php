@@ -67,6 +67,15 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
 
     public function createBasicAssessment($assessment)
     {
+        $defaultAssessment = [
+            'type' => 'regular',
+            'parentId' => '0',
+            'status' => 'draft',
+            'parent_id' => '0'
+        ];
+
+        $assessment = array_merge($defaultAssessment, $assessment);
+        $totalScore = $assessment['total_score'] ?? 0;
         $assessment = $this->getValidator()->validate($assessment, [
             'bank_id' => ['required', 'integer', ['min', 1]],
             'name' => ['required', ['lengthBetween', 1, 255]],
@@ -75,6 +84,9 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'item_count' => ['integer', ['min', 0]],
             'question_count' => ['integer', ['min', 0]],
             'displayable' => ['required', ['in', [0, 1]]],
+            'type' => ['required', ['in', ['regular', 'random', 'aiPersonality']]],
+            'parent_id' => ['required', ['min', 0]],
+            'status' => ['required', ['in', ['generating', 'draft', 'open']]],
         ]);
 
         $itemBank = $this->getItemBankService()->getItemBank($assessment['bank_id']);
@@ -85,7 +97,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
         $assessment['created_user_id'] = empty($assessment['created_user_id']) ? empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'] : $assessment['created_user_id'];
         $assessment['updated_user_id'] = $assessment['created_user_id'];
-
+        $assessment['total_score'] = $totalScore;
         $assessment = $this->getAssessmentDao()->create($assessment);
 
         if (1 == $assessment['displayable']) {
@@ -149,6 +161,109 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         }
     }
 
+    public function deleteAssessmentByIds($assessmentIds)
+    {
+        $assessments = $this->findAssessmentsByIds($assessmentIds);
+        if (empty($assessments)) {
+            throw new AssessmentException('assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
+        }
+
+        try {
+            $this->beginTransaction();
+
+            $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
+
+            $this->processBatchDeleteAssessment($assessmentIds);
+            $this->updateItemBankAssessmentNum($assessments);
+
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
+
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function deleteAssessmentByParentId($parentId)
+    {
+        $assessment = $this->getAssessment($parentId);
+        if (empty($assessment) || $assessment['parent_id'] != 0)  {
+            throw AssessmentException::ASSESSMENT_NOTEXIST();
+        }
+        $assessmentIds = $this->getAssessmentDao()->search(['parent_id' => $parentId], [], 0, PHP_INT_MAX, ['id']);
+        $assessmentIds = array_column($assessmentIds, 'id');
+        if (empty($assessmentIds)) {
+            return true;
+        }
+
+        try {
+            $this->beginTransaction();
+            $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
+            $this->processBatchDeleteAssessment($assessmentIds);
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function deleteAssessmentByParentIds($parentIds)
+    {
+        $assessments = $this->findAssessmentsByIds($parentIds);
+        foreach ($assessments as $assessment) {
+            if (empty($assessment) || $assessment['parent_id'] != 0)  {
+                throw AssessmentException::ASSESSMENT_NOTEXIST();
+            }
+        }
+        $assessmentIds = $this->getAssessmentDao()->search(['parent_ids' => $parentIds], [], 0, PHP_INT_MAX, ['id']);
+        $assessmentIds = array_column($assessmentIds, 'id');
+        if (empty($assessmentIds)) {
+            return true;
+        }
+
+        try {
+            $this->beginTransaction();
+            $this->getAssessmentDao()->batchDelete(['ids'=> $assessmentIds]);
+            $this->processBatchDeleteAssessment($assessmentIds);
+            $this->dispatch('assessment.batch.delete', $assessmentIds);
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    protected function updateItemBankAssessmentNum($assessments)
+    {
+        if (empty($assessments)) {
+            return;
+        }
+        $diff = 0;
+        foreach ($assessments as $assessment) {
+            if (1 == $assessment['displayable']) {
+                $diff++;
+            }
+        }
+        $this->getItemBankService()->updateAssessmentNum(current($assessments)['bank_id'], -$diff);
+    }
+
+    protected function processBatchDeleteAssessment($assessmentIds){
+        $this->getSectionService()->deleteAssessmentSectionsByAssessmentIds($assessmentIds);
+        $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentIds($assessmentIds);
+        $daoArr = ['AnswerReportDao', 'AnswerRecordDao', 'AnswerQuestionReportDao'];
+        foreach ($daoArr as $dao){
+            $this->biz->dao('ItemBank:Answer:'.$dao)->batchDelete(['assessment_ids' => $assessmentIds]);
+        }
+    }
+
     protected function processDeleteAssessment($assessment){
         $this->getSectionService()->deleteAssessmentSectionsByAssessmentId($assessment['id']);
         $this->getSectionItemService()->deleteAssessmentSectionItemsByAssessmentId($assessment['id']);
@@ -202,7 +317,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'bank_id' => ['integer', ['min', 1]],
             'name' => [['lengthBetween', 1, 255]],
             'updated_user_id' => ['integer', ['min', 0]],
-            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED]]],
+            'status' => [['in', [self::GENERATING, self::DRAFT, self::OPEN, self::CLOSED, self::FAILURE]]],
             'item_count' => ['integer', ['min', 0]],
             'question_count' => ['integer', ['min', 0]],
             'total_score' => [],
@@ -212,6 +327,28 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
 
         return $this->getAssessmentDao()->update($assessmentId, $assessment);
+    }
+
+    public function updateBasicAssessmentByParentId($parentId, $assessment)
+    {
+        $ids = $this->searchAssessments(['parent_id' => $parentId], [] , 0, PHP_INT_MAX, ['id']);
+        if (empty($ids)) {
+            throw new AssessmentException('Assessment not found', ErrorCode::ASSESSMENT_NOTFOUND);
+        }
+        $assessment = $this->getValidator()->validate($assessment, [
+            'bank_id' => ['integer', ['min', 1]],
+            'name' => [['lengthBetween', 1, 255]],
+            'updated_user_id' => ['integer', ['min', 0]],
+            'status' => [['in', [self::DRAFT, self::OPEN, self::CLOSED]]],
+            'item_count' => ['integer', ['min', 0]],
+            'question_count' => ['integer', ['min', 0]],
+            'total_score' => [],
+            'description' => [],
+        ]);
+        $assessment['updated_user_id'] = empty($assessment['updated_user_id']) ? empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'] : $assessment['updated_user_id'];
+        isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
+
+        return $this->getAssessmentDao()->update(['ids' => array_column($ids, 'id')], $assessment);
     }
 
     protected function createAssessmentSectionsAndItems($assessmentId, $sections)
@@ -423,6 +560,11 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
         $assessment = $this->getAssessment($assessmentId);
 
         return empty($assessment['item_count']);
+    }
+
+    public function findAssessmentTypes()
+    {
+        return $this->getAssessmentDao()->findTypes();
     }
 
     private function createAssessmentSnapshots($assessments)

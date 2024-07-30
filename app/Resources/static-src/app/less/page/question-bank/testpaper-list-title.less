@@ -1,0 +1,169 @@
+.test-paper-list-container {
+  .ant-btn-link:hover, .ant-btn-link:focus {
+    color: fade(@brand-primary, 50%) !important;
+  }
+  .ant-btn-link[disabled].ant-btn-link:hover, .ant-btn-link:focus {
+    color: #bebebe !important;
+  }
+  .test-paper-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-self: stretch;
+
+    .testpaper-title-left {
+
+      div {
+        cursor: pointer;
+      }
+      display: flex;
+      padding: 2px;
+      align-items: center;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 22px;
+      background: rgba(0, 0, 0, 0.06);
+      color: rgba(0, 0, 0, 0.65);
+      border-radius: 2px;
+
+      span {
+        display: flex;
+        padding: 3px 11px;
+        align-items: center;
+
+        img {
+          margin: -2px 5px 0 0;
+          width: 17px;
+          height: 12px;
+        }
+      }
+
+      .active {
+        border-radius: 2px;
+        background: #FFF;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.05);
+      }
+    }
+
+    .testpaper-title-right {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+
+      .testpaper-title-right-create {
+        display: flex;
+        padding: 4px 15px;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+
+        border-radius: 2px;
+        border: 1px solid @brand-primary;
+        background: @brand-primary;
+        box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
+
+        color: #FFF;
+        text-align: center;
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+      }
+
+      .testpaper-title-right-import {
+        display: flex;
+        padding: 4px 15px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        border-radius: 2px;
+        border: 1px solid @brand-primary;
+        background: #FFF;
+        box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.02);
+
+        color: @brand-primary;
+        text-align: center;
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+      }
+    }
+  }
+
+  .condition-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .list-bottom {
+    width: 100%;
+    padding-left: 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .selector-operate {
+      display: flex;
+      gap: 16px
+    }
+  }
+
+  .checkbox-text {
+    font-weight: normal;
+  }
+
+  .created_time {
+    font-weight: 400;
+    font-size: 12px;
+    color: rgb(145, 147, 153);
+  }
+
+  .operation-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .operation-group-button-active {
+    color: rgb(70, 195, 123);
+  }
+
+  .paper-type {
+    width: 92px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 4px 0;
+    border-radius: 4px;
+  }
+
+  .paper-type-regular {
+    background-color: rgb(232, 243, 255);
+    color: rgb(22, 93, 255);
+  }
+
+  .paper-type-random {
+    background-color: rgb(255, 243, 232);
+    color: rgb(247, 114, 52);
+  }
+
+  .paper-type-ai {
+    background-color: rgb(232, 255, 234);
+    color: rgb(0, 180, 42);
+  }
+
+  .ant-table-selection-column {
+    padding: 16px 0 !important;
+    width: 16px;
+    max-width: 16px;
+  }
+}

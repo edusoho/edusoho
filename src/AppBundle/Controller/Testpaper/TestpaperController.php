@@ -27,12 +27,21 @@ class TestpaperController extends BaseController
     public function doTestpaperAction(Request $request, $testId, $lessonId)
     {
         $activity = $this->getActivityService()->getActivity($lessonId, true);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($activity['fromCourseId'], $activity['id']);
 
         $canTakeCourse = $this->getCourseService()->canTakeCourse($activity['fromCourseId']);
         if (!$canTakeCourse) {
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
+        }
+        $returnUrl = $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
+        $assessment = $this->getAssessmentService()->getAssessment($testpaperActivity['mediaId']);
+        if (empty($assessment)) {
+            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:message', [
+                'message' => '试卷已删除',
+                'returnUrl' => $returnUrl,
+                'showHeader' => 0,
+            ]);
         }
 
         $user = $this->getCurrentUser();
@@ -45,6 +54,7 @@ class TestpaperController extends BaseController
             if (0 == $activity['ext']['remainderDoTimes'] && '1' == $activity['ext']['isLimitDoTimes']) {
                 return $this->createMessageResponse('error', '当前考试次数已用完，请重新选择考试', '', 3, $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]));
             }
+            $this->getRandomAssessmentId($testpaperActivity);
             if ($this->getAssessmentService()->isEmptyAssessment($testpaperActivity['mediaId'])) {
                 return $this->redirectToRoute('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]);
             }
@@ -56,6 +66,7 @@ class TestpaperController extends BaseController
             'answerRecordId' => $latestAnswerRecord['id'],
             'submitGotoUrl' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
             'saveGotoUrl' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
+            'returnUrl' => $returnUrl,
         ]);
     }
 
@@ -183,6 +194,24 @@ class TestpaperController extends BaseController
         }
 
         return false;
+    }
+
+    private function getRandomAssessmentId(&$testpaperActivity)
+    {
+        $assessment = $this->getAssessmentService()->getAssessment($testpaperActivity['mediaId']);
+        if ('random' !== $assessment['type']) {
+            return;
+        }
+        $subAssessments = $this->getAssessmentService()->searchAssessments(
+            ['parent_id' => $assessment['id']],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['id']
+        );
+        $subAssessmentIds = array_column($subAssessments, 'id');
+        $allIds = array_merge($subAssessmentIds, [$assessment['id']]);
+        $testpaperActivity['mediaId'] = $allIds[array_rand($allIds)];
     }
 
     /**
