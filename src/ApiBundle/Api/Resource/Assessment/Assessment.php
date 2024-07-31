@@ -168,8 +168,8 @@ class Assessment extends AbstractResource
         $conditions['parent_id'] = 0;
         $conditions['bank_id'] = $conditions['itemBankId'];
         if (isset($conditions['exerciseId']) && isset($conditions['moduleId'])) {
-            $assessmentIds = $this->getAssessmentExerciseService()->search(['exerciseId' => $conditions['exerciseId'], 'moduleId' => $conditions['moduleId']], [], 0, PHP_INT_MAX, ['id']);
-            $conditions['notInIds'] = array_column($assessmentIds, 'id');
+            $assessmentIds = $this->getAssessmentExerciseService()->search(['exerciseId' => $conditions['exerciseId'], 'moduleId' => $conditions['moduleId']], [], 0, PHP_INT_MAX, ['assessmentId']);
+            $conditions['notInIds'] = array_column($assessmentIds, 'assessmentId');
         }
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $total = $this->getAssessmentService()->countAssessments($conditions);
