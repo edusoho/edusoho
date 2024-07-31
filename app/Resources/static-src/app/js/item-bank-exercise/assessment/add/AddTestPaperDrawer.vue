@@ -81,14 +81,14 @@ export default {
     },
     async fetchTestPaper(params) {
       this.loading = true;
-      const {data, paging} = await Testpaper.search({
+      const {data, paging} = await Testpaper.search(Object.assign({
         limit: 20,
         itemBankId: this.itemBankId,
         exerciseId: this.exerciseId,
         moduleId: this.moduleId,
         status: 'open',
         ...params
-      });
+      }, this.keywordType === 'creator' ? {createdUser: this.keyword} : {nameLike: this.keyword}));
 
       const pagination = {...this.pagination};
       pagination.total = paging.total;
@@ -247,7 +247,7 @@ export default {
       </a-table>
       <div class="drawer-bottom">
         <div class="selector-operate">
-          <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="isSelectAll"
+          <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="selectedRowKeys && selectedRowKeys.length > 0 && isSelectAll"
                       @change="handleSelectAllChange">
             <span class="checkbox-text">{{ 'question.bank.paper.selectAll'|trans }}</span>
           </a-checkbox>

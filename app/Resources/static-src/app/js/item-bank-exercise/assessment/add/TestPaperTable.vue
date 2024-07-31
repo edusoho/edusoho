@@ -230,7 +230,7 @@ export default {
     </a-table>
     <div class="list-bottom">
       <div class="selector-operate">
-        <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="isSelectAll"
+        <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="selectedRowKeys && selectedRowKeys.length > 0 && isSelectAll"
                     @change="handleSelectAllChange">
           <span class="checkbox-text">{{ 'question.bank.paper.selectAll'|trans }}</span>
         </a-checkbox>
