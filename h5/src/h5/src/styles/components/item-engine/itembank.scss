@@ -725,6 +725,23 @@ $common-padding: 35;
 		background-color: rgba(255, 255, 255, 0.6);
 		border-radius: 0 0 vw(12) vw(12);
 	}
+
+	.ai-personal-notice {
+		margin-bottom: vw(16);
+		padding: 0 vw(16);
+
+		.notice-border {
+			background: #edf9f2;
+			border: 1px solid #83d7a7;
+			border-radius: 2px;
+		}
+
+		.notice-ai-img {
+			width: vw(16);
+			height: vw(10);
+			padding-right: 4px;
+		}
+	}
 }
 
 .ibs-attachment-preview {
