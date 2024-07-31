@@ -221,6 +221,7 @@ export default {
               limit: this.pagination.pageSize,
               offset: (this.pagination.current - 1) * this.pagination.pageSize
             };
+            this.selectedRowKeys = this.selectedRowKeys.filter(key => key !== paper.id);
             await refresh(params);
           } catch (err) {
             this.$message.success('删除失败', err);
@@ -281,6 +282,7 @@ export default {
             limit: this.pagination.pageSize,
             offset: (this.pagination.current - 1) * this.pagination.pageSize
           };
+          this.selectedRowKeys = [];
           await this.fetchTestPaper(params);
         }
       });
