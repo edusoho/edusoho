@@ -158,6 +158,16 @@ export default {
     });
 
     observer.observe(hiddenInput, { attributes: true, attributeFilter: ['value'] });
+  },
+  watch: {
+    async drawerVisible(val) {
+      if (val) {
+        const pager = {...this.pagination};
+        pager.current = 1;
+        this.pagination = pager;
+        await this.fetchTestPaper(this.pagination);
+      }
+    }
   }
 };
 </script>
