@@ -166,6 +166,8 @@ export default {
         pager.current = 1;
         this.pagination = pager;
         await this.fetchTestPaper(this.pagination);
+      } else {
+        this.selectedRowKeys = [];
       }
     }
   }
