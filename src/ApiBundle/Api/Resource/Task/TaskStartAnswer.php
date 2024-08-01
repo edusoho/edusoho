@@ -34,7 +34,20 @@ class TaskStartAnswer extends AbstractResource
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
         }
-
+        if (!empty($activity)) {
+            $assessment = $this->getAssessmentService()->getAssessment($activity['ext']['mediaId']);
+            if ('random' == $assessment['type']) {
+                $ids = $this->getAssessmentService()->searchAssessments(
+                    ['parent_id' => $assessment['id']],
+                    ['id' => 'ASC'],
+                    0,
+                    PHP_INT_MAX,
+                    ['id']
+                );
+                $ids = array_column($ids, 'id');
+                $activity['ext']['mediaId'] = $ids[array_rand($ids)];
+            }
+        }
         $answerRecord = $this->$method($task, $activity, $request->getHttpRequest());
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
