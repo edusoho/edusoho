@@ -88,11 +88,7 @@ export default {
   },
   methods: {
     preview(record) {
-      if (record.type === 'aiPersonality') {
-        window.location.href = `${window.location.origin}/question_bank/${this.itemBankId}/testpapers#/preview/${record.id}`
-      } else {
-        window.location.href = `${window.location.origin}/question_bank/${this.itemBankId}/testpaper/${record.id}/preview`
-      }
+      window.location.href = `${window.location.origin}/question_bank/${this.itemBankId}/testpaper/${record.assessmentId}/preview`
     },
     onSelectChange(selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys;
@@ -119,7 +115,7 @@ export default {
       pagination.pageSize = Number(paging.limit);
 
       this.loading = false;
-      this.pageData = data.map(a => Object.assign(a.assessment, {id: a.id}));
+      this.pageData = data.map(a => Object.assign(a.assessment, {id: a.id, assessmentId: a.assessment.id}));
       this.pagination = pagination;
     },
     getTableTotal(total) {
@@ -146,6 +142,7 @@ export default {
             offset: (this.pagination.current - 1) * this.pagination.pageSize
           };
           await this.fetchTestPaper(params);
+          this.selectedRowKeys = [];
         }
       });
     },
@@ -165,6 +162,7 @@ export default {
               limit: this.pagination.pageSize,
               offset: (this.pagination.current - 1) * this.pagination.pageSize
             };
+            this.selectedRowKeys = this.selectedRowKeys.filter(key => key !== paper.id);
             await refresh(params);
           } catch (err) {
             this.$message.success('移除失败', err);
@@ -211,14 +209,14 @@ export default {
       </template>
       <template slot="operation" slot-scope="record">
         <div class="operation-group">
-          <a-button v-if="['draft', 'open'].includes(record.status)"
+          <a-button v-if="record.type !== 'aiPersonality' && ['draft', 'open'].includes(record.status)"
                     type="link"
                     class="operation-group-button-active"
                     @click="preview(record)"
           >
             {{ 'question.bank.paper.preview'|trans }}
           </a-button>
-          <a-button v-if="['generating', 'fail'].includes(record.status)"
+          <a-button v-if="record.type !== 'aiPersonality' && ['generating', 'fail'].includes(record.status)"
                     type="link"
                     :disabled="true"
           >
@@ -232,7 +230,7 @@ export default {
     </a-table>
     <div class="list-bottom">
       <div class="selector-operate">
-        <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="isSelectAll"
+        <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="selectedRowKeys && selectedRowKeys.length > 0 && isSelectAll"
                     @change="handleSelectAllChange">
           <span class="checkbox-text">{{ 'question.bank.paper.selectAll'|trans }}</span>
         </a-checkbox>

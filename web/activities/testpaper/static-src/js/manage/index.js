@@ -461,9 +461,20 @@ class Testpaper {
 
   initAjaxTestPaperSelector() {
     let self = this;
+    let typeSelected = this.$testpaperTypeSelector.select2('data');
+    let type = typeSelected ? typeSelected.id : 0;
+
+    let baseUrl = self.$testpaperSelector.data('url');
+    let url = '';
+    if (type == 0) {
+      url = baseUrl + `?type=${$('#testPaperType').val()}`;
+    }else {
+      baseUrl = baseUrl.replace(/([&?]type=)[^&]+/, '');
+      url = baseUrl.includes('?') ? `${baseUrl}&type=${type}` : `${baseUrl}?type=${type}`;
+    }
     this.$testpaperSelector.select2({
       ajax: {
-        url: self.$testpaperSelector.data('url'),
+        url: url,
         dataType: 'json',
         quietMillis: 250,
         data: function (term, page) {

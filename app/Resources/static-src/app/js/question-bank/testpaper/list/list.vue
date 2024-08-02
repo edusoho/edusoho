@@ -221,6 +221,7 @@ export default {
               limit: this.pagination.pageSize,
               offset: (this.pagination.current - 1) * this.pagination.pageSize
             };
+            this.selectedRowKeys = this.selectedRowKeys.filter(key => key !== paper.id);
             await refresh(params);
           } catch (err) {
             this.$message.success('删除失败', err);
@@ -281,6 +282,7 @@ export default {
             limit: this.pagination.pageSize,
             offset: (this.pagination.current - 1) * this.pagination.pageSize
           };
+          this.selectedRowKeys = [];
           await this.fetchTestPaper(params);
         }
       });
@@ -497,7 +499,7 @@ export default {
     </a-table>
     <div class="list-bottom">
       <div class="selector-operate">
-        <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="isSelectAll"
+        <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="selectedRowKeys && selectedRowKeys.length > 0 && isSelectAll"
                     @change="handleSelectAllChange">
           <span class="checkbox-text">{{ 'question.bank.paper.selectAll'|trans }}</span>
         </a-checkbox>
