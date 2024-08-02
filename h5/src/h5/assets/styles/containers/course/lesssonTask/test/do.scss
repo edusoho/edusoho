@@ -338,4 +338,18 @@
 		border-radius: 4px;
 		transform: translate(-50%, -50%);
 	}
+
+	.notice {
+		margin-bottom: vw(20);
+		padding: 0 vw(20);
+
+		.notice-boreder {
+			border: 1px solid #46c37b;
+		}
+
+		.notice-ai-img {
+			width: vw(16);
+			padding-right: 4px;
+		}
+	}
 }

@@ -65,7 +65,7 @@ export default {
   watch: {},
   created() {
     const mode = this.$route.query.mode;
-    
+
     if (mode === 'start' && !localStorage.getItem('exerciseId_'+this.$route.query.exerciseId)) {
       this.getStart()
     } else {
@@ -113,8 +113,8 @@ export default {
         });
     },
     getResourceToken(globalId) {
-      return Api.getItemDetail({ 
-        params: { globalId } 
+      return Api.getItemDetail({
+        params: { globalId }
       })
     },
     getStart() {
@@ -143,7 +143,22 @@ export default {
     handleError(err) {
       this.canLeave = true;
       this.isLoading = false;
-      this.isAuthorized(err);
+      if (err.code === 4004003) {
+        Dialog.alert({
+          title: '试卷已关闭',
+          confirmButtonText: '确定',
+          confirmButtonColor: '#00BE63',
+        }).then(() => {
+          const query = {
+            targetId: this.$route.query.exerciseId,
+            moduleId: this.$route.query.moduleId,
+            type: 'item_bank_exercise',
+          };
+          this.$router.push({ path: `/item_bank_exercise/${this.$route.query.exerciseId}`, query });
+        });
+      } else {
+        this.isAuthorized(err);
+      }
     },
     assignData(res) {
       this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
@@ -204,7 +219,7 @@ export default {
             }).then(() => this.exitPage())
             return
           }
-          
+
           this.$toast(err.message);
         });
     },
@@ -223,7 +238,7 @@ export default {
             }).then(() => this.exitPage())
             return
           }
-          
+
           this.$toast(err.message);
         });
     },

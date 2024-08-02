@@ -60,7 +60,8 @@ import {
   Cascader,
   TreeSelect,
   Image,
-  Progress
+  Progress,
+  NoticeBar,
 } from 'vant';
 import { handleCourse, handleLocale, handleSite, handleStorage, handleUgc, handleVip, handleWap, handleGoods } from "./handleSettings";
 // 按需引入组件
@@ -93,6 +94,7 @@ Vue.component('van-cascader', Cascader);
 Vue.component('van-tree-select', TreeSelect);
 Vue.component('van-image', Image);
 Vue.component('van-progress', Progress);
+Vue.component('van-notice-bar', NoticeBar);
 
 Vue.use(ActionSheet);
 Vue.use(filters);

@@ -647,7 +647,8 @@ export default {
     analysis: 'analysis',
     stopGeneration: 'stopGeneration',
     reGenerate: 'reGenerate',
-    beGenerating: 'Generating, please be patient～'
+    beGenerating: 'Generating, please be patient～',
+    exerciseAiTips: 'Smart Exercise: Precise and Personalized Pushing, Helping Efficient Review',
   },
   classLearning: {
     intor: 'Intro',

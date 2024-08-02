@@ -246,6 +246,7 @@ export default {
           exerciseId: this.exercise.id,
           courseId: this.courseId,
           exerciseMode: this.radio,
+          type: this.exercise.type
         },
         params: {
           KeepDoing: true,
