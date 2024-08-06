@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractRelationService;
 
 class ItemBankExercise extends AbstractResource
 {
@@ -29,6 +30,12 @@ class ItemBankExercise extends AbstractResource
             $itemBankExercise['access'] = $this->getItemBankExerciseService()->canLearnExercise($id);
         } else {
             $itemBankExercise['access'] = $this->getItemBankExerciseService()->canJoinExercise($id);
+        }
+        if ($itemBankExercise['price'] > 0) {
+            if ($this->isPluginInstalled('electronicContract')) {
+                $contractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('questionBank', $itemBankExercise['id']);
+                $itemBankExercise['needSignContract'] = !empty($contractRelation);
+            }
         }
 
         return $itemBankExercise;
@@ -77,5 +84,13 @@ class ItemBankExercise extends AbstractResource
     protected function getItemBankExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return ElectronicContractRelationService
+     */
+    private function getElectronicContractRelationService()
+    {
+        return $this->service('ElectronicContractPlugin:ElectronicContract:ElectronicContractRelationService');
     }
 }
