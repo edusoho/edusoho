@@ -103,6 +103,8 @@ if (!window.Vue) {
     }
     return moment(value * 1000).format(format);
   };
+
+  Vue.config.productionTip = false;
 }
 
 window.Vue = window.Vue || Vue;

@@ -1,8 +1,6 @@
 import AddTestPaper from './AddTestPaper.vue';
-import TestPaperTable from './TestPaperTable.vue';
 import Vue from 'common/vue';
-import Router from 'vue-router';
-import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
+import { createVueApp } from 'app/vue/utils/vue-creator';
 
 const routes = [
   {
@@ -30,20 +28,8 @@ const routes = [
   }
 ];
 
-const router = new Router({
-  mode: 'hash',
-  routes
-});
-
 new Vue({
   render: createElement => createElement(AddTestPaper)
 }).$mount('#addTestPaper');
 
-new Vue({
-  el: '#assessment-list',
-  components: {
-    AntConfigProvider
-  },
-  router,
-  template: '<ant-config-provider/>'
-});
+createVueApp('#assessment-list', routes);
