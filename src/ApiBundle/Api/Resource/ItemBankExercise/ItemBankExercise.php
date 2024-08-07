@@ -33,7 +33,7 @@ class ItemBankExercise extends AbstractResource
         }
         if ($itemBankExercise['price'] > 0) {
             if ($this->isPluginInstalled('electronicContract')) {
-                $contractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('questionBank', $itemBankExercise['id']);
+                $contractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('itemBankExercise', $itemBankExercise['id']);
                 $itemBankExercise['needSignContract'] = !empty($contractRelation);
             }
         }
