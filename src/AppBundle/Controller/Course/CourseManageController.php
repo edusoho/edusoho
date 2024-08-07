@@ -582,6 +582,20 @@ class CourseManageController extends BaseController
             if (!empty($data['covers'])) {
                 $this->getCourseSetService()->changeCourseSetCover($courseSetId, $data['covers']);
             }
+            if ($this->isPluginInstalled('electronicContract')) {
+                $electronicContractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('course', $course['id']);
+                if (empty($electronicContractRelation)) {
+                    $electronicContractRelation['contractId'] = $data['contractOption'];
+                    $electronicContractRelation['enableContract'] = $data['enableContract'];
+                    $electronicContractRelation['targetType'] = 'course';
+                    $electronicContractRelation['targetId'] = $course['id'];
+                    $this->getElectronicContractRelationService()->create($electronicContractRelation);
+                } else {
+                    $electronicContractRelation['contractId'] = $data['contractOption'];
+                    $electronicContractRelation['enableContract'] = $data['enableContract'];
+                    $this->getElectronicContractRelationService()->update($electronicContractRelation);
+                }
+            }
 
             return $this->createJsonResponse(true);
         }
@@ -627,9 +641,10 @@ class CourseManageController extends BaseController
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
         if ($this->isPluginInstalled('electronicContract')) {
             $electronicContractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('course', $course['id']);
-            $course['enableContract'] = !empty($electronicContractRelation);
-            if ($course['enableContract']) {
+            $course['enableContract'] = 0;
+            if (!empty($electronicContractRelation)) {
                 $course['contractOption'] = $electronicContractRelation['contractId'];
+                $course['enableContract'] = $electronicContractRelation['enableContract'];
             }
             $course['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
         }

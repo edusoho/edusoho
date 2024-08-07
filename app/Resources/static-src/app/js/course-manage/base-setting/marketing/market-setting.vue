@@ -102,14 +102,14 @@
           <el-form-item label="电子合同">
             <el-col :span="8">
               <el-switch
-                v-model="marketingForm.enableContract"
+                v-model="marketingForm.enableContractSwitch"
                 active-color="#46C37B"
                 inactive-color="#BFBFBF"
                 inline-prompt
               ></el-switch>
             </el-col>
           </el-form-item>
-          <el-form-item v-if="marketingForm.enableContract">
+          <el-form-item v-if="marketingForm.enableContractSwitch">
             <el-col :span="8">
               <el-select v-model="marketingForm.contractOption" placeholder="请选择">
                 <el-option
@@ -401,7 +401,13 @@
             vipLevels: {},
             serviceTags: {},
         },
-        watch: {},
+        watch: {
+            'marketingForm.enableContractSwitch'(newVal) {
+              console.log(newVal+'*************************')
+              this.marketingForm.enableContract = newVal ? 1 : 0;
+              console.log(this.marketingForm.enableContract + '________________');
+            }
+        },
         methods: {
             serviceItemClick(event) {
                 let $item = $(event.currentTarget);
@@ -466,6 +472,7 @@
                 buyable: this.course.buyable,
                 showable: this.course.showable,
                 enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
+                enableContractSwitch: this.course.enableContract == 1,
                 enableContract: this.course.enableContract,
                 contractOption: this.course.contractOption,
                 contracts: this.course.contracts,
