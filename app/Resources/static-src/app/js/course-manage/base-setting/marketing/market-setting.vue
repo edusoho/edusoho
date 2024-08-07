@@ -99,7 +99,28 @@
               {{'course.manage.max_capacity_hint'|trans({capacity: liveCapacity})}}
             </div>
           </el-form-item>
-
+          <el-form-item label="电子合同">
+            <el-col :span="8">
+              <el-switch
+                v-model="marketingForm.enableContract"
+                active-color="#46C37B"
+                inactive-color="#BFBFBF"
+                inline-prompt
+              ></el-switch>
+            </el-col>
+          </el-form-item>
+          <el-form-item v-if="marketingForm.enableContract">
+            <el-col :span="8">
+              <el-select v-model="marketingForm.contractOption" placeholder="请选择">
+                <el-option
+                  v-for="contract in marketingForm.contracts"
+                  :key="contract.id"
+                  :label="contract.name"
+                  :value="contract.id"
+                ></el-option>
+              </el-select>
+            </el-col>
+          </el-form-item>
           <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
                           :prop="marketingForm.enableBuyExpiryTime == 1 ? 'buyExpiryTime': 'enableBuyExpiryTime'">
                 <el-col :span="8">
@@ -445,6 +466,9 @@
                 buyable: this.course.buyable,
                 showable: this.course.showable,
                 enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
+                enableContract: this.course.enableContract,
+                contractOption: this.course.contractOption,
+                contracts: this.course.contracts,
                 buyExpiryTime: this.course.buyExpiryTime,
                 approval: this.course.approval,
                 expiryMode: this.course.expiryMode,

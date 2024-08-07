@@ -32,6 +32,8 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Pay\Service\PayService;
+use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractRelationService;
+use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -623,6 +625,14 @@ class CourseManageController extends BaseController
             $course['drainageImage'] = $this->getWebExtension()->getFurl($course['drainageImage']);
         }
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
+        if ($this->isPluginInstalled('electronicContract')) {
+            $electronicContractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('course', $course['id']);
+            $course['enableContract'] = !empty($electronicContractRelation);
+            if ($course['enableContract']) {
+                $course['contractOption'] = $electronicContractRelation['contractId'];
+            }
+            $course['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
+        }
 
         return $this->render(
             'course-manage/info.html.twig',
@@ -1378,5 +1388,21 @@ class CourseManageController extends BaseController
     protected function getVipRightService()
     {
         return $this->createService('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return ElectronicContractRelationService
+     */
+    private function getElectronicContractRelationService()
+    {
+        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractRelationService');
+    }
+
+    /**
+     * @return ElectronicContractService
+     */
+    private function getElectronicContractService()
+    {
+        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractService');
     }
 }
