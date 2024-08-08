@@ -1,6 +1,4 @@
-import Vue from 'common/vue';
-import Router from 'vue-router';
-import AntConfigProvider from 'app/vue/views/components/AntConfigProvider.vue';
+import { createVueApp } from 'app/vue/utils/vue-creator';
 
 const routes = [
   {
@@ -46,19 +44,7 @@ const routes = [
     },
   }
 ];
-const router = new Router({
-  routes
-});
 
-Vue.config.productionTip = false;
-
-new Vue({
-  el: '#app',
-  components: {
-    AntConfigProvider
-  },
-  router,
-  template: '<ant-config-provider/>'
-});
+createVueApp('#app', routes);
 
 $('.nav.nav-tabs').lavaLamp({setOnClick: false});
