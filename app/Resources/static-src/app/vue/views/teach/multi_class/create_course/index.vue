@@ -503,6 +503,7 @@
 
         this.courseCoverName = info.file.originFileObj.name
         reader.readAsDataURL(info.file.originFileObj);
+
       },
       reSelectCourseCover () {
         const $inputs = this.$refs.upload.$el.getElementsByTagName('input');
