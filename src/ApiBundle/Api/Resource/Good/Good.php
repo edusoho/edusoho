@@ -55,11 +55,9 @@ class Good extends AbstractResource
             $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $request->query->get('targetId'));
             $this->getGoodsService()->hitGoodsSpecs($goodsSpecs['id']);
         }
-        if ($goods['minPrice'] > 0) {
-            if ($this->isPluginInstalled('electronicContract')) {
-                $contractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId($goods['type'], $goods['product']['targetId']);
-                $goods['needSignContract'] = !empty($contractRelation);
-            }
+        if ($goods['minPrice'] > 0 && $this->isPluginInstalled('electronicContract')) {
+            $contractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId($goods['type'], $goods['product']['targetId']);
+            $goods['contractId'] = empty($contractRelation) ? 0 : $contractRelation['contractId'];
         }
 
         return $goods;
