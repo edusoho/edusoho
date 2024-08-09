@@ -57,7 +57,10 @@ class Good extends AbstractResource
         }
         if ($goods['minPrice'] > 0 && $this->isPluginInstalled('electronicContract')) {
             $contractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId($goods['type'], $goods['product']['targetId']);
-            $goods['contractId'] = empty($contractRelation) ? 0 : $contractRelation['contractId'];
+            $goods['needSignContract'] = !empty($contractRelation);
+            if ($goods['needSignContract']) {
+                $goods['contractId'] = $contractRelation['contractId'];
+            }
         }
 
         return $goods;
