@@ -65,7 +65,7 @@ class ClassroomManageController extends BaseController
         }
         $courseNum = count($courses);
         if ($this->isPluginInstalled('electronicContract')) {
-            $this->getElectronicContractRelationService()->buildContractRelation('classroom', $classroom);
+            $classroom = $this->getElectronicContractRelationService()->buildContractRelation('classroom', $classroom);
             $classroom['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
         }
 

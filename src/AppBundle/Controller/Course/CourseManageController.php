@@ -629,7 +629,7 @@ class CourseManageController extends BaseController
         }
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
         if ($this->isPluginInstalled('electronicContract')) {
-            $this->getElectronicContractRelationService()->buildContractRelation('course', $course);
+            $course = $this->getElectronicContractRelationService()->buildContractRelation('course', $course);
             $course['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
         }
 
