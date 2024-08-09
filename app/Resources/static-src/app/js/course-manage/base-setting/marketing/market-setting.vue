@@ -403,9 +403,7 @@
         },
         watch: {
             'marketingForm.enableContractSwitch'(newVal) {
-              console.log(newVal+'*************************')
               this.marketingForm.enableContract = newVal ? 1 : 0;
-              console.log(this.marketingForm.enableContract + '________________');
             }
         },
         methods: {
