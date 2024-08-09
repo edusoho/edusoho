@@ -65,12 +65,7 @@ class ClassroomManageController extends BaseController
         }
         $courseNum = count($courses);
         if ($this->isPluginInstalled('electronicContract')) {
-            $electronicContractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('classroom', $classroom['id']);
-            $classroom['enableContract'] = 0;
-            if (!empty($electronicContractRelation)) {
-                $classroom['contractOption'] = $electronicContractRelation['contractId'];
-                $classroom['enableContract'] = $electronicContractRelation['enableContract'];
-            }
+            $this->getElectronicContractRelationService()->buildContractRelation('classroom', $classroom);
             $classroom['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
         }
 
@@ -697,18 +692,7 @@ class ClassroomManageController extends BaseController
             $this->setVipRight($id, $class);
         }
         if ($this->isPluginInstalled('electronicContract')) {
-            $electronicContractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId('classroom', $id);
-            if (empty($electronicContractRelation)) {
-                $electronicContractRelation['contractId'] = $class['contractOption'];
-                $electronicContractRelation['enableContract'] = $class['enableContract'];
-                $electronicContractRelation['targetType'] = 'classroom';
-                $electronicContractRelation['targetId'] = $id;
-                $this->getElectronicContractRelationService()->create($electronicContractRelation);
-            } else {
-                $electronicContractRelation['contractId'] = $class['contractOption'];
-                $electronicContractRelation['enableContract'] = $class['enableContract'];
-                $this->getElectronicContractRelationService()->update($electronicContractRelation);
-            }
+            $this->getElectronicContractRelationService()->choseContract('classroom', $id, $class);
         }
 
         return $this->createJsonResponse(true);
