@@ -707,9 +707,9 @@ class Setting extends AbstractResource
 
     public function getElectronicContract()
     {
-        $cloudAttachmentSetting = $this->getSettingService()->get('electronicContract', []);
+        $electronicContractSetting = $this->getSettingService()->get('electronicContract', []);
 
-        return $cloudAttachmentSetting;
+        return $electronicContractSetting;
     }
 
     public function getArticle()
