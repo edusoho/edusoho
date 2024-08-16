@@ -4215,3 +4215,8 @@ user_show_mobile:
     _controller: 'AppBundle:MobileMask:showMobile'
   methods:
     - POST
+
+contract_sign_mobile:
+  path: '/contract_sign/mobile'
+  defaults:
+    _controller: 'AppBundle:Contract:signMobile'
