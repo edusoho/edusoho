@@ -25,7 +25,7 @@ class CreateContractTables extends Migration
 
           CREATE TABLE IF NOT EXISTS `contract_goods_relation` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `goodsType` varchar(32) NOT NULL COMMENT '商品类型',
+              `goodsType` varchar(32) NOT NULL COMMENT '商品类型(course,classroom,itemBankExercise)',
               `targetId` int(10) UNSIGNED NOT NULL COMMENT '对应商品id',
               `contractId` int(10) UNSIGNED NOT NULL COMMENT '合同id',
               `sign` tinyint(1) NOT NULL COMMENT '签署要求 0: 非强制, 1: 强制',
@@ -39,7 +39,7 @@ class CreateContractTables extends Migration
           CREATE TABLE IF NOT EXISTS `contract_sign_record` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `userId` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
-              `goodsType` varchar(32) NOT NULL COMMENT '商品类型',
+              `goodsType` varchar(32) NOT NULL COMMENT '商品类型(course,classroom,itemBankExercise)',
               `targetId` int(10) UNSIGNED NOT NULL COMMENT '对应商品id',
               `contractSnapshot` mediumtext COMMENT '合同快照',
               `createdTime` int(10) UNSIGNED NOT NULL,
