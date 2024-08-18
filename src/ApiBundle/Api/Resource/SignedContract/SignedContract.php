@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\SignedContract;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Course\Service\MemberService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -28,12 +29,15 @@ class SignedContract extends AbstractResource
     {
         $signedContract = $this->getContractService()->getSignedContract($id);
         $signSnapshot = $signedContract['snapshot'];
+        if (!empty($signSnapshot['sign']['handSignature'])) {
+            $signSnapshot['sign']['handSignature'] = AssetHelper::getFurl($signSnapshot['sign']['handSignature']);
+        }
 
         return [
             'code' => $signSnapshot['contractCode'],
             'name' => $signSnapshot['contract']['name'],
             'content' => $signSnapshot['contract']['content'],
-            'seal' => $signSnapshot['contract']['seal'],
+            'seal' => AssetHelper::getFurl($signSnapshot['contract']['seal']),
             'sign' => $signSnapshot['sign'],
             'signDate' => date('Y年m月d日', $signedContract['createdTime']),
         ];

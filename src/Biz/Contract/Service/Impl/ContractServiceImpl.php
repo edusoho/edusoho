@@ -5,6 +5,7 @@ namespace Biz\Contract\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Content\FileTrait;
 use Biz\Content\Service\FileService;
 use Biz\Contract\Dao\ContractDao;
 use Biz\Contract\Dao\ContractGoodsRelationDao;
@@ -14,6 +15,8 @@ use Biz\Contract\Service\ContractService;
 
 class ContractServiceImpl extends BaseService implements ContractService
 {
+    use FileTrait;
+
     public function countContracts(array $conditions)
     {
         return $this->getContractDao()->count($conditions);
@@ -71,6 +74,14 @@ class ContractServiceImpl extends BaseService implements ContractService
                 'seal' => $contract['seal'],
                 'version' => $version,
             ]);
+        }
+        if (!empty($sign['handSignature'])) {
+            $file = $this->fileDecode($sign['handSignature']);
+            if (empty($file)) {
+                throw CommonException::ERROR_PARAMETER();
+            }
+            $file = $this->getFileService()->uploadFile('user', $file);
+            $sign['handSignature'] = $file['uri'];
         }
         $snapshot = [
             'contractCode' => $sign['contractCode'],

@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Contract;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Contract\Service\ContractService;
 use Biz\User\Service\UserService;
 
@@ -39,7 +40,7 @@ class ContractSign extends AbstractResource
             'name' => $contract['name'],
             'code' => date('Ymd').substr(microtime(true) * 10000, -6),
             'content' => $contract['content'],
-            'seal' => $contract['seal'],
+            'seal' => AssetHelper::getFurl($contract['seal']),
             'signFields' => $signFields,
             'signDate' => date('Y年m月d日'),
         ];
