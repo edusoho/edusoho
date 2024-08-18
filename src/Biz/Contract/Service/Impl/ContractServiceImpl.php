@@ -51,7 +51,17 @@ class ContractServiceImpl extends BaseService implements ContractService
 
     public function signContract($id, $sign)
     {
+        $requiredKeys = ['contractCode', 'goodsKey', 'truename'];
         $contract = $this->getContract($id);
+        foreach ($contract['sign'] as $field => $enable) {
+            if (!empty($enable)) {
+                $requiredKeys[] = $field;
+            }
+        }
+        if (!ArrayToolkit::requireds($sign, $requiredKeys, true)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $sign = ArrayToolkit::parts($sign, $requiredKeys);
         $version = md5(json_encode([ArrayToolkit::parts($contract, ['name', 'content', 'seal'])]));
         $contractSnapshot = $this->getContractSnapshotDao()->getByVersion($version);
         if (empty($contractSnapshot)) {
@@ -62,6 +72,16 @@ class ContractServiceImpl extends BaseService implements ContractService
                 'version' => $version,
             ]);
         }
+        $snapshot = [
+            'contractCode' => $sign['contractCode'],
+            'contractSnapshotId' => $contractSnapshot['id'],
+            'sign' => ArrayToolkit::parts($sign, ['truename', 'IDNumber', 'phoneNumber', 'handSignature']),
+        ];
+        $this->getContractSignRecordDao()->create([
+            'userId' => $this->getCurrentUser()->getId(),
+            'goodsKey' => $sign['goodsKey'],
+            'snapshot' => $snapshot,
+        ]);
     }
 
     public function countSignedContracts(array $conditions)
@@ -72,6 +92,15 @@ class ContractServiceImpl extends BaseService implements ContractService
     public function searchSignedContracts(array $conditions, array $orderBys, $start, $limit, array $columns = [])
     {
         return $this->getContractSignRecordDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function getSignedContract($id)
+    {
+        $signedContract = $this->getContractSignRecordDao()->get($id);
+        $contractSnapshot = $this->getContractSnapshotDao()->get($signedContract['snapshot']['contractSnapshotId']);
+        $signedContract['snapshot']['contract'] = $contractSnapshot;
+
+        return $signedContract;
     }
 
     public function getBindContractByGoodsKey($goodsKey)

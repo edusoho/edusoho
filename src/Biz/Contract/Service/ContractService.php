@@ -22,6 +22,8 @@ interface ContractService
 
     public function searchSignedContracts(array $conditions, array $orderBys, $start, $limit, array $columns = []);
 
+    public function getSignedContract($id);
+
     public function getBindContractByGoodsKey($goodsKey);
 
     public function findContractGoodsRelationsByContractIds($contractIds);

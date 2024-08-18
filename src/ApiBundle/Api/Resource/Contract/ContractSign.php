@@ -9,7 +9,7 @@ use Biz\User\Service\UserService;
 
 class ContractSign extends AbstractResource
 {
-    public function get(ApiRequest $request, $contractId)
+    public function get(ApiRequest $request, $contractId, $goodsKey)
     {
         $contract = $this->getContractService()->getContract($contractId);
         if (empty($contract)) {

@@ -7,7 +7,9 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Contract\Service\ContractService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Order\Service\OrderService;
 
 class SignedContract extends AbstractResource
 {
@@ -25,6 +27,17 @@ class SignedContract extends AbstractResource
 
     public function get(ApiRequest $request, $id)
     {
+        $signedContract = $this->getContractService()->getSignedContract($id);
+        $signSnapshot = $signedContract['snapshot'];
+
+        return [
+            'code' => $signSnapshot['contractCode'],
+            'name' => $signSnapshot['contract']['name'],
+            'content' => $signSnapshot['contract']['content'],
+            'seal' => $signSnapshot['contract']['seal'],
+            'sign' => $signSnapshot['sign'],
+            'signDate' => date('Y年m月d日', $signedContract['createdTime']),
+        ];
     }
 
     private function buildSearchConditions($query)
@@ -107,8 +120,54 @@ class SignedContract extends AbstractResource
     private function wrap($signedContracts)
     {
         $users = $this->getUserService()->findUsersByIds(array_column($signedContracts, 'userId'));
+        $contractSnapshots = $this->getContractService()->findContractSnapshotsByIds(array_column(array_column($signedContracts, 'snapshot'), 'contractSnapshotId'));
+        $contractSnapshots = array_column($contractSnapshots, null, 'id');
+        $wrappedSignedContracts = [];
+        foreach ($signedContracts as $signedContract) {
+            list($goodsType, $targetId) = explode('_', $signedContract['goodsKey']);
+            $wrappedSignedContracts[] = [
+                'id' => $signedContract['id'],
+                'contractCode' => $signedContract['snapshot']['contractCode'],
+                'username' => $users[$signedContract['userId']]['nickname'],
+                'mobile' => $users[$signedContract['userId']]['verifiedMobile'],
+                'goodsType' => $goodsType,
+                'goodsName' => $this->getGoodsName($goodsType, $targetId),
+                'orderSn' => $this->getOrderSn($goodsType, $targetId, $signedContract['userId']),
+                'contractName' => $contractSnapshots[$signedContract['snapshot']['contractSnapshotId']]['name'],
+                'signTime' => $signedContract['createdTime'],
+            ];
+        }
 
-        return $signedContracts;
+        return $wrappedSignedContracts;
+    }
+
+    private function getGoodsName($goodsType, $targetId)
+    {
+        if ('course' == $goodsType) {
+            $course = $this->getCourseService()->getCourse($targetId);
+
+            return "{$course['courseSetTitle']}-{$course['title']}";
+        }
+        if ('classroom' == $goodsType) {
+            $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+            return $classroom['title'];
+        }
+    }
+
+    private function getOrderSn($goodsType, $targetId, $userId)
+    {
+        if ('course' == $goodsType) {
+            $member = $this->getCourseMemberService()->getCourseMember($targetId, $userId);
+        }
+        if ('classroom' == $goodsType) {
+            $member = $this->getClassroomService()->getClassroomMember($targetId, $userId);
+        }
+        if (!empty($member['orderId'])) {
+            $order = $this->getOrderService()->getOrder($member['orderId']);
+        }
+
+        return $order['sn'] ?? '';
     }
 
     /**
@@ -136,10 +195,26 @@ class SignedContract extends AbstractResource
     }
 
     /**
+     * @return MemberService
+     */
+    private function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
+    }
+
+    /**
      * @return ClassroomService
      */
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    private function getOrderService()
+    {
+        return $this->service('Order:OrderService');
     }
 }
