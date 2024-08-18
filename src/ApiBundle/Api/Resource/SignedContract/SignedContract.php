@@ -4,15 +4,14 @@ namespace ApiBundle\Api\Resource\SignedContract;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Contract\Service\ContractService;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Order\Service\OrderService;
 
 class SignedContract extends AbstractResource
 {
+    use SignedContractWrapTrait;
+
     public function search(ApiRequest $request)
     {
         list($abort, $conditions) = $this->buildSearchConditions($request->query->all());
@@ -120,7 +119,7 @@ class SignedContract extends AbstractResource
     private function wrap($signedContracts)
     {
         $users = $this->getUserService()->findUsersByIds(array_column($signedContracts, 'userId'));
-        $contractSnapshots = $this->getContractService()->findContractSnapshotsByIds(array_column(array_column($signedContracts, 'snapshot'), 'contractSnapshotId'));
+        $contractSnapshots = $this->getContractService()->findContractSnapshotsByIds(array_column(array_column($signedContracts, 'snapshot'), 'contractSnapshotId'), ['id', 'name']);
         $contractSnapshots = array_column($contractSnapshots, null, 'id');
         $wrappedSignedContracts = [];
         foreach ($signedContracts as $signedContract) {
@@ -141,20 +140,6 @@ class SignedContract extends AbstractResource
         return $wrappedSignedContracts;
     }
 
-    private function getGoodsName($goodsType, $targetId)
-    {
-        if ('course' == $goodsType) {
-            $course = $this->getCourseService()->getCourse($targetId);
-
-            return "{$course['courseSetTitle']}-{$course['title']}";
-        }
-        if ('classroom' == $goodsType) {
-            $classroom = $this->getClassroomService()->getClassroom($targetId);
-
-            return $classroom['title'];
-        }
-    }
-
     private function getOrderSn($goodsType, $targetId, $userId)
     {
         if ('course' == $goodsType) {
@@ -171,14 +156,6 @@ class SignedContract extends AbstractResource
     }
 
     /**
-     * @return ContractService
-     */
-    private function getContractService()
-    {
-        return $this->service('Contract:ContractService');
-    }
-
-    /**
      * @return UserService
      */
     private function getUserService()
@@ -187,27 +164,11 @@ class SignedContract extends AbstractResource
     }
 
     /**
-     * @return CourseService
-     */
-    private function getCourseService()
-    {
-        return $this->service('Course:CourseService');
-    }
-
-    /**
      * @return MemberService
      */
     private function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    private function getClassroomService()
-    {
-        return $this->service('Classroom:ClassroomService');
     }
 
     /**

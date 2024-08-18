@@ -78,14 +78,13 @@ class Course extends AbstractResource
         if (empty($contract)) {
             $course['contract'] = [
                 'sign' => 'no',
-                'name' => '',
-                'id' => '',
             ];
         } else {
             $course['contract'] = [
                 'sign' => $contract['sign'] ? 'required' : 'optional',
                 'name' => $contract['name'],
                 'id' => $contract['id'],
+                'goodsKey' => $goodsKey,
             ];
         }
 
