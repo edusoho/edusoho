@@ -46,6 +46,28 @@
                     关闭后班级将无法在线购买加入。
                 </div>
             </el-form-item>
+            <el-form-item label="电子合同">
+              <el-col :span="8">
+                <el-switch
+                  v-model="form.enableContractSwitch"
+                  active-color="#46C37B"
+                  inactive-color="#BFBFBF"
+                  inline-prompt
+                ></el-switch>
+              </el-col>
+            </el-form-item>
+            <el-form-item v-if="form.enableContractSwitch">
+              <el-col :span="8">
+                <el-select v-model="form.contractOption" placeholder="请选择">
+                  <el-option
+                    v-for="contract in form.contracts"
+                    :key="contract.id"
+                    :label="contract.name"
+                    :value="contract.id"
+                  ></el-option>
+                </el-select>
+              </el-col>
+            </el-form-item>
             <el-form-item :label="'classroom.expiry_mode_label'|trans">
                 <el-radio v-model="form.expiryMode"
                           v-for="(label, value) in expiryModeRadios"
@@ -212,6 +234,9 @@
                 } else {
                     this.formRule.expiryValue = [];
                 }
+            },
+            'form.enableContractSwitch'(newVal) {
+              this.form.enableContract = newVal ? 1 : 0;
             }
         },
         created() {
@@ -249,6 +274,10 @@
                 expiryMode: this.classroom.expiryMode,
                 expiryValue: this.classroom.expiryMode == 'date' ? this.classroom.expiryValue * 1000 : this.classroom.expiryValue,
                 service: this.classroom.service,
+                enableContractSwitch: this.classroom.enableContract == 1,
+                enableContract: this.classroom.enableContract,
+                contractOption: this.classroom.contractOption,
+                contracts: this.classroom.contracts,
             };
 
             if (this.vipInstalled && this.vipEnabled) {

@@ -34,6 +34,8 @@ use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\Order\Service\OrderService;
+use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractRelationService;
+use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -62,6 +64,10 @@ class ClassroomManageController extends BaseController
             $coursePrice += $course['originPrice'];
         }
         $courseNum = count($courses);
+        if ($this->isPluginInstalled('electronicContract')) {
+            $classroom = $this->getElectronicContractRelationService()->buildContractRelation('classroom', $classroom);
+            $classroom['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
+        }
 
         return $this->render(
             'classroom-manage/index.html.twig',
@@ -684,6 +690,9 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->updateClassroomInfo($id, $class);
         if ($this->isPluginInstalled('Vip')) {
             $this->setVipRight($id, $class);
+        }
+        if ($this->isPluginInstalled('electronicContract')) {
+            $this->getElectronicContractRelationService()->choseContract('classroom', $id, $class);
         }
 
         return $this->createJsonResponse(true);
@@ -1502,5 +1511,21 @@ class ClassroomManageController extends BaseController
     protected function getReportService()
     {
         return $this->getBiz()->service('Classroom:ReportService');
+    }
+
+    /**
+     * @return ElectronicContractRelationService
+     */
+    private function getElectronicContractRelationService()
+    {
+        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractRelationService');
+    }
+
+    /**
+     * @return ElectronicContractService
+     */
+    private function getElectronicContractService()
+    {
+        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractService');
     }
 }
