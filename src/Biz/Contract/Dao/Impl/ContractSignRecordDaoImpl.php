@@ -9,9 +9,9 @@ class ContractSignRecordDaoImpl extends GeneralDaoImpl implements ContractSignRe
 {
     protected $table = 'contract_sign_record';
 
-    public function getByUserIdAndGoodsTypeAndTargetId($userId, $goodsType, $targetId)
+    public function getByUserIdAndGoodsKey($userId, $goodsKey)
     {
-        return $this->getByFields(['userId' => $userId, 'goodsType' => $goodsType, 'targetId' => $targetId]);
+        return $this->getByFields(['userId' => $userId, 'goodsKey' => $goodsKey]);
     }
 
     public function declares()
@@ -19,12 +19,17 @@ class ContractSignRecordDaoImpl extends GeneralDaoImpl implements ContractSignRe
         return [
             'conditions' => [
                 'userId = :userId',
+                'userId in (:userIds)',
+                'goodsKey pre_like :goodsType',
+                'goodsKey in (:goodsKeys)',
+                'createdTime >= :createdTime_GTE',
+                'createdTime <= :createdTime_LTE',
             ],
             'serializes' => [
-                'contractSnapshot' => 'json',
+                'snapshot' => 'json',
             ],
             'orderbys' => [
-                'createdTime',
+                'id',
             ],
             'timestamps' => [
                 'createdTime',

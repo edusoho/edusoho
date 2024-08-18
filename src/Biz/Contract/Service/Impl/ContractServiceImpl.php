@@ -2,17 +2,33 @@
 
 namespace Biz\Contract\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\Content\Service\FileService;
 use Biz\Contract\Dao\ContractDao;
 use Biz\Contract\Dao\ContractGoodsRelationDao;
 use Biz\Contract\Dao\ContractSignRecordDao;
+use Biz\Contract\Dao\ContractSnapshotDao;
 use Biz\Contract\Service\ContractService;
 
 class ContractServiceImpl extends BaseService implements ContractService
 {
+    public function countContracts(array $conditions)
+    {
+        return $this->getContractDao()->count($conditions);
+    }
+
+    public function searchContracts(array $conditions, array $orderBys, $start, $limit, array $columns = [])
+    {
+        return $this->getContractDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
     public function createContract(array $params)
     {
-        // TODO: Implement createContract() method.
+        $params = $this->preprocess($params);
+        $params['createdUserId'] = $params['updatedUserId'] = $this->getCurrentUser()->getId();
+        $this->getContractDao()->create($params);
     }
 
     public function getContract($id)
@@ -20,14 +36,42 @@ class ContractServiceImpl extends BaseService implements ContractService
         return $this->getContractDao()->get($id);
     }
 
-    public function signContract($id, $sign)
+    public function updateContract($id, array $params)
     {
-        // TODO: Implement signContract() method.
+        $params = $this->preprocess($params);
+        $params['updatedUserId'] = $this->getCurrentUser()->getId();
+
+        $this->getContractDao()->update($id, $params);
     }
 
-    public function getBindContractByGoodsTypeAndTargetId($goodsType, $targetId)
+    public function signContract($id, $sign)
     {
-        $relation = $this->getContractGoodsRelationDao()->getByGoodsTypeAndTargetId($goodsType, $targetId);
+        $contract = $this->getContract($id);
+        $version = md5(json_encode([ArrayToolkit::parts($contract, ['name', 'content', 'seal'])]));
+        $contractSnapshot = $this->getContractSnapshotDao()->getByVersion($version);
+        if (empty($contractSnapshot)) {
+            $contractSnapshot = $this->getContractSnapshotDao()->create([
+                'name' => $contract['name'],
+                'content' => $contract['content'],
+                'seal' => $contract['seal'],
+                'version' => $version,
+            ]);
+        }
+    }
+
+    public function countSignedContracts(array $conditions)
+    {
+        return $this->getContractSignRecordDao()->count($conditions);
+    }
+
+    public function searchSignedContracts(array $conditions, array $orderBys, $start, $limit, array $columns = [])
+    {
+        return $this->getContractSignRecordDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function getBindContractByGoodsKey($goodsKey)
+    {
+        $relation = $this->getContractGoodsRelationDao()->getByGoodsKey($goodsKey);
         if (empty($relation)) {
             return null;
         }
@@ -37,9 +81,43 @@ class ContractServiceImpl extends BaseService implements ContractService
         return $relation;
     }
 
-    public function getSignRecordByUserIdAndGoodsTypeAndTargetId($userId, $goodsType, $targetId)
+    public function getSignRecordByUserIdAndGoodsKey($userId, $goodsKey)
     {
-        return $this->getContractSignRecordDao()->getByUserIdAndGoodsTypeAndTargetId($userId, $goodsType, $targetId);
+        return $this->getContractSignRecordDao()->getByUserIdAndGoodsKey($userId, $goodsKey);
+    }
+
+    public function findContractSnapshotsByIds($ids, $columns = [])
+    {
+        return $this->getContractSnapshotDao()->search(['ids' => $ids], [], 0, count($ids), $columns);
+    }
+
+    private function preprocess($params)
+    {
+        $keys = ['name', 'content', 'seal', 'sign'];
+        if (!ArrayToolkit::requireds($params, $keys, true)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $params = ArrayToolkit::parts($params, $keys);
+        $signKeys = ['IDNumber', 'phoneNumber', 'handSignature'];
+        if (!ArrayToolkit::requireds($params['sign'], $signKeys)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $params['sign'] = ArrayToolkit::parts($params['sign'], $signKeys);
+        $file = $this->getFileService()->getFile($params['seal']);
+        if (empty($file)) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+        $params['seal'] = $file['uri'];
+
+        return $params;
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 
     /**
@@ -56,6 +134,14 @@ class ContractServiceImpl extends BaseService implements ContractService
     private function getContractGoodsRelationDao()
     {
         return $this->createDao('Contract:ContractGoodsRelationDao');
+    }
+
+    /**
+     * @return ContractSnapshotDao
+     */
+    private function getContractSnapshotDao()
+    {
+        return $this->createDao('Contract:ContractSnapshotDao');
     }
 
     /**

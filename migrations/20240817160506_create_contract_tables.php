@@ -25,27 +25,36 @@ class CreateContractTables extends Migration
 
           CREATE TABLE IF NOT EXISTS `contract_goods_relation` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `goodsType` varchar(32) NOT NULL COMMENT '商品类型(course,classroom,itemBankExercise)',
-              `targetId` int(10) UNSIGNED NOT NULL COMMENT '对应商品id',
+              `goodsKey` varchar(32) NOT NULL COMMENT '商品类型(course,classroom,itemBankExercise)_对应商品id',
               `contractId` int(10) UNSIGNED NOT NULL COMMENT '合同id',
               `sign` tinyint(1) NOT NULL COMMENT '签署要求 0: 非强制, 1: 强制',
               `createdTime` int(10) UNSIGNED NOT NULL,
               `updatedTime` int(10) UNSIGNED NOT NULL,
               PRIMARY KEY (`id`),
               KEY `contractId` (`contractId`),
-              KEY `goodsType_targetId` (`goodsType`, `targetId`)
+              KEY `goodsKey` (`goodsKey`)
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT = '商品合同关系表';
+
+          CREATE TABLE IF NOT EXISTS `contract_snapshot` (
+              `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `name` varchar(255) NOT NULL COMMENT '合同名称',
+              `content` mediumtext COMMENT '合同内容',
+              `seal` varchar(255) NOT NULL COMMENT '甲方印章图标',
+              `version` varchar(32) NOT NULL COMMENT '版本号(MD5)',
+              `createdTime` int(10) UNSIGNED NOT NULL COMMENT '创建时间',
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `version` (`version`)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT = '合同快照表';
 
           CREATE TABLE IF NOT EXISTS `contract_sign_record` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `userId` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
-              `goodsType` varchar(32) NOT NULL COMMENT '商品类型(course,classroom,itemBankExercise)',
-              `targetId` int(10) UNSIGNED NOT NULL COMMENT '对应商品id',
-              `contractSnapshot` mediumtext COMMENT '合同快照',
+              `goodsKey` varchar(32) NOT NULL COMMENT '商品类型(course,classroom,itemBankExercise)_对应商品id',
+              `snapshot` varchar(1024) COMMENT '签署快照',
               `createdTime` int(10) UNSIGNED NOT NULL,
               PRIMARY KEY (`id`),
               KEY `userId` (`userId`),
-              KEY `goodsType_targetId` (`goodsType`, `targetId`)
+              KEY `goodsKey` (`goodsKey`)
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT = '合同签署记录表';
         ");
     }

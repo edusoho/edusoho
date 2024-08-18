@@ -73,14 +73,8 @@ class Course extends AbstractResource
             $course['drainage']['image'] = preg_replace('/^.+\/files\//', '/files/', $course['drainage']['image']);
             $course['drainage']['image'] = $this->getWebExtension()->getFurl($course['drainage']['image']);
         }
-        if (empty($classroom)) {
-            $goodsType = 'course';
-            $targetId = $course['id'];
-        } else {
-            $goodsType = 'classroom';
-            $targetId = $classroom['id'];
-        }
-        $contract = $this->getContractService()->getBindContractByGoodsTypeAndTargetId($goodsType, $targetId);
+        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $contract = $this->getContractService()->getBindContractByGoodsKey($goodsKey);
         if (empty($contract)) {
             $course['contract'] = [
                 'sign' => 'no',

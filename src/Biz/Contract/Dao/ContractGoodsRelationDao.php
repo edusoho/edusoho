@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ContractGoodsRelationDao extends GeneralDaoInterface
 {
-    public function getByGoodsTypeAndTargetId($goodsType, $targetId);
+    public function getByGoodsKey($goodsKey);
 }

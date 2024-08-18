@@ -36,14 +36,8 @@ class MeCourseMember extends AbstractResource
                 $courseMember['expire']['deadline'] = empty($classroomMember['expire']['deadline']) ? 0 : strtotime($classroomMember['expire']['deadline']);
             }
         }
-        if (empty($classroom)) {
-            $goodsType = 'course';
-            $targetId = $course['id'];
-        } else {
-            $goodsType = 'classroom';
-            $targetId = $classroom['id'];
-        }
-        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsTypeAndTargetId($this->getCurrentUser()->getId(), $goodsType, $targetId);
+        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
         $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
 
         return $courseMember;
