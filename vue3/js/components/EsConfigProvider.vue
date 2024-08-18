@@ -7,7 +7,7 @@
 <script setup>
 import { ConfigProvider } from "ant-design-vue";
 import { ref } from 'vue'
-import { getCurrentPrimaryColor } from 'ElectronicContractPlugin/vue3/js/common.js';
+import { getCurrentPrimaryColor } from 'vue3/js/common';
 import zh_CN from 'ant-design-vue/es/locale/zh_CN';
 import en_US from 'ant-design-vue/es/locale/en_US';
 import dayjs from 'dayjs';

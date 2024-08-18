@@ -45,7 +45,7 @@ class ContractSign extends AbstractResource
         ];
     }
 
-    public function post(ApiRequest $request, $contractId)
+    public function add(ApiRequest $request, $contractId)
     {
         $this->getContractService()->signContract($contractId, $request->request->all());
 

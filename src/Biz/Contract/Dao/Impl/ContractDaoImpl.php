@@ -13,6 +13,8 @@ class ContractDaoImpl extends GeneralDaoImpl implements ContractDao
     {
         return [
             'conditions' => [
+                'name like :nameLike',
+                'updatedUserId in (:updatedUserIds)',
             ],
             'serializes' => [
                 'sign' => 'json',

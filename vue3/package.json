@@ -46,6 +46,6 @@
   "scripts": {
     "serve": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/@codeages/webpack-vue3/dist/webpack.dev.js",
     "serve:analyzer": "npm run serve analyzer:true",
-    "build": "cross-env NODE_ENV=production nodemon --max_old_space_size=4096 node_modules/@codeages/webpack-vue3/dist/webpack.prod.js"
+    "build": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/@codeages/webpack-vue3/dist/webpack.prod.js"
   }
 }
