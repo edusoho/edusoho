@@ -14,6 +14,8 @@ interface ContractService
 
     public function updateContract($id, array $params);
 
+    public function deleteContract($id);
+
     public function signContract($id, $sign);
 
     public function countSignedContracts(array $conditions);
@@ -21,6 +23,8 @@ interface ContractService
     public function searchSignedContracts(array $conditions, array $orderBys, $start, $limit, array $columns = []);
 
     public function getBindContractByGoodsKey($goodsKey);
+
+    public function findContractGoodsRelationsByContractIds($contractIds);
 
     public function getSignRecordByUserIdAndGoodsKey($userId, $goodsKey);
 

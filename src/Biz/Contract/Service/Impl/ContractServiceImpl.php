@@ -44,6 +44,11 @@ class ContractServiceImpl extends BaseService implements ContractService
         $this->getContractDao()->update($id, $params);
     }
 
+    public function deleteContract($id)
+    {
+        $this->getContractDao()->delete($id);
+    }
+
     public function signContract($id, $sign)
     {
         $contract = $this->getContract($id);
@@ -81,6 +86,11 @@ class ContractServiceImpl extends BaseService implements ContractService
         return $relation;
     }
 
+    public function findContractGoodsRelationsByContractIds($contractIds)
+    {
+        return $this->getContractGoodsRelationDao()->findByContractIds($contractIds);
+    }
+
     public function getSignRecordByUserIdAndGoodsKey($userId, $goodsKey)
     {
         return $this->getContractSignRecordDao()->getByUserIdAndGoodsKey($userId, $goodsKey);
@@ -103,6 +113,9 @@ class ContractServiceImpl extends BaseService implements ContractService
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $params['sign'] = ArrayToolkit::parts($params['sign'], $signKeys);
+        foreach ($signKeys as $signKey) {
+            $params['sign'][$signKey] = empty($params['sign'][$signKey]) ? 0 : 1;
+        }
         $file = $this->getFileService()->getFile($params['seal']);
         if (empty($file)) {
             throw CommonException::ERROR_PARAMETER();
