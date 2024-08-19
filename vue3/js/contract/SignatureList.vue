@@ -11,7 +11,7 @@ const columns = [
     key: 'contractCode',
     title: '合同编号',
     dataIndex: 'contractCode',
-    width: 140,
+    width: 120,
     ellipsis: true,
   },
   {
@@ -37,7 +37,7 @@ const columns = [
     key: 'goodsName',
     title: '商品名称',
     dataIndex: 'goodsName',
-    width: 200,
+    width: 220,
   },
   {
     key: 'contractName',
