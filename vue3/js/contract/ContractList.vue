@@ -150,16 +150,16 @@ const onDelete = async (id) => {
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
-            <span>{{ `课程：${record.relatedGoodsCount.course}` }}</span>
-            <span>{{ `班级：${record.relatedGoodsCount.classroom}` }}</span>
-            <span>{{ `题库：${record.relatedGoodsCount.itemBankExercise}` }}</span>
+            <span>{{ `课程：${record.relatedGoodsCount ? record.relatedGoodsCount.course : 0}` }}</span>
+            <span>{{ `班级：${record.relatedGoodsCount ? record.relatedGoodsCount.classroom : 0}` }}</span>
+            <span>{{ `题库：${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise : 0}` }}</span>
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">
           <a-button type="link" @click="onDelete(record.id)">删除</a-button>
         </template>
         <template v-else-if="column.key === 'updatedUser'">
-          {{ record.updatedUser.nickname }}
+          {{ record.updatedUser ? record.updatedUser.nickname : '' }}
         </template>
         <template v-if="column.key === 'updatedTime'">
           {{ formatDate(record.updatedTime) }}

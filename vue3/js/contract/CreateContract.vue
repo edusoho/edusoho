@@ -35,7 +35,7 @@ const showCancelModal = () => {
     content: createVNode('div', {style: 'color:#626973; font-size:14px; font-weight:400'}, '离开后已编辑的数据将消失...'),
     onOk() {
       resetForm();
-      router.push({name: 'ContractList'});
+      router.push({name: 'Index'});
     },
     onCancel() {
     },
