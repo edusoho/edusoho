@@ -39,4 +39,6 @@ interface ContractService
     public function getSignRecordByUserIdAndGoodsKey($userId, $goodsKey);
 
     public function findContractSnapshotsByIds($ids, $columns = []);
+
+    public function getContractDetail($contract);
 }

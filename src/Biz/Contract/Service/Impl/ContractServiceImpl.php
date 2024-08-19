@@ -118,6 +118,8 @@ class ContractServiceImpl extends BaseService implements ContractService
         $signedContract = $this->getContractSignRecordDao()->get($id);
         $contractSnapshot = $this->getContractSnapshotDao()->get($signedContract['snapshot']['contractSnapshotId']);
         $signedContract['snapshot']['contract'] = $contractSnapshot;
+        $content = $this->getDetailContent($signedContract['snapshot']['contract']['content'], $signedContract['goodsKey']);
+        $this->getHtmlByRecord($content, $signedContract['sign']);
 
         return $signedContract;
     }
@@ -175,6 +177,36 @@ class ContractServiceImpl extends BaseService implements ContractService
         return $this->getContractSnapshotDao()->search(['ids' => $ids], [], 0, count($ids), $columns);
     }
 
+    public function getContractDetail($contract)
+    {
+        $contractGoodsRelation = $this->getContractGoodsRelationByContractId($contract['id']);
+        $content = $this->getDetailContent($contract['content'], $contractGoodsRelation['goodsKey']);
+
+        return $this->getHtml($content, $contract['sign'], $this->getCurrentUser());
+    }
+
+    private function getDetailContent($content, $goodsKey)
+    {
+        $parts = explode('_', $goodsKey);
+        $product = $this->getServiceByType($parts[0])->get($parts[1]);
+        $member = [];
+        if ('course' == $parts[0]) {
+            $member = $this->getMemberService($parts[0])->getCourseMember($parts[1], $this->getCurrentUser()->getId());
+        } elseif ('classroom' == $parts[0]) {
+            $member = $this->getMemberService($parts[0])->getClassroomMember($parts[1], $this->getCurrentUser()->getId());
+        } else {
+            $member = $this->getMemberService($parts[0])->getExerciseMember($parts[1], $this->getCurrentUser()->getId());
+        }
+        $order = $this->getOrderService()->getOrder($member['orderId']);
+        $user = $this->getCurrentUser();
+
+        return str_replace(
+            ['$name$', '$username$', '$idcard$', '$courseName$', '$contract number$', '$date$', '$order price$'],
+            [$user['truename'] ?? '', $user['nickname'] ?? '', $user['idcard'] ?? '', $product['title'] ?? '', $contract['id'] ?? '', date('Y年m月d日') ?? '', $order['pay_amount'] ?? ''],
+            $content
+        );
+    }
+
     private function preprocess($params)
     {
         $keys = ['name', 'content', 'seal', 'sign'];
@@ -197,6 +229,91 @@ class ContractServiceImpl extends BaseService implements ContractService
         $params['seal'] = $file['uri'];
 
         return $params;
+    }
+
+    protected function getHtml($content, $sign, $user)
+    {
+//        return $htmlContent = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>合同页面</title></head><body style="padding: 20px 32px 20px 32px; min-width: 311px;"><p style="overflow: hidden; color: #1E2226; text-overflow: ellipsis; font-size: 14px; font-style: normal; font-weight: 500; line-height: 22px; text-align: center;">合作协议书</p><p style="color: #626973; text-align: right; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;">合同编号：HT20230712</p><div style="color: #626973; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;">fasdfasdfasdfasdfa</div><div><p style="color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;">甲方：</p><img src="未标题-2.jpg" alt="甲方印章" style="width: 150px; height: 150px; margin-top: 22px;"><div style="margin-top: 22px; display: flex;">甲方公司：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;">aaa</div></div><div style="margin-top: 22px; display: flex;">签约日期：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;">2024年07月29日</div></div></div><div style="margin-top: 32px;"><p style="color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;">已方：</p><div style="margin-top: 22px; display: flex;">手写签名：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;"><img src="未标题-2.jpg" style="height: 35px;"></div></div><div style="margin-top: 22px; display: flex;">签约日期：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;">2024年07月29日</div></div></div></body></html>';
+        $htmlContentHeader = '<!DOCTYPE html><html lang=\'zh-CN\'><head><meta charset=\'UTF-8\'><title>合同页面</title></head><body style=\'padding: 20px 32px 20px 32px; min-width: 311px;\'><p style=\'overflow: hidden; color: #1E2226; text-overflow: ellipsis; font-size: 14px; font-style: normal; font-weight: 500; line-height: 22px; text-align: center;\'>合作协议书</p><p style=\'color: #626973; text-align: right; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;\'>合同编号：HT20230712</p><div style=\'color: #626973; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;\'>'.$content.'</div><div><p style=\'color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;\'>甲方：</p><img src=\'未标题-2.jpg\' alt=\'甲方印章\' style=\'width: 150px; height: 150px; margin-top: 22px;\'><div style=\'margin-top: 22px; display: flex;\'>签约日期：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.date('Y年m月d日').'</div></div></div><div style=\'margin-top: 32px;\'><p style=\'color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;\'>已方：</p>';
+        $htmlContentOptions = '';
+        $htmlContentFoot = '<div style=\'margin-top: 22px; display: flex;\'>签约日期：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.date('Y年m月d日').'</div></div></div></body></html>';
+        if (1 == $sign['handSignature']) {
+            $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>手写签名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$handSignature ? $handSignature : ''.'</div></div>';
+        }
+        $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>乙方姓名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$user['truename'] ? $user['truename'] : ''.'</div></div>';
+        if (1 == $sign['IDNumber']) {
+            $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>身份证号：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$user['idCard'] ? $user['idCard'] : ''.'</div></div>';
+        }
+        if (1 == $sign['phoneNumber']) {
+            $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>联系方式：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$user['verifiedMobile'] ? $user['verifiedMobile'] : ''.'</div></div>';
+        }
+
+        return $htmlContentHeader + $htmlContentOptions + $htmlContentFoot;
+    }
+
+    protected function getHtmlByRecord($content, $sign)
+    {
+//        return $htmlContent = '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>合同页面</title></head><body style="padding: 20px 32px 20px 32px; min-width: 311px;"><p style="overflow: hidden; color: #1E2226; text-overflow: ellipsis; font-size: 14px; font-style: normal; font-weight: 500; line-height: 22px; text-align: center;">合作协议书</p><p style="color: #626973; text-align: right; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;">合同编号：HT20230712</p><div style="color: #626973; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;">fasdfasdfasdfasdfa</div><div><p style="color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;">甲方：</p><img src="未标题-2.jpg" alt="甲方印章" style="width: 150px; height: 150px; margin-top: 22px;"><div style="margin-top: 22px; display: flex;">甲方公司：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;">aaa</div></div><div style="margin-top: 22px; display: flex;">签约日期：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;">2024年07月29日</div></div></div><div style="margin-top: 32px;"><p style="color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;">已方：</p><div style="margin-top: 22px; display: flex;">手写签名：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;"><img src="未标题-2.jpg" style="height: 35px;"></div></div><div style="margin-top: 22px; display: flex;">签约日期：<div style="display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;">2024年07月29日</div></div></div></body></html>';
+        $htmlContentHeader = '<!DOCTYPE html><html lang=\'zh-CN\'><head><meta charset=\'UTF-8\'><title>合同页面</title></head><body style=\'padding: 20px 32px 20px 32px; min-width: 311px;\'><p style=\'overflow: hidden; color: #1E2226; text-overflow: ellipsis; font-size: 14px; font-style: normal; font-weight: 500; line-height: 22px; text-align: center;\'>合作协议书</p><p style=\'color: #626973; text-align: right; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;\'>合同编号：HT20230712</p><div style=\'color: #626973; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;\'>'.$content.'</div><div><p style=\'color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;\'>甲方：</p><img src=\'未标题-2.jpg\' alt=\'甲方印章\' style=\'width: 150px; height: 150px; margin-top: 22px;\'><div style=\'margin-top: 22px; display: flex;\'>签约日期：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.date('Y年m月d日').'</div></div></div><div style=\'margin-top: 32px;\'><p style=\'color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;\'>已方：</p>';
+        $htmlContentOptions = '';
+        $htmlContentFoot = '<div style=\'margin-top: 22px; display: flex;\'>签约日期：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.date('Y年m月d日').'</div></div></div></body></html>';
+        if (!empty($sign['handSignature'])) {
+            $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>手写签名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['handSignature'] ? $sign['handSignature'] : ''.'</div></div>';
+        }
+        $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>乙方姓名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['truename'] ? $sign['truename'] : ''.'</div></div>';
+        if (!empty($sign['IDNumber'])) {
+            $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>身份证号：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['IDNumber'] ? $sign['IDNumber'] : ''.'</div></div>';
+        }
+        if (!empty($sign['phoneNumber'])) {
+            $htmlContentFoot += '<div style=\'margin-top: 22px; display: flex;\'>联系方式：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['phoneNumber'] ? $sign['phoneNumber'] : ''.'</div></div>';
+        }
+
+        return $htmlContentHeader + $htmlContentOptions + $htmlContentFoot;
+    }
+
+    /**
+     * 根据输入的字符串拆分并获取对应的服务
+     *
+     * @param string $input
+     *
+     * @return mixed
+     */
+    private function getServiceByType($type)
+    {
+        switch ($type) {
+            case 'course':
+                $serviceName = 'Course:CourseService';
+                break;
+            case 'classroom':
+                $serviceName = 'Classroom:ClassroomService';
+                break;
+            case 'itemBank':
+                $serviceName = 'ItemBank:ItemBank:ItemBankService';
+                break;
+            default:
+                throw new \Exception('Unknown type: '.$type);
+        }
+
+        return $this->createService($serviceName);
+    }
+
+    private function getMemberService($type)
+    {
+        switch ($type) {
+            case 'course':
+                $serviceName = 'Course:MemberService';
+                break;
+            case 'classroom':
+                $serviceName = 'Classroom:MemberService';
+                break;
+            case 'itemBankExercise':
+                $serviceName = 'ItemBankExercise:ExerciseMemberService';
+                break;
+            default:
+                throw new \Exception('Unknown type: '.$type);
+        }
+
+        return $this->createService($serviceName);
     }
 
     /**
@@ -237,5 +354,13 @@ class ContractServiceImpl extends BaseService implements ContractService
     private function getContractSignRecordDao()
     {
         return $this->createDao('Contract:ContractSignRecordDao');
+    }
+
+    /**
+     * @return OrderService
+     */
+    private function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }
