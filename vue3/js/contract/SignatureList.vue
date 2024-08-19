@@ -106,7 +106,7 @@ async function onSearch() {
 
 async function onReset() {
   pagination.current = 1;
-  keywordType.value = 'name';
+  keywordType.value = 'username';
   keyword.value = '';
   signTime.value = undefined;
   goodsType.value = undefined;
