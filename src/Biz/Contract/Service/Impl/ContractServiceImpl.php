@@ -121,7 +121,7 @@ class ContractServiceImpl extends BaseService implements ContractService
             return null;
         }
         $contract = $this->getContract($relation['contractId']);
-        $relation['name'] = $contract['name'];
+        $relation['contractName'] = $contract['name'];
 
         return $relation;
     }
