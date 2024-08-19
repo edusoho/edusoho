@@ -35,8 +35,6 @@ use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\Order\Service\OrderService;
-use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractRelationService;
-use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -13,7 +13,6 @@ use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
-use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractRelationService;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -54,13 +53,6 @@ class Good extends AbstractResource
         if ($request->query->get('targetId')) {
             $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $request->query->get('targetId'));
             $this->getGoodsService()->hitGoodsSpecs($goodsSpecs['id']);
-        }
-        if ($goods['minPrice'] > 0 && $this->isPluginInstalled('electronicContract')) {
-            $contractRelation = $this->getElectronicContractRelationService()->getContractRelationByTargetTypeAndTargetId($goods['type'], $goods['product']['targetId']);
-            $goods['needSignContract'] = !empty($contractRelation);
-            if ($goods['needSignContract']) {
-                $goods['contractId'] = $contractRelation['contractId'];
-            }
         }
 
         return $goods;
@@ -223,13 +215,5 @@ class Good extends AbstractResource
     protected function getCourseSetService()
     {
         return $this->service('Course:CourseSetService');
-    }
-
-    /**
-     * @return ElectronicContractRelationService
-     */
-    private function getElectronicContractRelationService()
-    {
-        return $this->service('ElectronicContractPlugin:ElectronicContract:ElectronicContractRelationService');
     }
 }

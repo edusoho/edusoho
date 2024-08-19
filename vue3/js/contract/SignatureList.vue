@@ -195,7 +195,7 @@ const view = async (record) => {
           <span class="text-gray-500">{{ `订单号：${record.orderSn}` }}</span>
         </template>
         <template v-else-if="column.key === 'contractName'">
-          {{ record.goodsName }}
+          {{ record.contractName }}
           <br>
           <span class="text-gray-500">{{ `签署时间：${formatDate(record.signTime)}` }}</span>
         </template>
