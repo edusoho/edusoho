@@ -160,6 +160,11 @@ class ContractServiceImpl extends BaseService implements ContractService
         return $this->getContractGoodsRelationDao()->findByContractIds($contractIds);
     }
 
+    public function getContractGoodsRelationByContractId($contractId)
+    {
+        return $this->getContractGoodsRelationDao()->getByContractId($contractId);
+    }
+
     public function getSignRecordByUserIdAndGoodsKey($userId, $goodsKey)
     {
         return $this->getContractSignRecordDao()->getByUserIdAndGoodsKey($userId, $goodsKey);
