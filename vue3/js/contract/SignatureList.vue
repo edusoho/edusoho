@@ -192,7 +192,7 @@ const view = async (record) => {
         <template v-if="column.key === 'goodsName'">
           {{ record.goodsName }}
           <br>
-          <span class="text-gray-500">{{ `订单号：${record.orderSn}` }}</span>
+          <span class="text-gray-500">{{ `订单号：${record.orderSn ? record.orderSn : '-'}` }}</span>
         </template>
         <template v-else-if="column.key === 'contractName'">
           {{ record.contractName }}
