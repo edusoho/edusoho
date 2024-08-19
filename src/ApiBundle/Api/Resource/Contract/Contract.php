@@ -16,7 +16,7 @@ class Contract extends AbstractResource
         if ($abort) {
             return $this->makePagingObject([], 0, $offset, $limit);
         }
-        $contracts = $this->getContractService()->searchContracts($conditions, [], $offset, $limit, ['id', 'name', 'updatedUserId', 'updatedTime']);
+        $contracts = $this->getContractService()->searchContracts($conditions, ['updatedTime' => 'DESC'], $offset, $limit, ['id', 'name', 'updatedUserId', 'updatedTime']);
 
         return $this->makePagingObject($this->wrap($contracts), $this->getContractService()->countContracts($conditions), $offset, $limit);
     }
