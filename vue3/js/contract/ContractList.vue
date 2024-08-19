@@ -14,7 +14,7 @@ const contractManagementColumns = [
   },
   {
     key: 'relatedGoods',
-    title: '关联商品（课程/班级/题库）',
+    title: '关联商品',
     dataIndex: 'relatedGoods',
     width: 200,
   },
@@ -150,9 +150,9 @@ const onDelete = async (id) => {
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
-            <span>{{ `课程：${record.relatedGoodsCount ? record.relatedGoodsCount.course : 0}` }}</span>
-            <span>{{ `班级：${record.relatedGoodsCount ? record.relatedGoodsCount.classroom : 0}` }}</span>
-            <span>{{ `题库：${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise : 0}` }}</span>
+            <span>{{ `课程：${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
+            <span>{{ `班级：${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
+            <span>{{ `题库：${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">

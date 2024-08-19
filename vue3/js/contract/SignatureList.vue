@@ -11,7 +11,7 @@ const columns = [
     key: 'contractCode',
     title: '合同编号',
     dataIndex: 'contractCode',
-    width: 126,
+    width: 140,
     ellipsis: true,
   },
   {
@@ -19,19 +19,19 @@ const columns = [
     title: '用户名',
     dataIndex: 'username',
     align: 'center',
-    width: 200,
+    width: 150,
   },
   {
     key: 'mobile',
     title: '手机号',
     dataIndex: 'mobile',
-    width: 150,
+    width: 120,
   },
   {
     key: 'goodsType',
     title: '商品类型',
     dataIndex: 'goodsType',
-    width: 150,
+    width: 80,
   },
   {
     key: 'goodsName',
@@ -43,12 +43,12 @@ const columns = [
     key: 'contractName',
     title: '电子合同名称',
     dataIndex: 'contractName',
-    width: 150,
+    width: 200,
   },
   {
     key: 'operation',
     title: '操作',
-    width: 100,
+    width: 60,
   },
 ];
 
@@ -75,7 +75,7 @@ async function fetchContracts(params) {
   }
   const searchQuery = keyword.value ? Object.assign({
       ...params
-    }, keywordType.value === 'username' ? {username: keyword.value} : keywordType.value === 'mobile' ? {mobile: keyword.value} : {goodsName: keyword.value}
+    }, {keywordType: keywordType.value, keyword: keyword.value}
   ) : params;
   const {data, paging} = await ContractApi.searchSignature(searchQuery);
   pagination.total = Number(paging.total);
