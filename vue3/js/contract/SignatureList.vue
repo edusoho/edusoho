@@ -201,7 +201,7 @@ const view = async (record) => {
           <a-button type="link" @click="view(record)">查看</a-button>
         </template>
         <template v-else-if="column.key === 'mobile'">
-          {{ record.mobile ?? '-' }}
+          {{ record.mobile ? record.mobile : '-' }}
         </template>
         <template v-else-if="column.key === 'goodsType'">
           {{ record.goodsType === 'course' ? '课程' : record.goodsType === 'classroom' ? '班级' : record.goodsType === 'itemBankExercise' ? '题库' : record.goodsType  }}
@@ -261,13 +261,13 @@ const view = async (record) => {
               <span class="text-gray-500">身份证号：</span>
               <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.IDNumber }}</div>
             </div>
-            <div class="flex items-center">
+            <div v-if="signatureContent.sign && signatureContent.sign.phoneNumber" class="flex items-center">
               <span class="text-gray-500">联系方式：</span>
-              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.signDate }}</div>
+              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.phoneNumber }}</div>
             </div>
             <div class="flex items-center">
               <span class="text-gray-500">签约日期：</span>
-              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.signDate }}</div>
+              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
             </div>
           </div>
         </div>
