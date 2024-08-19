@@ -37,7 +37,7 @@ const columns = [
     key: 'goodsName',
     title: '商品名称',
     dataIndex: 'goodsName',
-    width: 150,
+    width: 200,
   },
   {
     key: 'contractName',
@@ -106,8 +106,10 @@ async function onSearch() {
 
 async function onReset() {
   pagination.current = 1;
-  keywordType.value = 'username';
+  keywordType.value = 'name';
   keyword.value = '';
+  signTime.value = undefined;
+  goodsType.value = undefined;
   const params = {
     limit: pagination.pageSize,
     offset: (pagination.current - 1) * pagination.pageSize,
