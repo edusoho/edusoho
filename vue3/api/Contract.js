@@ -11,7 +11,7 @@ export const ContractApi = {
     return apiClient.post('/api/files', params)
   },
   async delete(id) {
-    return await apiClient.delete(`/api/contract`, {params: {id}});
+    return await apiClient.delete(`/api/contract/${id}`);
   },
   async searchSignature(params) {
     return await apiClient.get(`/api/signed_contract`, {params});
