@@ -260,14 +260,14 @@ class ContractServiceImpl extends BaseService implements ContractService
         $htmlContentOptions = '';
         $htmlContentFoot = '<div style=\'margin-top: 22px; display: flex;\'>签约日期：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.date('Y年m月d日').'</div></div></div></body></html>';
         if (!empty($sign['handSignature'])) {
-            $htmlContentFoot = $htmlContentFoot.'<div style=\'margin-top: 22px; display: flex;\'>手写签名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['handSignature'].'</div></div>';
+            $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>手写签名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['handSignature'].'</div></div>';
         }
-        $htmlContentFoot = $htmlContentFoot.'<div style=\'margin-top: 22px; display: flex;\'>乙方姓名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['truename'].'</div></div>';
+        $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>乙方姓名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['truename'].'</div></div>';
         if (!empty($sign['IDNumber'])) {
-            $htmlContentFoot = $htmlContentFoot.'<div style=\'margin-top: 22px; display: flex;\'>身份证号：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['IDNumber'].'</div></div>';
+            $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>身份证号：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['IDNumber'].'</div></div>';
         }
         if (!empty($sign['phoneNumber'])) {
-            $htmlContentFoot = $htmlContentFoot.'<div style=\'margin-top: 22px; display: flex;\'>联系方式：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['phoneNumber'].'</div></div>';
+            $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>联系方式：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['phoneNumber'].'</div></div>';
         }
 
         return $htmlContentHeader . $htmlContentOptions . $htmlContentFoot;
