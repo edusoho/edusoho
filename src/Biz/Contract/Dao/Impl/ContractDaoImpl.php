@@ -20,7 +20,7 @@ class ContractDaoImpl extends GeneralDaoImpl implements ContractDao
                 'sign' => 'json',
             ],
             'orderbys' => [
-                'id',
+                'updatedTime',
             ],
             'timestamps' => [
                 'createdTime',

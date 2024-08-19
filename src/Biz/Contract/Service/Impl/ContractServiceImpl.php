@@ -76,6 +76,9 @@ class ContractServiceImpl extends BaseService implements ContractService
             ]);
         }
         if (!empty($sign['handSignature'])) {
+            if (strpos($sign['handSignature'], 'data:image/png;base64,') !== 0) {
+                $sign['handSignature'] = 'data:image/png;base64,'.$sign['handSignature'];
+            }
             $file = $this->fileDecode($sign['handSignature']);
             if (empty($file)) {
                 throw CommonException::ERROR_PARAMETER();
@@ -121,7 +124,7 @@ class ContractServiceImpl extends BaseService implements ContractService
             return null;
         }
         $contract = $this->getContract($relation['contractId']);
-        $relation['name'] = $contract['name'];
+        $relation['contractName'] = $contract['name'];
 
         return $relation;
     }
