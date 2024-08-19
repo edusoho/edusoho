@@ -16,6 +16,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\MemberOperation\Service\MemberOperationService;
@@ -64,10 +65,10 @@ class ClassroomManageController extends BaseController
             $coursePrice += $course['originPrice'];
         }
         $courseNum = count($courses);
-        if ($this->isPluginInstalled('electronicContract')) {
-            $classroom = $this->getElectronicContractRelationService()->buildContractRelation('classroom', $classroom);
-            $classroom['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
-        }
+        $relatedContract = $this->getContractService()->getRelatedContractByGoodsKey("classroom_{$id}");
+        $classroom['contractId'] = $relatedContract['contractId'] ?? 0;
+        $classroom['contractForceSign'] = empty($relatedContract['sign']) ? 0 : 1;
+        $classroom['contractName'] = $relatedContract['contractName'] ?? '';
 
         return $this->render(
             'classroom-manage/index.html.twig',
@@ -691,8 +692,10 @@ class ClassroomManageController extends BaseController
         if ($this->isPluginInstalled('Vip')) {
             $this->setVipRight($id, $class);
         }
-        if ($this->isPluginInstalled('electronicContract')) {
-            $this->getElectronicContractRelationService()->choseContract('classroom', $id, $class);
+        if (empty($class['contractEnable'])) {
+            $this->getContractService()->unRelateContract("classroom_{$id}");
+        } else {
+            $this->getContractService()->relateContract($class['contractId'], "classroom_{$id}", $class['contractForceSign']);
         }
 
         return $this->createJsonResponse(true);
@@ -1514,18 +1517,10 @@ class ClassroomManageController extends BaseController
     }
 
     /**
-     * @return ElectronicContractRelationService
+     * @return ContractService
      */
-    private function getElectronicContractRelationService()
+    private function getContractService()
     {
-        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractRelationService');
-    }
-
-    /**
-     * @return ElectronicContractService
-     */
-    private function getElectronicContractService()
-    {
-        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractService');
+        return $this->createService('Contract:ContractService');
     }
 }
