@@ -1,16 +1,20 @@
 import { createApp } from 'vue'
-import ContractH5 from './ContractH5.vue'
-import { Form, Input, Button } from 'ant-design-vue'
-import { Button as VButton } from 'vant'
+import { Form, Input, Button, Modal } from 'ant-design-vue'
 import { setCurrentPrimaryColor } from '../common'
 import 'vue3/main.less'
+
+import App from './App.vue'
+import router from './router'
+import { Button as VButton } from 'vant'
 import 'vant/lib/button/style/index.js'
 
-const app = createApp(ContractH5)
+const app = createApp(App)
 
+app.use(router)
 app.use(Form)
 app.use(Input)
 app.use(Button)
+app.use(Modal)
 app.use(VButton)
 
 setCurrentPrimaryColor(app)
