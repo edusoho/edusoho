@@ -1,0 +1,6 @@
+<?php
+// @see https://symfony.com/doc/3.x/deployment/proxies.html
+return array (
+    '192.0.0.1',
+    '10.0.0.0/8',
+);
