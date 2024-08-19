@@ -2,6 +2,7 @@
 import {reactive, ref, watch} from 'vue';
 import {ContractApi} from '../../api/Contract.js';
 import {InfoCircleOutlined} from '@ant-design/icons-vue';
+import {formatDate} from '../common';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -194,10 +195,16 @@ const view = async (record) => {
         <template v-else-if="column.key === 'contractName'">
           {{ record.goodsName }}
           <br>
-          <span class="text-gray-500">{{ `订单号：${record.orderSn}` }}</span>
+          <span class="text-gray-500">{{ `签署时间：${formatDate(record.signTime)}` }}</span>
         </template>
         <template v-else-if="column.key === 'operation'">
           <a-button type="link" @click="view(record)">查看</a-button>
+        </template>
+        <template v-else-if="column.key === 'mobile'">
+          {{ record.mobile ?? '-' }}
+        </template>
+        <template v-else-if="column.key === 'goodsType'">
+          {{ record.goodsType === 'course' ? '课程' : record.goodsType === 'classroom' ? '班级' : record.goodsType === 'itemBankExercise' ? '题库' : record.goodsType  }}
         </template>
       </template>
     </a-table>
@@ -240,25 +247,27 @@ const view = async (record) => {
         <div class="flex-1 flex flex-col items-start justify-between">
           <span class="text-18 font-medium">乙方：</span>
           <div class="w-full flex flex-col space-y-22">
+            <div v-if="signatureContent.sign && signatureContent.sign.handSignature" class="flex items-center">
+              <span class="text-gray-500">手写签名：</span>
+              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
+                <img :src="signatureContent.sign.handSignature" class="h-35" alt="手写签名"/>
+              </div>
+            </div>
+            <div v-if="signatureContent.sign && signatureContent.sign.truename" class="flex items-center">
+              <span class="text-gray-500">乙方姓名：</span>
+              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.truename }}</div>
+            </div>
+            <div v-if="signatureContent.sign && signatureContent.sign.IDNumber" class="flex items-center">
+              <span class="text-gray-500">身份证号：</span>
+              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.IDNumber }}</div>
+            </div>
             <div class="flex items-center">
-              <span class="text-gray-500">签约日期：</span>
-              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
+              <span class="text-gray-500">联系方式：</span>
+              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.signDate }}</div>
             </div>
             <div class="flex items-center">
               <span class="text-gray-500">签约日期：</span>
-              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
-            </div>
-            <div class="flex items-center">
-              <span class="text-gray-500">签约日期：</span>
-              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
-            </div>
-            <div class="flex items-center">
-              <span class="text-gray-500">签约日期：</span>
-              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
-            </div>
-            <div class="flex items-center">
-              <span class="text-gray-500">签约日期：</span>
-              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
+              <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.signDate }}</div>
             </div>
           </div>
         </div>
