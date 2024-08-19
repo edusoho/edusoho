@@ -247,7 +247,7 @@ class ContractServiceImpl extends BaseService implements ContractService
             $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>身份证号：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$userProfile['idCard'].'</div></div>';
         }
         if (1 == $sign['phoneNumber']) {
-            $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>联系方式：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$user['verifiedMobile'] ? $user['verifiedMobile'] : ''.'</div></div>';
+            $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>联系方式：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$user['verifiedMobile'].'</div></div>';
         }
 
         return $htmlContentHeader.$htmlContentOptions.$htmlContentFoot;
