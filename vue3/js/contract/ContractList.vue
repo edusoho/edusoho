@@ -37,7 +37,7 @@ const contractManagementColumns = [
 ];
 
 const keyword = ref('');
-const keywordType = ref('contractName');
+const keywordType = ref('name');
 
 const pagination = reactive({
   current: 1,
@@ -83,7 +83,7 @@ async function onSearch() {
 
 async function onReset() {
   pagination.current = 1;
-  keywordType.value = 'contractName';
+  keywordType.value = 'name';
   keyword.value = '';
   const params = {
     limit: pagination.pageSize,
@@ -130,8 +130,8 @@ const onDelete = async (id) => {
   <div class="flex flex-col space-y-24">
     <div class="space-x-20">
       <a-select v-model:value="keywordType" style="width: 140px" placeholder="搜索类型" allow-clear>
-        <a-select-option value="contractName">名称</a-select-option>
-        <a-select-option value="userName">更新人</a-select-option>
+        <a-select-option value="name">名称</a-select-option>
+        <a-select-option value="username">更新人</a-select-option>
       </a-select>
       <a-input v-model:value="keyword" placeholder="请输入名称" style="width: 360px"></a-input>
       <a-button type="primary" ghost @click="onSearch">搜索</a-button>
