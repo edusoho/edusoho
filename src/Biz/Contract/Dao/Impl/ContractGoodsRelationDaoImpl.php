@@ -22,17 +22,8 @@ class ContractGoodsRelationDaoImpl extends GeneralDaoImpl implements ContractGoo
     public function declares()
     {
         return [
-            'conditions' => [
-            ],
-            'serializes' => [
-                'sign' => 'json',
-            ],
-            'orderbys' => [
-                'id',
-            ],
             'timestamps' => [
                 'createdTime',
-                'updatedTime',
             ],
         ];
     }

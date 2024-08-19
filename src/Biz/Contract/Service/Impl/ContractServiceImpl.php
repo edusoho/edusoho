@@ -117,16 +117,37 @@ class ContractServiceImpl extends BaseService implements ContractService
         return $signedContract;
     }
 
-    public function getBindContractByGoodsKey($goodsKey)
+    public function getRelatedContractByGoodsKey($goodsKey)
     {
         $relation = $this->getContractGoodsRelationDao()->getByGoodsKey($goodsKey);
         if (empty($relation)) {
             return null;
         }
         $contract = $this->getContract($relation['contractId']);
+        if (empty($contract)) {
+            return null;
+        }
         $relation['contractName'] = $contract['name'];
 
         return $relation;
+    }
+
+    public function relateContract($id, $goodsKey, $forceSign)
+    {
+        $this->unRelateContract($goodsKey);
+        $this->getContractGoodsRelationDao()->create([
+            'goodsKey' => $goodsKey,
+            'contractId' => $id,
+            'sign' => empty($forceSign) ? 0 : 1,
+        ]);
+    }
+
+    public function unRelateContract($goodsKey)
+    {
+        $relation = $this->getContractGoodsRelationDao()->getByGoodsKey($goodsKey);
+        if ($relation) {
+            $this->getContractGoodsRelationDao()->delete($relation['id']);
+        }
     }
 
     public function findContractGoodsRelationsByContractIds($contractIds)

@@ -74,7 +74,7 @@ class Course extends AbstractResource
             $course['drainage']['image'] = $this->getWebExtension()->getFurl($course['drainage']['image']);
         }
         $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
-        $contract = $this->getContractService()->getBindContractByGoodsKey($goodsKey);
+        $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
         if (empty($contract)) {
             $course['contract'] = [
                 'sign' => 'no',

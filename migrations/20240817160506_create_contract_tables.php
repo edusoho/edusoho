@@ -29,7 +29,6 @@ class CreateContractTables extends Migration
               `contractId` int(10) UNSIGNED NOT NULL COMMENT '合同id',
               `sign` tinyint(1) NOT NULL COMMENT '签署要求 0: 非强制, 1: 强制',
               `createdTime` int(10) UNSIGNED NOT NULL,
-              `updatedTime` int(10) UNSIGNED NOT NULL,
               PRIMARY KEY (`id`),
               KEY `contractId` (`contractId`),
               KEY `goodsKey` (`goodsKey`)

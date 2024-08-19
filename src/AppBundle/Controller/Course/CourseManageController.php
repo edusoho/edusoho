@@ -10,6 +10,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
@@ -32,8 +33,6 @@ use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Pay\Service\PayService;
-use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractRelationService;
-use ElectronicContractPlugin\Biz\ElectronicContract\Service\ElectronicContractService;
 use MarketingMallBundle\Biz\ProductMallGoodsRelation\Service\ProductMallGoodsRelationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -582,8 +581,10 @@ class CourseManageController extends BaseController
             if (!empty($data['covers'])) {
                 $this->getCourseSetService()->changeCourseSetCover($courseSetId, $data['covers']);
             }
-            if ($this->isPluginInstalled('electronicContract')) {
-                $this->getElectronicContractRelationService()->choseContract('course', $course['id'], $data);
+            if (empty($data['contractEnable'])) {
+                $this->getContractService()->unRelateContract("course_{$courseId}");
+            } else {
+                $this->getContractService()->relateContract($data['contractId'], "course_{$courseId}", $data['contractForceSign']);
             }
 
             return $this->createJsonResponse(true);
@@ -628,10 +629,10 @@ class CourseManageController extends BaseController
             $course['drainageImage'] = $this->getWebExtension()->getFurl($course['drainageImage']);
         }
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
-        if ($this->isPluginInstalled('electronicContract')) {
-            $course = $this->getElectronicContractRelationService()->buildContractRelation('course', $course);
-            $course['contracts'] = $this->getElectronicContractService()->search([], ['id' => 'DESC'], 0, PHP_INT_MAX, ['id', 'name']);
-        }
+        $relatedContract = $this->getContractService()->getRelatedContractByGoodsKey("course_{$courseId}");
+        $course['contractId'] = $relatedContract['contractId'] ?? 0;
+        $course['contractForceSign'] = empty($relatedContract['sign']) ? 0 : 1;
+        $course['contractName'] = $relatedContract['contractName'] ?? '';
 
         return $this->render(
             'course-manage/info.html.twig',
@@ -1390,18 +1391,10 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return ElectronicContractRelationService
+     * @return ContractService
      */
-    private function getElectronicContractRelationService()
+    private function getContractService()
     {
-        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractRelationService');
-    }
-
-    /**
-     * @return ElectronicContractService
-     */
-    private function getElectronicContractService()
-    {
-        return $this->createService('ElectronicContractPlugin:ElectronicContract:ElectronicContractService');
+        return $this->createService('Contract:ContractService');
     }
 }

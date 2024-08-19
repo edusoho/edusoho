@@ -24,7 +24,11 @@ interface ContractService
 
     public function getSignedContract($id);
 
-    public function getBindContractByGoodsKey($goodsKey);
+    public function getRelatedContractByGoodsKey($goodsKey);
+
+    public function relateContract($id, $goodsKey, $forceSign);
+
+    public function unRelateContract($goodsKey);
 
     public function findContractGoodsRelationsByContractIds($contractIds);
 

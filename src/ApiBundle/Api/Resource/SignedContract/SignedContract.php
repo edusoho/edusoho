@@ -53,10 +53,10 @@ class SignedContract extends AbstractResource
             'goodsType' => $query['goodsType'] ?? '',
         ];
         if (!empty($query['signTimeFrom'])) {
-            $conditions['createdTime_GTE'] = $query['signTimeFrom'];
+            $conditions['createdTime_GTE'] = strtotime($query['signTimeFrom']);
         }
         if (!empty($query['signTimeTo'])) {
-            $conditions['createdTime_LTE'] = $query['signTimeTo'];
+            $conditions['createdTime_LTE'] = strtotime($query['signTimeTo']);
         }
         if (empty($query['keywordType']) || (empty($query['keyword']) && '0' != $query['keyword'])) {
             return [false, $conditions];
