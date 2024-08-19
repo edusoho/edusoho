@@ -322,7 +322,8 @@ class ClassroomManageController extends BaseController
             if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
-            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $operateUser = $this->getUser();
+            $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
             $data['isNotify'] = 1;
             $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 

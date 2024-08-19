@@ -1,11 +1,11 @@
 <template>
-  <img class="mt-20" id="cropper-image" :src="src" />
+  <img class="mt-20 w-400" id="cropper-image" :src="src" />
 </template>
 
 <script setup>
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
-import { ref, onMounted } from 'vue'
+import {ref, onMounted, watch} from 'vue';
 
 const props = defineProps({
   src: {
@@ -23,6 +23,10 @@ onMounted(() => {
     crop(event) {
     }
   })
+})
+
+watch(() => props.src, (value) => {
+  cropper.value.replace(value);
 })
 
 defineExpose({

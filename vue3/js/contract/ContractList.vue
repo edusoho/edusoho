@@ -14,7 +14,7 @@ const contractManagementColumns = [
   },
   {
     key: 'relatedGoods',
-    title: '关联商品（课程/班级/题库）',
+    title: '关联商品',
     dataIndex: 'relatedGoods',
     width: 200,
   },
@@ -37,7 +37,7 @@ const contractManagementColumns = [
 ];
 
 const keyword = ref('');
-const keywordType = ref('contractName');
+const keywordType = ref('name');
 
 const pagination = reactive({
   current: 1,
@@ -53,8 +53,7 @@ async function fetchContracts(params) {
   loading.value = true;
   const searchQuery = keyword.value ? Object.assign({
       ...params
-    }, keywordType.value === 'userName' ? {userName: keyword.value} : {name: keyword.value}
-  ) : params;
+    }, {keyword: keyword.value, keywordType: keywordType.value}) : params;
   const {data, paging} = await ContractApi.search(searchQuery);
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
@@ -84,7 +83,7 @@ async function onSearch() {
 
 async function onReset() {
   pagination.current = 1;
-  keywordType.value = 'contractName';
+  keywordType.value = 'name';
   keyword.value = '';
   const params = {
     limit: pagination.pageSize,
@@ -131,8 +130,8 @@ const onDelete = async (id) => {
   <div class="flex flex-col space-y-24">
     <div class="space-x-20">
       <a-select v-model:value="keywordType" style="width: 140px" placeholder="搜索类型" allow-clear>
-        <a-select-option value="contractName">名称</a-select-option>
-        <a-select-option value="userName">更新人</a-select-option>
+        <a-select-option value="name">名称</a-select-option>
+        <a-select-option value="username">更新人</a-select-option>
       </a-select>
       <a-input v-model:value="keyword" placeholder="请输入名称" style="width: 360px"></a-input>
       <a-button type="primary" ghost @click="onSearch">搜索</a-button>
@@ -150,16 +149,16 @@ const onDelete = async (id) => {
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
-            <span>{{ `课程：${record.relatedGoodsCount.course}` }}</span>
-            <span>{{ `班级：${record.relatedGoodsCount.classroom}` }}</span>
-            <span>{{ `题库：${record.relatedGoodsCount.itemBankExercise}` }}</span>
+            <span>{{ `课程：${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
+            <span>{{ `班级：${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
+            <span>{{ `题库：${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">
           <a-button type="link" @click="onDelete(record.id)">删除</a-button>
         </template>
         <template v-else-if="column.key === 'updatedUser'">
-          {{ record.updatedUser.nickname }}
+          {{ record.updatedUser ? record.updatedUser.nickname : '' }}
         </template>
         <template v-if="column.key === 'updatedTime'">
           {{ formatDate(record.updatedTime) }}
