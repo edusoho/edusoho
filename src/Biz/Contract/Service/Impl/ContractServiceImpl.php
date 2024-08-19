@@ -118,7 +118,8 @@ class ContractServiceImpl extends BaseService implements ContractService
     {
         $signedContract = $this->getContractSignRecordDao()->get($id);
         $contractSnapshot = $this->getContractSnapshotDao()->get($signedContract['snapshot']['contractSnapshotId']);
-        $content = $this->getDetailContent($signedContract['snapshot']['contract']['content'], $signedContract['goodsKey']);
+        $content = $this->getDetailContent($contractSnapshot['content'], $signedContract['goodsKey']);
+        file_put_contents("/tmp/jc123", json_encode($content), 8);
         $contractSnapshot['content'] = $this->getHtmlByRecord($content, $signedContract['sign']);
         $signedContract['snapshot']['contract'] = $contractSnapshot;
 
