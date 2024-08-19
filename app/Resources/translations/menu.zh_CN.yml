@@ -941,6 +941,8 @@ admin_v2.system.user_content_audit_menu: 内容审核设置
 admin_v2.system.user_content_audit_tab: 用户内容审核设置
 admin_v2.system.course_purchase_agreement_tab: 购买协议设置
 admin_v2_system.course_purchase_agreement.eduit: 协议编辑
+admin_v2_system.contract: 电子合同
+admin_v2_system.contract_manage: 电子合同管理
 
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: 资产设置

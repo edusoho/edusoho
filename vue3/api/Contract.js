@@ -1,0 +1,16 @@
+import { apiClient } from 'common/vue/service/api-client';
+
+export const ContractApi = {
+  async search(params) {
+    return apiClient.get(`/api/contract`, {params});
+  },
+  async create(params) {
+    return await apiClient.post(`/api/contract`, params);
+  },
+  async uploadFile(params) {
+    return apiClient.post('/api/files', params);
+  },
+  async delete(id) {
+    return await apiClient.delete(`/api/contract/${id}`);
+  },
+}

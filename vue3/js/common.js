@@ -25,12 +25,6 @@ export const formatDate = (datetime, format = 'YYYY/MM/DD') => {
   return dayjs(datetime).format(format)
 }
 
-export const formatScore = (score) => {
-  if (score === null || score === undefined || score === '') return '-'
-  
-  return score%1 == 0 ? parseInt(score) : score
-}
-
 export const stopFunc = (e) => {
   e.stopPropagation()
 }
@@ -153,7 +147,22 @@ export function generateRandomString(length = 4) {
   return result;  
 }
 
+export function removeHTMLTagsAndEntities(str) {  
+  // 去除HTML标签  
+  str = str.replace(/<[^>]*>?/gm, '');  
+
+  // 去除HTML实体（这里只列举了一些常见的，你可能需要添加更多）  
+  str = str.replace(/&nbsp;/g, ' '); // 替换&nbsp;为空格  
+  str = str.replace(/&lt;/g, '<');  // 替换&lt;为<  
+  str = str.replace(/&gt;/g, '>');  // 替换&gt;为>  
+  str = str.replace(/&amp;/g, '&'); // 替换&amp;为&  
+  str = str.replace(/&quot;/g, '"'); // 替换&quot;为"  
+
+  // 如果你想删除所有HTML实体，可以使用这个函数（但请注意，这可能会删除一些不是HTML实体的&符号）  
+  // str = str.replace(/&[^;]+;/g, '');  
+  return str;  
+} 
+
 export const primaryColorOpacity = (opacity) => {
   return translateHexToRgb(getCurrentPrimaryColor(), opacity)
 }
-

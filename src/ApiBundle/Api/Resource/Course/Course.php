@@ -9,6 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -72,9 +73,22 @@ class Course extends AbstractResource
             $course['drainage']['image'] = preg_replace('/^.+\/files\//', '/files/', $course['drainage']['image']);
             $course['drainage']['image'] = $this->getWebExtension()->getFurl($course['drainage']['image']);
         }
-        $course = $this->convertFields($course);
+        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $contract = $this->getContractService()->getBindContractByGoodsKey($goodsKey);
+        if (empty($contract)) {
+            $course['contract'] = [
+                'sign' => 'no',
+            ];
+        } else {
+            $course['contract'] = [
+                'sign' => $contract['sign'] ? 'required' : 'optional',
+                'name' => $contract['name'],
+                'id' => $contract['id'],
+                'goodsKey' => $goodsKey,
+            ];
+        }
 
-        return $course;
+        return $this->convertFields($course);
     }
 
     protected function getAssistantScrmQrCode($assistant)
@@ -315,5 +329,13 @@ class Course extends AbstractResource
     protected function getTokenService()
     {
         return $this->service('User:TokenService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->service('Contract:ContractService');
     }
 }
