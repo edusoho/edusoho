@@ -53,8 +53,7 @@ async function fetchContracts(params) {
   loading.value = true;
   const searchQuery = keyword.value ? Object.assign({
       ...params
-    }, keywordType.value === 'userName' ? {userName: keyword.value} : {name: keyword.value}
-  ) : params;
+    }, {keyword: keyword.value, keywordType: keywordType.value}) : params;
   const {data, paging} = await ContractApi.search(searchQuery);
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
