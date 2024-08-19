@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\SignedContract;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Contract\ContractDisplayTrait;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Course\Service\MemberService;
 use Biz\User\Service\UserService;
@@ -11,7 +12,7 @@ use Codeages\Biz\Order\Service\OrderService;
 
 class SignedContract extends AbstractResource
 {
-    use SignedContractWrapTrait;
+    use ContractDisplayTrait;
 
     public function search(ApiRequest $request)
     {
@@ -127,14 +128,14 @@ class SignedContract extends AbstractResource
         $contractSnapshots = array_column($contractSnapshots, null, 'id');
         $wrappedSignedContracts = [];
         foreach ($signedContracts as $signedContract) {
-            list($goodsType, $targetId) = explode('_', $signedContract['goodsKey']);
+            list($goodsType, $targetId) = $this->parseGoodsKey($signedContract['goodsKey']);
             $wrappedSignedContracts[] = [
                 'id' => $signedContract['id'],
                 'contractCode' => $signedContract['snapshot']['contractCode'],
                 'username' => $users[$signedContract['userId']]['nickname'],
                 'mobile' => $users[$signedContract['userId']]['verifiedMobile'],
                 'goodsType' => $goodsType,
-                'goodsName' => $this->getGoodsName($goodsType, $targetId),
+                'goodsName' => $this->getGoodsName($signedContract['goodsKey']),
                 'orderSn' => $this->getOrderSn($goodsType, $targetId, $signedContract['userId']),
                 'contractName' => $contractSnapshots[$signedContract['snapshot']['contractSnapshotId']]['name'],
                 'signTime' => $signedContract['createdTime'],

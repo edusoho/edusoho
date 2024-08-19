@@ -52,6 +52,11 @@ class ContractServiceImpl extends BaseService implements ContractService
         $this->getContractDao()->delete($id);
     }
 
+    public function generateContractCode()
+    {
+        return date('Ymd').substr(microtime(true) * 10000, -6);
+    }
+
     public function signContract($id, $sign)
     {
         $requiredKeys = ['contractCode', 'goodsKey', 'truename'];
@@ -76,7 +81,7 @@ class ContractServiceImpl extends BaseService implements ContractService
             ]);
         }
         if (!empty($sign['handSignature'])) {
-            if (strpos($sign['handSignature'], 'data:image/png;base64,') !== 0) {
+            if (0 !== strpos($sign['handSignature'], 'data:image/png;base64,')) {
                 $sign['handSignature'] = 'data:image/png;base64,'.$sign['handSignature'];
             }
             $file = $this->fileDecode($sign['handSignature']);

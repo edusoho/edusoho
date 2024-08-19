@@ -38,7 +38,7 @@ class ContractSign extends AbstractResource
         return [
             'id' => $contractId,
             'name' => $contract['name'],
-            'code' => date('Ymd').substr(microtime(true) * 10000, -6),
+            'code' => $this->getContractService()->generateContractCode(),
             'content' => $contract['content'],
             'seal' => AssetHelper::getFurl($contract['seal']),
             'signFields' => $signFields,

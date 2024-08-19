@@ -1,15 +1,16 @@
 <?php
 
-namespace ApiBundle\Api\Resource\SignedContract;
+namespace ApiBundle\Api\Resource\Contract;
 
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Contract\Service\ContractService;
 use Biz\Course\Service\CourseService;
 
-trait SignedContractWrapTrait
+trait ContractDisplayTrait
 {
-    private function getGoodsName($goodsType, $targetId)
+    private function getGoodsName($goodsKey)
     {
+        list($goodsType, $targetId) = $this->parseGoodsKey($goodsKey);
         if ('course' == $goodsType) {
             $course = $this->getCourseService()->getCourse($targetId);
 
@@ -20,6 +21,11 @@ trait SignedContractWrapTrait
 
             return $classroom['title'];
         }
+    }
+
+    private function parseGoodsKey($goodsKey)
+    {
+        return explode('_', $goodsKey);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Contract;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Contract\Service\ContractService;
 use Biz\User\Service\UserService;
 
@@ -31,7 +32,10 @@ class Contract extends AbstractResource
 
     public function get(ApiRequest $request, $id)
     {
-        return $this->getContractService()->getContract($id);
+        $contract = $this->getContractService()->getContract($id);
+        $contract['seal'] = AssetHelper::getFurl($contract['seal']);
+
+        return $contract;
     }
 
     public function update(ApiRequest $request, $id)

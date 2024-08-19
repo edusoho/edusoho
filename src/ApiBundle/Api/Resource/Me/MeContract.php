@@ -4,11 +4,11 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Resource\SignedContract\SignedContractWrapTrait;
+use ApiBundle\Api\Resource\Contract\ContractDisplayTrait;
 
 class MeContract extends AbstractResource
 {
-    use SignedContractWrapTrait;
+    use ContractDisplayTrait;
 
     public function search(ApiRequest $request)
     {
@@ -25,13 +25,13 @@ class MeContract extends AbstractResource
         $contractSnapshots = array_column($contractSnapshots, null, 'id');
         $wrappedSignedContracts = [];
         foreach ($signedContracts as $signedContract) {
-            list($goodsType, $targetId) = explode('_', $signedContract['goodsKey']);
+            list($goodsType) = $this->parseGoodsKey($signedContract['goodsKey']);
             $wrappedSignedContracts[] = [
                 'id' => $signedContract['id'],
                 'name' => $contractSnapshots[$signedContract['snapshot']['contractSnapshotId']]['name'],
                 'relatedGoods' => [
                     'type' => $goodsType,
-                    'name' => $this->getGoodsName($goodsType, $targetId),
+                    'name' => $this->getGoodsName($signedContract['goodsKey']),
                 ],
             ];
         }

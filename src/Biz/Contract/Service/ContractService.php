@@ -16,6 +16,8 @@ interface ContractService
 
     public function deleteContract($id);
 
+    public function generateContractCode();
+
     public function signContract($id, $sign);
 
     public function countSignedContracts(array $conditions);
