@@ -21,7 +21,7 @@ class ContractGoodsRelationDaoImpl extends GeneralDaoImpl implements ContractGoo
 
     public function getByContractId($contractId)
     {
-        return $this->getByFields('contractId', $contractId);
+        return $this->getByFields(['contractId' => $contractId]);
     }
 
     public function declares()
