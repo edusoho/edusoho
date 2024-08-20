@@ -10,6 +10,8 @@ use Biz\User\Service\UserService;
 
 class ContractSign extends AbstractResource
 {
+    use ContractDisplayTrait;
+
     public function get(ApiRequest $request, $contractId, $goodsKey)
     {
         $contract = $this->getContractService()->getContract($contractId);
@@ -33,6 +35,12 @@ class ContractSign extends AbstractResource
                     'default' => 'IDNumber' === $field ? ($userProfile['idcard'] ?? '') : '',
                 ];
             }
+        }
+
+        $conditions = $request->query->all();
+        if ($conditions['viewMode'] == 'html') {
+            $contractGoodsRelation = $this->getContractService()->getContractGoodsRelationByContractId($contractId);
+            $contract['content'] = $this->getContractDetail($contract, $contractGoodsRelation['goodsKey']);
         }
 
         return [
