@@ -35,7 +35,14 @@ trait ContractDisplayTrait
     private function getDetailContent($content, $goodsKey)
     {
         $parts = explode('_', $goodsKey);
-        $product = $this->getServiceByType($parts[0])->get($parts[1]);
+        $product = [];
+        if ($parts[0] == 'course') {
+            $product = $this->getServiceByType($parts[0])->getCourse($parts[1]);
+        }else if ($parts[0] == 'classroom') {
+            $product = $this->getServiceByType($parts[0])->getClassroom($parts[1]);
+        }else if($parts[0] == 'classroom') {
+            $product = $this->getServiceByType($parts[0])->getItemBank($parts[1]);
+        }
         $member = [];
         if ('course' == $parts[0]) {
             $member = $this->getMemberService($parts[0])->getCourseMember($parts[1], $this->getCurrentUser()->getId());
