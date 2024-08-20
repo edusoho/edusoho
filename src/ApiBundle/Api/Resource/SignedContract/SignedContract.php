@@ -43,7 +43,7 @@ class SignedContract extends AbstractResource
 
         $conditions = $request->query->all();
         if ($conditions['viewMode'] == 'html') {
-            $content = $this->getDetailContent($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode']);
+            $content = $this->replaceContentVariable($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode']);
             $signSnapshot['contract']['content'] = $this->getHtmlByRecord($content, $signSnapshot);
         }
 
