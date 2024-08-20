@@ -59,7 +59,7 @@ trait ContractDisplayTrait
         $content = str_replace("\n", "<br>", $content);
         return str_replace(
             ['$name$', '$username$', '$idcard$', '$courseName$', '$contract number$', '$date$', '$order price$'],
-            [$userProfile['truename'] ?? '', $user['nickname'] ?? '', $userProfile['idcard'] ?? '', $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] ?? ''],
+            [$userProfile['truename'] ?? '', $user['nickname'] ?? '', $userProfile['idcard'] ?? '', $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] /100 ?? ''],
             $content
         );
     }
