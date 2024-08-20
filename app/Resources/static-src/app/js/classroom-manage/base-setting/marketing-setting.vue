@@ -67,7 +67,7 @@
           <div v-if="contractEnableSwitch">
             <a-dropdown :trigger="['click']" v-model="contractMenuVisible">
               <a-button class="contract-dropdown-btn">
-                <span>{{ contractName }}</span>
+                <span class="contract-name">{{ contractName }}</span>
                 <a-icon type="down"/>
               </a-button>
               <a-menu slot="overlay" class="contract-dropdown-menu">
@@ -76,9 +76,9 @@
                   :key="contract.id"
                 >
                   <div class="contract-dropdown-menu-item">
-                    <span class="contract-dropdown-menu-item-label" @click="selectContract(contract.id, contract.name)">{{
-                        contract.name
-                      }}</span>
+                    <span class="contract-dropdown-menu-item-label contract-name" @click="selectContract(contract.id, contract.name)" :title="contract.name">
+                      {{ contract.name }}
+                    </span>
                     <span class="contract-dropdown-menu-item-preview" @click="previewContract(contract.id)">预览</span>
                   </div>
                 </a-menu-item>
