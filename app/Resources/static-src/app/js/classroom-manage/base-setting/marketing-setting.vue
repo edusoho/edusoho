@@ -192,7 +192,7 @@
           <span class="text-22 font-medium">{{ contractPreview.name }}</span>
           <span class="text-gray-500">{{ `合同编号: ${contractPreview.code}` }}</span>
         </div>
-        <div class="text-gray-500">{{ contractPreview.content }}</div>
+        <div class="text-gray-500" v-html="contractPreview.content"></div>
         <div class="flex space-x-64">
           <div class="flex-1 flex flex-col items-start justify-between space-y-22">
             <span class="text-18 font-medium">甲方：</span>
