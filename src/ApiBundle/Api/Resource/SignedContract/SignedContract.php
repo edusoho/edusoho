@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\Contract\ContractDisplayTrait;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Course\Service\MemberService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 
 class SignedContract extends AbstractResource
@@ -16,6 +17,9 @@ class SignedContract extends AbstractResource
 
     public function search(ApiRequest $request)
     {
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_contract_manage')) {
+            throw UserException::PERMISSION_DENIED();
+        }
         list($abort, $conditions) = $this->buildSearchConditions($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         if ($abort) {
@@ -29,6 +33,9 @@ class SignedContract extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $signedContract = $this->getContractService()->getSignedContract($id);
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_contract_manage') && $signedContract['userId'] != $this->getCurrentUser()->getId()) {
+            throw UserException::PERMISSION_DENIED();
+        }
         $signSnapshot = $signedContract['snapshot'];
         if (!empty($signSnapshot['sign']['handSignature'])) {
             $signSnapshot['sign']['handSignature'] = AssetHelper::getFurl($signSnapshot['sign']['handSignature']);

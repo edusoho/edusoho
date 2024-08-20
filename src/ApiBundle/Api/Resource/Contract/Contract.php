@@ -7,11 +7,13 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Contract\Service\ContractService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 
 class Contract extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
+        $this->checkPermission();
         list($abort, $conditions) = $this->buildSearchConditions($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         if ($abort) {
@@ -24,7 +26,7 @@ class Contract extends AbstractResource
 
     public function add(ApiRequest $request)
     {
-        //鉴权
+        $this->checkPermission();
         $this->getContractService()->createContract($request->request->all());
 
         return ['ok' => true];
@@ -40,6 +42,7 @@ class Contract extends AbstractResource
 
     public function update(ApiRequest $request, $id)
     {
+        $this->checkPermission();
         $this->getContractService()->updateContract($id, $request->request->all());
 
         return ['ok' => true];
@@ -47,9 +50,17 @@ class Contract extends AbstractResource
 
     public function remove(ApiRequest $request, $id)
     {
+        $this->checkPermission();
         $this->getContractService()->deleteContract($id);
 
         return ['ok' => true];
+    }
+
+    private function checkPermission()
+    {
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_contract_manage')) {
+            throw UserException::PERMISSION_DENIED();
+        }
     }
 
     private function buildSearchConditions($query)
