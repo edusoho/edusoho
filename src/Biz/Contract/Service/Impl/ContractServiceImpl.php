@@ -12,7 +12,6 @@ use Biz\Contract\Dao\ContractGoodsRelationDao;
 use Biz\Contract\Dao\ContractSignRecordDao;
 use Biz\Contract\Dao\ContractSnapshotDao;
 use Biz\Contract\Service\ContractService;
-use Biz\User\Service\UserService;
 
 class ContractServiceImpl extends BaseService implements ContractService
 {
