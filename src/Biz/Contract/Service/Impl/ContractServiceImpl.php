@@ -12,6 +12,9 @@ use Biz\Contract\Dao\ContractGoodsRelationDao;
 use Biz\Contract\Dao\ContractSignRecordDao;
 use Biz\Contract\Dao\ContractSnapshotDao;
 use Biz\Contract\Service\ContractService;
+use Biz\System\Constant\LogAction;
+use Biz\System\Constant\LogModule;
+use Biz\System\Service\LogService;
 
 class ContractServiceImpl extends BaseService implements ContractService
 {
@@ -31,7 +34,8 @@ class ContractServiceImpl extends BaseService implements ContractService
     {
         $params = $this->preprocess($params);
         $params['createdUserId'] = $params['updatedUserId'] = $this->getCurrentUser()->getId();
-        $this->getContractDao()->create($params);
+        $contract = $this->getContractDao()->create($params);
+        $this->getLogService()->info(LogModule::CONTRACT, LogAction::CREATE_CONTRACT, "创建了合同《{$contract['name']}》", $contract);
     }
 
     public function getContract($id)
@@ -49,12 +53,14 @@ class ContractServiceImpl extends BaseService implements ContractService
 
     public function deleteContract($id)
     {
+        $contract = $this->getContract($id);
         $this->getContractDao()->delete($id);
+        $this->getLogService()->info(LogModule::CONTRACT, LogAction::DELETE_CONTRACT, "删除了合同《{$contract['name']}》", $contract);
     }
 
     public function generateContractCode()
     {
-        return date('Ymd').substr(microtime(true) * 10000, -6);
+        return date('Ymd') . substr(microtime(true) * 10000, -6);
     }
 
     public function signContract($id, $sign)
@@ -82,7 +88,7 @@ class ContractServiceImpl extends BaseService implements ContractService
         }
         if (!empty($sign['handSignature'])) {
             if (0 !== strpos($sign['handSignature'], 'data:image/png;base64,')) {
-                $sign['handSignature'] = 'data:image/png;base64,'.$sign['handSignature'];
+                $sign['handSignature'] = 'data:image/png;base64,' . $sign['handSignature'];
             }
             $file = $this->fileDecode($sign['handSignature']);
             if (empty($file)) {
@@ -197,9 +203,17 @@ class ContractServiceImpl extends BaseService implements ContractService
     /**
      * @return FileService
      */
-    protected function getFileService()
+    private function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**
