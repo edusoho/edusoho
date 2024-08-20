@@ -138,6 +138,20 @@ const onFinishFailed = ({ values, errorFields, outOfDate }) => {
     });
   }
 };
+
+const validateContent = async (_rule, value) => {
+
+  if (!value) {
+    return Promise.reject("请输入电子合同内容");
+  }
+
+  value = value.trim();
+  if (!value) {
+    return Promise.reject("请输入电子合同内容");
+  }
+
+  return Promise.resolve();
+}
 </script>
 
 <template>
@@ -166,10 +180,10 @@ const onFinishFailed = ({ values, errorFields, outOfDate }) => {
         <a-form-item
           name="content"
           label="电子合同内容"
-          :rules="[{ required: true, message: '请输入电子合同内容' }]"
+          :rules="[{ required: true, message: '请输入电子合同内容', validator: validateContent }]"
         >
           <div class="flex flex-col space-y-4">
-            <a-textarea v-model:value.trim="formState.content"
+            <a-textarea v-model:value="formState.content"
                         placeholder="请输入" :rows="10"/>
             <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签署日期：$date$ 订单价格：$order price$</span>
           </div>
