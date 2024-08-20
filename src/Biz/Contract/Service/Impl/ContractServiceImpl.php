@@ -75,6 +75,9 @@ class ContractServiceImpl extends BaseService implements ContractService
         if (!ArrayToolkit::requireds($sign, $requiredKeys, true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
+        if ($this->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $sign['goodsKey'])) {
+            return;
+        }
         $sign = ArrayToolkit::parts($sign, $requiredKeys);
         $version = md5(json_encode([ArrayToolkit::parts($contract, ['name', 'content', 'seal'])]));
         $contractSnapshot = $this->getContractSnapshotDao()->getByVersion($version);
