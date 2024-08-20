@@ -11,7 +11,7 @@ const columns = [
     key: 'contractCode',
     title: '合同编号',
     dataIndex: 'contractCode',
-    width: 150,
+    width: 170,
   },
   {
     key: 'username',
