@@ -229,10 +229,10 @@ const view = async (record) => {
            :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
   >
     <div class="w-full flex flex-col space-y-32 p-32">
-      <div class="flex items-center justify-between">
-        <span class="opacity-0">{{ `合同编号: ${signatureContent.code}` }}</span>
-        <span class="text-22 font-medium">{{ signatureContent.name }}</span>
-        <span class="text-gray-500">{{ `合同编号: ${signatureContent.code}` }}</span>
+      <div class="flex items-end justify-between gap-4">
+        <span class="flex-none whitespace-nowrap opacity-0">{{ `合同编号: ${signatureContent.code}` }}</span>
+        <span class="grow text-center text-22 font-medium">{{ signatureContent.name }}</span>
+        <span class="flex-none whitespace-nowrap text-gray-500">{{ `合同编号: ${signatureContent.code}` }}</span>
       </div>
       <div class="text-gray-500">{{ signatureContent.content }}</div>
       <div class="flex space-x-64">

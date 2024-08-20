@@ -246,6 +246,7 @@ const validateContent = async (_rule, value) => {
             </div>
           </div>
           <a-modal
+            :mask-closable="false"
             class="flex justify-center"
             v-model:open="cropModalVisible"
             @cancel="cropModalVisible = false; contractCoverUrl = ''; formState.seal = ''">
