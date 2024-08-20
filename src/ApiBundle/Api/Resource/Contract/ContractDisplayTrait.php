@@ -46,10 +46,11 @@ trait ContractDisplayTrait
         }
         $order = $this->getOrderService()->getOrder($member['orderId']);
         $user = $this->getCurrentUser();
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
         return str_replace(
             ['$name$', '$username$', '$idcard$', '$courseName$', '$contract number$', '$date$', '$order price$'],
-            [$user['truename'] ?? '', $user['nickname'] ?? '', $user['idcard'] ?? '', $product['title'] ?? '', $contract['id'] ?? '', date('Y年m月d日') ?? '', $order['pay_amount'] ?? ''],
+            [$userProfile['truename'] ?? '', $user['nickname'] ?? '', $userProfile['idcard'] ?? '', $product['title'] ?? '', $contract['id'] ?? '', date('Y年m月d日') ?? '', $order['pay_amount'] ?? ''],
             $content
         );
     }
