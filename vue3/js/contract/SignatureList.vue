@@ -234,7 +234,7 @@ const view = async (record) => {
         <span class="grow text-center text-22 font-medium">{{ signatureContent.name }}</span>
         <span class="flex-none whitespace-nowrap text-gray-500">{{ `合同编号: ${signatureContent.code}` }}</span>
       </div>
-      <div class="text-gray-500">{{ signatureContent.content }}</div>
+      <div v-html="signatureContent.content" class="text-gray-500"></div>
       <div class="flex space-x-64">
         <div class="flex-1 flex flex-col items-start justify-between space-y-22">
           <span class="text-18 font-medium">甲方：</span>
