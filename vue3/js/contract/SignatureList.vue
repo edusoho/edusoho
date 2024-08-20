@@ -11,44 +11,45 @@ const columns = [
     key: 'contractCode',
     title: '合同编号',
     dataIndex: 'contractCode',
-    width: 120,
+    width: 140,
     ellipsis: true,
+
   },
   {
     key: 'username',
     title: '用户名',
     dataIndex: 'username',
     align: 'center',
-    width: 150,
+    width: 200,
   },
   {
     key: 'mobile',
     title: '手机号',
     dataIndex: 'mobile',
-    width: 120,
+    width: 150,
   },
   {
     key: 'goodsType',
     title: '商品类型',
     dataIndex: 'goodsType',
-    width: 80,
+    width: 100,
   },
   {
     key: 'goodsName',
     title: '商品名称',
     dataIndex: 'goodsName',
-    width: 220,
+    width: 250,
   },
   {
     key: 'contractName',
     title: '电子合同名称',
     dataIndex: 'contractName',
-    width: 200,
+    width: 250,
   },
   {
     key: 'operation',
     title: '操作',
-    width: 60,
+    width: 90,
   },
 ];
 
@@ -175,7 +176,7 @@ const view = async (record) => {
       :row-key="record => record.id"
       :pagination="false"
       :loading="loading"
-      :scroll="{ x: 1210 }"
+      :scroll="{ x: 1500 }"
       @change="handleTableChange"
     >
       <template #headerCell="{ column }">
