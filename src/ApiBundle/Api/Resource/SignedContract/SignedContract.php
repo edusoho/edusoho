@@ -41,7 +41,7 @@ class SignedContract extends AbstractResource
             $signSnapshot['sign']['handSignature'] = AssetHelper::getFurl($signSnapshot['sign']['handSignature']);
         }
 
-        $signSnapshot['contract']['content'] = $this->getDetailContent($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode']);
+        $signSnapshot['contract']['content'] = $this->replaceContentVariable($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode'], $signSnapshot['sign']);
         $conditions = $request->query->all();
         if ($conditions['viewMode'] == 'html') {
             $signSnapshot['contract']['content'] = $this->getHtmlByRecord($signSnapshot['contract']['content'], $signSnapshot);

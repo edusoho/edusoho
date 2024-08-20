@@ -28,7 +28,7 @@ trait ContractDisplayTrait
     private function getContractDetail($contract, $goodsKey)
     {
         $code = $this->getContractService()->generateContractCode();
-        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code);
+        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code, []);
 
         return $this->getHtml($content, $contract, $code);
     }
