@@ -39,6 +39,7 @@ trait ContractDisplayTrait
         $product = [];
         if ('course' == $parts[0]) {
             $product = $this->getServiceByType($parts[0])->getCourse($parts[1]);
+            $product['title'] = $product['courseSetTitle'].'-'.$product['title'];
         } elseif ('classroom' == $parts[0]) {
             $product = $this->getServiceByType($parts[0])->getClassroom($parts[1]);
         } elseif ('itemBankExercise' == $parts[0]) {
@@ -59,7 +60,7 @@ trait ContractDisplayTrait
 
         return str_replace(
             ['$name$', '$username$', '$idcard$', '$courseName$', '$contract number$', '$date$', '$order price$'],
-            [$userProfile['truename'] ?? '', $user['nickname'] ?? '', $userProfile['idcard'] ?? '', $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] ?? ''],
+            [$userProfile['truename'] ?? '', $user['nickname'] ?? '', $userProfile['idcard'] ?? '', $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] /100 ?? ''],
             $content
         );
     }
