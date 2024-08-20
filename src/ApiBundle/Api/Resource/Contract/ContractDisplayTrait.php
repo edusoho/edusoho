@@ -40,7 +40,7 @@ trait ContractDisplayTrait
             $product = $this->getServiceByType($parts[0])->getCourse($parts[1]);
         } elseif ('classroom' == $parts[0]) {
             $product = $this->getServiceByType($parts[0])->getClassroom($parts[1]);
-        } elseif ('classroom' == $parts[0]) {
+        } elseif ('itemBankExercise' == $parts[0]) {
             $product = $this->getServiceByType($parts[0])->getItemBank($parts[1]);
         }
         $member = [];
@@ -48,7 +48,7 @@ trait ContractDisplayTrait
             $member = $this->getMemberService($parts[0])->getCourseMember($parts[1], $this->getCurrentUser()->getId());
         } elseif ('classroom' == $parts[0]) {
             $member = $this->getMemberService($parts[0])->getClassroomMember($parts[1], $this->getCurrentUser()->getId());
-        } else {
+        } elseif ('itemBankExercise' == $parts[0]) {
             $member = $this->getMemberService($parts[0])->getExerciseMember($parts[1], $this->getCurrentUser()->getId());
         }
         $order = $this->getOrderService()->getOrder($member['orderId']);
@@ -91,7 +91,7 @@ trait ContractDisplayTrait
         $htmlContentHeader = '<html lang=\'zh-CN\'><head><meta charset=\'UTF-8\'><title>合同页面</title></head><body style=\'padding: 20px 32px 20px 32px; min-width: 311px;\'><p style=\'overflow: hidden; color: #1E2226; text-overflow: ellipsis; font-size: 14px; font-style: normal; font-weight: 500; line-height: 22px; text-align: center;\'>'.$signSnapshot['contract']['name'].'</p><p style=\'color: #626973; text-align: right; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;\'>合同编号：'.$signSnapshot['contractCode'].'</p><div style=\'color: #626973; font-family: \'PingFang SC\'; font-size: 12px; font-style: normal; font-weight: 400; line-height: 20px;\'>'.$content.'</div><div><p style=\'color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;\'>甲方：</p><img src=\''.AssetHelper::getFurl($signSnapshot['contract']['seal']).'\' alt=\'甲方印章\' style=\'width: 150px; height: 150px; margin-top: 22px;\'><div style=\'margin-top: 22px; display: flex;\'>签约日期：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.date('Y年m月d日').'</div></div></div><div style=\'margin-top: 32px;\'><p style=\'color: #1E2226; font-family: \'PingFang SC\'; font-size: 18px; font-style: normal; font-weight: 500; line-height: 26px;\'>已方：</p>';
         $htmlContentOptions = '';
         $htmlContentFoot = '<div style=\'margin-top: 22px; display: flex;\'>签约日期：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.date('Y年m月d日').'</div></div></div></body></html>';
-        $sign = $signSnapshot['snapshot']['sign'];
+        $sign = $signSnapshot['sign'];
         if (!empty($sign['handSignature'])) {
             $htmlContentOptions = $htmlContentOptions.'<div style=\'margin-top: 22px; display: flex;\'>手写签名：<div style=\'display: flex; align-items: center; gap: 10px; flex: 1 0 0; border-bottom: 0.5px solid #919399; width: 241px;\'>'.$sign['handSignature'].'</div></div>';
         }
