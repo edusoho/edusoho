@@ -57,7 +57,7 @@ class SignedContract extends AbstractResource
             $conditions['createdTime_GTE'] = strtotime($query['signTimeFrom']);
         }
         if (!empty($query['signTimeTo'])) {
-            $conditions['createdTime_LTE'] = strtotime($query['signTimeTo']);
+            $conditions['createdTime_LTE'] = strtotime($query['signTimeTo'].' 23:59:59');
         }
         if (empty($query['keywordType']) || (empty($query['keyword']) && '0' != $query['keyword'])) {
             return [false, $conditions];
