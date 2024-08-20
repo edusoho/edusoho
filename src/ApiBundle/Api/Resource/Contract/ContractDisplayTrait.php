@@ -39,6 +39,7 @@ trait ContractDisplayTrait
         $product = [];
         if ('course' == $parts[0]) {
             $product = $this->getServiceByType($parts[0])->getCourse($parts[1]);
+            $product['title'] = $product['courseSetTitle'].'-'.$product['title'];
         } elseif ('classroom' == $parts[0]) {
             $product = $this->getServiceByType($parts[0])->getClassroom($parts[1]);
         } elseif ('itemBankExercise' == $parts[0]) {
