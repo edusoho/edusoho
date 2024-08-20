@@ -38,7 +38,7 @@ class ContractSign extends AbstractResource
         }
 
         $conditions = $request->query->all();
-        if ($conditions['isMobile']) {
+        if ($conditions['viewMode'] == 'html') {
             $contractGoodsRelation = $this->getContractService()->getContractGoodsRelationByContractId($contractId);
             $contract['content'] = $this->getContractDetail($contract, $contractGoodsRelation['goodsKey']);
         }
