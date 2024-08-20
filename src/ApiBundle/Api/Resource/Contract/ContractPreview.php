@@ -18,7 +18,7 @@ class ContractPreview extends AbstractResource
         $contract['code'] = $this->getContractService()->generateContractCode();
         $contract['signDate'] = date('Y年m月d日');
         $contract['goodsName'] = $this->getGoodsName($goodsKey);
-        $contract['content'] = $this->replaceContentVariable($contract['content'], $goodsKey, $contract['code']);
+        $contract['content'] = $this->replaceContentVariable($contract['content'], $goodsKey, $contract['code'], []);
 
         return $contract;
     }
