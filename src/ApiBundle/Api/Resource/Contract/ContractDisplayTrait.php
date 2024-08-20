@@ -28,12 +28,12 @@ trait ContractDisplayTrait
     private function getContractDetail($contract, $goodsKey)
     {
         $code = $this->getContractService()->generateContractCode();
-        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code);
+        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code, []);
 
         return $this->getHtml($content, $contract, $code);
     }
 
-    private function replaceContentVariable($content, $goodsKey, $contractCode)
+    private function replaceContentVariable($content, $goodsKey, $contractCode, $sign)
     {
         $parts = explode('_', $goodsKey);
         $product = [];
@@ -57,10 +57,12 @@ trait ContractDisplayTrait
         $user = $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $content = str_replace("\n", '<br>', $content);
+        $truename = $sign['truename'] ?? $userProfile['truename'] ?? '';
+        $iDNumber = $sign['IDNumber'] ?? $userProfile['idcard'] ?? '';
 
         return str_replace(
             ['$name$', '$username$', '$idcard$', '$courseName$', '$contract number$', '$date$', '$order price$'],
-            [$userProfile['truename'] ?? '', $user['nickname'] ?? '', $userProfile['idcard'] ?? '', $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] /100 ?? ''],
+            [$truename, $user['nickname'] ?? '', $iDNumber, $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] /100 ?? ''],
             $content
         );
     }
