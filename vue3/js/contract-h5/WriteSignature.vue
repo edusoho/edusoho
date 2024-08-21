@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
 <div class="py-16 text-center text-[#37393D] text-14">请横着屏幕手写</div>
 
 <div class="box-container" :style="customBoxContainerStyle">
@@ -18,6 +19,29 @@
 <div v-if="!isVertical" class="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-[#fff] z-[9999]">
   为了更好的视觉体验，请在关闭手机的旋转功能后再进行操作。
 </div>
+=======
+  <div class="header-box">这个是导航</div>
+
+  <div class="py-16 text-center text-[#37393D] text-14">请横着屏幕手写</div>
+
+  <div class="box-container" :style="customBoxContainerStyle">
+    <canvas id="canvas"></canvas>
+
+    <div class="tip" :style="customTipStyle">请确保“字迹清晰”并尽量把“签字范围”撑满</div>
+    <div class="bg-text">签字范围</div>
+  </div>
+
+  <div class="fixed left-0 right-0 bottom-0 flex items-center justify-center h-100">
+    <div class="btn-list">
+      <a-button type="primary" class="mb-16" @click="getPreviewImg">提交</a-button>
+      <a-button @click="signature.clear()">清空</a-button>
+    </div>
+  </div>
+
+  <a-modal v-model:open="previewModalVisible">
+    <img :src="previewImgUrl" style="max-width: 100%;">
+  </a-modal>
+>>>>>>> feat/20240805-wb
 </template>
 
 <script setup>
