@@ -19,13 +19,12 @@
   </div>
 
   <a-form :model="formItems" ref="formRef" :rules="rules">
-    <a-form-item v-for="key in formItems" :name="key" class="mb-16">
+    <a-form-item v-for="(a, key) in formItems" :name="key" class="mb-16">
       <a-input v-model:value="formItems[key]" :placeholder="rules[key][0].message" size="large"></a-input>
     </a-form-item>
   </a-form>
 
-  <div v-if="!formItems.handSignature"
-    @click="writeSignatureVisible = true"
+  <div v-if="!formItems.handSignature" @click="writeSignatureVisible = true"
     class="flex items-center justify-center py-8 leading-24 border border-dashed border-[#B6BABF] rounded-6">
     <svg width="17" height="16" viewBox="0 0 17 16" fill="none">
       <path d="M2.83398 14H14.834" stroke="#5E6166" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -88,12 +87,16 @@ watch(route, () => {
 
 const formItems = ref({})
 const initFormItems = async () => {
-  const { data } = await ElectronicContract.getSignContractTemplate({ id, goodsKey })
+  const res = await ElectronicContract.getSignContractTemplate({ id, goodsKey })
 
-  data.signFields.forEach(item => {
+  res.signFields.forEach(item => {
+    if (item.field === 'handSignature') return
+
     formItems.value[item.field] = ''
-    rules.value.push(baseRules[item.field])
+    rules.value[item.field] = baseRules[item.field]
   })
+
+  console.log('rules: ', rules.value, formItems.value)
 }
 initFormItems()
 

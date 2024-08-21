@@ -9,7 +9,7 @@ const i18n = createI18n({
       title: '签署合同',
       contract_detail: '查看合同详情',
       placeholder: {
-        name: '请输入姓名',
+        truename: '请输入姓名',
         IDNumber: '请输入身份证号',
         phoneNumber: '请输入手机号'
       },
@@ -24,7 +24,7 @@ const i18n = createI18n({
       title: 'Sign Contract',
       contract_detail: 'View Contract details',
       placeholder: {
-        name: 'Please enter your name',
+        truename: 'Please enter your name',
         IDNumber: 'Please enter your ID number',
         phoneNumber: 'Please enter your phone number'
       },

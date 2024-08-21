@@ -9,7 +9,6 @@ export const ElectronicContract = {
     return apiClient.get(`/api/contract`)
   },
 
-<<<<<<< HEAD
   signContract: ({ id, contractCode, goodsKey, truename, IDNumber, phoneNumber, handSignature }) => {
     return apiClient.get(`/api/contract/${id}/sign`)
   },
@@ -19,9 +18,3 @@ export const ElectronicContract = {
   }
 }
 
-=======
-  signContract: () => {
-    return apiClient.get(`/api/contract/${id}/sign`)
-  }
-}
->>>>>>> feat/20240805-wb
