@@ -23,6 +23,11 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findDailyIncreaseDataByClassroomIdAndRoleWithTimeRange($classroomId, $role, $startTime, $endTime, $format);
     }
 
+    public function getClassroomMember($classroomId, $userId)
+    {
+        return $this->getMemberDao()->getByClassroomIdAndUserId($classroomId, $userId);
+    }
+
     /**
      * @return ClassroomMemberDao
      */

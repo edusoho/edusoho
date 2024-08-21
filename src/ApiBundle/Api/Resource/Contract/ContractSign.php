@@ -10,6 +10,8 @@ use Biz\User\Service\UserService;
 
 class ContractSign extends AbstractResource
 {
+    use ContractDisplayTrait;
+
     public function get(ApiRequest $request, $contractId, $goodsKey)
     {
         $contract = $this->getContractService()->getContract($contractId);
@@ -35,10 +37,15 @@ class ContractSign extends AbstractResource
             }
         }
 
+        $conditions = $request->query->all();
+        if ($conditions['viewMode'] == 'html') {
+            $contract['content'] = $this->getContractDetail($contract, $goodsKey);
+        }
+
         return [
             'id' => $contractId,
             'name' => $contract['name'],
-            'code' => date('Ymd').substr(microtime(true) * 10000, -6),
+            'code' => $this->getContractService()->generateContractCode(),
             'content' => $contract['content'],
             'seal' => AssetHelper::getFurl($contract['seal']),
             'signFields' => $signFields,

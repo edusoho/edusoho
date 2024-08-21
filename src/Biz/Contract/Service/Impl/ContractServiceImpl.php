@@ -12,6 +12,9 @@ use Biz\Contract\Dao\ContractGoodsRelationDao;
 use Biz\Contract\Dao\ContractSignRecordDao;
 use Biz\Contract\Dao\ContractSnapshotDao;
 use Biz\Contract\Service\ContractService;
+use Biz\System\Constant\LogAction;
+use Biz\System\Constant\LogModule;
+use Biz\System\Service\LogService;
 
 class ContractServiceImpl extends BaseService implements ContractService
 {
@@ -31,7 +34,8 @@ class ContractServiceImpl extends BaseService implements ContractService
     {
         $params = $this->preprocess($params);
         $params['createdUserId'] = $params['updatedUserId'] = $this->getCurrentUser()->getId();
-        $this->getContractDao()->create($params);
+        $contract = $this->getContractDao()->create($params);
+        $this->getLogService()->info(LogModule::CONTRACT, LogAction::CREATE_CONTRACT, "创建了合同《{$contract['name']}》", $contract);
     }
 
     public function getContract($id)
@@ -49,7 +53,14 @@ class ContractServiceImpl extends BaseService implements ContractService
 
     public function deleteContract($id)
     {
+        $contract = $this->getContract($id);
         $this->getContractDao()->delete($id);
+        $this->getLogService()->info(LogModule::CONTRACT, LogAction::DELETE_CONTRACT, "删除了合同《{$contract['name']}》", $contract);
+    }
+
+    public function generateContractCode()
+    {
+        return date('Ymd') . substr(microtime(true) * 10000, -6);
     }
 
     public function signContract($id, $sign)
@@ -64,6 +75,9 @@ class ContractServiceImpl extends BaseService implements ContractService
         if (!ArrayToolkit::requireds($sign, $requiredKeys, true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
+        if ($this->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $sign['goodsKey'])) {
+            return;
+        }
         $sign = ArrayToolkit::parts($sign, $requiredKeys);
         $version = md5(json_encode([ArrayToolkit::parts($contract, ['name', 'content', 'seal'])]));
         $contractSnapshot = $this->getContractSnapshotDao()->getByVersion($version);
@@ -76,6 +90,9 @@ class ContractServiceImpl extends BaseService implements ContractService
             ]);
         }
         if (!empty($sign['handSignature'])) {
+            if (0 !== strpos($sign['handSignature'], 'data:image/png;base64,')) {
+                $sign['handSignature'] = 'data:image/png;base64,' . $sign['handSignature'];
+            }
             $file = $this->fileDecode($sign['handSignature']);
             if (empty($file)) {
                 throw CommonException::ERROR_PARAMETER();
@@ -114,21 +131,47 @@ class ContractServiceImpl extends BaseService implements ContractService
         return $signedContract;
     }
 
-    public function getBindContractByGoodsKey($goodsKey)
+    public function getRelatedContractByGoodsKey($goodsKey)
     {
         $relation = $this->getContractGoodsRelationDao()->getByGoodsKey($goodsKey);
         if (empty($relation)) {
             return null;
         }
         $contract = $this->getContract($relation['contractId']);
-        $relation['name'] = $contract['name'];
+        if (empty($contract)) {
+            return null;
+        }
+        $relation['contractName'] = $contract['name'];
 
         return $relation;
+    }
+
+    public function relateContract($id, $goodsKey, $forceSign)
+    {
+        $this->unRelateContract($goodsKey);
+        $this->getContractGoodsRelationDao()->create([
+            'goodsKey' => $goodsKey,
+            'contractId' => $id,
+            'sign' => empty($forceSign) ? 0 : 1,
+        ]);
+    }
+
+    public function unRelateContract($goodsKey)
+    {
+        $relation = $this->getContractGoodsRelationDao()->getByGoodsKey($goodsKey);
+        if ($relation) {
+            $this->getContractGoodsRelationDao()->delete($relation['id']);
+        }
     }
 
     public function findContractGoodsRelationsByContractIds($contractIds)
     {
         return $this->getContractGoodsRelationDao()->findByContractIds($contractIds);
+    }
+
+    public function getContractGoodsRelationByContractId($contractId)
+    {
+        return $this->getContractGoodsRelationDao()->getByContractId($contractId);
     }
 
     public function getSignRecordByUserIdAndGoodsKey($userId, $goodsKey)
@@ -161,6 +204,7 @@ class ContractServiceImpl extends BaseService implements ContractService
             throw CommonException::ERROR_PARAMETER();
         }
         $params['seal'] = $file['uri'];
+        $params['content'] = strip_tags($params['content']);
 
         return $params;
     }
@@ -168,9 +212,17 @@ class ContractServiceImpl extends BaseService implements ContractService
     /**
      * @return FileService
      */
-    protected function getFileService()
+    private function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**

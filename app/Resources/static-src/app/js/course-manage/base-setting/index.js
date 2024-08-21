@@ -1,8 +1,8 @@
 import Intro from '../info/intro';
 import ManageInfo from './manage-info';
-import ElementUI from 'element-ui';
+import * as ElementUI from 'element-ui';
+import {Dropdown, Menu} from '@codeages/design-vue';
 import Axios from 'axios';
-
 import qs from 'qs';
 
 const axios = Axios.create({
@@ -18,6 +18,8 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$qs = qs;
 
 Vue.use(ElementUI);
+Vue.use(Dropdown);
+Vue.use(Menu);
 Vue.filter('trans', function (value, params) {
   if (!value) return '';
   return Translator.trans(value, params);

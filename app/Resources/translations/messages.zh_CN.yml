@@ -9522,6 +9522,7 @@ log.module.multi_class_assistant: 班课助教
 log.module.multi_class: 班课
 log.module.wrong_question: 错题
 log.module.ai: AI
+log.module.contract: 合同
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程

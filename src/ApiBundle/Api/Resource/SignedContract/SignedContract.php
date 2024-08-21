@@ -4,17 +4,22 @@ namespace ApiBundle\Api\Resource\SignedContract;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Contract\ContractDisplayTrait;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Course\Service\MemberService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
 
 class SignedContract extends AbstractResource
 {
-    use SignedContractWrapTrait;
+    use ContractDisplayTrait;
 
     public function search(ApiRequest $request)
     {
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_contract_manage')) {
+            throw UserException::PERMISSION_DENIED();
+        }
         list($abort, $conditions) = $this->buildSearchConditions($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         if ($abort) {
@@ -28,9 +33,18 @@ class SignedContract extends AbstractResource
     public function get(ApiRequest $request, $id)
     {
         $signedContract = $this->getContractService()->getSignedContract($id);
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_contract_manage') && $signedContract['userId'] != $this->getCurrentUser()->getId()) {
+            throw UserException::PERMISSION_DENIED();
+        }
         $signSnapshot = $signedContract['snapshot'];
         if (!empty($signSnapshot['sign']['handSignature'])) {
             $signSnapshot['sign']['handSignature'] = AssetHelper::getFurl($signSnapshot['sign']['handSignature']);
+        }
+
+        $signSnapshot['contract']['content'] = $this->replaceContentVariable($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode'], $signSnapshot['sign']);
+        $conditions = $request->query->all();
+        if ($conditions['viewMode'] == 'html') {
+            $signSnapshot['contract']['content'] = $this->getHtmlByRecord($signSnapshot['contract']['content'], $signSnapshot);
         }
 
         return [
@@ -53,10 +67,10 @@ class SignedContract extends AbstractResource
             'goodsType' => $query['goodsType'] ?? '',
         ];
         if (!empty($query['signTimeFrom'])) {
-            $conditions['createdTime_GTE'] = $query['signTimeFrom'];
+            $conditions['createdTime_GTE'] = strtotime($query['signTimeFrom']);
         }
         if (!empty($query['signTimeTo'])) {
-            $conditions['createdTime_LTE'] = $query['signTimeTo'];
+            $conditions['createdTime_LTE'] = strtotime($query['signTimeTo'].' 23:59:59');
         }
         if (empty($query['keywordType']) || (empty($query['keyword']) && '0' != $query['keyword'])) {
             return [false, $conditions];
@@ -127,14 +141,14 @@ class SignedContract extends AbstractResource
         $contractSnapshots = array_column($contractSnapshots, null, 'id');
         $wrappedSignedContracts = [];
         foreach ($signedContracts as $signedContract) {
-            list($goodsType, $targetId) = explode('_', $signedContract['goodsKey']);
+            list($goodsType, $targetId) = $this->parseGoodsKey($signedContract['goodsKey']);
             $wrappedSignedContracts[] = [
                 'id' => $signedContract['id'],
                 'contractCode' => $signedContract['snapshot']['contractCode'],
                 'username' => $users[$signedContract['userId']]['nickname'],
                 'mobile' => $users[$signedContract['userId']]['verifiedMobile'],
                 'goodsType' => $goodsType,
-                'goodsName' => $this->getGoodsName($goodsType, $targetId),
+                'goodsName' => $this->getGoodsName($signedContract['goodsKey']),
                 'orderSn' => $this->getOrderSn($goodsType, $targetId, $signedContract['userId']),
                 'contractName' => $contractSnapshots[$signedContract['snapshot']['contractSnapshotId']]['name'],
                 'signTime' => $signedContract['createdTime'],

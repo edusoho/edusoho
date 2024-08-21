@@ -8260,6 +8260,7 @@ log.module.multi_class_assistant: Multi class assistant
 log.module.multi_class: Multi class
 log.module.wrong_question: 'Wrong Question'
 log.module.ai: AI
+log.module.contract: Contract
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'

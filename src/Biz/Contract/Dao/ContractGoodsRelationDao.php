@@ -9,4 +9,6 @@ interface ContractGoodsRelationDao extends GeneralDaoInterface
     public function getByGoodsKey($goodsKey);
 
     public function findByContractIds($contractIds);
+
+    public function getByContractId($contractId);
 }

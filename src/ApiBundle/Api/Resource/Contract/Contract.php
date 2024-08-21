@@ -4,26 +4,29 @@ namespace ApiBundle\Api\Resource\Contract;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Contract\Service\ContractService;
 use Biz\User\Service\UserService;
+use Biz\User\UserException;
 
 class Contract extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
+        $this->checkPermission();
         list($abort, $conditions) = $this->buildSearchConditions($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         if ($abort) {
             return $this->makePagingObject([], 0, $offset, $limit);
         }
-        $contracts = $this->getContractService()->searchContracts($conditions, [], $offset, $limit, ['id', 'name', 'updatedUserId', 'updatedTime']);
+        $contracts = $this->getContractService()->searchContracts($conditions, ['updatedTime' => 'DESC'], $offset, $limit, ['id', 'name', 'updatedUserId', 'updatedTime']);
 
         return $this->makePagingObject($this->wrap($contracts), $this->getContractService()->countContracts($conditions), $offset, $limit);
     }
 
     public function add(ApiRequest $request)
     {
-        //鉴权
+        $this->checkPermission();
         $this->getContractService()->createContract($request->request->all());
 
         return ['ok' => true];
@@ -31,11 +34,15 @@ class Contract extends AbstractResource
 
     public function get(ApiRequest $request, $id)
     {
-        return $this->getContractService()->getContract($id);
+        $contract = $this->getContractService()->getContract($id);
+        $contract['seal'] = AssetHelper::getFurl($contract['seal']);
+
+        return $contract;
     }
 
     public function update(ApiRequest $request, $id)
     {
+        $this->checkPermission();
         $this->getContractService()->updateContract($id, $request->request->all());
 
         return ['ok' => true];
@@ -43,9 +50,17 @@ class Contract extends AbstractResource
 
     public function remove(ApiRequest $request, $id)
     {
+        $this->checkPermission();
         $this->getContractService()->deleteContract($id);
 
         return ['ok' => true];
+    }
+
+    private function checkPermission()
+    {
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_contract_manage')) {
+            throw UserException::PERMISSION_DENIED();
+        }
     }
 
     private function buildSearchConditions($query)

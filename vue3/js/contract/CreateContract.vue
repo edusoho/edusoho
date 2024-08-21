@@ -35,7 +35,7 @@ const showCancelModal = () => {
     content: createVNode('div', {style: 'color:#626973; font-size:14px; font-weight:400'}, '离开后已编辑的数据将消失...'),
     onOk() {
       resetForm();
-      router.push({name: 'ContractList'});
+      router.push({name: 'Index'});
     },
     onCancel() {
     },
@@ -138,6 +138,20 @@ const onFinishFailed = ({ values, errorFields, outOfDate }) => {
     });
   }
 };
+
+const validateContent = async (_rule, value) => {
+
+  if (!value) {
+    return Promise.reject("请输入电子合同内容");
+  }
+
+  value = value.trim();
+  if (!value) {
+    return Promise.reject("请输入电子合同内容");
+  }
+
+  return Promise.resolve();
+}
 </script>
 
 <template>
@@ -166,7 +180,7 @@ const onFinishFailed = ({ values, errorFields, outOfDate }) => {
         <a-form-item
           name="content"
           label="电子合同内容"
-          :rules="[{ required: true, message: '请输入电子合同内容' }]"
+          :rules="[{ required: true, message: '请输入电子合同内容', validator: validateContent }]"
         >
           <div class="flex flex-col space-y-4">
             <a-textarea v-model:value="formState.content"
@@ -232,6 +246,7 @@ const onFinishFailed = ({ values, errorFields, outOfDate }) => {
             </div>
           </div>
           <a-modal
+            :mask-closable="false"
             class="flex justify-center"
             v-model:open="cropModalVisible"
             @cancel="cropModalVisible = false; contractCoverUrl = ''; formState.seal = ''">
