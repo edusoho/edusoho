@@ -53,7 +53,7 @@ export const setCurrentPrimaryColor = (vueInstance) => {
   vueInstance.config.globalProperties.$primaryColor = primaryColor
 
   document
-    .getElementsByTagName("body")[0]
+    .getElementsByTagName("html")[0]
     .style.setProperty(`--primary-color`, primaryColor);
 }
 

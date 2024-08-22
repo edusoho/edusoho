@@ -13,7 +13,7 @@ const routes = [
         component: SignContract
       },
       {
-        path: 'contract_detail',
+        path: 'contract_detail/:id/:goodsKey',
         component: ContractDetail
       }
     ]

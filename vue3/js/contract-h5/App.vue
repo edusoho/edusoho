@@ -7,9 +7,4 @@
 </template>
 
 <script setup>
-import { ref, provide } from 'vue';
-
-const currentWriteSignature = ref('')
-
-provide('currentWriteSignature', currentWriteSignature)
 </script>
