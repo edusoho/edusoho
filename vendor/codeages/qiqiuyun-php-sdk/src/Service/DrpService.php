@@ -38,7 +38,7 @@ class DrpService extends BaseService
         ksort($data);
         $signingText = json_encode($data);
         $signature = $this->auth->makeRequestAuthorization($this->loginPath, $signingText);
-        $action = $this->getRequestUri($this->loginPath);
+        $action = $this->getRequestUri($this->loginPath, 'https');
 
         return MarketingHelper::generateLoginForm($action, $user, $site, $signature);
     }
