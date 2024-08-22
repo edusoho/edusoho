@@ -54,9 +54,6 @@ class ContinueAnswer extends AbstractResource
         if (empty($assessment)) {
             throw AssessmentException::ASSESSMENT_NOTEXIST();
         }
-        if ('open' !== $assessment['status']) {
-            throw AssessmentException::ASSESSMENT_NOTOPEN();
-        }
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
         $assessmentFilter = new AssessmentFilter();

@@ -496,7 +496,7 @@ class ClassroomManageController extends BaseController
                     return $this->createJsonResponse(true);
                 }
                 $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
-                $this->getClassroomService()->updateMember(['classroomId' => $classroomId], ['deadline' => $date]);
+                $this->getClassroomService()->changeMembersDeadlineByDate(['classroomId' => $classroomId], ['deadline' => $date]);
 
                 return $this->createJsonResponse(true);
             }

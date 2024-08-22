@@ -117,16 +117,17 @@
     "weixin-js-sdk": "1.6.0"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --trace-deprecation --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
-    "dev:debug": "npm run dev sourcemap:true",
-    "dev:custom": "npm run dev watch:CustomBundle",
-    "compile": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
-    "compile:debug": "npm run compile sourcemap:true",
-    "compile:custom": "npm run compile module:CustomBundle",
+    "dev": "node webpack-build/dev.js",
+    "compile": "npm run build && cd vue3 && npm run build",
+    "serve": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
+    "build": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
     "clean": "rm -rf node_modules",
     "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
     "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",
     "test:simple": "mocha --recursive --require babel-core/register --reporter dot",
     "commitmsg": "es-commit-msg-validator"
+  },
+  "volta": {
+    "node": "16.20.2"
   }
 }

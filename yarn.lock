@@ -46,7 +46,7 @@
 
 "@antv/component@^0.8.7":
   version "0.8.17"
-  resolved "https://registry.nlark.com/@antv/component/download/@antv/component-0.8.17.tgz?cache=0&sync_timestamp=1627547715812&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40antv%2Fcomponent%2Fdownload%2F%40antv%2Fcomponent-0.8.17.tgz#d93e0ead9bbdccea0f558531eb4610ccfacbcbf7"
+  resolved "https://registry.npmmirror.com/@antv/component/download/@antv/component-0.8.17.tgz?cache=0&sync_timestamp=1627547715812&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40antv%2Fcomponent%2Fdownload%2F%40antv%2Fcomponent-0.8.17.tgz#d93e0ead9bbdccea0f558531eb4610ccfacbcbf7"
   integrity sha1-2T4OrZu9zOoPVYUx60YQzPrLy/c=
   dependencies:
     "@antv/dom-util" "~2.0.1"
@@ -60,7 +60,7 @@
 
 "@antv/coord@^0.3.0":
   version "0.3.1"
-  resolved "https://registry.nlark.com/@antv/coord/download/@antv/coord-0.3.1.tgz#982e261d8a1e06a198eb518ea7acc20ed875a019"
+  resolved "https://registry.npmmirror.com/@antv/coord/download/@antv/coord-0.3.1.tgz#982e261d8a1e06a198eb518ea7acc20ed875a019"
   integrity sha1-mC4mHYoeBqGY61GOp6zCDth1oBk=
   dependencies:
     "@antv/matrix-util" "^3.1.0-beta.2"
@@ -103,7 +103,7 @@
 
 "@antv/g-base@0.5.6":
   version "0.5.6"
-  resolved "https://registry.nlark.com/@antv/g-base/download/@antv/g-base-0.5.6.tgz?cache=0&sync_timestamp=1619321697104&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40antv%2Fg-base%2Fdownload%2F%40antv%2Fg-base-0.5.6.tgz#d96da5fbf6c5f8b073072751e15e5eec70b393fc"
+  resolved "https://registry.npmmirror.com/@antv/g-base/download/@antv/g-base-0.5.6.tgz?cache=0&sync_timestamp=1619321697104&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40antv%2Fg-base%2Fdownload%2F%40antv%2Fg-base-0.5.6.tgz#d96da5fbf6c5f8b073072751e15e5eec70b393fc"
   integrity sha1-2W2l+/bF+LBzBydR4V5e7HCzk/w=
   dependencies:
     "@antv/event-emitter" "^0.1.1"
@@ -120,7 +120,7 @@
 
 "@antv/g-base@^0.5.3", "@antv/g-base@~0.5.6":
   version "0.5.9"
-  resolved "https://registry.nlark.com/@antv/g-base/download/@antv/g-base-0.5.9.tgz?cache=0&sync_timestamp=1619321697104&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40antv%2Fg-base%2Fdownload%2F%40antv%2Fg-base-0.5.9.tgz#58d0e11d85157ada1408fbdf24f4f468f40e59cd"
+  resolved "https://registry.npmmirror.com/@antv/g-base/download/@antv/g-base-0.5.9.tgz?cache=0&sync_timestamp=1619321697104&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40antv%2Fg-base%2Fdownload%2F%40antv%2Fg-base-0.5.9.tgz#58d0e11d85157ada1408fbdf24f4f468f40e59cd"
   integrity sha1-WNDhHYUVetoUCPvfJPT0aPQOWc0=
   dependencies:
     "@antv/event-emitter" "^0.1.1"
@@ -137,7 +137,7 @@
 
 "@antv/g-canvas@~0.5.10":
   version "0.5.12"
-  resolved "https://registry.nlark.com/@antv/g-canvas/download/@antv/g-canvas-0.5.12.tgz#2fc40dced6994f074f22341e65d56f7bbd5275f7"
+  resolved "https://registry.npmmirror.com/@antv/g-canvas/download/@antv/g-canvas-0.5.12.tgz#2fc40dced6994f074f22341e65d56f7bbd5275f7"
   integrity sha1-L8QNztaZTwdPIjQeZdVve71Sdfc=
   dependencies:
     "@antv/g-base" "^0.5.3"
@@ -150,7 +150,7 @@
 
 "@antv/g-math@^0.1.6":
   version "0.1.7"
-  resolved "https://registry.nlark.com/@antv/g-math/download/@antv/g-math-0.1.7.tgz#6ec2769269f7ccb67e58140d5739df74046cc04e"
+  resolved "https://registry.npmmirror.com/@antv/g-math/download/@antv/g-math-0.1.7.tgz#6ec2769269f7ccb67e58140d5739df74046cc04e"
   integrity sha1-bsJ2kmn3zLZ+WBQNVznfdARswE4=
   dependencies:
     "@antv/util" "~2.0.0"
@@ -158,7 +158,7 @@
 
 "@antv/g-svg@~0.5.6":
   version "0.5.6"
-  resolved "https://registry.nlark.com/@antv/g-svg/download/@antv/g-svg-0.5.6.tgz#70b2fa980c431b39ad3c5b4b53e36a1d60957d65"
+  resolved "https://registry.npmmirror.com/@antv/g-svg/download/@antv/g-svg-0.5.6.tgz#70b2fa980c431b39ad3c5b4b53e36a1d60957d65"
   integrity sha1-cLL6mAxDGzmtPFtLU+NqHWCVfWU=
   dependencies:
     "@antv/g-base" "^0.5.3"
@@ -169,7 +169,7 @@
 
 "@antv/g2@^4.1.23":
   version "4.1.23"
-  resolved "https://registry.nlark.com/@antv/g2/download/@antv/g2-4.1.23.tgz?cache=0&sync_timestamp=1628220005190&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40antv%2Fg2%2Fdownload%2F%40antv%2Fg2-4.1.23.tgz#e2066925070ab3cb0dfefea45214a58e9fd8e242"
+  resolved "https://registry.npmmirror.com/@antv/g2/download/@antv/g2-4.1.23.tgz?cache=0&sync_timestamp=1628220005190&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40antv%2Fg2%2Fdownload%2F%40antv%2Fg2-4.1.23.tgz#e2066925070ab3cb0dfefea45214a58e9fd8e242"
   integrity sha1-4gZpJQcKs8sN/v6kUhSljp/Y4kI=
   dependencies:
     "@antv/adjust" "^0.2.1"
@@ -214,7 +214,7 @@
 
 "@antv/scale@^0.3.7", "@antv/scale@~0.3.1":
   version "0.3.12"
-  resolved "https://registry.nlark.com/@antv/scale/download/@antv/scale-0.3.12.tgz?cache=0&sync_timestamp=1625571094812&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40antv%2Fscale%2Fdownload%2F%40antv%2Fscale-0.3.12.tgz#47dbba3e30f230bd6d27ca31d4204106608650db"
+  resolved "https://registry.npmmirror.com/@antv/scale/download/@antv/scale-0.3.12.tgz?cache=0&sync_timestamp=1625571094812&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40antv%2Fscale%2Fdownload%2F%40antv%2Fscale-0.3.12.tgz#47dbba3e30f230bd6d27ca31d4204106608650db"
   integrity sha1-R9u6PjDyML1tJ8ox1CBBBmCGUNs=
   dependencies:
     "@antv/util" "~2.0.3"
@@ -223,7 +223,7 @@
 
 "@antv/util@^2.0.0", "@antv/util@^2.0.7", "@antv/util@^2.0.9", "@antv/util@~2.0.0", "@antv/util@~2.0.12", "@antv/util@~2.0.3", "@antv/util@~2.0.5":
   version "2.0.14"
-  resolved "https://registry.nlark.com/@antv/util/download/@antv/util-2.0.14.tgz#1ac8c4f790beaf6572daecf62df6aa55fa0a31df"
+  resolved "https://registry.npmmirror.com/@antv/util/download/@antv/util-2.0.14.tgz#1ac8c4f790beaf6572daecf62df6aa55fa0a31df"
   integrity sha1-GsjE95C+r2Vy2uz2LfaqVfoKMd8=
   dependencies:
     tslib "^2.0.3"
@@ -1322,7 +1322,7 @@
 
 "@types/d3-timer@^2.0.0":
   version "2.0.1"
-  resolved "https://registry.nlark.com/@types/d3-timer/download/@types/d3-timer-2.0.1.tgz#ffb6620d290624f3726aa362c0c8a4b44c8d7200"
+  resolved "https://registry.npmmirror.com/@types/d3-timer/download/@types/d3-timer-2.0.1.tgz#ffb6620d290624f3726aa362c0c8a4b44c8d7200"
   integrity sha1-/7ZiDSkGJPNyaqNiwMiktEyNcgA=
 
 "@types/hast@^2.0.0":
@@ -3315,12 +3315,12 @@ cyclist@^1.0.1:
 
 d3-array@1:
   version "1.2.4"
-  resolved "https://registry.nlark.com/d3-array/download/d3-array-1.2.4.tgz?cache=0&sync_timestamp=1622916901018&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fd3-array%2Fdownload%2Fd3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
+  resolved "https://registry.npmmirror.com/d3-array/download/d3-array-1.2.4.tgz?cache=0&sync_timestamp=1622916901018&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fd3-array%2Fdownload%2Fd3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
   integrity sha1-Y1zk1e6nWfb2BYY9vPww7cc39x8=
 
 d3-array@^2.5.0:
   version "2.12.1"
-  resolved "https://registry.nlark.com/d3-array/download/d3-array-2.12.1.tgz?cache=0&sync_timestamp=1622916901018&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fd3-array%2Fdownload%2Fd3-array-2.12.1.tgz#e20b41aafcdffdf5d50928004ececf815a465e81"
+  resolved "https://registry.npmmirror.com/d3-array/download/d3-array-2.12.1.tgz?cache=0&sync_timestamp=1622916901018&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fd3-array%2Fdownload%2Fd3-array-2.12.1.tgz#e20b41aafcdffdf5d50928004ececf815a465e81"
   integrity sha1-4gtBqvzf/fXVCSgATs7PgVpGXoE=
   dependencies:
     internmap "^1.0.0"
@@ -3332,7 +3332,7 @@ d3-collection@1:
 
 d3-color@1:
   version "1.4.1"
-  resolved "https://registry.nlark.com/d3-color/download/d3-color-1.4.1.tgz#c52002bf8846ada4424d55d97982fef26eb3bc8a"
+  resolved "https://registry.npmmirror.com/d3-color/download/d3-color-1.4.1.tgz#c52002bf8846ada4424d55d97982fef26eb3bc8a"
   integrity sha1-xSACv4hGraRCTVXZeYL+8m6zvIo=
 
 d3-composite-projections@^1.2.0:
@@ -3345,7 +3345,7 @@ d3-composite-projections@^1.2.0:
 
 d3-dsv@^1.0.5:
   version "1.2.0"
-  resolved "https://registry.nlark.com/d3-dsv/download/d3-dsv-1.2.0.tgz#9d5f75c3a5f8abd611f74d3f5847b0d4338b885c"
+  resolved "https://registry.npmmirror.com/d3-dsv/download/d3-dsv-1.2.0.tgz#9d5f75c3a5f8abd611f74d3f5847b0d4338b885c"
   integrity sha1-nV91w6X4q9YR900/WEew1DOLiFw=
   dependencies:
     commander "2"
@@ -3354,12 +3354,12 @@ d3-dsv@^1.0.5:
 
 d3-ease@^1.0.5:
   version "1.0.7"
-  resolved "https://registry.nlark.com/d3-ease/download/d3-ease-1.0.7.tgz#9a834890ef8b8ae8c558b2fe55bd57f5993b85e2"
+  resolved "https://registry.npmmirror.com/d3-ease/download/d3-ease-1.0.7.tgz#9a834890ef8b8ae8c558b2fe55bd57f5993b85e2"
   integrity sha1-moNIkO+LiujFWLL+Vb1X9Zk7heI=
 
 d3-geo-projection@~2.1.2:
   version "2.1.2"
-  resolved "https://registry.nlark.com/d3-geo-projection/download/d3-geo-projection-2.1.2.tgz#7df8e1e9d046d631c6509f7e531357d4adc24aa3"
+  resolved "https://registry.npmmirror.com/d3-geo-projection/download/d3-geo-projection-2.1.2.tgz#7df8e1e9d046d631c6509f7e531357d4adc24aa3"
   integrity sha1-ffjh6dBG1jHGUJ9+UxNX1K3CSqM=
   dependencies:
     commander "2"
@@ -3368,21 +3368,21 @@ d3-geo-projection@~2.1.2:
 
 d3-geo@^1.1.0:
   version "1.12.1"
-  resolved "https://registry.nlark.com/d3-geo/download/d3-geo-1.12.1.tgz?cache=0&sync_timestamp=1623250051497&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fd3-geo%2Fdownload%2Fd3-geo-1.12.1.tgz#7fc2ab7414b72e59fbcbd603e80d9adc029b035f"
+  resolved "https://registry.npmmirror.com/d3-geo/download/d3-geo-1.12.1.tgz?cache=0&sync_timestamp=1623250051497&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fd3-geo%2Fdownload%2Fd3-geo-1.12.1.tgz#7fc2ab7414b72e59fbcbd603e80d9adc029b035f"
   integrity sha1-f8KrdBS3Lln7y9YD6A2a3AKbA18=
   dependencies:
     d3-array "1"
 
 d3-geo@^2.0.1:
   version "2.0.2"
-  resolved "https://registry.nlark.com/d3-geo/download/d3-geo-2.0.2.tgz?cache=0&sync_timestamp=1623250051497&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fd3-geo%2Fdownload%2Fd3-geo-2.0.2.tgz#c065c1b71fe8c5f1be657e5f43d9bdd010383c40"
+  resolved "https://registry.npmmirror.com/d3-geo/download/d3-geo-2.0.2.tgz?cache=0&sync_timestamp=1623250051497&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fd3-geo%2Fdownload%2Fd3-geo-2.0.2.tgz#c065c1b71fe8c5f1be657e5f43d9bdd010383c40"
   integrity sha1-wGXBtx/oxfG+ZX5fQ9m90BA4PEA=
   dependencies:
     d3-array "^2.5.0"
 
 d3-geo@~1.6.4:
   version "1.6.4"
-  resolved "https://registry.nlark.com/d3-geo/download/d3-geo-1.6.4.tgz?cache=0&sync_timestamp=1623250051497&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fd3-geo%2Fdownload%2Fd3-geo-1.6.4.tgz#f20e1e461cb1845f5a8be55ab6f876542a7e3199"
+  resolved "https://registry.npmmirror.com/d3-geo/download/d3-geo-1.6.4.tgz?cache=0&sync_timestamp=1623250051497&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fd3-geo%2Fdownload%2Fd3-geo-1.6.4.tgz#f20e1e461cb1845f5a8be55ab6f876542a7e3199"
   integrity sha1-8g4eRhyxhF9ai+Vatvh2VCp+MZk=
   dependencies:
     d3-array "1"
@@ -3396,24 +3396,24 @@ d3-hexjson@^1.0.1:
 
 d3-hierarchy@^1.1.5:
   version "1.1.9"
-  resolved "https://registry.nlark.com/d3-hierarchy/download/d3-hierarchy-1.1.9.tgz#2f6bee24caaea43f8dc37545fa01628559647a83"
+  resolved "https://registry.npmmirror.com/d3-hierarchy/download/d3-hierarchy-1.1.9.tgz#2f6bee24caaea43f8dc37545fa01628559647a83"
   integrity sha1-L2vuJMqupD+Nw3VF+gFihVlkeoM=
 
 d3-interpolate@^1.3.2:
   version "1.4.0"
-  resolved "https://registry.nlark.com/d3-interpolate/download/d3-interpolate-1.4.0.tgz#526e79e2d80daa383f9e0c1c1c7dcc0f0583e987"
+  resolved "https://registry.npmmirror.com/d3-interpolate/download/d3-interpolate-1.4.0.tgz#526e79e2d80daa383f9e0c1c1c7dcc0f0583e987"
   integrity sha1-Um554tgNqjg/ngwcHH3MDwWD6Yc=
   dependencies:
     d3-color "1"
 
 d3-path@1:
   version "1.0.9"
-  resolved "https://registry.nlark.com/d3-path/download/d3-path-1.0.9.tgz#48c050bb1fe8c262493a8caf5524e3e9591701cf"
+  resolved "https://registry.npmmirror.com/d3-path/download/d3-path-1.0.9.tgz#48c050bb1fe8c262493a8caf5524e3e9591701cf"
   integrity sha1-SMBQux/owmJJOoyvVSTj6VkXAc8=
 
 d3-path@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.nlark.com/d3-path/download/d3-path-2.0.0.tgz#55d86ac131a0548adae241eebfb56b4582dd09d8"
+  resolved "https://registry.npmmirror.com/d3-path/download/d3-path-2.0.0.tgz#55d86ac131a0548adae241eebfb56b4582dd09d8"
   integrity sha1-VdhqwTGgVIra4kHuv7VrRYLdCdg=
 
 d3-sankey@^0.9.1:
@@ -3427,19 +3427,19 @@ d3-sankey@^0.9.1:
 
 d3-shape@^1.2.0:
   version "1.3.7"
-  resolved "https://registry.nlark.com/d3-shape/download/d3-shape-1.3.7.tgz#df63801be07bc986bc54f63789b4fe502992b5d7"
+  resolved "https://registry.npmmirror.com/d3-shape/download/d3-shape-1.3.7.tgz#df63801be07bc986bc54f63789b4fe502992b5d7"
   integrity sha1-32OAG+B7yYa8VPY3ibT+UCmStdc=
   dependencies:
     d3-path "1"
 
 d3-timer@^1.0.9:
   version "1.0.10"
-  resolved "https://registry.nlark.com/d3-timer/download/d3-timer-1.0.10.tgz#dfe76b8a91748831b13b6d9c793ffbd508dd9de5"
+  resolved "https://registry.npmmirror.com/d3-timer/download/d3-timer-1.0.10.tgz#dfe76b8a91748831b13b6d9c793ffbd508dd9de5"
   integrity sha1-3+dripF0iDGxO22ceT/71QjdneU=
 
 d3-voronoi@^1.1.2:
   version "1.1.4"
-  resolved "https://registry.nlark.com/d3-voronoi/download/d3-voronoi-1.1.4.tgz#dd3c78d7653d2bb359284ae478645d95944c8297"
+  resolved "https://registry.npmmirror.com/d3-voronoi/download/d3-voronoi-1.1.4.tgz#dd3c78d7653d2bb359284ae478645d95944c8297"
   integrity sha1-3Tx412U9K7NZKErkeGRdlZRMgpc=
 
 d@1, d@^1.0.1:
@@ -3540,7 +3540,7 @@ deep-eql@^3.0.1:
 
 deep-extend@0.6.0, deep-extend@^0.6.0:
   version "0.6.0"
-  resolved "https://registry.nlark.com/deep-extend/download/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
+  resolved "https://registry.npmmirror.com/deep-extend/download/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
   integrity sha1-xPp8lUBKF6nD6Mp+FTcxK3NjMKw=
 
 deep-is@~0.1.3:
@@ -5363,7 +5363,7 @@ internal-slot@^1.0.2:
 
 internmap@^1.0.0:
   version "1.0.1"
-  resolved "https://registry.nlark.com/internmap/download/internmap-1.0.1.tgz#0017cc8a3b99605f0302f2b198d272e015e5df95"
+  resolved "https://registry.npmmirror.com/internmap/download/internmap-1.0.1.tgz#0017cc8a3b99605f0302f2b198d272e015e5df95"
   integrity sha1-ABfMijuZYF8DAvKxmNJy4BXl35U=
 
 intersperse@^1.0.0:
@@ -9602,7 +9602,7 @@ tslib@^1.10.0, tslib@^1.9.0:
 
 tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0:
   version "2.3.0"
-  resolved "https://registry.nlark.com/tslib/download/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  resolved "https://registry.npmmirror.com/tslib/download/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
   integrity sha1-gDuM2rPhK6WBpMpByIObuw2ssJ4=
 
 tslib@^2.3.0:
