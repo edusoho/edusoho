@@ -1,12 +1,28 @@
+import dayjs from 'dayjs'
 import { floor } from 'lodash-es';
-import moment from 'moment';
 
 export const trans = (value, options) => {
 	return Translator.trans(value, options);
 }
 
-export const formatDate = (datetime, format = 'YYYY-MM-DD HH:mm:ss') => {
-  return moment.unix(Number(datetime)).format(format)
+export const formatDate = (datetime, format = 'YYYY/MM/DD') => {
+  if (!datetime) return '-'
+
+  datetime = datetime.toString()
+
+  if (datetime.length < 10) return '-'
+
+  if (datetime.indexOf('-') > -1 || datetime.indexOf('/') > -1) return datetime
+
+  if (datetime.length === 10) {
+    datetime *= 1000
+  }
+
+  if (datetime.length === 13) {
+    datetime *= 1
+  }
+
+  return dayjs(datetime).format(format)
 }
 
 export const stopFunc = (e) => {
@@ -56,6 +72,9 @@ export const translateHexToRgb = (hex, opacity) => {
 
   return `rgb(${parseInt(red, 16)}, ${parseInt(green, 16)}, ${parseInt(blue, 16)})`
 }
+
+export const defaultUserAvatar = '/assets/img/default/avatar.png'
+
 export const createStyleTag = (path) => {
   if (!path) return
 
@@ -65,6 +84,16 @@ export const createStyleTag = (path) => {
   $style.href = path
 
   document.getElementsByTagName('head')[0].appendChild($style)
+}
+
+export const createScriptTag = (path) => {
+  if (!path) return
+
+  const $script = document.createElement('script')
+
+  $script.src = path
+
+  document.getElementsByTagName('body')[0].appendChild($script)
 }
 
 export const getQueryParam = (paramName, url) => {
@@ -105,6 +134,7 @@ export const isMobileBrowser = () => {
 
   return false;  
 }
+
 export function generateRandomString(length = 4) {  
   let result = '';  
   const characters = 'abcdefghijklmnopqrstuvwxyz123456789'; 
