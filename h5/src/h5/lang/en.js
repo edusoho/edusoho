@@ -56,6 +56,8 @@ export default {
     me: 'Me',
     myOrder: 'My Order',
     myActivity: 'My Activity',
+    myContract: 'My Contract',
+    viewContract: 'View Contract',
     setting: 'Setting',
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',

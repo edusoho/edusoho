@@ -8,6 +8,7 @@
 <script>
 import joinAfter from './join-after.vue';
 import { mapState, mapActions, mapMutations } from 'vuex';
+import { Dialog } from 'vant';
 import * as types from '@/store/mutation-types';
 
 export default {
@@ -57,7 +58,25 @@ export default {
             path: `/goods/${res.goodsId}/show`
           });
         }
+
+        if (res.contract && res.member.isContractSigned == 0) {
+          this.signContractConfirm(res)
+
+          return
+        }
       });
+    },
+
+    signContractConfirm(res) {
+      const { contractId, goodsKey, contractName } = res.contract
+
+      Dialog.confirm({
+        title: '签署电子合同',
+        message: `开始学习前请签署《${contractName}》，以确保正常享受后续服务`,
+        confirmButtonText: '去签署',
+      }).then(() => {
+        window.location.href = `/contract_sign/mobile#/sign_contract/${contractId}/${goodsKey}`
+      })
     },
 
     // 获取加入后课程目录和学习状态

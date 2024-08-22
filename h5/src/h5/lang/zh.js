@@ -56,6 +56,8 @@ export default {
     me: '我的',
     myOrder: '我的订单',
     myActivity: '我的活动',
+    myContract: '我的合同',
+    viewContract: '查看合同',
     setting: '设置',
     nicknameSetting: '昵称设置',
     switchLanguage: '切换语言',

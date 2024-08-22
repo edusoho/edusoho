@@ -979,6 +979,30 @@ const routes = [
       ),
   },
   {
+    path: '/my/contract',
+    name: 'myContract',
+    meta: {
+      i18n: true,
+      title: 'title.myContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "my-contract" */ '@/containers/my/contract/index.vue'
+      ),
+  },
+  {
+    path: '/my/contract/:id',
+    name: 'myContractDetail',
+    meta: {
+      i18n: true,
+      title: 'title.viewContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "my-contract" */ '@/containers/my/contract/detail.vue'
+      ),
+  },
+  {
     path: '/my/wrong-quesition-book/exercise',
     name: 'myWrongQuestionBookExercise',
     component: () =>
