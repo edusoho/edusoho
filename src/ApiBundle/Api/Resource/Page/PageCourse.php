@@ -81,7 +81,19 @@ class PageCourse extends AbstractResource
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
         $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
-        $course['contract'] = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        if (empty($contract)) {
+            $course['contract'] = [
+                'sign' => 'no',
+            ];
+        } else {
+            $course['contract'] = [
+                'sign' => $contract['sign'] ? 'required' : 'optional',
+                'name' => $contract['contractName'],
+                'id' => $contract['contractId'],
+                'goodsKey' => $goodsKey,
+            ];
+        }
 
         $course['assistant'] = [];
         if (!empty($user['id'])) {
