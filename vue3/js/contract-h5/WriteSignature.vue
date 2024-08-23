@@ -1,23 +1,23 @@
 <template>
-<div class="py-16 text-center text-[#37393D] text-14">{{ t('acrossScreen') }}</div>
+  <div class="py-16 text-center text-[#37393D] text-14">{{ t('acrossScreen') }}</div>
 
-<div class="box-container" :style="customBoxContainerStyle">
-  <canvas id="canvas"></canvas>
+  <div class="box-container" :style="customBoxContainerStyle">
+    <canvas id="canvas"></canvas>
 
-  <div class="tip" :style="customTipStyle">{{ t('signTips') }}</div>
-  <div class="bg-text" :style="bgTextStyle">{{ t('signScope') }}</div>
-</div>
-
-<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center h-100">
-  <div class="btn-list">
-    <a-button type="primary" class="mb-16" @click="getPreviewImg">{{ t('submit') }}</a-button>
-    <a-button @click="signature.clear()">{{ t('clear') }}</a-button>
+    <div class="tip" :style="customTipStyle">{{ t('signTips') }}</div>
+    <div class="bg-text" :style="bgTextStyle">{{ t('signScope') }}</div>
   </div>
-</div>
 
-<div v-if="!isVertical" class="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center text-16 bg-[#fff] z-[9999]">
-  {{ t('acrossTips') }}
-</div>
+  <div class="fixed left-0 right-0 bottom-0 flex items-center justify-center h-100">
+    <div class="btn-list">
+      <a-button type="primary" class="mb-16" @click="getPreviewImg">{{ t('submit') }}</a-button>
+      <a-button @click="signature.clear()">{{ t('clear') }}</a-button>
+    </div>
+  </div>
+
+  <div v-if="!isVertical" class="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center text-16 bg-[#fff] z-[9999]">
+    {{ t('acrossTips') }}
+  </div>
 </template>
 
 <script setup>
