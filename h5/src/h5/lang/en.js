@@ -106,6 +106,7 @@ export default {
     preview: 'Preview',
   },
   btn: {
+    view: 'View',
     save: 'Save',
     confirm: 'Confirm',
     cancel: 'Cancel',
@@ -160,6 +161,15 @@ export default {
     activities: 'Activities',
     more: 'More',
     all: 'All',
+  },
+  contract: {
+    relatedCourse: 'Related Course',
+    relatedClassRoom: 'Related Classroom',
+    relatedItemBank: 'Related Question Bank',
+    noData: 'No Contract',
+    signContractTitle: 'Sign an electronic contract',
+    signContractTips: 'Please sign the "{name}" before starting the study to ensure that you can enjoy the follow-up service normally',
+    sign: 'Sign',
   },
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',

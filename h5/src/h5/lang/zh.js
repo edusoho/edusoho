@@ -50,7 +50,7 @@ export default {
     moreCourse: '更多好课等您加入',
     moreClass: '更多班级等您加入',
     moreQuestionBanks: '更多题库等您加入',
-    browse: '人浏览',
+    browse: '人浏览'
   },
   title: {
     me: '我的',
@@ -106,6 +106,7 @@ export default {
     preview: '预览',
   },
   btn: {
+    view: '查看',
     save: '保存',
     confirm: '确认',
     cancel: '取消',
@@ -158,6 +159,15 @@ export default {
     activities: '我的活动',
     more: '更多',
     all: '全部',
+  },
+  contract: {
+    relatedCourse: '关联课程',
+    relatedClassRoom: '关联班级',
+    relatedItemBank: '关联题库',
+    noData: '暂无合同',
+    signContractTitle: '签署电子合同',
+    signContractTips: '开始学习前请签署《{name}》，以确保正常享受后续服务',
+    sign: '去签署',
   },
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',

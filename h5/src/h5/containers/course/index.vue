@@ -64,19 +64,26 @@ export default {
 
           return
         }
-      });
+      })
     },
 
     signContractConfirm(res) {
-      const { contractId, goodsKey, contractName } = res.contract
+      const { id, goodsKey, name } = res.contract
 
       Dialog.confirm({
-        title: '签署电子合同',
-        message: `开始学习前请签署《${contractName}》，以确保正常享受后续服务`,
-        confirmButtonText: '去签署',
+        title: this.$t('contract.signContractTitle'),
+        message: this.$t('contract.signContractTips', { name }),
+        confirmButtonText: this.$t('contract.sign'),
       }).then(() => {
-        window.location.href = `/contract_sign/mobile#/sign_contract/${contractId}/${goodsKey}`
-      })
+        // 这里是 edusoho 的路由，参见edusoho的vue3/js/contract-h5目录
+        const goto = encodeURIComponent(`/contract_sign/mobile#/sign_contract/${id}/${goodsKey}?backUrl=${encodeURIComponent(window.location.hash)}`)
+
+        const token = window.localStorage.getItem('token')
+
+        window.location.href = `${window.location.origin}/login/h5?token=${token}&goto=${goto}`
+      }).catch(() => {
+        this.$router.go(-1)
+      });
     },
 
     // 获取加入后课程目录和学习状态

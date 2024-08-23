@@ -86,7 +86,7 @@
     </linearGradient>
     </defs>
   </svg>
-  <div class="mt-16 text-text-6 text-14">暂无合同</div>
+  <div class="mt-16 text-text-6 text-14">{{ t('contract.noData') }}</div>
 </div>
 </template>
 

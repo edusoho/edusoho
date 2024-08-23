@@ -3,7 +3,7 @@
     <van-list
       v-model="loading"
       :finished="finished"
-      finished-text="没有更多了"
+      :finished-text="t('goods.notMore')"
       @load="onLoad"
       style="padding: 16px;"
     >
@@ -15,12 +15,18 @@
           <img src="static/images/contract-icon.png" class="mr-12 w-56" />
           <div class="flex flex-col justify-between">
             <div class="line-clamp-1 text-text-7 text-16 font-medium">{{ item.name }}</div>
-            <div class="line-clamp-1 text-text-6 text-12">关联课程：{{ item.relatedGoods.name }}</div>
+            <div class="line-clamp-1 text-text-6 text-12">
+              <template v-if="item.relatedGoods.type === 'course'">{{ t('contract.relatedCourse') }}</template>
+              <template v-if="item.relatedGoods.type === 'classroom'">{{ t('contract.relatedClassRoom') }}</template>
+              <template v-if="item.relatedGoods.type === 'itemBankExercise'">{{ t('contract.relatedItemBank') }}</template>
+              ：
+              {{ item.relatedGoods.name }}
+            </div>
           </div>
         </div>
         <div class="mt-16 flex">
           <!-- <van-button type="default" size="small" class="flex-1 mr-16 rounded-md">下载</van-button> -->
-          <van-button type="primary" size="small" class="flex-1 rounded-md" @click="viewContract(item)">查看</van-button>
+          <van-button type="primary" size="small" class="flex-1 rounded-md" @click="viewContract(item)">{{ t('btn.view') }}</van-button>
         </div>
       </div>
     </van-list>
