@@ -82,19 +82,17 @@ const baseRules = {
 }
 let id = ''
 let goodsKey = ''
-let courseId = ''
 
 const route = useRoute()
 const router = useRouter()
 const primaryColor = getCurrentPrimaryColor()
 const rules = ref({})
-
+window.route = route
 document.title = t('title')
 
 watch(route, () => {
   id = route.params.id
   goodsKey = route.params.goodsKey
-  courseId = goodsKey.split('_')[1]
 }, { immediate: true })
 
 const formItems = ref({})
@@ -146,14 +144,14 @@ const submitForm = async () => {
     })
 
     showSuccessToast(t('signSuccess'))
-    window.location.replace(`/h5/index.html#/course/${courseId}`)
+    routerBack()
   } finally {
     submitLoading.value = false
   }
 }
 
 const routerBack = () => {
-  window.location.replace(`/h5/index.html#/course/${courseId}`)
+  window.location.replace(`/h5/index.html${route.query.backUrl}`)
 }
 </script>
 
