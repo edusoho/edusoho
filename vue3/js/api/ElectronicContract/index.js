@@ -10,11 +10,10 @@ export const ElectronicContract = {
   },
 
   signContract: ({ id, contractCode, goodsKey, truename, IDNumber, phoneNumber, handSignature }) => {
-    return apiClient.get(`/api/contract/${id}/sign`)
+    return apiClient.post(`/api/contract/${id}/sign`, { contractCode, goodsKey, truename, IDNumber, phoneNumber, handSignature })
   },
 
   getSignContractTemplate: ({ id, goodsKey }) => {
     return apiClient.get(`/api/contract/${id}/sign/${goodsKey}`)
   }
 }
-

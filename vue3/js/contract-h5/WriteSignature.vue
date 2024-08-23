@@ -1,34 +1,36 @@
 <template>
-<div class="py-16 text-center text-[#37393D] text-14">请横着屏幕手写</div>
+  <div class="py-16 text-center text-[#37393D] text-14">{{ t('acrossScreen') }}</div>
 
-<div class="box-container" :style="customBoxContainerStyle">
-  <canvas id="canvas"></canvas>
+  <div class="box-container" :style="customBoxContainerStyle">
+    <canvas id="canvas"></canvas>
 
-  <div class="tip" :style="customTipStyle">请确保“字迹清晰”并尽量把“签字范围”撑满</div>
-  <div class="bg-text">签字范围</div>
-</div>
-
-<div class="fixed left-0 right-0 bottom-0 flex items-center justify-center h-100">
-  <div class="btn-list">
-    <a-button type="primary" class="mb-16" @click="getPreviewImg">提交</a-button>
-    <a-button @click="signature.clear()">清空</a-button>
+    <div class="tip" :style="customTipStyle">{{ t('signTips') }}</div>
+    <div class="bg-text" :style="bgTextStyle">{{ t('signScope') }}</div>
   </div>
-</div>
 
-<div v-if="!isVertical" class="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center bg-[#fff] z-[9999]">
-  为了更好的视觉体验，请在关闭手机的旋转功能后再进行操作。
-</div>
+  <div class="fixed left-0 right-0 bottom-0 flex items-center justify-center h-100">
+    <div class="btn-list">
+      <a-button type="primary" class="mb-16" @click="getPreviewImg">{{ t('submit') }}</a-button>
+      <a-button @click="signature.clear()">{{ t('clear') }}</a-button>
+    </div>
+  </div>
+
+  <div v-if="!isVertical" class="fixed top-0 right-0 bottom-0 left-0 flex items-center justify-center text-16 bg-[#fff] z-[9999]">
+    {{ t('acrossTips') }}
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import SmoothSignature from "smooth-signature";
+import { t } from "./vue-lang";
 
 const emit = defineEmits(['submit'])
 
 const signature = ref()
 const customTipStyle = ref()
 const customBoxContainerStyle = ref()
+const bgTextStyle = ref()
 const init = () => {
   const canvas = document.getElementById("canvas")
   const topDistance = 102
@@ -50,6 +52,13 @@ const init = () => {
   customBoxContainerStyle.value = {
     top: topDistance + 'px',
     bottom: bottomDistance + 'px'
+  }
+
+  bgTextStyle.value = {
+    width: canvasHeight + 'px',
+    height: canvasWidth + 'px',
+    left: window.innerWidth / 2 - canvasHeight / 2 + 'px',
+    top: canvasHeight / 2 - canvasWidth / 2 + 'px',
   }
 }
 
@@ -103,10 +112,8 @@ window.addEventListener('orientationchange', function() {
 
   .bg-text {
     position: absolute;
-    left: 0;
     right: 0;
     bottom: 0;
-    top: 0;
     z-index: -1;
     display: flex;
     align-items: center;
