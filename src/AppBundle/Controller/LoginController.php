@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class LoginController extends BaseController
 {
@@ -192,6 +193,31 @@ class LoginController extends BaseController
         $this->authenticateUser($user);
 
         return $this->redirect($this->generateUrl('homepage'));
+    }
+
+    public function h5LoginAction(Request $request)
+    {
+        $goto = $request->get('goto', '');
+        $requestToken = $this->getTokenService()->verifyToken('mobile_login', $request->get('token'));
+        if (empty($requestToken) || MobileBaseController::TOKEN_TYPE != $requestToken['type']) {
+            throw UserException::NOTFOUND_TOKEN();
+        }
+
+        $user = $this->getUserService()->getUser($requestToken['userId']);
+        if (empty($user)) {
+            throw UserException::NOTFOUND_USER();
+        }
+
+        if ($user['locked']) {
+            throw UserException::LOCKED_USER();
+        }
+        if (!strpos($goto, 'contract')) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $this->authenticateUser($user);
+
+        return $this->redirect(urldecode($goto));
     }
 
     public function ajaxAction(Request $request)
