@@ -1,16 +1,4 @@
 /*!
-  * shared v9.10.1
-  * (c) 2024 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-
-/*!
-  * vue-i18n v9.10.1
-  * (c) 2024 kazuya kawaguchi
-  * Released under the MIT License.
-  */
-
-/*!
   * vue-router v4.3.0
   * (c) 2024 Eduardo San Martin Morote
   * @license MIT
@@ -33,16 +21,4 @@
  * @license  MIT
  */
 
-/*! #__NO_SIDE_EFFECTS__ */
-
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
-
-/**
-* @vue/shared v3.4.35
-* (c) 2018-present Yuxi (Evan) You and Vue contributors
-* @license MIT
-**/
-
-//! moment.js
-
-//! moment.js locale configuration
