@@ -6,6 +6,7 @@ use ApiBundle\Api\Util\AssetHelper;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Contract\Service\ContractService;
 use Biz\Course\Service\CourseService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserService;
 
 trait ContractDisplayTrait
@@ -22,6 +23,11 @@ trait ContractDisplayTrait
             $classroom = $this->getClassroomService()->getClassroom($targetId);
 
             return $classroom['title'];
+        }
+        if ('itemBankExercise' == $goodsType) {
+            $exerciseService = $this->getExerciseService()->get($targetId);
+
+            return $exerciseService['title'];
         }
     }
 
@@ -199,5 +205,13 @@ trait ContractDisplayTrait
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 }
