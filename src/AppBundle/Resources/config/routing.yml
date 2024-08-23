@@ -48,6 +48,10 @@ external_login:
   path:  '/login/external'
   defaults:
         _controller: 'AppBundle:Login:externalLogin'
+h5_login:
+    path:  '/login/h5'
+    defaults:
+      _controller: 'AppBundle:Login:h5Login'
 login_check:
     path: '/login_check'
 logout:
