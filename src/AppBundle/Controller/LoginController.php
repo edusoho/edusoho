@@ -217,7 +217,7 @@ class LoginController extends BaseController
 
         $this->authenticateUser($user);
 
-        return $this->redirect(urldecode($goto));
+        return $this->redirect($goto);
     }
 
     public function ajaxAction(Request $request)
