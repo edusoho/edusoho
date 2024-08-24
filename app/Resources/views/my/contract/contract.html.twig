@@ -1,0 +1,16 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'my.contract'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-contract' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {{ 'my.contract'|trans }}
+    </div>
+    <div class="panel-body">
+      <div id="app"></div>
+    </div>
+  </div>
+{% endblock %}
