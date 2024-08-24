@@ -95,7 +95,6 @@
 <script setup>
 import {reactive, ref} from 'vue';
 import {MyContractApi} from '../../api/MyContract';
-import {ContractApi} from '../../api/Contract';
 
 const pagination = reactive({
   current: 1,
@@ -147,7 +146,7 @@ const signatureContent = ref();
 const signatureContentVisible = ref(false);
 const courseName = ref();
 const view = async (id, name) => {
-  signatureContent.value = await ContractApi.getSignatureContent(id);
+  signatureContent.value = await MyContractApi.getSignedContract(id);
   courseName.value = name;
   signatureContentVisible.value = true;
 }

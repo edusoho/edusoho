@@ -19,4 +19,7 @@ export const ContractApi = {
   async getSignatureContent(id) {
     return await apiClient.get(`/api/signed_contract/${id}`);
   },
+  async getContract(id) {
+    return await apiClient.get(`/api/contract/${id}?viewMode=html`);
+  },
 }
