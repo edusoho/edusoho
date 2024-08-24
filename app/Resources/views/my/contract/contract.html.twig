@@ -2,15 +2,13 @@
 
 {% block title %}{{ 'my.contract'|trans }} - {{ parent() }}{% endblock %}
 
+{% do script(['vue3/js/my-contract/index.js']) %}
+
 {% set side_nav = 'my-contract' %}
 
 {% block main %}
-  <div class="panel panel-default panel-col">
-    <div class="panel-heading">
-      {{ 'my.contract'|trans }}
-    </div>
-    <div class="panel-body">
-      <div id="app"></div>
-    </div>
-  </div>
+{#  <div class="panel panel-default panel-col">#}
+    <div id="my-contract"></div>
+{#  </div>#}
+
 {% endblock %}

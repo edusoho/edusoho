@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Content\FileException;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -136,7 +137,11 @@ class TaskController extends BaseController
             }
         }
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
-
+        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        if (empty($contract)) {
+            $contract['id'] = 0;
+        }
         return $this->render(
             'task/show.html.twig',
             [
@@ -151,6 +156,8 @@ class TaskController extends BaseController
                 'media' => $media,
                 'learnControlSetting' => $learnControlSetting,
                 'videoHeaderLength' => $videoHeaderLength,
+                'contract' => $contract,
+                'goodsKey' => $goodsKey
             ]
         );
     }
@@ -777,5 +784,13 @@ class TaskController extends BaseController
     protected function getAnswerReportService()
     {
         return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }

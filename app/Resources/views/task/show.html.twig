@@ -4,7 +4,7 @@
 
 {% set bodyClass = "" %}
 {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
-{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
+{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js', 'vue3/js/sign-contract/index.js']) %}
 
 {% set showSidebar = app.request.cookies.get('show-sidebar') | default(1) %}
 
@@ -15,8 +15,12 @@
     {% set preview = true %}
   {% endif %}
 
+  <div id="sign-contract-modal"></div>
+
   <div id="js-hidden-data">
     <input type="hidden" name="course-id" value="{{ task.courseId }}">
+    <input type="hidden" name="contract-id" value="{{ contract.id}}">
+    <input type="hidden" name="goods-key" value="{{ goodsKey}}">
     <input type="hidden" name="task-id" value="{{ task.id }}">
     <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
     <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">
