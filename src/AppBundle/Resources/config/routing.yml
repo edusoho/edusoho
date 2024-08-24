@@ -726,6 +726,10 @@ my_wrong_question_book:
     path: '/my/wrong_question_book'
     defaults:
         _controller: 'AppBundle:My/WrongQuestionBook:index'
+my_contract:
+    path: '/my/contract'
+    defaults:
+        _controller: 'AppBundle:My/Contract:index'
 my_wrong_question_book_target_detail:
     path: '/my/wrong_question_book/wrong_questions'
     defaults:
