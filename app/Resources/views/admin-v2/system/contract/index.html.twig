@@ -5,5 +5,20 @@
 {% set menu = 'admin_v2_contract_manage' %}
 
 {% block main %}
-  <div id="app"></div>
+  {% if cloudStatus() %}
+    <div id="app"></div>
+  {% else %}
+    <div style="padding: 24px;width:100%">
+      <div class="ai-problem-analysis" style="width:100%;background-size: cover;">
+        <h2 class="ai-analysis-title">
+          <span class="analysis-title-left">{{ 'admin_v2.question.ai_analysis.Upgrade'|trans }}</span>
+          <span class="analysis-title-right">
+           {{ 'admin_v2.contract.experience'|trans }}
+         </span>
+        </h2>
+        <p class="ai-analysis-text">{{ 'admin_v2.contract.tittle'|trans }}</p>
+        <a href="{{ path('admin_v2_my_cloud_overview') }}" class="upgrades">{{ 'admin_v2.question.ai_analysis.upgrade_now'|trans }}</a>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
