@@ -2,7 +2,7 @@
   <div class="w-full h-[555px] bg-white rounded-4 border border-[#e4ecf3] border-solid p-24 relative">
     <div class="text-[#1E2226] text-18 font-medium">我的合同</div>
     <div class="w-full overflow-y-auto overscroll-none flex-col pb-63" style="height: calc(100% - 20px);">
-      <div v-for="contract in contracts" class="flex justify-between items-center p-16 border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
+      <div v-for="contract in contracts" class="flex justify-between items-center px-16 py-36  border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
         <div class="flex">
           <img class="w-45 ml-11 mr-24" src="../../img/my-contract/icon-01.jpg" alt="">
           <div class="flex flex-col">
