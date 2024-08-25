@@ -3,6 +3,7 @@ import {reactive, ref} from 'vue';
 import {ContractApi} from '../../api/Contract.js';
 import {formatDate} from 'vue3/js/common';
 import {message} from 'ant-design-vue';
+import { useRouter } from 'vue-router'
 
 const contractManagementColumns = [
   {
@@ -130,8 +131,13 @@ const selectedSignatureContract = ref({});
 const view = async (record) => {
   selectedSignatureContract.value = record;
   console.log(selectedSignatureContract.value)
-  signatureContent.value = await ContractApi.getContract(record.id);
+  signatureContent.value = await ContractApi.getContractWithHtml(record.id);
   signatureContentVisible.value = true;
+}
+
+const router = useRouter()
+const toUpdateContract = (id) => {
+  router.push({ name: 'UpdateContract', query: { contractId: id } })
 }
 </script>
 
@@ -167,7 +173,7 @@ const view = async (record) => {
         <template v-else-if="column.key === 'operation'">
           <div class="flex">
             <a-button type="link" @click="view(record)">查看</a-button>
-            <a-button type="link" @click="">编辑</a-button>
+            <a-button type="link" @click="toUpdateContract(record.id)">编辑</a-button>
             <a-button type="link" @click="onDelete(record.id)">删除</a-button>
           </div>
         </template>

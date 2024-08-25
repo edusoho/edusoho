@@ -40,7 +40,10 @@ class ContractServiceImpl extends BaseService implements ContractService
 
     public function getContract($id)
     {
-        return $this->getContractDao()->get($id);
+        $contract = $this->getContractDao()->get($id);
+        $contract['sealFile'] = $this->getFileService()->findFilesByUris(array($contract['seal']))[0];
+
+        return $contract;
     }
 
     public function updateContract($id, array $params)

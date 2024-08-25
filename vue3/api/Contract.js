@@ -19,7 +19,13 @@ export const ContractApi = {
   async getSignatureContent(id) {
     return await apiClient.get(`/api/signed_contract/${id}`);
   },
-  async getContract(id) {
+  async getContractWithHtml(id) {
     return await apiClient.get(`/api/contract/${id}?viewMode=html`);
+  },
+  async getContract(id) {
+    return await apiClient.get(`/api/contract/${id}`);
+  },
+  async update(id, params) {
+    return await apiClient.patch(`/api/contract/${id}`, params);
   },
 }

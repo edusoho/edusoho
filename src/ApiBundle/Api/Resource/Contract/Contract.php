@@ -36,6 +36,9 @@ class Contract extends AbstractResource
     {
         $contract = $this->getContractService()->getContract($id);
         $contract['seal'] = AssetHelper::getFurl($contract['seal']);
+        if ($request->query->get('viewMode') == 'html') {
+            $contract['content'] = str_replace("\n", '<br>', $contract['content']);
+        }
 
         return $contract;
     }
