@@ -72,10 +72,10 @@
             v-if="contract.sign.phoneNumber === 1"
             :rules="[
                 { required: true, message: '请输入乙方联系方式' },
-                { pattern: /^\d+$/, message: '请填写数字' }
+                { pattern: /^\d{1,11}$/, message: '请填写数字' }
               ]"
           >
-            <a-input v-model:value="formState.phoneNumber"/>
+            <a-input v-model:value="formState.phoneNumber" :maxlength="11"/>
           </a-form-item>
           <a-form-item
             label="手写签名"
