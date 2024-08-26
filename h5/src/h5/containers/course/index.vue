@@ -59,7 +59,7 @@ export default {
           });
         }
 
-        if (res.contract && res.member.isContractSigned == 0) {
+        if (res.contract?.sign !== 'no' && res.member.isContractSigned == 0) {
           this.signContractConfirm(res)
 
           return
@@ -75,14 +75,11 @@ export default {
         message: this.$t('contract.signContractTips', { name }),
         confirmButtonText: this.$t('contract.sign'),
       }).then(() => {
-        // 这里是 edusoho 的路由，参见edusoho的vue3/js/contract-h5目录
-        const goto = encodeURIComponent(`/contract_sign/mobile#/sign_contract/${id}/${goodsKey}?backUrl=${encodeURIComponent(window.location.hash)}`)
-
-        const token = window.localStorage.getItem('token')
-
-        window.location.href = `${window.location.origin}/login/h5?token=${token}&goto=${goto}`
+        this.$router.push({ name: 'signContract', params: { id, goodsKey } })
       }).catch(() => {
-        this.$router.go(-1)
+        if (res.contract.sign === 'required') {
+          this.$router.go(-1)
+        }
       });
     },
 

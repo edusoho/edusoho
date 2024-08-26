@@ -161,6 +161,30 @@ export default {
     all: '全部',
   },
   contract: {
+    placeholder: {
+      truename: '请输入姓名',
+      IDNumber: '请输入身份证号',
+      phoneNumber: '请输入手机号',
+    },
+    validator: {
+      truename: '姓名只能是纯英文或汉字',
+      IDNumber: '请输入正确的身份证号',
+      phoneNumber: '请输入正确的手机号',
+    },
+    viewContractDetail: '查看合同详情',
+    contractDetail: '合同详情',
+    signContract: '签署合同',
+    handwritten: '手写签名',
+    reSign: '重新签名',
+    confirmSign: '确认签署',
+    acrossScreen: '请横着屏幕手写',
+    signScope: '签名范围',
+    signTips: '请确保“字迹清晰”并尽量把“签字范围”撑满',
+    clear: '清空',
+    submit: '提交',
+    acrossTips: '为了更好的视觉体验，请在关闭手机的旋转功能后再进行操作',
+    signSuccess: '签署成功',
+    signing: '签署中...',
     relatedCourse: '关联课程',
     relatedClassRoom: '关联班级',
     relatedItemBank: '关联题库',
@@ -168,6 +192,7 @@ export default {
     signContractTitle: '签署电子合同',
     signContractTips: '开始学习前请签署《{name}》，以确保正常享受后续服务',
     sign: '去签署',
+    signEmpty: '签名不能为空'
   },
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',

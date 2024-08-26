@@ -1,5 +1,3 @@
-import { method } from "lodash";
-
 export default [
   {
     // 登录
@@ -220,11 +218,6 @@ export default [
   {
     name: 'getMyContract',
     url: '/me/contract',
-    method: 'GET',
-  },
-  {
-    name: 'getSignedContractDetail',
-    url: '/signed_contract/{id}',
     method: 'GET',
   }
 ];

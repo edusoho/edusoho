@@ -1066,6 +1066,30 @@ const routes = [
         /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/analysis.vue'
       ),
   },
+  {
+    path: '/sign_contract/:id/:goodsKey',
+    name: 'signContract',
+    meta: {
+      i18n: true,
+      title: 'contract.signContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "signContract" */ '@/containers/contract/SignContract.vue'
+      ),
+  },
+  {
+    path: '/contract_detail/:id/:goodsKey',
+    name: 'contractDetail',
+    meta: {
+      i18n: true,
+      title: 'contract.contractDetail',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "signContract" */ '@/containers/contract/ContractDetail.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
