@@ -2,13 +2,11 @@
   <div>
     <a-from>
       <a-form-item>
-        <a-col :span="4">
-          <a-tooltip placement="top" :title="'启用后，学员开始学习前需完成电子合同签署'">
-            <span>
-              {{ '电子合同' | trans }}
-              <a-icon type="question-circle" style="margin-left: 8px; color: #888;" />
-            </span>
-          </a-tooltip>
+        <a-col :span="4" style="text-align:right;padding-right:20px">
+          <span style="font-size:14px;font-family:-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif">
+            {{ '电子合同 ' | trans }}
+            <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="启用后，学员开始学习前需完成电子合同签署" data-original-title="" title=""></a>
+          </span>
         </a-col>
         <a-col :span="20">
           <a-switch
@@ -44,11 +42,11 @@
       </a-form-item>
 
       <a-from-item v-if="contractEnableSwitch">
-        <a-col :span="4">
+        <a-col :span="4" style="text-align:right;padding-right:20px;">
           <a-tooltip placement="top" :title="'开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。'">
-            <span>
+            <span style="font-size:14px;font-family:-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif">
               {{ '强制签署' | trans }}
-              <a-icon type="question-circle" style="margin-left: 8px; color: #888;" />
+              <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。" data-original-title="" title=""></a>
             </span>
           </a-tooltip>
 
@@ -134,6 +132,10 @@ export default {
   },
   mounted() {
     window.marketingForm = this.marketingForm;
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      trigger: 'hover',
+    });
   },
   watch: {
     contractEnableSwitch(newVal) {
