@@ -3,9 +3,9 @@
     <van-loading v-if="!contractDetail.content" class="loading-center" />
 
     <template v-else>
-      <div class="px-16 py-16 pb-80">
-        <div class="relative mb-24 rounded-8 border border-solid" style="max-height: 300px;overflow-y: auto;border-color: #DFE2E6;">
-          <div class="py-20 px-32" v-html="contractDetail.content"></div>
+      <div class="sign-contract-container">
+        <div class="flex-1 flex flex-col mb-24 rounded-8 border border-solid rounded-lg" style="overflow-y: auto;border-color: #DFE2E6;">
+          <div class="py-20 px-32 flex-1 overflow-y-auto" v-html="contractDetail.content"></div>
           <div class="check-contract-detail" >
             <div class="inline-flex items-center" @click="viewContractDetail">
               <svg width="17" height="16" viewBox="0 0 17 16" fill="none" class="color-primary">
@@ -65,7 +65,7 @@
       </van-popup>
 
       <div class="fixed bottom-0 w-full py-8 px-16 box-border flex">
-        <van-button :disabled="!canSubmit" class="flex-1"
+        <van-button :disabled="!canSubmit" class="flex-1 rounded-md"
           type="primary" @click="submitForm"
           :loading="submitLoading" :loading-text="$t('contract.signing')">
           {{ $t('contract.confirmSign') }}
@@ -119,7 +119,8 @@ export default {
   methods: {
     async initFormItems() {
       const res = await Api.getSignContractTemplate({
-        query: { id: this.id, goodsKey: this.goodsKey }
+        query: { id: this.id, goodsKey: this.goodsKey },
+        params: { viewMode: 'html' }
       })
 
       this.contractDetail = res
@@ -165,27 +166,18 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.text-drawer-container {
-  .ant-drawer-body {
-    padding: 0;
-  }
-
-  .ant-drawer-content-wrapper {
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .ant-drawer-title {
-    position: absolute;
-    left: 60px;
-    right: 60px;
-    text-align: center;
-  }
-}
-</style>
-
 <style lang="scss" scoped>
+.sign-contract-container {
+  position: fixed;
+  top: 62px;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+}
+
 .loading-center {
   position: fixed;
   top: 50%;
@@ -217,10 +209,6 @@ export default {
 }
 
 .check-contract-detail {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;

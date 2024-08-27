@@ -13,8 +13,8 @@
 
   <div class="fixed left-0 right-0 bottom-0 flex items-center justify-center h-100">
     <div class="btn-list">
-      <van-button type="primary" class="mb-16" @click="getPreviewImg">{{ $t('contract.submit') }}</van-button>
-      <van-button @click="signature.clear()">{{ $t('contract.clear') }}</van-button>
+      <van-button type="primary" class="mb-16 rounded-md" @click="getPreviewImg">{{ $t('contract.submit') }}</van-button>
+      <van-button class="rounded-md" @click="signature.clear()">{{ $t('contract.clear') }}</van-button>
     </div>
   </div>
 
@@ -58,9 +58,8 @@ export default {
       this.signature = new SmoothSignature(canvas, {
         width: canvasWidth,
         height: canvasHeight,
-        scale: 1,
-        minWidth: 2,
-        maxWidth: 6
+        minWidth: 4,
+        maxWidth: 10
       })
 
       this.customTipStyle = {

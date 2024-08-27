@@ -168,8 +168,8 @@ export default {
     },
     validator: {
       truename: '姓名只能是纯英文或汉字',
-      IDNumber: '请输入正确的身份证号',
-      phoneNumber: '请输入正确的手机号',
+      IDNumber: '身份证号不符合格式',
+      phoneNumber: '手机号不符合格式',
     },
     viewContractDetail: '查看合同详情',
     contractDetail: '合同详情',

@@ -16,7 +16,8 @@ export default {
   methods: {
     async getContractDetail() {
       const res = await Api.getSignContractTemplate({
-        query: { id: this.id, goodsKey: this.goodsKey }
+        query: { id: this.id, goodsKey: this.goodsKey },
+        params: { viewMode: 'html' }
       })
 
       this.contractContent = res.content
