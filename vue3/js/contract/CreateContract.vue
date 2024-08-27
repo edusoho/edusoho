@@ -1,6 +1,6 @@
 <script setup>
 
-import {createVNode, onMounted, reactive, ref} from 'vue';
+import {createVNode, onMounted, reactive, ref, onBeforeUnmount} from 'vue';
 import {CloudUploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
 import {ContractApi} from '../../api/Contract.js';
@@ -43,6 +43,17 @@ const showCancelModal = () => {
   });
 };
 
+function handleRouterSkip(event) {
+  const target = event.target;
+  if (target.tagName === 'A' && target.getAttribute('href') && target.getAttribute('data-is-link')) {
+    const href = target.getAttribute('href');
+
+    event.preventDefault();
+
+    this.confirmLeave(href);
+  }
+}
+
 const descriptionEditor = ref();
 const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
@@ -65,7 +76,13 @@ const initDescriptionEditor = () => {
 
 onMounted(() => {
   initDescriptionEditor();
+  document.addEventListener('click', handleRouterSkip);
 })
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleRouterSkip);
+})
+
 const onFinish = async () => {
   await ContractApi.create(formState);
   resetForm();
