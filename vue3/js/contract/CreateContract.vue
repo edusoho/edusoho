@@ -76,7 +76,7 @@ const initDescriptionEditor = () => {
 
 onMounted(() => {
   initDescriptionEditor();
-  document.addEventListener('click', handleRouterSkip)npm;
+  document.addEventListener('click', handleRouterSkip);
 })
 
 onBeforeUnmount(() => {

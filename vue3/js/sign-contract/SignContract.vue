@@ -42,6 +42,7 @@
           >
             <a-form-item
               label="乙方名称"
+              :validateTrigger="['blur']"
               :label-col="{ span: 8 }"
               :wrapper-col="{ span: 10 }"
               name="truename"
@@ -54,6 +55,7 @@
             </a-form-item>
             <a-form-item
               label="乙方身份证号"
+              :validateTrigger="['blur']"
               :label-col="{ span: 8 }"
               :wrapper-col="{ span: 16 }"
               name="IDNumber"
@@ -67,6 +69,7 @@
             </a-form-item>
             <a-form-item
               label="乙方联系方式"
+              :validateTrigger="['blur']"
               :label-col="{ span: 8 }"
               :wrapper-col="{ span: 12 }"
               name="phoneNumber"
@@ -124,7 +127,7 @@
     </a-modal>
 
     <!--  合同详情页面-->
-    <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw" :style="{ top: 0, height: '100%' }"
+    <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw"
              wrapClassName="contract-detail-modal" :closable=false>
       <template #title>
         <div class="px-20 py-16 flex items-center">
@@ -241,6 +244,7 @@ const toCoursePage = () => {
     }
   } else if (sign.value === 'optional') {
     signContractConfirmVisible.value = false;
+    signContractVisible.value = false;
   }
 };
 
@@ -392,43 +396,47 @@ const submitIsDisabled = () => {
 }
 
 .contract-detail-modal {
-  .ant-modal-content {
-    padding: 0;
-    border-radius: 0;
-  }
-
-  .ant-modal-body {
-    padding-top: 24px;
-    padding-bottom: 24px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 960px;
-  }
-
-  .ant-modal-footer {
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    margin-top: 24px;
-  }
-
-  .ant-btn-primary:hover {
-    background-color: #BDF2D0;
-    border-color: #BDF2D0;
-  }
-
-  .ant-btn-default:hover {
-    border-color: #46C37B;
-    color: #46C37B;
-  }
-
   .ant-modal {
-    max-width: 100%;
-  }
+    max-width: 100vw;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    .ant-modal-content {
+      padding: 0;
+      border-radius: 0;
+      height: 100%;
+      top: 0;
+    }
 
-  .ant-modal-header {
-    padding: 0;
-    margin-bottom: 0;
+    .ant-modal-body {
+      padding-top: 24px;
+      padding-bottom: 24px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 960px;
+    }
+
+    .ant-modal-footer {
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      margin-top: 24px;
+    }
+
+    .ant-btn-primary:hover {
+      background-color: #BDF2D0;
+      border-color: #BDF2D0;
+    }
+
+    .ant-btn-default:hover {
+      border-color: #46C37B;
+      color: #46C37B;
+    }
+
+    .ant-modal-header {
+      padding: 0;
+      margin-bottom: 0;
+    }
   }
 }
 
