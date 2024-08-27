@@ -1,12 +1,14 @@
 {% extends 'admin-v2/content-layout.html.twig' %}
 
-{% do script(['vue3/js/contract/index.js']) %}
+{% do script([ 'vue3/js/contract/index.js']) %}
 
 {% set menu = 'admin_v2_contract_manage' %}
 
 {% block main %}
   {% if cloudStatus() %}
     <div id="app"></div>
+    <input type="hidden" id="ckeditor_image_upload_url" value="{{ path('editor_upload', {token: upload_token('question')}) }}">
+    <input type="hidden" id="ckeditor_image_download_url" value="{{ path('editor_download', {token: upload_token('question')}) }}">
   {% else %}
     <div style="padding: 24px;width:100%">
       <div class="ai-problem-analysis" style="width:100%;background-size: cover;">
@@ -21,4 +23,6 @@
       </div>
     </div>
   {% endif %}
+
+  <script src="{{ asset('/static-dist/libs/es-ckeditor/ckeditor.js') }}"></script>
 {% endblock %}

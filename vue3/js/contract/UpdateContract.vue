@@ -37,7 +37,6 @@ const contractId = route.query.contractId;
 
 onMounted(async () => {
   const formData = await ContractApi.getContract(contractId);
-  console.log(formData);
   formState.name = formData.name;
   formState.content = formData.content;
   formState.seal = formData.sealFile.id;
@@ -45,6 +44,7 @@ onMounted(async () => {
   formState.sign.handSignature = formData.sign.handSignature === 1;
   formState.sign.phoneNumber = formData.sign.phoneNumber === 1;
   contractCoverUrl.value = formData.seal;
+  initDescriptionEditor();
 })
 
 const showCancelModal = () => {
@@ -164,6 +164,27 @@ const validateContent = async (_rule, value) => {
   }
   return Promise.resolve();
 }
+
+const descriptionEditor = ref();
+const CKEditorConfig = {
+  filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
+  filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
+  language: window.app.lang
+};
+
+const initDescriptionEditor = () => {
+  descriptionEditor.value = CKEDITOR.replace('contract-content', {
+    toolbar: 'Simple',
+    fileSingleSizeLimit: app.fileSingleSizeLimit,
+    filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
+    language: CKEditorConfig.language,
+  });
+
+  descriptionEditor.value.setData(formState.content);
+  descriptionEditor.value.on('blur', () => {
+    formState.content = descriptionEditor.value.getData();
+  });
+};
 </script>
 
 <template>
@@ -195,8 +216,7 @@ const validateContent = async (_rule, value) => {
           :rules="[{ required: true, message: '请输入电子合同内容', validator: validateContent }]"
         >
           <div class="flex flex-col space-y-4">
-            <a-textarea v-model:value="formState.content"
-                        placeholder="请输入" :rows="10"/>
+            <textarea id="contract-content"></textarea>
             <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签署日期：$date$ 订单价格：$order price$</span>
           </div>
         </a-form-item>

@@ -1,9 +1,10 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {createVNode, reactive, ref} from 'vue';
 import {ContractApi} from '../../api/Contract.js';
 import {formatDate} from 'vue3/js/common';
-import {message} from 'ant-design-vue';
+import {message, Modal} from 'ant-design-vue';
 import { useRouter } from 'vue-router'
+import {ExclamationCircleOutlined} from '@ant-design/icons-vue';
 
 const contractManagementColumns = [
   {
@@ -119,11 +120,20 @@ const getList = async () => {
 };
 getList();
 
-const onDelete = async (id) => {
-  await ContractApi.delete(id);
-  message.success('删除成功');
-  await getList();
-};
+function showDeleteConfirm(id, name) {
+  Modal.confirm({
+    title: `是否确认删除《${name}》`,
+    icon: createVNode(ExclamationCircleOutlined),
+    content: '删除后无法恢复...',
+    okText: '删除',
+    async onOk() {
+      await ContractApi.delete(id);
+      message.success('删除成功');
+      await getList();
+    },
+    onCancel() {},
+  });
+}
 
 const signatureContent = ref();
 const signatureContentVisible = ref(false);
@@ -174,7 +184,7 @@ const toUpdateContract = (id) => {
           <div class="flex">
             <a-button type="link" @click="view(record)">查看</a-button>
             <a-button type="link" @click="toUpdateContract(record.id)">编辑</a-button>
-            <a-button type="link" @click="onDelete(record.id)">删除</a-button>
+            <a-button type="link" @click="showDeleteConfirm(record.id, record.name)">删除</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'updatedUser'">

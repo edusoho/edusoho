@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import MyContract from './MyContract.vue';
-import { Button, Modal, Pagination } from 'ant-design-vue';
+import { Button, Modal, Pagination, Empty } from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 import i18n from './vue-lang';
 import 'vue3/main.less';
@@ -13,6 +13,7 @@ app.use(i18n);
 app.use(Button);
 app.use(Modal);
 app.use(Pagination);
+app.use(Empty);
 
 
 setCurrentPrimaryColor(app);
