@@ -71,6 +71,7 @@ class TaskController extends BaseController
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
             $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);
+            $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
             $member['locked'] = $classroomMember['locked'];
         }
         if ($member['locked']) {
@@ -149,6 +150,7 @@ class TaskController extends BaseController
                 'name' => $contract['contractName'],
                 'id' => $contract['contractId'],
                 'goodsKey' => $goodsKey,
+                'targetTitle' => $classroom['title'] ?? $course['courseSetTitle'] ?? ''
             ];
         }
 
@@ -166,7 +168,8 @@ class TaskController extends BaseController
                 'media' => $media,
                 'learnControlSetting' => $learnControlSetting,
                 'videoHeaderLength' => $videoHeaderLength,
-                'contract' => $contract
+                'contract' => $contract,
+                'user' => $this->getCurrentUser(),
             ]
         );
     }
