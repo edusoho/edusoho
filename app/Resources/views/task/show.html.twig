@@ -14,13 +14,16 @@
   {% if member.role|default('') != 'student' %}
     {% set preview = true %}
   {% endif %}
-
-  <div id="sign-contract-modal"></div>
-
+  {% if contract.sign|default('') != 'no' %}
+    <div id="sign-contract-modal"></div>
+  {% endif %}
   <div id="js-hidden-data">
     <input type="hidden" name="course-id" value="{{ task.courseId }}">
+    {% if contract.sign|default('') != 'no' %}
+    <input type="hidden" name="sign" value="{{ contract.sign }}">
     <input type="hidden" name="contract-id" value="{{ contract.id}}">
-    <input type="hidden" name="goods-key" value="{{ goodsKey}}">
+    <input type="hidden" name="goods-key" value="{{ contract.goodsKey}}">
+    {% endif %}
     <input type="hidden" name="task-id" value="{{ task.id }}">
     <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
     <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">

@@ -137,11 +137,21 @@ class TaskController extends BaseController
             }
         }
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
-        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $goodsKey = empty($classroomMember) ? 'course_'.$course['id'] : 'classroom_'.$classroomMember['classroomId'];
         $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
         if (empty($contract)) {
-            $contract['id'] = 0;
+            $contract = [
+                'sign' => 'no',
+            ];
+        } else {
+            $contract = [
+                'sign' => $contract['sign'] ? 'required' : 'optional',
+                'name' => $contract['contractName'],
+                'id' => $contract['contractId'],
+                'goodsKey' => $goodsKey,
+            ];
         }
+
         return $this->render(
             'task/show.html.twig',
             [
@@ -156,8 +166,7 @@ class TaskController extends BaseController
                 'media' => $media,
                 'learnControlSetting' => $learnControlSetting,
                 'videoHeaderLength' => $videoHeaderLength,
-                'contract' => $contract,
-                'goodsKey' => $goodsKey
+                'contract' => $contract
             ]
         );
     }
