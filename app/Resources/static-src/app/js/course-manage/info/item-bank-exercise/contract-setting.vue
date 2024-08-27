@@ -1,9 +1,9 @@
 <template>
   <div>
     <a-from>
-      <a-form-item>
+      <a-form-item style="margin-bottom:22px;">
         <a-col :span="4" style="text-align:right;padding-right:20px">
-          <span style="font-size:14px;font-family:-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif">
+          <span style="font-size:14px;font-weight:bold;color:rgba(0, 0, 0, 0.56)">
             {{ '电子合同 ' | trans }}
             <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="启用后，学员开始学习前需完成电子合同签署" data-original-title="" title=""></a>
           </span>
@@ -42,16 +42,13 @@
       </a-form-item>
 
       <a-from-item v-if="contractEnableSwitch">
-        <a-col :span="4" style="text-align:right;padding-right:20px;">
-          <a-tooltip placement="top" :title="'开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。'">
-            <span style="font-size:14px;font-family:-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei', sans-serif">
+        <a-col :span="4" style="text-align:right;padding-right:20px;margin-bottom:22px;">
+            <span style="font-size:14px;font-weight:bold;color:rgba(0, 0, 0, 0.56)">
               {{ '强制签署' | trans }}
               <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。" data-original-title="" title=""></a>
             </span>
-          </a-tooltip>
-
         </a-col>
-        <a-col :span="20">
+        <a-col :span="20" style="margin-bottom:22px;">
           <a-switch
             id="contract-force-sign"
             v-model="contractForceSignSwitch"
@@ -61,7 +58,6 @@
         </a-col>
       </a-from-item>
     </a-from>
-    <p></p>
 
 
     <a-modal :width="900"
@@ -166,7 +162,7 @@ export default {
       this.contractMenuVisible = false;
     },
     previewContract(id) {
-      this.$axios.get(`/api/contract/${id}/preview/exercise_${this.exercise.id}`).then(res => {
+      this.$axios.get(`/api/contract/${id}/preview/itemBankExercise_${this.exercise.id}`).then(res => {
         this.contractPreview = res.data;
         this.contractPreviewModalVisible = true;
       });
