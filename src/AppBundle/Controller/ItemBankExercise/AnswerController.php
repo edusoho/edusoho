@@ -4,6 +4,7 @@ namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Controller\BaseController;
 use Biz\Accessor\AccessorInterface;
+use Biz\Contract\Service\ContractService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
@@ -82,6 +83,7 @@ class AnswerController extends BaseController
             'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
             'returnUrl' => $returnUrl,
             'showHeader' => 1,
+            'contract' => $this->getContract($exerciseId),
         ]);
     }
 
@@ -133,6 +135,7 @@ class AnswerController extends BaseController
             'submitGotoUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId]),
             'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
             'showHeader' => 1,
+            'contract' => $this->getContract($exerciseId),
         ]);
     }
 
@@ -188,6 +191,27 @@ class AnswerController extends BaseController
         }
 
         return true;
+    }
+
+    protected function getContract($exerciseId)
+    {
+        $goodsKey = 'itemBankExercise_'.$exerciseId['id'];
+        $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        if (empty($contract)) {
+            $contract = [
+                'sign' => 'no',
+            ];
+        } else {
+            $contract = [
+                'sign' => $contract['sign'] ? 'required' : 'optional',
+                'name' => $contract['contractName'],
+                'id' => $contract['contractId'],
+                'goodsKey' => $goodsKey,
+                'targetTitle' => $classroom['title'] ?? $course['courseSetTitle'] ?? ''
+            ];
+        }
+
+        return $contract;
     }
 
     /**
@@ -260,5 +284,13 @@ class AnswerController extends BaseController
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }
