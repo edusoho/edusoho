@@ -14,7 +14,8 @@ export default {
   },
   async created() {
     const { content } = await Api.getSignedContractDetail({
-      query: { id: this.$route.params.id }
+      query: { id: this.$route.params.id },
+      params: { viewMode: 'html' }
     })
 
     this.contractDetail = content
