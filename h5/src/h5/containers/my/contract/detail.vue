@@ -1,5 +1,5 @@
 <template>
-  <div v-html="contractDetail" class="p-16"></div>
+  <div v-html="contractDetail" class="my-contract-detail"></div>
 </template>
 
 <script>
@@ -21,3 +21,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.my-contract-detail {
+  position: fixed;
+  top: 46px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 16px;
+  overflow-y: auto;
+}
+</style>
