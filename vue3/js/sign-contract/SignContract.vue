@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--    签署合同确认框-->
-    <a-modal v-model:open="signContractConfirmVisible" :closable=false cancelText="取消" okText="去签署" width="416px"
+    <a-modal v-model:open="signContractConfirmVisible" :maskClosable="false" :closable=false cancelText="取消" okText="去签署" width="416px"
              wrapClassName="to-sign-contract-modal" :onCancel="toCoursePage" :onOk="toSignContract">
       <div class="flex">
         <ExclamationCircleOutlined class="mr-16 w-22 h-22 text-[#FAAD14]" style="font-size: 22px"/>
@@ -13,7 +13,7 @@
     </a-modal>
 
     <!--  签署合同页面-->
-    <a-modal v-model:open="signContractVisible" :closable=false width="900px" wrapClassName="sign-contract-modal">
+    <a-modal v-model:open="signContractVisible" :maskClosable="false" :closable=false width="900px" wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
           <div class="text-16 text-[#1E2226] font-medium">签署合同</div>
@@ -124,7 +124,7 @@
     </a-modal>
 
     <!--  合同详情页面-->
-    <a-modal v-model:open="contractDetailVisible" width="100vw" :style="{ top: 0, height: '100%' }"
+    <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw" :style="{ top: 0, height: '100%' }"
              wrapClassName="contract-detail-modal" :closable=false>
       <template #title>
         <div class="px-20 py-16 flex items-center">
@@ -141,11 +141,11 @@
     </a-modal>
 
     <!--合同签字-->
-    <a-modal v-model:open="signVisible" :closable=false cancelText="关闭" okText="确认签署" width="572px"
+    <a-modal v-model:open="signVisible" :maskClosable="false" :closable=false cancelText="关闭" okText="确认签署" width="572px"
              wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
-          <div class="text-16 text-[#1E2226] font-medium">{{`${targetTitle}-${nickname}-电子合同签签署`}}</div>
+          <div class="text-16 text-[#1E2226] font-medium">{{ `${targetTitle}-${nickname}-电子合同签签署` }}</div>
           <CloseOutlined class="h-16 w-16" @click="closeSignModal"/>
         </div>
       </template>
@@ -187,14 +187,25 @@ const contractDetailVisible = ref(false);
 const signVisible = ref(false);
 
 const courseId = ref();
+const exerciseId = ref();
+const moduleId = ref();
 const contractId = ref();
+const pathname = ref();
 const sign = ref();
 const targetTitle = ref();
 const nickname = ref();
 onMounted(() => {
-  courseId.value = document.querySelector('input[name="course-id"]').value;
-  contractId.value = document.querySelector('input[name="contract-id"]').value;
   goodsKey.value = document.querySelector('input[name="goods-key"]').value;
+  if (goodsKey.value.includes('itemBankExercise')) {
+    const path = window.location.pathname;
+    const parts = path.split('/');
+    exerciseId.value = parts[2];
+    moduleId.value = parts[4];
+    pathname.value = parts[5];
+  } else {
+    courseId.value = document.querySelector('input[name="course-id"]').value;
+  }
+  contractId.value = document.querySelector('input[name="contract-id"]').value;
   sign.value = document.querySelector('input[name="sign"]').value;
   targetTitle.value = document.querySelector('input[name="target-title"]').value;
   nickname.value = document.querySelector('input[name="nickname"]').value;
@@ -223,7 +234,11 @@ const toSignContract = async () => {
 
 const toCoursePage = () => {
   if (sign.value === 'required') {
-    window.location.href = `/my/course/${courseId.value}`;
+    if (goodsKey.value.includes('itemBankExercise')) {
+      window.location.href = `/my/item_bank_exercise/${exerciseId.value}/${pathname.value}/${moduleId.value}`;
+    } else {
+      window.location.href = `/my/course/${courseId.value}`;
+    }
   } else if (sign.value === 'optional') {
     signContractConfirmVisible.value = false;
   }
@@ -252,7 +267,6 @@ const submitSignature = () => {
     formState.handSignature = signature.value.getPNG();
     signVisible.value = false;
     signContractVisible.value = true;
-
   } else {
     message.error('请输入手写签名');
   }
