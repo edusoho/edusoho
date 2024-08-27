@@ -137,7 +137,7 @@ class TaskController extends BaseController
             }
         }
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
-        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $goodsKey = empty($classroomMember) ? 'course_'.$course['id'] : 'classroom_'.$classroomMember['classroomId'];
         $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
         if (empty($contract)) {
             $contract = [
