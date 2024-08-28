@@ -51,7 +51,7 @@
                 { pattern: /^[\u4e00-\u9fa5a-zA-Z]+$/, message: '只能输入汉字和英文' }
               ]"
             >
-              <a-input v-model:value="formState.truename"/>
+              <a-input v-model:value="formState.truename" placeholder="请输入"/>
             </a-form-item>
             <a-form-item
               label="乙方身份证号"
@@ -65,7 +65,7 @@
                 { pattern: /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/, message: '身份证号不符合格式' }
               ]"
             >
-              <a-input v-model:value="formState.IDNumber" class="w-full"/>
+              <a-input v-model:value="formState.IDNumber" class="w-full" placeholder="请输入"/>
             </a-form-item>
             <a-form-item
               label="乙方联系方式"
@@ -79,7 +79,7 @@
                 { pattern: /^\d{1,11}$/, message: '请填写数字' }
               ]"
             >
-              <a-input v-model:value="formState.phoneNumber" :maxlength="11"/>
+              <a-input v-model:value="formState.phoneNumber" :maxlength="11" placeholder="请输入"/>
             </a-form-item>
             <a-form-item
               label="手写签名"
@@ -155,7 +155,7 @@
       <div class="p-24 flex flex-col">
         <div class="text-center text-14 text-[#37393D] font-normal mb-32">请确保“字迹清晰”并尽量把“签字范围”撑满</div>
         <div
-          class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat bg-[url('img/sign-contract/bg-01.jpg')] border-dashed rounded-8 h-256 w-full mb-8">
+          class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat bg-[url('img/sign-contract/bg-01.svg')] border-dashed rounded-8 h-256 w-full mb-8">
           <canvas id="canvas" class="rounded-8"></canvas>
         </div>
       </div>
