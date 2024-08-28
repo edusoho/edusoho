@@ -370,6 +370,7 @@ class TaskController extends BaseController
                 'preview' => $preview,
                 'doAgain' => $request->query->get('doAgain', false),
                 'assessmentId' => $request->query->get('assessmentId'),
+                'sign' => $request->query->get('sign', 'no')
             ]
         );
     }
