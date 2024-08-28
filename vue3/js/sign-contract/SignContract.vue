@@ -7,7 +7,7 @@
         <ExclamationCircleOutlined class="mr-16 w-22 h-22 text-[#FAAD14]" style="font-size: 22px"/>
         <div class="flex flex-col">
           <div class="text-16 text-[#1E2226] font-medium mb-8">签署电子合同</div>
-          <div class="text-14 text-[#626973] font-normal">开始学习前请签署《合同名称》，以确保正常享受后续服务</div>
+          <div class="text-14 text-[#626973] font-normal">{{`开始学习前请签署《${contractTemplate.name}》，以确保正常享受后续服务`}}</div>
         </div>
       </div>
     </a-modal>
@@ -184,7 +184,7 @@ const contractTemplate = ref();
 const contract = ref();
 const goodsKey = ref();
 
-const signContractConfirmVisible = ref(true);
+const signContractConfirmVisible = ref(false);
 const signContractVisible = ref(false);
 const contractDetailVisible = ref(false);
 const signVisible = ref(false);
@@ -197,7 +197,14 @@ const pathname = ref();
 const sign = ref();
 const targetTitle = ref();
 const nickname = ref();
-onMounted(() => {
+
+const formState = reactive({
+  truename: '',
+  IDNumber: '',
+  phoneNumber: '',
+  handSignature: '',
+});
+onMounted(async () => {
   goodsKey.value = document.querySelector('input[name="goods-key"]').value;
   if (goodsKey.value.includes('itemBankExercise')) {
     const path = window.location.pathname;
@@ -212,24 +219,18 @@ onMounted(() => {
   sign.value = document.querySelector('input[name="sign"]').value;
   targetTitle.value = document.querySelector('input[name="target-title"]').value;
   nickname.value = document.querySelector('input[name="nickname"]').value;
+  contractTemplate.value = await SignContractApi.getContractTemplate(contractId.value, goodsKey.value);
+  signContractConfirmVisible.value = true;
+  formState.truename = contractTemplate.value.signFields.find(item => item.field === 'truename')?.default;
+  formState.IDNumber = contractTemplate.value.signFields.find(item => item.field === 'IDNumber')?.default;
+  formState.phoneNumber = contractTemplate.value.signFields.find(item => item.field === 'phoneNumber')?.default;
 });
 
 const showContractDetailModal = () => {
   contractDetailVisible.value = true;
 };
 
-const formState = reactive({
-  truename: '',
-  IDNumber: '',
-  phoneNumber: '',
-  handSignature: '',
-});
-
 const toSignContract = async () => {
-  contractTemplate.value = await SignContractApi.getContractTemplate(contractId.value, goodsKey.value);
-  formState.truename = contractTemplate.value.signFields.find(item => item.field === 'truename')?.default;
-  formState.IDNumber = contractTemplate.value.signFields.find(item => item.field === 'IDNumber')?.default;
-  formState.phoneNumber = contractTemplate.value.signFields.find(item => item.field === 'phoneNumber')?.default;
   contract.value = await SignContractApi.getContract(contractId.value);
   signContractConfirmVisible.value = false;
   signContractVisible.value = true;

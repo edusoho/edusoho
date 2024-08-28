@@ -57,8 +57,7 @@ function handleRouterSkip(event) {
 const descriptionEditor = ref();
 const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
-  filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
-  language: window.app.lang
+  filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value
 };
 const initDescriptionEditor = () => {
   descriptionEditor.value = CKEDITOR.replace('contract-content', {
@@ -66,8 +65,7 @@ const initDescriptionEditor = () => {
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
     ],
     fileSingleSizeLimit: app.fileSingleSizeLimit,
-    filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
-    language: CKEditorConfig.language,
+    filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl
   });
 
   descriptionEditor.value.setData(formState.content);

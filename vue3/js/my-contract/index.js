@@ -5,7 +5,6 @@ import 'ant-design-vue/dist/reset.css';
 import i18n from './vue-lang';
 import 'vue3/main.less';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
-import path from 'path';
 
 const app = createApp(MyContract);
 
