@@ -207,7 +207,7 @@ class ContractServiceImpl extends BaseService implements ContractService
             throw CommonException::ERROR_PARAMETER();
         }
         $params['seal'] = $file['uri'];
-        $params['content'] = strip_tags($params['content']);
+        $params['content'] = $this->purifyHtml()($params['content']);
 
         return $params;
     }
