@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-    public function showAction($task, $preview)
+    public function showAction($task, $preview, $sign = 'no')
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-
+        $activity['sign'] = $sign;
         if (empty($activity)) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
