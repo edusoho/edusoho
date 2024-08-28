@@ -71,6 +71,7 @@ const initDescriptionEditor = () => {
   descriptionEditor.value.setData(formState.content);
   descriptionEditor.value.on('blur', () => {
     formState.content = descriptionEditor.value.getData();
+    formRef.value.validateFields(['content'], (errors) => {});
   });
 };
 
@@ -146,6 +147,7 @@ const saveCropperImage = async () => {
     formData.append('group', 'system');
     fileData.value = await FileApi.uploadFile(formData);
     formState.seal = fileData.value.id;
+    formRef.value.validateFields(['seal'], (errors) => {});
   });
 };
 
