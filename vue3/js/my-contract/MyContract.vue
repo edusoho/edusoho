@@ -82,7 +82,7 @@
     <div
       class="absolute w-full left-0 bottom-0 z-10 bg-white px-40 py-24 border border-x-0 border-b-0 border-solid border-[#e4ecf3] flex justify-end">
       <a-pagination
-        show-quick-jumper
+        class="my-contract-pagination"
         show-size-changer
         :page-size-options="pageSizeOptions"
         :show-total="total => getTableTotal(total)"
@@ -195,6 +195,18 @@ const view = async (id, name) => {
   .ant-modal-close-x {
     height: 24px;
     width: 24px;
+  }
+}
+
+.my-contract-pagination {
+  /deep/ .ant-pagination-item-active {
+    border-color: #46C37B;
+    a {
+      color: #46C37B;
+    }
+  }
+  /deep/ .ant-select-selector:hover {
+    border-color: #46C37B;
   }
 }
 </style>
