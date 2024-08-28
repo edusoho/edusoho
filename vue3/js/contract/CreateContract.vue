@@ -57,8 +57,7 @@ function handleRouterSkip(event) {
 const descriptionEditor = ref();
 const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
-  filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
-  language: window.app.lang
+  filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value
 };
 const initDescriptionEditor = () => {
   descriptionEditor.value = CKEDITOR.replace('contract-content', {
@@ -66,13 +65,13 @@ const initDescriptionEditor = () => {
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
     ],
     fileSingleSizeLimit: app.fileSingleSizeLimit,
-    filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
-    language: CKEditorConfig.language,
+    filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl
   });
 
   descriptionEditor.value.setData(formState.content);
   descriptionEditor.value.on('blur', () => {
     formState.content = descriptionEditor.value.getData();
+    formRef.value.validateFields(['content'], (errors) => {});
   });
 };
 
@@ -148,6 +147,7 @@ const saveCropperImage = async () => {
     formData.append('group', 'system');
     fileData.value = await FileApi.uploadFile(formData);
     formState.seal = fileData.value.id;
+    formRef.value.validateFields(['seal'], (errors) => {});
   });
 };
 
@@ -275,7 +275,7 @@ const validateContent = async (_rule, value) => {
             v-model:open="cropModalVisible"
             @cancel="cropModalVisible = false; contractCoverUrl = ''; formState.seal = ''">
 
-            <vue-cropper ref="cropperInstance" :src="imgUrl"></vue-cropper>
+            <vue-cropper ref="cropperInstance" :src="imgUrl" class="w-400 h-400"></vue-cropper>
             <template #title>裁剪图片</template>
             <template #footer>
               <div class="flex justify-between">

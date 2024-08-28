@@ -7,7 +7,7 @@
         <ExclamationCircleOutlined class="mr-16 w-22 h-22 text-[#FAAD14]" style="font-size: 22px"/>
         <div class="flex flex-col">
           <div class="text-16 text-[#1E2226] font-medium mb-8">签署电子合同</div>
-          <div class="text-14 text-[#626973] font-normal">开始学习前请签署《合同名称》，以确保正常享受后续服务</div>
+          <div class="text-14 text-[#626973] font-normal">{{`开始学习前请签署《${contractTemplate.name}》，以确保正常享受后续服务`}}</div>
         </div>
       </div>
     </a-modal>
@@ -22,7 +22,7 @@
       </template>
       <div class="p-24 flex">
         <div class="flex flex-1 mr-32 border border-solid border-[#DFE2E6] rounded-8 relative h-380">
-          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 pb-73 w-full contract-detail-style">
+          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 contract-detail-style" style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32"></div>
           </div>
           <div
@@ -51,7 +51,7 @@
                 { pattern: /^[\u4e00-\u9fa5a-zA-Z]+$/, message: '只能输入汉字和英文' }
               ]"
             >
-              <a-input v-model:value="formState.truename"/>
+              <a-input v-model:value="formState.truename" placeholder="请输入"/>
             </a-form-item>
             <a-form-item
               label="乙方身份证号"
@@ -65,7 +65,7 @@
                 { pattern: /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/, message: '身份证号不符合格式' }
               ]"
             >
-              <a-input v-model:value="formState.IDNumber" class="w-full"/>
+              <a-input v-model:value="formState.IDNumber" class="w-full" placeholder="请输入"/>
             </a-form-item>
             <a-form-item
               label="乙方联系方式"
@@ -76,10 +76,10 @@
               v-if="contract.sign.phoneNumber === 1"
               :rules="[
                 { required: true, message: '请输入乙方联系方式' },
-                { pattern: /^\d{1,11}$/, message: '请填写数字' }
+                { pattern:  /^1\d{10}$/, message: '请填写数字' }
               ]"
             >
-              <a-input v-model:value="formState.phoneNumber" :maxlength="11"/>
+              <a-input v-model:value="formState.phoneNumber" :maxlength="11" placeholder="请输入"/>
             </a-form-item>
             <a-form-item
               label="手写签名"
@@ -128,7 +128,7 @@
 
     <!--  合同详情页面-->
     <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw"
-             wrapClassName="contract-detail-modal" :closable=false class="overflow-hidden">
+             wrapClassName="contract-detail-modal" :closable=false>
       <template #title>
         <div class="px-20 py-16 flex items-center">
           <div class="hover:cursor-pointer flex items-center" @click="contractDetailVisible = false;">
@@ -139,7 +139,7 @@
           <div class="text-14 text-[#1E2226] font-normal mr-16">合同详情</div>
         </div>
       </template>
-      <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal w-900 leading-20 h-[100vh] overflow-auto"></div>
+      <div v-html="contractTemplate.content" class="text-12 mt-24 text-[#626973] font-normal w-900 leading-20"></div>
       <template #footer></template>
     </a-modal>
 
@@ -155,7 +155,7 @@
       <div class="p-24 flex flex-col">
         <div class="text-center text-14 text-[#37393D] font-normal mb-32">请确保“字迹清晰”并尽量把“签字范围”撑满</div>
         <div
-          class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat bg-[url('img/sign-contract/bg-01.jpg')] border-dashed rounded-8 h-256 w-full mb-8">
+          class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat bg-[url('img/sign-contract/bg-01.svg')] border-dashed rounded-8 h-256 w-full mb-8">
           <canvas id="canvas" class="rounded-8"></canvas>
         </div>
       </div>
@@ -184,7 +184,7 @@ const contractTemplate = ref();
 const contract = ref();
 const goodsKey = ref();
 
-const signContractConfirmVisible = ref(true);
+const signContractConfirmVisible = ref(false);
 const signContractVisible = ref(false);
 const contractDetailVisible = ref(false);
 const signVisible = ref(false);
@@ -197,7 +197,14 @@ const pathname = ref();
 const sign = ref();
 const targetTitle = ref();
 const nickname = ref();
-onMounted(() => {
+
+const formState = reactive({
+  truename: '',
+  IDNumber: '',
+  phoneNumber: '',
+  handSignature: '',
+});
+onMounted(async () => {
   goodsKey.value = document.querySelector('input[name="goods-key"]').value;
   if (goodsKey.value.includes('itemBankExercise')) {
     const path = window.location.pathname;
@@ -212,24 +219,18 @@ onMounted(() => {
   sign.value = document.querySelector('input[name="sign"]').value;
   targetTitle.value = document.querySelector('input[name="target-title"]').value;
   nickname.value = document.querySelector('input[name="nickname"]').value;
+  contractTemplate.value = await SignContractApi.getContractTemplate(contractId.value, goodsKey.value);
+  signContractConfirmVisible.value = true;
+  formState.truename = contractTemplate.value.signFields.find(item => item.field === 'truename')?.default;
+  formState.IDNumber = contractTemplate.value.signFields.find(item => item.field === 'IDNumber')?.default;
+  formState.phoneNumber = contractTemplate.value.signFields.find(item => item.field === 'phoneNumber')?.default;
 });
 
 const showContractDetailModal = () => {
   contractDetailVisible.value = true;
 };
 
-const formState = reactive({
-  truename: '',
-  IDNumber: '',
-  phoneNumber: '',
-  handSignature: '',
-});
-
 const toSignContract = async () => {
-  contractTemplate.value = await SignContractApi.getContractTemplate(contractId.value, goodsKey.value);
-  formState.truename = contractTemplate.value.signFields.find(item => item.field === 'truename')?.default;
-  formState.IDNumber = contractTemplate.value.signFields.find(item => item.field === 'IDNumber')?.default;
-  formState.phoneNumber = contractTemplate.value.signFields.find(item => item.field === 'phoneNumber')?.default;
   contract.value = await SignContractApi.getContract(contractId.value);
   signContractConfirmVisible.value = false;
   signContractVisible.value = true;
@@ -271,6 +272,7 @@ const submitSignature = () => {
     formState.handSignature = signature.value.getPNG();
     signVisible.value = false;
     signContractVisible.value = true;
+    message.success('提交成功');
   } else {
     message.error('请输入手写签名');
   }
@@ -296,6 +298,7 @@ const submitContract = async () => {
   const params = {...baseParams, ...Object.fromEntries(Object.entries(optionalFields).filter(([_, v]) => v !== undefined))};
   await SignContractApi.signContract(contractId.value, params);
   signContractVisible.value = false;
+  message.success('签署成功');
 };
 
 const submitIsDisabled = () => {
@@ -404,15 +407,16 @@ const submitIsDisabled = () => {
     .ant-modal-content {
       display: flex;
       flex-direction: column;
-      height: calc(100vh);
+      height: 100%;
       padding: 0;
       border-radius: 0;
       top: 0;
     }
 
     .ant-modal-body {
-      padding-top: 24px;
-      padding-bottom: 24px;
+      padding-top: 0;
+      bottom: 0;
+      padding-bottom: 120px;
       margin-left: auto;
       margin-right: auto;
       width: 960px;

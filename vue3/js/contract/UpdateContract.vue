@@ -169,7 +169,6 @@ const descriptionEditor = ref();
 const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
   filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
-  language: window.app.lang
 };
 
 const initDescriptionEditor = () => {
@@ -179,7 +178,6 @@ const initDescriptionEditor = () => {
     ],
     fileSingleSizeLimit: app.fileSingleSizeLimit,
     filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
-    language: CKEditorConfig.language,
   });
 
   descriptionEditor.value.setData(formState.content);

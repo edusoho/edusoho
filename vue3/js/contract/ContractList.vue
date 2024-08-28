@@ -219,7 +219,7 @@ const toUpdateContract = (id) => {
           <span class="grow text-center text-22 font-medium">{{ signatureContent.name }}</span>
           <span class="flex-none whitespace-nowrap text-gray-500 mr-100">合同编号:  </span>
         </div>
-        <div v-html="signatureContent.content" class="text-gray-500"></div>
+        <div v-html="signatureContent.content" class="text-gray-500 contract-content"></div>
         <div class="flex space-x-64">
           <div class="flex-1 flex flex-col items-start justify-between space-y-22">
             <span class="text-18 font-medium">甲方：</span>
@@ -238,7 +238,7 @@ const toUpdateContract = (id) => {
                 <span class="text-gray-500">手写签名：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
-              <div v-if="signatureContent.sign && signatureContent.sign.truename" class="flex items-center">
+              <div class="flex items-center">
                 <span class="text-gray-500">乙方姓名：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
@@ -271,6 +271,14 @@ const toUpdateContract = (id) => {
 .contract-list-operation-btn {
   .ant-btn {
     padding: 0;
+  }
+}
+</style>
+
+<style lang="less" scoped>
+.contract-content {
+  /deep/ img {
+    max-width: 100%;
   }
 }
 </style>
