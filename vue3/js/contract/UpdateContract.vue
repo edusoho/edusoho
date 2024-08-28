@@ -32,6 +32,7 @@ const imgUrl = ref('');
 const cropModalVisible = ref(false);
 const loading = ref(false);
 const fileData = ref();
+const btnLoading = ref(false);
 
 const contractId = route.query.contractId;
 
@@ -181,8 +182,12 @@ const initDescriptionEditor = () => {
   });
 
   descriptionEditor.value.setData(formState.content);
+  descriptionEditor.value.on('focus', () => {
+    btnLoading.value = true;
+  });
   descriptionEditor.value.on('blur', () => {
     formState.content = descriptionEditor.value.getData();
+    btnLoading.value = false;
   });
 };
 </script>
@@ -300,7 +305,7 @@ const initDescriptionEditor = () => {
           <div
             class="flex justify-center fixed bottom-20 w-[calc(100%-216px)] border-t border-x-0 border-b-0 border-solid border-[#F0F2F5] p-20 left-200 bg-white">
             <a-button class="mr-16" @click="showCancelModal">取消</a-button>
-            <a-button type="primary" html-type="submit">保存</a-button>
+            <a-button type="primary" html-type="submit" :disabled="btnLoading">保存</a-button>
           </div>
         </a-form-item>
       </a-form>

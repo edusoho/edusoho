@@ -24,6 +24,7 @@ const formState = reactive({
   },
 });
 const isError = ref(false);
+const loadingBtn = ref(false);
 
 const showCancelModal = () => {
   Modal.confirm({
@@ -69,19 +70,18 @@ const initDescriptionEditor = () => {
   });
 
   descriptionEditor.value.setData(formState.content);
+  descriptionEditor.value.on('focus', () => {
+    loadingBtn.value = true;
+  });
   descriptionEditor.value.on('blur', () => {
     formState.content = descriptionEditor.value.getData();
     formRef.value.validateFields(['content'], (errors) => {});
+    btnLoading.value = false;
   });
 };
 
 onMounted(() => {
   initDescriptionEditor();
-  document.addEventListener('click', handleRouterSkip);
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleRouterSkip);
 })
 
 const onFinish = async () => {
