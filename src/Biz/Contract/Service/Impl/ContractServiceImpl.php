@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\FileTrait;
 use Biz\Content\Service\FileService;
+use Biz\Contract\ContractException;
 use Biz\Contract\Dao\ContractDao;
 use Biz\Contract\Dao\ContractGoodsRelationDao;
 use Biz\Contract\Dao\ContractSignRecordDao;
@@ -79,7 +80,7 @@ class ContractServiceImpl extends BaseService implements ContractService
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         if ($this->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $sign['goodsKey'])) {
-            return;
+            throw ContractException::SIGN_RECORD_IS_EXISTED();
         }
         $sign = ArrayToolkit::parts($sign, $requiredKeys);
         $version = md5(json_encode([ArrayToolkit::parts($contract, ['name', 'content', 'seal'])]));
