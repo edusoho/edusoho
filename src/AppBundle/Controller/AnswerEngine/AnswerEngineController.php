@@ -21,6 +21,10 @@ class AnswerEngineController extends BaseController
 {
     public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0, $showSaveProgressBtn = 1, $returnUrl = '', $contract = [])
     {
+        // 修复当课程包含模拟考试，答题会出现两个签署弹窗
+        if (!str_contains($request->getUri(), 'module')) {
+            $contract['sign'] = 'no';
+        }
         return $this->render('answer-engine/answer.html.twig', [
             'answerRecord' => $this->getAnswerRecordService()->get($answerRecordId),
             'submitGotoUrl' => $submitGotoUrl,
