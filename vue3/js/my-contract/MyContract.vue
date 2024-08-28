@@ -12,7 +12,7 @@
                 class="w-320 overflow-hidden text-ellipsis whitespace-nowrap mb-12 text-16 text-[#37393D] font-medium">
                 {{ contract.name }}
               </div>
-              <div class="text-12 text-[#919399] font-normal"><span>
+              <div class="text-12 text-[#919399] font-normal"><span
                 v-if="contract.relatedGoods.type === 'course'">关联课程：</span><span
                 v-if="contract.relatedGoods.type === 'classroom'">关联班级：</span><span
                 v-if="contract.relatedGoods.type === 'itemBankExercise'">关联题库：</span>{{
