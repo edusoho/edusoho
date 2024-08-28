@@ -1,6 +1,6 @@
 <script setup>
 
-import {createVNode, reactive, ref} from 'vue';
+import {createVNode, onMounted, reactive, ref, onBeforeUnmount} from 'vue';
 import {CloudUploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
 import {ContractApi} from '../../api/Contract.js';
@@ -42,6 +42,48 @@ const showCancelModal = () => {
     class: 'test',
   });
 };
+
+function handleRouterSkip(event) {
+  const target = event.target;
+  if (target.tagName === 'A' && target.getAttribute('href') && target.getAttribute('data-is-link')) {
+    const href = target.getAttribute('href');
+
+    event.preventDefault();
+
+    this.confirmLeave(href);
+  }
+}
+
+const descriptionEditor = ref();
+const CKEditorConfig = {
+  filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
+  filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
+  language: window.app.lang
+};
+const initDescriptionEditor = () => {
+  descriptionEditor.value = CKEDITOR.replace('contract-content', {
+    toolbar: [
+      { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
+    ],
+    fileSingleSizeLimit: app.fileSingleSizeLimit,
+    filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
+    language: CKEditorConfig.language,
+  });
+
+  descriptionEditor.value.setData(formState.content);
+  descriptionEditor.value.on('blur', () => {
+    formState.content = descriptionEditor.value.getData();
+  });
+};
+
+onMounted(() => {
+  initDescriptionEditor();
+  document.addEventListener('click', handleRouterSkip);
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleRouterSkip);
+})
 
 const onFinish = async () => {
   await ContractApi.create(formState);
@@ -126,30 +168,14 @@ const reSelectCourseCover = () => {
   imgUrl.value = '';
 };
 
-const onFinishFailed = ({ values, errorFields, outOfDate }) => {
-  if (!formState.seal) {
-    isError.value = true;
-  }
-  if (errorFields.length > 0) {
-    const firstErrorField = errorFields[0].name[0];
-    formRef.value.scrollToField(firstErrorField, {
-      behavior: 'smooth',
-      block: 'center'
-    });
-  }
-};
-
 const validateContent = async (_rule, value) => {
-
   if (!value) {
     return Promise.reject("请输入电子合同内容");
   }
-
   value = value.trim();
   if (!value) {
     return Promise.reject("请输入电子合同内容");
   }
-
   return Promise.resolve();
 }
 </script>
@@ -161,7 +187,6 @@ const validateContent = async (_rule, value) => {
         ref="formRef"
         :model="formState"
         @finish="onFinish"
-        @finishFailed="onFinishFailed"
         :label-col="{ span: 3 }"
         :wrapper-col="{ span: 12 }"
       >
@@ -183,8 +208,7 @@ const validateContent = async (_rule, value) => {
           :rules="[{ required: true, message: '请输入电子合同内容', validator: validateContent }]"
         >
           <div class="flex flex-col space-y-4">
-            <a-textarea v-model:value="formState.content"
-                        placeholder="请输入" :rows="10"/>
+            <textarea id="contract-content"></textarea>
             <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签署日期：$date$ 订单价格：$order price$</span>
           </div>
         </a-form-item>
@@ -296,4 +320,5 @@ const validateContent = async (_rule, value) => {
   font-weight: 400 !important;
   font-size: 14px !important;
 }
+
 </style>

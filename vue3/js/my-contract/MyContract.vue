@@ -2,7 +2,7 @@
   <div class="w-full h-[555px] bg-white rounded-4 border border-[#e4ecf3] border-solid p-24 relative">
     <div class="text-[#1E2226] text-18 font-medium">我的合同</div>
     <div class="w-full overflow-y-auto overscroll-none flex-col pb-63" style="height: calc(100% - 20px);">
-      <div v-for="contract in contracts" class="flex justify-between items-center px-16 py-36  border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
+      <div v-if="contracts.length !== 0" v-for="contract in contracts" class="flex justify-between items-center px-16 py-36  border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
         <div class="flex">
           <img class="w-45 ml-11 mr-24" src="../../img/my-contract/icon-01.jpg" alt="">
           <div class="flex flex-col">
@@ -15,6 +15,9 @@
         <div class="my-contract-btn">
           <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">查看</a-button>
         </div>
+      </div>
+      <div v-else>
+        <a-empty :image="simpleImage" description="暂无合同"/>
       </div>
     </div>
     <a-modal :width="900"
@@ -95,6 +98,8 @@
 <script setup>
 import {reactive, ref} from 'vue';
 import {MyContractApi} from '../../api/MyContract';
+import { Empty } from 'ant-design-vue';
+const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 
 const pagination = reactive({
   current: 1,
@@ -113,7 +118,6 @@ async function fetchMyContracts(params) {
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   contracts.value = data;
-  console.log(contracts.value);
 }
 
 async function handleTableChange(paging) {

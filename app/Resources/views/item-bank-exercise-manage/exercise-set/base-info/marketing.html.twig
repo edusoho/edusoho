@@ -79,3 +79,8 @@
     <div class="cd-alert cd-alert-danger">{{ 'item_bank_exercise.marketing_setup.no_permission_tips'|trans }}</div>
   {% endif %}
 {% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/vue3/js/contract/index.css') }}" rel="stylesheet"/>
+{% endblock %}

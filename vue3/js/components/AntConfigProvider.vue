@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ConfigProvider } from "ant-design-vue";
+import { ConfigProvider } from 'ant-design-vue';
 import { ref } from 'vue'
 import { getCurrentPrimaryColor } from 'vue3/js/common';
 import zh_CN from 'ant-design-vue/es/locale/zh_CN';

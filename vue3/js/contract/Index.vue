@@ -1,15 +1,15 @@
 <script>
-import EsConfigProvider from '../components/EsConfigProvider.vue';
+import AntConfigProvider from '../components/AntConfigProvider.vue';
 import {defineComponent} from 'vue';
 
 export default defineComponent({
-  components: {EsConfigProvider}
+  components: {AntConfigProvider}
 });
 
 </script>
 
 <template>
-  <es-config-provider>
+  <ant-config-provider>
     <router-view/>
-  </es-config-provider>
+  </ant-config-provider>
 </template>

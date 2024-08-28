@@ -5,7 +5,7 @@ export const trans = (value, options) => {
 	return Translator.trans(value, options);
 }
 
-export const formatDate = (datetime, format = 'YYYY/MM/DD') => {
+export const formatDate = (datetime, format = 'YYYY-MM-DD HH:mm:ss') => {
   if (!datetime) return '-'
 
   datetime = datetime.toString()
