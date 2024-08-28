@@ -5,6 +5,7 @@ import 'ant-design-vue/dist/reset.css';
 import i18n from './vue-lang';
 import 'vue3/main.less';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
+import path from 'path';
 
 const app = createApp(MyContract);
 
@@ -19,7 +20,7 @@ app.use(Empty);
 setCurrentPrimaryColor(app);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/contract/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/my-contract/index.css?${window.app.version}`);
 }
 
 app.mount('#my-contract');
