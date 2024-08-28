@@ -22,7 +22,7 @@
       </template>
       <div class="p-24 flex">
         <div class="flex flex-1 mr-32 border border-solid border-[#DFE2E6] rounded-8 relative h-380">
-          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 pb-73 w-full contract-detail-style">
+          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 pb-73 w-full rounded-8 contract-detail-style" style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32"></div>
           </div>
           <div
@@ -272,6 +272,7 @@ const submitSignature = () => {
     formState.handSignature = signature.value.getPNG();
     signVisible.value = false;
     signContractVisible.value = true;
+    message.success('提交成功');
   } else {
     message.error('请输入手写签名');
   }
@@ -297,6 +298,7 @@ const submitContract = async () => {
   const params = {...baseParams, ...Object.fromEntries(Object.entries(optionalFields).filter(([_, v]) => v !== undefined))};
   await SignContractApi.signContract(contractId.value, params);
   signContractVisible.value = false;
+  message.success('签署成功');
 };
 
 const submitIsDisabled = () => {
