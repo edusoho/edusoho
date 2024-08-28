@@ -91,7 +91,7 @@ class ActivityExtension extends \Twig_Extension
         ];
     }
 
-    public function findLtcSource($courseId, $taskId, $sign)
+    public function findLtcSource($courseId, $taskId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $cdnSetting = $this->getSettingService()->get('cdn');
@@ -105,7 +105,6 @@ class ActivityExtension extends \Twig_Extension
             'courseSetId' => $course['courseSetId'],
             'taskId' => empty($task) ? 0 : $task['id'],
             'activityId' => empty($task) ? 0 : $task['activityId'],
-            'autoplay' => $sign == 'no'
         ];
 
         return json_encode([
