@@ -128,7 +128,7 @@
 
     <!--  合同详情页面-->
     <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw"
-             wrapClassName="contract-detail-modal" :closable=false class="overflow-hidden">
+             wrapClassName="contract-detail-modal" :closable=false>
       <template #title>
         <div class="px-20 py-16 flex items-center">
           <div class="hover:cursor-pointer flex items-center" @click="contractDetailVisible = false;">
@@ -139,7 +139,7 @@
           <div class="text-14 text-[#1E2226] font-normal mr-16">合同详情</div>
         </div>
       </template>
-      <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal w-900 leading-20 h-[100vh] overflow-auto"></div>
+      <div v-html="contractTemplate.content" class="text-12 mt-24 text-[#626973] font-normal w-900 leading-20"></div>
       <template #footer></template>
     </a-modal>
 
@@ -405,15 +405,16 @@ const submitIsDisabled = () => {
     .ant-modal-content {
       display: flex;
       flex-direction: column;
-      height: calc(100vh);
+      height: 100%;
       padding: 0;
       border-radius: 0;
       top: 0;
     }
 
     .ant-modal-body {
-      padding-top: 24px;
-      padding-bottom: 24px;
+      padding-top: 0;
+      bottom: 0;
+      padding-bottom: 120px;
       margin-left: auto;
       margin-right: auto;
       width: 960px;
