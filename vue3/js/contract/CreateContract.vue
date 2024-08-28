@@ -24,7 +24,7 @@ const formState = reactive({
   },
 });
 const isError = ref(false);
-const loadingBtn = ref(false);
+const btnLoading = ref(false);
 
 const showCancelModal = () => {
   Modal.confirm({
@@ -71,7 +71,7 @@ const initDescriptionEditor = () => {
 
   descriptionEditor.value.setData(formState.content);
   descriptionEditor.value.on('focus', () => {
-    loadingBtn.value = true;
+    btnLoading.value = true;
   });
   descriptionEditor.value.on('blur', () => {
     formState.content = descriptionEditor.value.getData();
@@ -142,12 +142,14 @@ const saveCropperImage = async () => {
   cropModalVisible.value = false;
 
   canvas.toBlob(async (blob) => {
+    btnLoading.value = true;
     const formData = new FormData();
     formData.append('file', blob, contractCoverName.value);
     formData.append('group', 'system');
     fileData.value = await FileApi.uploadFile(formData);
     formState.seal = fileData.value.id;
     formRef.value.validateFields(['seal'], (errors) => {});
+    btnLoading.value = false;
   });
 };
 
@@ -209,7 +211,7 @@ const validateContent = async (_rule, value) => {
         >
           <div class="flex flex-col space-y-4">
             <textarea id="contract-content"></textarea>
-            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签署日期：$date$ 订单价格：$order price$</span>
+            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签约日期：$date$ 订单价格：$order price$</span>
           </div>
         </a-form-item>
         <a-form-item
@@ -292,7 +294,7 @@ const validateContent = async (_rule, value) => {
           <div
             class="flex justify-center fixed bottom-20 w-[calc(100%-216px)] border-t border-x-0 border-b-0 border-solid border-[#F0F2F5] p-20 left-200 bg-white">
             <a-button class="mr-16" @click="showCancelModal">取消</a-button>
-            <a-button type="primary" html-type="submit">保存</a-button>
+            <a-button type="primary" html-type="submit" :disabled="btnLoading">保存</a-button>
           </div>
         </a-form-item>
       </a-form>

@@ -222,7 +222,7 @@ const initDescriptionEditor = () => {
         >
           <div class="flex flex-col space-y-4">
             <textarea id="contract-content"></textarea>
-            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签署日期：$date$ 订单价格：$order price$</span>
+            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签约日期：$date$ 订单价格：$order price$</span>
           </div>
         </a-form-item>
         <a-form-item
