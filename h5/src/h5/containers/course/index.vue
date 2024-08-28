@@ -74,6 +74,7 @@ export default {
         title: this.$t('contract.signContractTitle'),
         message: this.$t('contract.signContractTips', { name }),
         confirmButtonText: this.$t('contract.sign'),
+        cancelButtonText: this.$t('contract.cancel')
       }).then(() => {
         this.$router.push({ name: 'signContract', params: { id, goodsKey } })
       }).catch(() => {

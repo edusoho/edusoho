@@ -192,6 +192,7 @@ export default {
     signContractTitle: '签署电子合同',
     signContractTips: '开始学习前请签署《{name}》，以确保正常享受后续服务',
     sign: '去签署',
+    cancel: '取消',
     signEmpty: '签名不能为空'
   },
   tips: {
