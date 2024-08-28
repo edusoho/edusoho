@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--    签署合同确认框-->
-    <a-modal v-model:open="signContractConfirmVisible" :maskClosable="false" :closable=false cancelText="取消" okText="去签署" width="416px"
+    <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false cancelText="取消" okText="去签署" width="416px"
              wrapClassName="to-sign-contract-modal" :onCancel="toCoursePage" :onOk="toSignContract">
       <div class="flex">
         <ExclamationCircleOutlined class="mr-16 w-22 h-22 text-[#FAAD14]" style="font-size: 22px"/>
@@ -13,7 +13,7 @@
     </a-modal>
 
     <!--  签署合同页面-->
-    <a-modal v-model:open="signContractVisible" :maskClosable="false" :closable=false width="900px" wrapClassName="sign-contract-modal">
+    <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px" wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
           <div class="text-16 text-[#1E2226] font-medium">签署合同</div>
@@ -62,7 +62,7 @@
               v-if="contract.sign.IDNumber === 1"
               :rules="[
                 { required: true, message: '请输入乙方身份证号' },
-                { pattern: /^[1-9]\d{5}(18|19|20\d{2})(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i, message: '身份证号不符合格式' }
+                { pattern: /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/, message: '身份证号不符合格式' }
               ]"
             >
               <a-input v-model:value="formState.IDNumber" class="w-full"/>
@@ -128,7 +128,7 @@
 
     <!--  合同详情页面-->
     <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw"
-             wrapClassName="contract-detail-modal" :closable=false>
+             wrapClassName="contract-detail-modal" :closable=false class="overflow-hidden">
       <template #title>
         <div class="px-20 py-16 flex items-center">
           <div class="hover:cursor-pointer flex items-center" @click="contractDetailVisible = false;">
@@ -139,12 +139,12 @@
           <div class="text-14 text-[#1E2226] font-normal mr-16">合同详情</div>
         </div>
       </template>
-      <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20"></div>
+      <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal w-900 leading-20 h-[100vh] overflow-auto"></div>
       <template #footer></template>
     </a-modal>
 
     <!--合同签字-->
-    <a-modal v-model:open="signVisible" :maskClosable="false" :closable=false cancelText="关闭" okText="确认签署" width="572px"
+    <a-modal v-model:open="signVisible" :centered="true" :maskClosable="false" :closable=false cancelText="关闭" okText="确认签署" width="572px"
              wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
@@ -397,15 +397,16 @@ const submitIsDisabled = () => {
 
 .contract-detail-modal {
   .ant-modal {
-    max-width: 100vw;
-    height: 100%;
+    max-width: 100%;
     top: 0;
-    bottom: 0;
     padding-bottom: 0;
+    margin: 0;
     .ant-modal-content {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh);
       padding: 0;
       border-radius: 0;
-      height: 100%;
       top: 0;
     }
 

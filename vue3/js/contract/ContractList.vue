@@ -125,6 +125,7 @@ function showDeleteConfirm(id, name) {
     title: `是否确认删除《${name}》`,
     icon: createVNode(ExclamationCircleOutlined),
     content: '删除后无法恢复...',
+    centered: true,
     okText: '删除',
     async onOk() {
       await ContractApi.delete(id);
