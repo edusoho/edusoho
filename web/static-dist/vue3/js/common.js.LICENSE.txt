@@ -10,6 +10,13 @@
   * Released under the MIT License.
   */
 
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
 /*! #__NO_SIDE_EFFECTS__ */
 
 /**

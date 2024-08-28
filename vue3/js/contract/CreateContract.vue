@@ -62,7 +62,9 @@ const CKEditorConfig = {
 };
 const initDescriptionEditor = () => {
   descriptionEditor.value = CKEDITOR.replace('contract-content', {
-    toolbar: 'Simple',
+    toolbar: [
+      { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
+    ],
     fileSingleSizeLimit: app.fileSingleSizeLimit,
     filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
     language: CKEditorConfig.language,

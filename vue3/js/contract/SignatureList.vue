@@ -200,7 +200,9 @@ const view = async (record) => {
           <span class="text-gray-500">{{ `签署时间：${formatDate(record.signTime)}` }}</span>
         </template>
         <template v-else-if="column.key === 'operation'">
-          <a-button type="link" @click="view(record)">查看</a-button>
+          <div class="signature-list-operation-btn">
+            <a-button type="link" @click="view(record)">查看</a-button>
+          </div>
         </template>
         <template v-else-if="column.key === 'mobile'">
           {{ record.mobile ? record.mobile : '-' }}
@@ -282,3 +284,10 @@ const view = async (record) => {
     </template>
   </a-modal>
 </template>
+<style lang="less">
+.signature-list-operation-btn {
+  .ant-btn {
+    padding: 0;
+  }
+}
+</style>
