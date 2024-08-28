@@ -40,7 +40,7 @@ export const phoneNumberValidator = () => {
 
   const rule2 = {
     validator: (value) => {
-      const reg = /\d{11}$/
+      const reg = /^1\d{10}$/
 
       return !!reg.exec(value)
     },
