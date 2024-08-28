@@ -181,7 +181,7 @@ const toUpdateContract = (id) => {
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">
-          <div class="flex">
+          <div class="flex contract-list-operation-btn space-x-16">
             <a-button type="link" @click="view(record)">查看</a-button>
             <a-button type="link" @click="toUpdateContract(record.id)">编辑</a-button>
             <a-button type="link" @click="showDeleteConfirm(record.id, record.name)">删除</a-button>
@@ -266,3 +266,10 @@ const toUpdateContract = (id) => {
   </div>
   <!--  <contract-drawer v-model:visible="drawerVisible" :type="drawerType"/>-->
 </template>
+<style lang="less">
+.contract-list-operation-btn {
+  .ant-btn {
+    padding: 0;
+  }
+}
+</style>

@@ -401,6 +401,7 @@ const submitIsDisabled = () => {
     height: 100%;
     top: 0;
     bottom: 0;
+    padding-bottom: 0;
     .ant-modal-content {
       padding: 0;
       border-radius: 0;
