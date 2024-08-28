@@ -2,7 +2,7 @@
   <es-config-provider>
     <div class="w-full h-[555px] bg-white rounded-4 border border-[#e4ecf3] border-solid p-24 relative">
       <div class="text-[#1E2226] text-18 font-medium">我的合同</div>
-      <div class="w-full overflow-y-auto overscroll-none flex-col pb-63" style="height: calc(100% - 20px);">
+      <div class="w-full overflow-y-auto overscroll-none flex-col" style="height: calc(100% - 84px);">
         <div v-if="contracts.length !== 0" v-for="contract in contracts"
              class="flex justify-between items-center px-16 py-36  border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
           <div class="flex">

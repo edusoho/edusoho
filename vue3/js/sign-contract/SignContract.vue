@@ -22,7 +22,7 @@
       </template>
       <div class="p-24 flex">
         <div class="flex flex-1 mr-32 border border-solid border-[#DFE2E6] rounded-8 relative h-380">
-          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 pb-73 w-full rounded-8 contract-detail-style" style="height: calc(100% - 53px);">
+          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 contract-detail-style" style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32"></div>
           </div>
           <div
@@ -76,7 +76,7 @@
               v-if="contract.sign.phoneNumber === 1"
               :rules="[
                 { required: true, message: '请输入乙方联系方式' },
-                { pattern: /^\d{1,11}$/, message: '请填写数字' }
+                { pattern:  /^1\d{10}$/, message: '请填写数字' }
               ]"
             >
               <a-input v-model:value="formState.phoneNumber" :maxlength="11" placeholder="请输入"/>
