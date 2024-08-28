@@ -196,6 +196,7 @@ class AnswerController extends BaseController
     protected function getContract($exerciseId)
     {
         $goodsKey = 'itemBankExercise_'.$exerciseId;
+        $itemBankExercise = $this->getItemBankExerciseService()->get($exerciseId);
         $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
         if (empty($contract)) {
             $contract = [
@@ -207,7 +208,7 @@ class AnswerController extends BaseController
                 'name' => $contract['contractName'],
                 'id' => $contract['contractId'],
                 'goodsKey' => $goodsKey,
-                'targetTitle' => $classroom['title'] ?? $course['courseSetTitle'] ?? '',
+                'targetTitle' => $itemBankExercise['title'] ?? '',
                 'nickname' => $this->getCurrentUser()['nickname']
             ];
         }
