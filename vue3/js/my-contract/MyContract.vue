@@ -83,6 +83,7 @@
       class="absolute w-full left-0 bottom-0 z-10 bg-white px-40 py-24 border border-x-0 border-b-0 border-solid border-[#e4ecf3] flex justify-end">
       <a-pagination
         class="my-contract-pagination"
+        show-quick-jumper
         show-size-changer
         :page-size-options="pageSizeOptions"
         :show-total="total => getTableTotal(total)"
@@ -157,7 +158,7 @@ const view = async (id, name) => {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .my-contract-btn {
   .ant-btn-primary:hover {
     background-color: #BDF2D0;
@@ -166,7 +167,7 @@ const view = async (id, name) => {
 }
 
 .contract-content {
-  /deep/ img {
+  img {
     max-width: 100%;
   }
 }
@@ -199,13 +200,13 @@ const view = async (id, name) => {
 }
 
 .my-contract-pagination {
-  /deep/ .ant-pagination-item-active {
+  .ant-pagination-item-active {
     border-color: #46C37B;
     a {
       color: #46C37B;
     }
   }
-  /deep/ .ant-select-selector:hover {
+  .ant-select-selector:hover {
     border-color: #46C37B;
   }
 }
