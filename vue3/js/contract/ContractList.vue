@@ -238,7 +238,7 @@ const toUpdateContract = (id) => {
                 <span class="text-gray-500">手写签名：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
-              <div v-if="signatureContent.sign && signatureContent.sign.truename" class="flex items-center">
+              <div class="flex items-center">
                 <span class="text-gray-500">乙方姓名：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>

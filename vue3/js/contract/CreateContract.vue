@@ -275,7 +275,7 @@ const validateContent = async (_rule, value) => {
             v-model:open="cropModalVisible"
             @cancel="cropModalVisible = false; contractCoverUrl = ''; formState.seal = ''">
 
-            <vue-cropper ref="cropperInstance" :src="imgUrl"></vue-cropper>
+            <vue-cropper ref="cropperInstance" :src="imgUrl" class="w-400 h-400"></vue-cropper>
             <template #title>裁剪图片</template>
             <template #footer>
               <div class="flex justify-between">

@@ -1,5 +1,7 @@
 <template>
-  <img class="mt-20 w-400" id="cropper-image" :src="src" />
+  <div class="cropper-container" style="width: 400px; height: 400px;">
+    <img class="mt-20 w-400 h-400" id="cropper-image" :src="src"/>
+  </div>
 </template>
 
 <script setup>
@@ -20,6 +22,7 @@ onMounted(() => {
 
   cropper.value = new Cropper(image, {
     aspectRatio: 1/1,
+    autoCropArea: 1,
     crop(event) {
     }
   })
@@ -33,3 +36,6 @@ defineExpose({
   cropper
 })
 </script>
+<style lang="less">
+
+</style>
