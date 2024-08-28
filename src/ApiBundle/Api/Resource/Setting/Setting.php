@@ -582,6 +582,10 @@ class Setting extends AbstractResource
             'only_learning_on_APP' => isset($courseSetting['only_learning_on_APP']) ? intval($courseSetting['only_learning_on_APP']) : 0,
             'android_APP_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
             'app_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
+            'task_page_watermark' => [
+                'enable' => isset($courseSetting['task_page_watermark_enable']) ? intval($courseSetting['task_page_watermark_enable']) : 0,
+                'setting' => $courseSetting['task_page_watermark_setting'] ?? [],
+            ],
         ];
     }
 
