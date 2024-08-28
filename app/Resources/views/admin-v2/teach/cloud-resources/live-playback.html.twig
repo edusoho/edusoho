@@ -4,6 +4,11 @@
 
 {% do script(['app/vue/views/teach/cloud_resources/live_playback/index.js']) %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/admin-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block main %}
   <div id="app">
     {% include "vue-components/loading.html.twig" %}

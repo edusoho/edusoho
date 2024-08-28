@@ -140,7 +140,7 @@ class TaskController extends BaseController
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
         $goodsKey = empty($classroomMember) ? 'course_'.$course['id'] : 'classroom_'.$classroomMember['classroomId'];
         $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
-        if (empty($contract)) {
+        if (empty($contract) || $preview) {
             $contract = [
                 'sign' => 'no',
             ];
