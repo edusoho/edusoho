@@ -24,7 +24,6 @@ const formState = reactive({
   },
 });
 const isError = ref(false);
-const btnLoading = ref(false);
 
 const showCancelModal = () => {
   Modal.confirm({
@@ -60,7 +59,7 @@ const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
   filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value
 };
-const initDescriptionEditor = () => {
+const initEditor = () => {
   descriptionEditor.value = CKEDITOR.replace('contract-content', {
     toolbar: [
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
@@ -70,18 +69,15 @@ const initDescriptionEditor = () => {
   });
 
   descriptionEditor.value.setData(formState.content);
-  descriptionEditor.value.on('focus', () => {
-    btnLoading.value = true;
-  });
-  descriptionEditor.value.on('blur', () => {
+
+  descriptionEditor.value.on('change', () => {
     formState.content = descriptionEditor.value.getData();
     formRef.value.validateFields(['content'], (errors) => {});
-    btnLoading.value = false;
   });
 };
 
 onMounted(() => {
-  initDescriptionEditor();
+  initEditor();
 })
 
 const onFinish = async () => {
@@ -142,14 +138,12 @@ const saveCropperImage = async () => {
   cropModalVisible.value = false;
 
   canvas.toBlob(async (blob) => {
-    btnLoading.value = true;
     const formData = new FormData();
     formData.append('file', blob, contractCoverName.value);
     formData.append('group', 'system');
     fileData.value = await FileApi.uploadFile(formData);
     formState.seal = fileData.value.id;
     formRef.value.validateFields(['seal'], (errors) => {});
-    btnLoading.value = false;
   });
 };
 
@@ -294,7 +288,7 @@ const validateContent = async (_rule, value) => {
           <div
             class="flex justify-center fixed bottom-20 w-[calc(100%-216px)] border-t border-x-0 border-b-0 border-solid border-[#F0F2F5] p-20 left-200 bg-white">
             <a-button class="mr-16" @click="showCancelModal">取消</a-button>
-            <a-button type="primary" html-type="submit" :disabled="btnLoading">保存</a-button>
+            <a-button type="primary" html-type="submit">保存</a-button>
           </div>
         </a-form-item>
       </a-form>
