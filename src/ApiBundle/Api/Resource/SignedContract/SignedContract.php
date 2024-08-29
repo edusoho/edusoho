@@ -7,6 +7,8 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Contract\ContractDisplayTrait;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Course\Service\MemberService;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Order\Service\OrderService;
@@ -129,6 +131,12 @@ class SignedContract extends AbstractResource
                     $goodsKeys[] = "{$goodsType}_{$classroom['id']}";
                 }
             }
+            if ('itemBankExercise' == $goodsType) {
+                $itemBankExercises = $this->getExerciseService()->search(['title' => $query['keyword']], [], 0, PHP_INT_MAX, ['id']);
+                foreach ($itemBankExercises as $itemBankExercise) {
+                    $goodsKeys[] = "{$goodsType}_{$itemBankExercise['id']}";
+                }
+            }
         }
 
         return $goodsKeys;
@@ -166,6 +174,9 @@ class SignedContract extends AbstractResource
         if ('classroom' == $goodsType) {
             $member = $this->getClassroomService()->getClassroomMember($targetId, $userId);
         }
+        if ('itemBankExercise' == $goodsType) {
+            $member = $this->getItemBankExerciseMemberService()->getExerciseMember($targetId, $userId);
+        }
         if (!empty($member['orderId'])) {
             $order = $this->getOrderService()->getOrder($member['orderId']);
         }
@@ -195,5 +206,21 @@ class SignedContract extends AbstractResource
     private function getOrderService()
     {
         return $this->service('Order:OrderService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getItemBankExerciseMemberService()
+    {
+        return $this->service('ItemBankExercise:ExerciseMemberService');
     }
 }
