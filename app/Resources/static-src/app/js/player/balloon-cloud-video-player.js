@@ -21,9 +21,6 @@ class BalloonCloudVideoPlayer extends Emitter {
     const disableProgressBar = ((resultStatus === 'start' || resultStatus === 'none') && 'learn' === mode && activityFinishType === 'end' && activityFinishData);
     const disableSeek = disableProgressBar ? 'forward' : 'none';
 
-    console.log(disableSeek);
-    let element = this.options.element;
-
     var self = this;
 
     let extConfig = {};
@@ -51,13 +48,18 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.fingerprint) {
-      extConfig = Object.assign(extConfig, {
-        fingerprint: {
-          html: self.options.fingerprint,
-          duration: self.options.fingerprintTime
-        }
-      });
+    if (this.options.fullWatermark) {
+      extConfig.fingerprint = {
+        isFull: true,
+        html: this.options.fingerprintTxt,
+        color: this.options.fingerprintColor,
+        alpha: this.options.fingerprintAlpha,
+      };
+    } else if (this.options.fingerprint) {
+      extConfig.fingerprint = {
+        html: this.options.fingerprint,
+        duration: this.options.fingerprintTime
+      };
     }
 
     if (self.options.timelimit) {
