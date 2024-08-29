@@ -65,7 +65,10 @@ const showCancelModal = () => {
   });
 };
 
+const updateBtnDisabled = ref(false);
+
 const onFinish = async () => {
+  updateBtnDisabled.value = true;
   await ContractApi.update(contractId, formState);
   resetForm();
   await router.push({name: 'Index'});
@@ -300,7 +303,7 @@ const initEditor = () => {
           <div
             class="flex justify-center fixed bottom-20 w-[calc(100%-216px)] border-t border-x-0 border-b-0 border-solid border-[#F0F2F5] p-20 left-200 bg-white">
             <a-button class="mr-16" @click="showCancelModal">取消</a-button>
-            <a-button type="primary" html-type="submit">保存</a-button>
+            <a-button type="primary" html-type="submit" :disabled="updateBtnDisabled">保存</a-button>
           </div>
         </a-form-item>
       </a-form>
