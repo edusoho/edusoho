@@ -30,11 +30,18 @@
         </div>
       </div>
       <a-modal :width="900"
-               v-model:open="signatureContentVisible"
-               :title="`${courseName}-电子合同签署`"
-               :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
+               v-model:open="myContentVisible"
+               :closable=false
+               :centered="true"
+               :bodyStyle="{ 'height': '513px', 'overflow': 'auto'}"
                wrapClassName="my-contract-detail-modal"
       >
+        <template #title>
+          <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
+            <div class="text-16 text-[#1E2226] font-medium">{{ `${courseName}-电子合同签署` }}</div>
+            <CloseOutlined class="h-16 w-16" @click="myContentVisible = false"/>
+          </div>
+        </template>
         <div class="w-full flex flex-col space-y-32 p-32">
           <div class="flex items-end justify-between gap-4">
             <span class="flex-none whitespace-nowrap opacity-0">{{ `合同编号: ${signatureContent.code}` }}</span>
@@ -123,6 +130,7 @@ import {Empty} from 'ant-design-vue';
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import AntConfigProvider from '../components/AntConfigProvider.vue';
+import {CloseOutlined} from '@ant-design/icons-vue';
 
 
 const pagination = reactive({
@@ -171,12 +179,12 @@ const getList = async () => {
 getList();
 
 const signatureContent = ref();
-const signatureContentVisible = ref(false);
+const myContentVisible = ref(false);
 const courseName = ref();
 const view = async (id, name) => {
   signatureContent.value = await MyContractApi.getSignedContract(id);
   courseName.value = name;
-  signatureContentVisible.value = true;
+  myContentVisible.value = true;
 };
 
 </script>
@@ -195,52 +203,20 @@ const view = async (id, name) => {
   }
 }
 
-
 .my-contract-detail-modal {
-  .ant-modal-header {
-    padding: 24px;
-    margin-bottom: 0;
-    border: none;
-  }
-
-  .ant-modal-content {
-    padding: 0;
-  }
-
-  .ant-modal-body {
-    padding: 0;
-  }
-
-  .ant-modal-footer {
-    padding: 16px;
-    border: none;
-  }
-
-  .ant-modal-close-x {
-    height: 24px;
-    width: 24px;
-  }
-}
-
-.my-contract-pagination {
-  .ant-pagination-item-active {
-    border-color: #46C37B;
-
-    a {
-      color: #46C37B;
+  .ant-modal {
+    padding: 0 !important;
+    .ant-modal-content {
+      padding: 0 !important;
+      .ant-modal-footer {
+        margin-top: 0;
+      }
+      .ant-modal-header {
+        padding: 0;
+        margin-bottom: 0;
+        border: none;
+      }
     }
   }
-
-  //.ant-pagination-options {
-  //  .ant-select-selector:hover {
-  //    border-color: #46C37B !important;
-  //  }
-  //  .ant-pagination-options-quick-jumper input:hover {
-  //    border-color: #46C37B !important;
-  //  }
-  //  .ant-pagination-options-quick-jumper input:focus {
-  //    border-color: #46C37B !important;
-  //  }
-  //}
 }
 </style>

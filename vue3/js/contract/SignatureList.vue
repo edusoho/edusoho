@@ -229,7 +229,8 @@ const view = async (record) => {
            wrapClassName="signature-list-detail-modal"
            v-model:open="signatureContentVisible"
            :closable=false
-           :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
+           :centered="true"
+           :bodyStyle="{ 'height': '513px', 'overflow': 'auto'}"
   >
     <template #title>
       <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">

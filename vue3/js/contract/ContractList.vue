@@ -168,9 +168,9 @@ const toUpdateContract = (id) => {
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
-            <span>{{ `课程：${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
-            <span>{{ `班级：${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
-            <span>{{ `题库：${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">课程：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">班级：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">题库：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">
@@ -203,8 +203,9 @@ const toUpdateContract = (id) => {
     <a-modal :width="900"
              v-model:open="contractContentVisible"
              :closable=false
+             :centered="true"
              wrapClassName="contract-list-detail-modal"
-             :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
+             :bodyStyle="{ 'height': '513px', 'overflow': 'auto'}"
     >
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
