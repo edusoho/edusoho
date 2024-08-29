@@ -153,7 +153,7 @@ trait ContractDisplayTrait
                 $serviceName = 'Classroom:MemberService';
                 break;
             case 'itemBankExercise':
-                $serviceName = 'ItemBankExercise:ExerciseService';
+                $serviceName = 'ItemBankExercise:ExerciseMemberService';
                 break;
             default:
                 throw new \Exception('Unknown type: '.$type);
