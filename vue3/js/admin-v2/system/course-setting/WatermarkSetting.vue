@@ -29,8 +29,8 @@
             </div>
             <div class="watermark-field">
               透明度
-              <a-form-item name="opacity">
-                <a-input class="form-control watermark-opacity" type="number" v-model:value="formState.opacity"/>
+              <a-form-item name="alpha">
+                <a-input class="form-control watermark-alpha" type="number" v-model:value="formState.alpha"/>
                 1 ~ 100
               </a-form-item>
             </div>
@@ -79,9 +79,9 @@ const formState = reactive({
   fields: [],
   custom_text: '',
   color: '#d0d0d2',
-  opacity: 20,
+  alpha: 20,
 });
-const opacityValidator = async (rule, value) => {
+const alphaValidator = async (rule, value) => {
   if (!value) {
     return Promise.reject('请输入透明度');
   }
@@ -96,9 +96,9 @@ const opacityValidator = async (rule, value) => {
   }
 };
 const rules = {
-  opacity: [
+  alpha: [
     {
-      validator: opacityValidator,
+      validator: alphaValidator,
       trigger: 'change',
     },
   ],
@@ -123,19 +123,17 @@ const fetchWatermarkSetting = async () => {
   formState.fields = watermark.setting.fields || formState.fields;
   formState.custom_text = watermark.setting.custom_text || formState.custom_text;
   formState.color = watermark.setting.color || formState.color;
-  formState.opacity = watermark.setting.opacity || formState.opacity;
-};
-fetchWatermarkSetting();
-
-onMounted(() => {
+  formState.alpha = watermark.setting.alpha || formState.alpha;
   const picker = new Picker({
     parent: document.getElementById('color-picker'),
     color: formState.color,
   });
   picker.onChange = color => {
-    formState.color = color.rgbaString;
+    formState.color = color.rgbString;
   };
-});
+};
+
+onMounted(fetchWatermarkSetting);
 
 </script>
 
@@ -167,8 +165,7 @@ onMounted(() => {
   cursor: pointer;
 }
 
-.watermark-opacity {
-  display: inline;
+.watermark-alpha {
   width: 100px;
   margin-right: 10px;
 }
