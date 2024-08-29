@@ -134,7 +134,6 @@ const signatureContentVisible = ref(false);
 const selectedSignatureContract = ref({});
 const view = async (record) => {
   selectedSignatureContract.value = record;
-  console.log(selectedSignatureContract.value)
   signatureContent.value = await ContractApi.getContractWithHtml(record.id);
   signatureContentVisible.value = true;
 }
