@@ -1,10 +1,10 @@
 <template>
   <ant-config-provider>
-    <div class="w-full h-[850px] bg-white rounded-4 border border-[#e4ecf3] border-solid p-24 relative">
+    <div class="w-full h-fit bg-white rounded-4 border border-[#e4ecf3] border-solid pt-24 px-24">
       <div class="text-[#1E2226] text-18 font-medium">我的合同</div>
-      <div class="w-full overflow-y-auto flex-col" style="height: calc(100% - 84px);">
+      <div class="w-full h-full flex-col">
         <div v-if="contracts.length !== 0" v-for="contract in contracts"
-             class="flex justify-between items-center px-16 py-36  border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
+             class="flex justify-between items-center px-16 py-36 border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
           <div class="flex">
             <img class="w-45 ml-11 mr-24" src="../../img/my-contract/icon-01.jpg" alt="">
             <div class="flex flex-col">
@@ -25,7 +25,7 @@
             <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">查看</a-button>
           </div>
         </div>
-        <div v-else>
+        <div v-else class="border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
           <a-empty :image="simpleImage" description="暂无合同"/>
         </div>
       </div>
@@ -106,17 +106,13 @@
         </template>
       </a-modal>
       <div
-        class="absolute w-full left-0 bottom-0 z-10 bg-white px-40 py-24 border border-x-0 border-b-0 border-solid border-[#e4ecf3] flex justify-end">
+        class="w-full bg-white px-40 py-24 flex justify-end">
         <a-pagination
-          class="my-contract-pagination"
-          show-quick-jumper
-          show-size-changer
-          :page-size-options="pageSizeOptions"
           :show-total="total => getTableTotal(total)"
           v-model="pagination.current"
           :total="pagination.total"
-          @showSizeChange="handlePaginationChange"
           @change="handlePaginationChange"
+          show-less-items
         />
       </div>
     </div>
@@ -138,7 +134,6 @@ const pagination = reactive({
   total: 0,
   pageSize: 10,
 });
-const pageSizeOptions = ['10', '20', '30', '40', '50'];
 const contracts = ref([]);
 
 function getTableTotal(total) {
