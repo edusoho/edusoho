@@ -205,7 +205,7 @@ const toUpdateContract = (id) => {
              :closable=false
              :centered="true"
              wrapClassName="contract-list-detail-modal"
-             :bodyStyle="{ 'height': '513px', 'overflow': 'auto'}"
+             :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
     >
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">

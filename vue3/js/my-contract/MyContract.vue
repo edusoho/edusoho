@@ -33,7 +33,7 @@
                v-model:open="myContentVisible"
                :closable=false
                :centered="true"
-               :bodyStyle="{ 'height': '513px', 'overflow': 'auto'}"
+               :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
                wrapClassName="my-contract-detail-modal"
       >
         <template #title>
