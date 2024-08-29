@@ -34,12 +34,12 @@ trait ContractDisplayTrait
     private function getContractDetail($contract, $goodsKey)
     {
         $code = $this->getContractService()->generateContractCode();
-        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code, []);
+        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code, [], []);
 
         return $this->getHtml($content, $contract, $code);
     }
 
-    private function replaceContentVariable($content, $goodsKey, $contractCode, $sign)
+    private function replaceContentVariable($content, $goodsKey, $contractCode, $sign, $user)
     {
         $parts = explode('_', $goodsKey);
         $product = [];
@@ -60,7 +60,7 @@ trait ContractDisplayTrait
             $member = $this->getMemberService($parts[0])->getExerciseMember($parts[1], $this->getCurrentUser()->getId());
         }
         $order = $this->getOrderService()->getOrder($member['orderId']);
-        $user = $this->getCurrentUser();
+        $user = !empty($user)? $user: $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $content = str_replace("\n", '<br>', $content);
         $truename = $sign['truename'] ?? $userProfile['truename'] ?? '';

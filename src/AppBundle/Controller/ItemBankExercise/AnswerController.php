@@ -198,7 +198,9 @@ class AnswerController extends BaseController
         $goodsKey = 'itemBankExercise_'.$exerciseId;
         $itemBankExercise = $this->getItemBankExerciseService()->get($exerciseId);
         $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
-        if (empty($contract)) {
+        $user = $this->getCurrentUser();
+        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($user['id'], $goodsKey);
+        if (empty($contract) || !empty($signRecord)) {
             $contract = [
                 'sign' => 'no',
             ];
