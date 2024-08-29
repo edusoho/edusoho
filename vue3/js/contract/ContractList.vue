@@ -104,13 +104,6 @@ async function handlePaginationChange(page, pageSize) {
   await handleTableChange(pagination);
 }
 
-// const drawerVisible = ref(false);
-// const drawerType = ref('');
-// const showDrawer = (type) => {
-//   drawerVisible.value = true;
-//   drawerType.value = type;
-// };
-
 const getList = async () => {
   const params = {
     limit: pagination.pageSize,
