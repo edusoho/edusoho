@@ -4,7 +4,7 @@ import {ContractApi} from '../../api/Contract.js';
 import {formatDate} from 'vue3/js/common';
 import {message, Modal} from 'ant-design-vue';
 import { useRouter } from 'vue-router'
-import {ExclamationCircleOutlined} from '@ant-design/icons-vue';
+import {CloseOutlined, ExclamationCircleOutlined} from '@ant-design/icons-vue';
 
 const contractManagementColumns = [
   {
@@ -129,14 +129,13 @@ function showDeleteConfirm(id, name) {
   });
 }
 
-const signatureContent = ref();
-const signatureContentVisible = ref(false);
+const contractContent = ref();
+const contractContentVisible = ref(false);
 const selectedSignatureContract = ref({});
 const view = async (record) => {
   selectedSignatureContract.value = record;
-  console.log(selectedSignatureContract.value)
-  signatureContent.value = await ContractApi.getContractWithHtml(record.id);
-  signatureContentVisible.value = true;
+  contractContent.value = await ContractApi.getContractWithHtml(record.id);
+  contractContentVisible.value = true;
 }
 
 const router = useRouter()
@@ -169,9 +168,9 @@ const toUpdateContract = (id) => {
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
-            <span>{{ `课程：${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
-            <span>{{ `班级：${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
-            <span>{{ `题库：${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">课程：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">班级：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">题库：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">
@@ -202,22 +201,30 @@ const toUpdateContract = (id) => {
       />
     </div>
     <a-modal :width="900"
-             v-model:open="signatureContentVisible"
-             :title="`电子合同签署`"
-             :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
+             v-model:open="contractContentVisible"
+             :closable=false
+             :centered="true"
+             wrapClassName="contract-list-detail-modal"
+             :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
     >
+      <template #title>
+        <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
+          <div class="text-16 text-[#1E2226] font-medium">电子合同签署</div>
+          <CloseOutlined class="h-16 w-16" @click="contractContentVisible = false"/>
+        </div>
+      </template>
       <div class="w-full flex flex-col space-y-32 p-32">
         <div class="flex items-end justify-between gap-4">
           <span class="flex-none whitespace-nowrap opacity-0 mr-100">合同编号:  </span>
-          <span class="grow text-center text-22 font-medium">{{ signatureContent.name }}</span>
+          <span class="grow text-center text-22 font-medium">{{ contractContent.name }}</span>
           <span class="flex-none whitespace-nowrap text-gray-500 mr-100">合同编号:  </span>
         </div>
-        <div v-html="signatureContent.content" class="text-gray-500 contract-content"></div>
+        <div v-html="contractContent.content" class="text-gray-500 contract-content"></div>
         <div class="flex space-x-64">
           <div class="flex-1 flex flex-col items-start justify-between space-y-22">
             <span class="text-18 font-medium">甲方：</span>
             <div class="w-full flex flex-col space-y-22">
-              <img :src="signatureContent.seal" alt="甲方印章" class="w-150 h-150" />
+              <img :src="contractContent.seal" alt="甲方印章" class="w-150 h-150" />
               <div class="flex items-center">
                 <span class="text-gray-500">签约日期：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
@@ -227,7 +234,7 @@ const toUpdateContract = (id) => {
           <div class="flex-1 flex flex-col items-start justify-between">
             <span class="text-18 font-medium">乙方：</span>
             <div class="w-full flex flex-col space-y-22">
-              <div v-if="signatureContent.sign && signatureContent.sign.handSignature" class="flex items-center">
+              <div v-if="contractContent.sign && contractContent.sign.handSignature" class="flex items-center">
                 <span class="text-gray-500">手写签名：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
@@ -235,11 +242,11 @@ const toUpdateContract = (id) => {
                 <span class="text-gray-500">乙方姓名：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
-              <div v-if="signatureContent.sign && signatureContent.sign.IDNumber" class="flex items-center">
+              <div v-if="contractContent.sign && contractContent.sign.IDNumber" class="flex items-center">
                 <span class="text-gray-500">身份证号：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
-              <div v-if="signatureContent.sign && signatureContent.sign.phoneNumber" class="flex items-center">
+              <div v-if="contractContent.sign && contractContent.sign.phoneNumber" class="flex items-center">
                 <span class="text-gray-500">联系方式：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
@@ -252,7 +259,7 @@ const toUpdateContract = (id) => {
         </div>
       </div>
       <template #footer>
-        <div class="flex justify-center">
+        <div class="flex justify-center border-solid p-16 border-[#F0F0F0] border-b-0 border-x-0">
           <a-button @click="signatureContentVisible = false">关闭</a-button>
         </div>
       </template>
@@ -264,6 +271,21 @@ const toUpdateContract = (id) => {
 .contract-list-operation-btn {
   .ant-btn {
     padding: 0;
+  }
+}
+
+.contract-list-detail-modal {
+  .ant-modal {
+    padding: 0 !important;
+    .ant-modal-content {
+      padding: 0 !important;
+      .ant-modal-footer {
+        margin-top: 0;
+      }
+      .ant-modal-header {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 </style>

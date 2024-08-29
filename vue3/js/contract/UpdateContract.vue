@@ -327,3 +327,24 @@ const initEditor = () => {
   }
 }
 </style>
+
+<style lang="less">
+.cke_chrome {
+  border-color: #d9d9d9 !important;
+  border-radius: 8px;
+}
+.cke_inner {
+  border-color: #d9d9d9 !important;
+  border-radius: 8px !important;
+}
+.cke_top {
+  border-color: #d9d9d9 !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+}
+.cke_contents {
+  border-color: #d9d9d9 !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+}
+</style>
