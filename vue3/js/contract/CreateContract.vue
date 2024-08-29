@@ -1,6 +1,6 @@
 <script setup>
 
-import {createVNode, onMounted, reactive, ref, onBeforeUnmount} from 'vue';
+import {createVNode, onMounted, reactive, ref} from 'vue';
 import {CloudUploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
 import {ContractApi} from '../../api/Contract.js';
@@ -42,17 +42,6 @@ const showCancelModal = () => {
     class: 'test',
   });
 };
-
-function handleRouterSkip(event) {
-  const target = event.target;
-  if (target.tagName === 'A' && target.getAttribute('href') && target.getAttribute('data-is-link')) {
-    const href = target.getAttribute('href');
-
-    event.preventDefault();
-
-    this.confirmLeave(href);
-  }
-}
 
 const descriptionEditor = ref();
 const CKEditorConfig = {
@@ -315,5 +304,4 @@ const validateContent = async (_rule, value) => {
   font-weight: 400 !important;
   font-size: 14px !important;
 }
-
 </style>

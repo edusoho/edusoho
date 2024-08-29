@@ -40,15 +40,12 @@ apiClient.interceptors.response.use(
     try {
       if (![].includes(error.response.data.error.code)) {
         message.error(error.response.data.error.message);
-        if (![5005001].includes(error.response.data.error.code)) {
-          return Promise.reject(error);
-        }
       }
     } catch (e) {
-      return Promise.reject(error);
+
     }
 
-    return Promise.resolve(error);
+    return Promise.reject(error);
   });
 
 export { apiClient };

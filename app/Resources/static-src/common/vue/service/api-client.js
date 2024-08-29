@@ -70,7 +70,7 @@ apiClient.interceptors.response.use(
 
     try {
       if (![4042701].includes(error.response.data.error.code)) {
-        // Vue.prototype.$message.error(error.response.data.error.message)
+        Vue.prototype.$message.error(error.response.data.error.message)
       }
     } catch (e) {
 
