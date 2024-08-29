@@ -10,17 +10,10 @@
     <input type="hidden" id="ckeditor_image_upload_url" value="{{ path('editor_upload', {token: upload_token('question')}) }}">
     <input type="hidden" id="ckeditor_image_download_url" value="{{ path('editor_download', {token: upload_token('question')}) }}">
   {% else %}
-    <div style="padding: 24px;width:100%">
-      <div class="ai-problem-analysis" style="width:100%;background-size: cover;">
-        <h2 class="ai-analysis-title">
-          <span class="analysis-title-left">{{ 'admin_v2.question.ai_analysis.Upgrade'|trans }}</span>
-          <span class="analysis-title-right">
-           {{ 'admin_v2.contract.experience'|trans }}
-         </span>
-        </h2>
-        <p class="ai-analysis-text">{{ 'admin_v2.contract.tittle'|trans }}</p>
-        <a href="{{ path('admin_v2_my_cloud_overview') }}" class="upgrades">{{ 'admin_v2.question.ai_analysis.upgrade_now'|trans }}</a>
-      </div>
+    <div style="width: 100%; text-align: center;padding:24px;">
+      <a href="{{ path('admin_v2_my_cloud_overview') }}" style="display: inline-block; width: 100%;">
+        <img src="{{ asset('/static-dist/app/img/admin-v2/contract-background.png') }}" alt="Contract Background" style="width: 100%; height: auto; display: block;">
+      </a>
     </div>
   {% endif %}
 
