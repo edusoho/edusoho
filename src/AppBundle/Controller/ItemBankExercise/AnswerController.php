@@ -211,7 +211,7 @@ class AnswerController extends BaseController
                 'id' => $contract['contractId'],
                 'goodsKey' => $goodsKey,
                 'targetTitle' => $itemBankExercise['title'] ?? '',
-                'nickname' => $this->getCurrentUser()['nickname']
+                'nickname' => $user['nickname']
             ];
         }
 
