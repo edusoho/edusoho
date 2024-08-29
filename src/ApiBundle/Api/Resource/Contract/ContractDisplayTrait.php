@@ -49,7 +49,7 @@ trait ContractDisplayTrait
         } elseif ('classroom' == $parts[0]) {
             $product = $this->getServiceByType($parts[0])->getClassroom($parts[1]);
         } elseif ('itemBankExercise' == $parts[0]) {
-            $product = $this->getServiceByType($parts[0])->getItemBank($parts[1]);
+            $product = $this->getServiceByType($parts[0])->get($parts[1]);
         }
         $member = [];
         if ('course' == $parts[0]) {
@@ -68,7 +68,7 @@ trait ContractDisplayTrait
 
         return str_replace(
             ['$name$', '$username$', '$idcard$', '$courseName$', '$contract number$', '$date$', '$order price$'],
-            [$truename, $user['nickname'] ?? '', $iDNumber, $product['title'] ?? $product['name'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] / 100 ?? ''],
+            [$truename, $user['nickname'] ?? '', $iDNumber, $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] / 100 ?? ''],
             $content
         );
     }
@@ -153,7 +153,7 @@ trait ContractDisplayTrait
                 $serviceName = 'Classroom:MemberService';
                 break;
             case 'itemBankExercise':
-                $serviceName = 'ItemBankExercise:ExerciseMemberService';
+                $serviceName = 'ItemBankExercise:ExerciseService';
                 break;
             default:
                 throw new \Exception('Unknown type: '.$type);
