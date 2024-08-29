@@ -22,7 +22,7 @@
       </template>
       <div class="p-24 flex">
         <div class="flex flex-1 mr-32 border border-solid border-[#DFE2E6] rounded-8 relative h-380">
-          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 contract-detail-style" style="height: calc(100% - 53px);">
+          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 px-32" style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32"></div>
           </div>
           <div
@@ -41,7 +41,7 @@
             class="w-full"
           >
             <a-form-item
-              label="乙方名称"
+              label="乙方姓名"
               :validateTrigger="['blur']"
               :label-col="{ span: 8 }"
               :wrapper-col="{ span: 10 }"
@@ -148,7 +148,7 @@
              wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
-          <div class="text-16 text-[#1E2226] font-medium">{{ `${targetTitle}-${nickname}-电子合同签签署` }}</div>
+          <div class="text-16 text-[#1E2226] font-medium">{{ `${targetTitle}-${nickname}-电子合同签署` }}</div>
           <CloseOutlined class="h-16 w-16" @click="closeSignModal"/>
         </div>
       </template>
@@ -296,9 +296,14 @@ const submitContract = async () => {
     handSignature: contract.value.sign.handSignature === 1 ? formState.handSignature : undefined,
   };
   const params = {...baseParams, ...Object.fromEntries(Object.entries(optionalFields).filter(([_, v]) => v !== undefined))};
-  await SignContractApi.signContract(contractId.value, params);
-  signContractVisible.value = false;
-  message.success('签署成功');
+  try {
+    await SignContractApi.signContract(contractId.value, params);
+    message.success('签署成功');
+  } catch (e) {
+
+  } finally {
+    signContractVisible.value = false;
+  }
 };
 
 const submitIsDisabled = () => {
@@ -391,11 +396,6 @@ const submitIsDisabled = () => {
     border: 1px #BDF2D0;
     color: #F0FFF4;
   }
-}
-
-.contract-detail-style {
-  padding-left: 32px;
-  padding-right: 32px;
 }
 
 .contract-detail-modal {

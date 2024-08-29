@@ -1,6 +1,6 @@
 <script setup>
 
-import {createVNode, onMounted, reactive, ref, onBeforeUnmount} from 'vue';
+import {createVNode, onMounted, reactive, ref} from 'vue';
 import {CloudUploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
 import {ContractApi} from '../../api/Contract.js';
@@ -43,23 +43,12 @@ const showCancelModal = () => {
   });
 };
 
-function handleRouterSkip(event) {
-  const target = event.target;
-  if (target.tagName === 'A' && target.getAttribute('href') && target.getAttribute('data-is-link')) {
-    const href = target.getAttribute('href');
-
-    event.preventDefault();
-
-    this.confirmLeave(href);
-  }
-}
-
 const descriptionEditor = ref();
 const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
   filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value
 };
-const initDescriptionEditor = () => {
+const initEditor = () => {
   descriptionEditor.value = CKEDITOR.replace('contract-content', {
     toolbar: [
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
@@ -69,19 +58,15 @@ const initDescriptionEditor = () => {
   });
 
   descriptionEditor.value.setData(formState.content);
-  descriptionEditor.value.on('blur', () => {
+
+  descriptionEditor.value.on('change', () => {
     formState.content = descriptionEditor.value.getData();
     formRef.value.validateFields(['content'], (errors) => {});
   });
 };
 
 onMounted(() => {
-  initDescriptionEditor();
-  document.addEventListener('click', handleRouterSkip);
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleRouterSkip);
+  initEditor();
 })
 
 const onFinish = async () => {
@@ -136,10 +121,7 @@ const uploadCourseCover = (info) => {
 const cropperInstance = ref();
 const saveCropperImage = async () => {
   const cropper = cropperInstance.value.cropper;
-
   const canvas = cropper.getCroppedCanvas();
-  contractCoverUrl.value = canvas.toDataURL('image/png');
-  cropModalVisible.value = false;
 
   canvas.toBlob(async (blob) => {
     const formData = new FormData();
@@ -147,6 +129,8 @@ const saveCropperImage = async () => {
     formData.append('group', 'system');
     fileData.value = await FileApi.uploadFile(formData);
     formState.seal = fileData.value.id;
+    contractCoverUrl.value = canvas.toDataURL('image/png');
+    cropModalVisible.value = false;
     formRef.value.validateFields(['seal'], (errors) => {});
   });
 };
@@ -209,7 +193,7 @@ const validateContent = async (_rule, value) => {
         >
           <div class="flex flex-col space-y-4">
             <textarea id="contract-content"></textarea>
-            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签署日期：$date$ 订单价格：$order price$</span>
+            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签约日期：$date$ 订单价格：$order price$</span>
           </div>
         </a-form-item>
         <a-form-item
@@ -320,5 +304,4 @@ const validateContent = async (_rule, value) => {
   font-weight: 400 !important;
   font-size: 14px !important;
 }
-
 </style>

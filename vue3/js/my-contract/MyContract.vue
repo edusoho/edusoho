@@ -1,6 +1,6 @@
 <template>
   <ant-config-provider>
-    <div class="w-full h-[555px] bg-white rounded-4 border border-[#e4ecf3] border-solid p-24 relative">
+    <div class="w-full h-[900px] bg-white rounded-4 border border-[#e4ecf3] border-solid p-24 relative">
       <div class="text-[#1E2226] text-18 font-medium">我的合同</div>
       <div class="w-full overflow-y-auto overscroll-none flex-col" style="height: calc(100% - 84px);">
         <div v-if="contracts.length !== 0" v-for="contract in contracts"
@@ -15,7 +15,9 @@
               <div class="text-12 text-[#919399] font-normal"><span
                 v-if="contract.relatedGoods.type === 'course'">关联课程：</span><span
                 v-if="contract.relatedGoods.type === 'classroom'">关联班级：</span><span
-                v-if="contract.relatedGoods.type === 'itemBankExercise'">关联题库：</span>{{ contract.relatedGoods.name }}
+                v-if="contract.relatedGoods.type === 'itemBankExercise'">关联题库：</span>{{
+                  contract.relatedGoods.name
+                }}
               </div>
             </div>
           </div>

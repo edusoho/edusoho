@@ -44,7 +44,7 @@ onMounted(async () => {
   formState.sign.handSignature = formData.sign.handSignature === 1;
   formState.sign.phoneNumber = formData.sign.phoneNumber === 1;
   contractCoverUrl.value = formData.seal;
-  initDescriptionEditor();
+  initEditor();
 })
 
 const showCancelModal = () => {
@@ -110,10 +110,7 @@ const uploadCourseCover = (info) => {
 const cropperInstance = ref();
 const saveCropperImage = async () => {
   const cropper = cropperInstance.value.cropper;
-
   const canvas = cropper.getCroppedCanvas();
-  contractCoverUrl.value = canvas.toDataURL('image/png');
-  cropModalVisible.value = false;
 
   canvas.toBlob(async (blob) => {
     const formData = new FormData();
@@ -121,6 +118,9 @@ const saveCropperImage = async () => {
     formData.append('group', 'system');
     fileData.value = await FileApi.uploadFile(formData);
     formState.seal = fileData.value.id;
+    contractCoverUrl.value = canvas.toDataURL('image/png');
+    cropModalVisible.value = false;
+    formRef.value.validateFields(['seal'], (errors) => {});
   });
 };
 
@@ -165,14 +165,13 @@ const validateContent = async (_rule, value) => {
   return Promise.resolve();
 }
 
-const descriptionEditor = ref();
 const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
   filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
 };
 
-const initDescriptionEditor = () => {
-  descriptionEditor.value = CKEDITOR.replace('contract-content', {
+const initEditor = () => {
+  const editor = CKEDITOR.replace('contract-content', {
     toolbar: [
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
     ],
@@ -180,9 +179,10 @@ const initDescriptionEditor = () => {
     filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
   });
 
-  descriptionEditor.value.setData(formState.content);
-  descriptionEditor.value.on('blur', () => {
-    formState.content = descriptionEditor.value.getData();
+  editor.setData(formState.content);
+
+  editor.on('change', () => {
+    formState.content = editor.getData();
   });
 };
 </script>
@@ -217,7 +217,7 @@ const initDescriptionEditor = () => {
         >
           <div class="flex flex-col space-y-4">
             <textarea id="contract-content"></textarea>
-            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签署日期：$date$ 订单价格：$order price$</span>
+            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签约日期：$date$ 订单价格：$order price$</span>
           </div>
         </a-form-item>
         <a-form-item
