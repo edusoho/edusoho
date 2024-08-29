@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Contract;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
+use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\Contract\Service\ContractService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
@@ -14,6 +15,7 @@ class Contract extends AbstractResource
     public function search(ApiRequest $request)
     {
         $this->checkPermission();
+        $this->initContract();
         list($abort, $conditions) = $this->buildSearchConditions($request->query->all());
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         if ($abort) {
@@ -113,6 +115,15 @@ class Contract extends AbstractResource
         return $wrappedContracts;
     }
 
+    private function initContract()
+    {
+        if ($this->getEduCloudService()->isVisibleCloud()) {
+            if (empty($this->getSettingService()->get('electronicContract'))) {
+                $this->getSettingService()->set('electronicContract', ['enabled' => 1]);
+            }
+        }
+    }
+
     /**
      * @return ContractService
      */
@@ -127,5 +138,13 @@ class Contract extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return EduCloudService
+     */
+    private function getEduCloudService()
+    {
+        return $this->service('CloudPlatform:EduCloudService');
     }
 }
