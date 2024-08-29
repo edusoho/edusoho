@@ -114,6 +114,7 @@
           :total="pagination.total"
           @change="handlePaginationChange"
           show-less-items
+          :disabled="pagination.total === 0"
         />
       </div>
     </div>
@@ -149,7 +150,7 @@ async function fetchMyContracts(params) {
 }
 
 async function handleTableChange(paging) {
-  pagination.current = paging.current;
+  pagination.current = paging.current === 0 ? 1 : paging.current;
   pagination.total = paging.total;
   pagination.pageSize = paging.pageSize;
   const params = {

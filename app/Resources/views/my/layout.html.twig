@@ -75,9 +75,11 @@
             <a href="{{path('my_wrong_question_book')}}">{{'my.wrong_question_book'|trans}}</a>
           </li>
 
-          <li class="list-group-item {% if side_nav == 'my-contract' %} active {% endif %}">
-            <a href="{{path('my_contract')}}">{{'my.contract'|trans}}</a>
-          </li>
+          {% if setting('electronicContract.enabled') %}
+            <li class="list-group-item {% if side_nav == 'my-contract' %} active {% endif %}">
+              <a href="{{path('my_contract')}}">{{'my.contract'|trans}}</a>
+            </li>
+          {% endif %}
 
           {{ slot('my.learning.menu', {'side_nav': side_nav}) }}
         </ul>
