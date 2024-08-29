@@ -1,7 +1,7 @@
 <script setup>
 import {reactive, ref, watch} from 'vue';
 import {ContractApi} from '../../api/Contract.js';
-import {InfoCircleOutlined} from '@ant-design/icons-vue';
+import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate} from '../common';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -226,10 +226,17 @@ const view = async (record) => {
     </div>
   </div>
   <a-modal :width="900"
+           wrapClassName="signature-list-detail-modal"
            v-model:open="signatureContentVisible"
-           :title="`${selectedSignatureContract.goodsName}-${selectedSignatureContract.username}-电子合同签署`"
+           :closable=false
            :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
   >
+    <template #title>
+      <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
+        <div class="text-16 text-[#1E2226] font-medium">{{ `${selectedSignatureContract.goodsName}-${selectedSignatureContract.username}-电子合同签署` }}</div>
+        <CloseOutlined class="h-16 w-16" @click="signatureContentVisible = false"/>
+      </div>
+    </template>
     <div class="w-full flex flex-col space-y-32 p-32">
       <div class="flex items-end justify-between gap-4">
         <span class="flex-none whitespace-nowrap opacity-0">{{ `合同编号: ${signatureContent.code}` }}</span>
@@ -278,7 +285,7 @@ const view = async (record) => {
       </div>
     </div>
     <template #footer>
-      <div class="flex justify-center">
+      <div class="flex justify-center p-16 border-solid border-[#F0F0F0] border-b-0 border-x-0">
         <a-button @click="signatureContentVisible = false">关闭</a-button>
       </div>
     </template>
@@ -288,6 +295,21 @@ const view = async (record) => {
 .signature-list-operation-btn {
   .ant-btn {
     padding: 0;
+  }
+}
+
+.signature-list-detail-modal {
+  .ant-modal {
+    padding: 0 !important;
+    .ant-modal-content {
+      padding: 0 !important;
+      .ant-modal-footer {
+        margin-top: 0;
+      }
+      .ant-modal-header {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 </style>

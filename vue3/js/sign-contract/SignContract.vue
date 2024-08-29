@@ -309,6 +309,7 @@ const submitContract = async () => {
 const submitIsDisabled = () => {
   const {IDNumber, phoneNumber, handSignature} = contract.value.sign;
   const fieldsToCheck = [
+    {key: 'truename', value: formState.truename},
     {key: 'IDNumber', value: IDNumber},
     {key: 'phoneNumber', value: phoneNumber},
     {key: 'handSignature', value: handSignature}
