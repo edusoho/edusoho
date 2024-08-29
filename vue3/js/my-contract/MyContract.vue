@@ -108,6 +108,7 @@
       <div
         class="w-full bg-white px-40 py-24 flex justify-end">
         <a-pagination
+          class="my-contract-pagination"
           :show-total="total => getTableTotal(total)"
           v-model="pagination.current"
           :total="pagination.total"
@@ -212,6 +213,15 @@ const view = async (id, name) => {
         border: none;
       }
     }
+  }
+}
+
+.my-contract-pagination {
+  .ant-pagination-item-active {
+    border-color: #3DCD7F !important;
+  }
+  .ant-pagination-item-active a {
+    color: #3DCD7F !important;
   }
 }
 </style>
