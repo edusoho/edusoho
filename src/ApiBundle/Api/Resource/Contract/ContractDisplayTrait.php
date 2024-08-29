@@ -68,7 +68,7 @@ trait ContractDisplayTrait
 
         return str_replace(
             ['$name$', '$username$', '$idcard$', '$courseName$', '$contract number$', '$date$', '$order price$'],
-            [$truename, $user['nickname'] ?? '', $iDNumber, $product['title'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] / 100 ?? ''],
+            [$truename, $user['nickname'] ?? '', $iDNumber, $product['title'] ?? $product['name'] ?? '', $contractCode, date('Y年m月d日') ?? '', $order['pay_amount'] / 100 ?? ''],
             $content
         );
     }
