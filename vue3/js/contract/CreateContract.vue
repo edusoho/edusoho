@@ -132,10 +132,7 @@ const uploadCourseCover = (info) => {
 const cropperInstance = ref();
 const saveCropperImage = async () => {
   const cropper = cropperInstance.value.cropper;
-
   const canvas = cropper.getCroppedCanvas();
-  contractCoverUrl.value = canvas.toDataURL('image/png');
-  cropModalVisible.value = false;
 
   canvas.toBlob(async (blob) => {
     const formData = new FormData();
@@ -143,6 +140,8 @@ const saveCropperImage = async () => {
     formData.append('group', 'system');
     fileData.value = await FileApi.uploadFile(formData);
     formState.seal = fileData.value.id;
+    contractCoverUrl.value = canvas.toDataURL('image/png');
+    cropModalVisible.value = false;
     formRef.value.validateFields(['seal'], (errors) => {});
   });
 };

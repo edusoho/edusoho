@@ -296,9 +296,11 @@ const submitContract = async () => {
     handSignature: contract.value.sign.handSignature === 1 ? formState.handSignature : undefined,
   };
   const params = {...baseParams, ...Object.fromEntries(Object.entries(optionalFields).filter(([_, v]) => v !== undefined))};
-  await SignContractApi.signContract(contractId.value, params);
+  const result = await SignContractApi.signContract(contractId.value, params);
+  if (!result.error) {
+    message.success('签署成功');
+  }
   signContractVisible.value = false;
-  message.success('签署成功');
 };
 
 const submitIsDisabled = () => {
