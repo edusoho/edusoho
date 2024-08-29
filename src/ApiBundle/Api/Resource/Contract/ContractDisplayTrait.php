@@ -34,12 +34,12 @@ trait ContractDisplayTrait
     private function getContractDetail($contract, $goodsKey)
     {
         $code = $this->getContractService()->generateContractCode();
-        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code, []);
+        $content = $this->replaceContentVariable($contract['content'], $goodsKey, $code);
 
         return $this->getHtml($content, $contract, $code);
     }
 
-    private function replaceContentVariable($content, $goodsKey, $contractCode, $sign)
+    private function replaceContentVariable($content, $goodsKey, $contractCode, $sign = [], $user = [])
     {
         $parts = explode('_', $goodsKey);
         $product = [];
@@ -52,15 +52,15 @@ trait ContractDisplayTrait
             $product = $this->getServiceByType($parts[0])->get($parts[1]);
         }
         $member = [];
+        $user = !empty($user)? $user: $this->getCurrentUser();
         if ('course' == $parts[0]) {
-            $member = $this->getMemberService($parts[0])->getCourseMember($parts[1], $this->getCurrentUser()->getId());
+            $member = $this->getMemberService($parts[0])->getCourseMember($parts[1], $user['id']);
         } elseif ('classroom' == $parts[0]) {
-            $member = $this->getMemberService($parts[0])->getClassroomMember($parts[1], $this->getCurrentUser()->getId());
+            $member = $this->getMemberService($parts[0])->getClassroomMember($parts[1], $user['id']);
         } elseif ('itemBankExercise' == $parts[0]) {
-            $member = $this->getMemberService($parts[0])->getExerciseMember($parts[1], $this->getCurrentUser()->getId());
+            $member = $this->getMemberService($parts[0])->getExerciseMember($parts[1], $user['id']);
         }
         $order = $this->getOrderService()->getOrder($member['orderId']);
-        $user = $this->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $content = str_replace("\n", '<br>', $content);
         $truename = $sign['truename'] ?? $userProfile['truename'] ?? '';
@@ -153,7 +153,7 @@ trait ContractDisplayTrait
                 $serviceName = 'Classroom:MemberService';
                 break;
             case 'itemBankExercise':
-                $serviceName = 'ItemBankExercise:ExerciseService';
+                $serviceName = 'ItemBankExercise:ExerciseMemberService';
                 break;
             default:
                 throw new \Exception('Unknown type: '.$type);
