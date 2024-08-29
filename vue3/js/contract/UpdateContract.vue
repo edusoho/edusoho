@@ -307,26 +307,23 @@ const initEditor = () => {
     </div>
   </div>
 </template>
-
-<style>
-.has-error .ant-upload-wrapper .ant-upload-list .ant-upload {
-  border-color: #ff4d4f;
+<style lang="less" scoped>
+.create-contract {
+  /deep/ .ant-form-item-label >label {
+    color: #626973;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  /deep/ label.ant-checkbox-wrapper{
+    color: #1E2226 !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+  }
 }
-
-.create-contract .ant-form-item-label >label {
-  color: #626973;
-  font-weight: 400;
-  font-size: 14px;
-}
-
-.seal-uploader .ant-upload.ant-upload-select {
-  width: 240px !important;
-  height: 240px !important;
-}
-
-.create-contract label.ant-checkbox-wrapper{
-  color: #1E2226 !important;
-  font-weight: 400 !important;
-  font-size: 14px !important;
+.seal-uploader {
+  /deep/ .ant-upload.ant-upload-select {
+    width: 240px !important;
+    height: 240px !important;
+  }
 }
 </style>
