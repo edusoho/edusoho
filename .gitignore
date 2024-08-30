@@ -24,12 +24,12 @@
 !/web/customize/.gitkeep
 /plugins/*
 !/plugins/.gitkeep
-/node_modules/
+node_modules
 npm-debug.log
 /build/
 /scripts/
-/.vscode
-/.idea
+.vscode
+.idea
 .DS_Store
 .sonar
 .php_cs.cache
@@ -59,6 +59,7 @@ chunk-manifest.json
 !/web/static-dist/custombundle
 !/web/static-dist/marketingmallbundle
 !/web/static-dist/*activity
+!/web/static-dist/vue3
 /web/static-dist/**/css/*.js
 deployment-config.json
 .webpack-watch.log
@@ -73,3 +74,4 @@ yarn-error.log
 /app/config/plumber.php
 .package-lock.json
 /js-sdk
+.env.local

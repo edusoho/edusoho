@@ -4,6 +4,11 @@
 
 {% do script(['app/vue/views/operation/app_setting/index.js']) %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/admin-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block main %}
   <div id="app"></div>
 {% endblock %}

@@ -23,6 +23,7 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $isPart = false, $context = [], $rememberLastPos = true, $file = [])
     {
+        file_put_contents("/tmp/jc123", json_encode($context), 8);
         $file = empty($file) ? $this->getUploadFileService()->getFullFile($id) : $file;
 
         if (empty($file)) {
@@ -42,7 +43,8 @@ class PlayerController extends BaseController
         if (is_array($context)) {
             $playerContext = array_merge($playerContext, $context);
         }
-
+        $playerContext['autoplay'] = $context['sign'] == 'no';
+        unset($context['sign']);
         $params = [
             'file' => $file,
             'cloudSdk' => 'resource_player',

@@ -4646,6 +4646,7 @@ my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
 user.certificate_menu: 我的证书
 my.wrong_question_book: 我的错题本
+my.contract: 我的合同
 
 my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 my.course.cancle_refund_btn: 取消退款，继续学习！
@@ -9522,6 +9523,7 @@ log.module.multi_class_assistant: 班课助教
 log.module.multi_class: 班课
 log.module.wrong_question: 错题
 log.module.ai: AI
+log.module.contract: 合同
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -11072,6 +11074,7 @@ exception.app.extract_failed: 无法解压缩安装包！
 exception.role.forbidden_modify: 该权限不能修改！
 exception.role.code_not_all_digital: code不能全为数字
 exception.content.not_found: 内容不存在
+exception.sign_record.is_existed: 合同已签署成功，无需再次签署
 exception.content.type_required: 内容类型不能为空
 exception.content.title_required: 内容标题不能为空
 exception.download_activity.not_download_activity: 不是下载资料活动
@@ -12516,3 +12519,7 @@ admin_v2.question.ai_analysis.experience: , 体验强大的
 admin_v2.question.ai_analysis.problem: 题目解析
 admin_v2.question.ai_analysis.tittle: 构筑智慧教育新高地，云能力全面升级，引领深度互动与精准解析的Al题库新时代，开启个性化学习无限可能
 admin_v2.question.ai_analysis.upgrade_now: 立即升级
+
+#电子合同
+admin_v2.contract.experience: ，体验安全的电子合同功能
+admin_v2.contract.tittle: 全新上线电子合同功能，带来高效、安全的签署体验，助力企业迈向数字化合规管理新阶段

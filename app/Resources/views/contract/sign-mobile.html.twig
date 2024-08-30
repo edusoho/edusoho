@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% set lang = app.request.getLocale() %}
+
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+</head>
+<body>
+  <div id="contract-h5"></div>
+
+  {% include 'window.app.html.twig' %}
+
+  <script src="{{ asset('/static-dist/libs/base.js') }}"></script>
+  <script src="{{ asset('/static-dist/vue3/js/common.js') }}"></script>
+  <script src="{{ asset('/static-dist/vue3/js/contract-h5/index.js') }}"></script>
+</body>
+</html>
