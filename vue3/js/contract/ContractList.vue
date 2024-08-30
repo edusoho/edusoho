@@ -216,43 +216,43 @@ const toUpdateContract = (id) => {
       </template>
       <div class="w-full flex flex-col space-y-32 p-32">
         <div class="flex items-end justify-between gap-4">
-          <span class="flex-none whitespace-nowrap opacity-0 mr-100">合同编号:  </span>
+          <span class="flex-none whitespace-nowrap opacity-0 mr-100">{{ `${ t('modal.contractNumber') }：` }}</span>
           <span class="grow text-center text-22 font-medium">{{ contractContent.name }}</span>
-          <span class="flex-none whitespace-nowrap text-gray-500 mr-100">合同编号:  </span>
+          <span class="flex-none whitespace-nowrap text-gray-500 mr-100">{{ `${ t('modal.contractNumber') }：` }}</span>
         </div>
         <div v-html="contractContent.content" class="text-gray-500 contract-content"></div>
         <div class="flex space-x-64">
           <div class="flex-1 flex flex-col items-start justify-between space-y-22">
-            <span class="text-18 font-medium">甲方：</span>
+            <span class="text-18 font-medium">{{ `${ t('modal.partyA') }：` }}</span>
             <div class="w-full flex flex-col space-y-22">
               <img :src="contractContent.seal" alt="甲方印章" class="w-150 h-150" />
               <div class="flex items-center">
-                <span class="text-gray-500">签约日期：</span>
+                <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
             </div>
           </div>
           <div class="flex-1 flex flex-col items-start justify-between">
-            <span class="text-18 font-medium">乙方：</span>
+            <span class="text-18 font-medium">{{ `${ t('modal.partyB') }：` }}</span>
             <div class="w-full flex flex-col space-y-22">
               <div v-if="contractContent.sign && contractContent.sign.handSignature" class="flex items-center">
-                <span class="text-gray-500">手写签名：</span>
+                <span class="text-gray-500">{{ `${ t('modal.handSignature') }：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div class="flex items-center">
-                <span class="text-gray-500">乙方姓名：</span>
+                <span class="text-gray-500">{{ `${ t('modal.partyBName') }：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div v-if="contractContent.sign && contractContent.sign.IDNumber" class="flex items-center">
-                <span class="text-gray-500">身份证号：</span>
+                <span class="text-gray-500">{{ `${ t('modal.iDNumber') }：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div v-if="contractContent.sign && contractContent.sign.phoneNumber" class="flex items-center">
-                <span class="text-gray-500">联系方式：</span>
+                <span class="text-gray-500">{{ `${ t('modal.contactInformation') }：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div class="flex items-center">
-                <span class="text-gray-500">签约日期：</span>
+                <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
             </div>
