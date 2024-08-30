@@ -7,7 +7,7 @@ import SignatureList from './SignatureList.vue';
 const activeTab = ref('contractList');
 
 function createContract() {
-  router.push({name: 'CreateContract'});
+  router.push({name: 'EditContract', query: { editType: 'create' }});
 }
 </script>
 

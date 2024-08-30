@@ -140,7 +140,7 @@ const view = async (record) => {
 
 const router = useRouter()
 const toUpdateContract = (id) => {
-  router.push({ name: 'UpdateContract', query: { contractId: id } })
+  router.push({ name: 'EditContract', query: { contractId: id, editType: 'update' } })
 }
 </script>
 
