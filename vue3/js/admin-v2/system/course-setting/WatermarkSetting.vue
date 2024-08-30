@@ -44,7 +44,7 @@
 <script setup>
 import {onMounted, reactive, ref} from 'vue';
 import Picker from 'vanilla-picker';
-import {SettingApi} from 'vue3/api/Setting';
+import Api from 'vue3/api';
 
 const watermarkEnable = ref(0);
 const radios = [
@@ -117,7 +117,7 @@ document.getElementById('submit').addEventListener('click', event => {
 });
 
 const fetchWatermarkSetting = async () => {
-  const setting = await SettingApi.get('course');
+  const setting = await Api.setting.get('course');
   const watermark = setting.task_page_watermark;
   watermarkEnable.value = watermark.enable;
   formState.fields = watermark.setting.fields || formState.fields;

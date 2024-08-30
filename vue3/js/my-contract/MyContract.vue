@@ -123,13 +123,12 @@
 
 <script setup>
 import {reactive, ref} from 'vue';
-import {MyContractApi} from '../../api/MyContract';
 import {Empty} from 'ant-design-vue';
 
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import AntConfigProvider from '../components/AntConfigProvider.vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
-
+import Api from 'vue3/api';
 
 const pagination = reactive({
   current: 1,
@@ -143,7 +142,7 @@ function getTableTotal(total) {
 }
 
 async function fetchMyContracts(params) {
-  const {data, paging} = await MyContractApi.getMyContracts(params);
+  const {data, paging} = await Api.contract.getMyContracts(params);
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   contracts.value = data;
@@ -179,7 +178,7 @@ const signatureContent = ref();
 const myContentVisible = ref(false);
 const courseName = ref();
 const view = async (id, name) => {
-  signatureContent.value = await MyContractApi.getSignedContract(id);
+  signatureContent.value = await Api.contract.getSignedContract(id);
   courseName.value = name;
   myContentVisible.value = true;
 };

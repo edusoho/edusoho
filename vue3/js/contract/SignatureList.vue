@@ -1,8 +1,8 @@
 <script setup>
-import {reactive, ref, watch} from 'vue';
-import {ContractApi} from '../../api/Contract.js';
+import {reactive, ref} from 'vue';
 import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate} from '../common';
+import Api from 'vue3/api';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -77,7 +77,7 @@ async function fetchContracts(params) {
       ...params
     }, {keywordType: keywordType.value, keyword: keyword.value}
   ) : params;
-  const {data, paging} = await ContractApi.searchSignature(searchQuery);
+  const {data, paging} = await Api.contract.searchSignedRecords(searchQuery);
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   pageData.value = data;
@@ -141,7 +141,7 @@ const signatureContentVisible = ref(false);
 const selectedSignatureContract = ref({});
 const view = async (record) => {
   selectedSignatureContract.value = record;
-  signatureContent.value = await ContractApi.getSignatureContent(record.id);
+  signatureContent.value = await Api.contract.getSignedContract(record.id);
   signatureContentVisible.value = true;
 }
 
@@ -292,6 +292,7 @@ const view = async (record) => {
     </template>
   </a-modal>
 </template>
+
 <style lang="less">
 .signature-list-operation-btn {
   .ant-btn {

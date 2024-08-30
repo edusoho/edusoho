@@ -1,11 +1,10 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import {createVNode, onMounted, reactive, ref} from 'vue';
-import {ContractApi} from '../../api/Contract';
 import {CloudUploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
 import router from './router';
-import {FileApi} from '../../api/File';
+import Api from 'vue3/api';
 import VueCropper from 'vue3/js/components/VueCropper.vue';
 
 const route = useRoute();
@@ -36,7 +35,7 @@ const fileData = ref();
 const contractId = route.query.contractId;
 
 onMounted(async () => {
-  const formData = await ContractApi.getContract(contractId);
+  const formData = await Api.contract.get(contractId);
   formState.name = formData.name;
   formState.content = formData.content;
   formState.seal = formData.sealFile.id;
@@ -66,7 +65,7 @@ const showCancelModal = () => {
 };
 
 const onFinish = async () => {
-  await ContractApi.update(contractId, formState);
+  await Api.contract.update(contractId, formState);
   resetForm();
   await router.push({name: 'Index'});
   message.success('编辑成功');
@@ -116,7 +115,7 @@ const saveCropperImage = async () => {
     const formData = new FormData();
     formData.append('file', blob, contractCoverName.value);
     formData.append('group', 'system');
-    fileData.value = await FileApi.uploadFile(formData);
+    fileData.value = await Api.file.upload(formData);
     formState.seal = fileData.value.id;
     contractCoverUrl.value = canvas.toDataURL('image/png');
     cropModalVisible.value = false;

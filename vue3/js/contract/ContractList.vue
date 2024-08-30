@@ -1,10 +1,10 @@
 <script setup>
 import {createVNode, reactive, ref} from 'vue';
-import {ContractApi} from '../../api/Contract.js';
-import {formatDate} from 'vue3/js/common';
 import {message, Modal} from 'ant-design-vue';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 import {CloseOutlined, ExclamationCircleOutlined} from '@ant-design/icons-vue';
+import Api from 'vue3/api';
+import {formatDate} from 'vue3/js/common';
 
 const contractManagementColumns = [
   {
@@ -56,7 +56,7 @@ async function fetchContracts(params) {
   const searchQuery = keyword.value ? Object.assign({
       ...params
     }, {keyword: keyword.value, keywordType: keywordType.value}) : params;
-  const {data, paging} = await ContractApi.search(searchQuery);
+  const {data, paging} = await Api.contract.search(searchQuery);
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   pageData.value = data;
@@ -121,7 +121,7 @@ function showDeleteConfirm(id, name) {
     centered: true,
     okText: '删除',
     async onOk() {
-      await ContractApi.delete(id);
+      await Api.contract.delete(id);
       message.success('删除成功');
       await getList();
     },
@@ -134,7 +134,7 @@ const contractContentVisible = ref(false);
 const selectedSignatureContract = ref({});
 const view = async (record) => {
   selectedSignatureContract.value = record;
-  contractContent.value = await ContractApi.getContractWithHtml(record.id);
+  contractContent.value = await Api.contract.getContractWithHtml(record.id);
   contractContentVisible.value = true;
 }
 

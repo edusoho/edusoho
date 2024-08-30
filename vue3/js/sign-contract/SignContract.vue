@@ -168,6 +168,7 @@
     </a-modal>
   </div>
 </template>
+
 <script setup>
 import {ref, reactive, nextTick, onMounted} from 'vue';
 import {
@@ -177,8 +178,8 @@ import {
   EditOutlined,
 } from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
-import {SignContractApi} from '../../api/SignContract';
 import SmoothSignature from 'smooth-signature';
+import Api from 'vue3/api';
 
 const contractTemplate = ref();
 const contract = ref();
@@ -219,7 +220,7 @@ onMounted(async () => {
   sign.value = document.querySelector('input[name="sign"]').value;
   targetTitle.value = document.querySelector('input[name="target-title"]').value;
   nickname.value = document.querySelector('input[name="nickname"]').value;
-  contractTemplate.value = await SignContractApi.getContractTemplate(contractId.value, goodsKey.value);
+  contractTemplate.value = await Api.contract.getContractSignTemplate(contractId.value, goodsKey.value);
   signContractConfirmVisible.value = true;
   formState.truename = contractTemplate.value.signFields.find(item => item.field === 'truename')?.default;
   formState.IDNumber = contractTemplate.value.signFields.find(item => item.field === 'IDNumber')?.default;
@@ -231,7 +232,7 @@ const showContractDetailModal = () => {
 };
 
 const toSignContract = async () => {
-  contract.value = await SignContractApi.getContract(contractId.value);
+  contract.value = await Api.contract.get(contractId.value);
   signContractConfirmVisible.value = false;
   signContractVisible.value = true;
 };
@@ -297,7 +298,7 @@ const submitContract = async () => {
   };
   const params = {...baseParams, ...Object.fromEntries(Object.entries(optionalFields).filter(([_, v]) => v !== undefined))};
   try {
-    await SignContractApi.signContract(contractId.value, params);
+    await Api.contract.sign(contractId.value, params);
     message.success('签署成功');
   } catch (e) {
 

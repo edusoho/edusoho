@@ -3,8 +3,7 @@
 import {createVNode, onMounted, reactive, ref} from 'vue';
 import {CloudUploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
-import {ContractApi} from '../../api/Contract.js';
-import {FileApi} from '../../api/File.js';
+import Api from 'vue3/api';
 import router from './router';
 import VueCropper from 'vue3/js/components/VueCropper.vue';
 
@@ -70,7 +69,7 @@ onMounted(() => {
 })
 
 const onFinish = async () => {
-  await ContractApi.create(formState);
+  await Api.contract.create(formState);
   resetForm();
   await router.push({name: 'Index'});
   message.success('创建成功');
@@ -127,7 +126,7 @@ const saveCropperImage = async () => {
     const formData = new FormData();
     formData.append('file', blob, contractCoverName.value);
     formData.append('group', 'system');
-    fileData.value = await FileApi.uploadFile(formData);
+    fileData.value = await Api.file.upload(formData);
     formState.seal = fileData.value.id;
     contractCoverUrl.value = canvas.toDataURL('image/png');
     cropModalVisible.value = false;
