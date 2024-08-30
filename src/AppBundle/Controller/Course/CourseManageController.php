@@ -10,6 +10,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
@@ -580,6 +581,11 @@ class CourseManageController extends BaseController
             if (!empty($data['covers'])) {
                 $this->getCourseSetService()->changeCourseSetCover($courseSetId, $data['covers']);
             }
+            if (empty($data['contractEnable'])) {
+                $this->getContractService()->unRelateContract("course_{$courseId}");
+            } else {
+                $this->getContractService()->relateContract($data['contractId'], "course_{$courseId}", $data['contractForceSign']);
+            }
 
             return $this->createJsonResponse(true);
         }
@@ -623,6 +629,10 @@ class CourseManageController extends BaseController
             $course['drainageImage'] = $this->getWebExtension()->getFurl($course['drainageImage']);
         }
         $course['drainageText'] = empty($course['drainage']['text']) ? '' : $course['drainage']['text'];
+        $relatedContract = $this->getContractService()->getRelatedContractByGoodsKey("course_{$courseId}");
+        $course['contractId'] = $relatedContract['contractId'] ?? 0;
+        $course['contractForceSign'] = empty($relatedContract['sign']) ? 0 : 1;
+        $course['contractName'] = $relatedContract['contractName'] ?? '';
 
         return $this->render(
             'course-manage/info.html.twig',
@@ -1378,5 +1388,13 @@ class CourseManageController extends BaseController
     protected function getVipRightService()
     {
         return $this->createService('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }

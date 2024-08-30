@@ -1,0 +1,43 @@
+/*!
+  * shared v9.10.1
+  * (c) 2024 kazuya kawaguchi
+  * Released under the MIT License.
+  */
+
+/*!
+  * vue-i18n v9.10.1
+  * (c) 2024 kazuya kawaguchi
+  * Released under the MIT License.
+  */
+
+/*! #__NO_SIDE_EFFECTS__ */
+
+/**
+* @vue/compiler-core v3.4.35
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/reactivity v3.4.35
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/runtime-core v3.4.35
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/runtime-dom v3.4.35
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/shared v3.4.35
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/

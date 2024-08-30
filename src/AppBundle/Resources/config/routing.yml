@@ -48,6 +48,10 @@ external_login:
   path:  '/login/external'
   defaults:
         _controller: 'AppBundle:Login:externalLogin'
+h5_login:
+    path:  '/login/h5'
+    defaults:
+      _controller: 'AppBundle:Login:h5Login'
 login_check:
     path: '/login_check'
 logout:
@@ -722,6 +726,10 @@ my_wrong_question_book:
     path: '/my/wrong_question_book'
     defaults:
         _controller: 'AppBundle:My/WrongQuestionBook:index'
+my_contract:
+    path: '/my/contract'
+    defaults:
+        _controller: 'AppBundle:My/Contract:index'
 my_wrong_question_book_target_detail:
     path: '/my/wrong_question_book/wrong_questions'
     defaults:
@@ -4215,3 +4223,8 @@ user_show_mobile:
     _controller: 'AppBundle:MobileMask:showMobile'
   methods:
     - POST
+
+contract_sign_mobile:
+  path: '/contract_sign/mobile'
+  defaults:
+    _controller: 'AppBundle:Contract:signMobile'

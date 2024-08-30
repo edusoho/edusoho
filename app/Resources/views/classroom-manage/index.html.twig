@@ -31,3 +31,8 @@
   >
   </div>
 {% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/vue3/js/contract/index.css') }}" rel="stylesheet"/>
+{% endblock %}

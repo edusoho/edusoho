@@ -1,1 +1,76 @@
 @tailwind utilities;
+
+body {
+  line-height: 22px;
+  font-size: 14px;
+  -webkit-overflow-scrolling: touch;
+  -webkit-font-smoothing: antialiased;
+  font-family:  PingFang SC, Helvetica Neue, Helvetica, Arial, Hiragino Sans GB, Microsoft YaHei, sans-serif;
+}
+
+:root:root {
+  --van-primary-color: var(--primary-color);
+}
+
+div, p, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+.v3-text-primary {
+  color: var(--primary-color);
+}
+
+.v3-bg-primary {
+  background-color: var(--primary-color);
+}
+
+a {
+  color: var(--primary-color);
+
+  &.disabled {
+    color: #C0C0C0;
+    pointer-events: none;
+  }
+
+  &:hover {
+    color: var(--primary-color);
+
+    svg path {
+      stroke: var(--primary-color) !important;
+    }
+  }
+}
+
+.v3-border-primary {
+  border-color: var(--primary-color);
+}
+
+.ant-pagination.custom-pagination .ant-pagination-item:not(.ant-pagination-item-active) {
+  border-color: #DCDEE0;
+
+  &:hover,
+  &:focus {
+    border-color: var(--primary-color);
+
+    a {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.h5-drawer-content {
+  border-radius: 8px 8px 0 0;
+}
+
+.ant-popover-inner-content {
+  padding: 0 !important;
+}
+
+.ant-popover-inner {
+  padding: 16px !important;
+}
+
+.ant-picker-dropdown .ant-picker-panel-container .ant-picker-panel table th {
+  text-align: center !important;
+}

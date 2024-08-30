@@ -4,7 +4,7 @@
 
 {% set bodyClass = "" %}
 {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
-{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
+{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js', 'vue3/js/sign-contract/index.js']) %}
 
 {% set showSidebar = app.request.cookies.get('show-sidebar') | default(1) %}
 
@@ -14,9 +14,18 @@
   {% if member.role|default('') != 'student' %}
     {% set preview = true %}
   {% endif %}
-
+  {% if contract.sign|default('') != 'no' %}
+    <div id="sign-contract-modal"></div>
+  {% endif %}
   <div id="js-hidden-data">
     <input type="hidden" name="course-id" value="{{ task.courseId }}">
+    {% if contract.sign|default('') != 'no' %}
+    <input type="hidden" name="sign" value="{{ contract.sign }}">
+    <input type="hidden" name="contract-id" value="{{ contract.id}}">
+    <input type="hidden" name="goods-key" value="{{ contract.goodsKey}}">
+    <input type="hidden" name="target-title" value="{{ contract.targetTitle}}">
+    <input type="hidden" name="nickname" value="{{ user.nickname}}">
+    {% endif %}
     <input type="hidden" name="task-id" value="{{ task.id }}">
     <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
     <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">
@@ -55,7 +64,7 @@
             data-last-learn-time="{{ taskResult.lastLearnTime|default(0) }}"
             data-user-id="{{ taskResult.userId|default(0) }}"
             data-file-id="{{ media.id|default(0) }}"
-            data-url="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview') }) }}"
+            data-url="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview'), sign:contract.sign}) }}"
                   data-video-header-length="{{ videoHeaderLength|default(0) }}"
             style="width:100%;height:100%;border:0px"
             allowfullscreen webkitallowfullscreen>
@@ -152,6 +161,6 @@
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
     {% include 'event_report.html.twig' with{ 'eventName':'task.view', 'subjectType':'courseMember', 'subjectId': course.id, 'eventReportParams':{}} %}
-    {% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id, courseId: task.courseId}%}
+    {% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id, courseId: task.courseId, sign: contract.sign}%}
 
 {% endblock %}

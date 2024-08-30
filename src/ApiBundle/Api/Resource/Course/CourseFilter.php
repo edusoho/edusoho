@@ -12,7 +12,6 @@ use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
 use Biz\Course\Util\CourseTitleUtils;
-use Biz\System\Service\SettingService;
 use Topxia\Service\Common\ServiceKernel;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
@@ -21,7 +20,7 @@ use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 class CourseFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'courseSetTitle', 'goodsId', 'specsId','canLearn'
+        'id', 'title', 'courseSetTitle', 'goodsId', 'specsId', 'canLearn',
     ];
 
     protected $publicFields = [
@@ -30,6 +29,7 @@ class CourseFilter extends Filter
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish',
         'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom', 'assistants', 'assistant', 'liveStatus', 'drainage',
+        'contract',
     ];
 
     protected function publicFields(&$data)
