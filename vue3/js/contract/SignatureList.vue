@@ -3,51 +3,52 @@ import {reactive, ref, watch} from 'vue';
 import {ContractApi} from '../../api/Contract.js';
 import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate} from '../common';
+import { t } from './vue-lang';
 
 const dateFormat = 'YYYY-MM-DD';
 
 const columns = [
   {
     key: 'contractCode',
-    title: '合同编号',
+    title: `${ t('list.title.contractNumber') }`,
     dataIndex: 'contractCode',
     width: 170,
   },
   {
     key: 'username',
-    title: '用户名',
+    title: `${ t('list.title.username') }`,
     dataIndex: 'username',
     align: 'center',
     width: 200,
   },
   {
     key: 'mobile',
-    title: '手机号',
+    title: `${ t('list.title.phoneNumber') }`,
     dataIndex: 'mobile',
     width: 150,
   },
   {
     key: 'goodsType',
-    title: '商品类型',
+    title: `${ t('list.title.commodityType') }`,
     dataIndex: 'goodsType',
     width: 100,
   },
   {
     key: 'goodsName',
-    title: '商品名称',
+    title: `${ t('list.title.tradeName') }`,
     dataIndex: 'goodsName',
     width: 250,
     ellipsis: true,
   },
   {
     key: 'contractName',
-    title: '电子合同名称',
+    title: `${ t('list.title.contractName') }`,
     dataIndex: 'contractName',
     width: 250,
   },
   {
     key: 'operation',
-    title: '操作',
+    title: `${ t('list.title.controls') }`,
     width: 90,
   },
 ];
@@ -118,7 +119,7 @@ async function onReset() {
 }
 
 function getTableTotal(total) {
-  return `共 ${total} 项`;
+  return `${ t('pagination.total') } ${ total } ${ t('pagination.item') }`;
 }
 
 async function handlePaginationChange(page, pageSize) {
@@ -151,23 +152,23 @@ const view = async (record) => {
 
   <div class="flex flex-col space-y-24">
     <div class="flex items-center space-x-20">
-      <a-select v-model:value="goodsType" style="width: 100px" placeholder="商品类型" allow-clear>
-        <a-select-option value="course">课程</a-select-option>
-        <a-select-option value="itemBankExercise">题库</a-select-option>
-        <a-select-option value="classroom">班级</a-select-option>
+      <a-select v-model:value="goodsType" style="width: 100px" :placeholder="t('placeholder.commodityType')" allow-clear>
+        <a-select-option value="course">{{ t('select.curriculum') }}</a-select-option>
+        <a-select-option value="itemBankExercise">{{ t('select.questionBank') }}</a-select-option>
+        <a-select-option value="classroom">{{ t('select.class') }}</a-select-option>
       </a-select>
       <div class="flex items-center">
-        <span>签署时间：</span>
+        <span>{{ t('label.signatureTime') }}：</span>
         <a-range-picker v-model:value="signTime" />
       </div>
       <a-select v-model:value="keywordType" style="width: 100px">
-        <a-select-option value="username">用户名</a-select-option>
-        <a-select-option value="mobile">手机号</a-select-option>
-        <a-select-option value="goodsName">商品名称</a-select-option>
+        <a-select-option value="username">{{ t('select.username') }}</a-select-option>
+        <a-select-option value="mobile">{{ t('select.phoneNumber') }}</a-select-option>
+        <a-select-option value="goodsName">{{ t('select.tradeName') }}</a-select-option>
       </a-select>
-      <a-input v-model:value="keyword" placeholder="请输入名称" style="width: 360px"></a-input>
-      <a-button type="primary" ghost @click="onSearch">搜索</a-button>
-      <a-button @click="onReset">重置</a-button>
+      <a-input v-model:value="keyword" :placeholder="t('placeholder.enterName')" style="width: 360px"></a-input>
+      <a-button type="primary" ghost @click="onSearch">{{ t('btn.search') }}</a-button>
+      <a-button @click="onReset">{{ t('btn.reset') }}</a-button>
     </div>
     <a-table
       :columns="columns"
@@ -181,8 +182,8 @@ const view = async (record) => {
       <template #headerCell="{ column }">
         <template v-if="column.key === 'goodsName'">
           <span>
-            商品名称
-            <a-tooltip placement="topLeft" title="管理员手动加入课程/班级/题库的学员，如果没有生成订单，这里不展示订单号">
+            {{ t('list.title.tradeName') }}
+            <a-tooltip placement="topLeft" :title="t('tip.title')">
               <info-circle-outlined />
             </a-tooltip>
           </span>
@@ -192,23 +193,25 @@ const view = async (record) => {
         <template v-if="column.key === 'goodsName'">
           {{ record.goodsName }}
           <br>
-          <span class="text-[#8A9099] text-12">{{ `订单号：${record.orderSn ? record.orderSn : '-'}` }}</span>
+          <span class="text-[#8A9099] text-12">{{ `${ t('list.content.orderNumber') }：${record.orderSn ? record.orderSn : '-'}` }}</span>
         </template>
         <template v-else-if="column.key === 'contractName'">
           {{ record.contractName }}
           <br>
-          <span class="text-[#8A9099] text-12">{{ `签署时间：${formatDate(record.signTime)}` }}</span>
+          <span class="text-[#8A9099] text-12">{{ `${ t('content.signatureTime') }：${ formatDate(record.signTime) }` }}</span>
         </template>
         <template v-else-if="column.key === 'operation'">
           <div class="signature-list-operation-btn">
-            <a-button type="link" @click="view(record)">查看</a-button>
+            <a-button type="link" @click="view(record)">{{ t('btn.view') }}</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'mobile'">
           {{ record.mobile ? record.mobile : '-' }}
         </template>
         <template v-else-if="column.key === 'goodsType'">
-          {{ record.goodsType === 'course' ? '课程' : record.goodsType === 'classroom' ? '班级' : record.goodsType === 'itemBankExercise' ? '题库' : record.goodsType  }}
+          {{
+            record.goodsType === 'course' ? `${ t('list.content.curriculum') }` : record.goodsType === 'classroom' ? `${ t('list.content.class') }` : record.goodsType === 'itemBankExercise' ? `${ t('list.content.questionBank') }` : record.goodsType
+          }}
         </template>
       </template>
     </a-table>

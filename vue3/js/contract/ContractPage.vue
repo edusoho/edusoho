@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import router from './router';
 import ContractList from './ContractList.vue';
 import SignatureList from './SignatureList.vue';
+import { t } from './vue-lang';
 
 const activeTab = ref('contractList');
 
@@ -14,14 +15,14 @@ function createContract() {
 <template>
   <div class="flex flex-col p-24">
     <div class="flex justify-between">
-      <div class="text-18 font-medium mb-24">电子合同</div>
-      <a-button type="primary" @click="createContract">创建电子合同</a-button>
+      <div class="text-18 font-medium mb-24">{{ t('contract') }}</div>
+      <a-button type="primary" @click="createContract">{{ t('createContract') }}</a-button>
     </div>
     <a-tabs v-model:activeKey="activeTab">
-      <a-tab-pane key="contractList" tab="电子合同管理">
+      <a-tab-pane key="contractList" :tab="t('contractManagement')">
         <contract-list />
       </a-tab-pane>
-      <a-tab-pane key="signatureRecord" tab="签署记录">
+      <a-tab-pane key="signatureRecord" :tab="t('signatureRecord')">
         <signature-list />
       </a-tab-pane>
     </a-tabs>

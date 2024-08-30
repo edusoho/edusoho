@@ -5,35 +5,36 @@ import {formatDate} from 'vue3/js/common';
 import {message, Modal} from 'ant-design-vue';
 import { useRouter } from 'vue-router'
 import {CloseOutlined, ExclamationCircleOutlined} from '@ant-design/icons-vue';
+import { t } from './vue-lang';
 
 const contractManagementColumns = [
   {
     key: 'name',
-    title: '名称',
+    title: `${t('list.title.name')}`,
     dataIndex: 'name',
     width: 400,
     ellipsis: true,
   },
   {
     key: 'relatedGoods',
-    title: '关联商品',
+    title: `${t('list.title.relatedGoods')}`,
     dataIndex: 'relatedGoods',
     width: 200,
   },
   {
     key: 'updatedUser',
-    title: '更新人',
+    title: `${t('list.title.regenerator')}`,
     dataIndex: 'updatedUser.nickname',
     width: 150,
   },
   {
     key: 'updatedTime',
-    title: '更新时间',
+    title: `${t('list.title.updateTime')}`,
     width: 210,
   },
   {
     key: 'operation',
-    title: '操作',
+    title: `${t('list.title.controls')}`,
     width: 200,
   },
 ];
@@ -95,7 +96,7 @@ async function onReset() {
 }
 
 function getTableTotal(total) {
-  return `共 ${total} 项`;
+  return `${ t('pagination.total') } ${ total } ${ t('pagination.item') }`;
 }
 
 async function handlePaginationChange(page, pageSize) {
@@ -148,13 +149,13 @@ const toUpdateContract = (id) => {
 
   <div class="flex flex-col space-y-24">
     <div class="space-x-20">
-      <a-select v-model:value="keywordType" style="width: 140px" placeholder="搜索类型" allow-clear>
-        <a-select-option value="name">名称</a-select-option>
-        <a-select-option value="username">更新人</a-select-option>
+      <a-select v-model:value="keywordType" style="width: 140px" :placeholder="t('placeholder.searchType')" allow-clear>
+        <a-select-option value="name">{{ t('select.name') }}</a-select-option>
+        <a-select-option value="username">{{ t('select.regenerator') }}</a-select-option>
       </a-select>
-      <a-input v-model:value="keyword" placeholder="请输入名称" style="width: 360px"></a-input>
-      <a-button type="primary" ghost @click="onSearch">搜索</a-button>
-      <a-button @click="onReset">重置</a-button>
+      <a-input v-model:value="keyword" :placeholder="t('placeholder.enterName')" style="width: 360px"></a-input>
+      <a-button type="primary" ghost @click="onSearch">{{ t('btn.search') }}</a-button>
+      <a-button @click="onReset">{{ t('btn.reset') }}</a-button>
     </div>
     <a-table
       :columns="contractManagementColumns"
@@ -168,16 +169,16 @@ const toUpdateContract = (id) => {
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
-            <span><span class="text-[#8A9099]">课程：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
-            <span><span class="text-[#8A9099]">班级：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
-            <span><span class="text-[#8A9099]">题库：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">{{ t('list.content.curriculum') }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">{{ t('list.content.class') }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">{{ t('list.content.questionBank') }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">
           <div class="flex contract-list-operation-btn space-x-16">
-            <a-button type="link" @click="view(record)">查看</a-button>
-            <a-button type="link" @click="toUpdateContract(record.id)">编辑</a-button>
-            <a-button type="link" @click="showDeleteConfirm(record.id, record.name)">删除</a-button>
+            <a-button type="link" @click="view(record)">{{ t('btn.view') }}</a-button>
+            <a-button type="link" @click="toUpdateContract(record.id)">{{ t('btn.editor') }}</a-button>
+            <a-button type="link" @click="showDeleteConfirm(record.id, record.name)">{{ t('btn.delete') }}</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'updatedUser'">

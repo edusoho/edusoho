@@ -6,6 +6,7 @@ import {CloudUploadOutlined, ExclamationCircleOutlined} from '@ant-design/icons-
 import {message, Modal} from 'ant-design-vue';
 import router from './router';
 import {FileApi} from '../../api/File';
+import { t } from './vue-lang';
 import VueCropper from 'vue3/js/components/VueCropper.vue';
 
 message.config({
@@ -179,7 +180,7 @@ const onFinish = async () => {
       >
         <a-form-item>
           <div class="flex items-center" id="basicInformation">
-            <div class="text-16 font-medium text-[#1E2226]">电子合同</div>
+            <div class="text-16 font-medium text-[#1E2226]">{{ t('contract') }}</div>
           </div>
         </a-form-item>
         <a-form-item
