@@ -979,6 +979,30 @@ const routes = [
       ),
   },
   {
+    path: '/my/contract',
+    name: 'myContract',
+    meta: {
+      i18n: true,
+      title: 'title.myContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "my-contract" */ '@/containers/my/contract/index.vue'
+      ),
+  },
+  {
+    path: '/my/contract/:id',
+    name: 'myContractDetail',
+    meta: {
+      i18n: true,
+      title: 'title.viewContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "my-contract" */ '@/containers/my/contract/detail.vue'
+      ),
+  },
+  {
     path: '/my/wrong-quesition-book/exercise',
     name: 'myWrongQuestionBookExercise',
     component: () =>
@@ -1040,6 +1064,30 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/analysis.vue'
+      ),
+  },
+  {
+    path: '/sign_contract/:id/:goodsKey',
+    name: 'signContract',
+    meta: {
+      i18n: true,
+      title: 'contract.signContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "signContract" */ '@/containers/contract/SignContract.vue'
+      ),
+  },
+  {
+    path: '/contract_detail/:id/:goodsKey',
+    name: 'contractDetail',
+    meta: {
+      i18n: true,
+      title: 'contract.contractDetail',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "signContract" */ '@/containers/contract/ContractDetail.vue'
       ),
   },
 ];

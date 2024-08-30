@@ -215,4 +215,9 @@ export default [
     url: '/setting/mail',
     method: 'GET',
   },
+  {
+    name: 'getMyContract',
+    url: '/me/contract',
+    method: 'GET',
+  }
 ];

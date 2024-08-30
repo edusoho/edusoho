@@ -26,6 +26,8 @@ const vipIcon = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAYCAMAAADeQ
 
 const vipIcon2 = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADcAAAAwCAMAAACCABLMAAABDlBMVEUAAAD/y5n/0J//tnf/z57/0KH/yZT/uHb/y5f/vHz/voT/uHT/u3r/wIL/vHv/xIr/x4//wof/wof/v4H/zZn/voD/wYf/unj/xYz/u3j/yJL/w4j/x4//zZv/w4n/z6D/wYf/zJn/wYj/x5H/wYn/z57/0aL/xYz/v4L/xY7/xIv/wIX/vHv/xo//t3T/xI3/0qP/vHz/0qT/y5v/uXr/zZ3/yI3/0qT/t3P/06b/vH7/t3L/vHn/1Kb/06P/z5//v4//vn//v4H/xYz/y5j/wIP/0KD/xIv/z57/w4n/uHX/ypb/zJn/unf/u3r/0aL/xo7/vHz/0qT/zpz/yZT/zZv/yJL/t3P/wYT/xY58xxn4AAAAQXRSTlMAH58Qv4CAH59/MN+Qf9+AX18/79+/cGDv79/Pv6+fkJBgUD8f79/f38+vr5+PgHBvb2BAQDAw7u7Pz7CvcD8QEEzx8nIAAAJHSURBVEjH7ZNrV9pAEIYngHIRLQIKFLFW8W6t195vkIQYCGGFCPL//0jfmd2Sek7+QHt4P+0J5+GZnZmlZZb5T/N9RXJLEmtVx6LSK84mvm2uc/LI9V3MfR6Px6Neb4UkOWcQRdH0NVFdKc/zz/Ct4na7nU7n8TEMw8ZF1nApwQxnOc5gEE2nJfqgbBvcNlHBBdc13LC/ZsA3mksR5y1zoisJ55VRphv7hkOAaeJc/c1VHQdlQke7yvZszyecRGd84PqXxLkBN+o9pEQXQDdgHZ3aNrAmTk3xneTzxQ3B+mvC/WDMcJnAcVDmAdEvJdweUfpZyizi52xDuJkUanGdD8LdA4NuB8cDxV3xMYay67qoskZIkbnZTDrzE5jhcsJF0NF7+MAViLbhA1eIOe2jjyPjswQbtAg5A+f7dZzO3S5SIc6WlPmJJEfCZTARcAAtQo55CD5XfMLX624RUguF+6q5DI+Buap0JUdIe2578Jm2ACxm29l8qNtSMwsDDj4MAVMwun29LftoCzh3sS3xGFAelznJQMc+0dE7W9rSJlp/frktiz2jK/jA3QbgjI521By+Y26FC1usizG60XW2nmId1cV3bh5DzDUu0/Qn94xNDhlzjE4eg+/Fj6GygXwr1kAtYsn9Jk8MGl1JKXB+GQ3S23JHCREfsEB00pa5tAX/vqevl07iDhmbBLGOTmVbmrotKPMLJeVIyjQ6iVK8Lbs46SlcJHItwwWrpFNePIaCK9x1IpcyXFV0Lx+DfusFWmaZfye/AVzKvzOFnTkhAAAAAElFTkSuQmCC`
 
+const contractIcon = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAPFBMVEUAAABOWWlQWGhPWGo8zX89zX9OWmlOWGlNWGg9zH48zX9OWWk9zX48zH5OWWlNWWlAz4A4x4BOWWk9zX8xCAKQAAAAEnRSTlMA3yCfv+/vv2BQr6+gkIBvICBCi9aMAAAAb0lEQVQ4y93UNw7AIBBEUZzIycP97+pmJQukxXRGvJbfLMWIBe0d4pUkOmQUROODplABB88BisINm2DQ88qhuUrlMkzoSyMwYT5r9p7v6uEw27PGHRNKww9/+HxX/xAqwB08QI0PAIn9SUmjI7WeB4awE9OiyxV3AAAAAElFTkSuQmCC`
+
 export default {
   editIcon,
   editIcon2,
@@ -40,5 +42,6 @@ export default {
   certificateIcon,
   certificateIcon2,
   vipIcon,
-  vipIcon2
+  vipIcon2,
+  contractIcon
 }

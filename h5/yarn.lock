@@ -13221,6 +13221,11 @@ slice-ansi@^4.0.0:
     astral-regex "^2.0.0"
     is-fullwidth-code-point "^3.0.0"
 
+smooth-signature@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.npmmirror.com/smooth-signature/-/smooth-signature-1.0.15.tgz#c3d095129491d63f7c21fe041bef0020dfa62ad9"
+  integrity sha512-YmoDJxUHo22ITgavyw1LEld8kpACzNS3uZuXey6D73rSSWq5S3oAAt3wJ7K60s9CdmUhrPG1myHE0i/N9LI31Q==
+
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.npmmirror.com/snapdragon-node/download/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"

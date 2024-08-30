@@ -27,6 +27,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex';
+import { Dialog } from 'vant';
 import directory from './directory';
 import reviewList from './review-list';
 import introduction from './introduction';
@@ -57,8 +58,27 @@ export default {
     }),
   },
   watch: {},
-  created() {},
+  created() {
+    this.signContractConfirm()
+  },
   methods: {
+    signContractConfirm() {
+      const { contract, isContractSigned } = this.ItemBankExercise
+
+      if (isContractSigned == 1 || contract.sign === 'no') return
+
+      const { id, goodsKey, name } = contract
+
+      Dialog.confirm({
+        title: this.$t('contract.signContractTitle'),
+        message: this.$t('contract.signContractTips', { name }),
+        confirmButtonText: this.$t('contract.sign'),
+      }).then(() => {
+        this.$router.push({ name: 'signContract', params: { id, goodsKey } })
+      }).catch(() => {
+        this.$router.go(-1)
+      });
+    },
   },
 };
 </script>
