@@ -40,6 +40,7 @@ const CKEditorConfig = {
 };
 const initEditor = () => {
   const editor = CKEDITOR.replace('contract-content', {
+    allowedContent: true,
     toolbar: [
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
     ],
@@ -153,7 +154,6 @@ const showCancelModal = () => {
 };
 
 const submitBtnDisabled = ref(false);
-
 const onFinish = async () => {
   submitBtnDisabled.value = true;
   if (editType === 'create') {
@@ -168,7 +168,7 @@ const onFinish = async () => {
 </script>
 
 <template>
-  <div class="flex h-[calc(100vh-152px)] overflow-y-auto">
+  <div class="flex h-[calc(100vh-172px)] overflow-y-auto">
     <div class="create-contract p-24 w-full">
       <a-form
         ref="formRef"
