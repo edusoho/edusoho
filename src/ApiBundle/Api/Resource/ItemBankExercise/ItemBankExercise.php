@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Contract\Service\ContractService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 
 class ItemBankExercise extends AbstractResource
@@ -29,6 +30,22 @@ class ItemBankExercise extends AbstractResource
             $itemBankExercise['access'] = $this->getItemBankExerciseService()->canLearnExercise($id);
         } else {
             $itemBankExercise['access'] = $this->getItemBankExerciseService()->canJoinExercise($id);
+        }
+        $goodsKey = 'itemBankExercise_'.$itemBankExercise['id'];
+        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
+        $itemBankExercise['isContractSigned'] = empty($signRecord) ? 0 : 1;
+        $itemBankExercise['contract'] = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        if (empty($itemBankExercise['contract'])) {
+            $itemBankExercise['contract'] = [
+                'sign' => 'no',
+            ];
+        } else {
+            $itemBankExercise['contract'] = [
+                'sign' => $itemBankExercise['contract']['sign'] ? 'required' : 'optional',
+                'name' => $itemBankExercise['contract']['contractName'],
+                'id' => $itemBankExercise['contract']['contractId'],
+                'goodsKey' => $goodsKey,
+            ];
         }
 
         return $itemBankExercise;
@@ -77,5 +94,13 @@ class ItemBankExercise extends AbstractResource
     protected function getItemBankExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->service('Contract:ContractService');
     }
 }

@@ -8,6 +8,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Assistant\Service\AssistantStudentService;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
 use Biz\MultiClass\Service\MultiClassService;
@@ -79,6 +80,20 @@ class PageCourse extends AbstractResource
 
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
+        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        if (empty($contract)) {
+            $course['contract'] = [
+                'sign' => 'no',
+            ];
+        } else {
+            $course['contract'] = [
+                'sign' => $contract['sign'] ? 'required' : 'optional',
+                'name' => $contract['contractName'],
+                'id' => $contract['contractId'],
+                'goodsKey' => $goodsKey,
+            ];
+        }
 
         $course['assistant'] = [];
         if (!empty($user['id'])) {
@@ -303,5 +318,13 @@ class PageCourse extends AbstractResource
     protected function getTokenService()
     {
         return $this->service('User:TokenService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->service('Contract:ContractService');
     }
 }

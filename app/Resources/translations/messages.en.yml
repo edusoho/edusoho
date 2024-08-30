@@ -8260,6 +8260,7 @@ log.module.multi_class_assistant: Multi class assistant
 log.module.multi_class: Multi class
 log.module.wrong_question: 'Wrong Question'
 log.module.ai: AI
+log.module.contract: Contract
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -9737,6 +9738,7 @@ exception.app.delete_cache_failed: Delete cache failed
 exception.app.extract_failed: Unable to extract the installation package！
 exception.role.forbidden_modify: This permission cannot be modified！
 exception.content.not_found: content is not exist
+exception.sign_record.is_existed: 'The contract has been successfully signed and there is no need to sign it again'
 exception.content.type_required: type of content is required
 exception.content.title_required: title of content is required
 exception.download_activity.not_download_activity: Not download activity

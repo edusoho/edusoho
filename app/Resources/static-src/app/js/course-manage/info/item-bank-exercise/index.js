@@ -1,5 +1,39 @@
 import Intro from '../intro';
 import Expiry from 'app/js/course-manage/expiry/expiry';
+import {Dropdown, Menu, Form, FormItem ,Switch } from '@codeages/design-vue';
+import ContractSetting from './contract-setting.vue';
+import Vue from 'common/vue';
+import Axios from 'axios';
+import qs from 'qs';
+
+const axios = Axios.create({
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Accept': 'application/vnd.edusoho.v2+json',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
+  },
+});
+
+Vue.prototype.$axios = axios;
+Vue.prototype.$qs = qs;
+
+Vue.use(Dropdown);
+Vue.use(Menu);
+Vue.filter('trans', function (value, params) {
+  if (!value) return '';
+  return Translator.trans(value, params);
+});
+
+
+new Vue({
+  el: '#contract-setting',
+  render: createElement => createElement(ContractSetting, {
+    props: {
+      exercise: $('#contract-setting').data('exercise')
+    },
+  }),
+});
 
 class ExerciseInfo {
   constructor() {
@@ -111,6 +145,27 @@ class ExerciseInfo {
 
   saveForm() {
     $('#course-submit').on('click', (event) => {
+      // 阻止表单的默认提交行为
+      event.preventDefault();
+
+      // 访问Vue组件的数据
+      const formData = window.marketingForm;
+
+      // 将formData中的数据添加到表单中
+      const $form = $('#course-info-form');
+
+      // 清除之前添加的隐藏字段，以免重复添加
+      $form.find('input[name^="marketingForm"]').remove();
+
+      // 遍历formData并添加隐藏字段
+      Object.keys(formData).forEach(key => {
+        const value = formData[key];
+        $('<input>')
+          .attr('type', 'hidden')
+          .attr('name', `${key}`)
+          .attr('value', value)
+          .appendTo($form);
+      });
       this.expiry.commonExpiryMode();
       if (this.validator.form()) {
         $('#course-info-form').submit();
