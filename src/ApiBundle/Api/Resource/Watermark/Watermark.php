@@ -14,14 +14,18 @@ class Watermark extends AbstractResource
             return $this->getTaskWatermark();
         }
 
-        return [];
+        return [
+            'text' => '',
+        ];
     }
 
     private function getTaskWatermark()
     {
         $courseSetting = $this->getSettingService()->get('course');
         if (empty($courseSetting['task_page_watermark_enable']) || empty($courseSetting['task_page_watermark_setting']['fields'])) {
-            return [];
+            return [
+                'text' => '',
+            ];
         }
         $watermarkSetting = $courseSetting['task_page_watermark_setting'];
         $user = $this->getUserService()->getUserAndProfile($this->getCurrentUser()->getId());
