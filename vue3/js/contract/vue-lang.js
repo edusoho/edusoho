@@ -17,6 +17,7 @@ const i18n = createI18n(merge({
         view: '查看',
         editor: '编辑',
         delete: '删除',
+        close: '关闭',
       },
       label: {
         signatureTime: '签署时间',
@@ -64,7 +65,18 @@ const i18n = createI18n(merge({
       },
       tip: {
         title: '管理员手动加入课程/班级/题库的学员，如果没有生成订单，这里不展示订单号',
-      }
+      },
+      modal: {
+        contractNumber: '合同编号',
+        contractSigning: '电子合同签署',
+        partyA: '甲方',
+        signingDate: '签约日期',
+        partyB: '乙方',
+        handSignature: '手写签名',
+        partyBName: '乙方姓名',
+        iDNumber: '身份证号',
+        contactInformation: '联系方式',
+      },
     },
     en: {
       contract: 'Contract',
@@ -77,6 +89,7 @@ const i18n = createI18n(merge({
         view: 'View',
         editor: 'Editor',
         delete: 'Delete',
+        close: 'Close',
       },
       label: {
         signatureTime: 'Signature time',
@@ -124,7 +137,18 @@ const i18n = createI18n(merge({
       },
       tip: {
         title: 'If the administrator manually joins the course/class/question bank, the order number is not displayed here if no order is generated',
-      }
+      },
+      modal: {
+        contractNumber: 'Contract number',
+        contractSigning: 'Electronic contract signing',
+        partyA: 'Party A',
+        signingDate: 'Signing date',
+        partyB: 'Party B',
+        handSignature: 'Hand signature',
+        partyBName: 'Party B\'s name',
+        iDNumber: 'ID number',
+        contactInformation: 'Contact information',
+      },
     }
   },
 }, {}));
