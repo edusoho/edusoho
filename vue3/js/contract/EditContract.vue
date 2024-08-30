@@ -73,11 +73,11 @@ onMounted(async () => {
 const uploadCourseCover = (info) => {
   const isPng = info.file.type === 'image/png';
   if (!isPng) {
-    message.error('仅支持上传 png 格式的图片');
+    message.error(`${ t('message.imagesInPng') }`);
   }
   const isLt2M = info.file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
-    message.error('请上传小于 2M 的文件');
+    message.error(`${ t('message.fileSizeLimit') }`);
   }
   if (isPng && isLt2M) {
     sealName.value = info.file.originFileObj.name;
@@ -128,23 +128,23 @@ const saveCropperImage = async () => {
 
 const validateContent = async (_rule, value) => {
   if (!value) {
-    return Promise.reject("请输入电子合同内容");
+    return Promise.reject(`${ t('message.enterContractContent') }`);
   }
   value = value.trim();
   if (!value) {
-    return Promise.reject("请输入电子合同内容");
+    return Promise.reject(`${ t('message.enterContractContent') }`);
   }
   return Promise.resolve();
 }
 
 const showCancelModal = () => {
   Modal.confirm({
-    title: '确定要离开当前页面吗？',
+    title: `${ t('modal.title.leaveTheCurrentPage') }`,
     icon: createVNode(ExclamationCircleOutlined),
     centered: true,
-    okText: '离开',
-    cancelText: '取消',
-    content: createVNode('div', {style: 'color:#626973; font-size:14px; font-weight:400'}, '离开后已编辑的数据将消失...'),
+    okText: `${ t('btn.leave') }`,
+    cancelText: `${ t('btn.cancel') }`,
+    content: createVNode('div', {style: 'color:#626973; font-size:14px; font-weight:400'}, `${ t('modal.dataWillDisappear') }`),
     onOk() {
       router.push({name: 'Index'});
     },
@@ -159,10 +159,10 @@ const onFinish = async () => {
   submitBtnDisabled.value = true;
   if (editType === 'create') {
     await ContractApi.create(formState);
-    message.success('创建成功');
+    message.success(`${ t('message.createdSuccessfully') }`);
   } else if (editType === 'update') {
     await ContractApi.update(contractId, formState);
-    message.success('编辑成功');
+    message.success(`${ t('message.editSuccessfully') }`);
   }
   await router.push({name: 'Index'});
 };
@@ -185,53 +185,53 @@ const onFinish = async () => {
         </a-form-item>
         <a-form-item
           name="name"
-          label="电子合同名称"
-          :rules="[{ required: true, message: '请输入电子合同名称' }]"
+          :label="t('label.contractName')"
+          :rules="[{ required: true, message: `${t('message.enterContractName')}` }]"
         >
-          <a-input v-model:value.trim="formState.name" :maxlength="80" show-count placeholder="请输入名称"/>
+          <a-input v-model:value.trim="formState.name" :maxlength="80" show-count :placeholder="t('placeholder.enterName')"/>
         </a-form-item>
         <a-form-item
           name="content"
-          label="电子合同内容"
-          :rules="[{ required: true, message: '请输入电子合同内容', validator: validateContent }]"
+          :label="t('label.contractContent')"
+          :rules="[{ required: true, message: `${t('message.enterContractContent')}`, validator: validateContent }]"
         >
           <div class="flex flex-col space-y-4">
             <textarea id="contract-content"></textarea>
-            <span class="text-[#8A9099] text-12 font-normal">支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签约日期：$date$ 订单价格：$order price$</span>
+            <span class="text-[#8A9099] text-12 font-normal">{{ t('tip.contractContent') }}</span>
           </div>
         </a-form-item>
         <a-form-item
           name="sign"
-          label="乙方签署内容"
-          :rules="[{ required: true, message: '请选择乙方签署内容' }]"
+          :label="t('label.contentSignedByPartyB')"
+          :rules="[{ required: true }]"
         >
           <a-checkbox
             :checked="true"
             disabled
           >
-            姓名
+            {{ t('checkbox.name') }}
           </a-checkbox>
           <a-checkbox
             v-model:checked="formState.sign.IDNumber"
           >
-            身份证号
+            {{ t('checkbox.iDNumber') }}
           </a-checkbox>
           <a-checkbox
             v-model:checked="formState.sign.phoneNumber"
           >
-            联系方式
+            {{ t('checkbox.contactInformation') }}
           </a-checkbox>
           <a-checkbox
             v-model:checked="formState.sign.handSignature"
           >
-            手写签名
+            {{ t('checkbox.handSignature') }}
           </a-checkbox>
         </a-form-item>
         <a-form-item
           name="seal"
-          label="甲方印章"
+          :label="t('label.partyASeal')"
           :validate-trigger="['']"
-          :rules="[{ required: true, message: '请上传印章' }]"
+          :rules="[{ required: true, message: `${t('message.uploadStamp')}` }]"
         >
           <div>
             <a-upload
@@ -249,12 +249,10 @@ const onFinish = async () => {
                 <div class="p-18 bg-[#006AFF]/5" style="border-radius: 9999px">
                   <cloud-upload-outlined :style="{fontSize: '32px'}" class="text-[#006AFF]"/>
                 </div>
-                <div class="mt-8">上传印章</div>
+                <div class="mt-8">{{ t('label.uploadStamp') }}</div>
               </div>
             </a-upload>
-            <div class="w-240 text-[#8A9099] text-12 font-normal">请上传png等透明背景格式的印章图片，建议尺寸为 650×650
-              px，文件大小不超过 2 MB
-            </div>
+            <div class="w-240 text-[#8A9099] text-12 font-normal">{{ t('tip.seal') }}</div>
           </div>
           <a-modal
             :mask-closable="false"
@@ -263,13 +261,13 @@ const onFinish = async () => {
             @cancel="cropperModalVisible = false; sealUrl = ''; formState.seal = ''">
 
             <vue-cropper ref="cropperInstance" :src="imgUrl"></vue-cropper>
-            <template #title>裁剪图片</template>
+            <template #title>{{ t('modal.title.cropPicture') }}</template>
             <template #footer>
               <div class="flex justify-between">
-                <a-button @click="reSelectSeal">重新选择</a-button>
+                <a-button @click="reSelectSeal">{{ t('btn.reselect') }}</a-button>
                 <div>
-                  <a-button @click="hideCropperModal">取消</a-button>
-                  <a-button type="primary" @click="saveCropperImage">保存图片</a-button>
+                  <a-button @click="hideCropperModal">{{ t('btn.cancel') }}</a-button>
+                  <a-button type="primary" @click="saveCropperImage">{{ t('btn.saveImage') }}</a-button>
                 </div>
               </div>
             </template>
@@ -278,8 +276,8 @@ const onFinish = async () => {
         <a-form-item>
           <div
             class="flex justify-center fixed bottom-20 w-[calc(100%-216px)] border-t border-x-0 border-b-0 border-solid border-[#F0F2F5] p-20 left-200 bg-white">
-            <a-button class="mr-16" @click="showCancelModal">取消</a-button>
-            <a-button type="primary" html-type="submit" :disabled="submitBtnDisabled">保存</a-button>
+            <a-button class="mr-16" @click="showCancelModal">{{ t('btn.cancel') }}</a-button>
+            <a-button type="primary" html-type="submit" :disabled="submitBtnDisabled">{{ t('btn.save') }}</a-button>
           </div>
         </a-form-item>
       </a-form>

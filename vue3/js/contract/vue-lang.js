@@ -18,9 +18,19 @@ const i18n = createI18n(merge({
         editor: '编辑',
         delete: '删除',
         close: '关闭',
+        save: '保存',
+        btn: '取消',
+        leave: '离开',
+        saveImage: '保存图片',
+        reselect: '重新选择',
       },
       label: {
         signatureTime: '签署时间',
+        contractName: '电子合同名称',
+        contractContent: '电子合同内容',
+        contentSignedByPartyB: '乙方签署内容',
+        partyASeal: '甲方印章',
+        uploadStamp: '上传印章',
       },
       select: {
         name: '名称',
@@ -31,6 +41,12 @@ const i18n = createI18n(merge({
         username: '用户名',
         phoneNumber: '手机号',
         tradeName: '商品名称',
+      },
+      checkbox: {
+        name: '姓名',
+        iDNumber: '身份证号',
+        contactInformation: '联系方式',
+        handSignature: '手写签名',
       },
       placeholder: {
         searchType: '搜索类型',
@@ -65,8 +81,14 @@ const i18n = createI18n(merge({
       },
       tip: {
         title: '管理员手动加入课程/班级/题库的学员，如果没有生成订单，这里不展示订单号',
+        contractContent: '支持添加 乙方姓名：$name$ 用户名：$username$ 身份证号：$idcard$ 课程/班级/题库名称：$courseName$ 合同编号：$contract number$ 签约日期：$date$ 订单价格：$order price$',
+        seal: '请上传png等透明背景格式的印章图片，建议尺寸为 650×650 px，文件大小不超过 2 MB',
       },
       modal: {
+        title: {
+          leaveTheCurrentPage: '确定要离开当前页面吗？',
+          cropPicture: '裁剪图片',
+        },
         contractNumber: '合同编号',
         contractSigning: '电子合同签署',
         partyA: '甲方',
@@ -76,8 +98,22 @@ const i18n = createI18n(merge({
         partyBName: '乙方姓名',
         iDNumber: '身份证号',
         contactInformation: '联系方式',
+        dataWillDisappear: '离开后已编辑的数据将消失...',
+      },
+      message: {
+        enterContractName: '请输入电子合同名称',
+        enterContractContent: '请输入电子合同内容',
+        uploadStamp: '请上传印章',
+        imagesInPng: '仅支持上传 png 格式的图片',
+        fileSizeLimit: '请上传小于 2M 的文件',
+        createdSuccessfully: '创建成功',
+        editSuccessfully: '编辑成功',
       },
     },
+
+
+
+
     en: {
       contract: 'Contract',
       createContract: 'Create an electronic contract',
@@ -90,9 +126,19 @@ const i18n = createI18n(merge({
         editor: 'Editor',
         delete: 'Delete',
         close: 'Close',
+        save: 'Save',
+        cancel: 'Cancel',
+        leave: 'Leave',
+        saveImage: 'Save the image',
+        reselect: 'Reselect',
       },
       label: {
         signatureTime: 'Signature time',
+        contractName: 'Electronic contract name',
+        contractContent: 'Electronic contract content',
+        contentSignedByPartyB: 'Content signed by Party B',
+        partyASeal: 'Party A\'s seal',
+        uploadStamp: 'Upload stamp',
       },
       select: {
         name: 'Name',
@@ -103,6 +149,12 @@ const i18n = createI18n(merge({
         username: 'Username',
         phoneNumber: 'Mobile phone number',
         tradeName: 'Trade name',
+      },
+      checkbox: {
+        name: 'name',
+        iDNumber: 'ID number',
+        contactInformation: 'Contact information',
+        handSignature: 'Hand signature',
       },
       placeholder: {
         searchType: 'Search type',
@@ -137,8 +189,14 @@ const i18n = createI18n(merge({
       },
       tip: {
         title: 'If the administrator manually joins the course/class/question bank, the order number is not displayed here if no order is generated',
+        contractContent: 'Party B\'s name: $name$User name: $username$ID number: $idcard$Course/Class/question Bank Name: $courseName$contract number: $date: $Date $Order Price: $order price$',
+        seal: 'Please upload the seal image in transparent background format such as png. The recommended size is 650×650 px and the file size should not exceed 2 MB',
       },
       modal: {
+        title: {
+          leaveTheCurrentPage: 'Are you sure you want to leave the current page?',
+          cropPicture: 'Crop picture',
+        },
         contractNumber: 'Contract number',
         contractSigning: 'Electronic contract signing',
         partyA: 'Party A',
@@ -148,6 +206,16 @@ const i18n = createI18n(merge({
         partyBName: 'Party B\'s name',
         iDNumber: 'ID number',
         contactInformation: 'Contact information',
+        dataWillDisappear: 'The edited data will disappear when you leave...',
+      },
+      message: {
+        enterContractName: 'Please enter the electronic contract name',
+        enterContractContent: 'Please enter the electronic contract',
+        uploadStamp: 'Please upload stamp',
+        imagesInPng: 'Only images in png format can be uploaded',
+        fileSizeLimit: 'Upload files smaller than 2 MB',
+        createdSuccessfully: 'Created successfully',
+        editSuccessfully: 'Edit successfully',
       },
     }
   },
