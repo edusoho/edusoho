@@ -116,14 +116,14 @@ getList();
 
 function showDeleteConfirm(id, name) {
   Modal.confirm({
-    title: `是否确认删除《${name}》`,
+    title: `${ t('modal.title.confirmDelete') }《${name}》？`,
     icon: createVNode(ExclamationCircleOutlined),
-    content: '删除后无法恢复...',
+    content: `${ t('modal.cannotBeRestored') }...`,
     centered: true,
-    okText: '删除',
+    okText: `${ t('btn.delete') }`,
     async onOk() {
       await ContractApi.delete(id);
-      message.success('删除成功');
+      message.success(t('message.successfullyDelete'));
       await getList();
     },
     onCancel() {},
@@ -167,6 +167,14 @@ const toUpdateContract = (id) => {
       @change="handleTableChange"
     >
       <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'name'">
+          <div class="flex flex-col items-start">
+            <a-tooltip placement="topLeft" :overlayStyle="{ maxWidth: '450px', whiteSpace: 'normal' }">
+              <template #title class="w-400">{{record.name}}</template>
+              <div class="w-full overflow-hidden text-ellipsis whitespace-nowrap">{{record.name}}</div>
+            </a-tooltip>
+          </div>
+        </template>
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
             <span><span class="text-[#8A9099]">{{ t('list.content.curriculum') }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
@@ -210,7 +218,7 @@ const toUpdateContract = (id) => {
     >
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
-          <div class="text-16 text-[#1E2226] font-medium">电子合同签署</div>
+          <div class="text-16 text-[#1E2226] font-medium">{{ t('modal.contractSigning') }}</div>
           <CloseOutlined class="h-16 w-16" @click="contractContentVisible = false"/>
         </div>
       </template>

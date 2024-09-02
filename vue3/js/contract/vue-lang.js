@@ -88,6 +88,7 @@ const i18n = createI18n(merge({
         title: {
           leaveTheCurrentPage: '确定要离开当前页面吗？',
           cropPicture: '裁剪图片',
+          confirmDelete: '是否确认删除',
         },
         contractNumber: '合同编号',
         contractSigning: '电子合同签署',
@@ -99,6 +100,7 @@ const i18n = createI18n(merge({
         iDNumber: '身份证号',
         contactInformation: '联系方式',
         dataWillDisappear: '离开后已编辑的数据将消失...',
+        cannotBeRestored: '删除后无法恢复',
       },
       message: {
         enterContractName: '请输入电子合同名称',
@@ -108,11 +110,9 @@ const i18n = createI18n(merge({
         fileSizeLimit: '请上传小于 2M 的文件',
         createdSuccessfully: '创建成功',
         editSuccessfully: '编辑成功',
+        successfullyDelete: '删除成功',
       },
     },
-
-
-
 
     en: {
       contract: 'Contract',
@@ -196,6 +196,7 @@ const i18n = createI18n(merge({
         title: {
           leaveTheCurrentPage: 'Are you sure you want to leave the current page?',
           cropPicture: 'Crop picture',
+          confirmDelete: 'Do you confirm to delete',
         },
         contractNumber: 'Contract number',
         contractSigning: 'Electronic contract signing',
@@ -207,6 +208,7 @@ const i18n = createI18n(merge({
         iDNumber: 'ID number',
         contactInformation: 'Contact information',
         dataWillDisappear: 'The edited data will disappear when you leave...',
+        cannotBeRestored: 'The deletion cannot be restored',
       },
       message: {
         enterContractName: 'Please enter the electronic contract name',
@@ -216,6 +218,7 @@ const i18n = createI18n(merge({
         fileSizeLimit: 'Upload files smaller than 2 MB',
         createdSuccessfully: 'Created successfully',
         editSuccessfully: 'Edit successfully',
+        successfullyDelete: 'Successfully delete',
       },
     }
   },
