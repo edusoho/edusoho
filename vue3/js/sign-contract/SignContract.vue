@@ -9,7 +9,7 @@ import {
 import {message} from 'ant-design-vue';
 import SmoothSignature from 'smooth-signature';
 import {t} from './vue-lang';
-import Api from 'vue3/api';
+import Api from '../../api';
 
 const contractTemplate = ref();
 const contract = ref();

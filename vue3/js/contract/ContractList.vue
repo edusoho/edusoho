@@ -4,7 +4,7 @@ import {message, Modal} from 'ant-design-vue';
 import {useRouter} from 'vue-router';
 import {CloseOutlined, ExclamationCircleOutlined} from '@ant-design/icons-vue';
 import {t} from './vue-lang';
-import Api from 'vue3/api';
+import Api from '../../api';
 import {formatDate} from 'vue3/js/common';
 
 const contractManagementColumns = [
