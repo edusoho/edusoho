@@ -25,13 +25,13 @@ const columns = [
     key: 'mobile',
     title: `${ t('list.title.phoneNumber') }`,
     dataIndex: 'mobile',
-    width: 150,
+    width: 180,
   },
   {
     key: 'goodsType',
     title: `${ t('list.title.commodityType') }`,
     dataIndex: 'goodsType',
-    width: 100,
+    width: 150,
   },
   {
     key: 'goodsName',
@@ -152,7 +152,7 @@ const view = async (record) => {
 
   <div class="flex flex-col space-y-24">
     <div class="flex items-center space-x-20">
-      <a-select v-model:value="goodsType" style="width: 100px" :placeholder="t('placeholder.commodityType')" allow-clear>
+      <a-select v-model:value="goodsType" style="width: 150px" :placeholder="t('placeholder.commodityType')" allow-clear>
         <a-select-option value="course">{{ t('select.curriculum') }}</a-select-option>
         <a-select-option value="itemBankExercise">{{ t('select.questionBank') }}</a-select-option>
         <a-select-option value="classroom">{{ t('select.class') }}</a-select-option>
@@ -161,7 +161,7 @@ const view = async (record) => {
         <span>{{ t('label.signatureTime') }}：</span>
         <a-range-picker v-model:value="signTime" />
       </div>
-      <a-select v-model:value="keywordType" style="width: 100px">
+      <a-select v-model:value="keywordType" style="width: 200px">
         <a-select-option value="username">{{ t('select.username') }}</a-select-option>
         <a-select-option value="mobile">{{ t('select.phoneNumber') }}</a-select-option>
         <a-select-option value="goodsName">{{ t('select.tradeName') }}</a-select-option>
