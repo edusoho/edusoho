@@ -97,6 +97,7 @@ const view = async (id, name) => {
       <a-modal :width="900"
                v-model:open="myContentVisible"
                :closable=false
+               zIndex="1050"
                :centered="true"
                :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
                wrapClassName="my-contract-detail-modal"

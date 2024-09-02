@@ -50,6 +50,7 @@ const columns = [
     key: 'operation',
     title: `${ t('list.title.controls') }`,
     width: 150,
+    fixed: 'right',
   },
 ];
 
@@ -158,7 +159,7 @@ const view = async (record) => {
         <a-select-option value="classroom">{{ t('select.class') }}</a-select-option>
       </a-select>
       <div class="flex items-center">
-        <span>{{ t('label.signatureTime') }}：</span>
+        <span class="whitespace-nowrap">{{ t('label.signatureTime') }}：</span>
         <a-range-picker v-model:value="signTime" />
       </div>
       <a-select v-model:value="keywordType" style="width: 200px">
@@ -176,7 +177,7 @@ const view = async (record) => {
       :row-key="record => record.id"
       :pagination="false"
       :loading="loading"
-      :scroll="{ x: 1500 }"
+      :scroll="{ x: 1300 }"
       @change="handleTableChange"
     >
       <template #headerCell="{ column }">
@@ -233,6 +234,7 @@ const view = async (record) => {
            wrapClassName="signature-list-detail-modal"
            v-model:open="signatureContentVisible"
            :closable=false
+           zIndex="1050"
            :centered="true"
            :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
   >
