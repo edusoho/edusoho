@@ -25,10 +25,8 @@ app.use(Popconfirm);
 app.use(Modal);
 app.use(Upload);
 app.use(Tabs);
-app.use(Tabs.TabPane);
 app.use(DatePicker);
 app.use(Tooltip);
-// app.use(RangePicker);
 
 setCurrentPrimaryColor(app);
 

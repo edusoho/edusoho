@@ -34,6 +34,8 @@ import reviewModule from './modules/review';
 import courseTaskEventModule from './modules/courseTaskEvent';
 import courseTaskResultModule from './modules/courseTaskResult';
 import fastLoginSmsModule from './modules/fastLoginSms';
+import watermark from './modules/watermark';
+import setting from './modules/setting';
 
 const API_URL_PREFIX = '/api';
 
@@ -66,7 +68,8 @@ const Api = {
   courseTaskEvent: courseTaskEventModule(API_URL_PREFIX),
   //courseTaskResult接口
   courseTaskResult: courseTaskResultModule(API_URL_PREFIX),
+  watermark: watermark(API_URL_PREFIX),
+  setting: setting(API_URL_PREFIX),
 };
 
 export default Api;
-

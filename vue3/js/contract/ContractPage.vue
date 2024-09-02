@@ -27,5 +27,4 @@ function createContract() {
       </a-tab-pane>
     </a-tabs>
   </div>
-  <!--  <contract-drawer v-model:visible="drawerVisible" :type="drawerType"/>-->
 </template>

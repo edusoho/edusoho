@@ -7,9 +7,9 @@ import {
   EditOutlined,
 } from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
-import {SignContractApi} from '../../api/SignContract';
 import SmoothSignature from 'smooth-signature';
-import { t } from './vue-lang';
+import {t} from './vue-lang';
+import Api from 'vue3/api';
 
 const contractTemplate = ref();
 const contract = ref();
@@ -50,7 +50,7 @@ onMounted(async () => {
   sign.value = document.querySelector('input[name="sign"]').value;
   targetTitle.value = document.querySelector('input[name="target-title"]').value;
   nickname.value = document.querySelector('input[name="nickname"]').value;
-  contractTemplate.value = await SignContractApi.getContractTemplate(contractId.value, goodsKey.value);
+  contractTemplate.value = await Api.contract.getContractSignTemplate(contractId.value, goodsKey.value);
   signContractConfirmVisible.value = true;
   formState.truename = contractTemplate.value.signFields.find(item => item.field === 'truename')?.default;
   formState.IDNumber = contractTemplate.value.signFields.find(item => item.field === 'IDNumber')?.default;
@@ -62,7 +62,7 @@ const showContractDetailModal = () => {
 };
 
 const toSignContract = async () => {
-  contract.value = await SignContractApi.getContract(contractId.value);
+  contract.value = await Api.contract.get(contractId.value);
   signContractConfirmVisible.value = false;
   signContractVisible.value = true;
 };
@@ -113,8 +113,6 @@ const clearSignature = () => {
   signature.value.clear();
 };
 
-const params = ref();
-
 const submitContract = async () => {
   const baseParams = {
     contractCode: contractTemplate.value.code,
@@ -128,7 +126,7 @@ const submitContract = async () => {
   };
   const params = {...baseParams, ...Object.fromEntries(Object.entries(optionalFields).filter(([_, v]) => v !== undefined))};
   try {
-    await SignContractApi.signContract(contractId.value, params);
+    await Api.contract.sign(contractId.value, params);
     message.success(t('message.signedSuccessfully'));
   } catch (e) {
 
@@ -154,19 +152,23 @@ const submitIsDisabled = () => {
 <template>
   <div>
     <!--    签署合同确认框-->
-    <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false :cancelText="t('btn.cancel')" :okText="t('btn.goToSign')" width="416px"
+    <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false
+             :cancelText="t('btn.cancel')" :okText="t('btn.goToSign')" width="416px"
              wrapClassName="to-sign-contract-modal" :onCancel="toCoursePage" :onOk="toSignContract">
       <div class="flex">
         <ExclamationCircleOutlined class="mr-16 w-22 h-22 text-[#FAAD14]" style="font-size: 22px"/>
         <div class="flex flex-col">
           <div class="text-16 text-[#1E2226] font-medium mb-8">{{ t('modal.SignAnElectronicContract') }}</div>
-          <div class="text-14 text-[#626973] font-normal">{{`${ t('modal.confirmContentPart01') }《${contractTemplate.name}》${ t('modal.confirmContentPart02') }`}}</div>
+          <div class="text-14 text-[#626973] font-normal">
+            {{ `${t('modal.confirmContentPart01')}《${contractTemplate.name}》${t('modal.confirmContentPart02')}` }}
+          </div>
         </div>
       </div>
     </a-modal>
 
     <!--  签署合同页面-->
-    <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px" wrapClassName="sign-contract-modal">
+    <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px"
+             wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
           <div class="text-16 text-[#1E2226] font-medium">{{ t('modal.signContract') }}</div>
@@ -175,7 +177,8 @@ const submitIsDisabled = () => {
       </template>
       <div class="p-24 flex">
         <div class="flex flex-1 mr-32 border border-solid border-[#DFE2E6] rounded-8 relative h-380">
-          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 px-32" style="height: calc(100% - 53px);">
+          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 px-32"
+               style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32"></div>
           </div>
           <div
@@ -232,7 +235,8 @@ const submitIsDisabled = () => {
                 { pattern:  /^1\d{10}$/, message: t('validation.enterNumber') }
               ]"
             >
-              <a-input v-model:value="formState.phoneNumber" :maxlength="11" :placeholder="t('placeholder.pleaseEnter')"/>
+              <a-input v-model:value="formState.phoneNumber" :maxlength="11"
+                       :placeholder="t('placeholder.pleaseEnter')"/>
             </a-form-item>
             <a-form-item
               :label="t('label.handwrittenSignature')"
@@ -297,11 +301,14 @@ const submitIsDisabled = () => {
     </a-modal>
 
     <!--合同签字-->
-    <a-modal v-model:open="signVisible" :centered="true" :maskClosable="false" :closable=false :cancelText="t('btn.close')" :okText="t('btn.confirmationSignature')" width="572px"
+    <a-modal v-model:open="signVisible" :centered="true" :maskClosable="false" :closable=false
+             :cancelText="t('btn.close')" :okText="t('btn.confirmationSignature')" width="572px"
              wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
-          <div class="text-16 text-[#1E2226] font-medium">{{ `${targetTitle}-${nickname}-${ t('modal.title.electronicContractSigning') }` }}</div>
+          <div class="text-16 text-[#1E2226] font-medium">
+            {{ `${targetTitle}-${nickname}-${t('modal.title.electronicContractSigning')}` }}
+          </div>
           <CloseOutlined class="h-16 w-16" @click="closeSignModal"/>
         </div>
       </template>
@@ -406,6 +413,7 @@ const submitIsDisabled = () => {
     top: 0;
     padding-bottom: 0;
     margin: 0;
+
     .ant-modal-content {
       display: flex;
       flex-direction: column;

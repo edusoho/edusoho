@@ -1,4 +1,5 @@
 import ActivityEmitter from 'app/js/activity/activity-emitter';
+import Api from 'common/api';
 
 const emitter = new ActivityEmitter();
 let url = $('.js-cloud-url').data('url');
@@ -17,8 +18,6 @@ let $element = $('#activity-ppt-content');
 let typeList = [];
 let currentType = '';
 let totalPagesNumber = '';
-// let tokenUrl = $element.data('tokenUrl');
-const finishType = $element.data('finishType');
 const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 
 const iosFullScreen = () => {
@@ -30,10 +29,10 @@ const iosFullScreen = () => {
   }
 };
 
-const initPptPlayer = (watermark) => {
+const initPptPlayer = () => {
   // 清空内容后切换
   $element.empty();
-  var pptPlayer = newPlayer(watermark);
+  const pptPlayer = newPlayer();
 
   $('.js-change-ppt-btn').on('click', (event) => {
     const $target = $(event.target);
@@ -60,7 +59,6 @@ const endFinishTip = (pageNumber) => {
       emitter.emit('finish', { page: 1 });
     } else {
       const page = Number(pageNumber);
-      console.log(page)
       if (totalPagesNumber === page) {
         emitter.emit('finish', { page });
       }
@@ -68,8 +66,7 @@ const endFinishTip = (pageNumber) => {
   }
 };
 
-const newPlayer = (watermark) => {
-  let finalToken = $element.data('token');
+const newPlayer = async () => {
   const playerConfig = {
     id: 'activity-ppt-content',
     // 环境配置
@@ -77,33 +74,30 @@ const newPlayer = (watermark) => {
     disableDataUpload: app.cloudDisableLogReport,
     disableSentry: app.cloudDisableLogReport,
     resNo: $element.data('resNo'),
-    token: finalToken,
+    token: $element.data('token'),
     user: {
       id: $element.data('userId'),
       name: $element.data('userName')
     }
-  }
-
-  if (watermark) {
+  };
+  const watermark = await Api.watermark.get('task');
+  if (watermark.text) {
     playerConfig.fingerprint = {
-      html: watermark
-    }
+      html: watermark.text,
+      color: watermark.color,
+      alpha: watermark.alpha,
+    };
   }
 
   const pptPlayer = new QiQiuYun.Player(playerConfig);
 
-  pptPlayer.on('ready', (data) => {
+  pptPlayer.on('ready', () => {
     toggleText(currentType);
     endFinishTip();
   });
 
   pptPlayer.on('pagechanged', (data) => {
-    console.log(data)
-    if (currentType == 'ppt-slide') {
-      var page = data.page;
-    } else {
-      var page = data.pageNum
-    }
+    const page = currentType === 'ppt-slide' ? data.page : data.pageNum;
     endFinishTip(page);
   });
 
@@ -121,17 +115,9 @@ const newPlayer = (watermark) => {
       $('.js-change-ppt-btn').removeClass('hidden');
       toggleText(currentType);
     }
-  })
+  });
 
   return pptPlayer;
 };
 
-let watermarkUrl = $element.data('watermark-url');
-
-if (watermarkUrl) {
-  $.get(watermarkUrl, function(watermark) {
-    initPptPlayer(watermark);
-  });
-} else {
-  initPptPlayer('');
-}
+initPptPlayer();

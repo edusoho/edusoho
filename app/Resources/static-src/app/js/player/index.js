@@ -1,3 +1,4 @@
+import Api from 'common/api';
 import PlayerFactory from './player-factory';
 import EsMessenger from '../../common/messenger';
 import DurationStorage from '../../common/duration-storage';
@@ -26,7 +27,6 @@ class Show {
     this.watermark = container.data('watermark');
     this.accesskey = container.data('accessKey');
     this.fingerprint = container.data('fingerprint');
-    this.fingerprintSrc = container.data('fingerprintSrc');
     this.fingerprintTime = container.data('fingerprintTime');
     this.jsPlayer = container.data('jsPlayer');
     this.markerUrl = container.data('markerurl');
@@ -55,6 +55,7 @@ class Show {
     this.fileStorage = container.data('fileStorage');
     this.allowedBrowse = container.data('allowedBrowse');
     this.securityVideoPlayer = container.data('securityVideoPlayer');
+    this.fullWatermark = container.data('fullWatermark');
     this.initView();
     this.initEvent();
   }
@@ -70,7 +71,7 @@ class Show {
     this.htmlDom.show();
   }
 
-  initPlayer() {
+  async initPlayer() {
     const customPos = parseInt(this.lastLearnTime) ? parseInt(this.lastLearnTime) : 0;
     const ua = new UAParser();
     let options = {
@@ -78,7 +79,6 @@ class Show {
       content: this.content,
       mediaType: this.fileType,
       fingerprint: this.fingerprint,
-      fingerprintSrc: this.fingerprintSrc,
       fingerprintTime: this.fingerprintTime,
       watermark: this.watermark,
       starttime: this.starttime,
@@ -118,6 +118,17 @@ class Show {
         token: this.token,
       });
     }
+    if (this.fullWatermark) {
+      const watermark = await Api.watermark.get('task');
+      if (watermark.text) {
+        options = Object.assign(options, {
+          fullWatermark: true,
+          fingerprintTxt: watermark.text,
+          fingerprintColor: watermark.color,
+          fingerprintAlpha: watermark.alpha,
+        });
+      }
+    }
 
     return window.player = PlayerFactory.create(
       this.jsPlayer, options
@@ -155,20 +166,15 @@ class Show {
   }
 
   isCloudVideoPalyer() {
-    return 'balloon-cloud-video-player' == this.jsPlayer;
+    return 'balloon-cloud-video-player' === this.jsPlayer;
   }
 
   isCloudAudioPlayer() {
-    return 'audio-player' == this.jsPlayer;
+    return 'audio-player' === this.jsPlayer;
   }
 
   async initEvent() {
-    const { only_learning_on_APP } = await $.ajax({
-      url: '/api/settings/course',
-      headers: {
-        Accept: 'application/vnd.edusoho.v2+json'
-      }
-    })
+    const { only_learning_on_APP } = await Api.setting.get('course');
 
     if (only_learning_on_APP === 1) {
       cd.confirm({
@@ -183,7 +189,7 @@ class Show {
       return;
     }
 
-    let player = this.initPlayer();
+    const player = await this.initPlayer();
     let messenger = this.initMesseger();
     player.on('ready', () => {
       messenger.sendToParent('ready', {

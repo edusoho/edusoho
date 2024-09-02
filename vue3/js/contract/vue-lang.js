@@ -1,5 +1,5 @@
 import { createI18n } from 'vue-i18n';
-import { merge } from 'lodash-es'
+import { merge } from 'lodash-es';
 
 const i18n = createI18n(merge({
   legacy: false,
@@ -19,7 +19,7 @@ const i18n = createI18n(merge({
         delete: '删除',
         close: '关闭',
         save: '保存',
-        btn: '取消',
+        cancel: '取消',
         leave: '离开',
         saveImage: '保存图片',
         reselect: '重新选择',

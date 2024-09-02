@@ -31,6 +31,7 @@ class CertificateController extends BaseController
 
     public function certificateRecordAction(Request $request, $recordId)
     {
+        $recordId = $request->query->get('code') ?: $recordId;
         $record = $this->getRecordService()->getByCode($recordId);
         if (empty($record) || in_array($record['status'], ['reject', 'none', 'cancelled'])) {
             return $this->createMessageResponse('info', '证书不存在', '', 3, $this->generateUrl('homepage'));
@@ -42,7 +43,7 @@ class CertificateController extends BaseController
         return $this->render('certificate/certificate-record.html.twig', [
             'record' => $record,
             'user' => $user,
-            'url' => $this->generateUrl('certificate_record', ['recordId' => $record['id']], UrlGeneratorInterface::ABSOLUTE_URL),
+            'url' => $this->generateUrl('certificate_record', ['recordId' => $record['id'], 'code' => $record['certificateCode']], UrlGeneratorInterface::ABSOLUTE_URL),
             'certificate' => $certificate,
         ]);
     }

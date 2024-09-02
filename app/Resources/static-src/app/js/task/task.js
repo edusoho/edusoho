@@ -1,7 +1,9 @@
+import gwm from 'gwm';
 import TaskSidebar from './widget/sidebar';
 import TaskUi from './widget/task-ui';
 import TaskPipe from './widget/task-pipe';
 import Emitter from 'common/es-event-emitter';
+import Api from 'common/api';
 import PagedCourseLesson from 'app/js/courseset/show/paged-course-lesson';
 import 'store';
 
@@ -19,15 +21,15 @@ export default class TaskShow extends Emitter {
   }
 
   init() {
+    this.initWatermark();
     this.initPlugin();
     this.initSidebar();
-    if (this.mode != 'preview') {
+    if (this.mode !== 'preview') {
       this.initTaskPipe();
       this.initLearnBtn();
     }
     this.initLearnContent();
     this.initPlaySequence();
-
   }
 
   initPlaySequence() {
@@ -51,6 +53,30 @@ export default class TaskShow extends Emitter {
         $target.addClass('checked');
         store.set('PLAY_MEDIA_SEQUENCE', 1);
       }
+    });
+  }
+
+  async initWatermark() {
+    const watermark = await Api.watermark.get('task');
+    if (!watermark.text) {
+      return;
+    }
+    gwm.creation({
+      txt: watermark.text,
+      color: watermark.color,
+      alpha: watermark.alpha,
+      mode: 'svg',
+      watch: true,
+      fontSize: 12,
+      angle: -15,
+      width: 200,
+      height: 150,
+      font: 'sans-serif',
+      destroy: false,
+      css: {
+        'z-index': 99999,
+        'pointer-events': 'none',
+      },
     });
   }
 

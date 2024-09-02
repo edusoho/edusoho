@@ -1,3 +1,7 @@
+admin:
+  path: '/'
+  defaults:
+    _controller: 'AppBundle:AdminV2/Default:index'
 admin_v2:
     path: '/'
     defaults:

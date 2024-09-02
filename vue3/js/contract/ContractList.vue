@@ -1,11 +1,11 @@
 <script setup>
 import {createVNode, reactive, ref} from 'vue';
-import {ContractApi} from '../../api/Contract.js';
-import {formatDate} from 'vue3/js/common';
 import {message, Modal} from 'ant-design-vue';
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router';
 import {CloseOutlined, ExclamationCircleOutlined} from '@ant-design/icons-vue';
-import { t } from './vue-lang';
+import {t} from './vue-lang';
+import Api from 'vue3/api';
+import {formatDate} from 'vue3/js/common';
 
 const contractManagementColumns = [
   {
@@ -55,9 +55,9 @@ const pageData = ref([]);
 async function fetchContracts(params) {
   loading.value = true;
   const searchQuery = keyword.value ? Object.assign({
-      ...params
-    }, {keyword: keyword.value, keywordType: keywordType.value}) : params;
-  const {data, paging} = await ContractApi.search(searchQuery);
+    ...params
+  }, {keyword: keyword.value, keywordType: keywordType.value}) : params;
+  const {data, paging} = await Api.contract.search(searchQuery);
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   pageData.value = data;
@@ -96,7 +96,7 @@ async function onReset() {
 }
 
 function getTableTotal(total) {
-  return `${ t('pagination.total') } ${ total } ${ t('pagination.item') }`;
+  return `${t('pagination.total')} ${total} ${t('pagination.item')}`;
 }
 
 async function handlePaginationChange(page, pageSize) {
@@ -116,17 +116,18 @@ getList();
 
 function showDeleteConfirm(id, name) {
   Modal.confirm({
-    title: `${ t('modal.title.confirmDelete') }《${name}》？`,
+    title: `${t('modal.title.confirmDelete')}《${name}》？`,
     icon: createVNode(ExclamationCircleOutlined),
-    content: `${ t('modal.cannotBeRestored') }...`,
+    content: `${t('modal.cannotBeRestored')}...`,
     centered: true,
-    okText: `${ t('btn.delete') }`,
+    okText: `${t('btn.delete')}`,
     async onOk() {
-      await ContractApi.delete(id);
+      await Api.contract.delete(id);
       message.success(t('message.successfullyDelete'));
       await getList();
     },
-    onCancel() {},
+    onCancel() {
+    },
   });
 }
 
@@ -135,14 +136,14 @@ const contractContentVisible = ref(false);
 const selectedSignatureContract = ref({});
 const view = async (record) => {
   selectedSignatureContract.value = record;
-  contractContent.value = await ContractApi.getContractWithHtml(record.id);
+  contractContent.value = await Api.contract.getContractWithHtml(record.id);
   contractContentVisible.value = true;
-}
+};
 
-const router = useRouter()
+const router = useRouter();
 const toUpdateContract = (id) => {
-  router.push({ name: 'EditContract', query: { contractId: id, editType: 'update' } })
-}
+  router.push({name: 'EditContract', query: {contractId: id, editType: 'update'}});
+};
 </script>
 
 <template>
@@ -170,16 +171,22 @@ const toUpdateContract = (id) => {
         <template v-if="column.key === 'name'">
           <div class="flex flex-col items-start">
             <a-tooltip placement="topLeft" :overlayStyle="{ maxWidth: '450px', whiteSpace: 'normal' }">
-              <template #title class="w-400">{{record.name}}</template>
-              <div class="w-full overflow-hidden text-ellipsis whitespace-nowrap">{{record.name}}</div>
+              <template #title class="w-400">{{ record.name }}</template>
+              <div class="w-full overflow-hidden text-ellipsis whitespace-nowrap">{{ record.name }}</div>
             </a-tooltip>
           </div>
         </template>
         <template v-if="column.key === 'relatedGoods'">
           <div class="flex flex-col items-start">
-            <span><span class="text-[#8A9099]">{{ t('list.content.curriculum') }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
-            <span><span class="text-[#8A9099]">{{ t('list.content.class') }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
-            <span><span class="text-[#8A9099]">{{ t('list.content.questionBank') }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">{{
+                t('list.content.curriculum')
+              }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.course ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">{{
+                t('list.content.class')
+              }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.classroom ?? 0 : 0}` }}</span>
+            <span><span class="text-[#8A9099]">{{
+                t('list.content.questionBank')
+              }}：</span>{{ `${record.relatedGoodsCount ? record.relatedGoodsCount.itemBankExercise ?? 0 : 0}` }}</span>
           </div>
         </template>
         <template v-else-if="column.key === 'operation'">
@@ -224,43 +231,43 @@ const toUpdateContract = (id) => {
       </template>
       <div class="w-full flex flex-col space-y-32 p-32">
         <div class="flex items-end justify-between gap-4">
-          <span class="flex-none whitespace-nowrap opacity-0 mr-100">{{ `${ t('modal.contractNumber') }：` }}</span>
+          <span class="flex-none whitespace-nowrap opacity-0 mr-100">{{ `${t('modal.contractNumber')}：` }}</span>
           <span class="grow text-center text-22 font-medium">{{ contractContent.name }}</span>
-          <span class="flex-none whitespace-nowrap text-gray-500 mr-100">{{ `${ t('modal.contractNumber') }：` }}</span>
+          <span class="flex-none whitespace-nowrap text-gray-500 mr-100">{{ `${t('modal.contractNumber')}：` }}</span>
         </div>
         <div v-html="contractContent.content" class="text-gray-500 contract-content"></div>
         <div class="flex space-x-64">
           <div class="flex-1 flex flex-col items-start justify-between space-y-22">
-            <span class="text-18 font-medium">{{ `${ t('modal.partyA') }：` }}</span>
+            <span class="text-18 font-medium">{{ `${t('modal.partyA')}：` }}</span>
             <div class="w-full flex flex-col space-y-22">
-              <img :src="contractContent.seal" alt="甲方印章" class="w-150 h-150" />
+              <img :src="contractContent.seal" alt="甲方印章" class="w-150 h-150"/>
               <div class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.signingDate')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
             </div>
           </div>
           <div class="flex-1 flex flex-col items-start justify-between">
-            <span class="text-18 font-medium">{{ `${ t('modal.partyB') }：` }}</span>
+            <span class="text-18 font-medium">{{ `${t('modal.partyB')}：` }}</span>
             <div class="w-full flex flex-col space-y-22">
               <div v-if="contractContent.sign && contractContent.sign.handSignature" class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.handSignature') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.handSignature')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.partyBName') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.partyBName')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div v-if="contractContent.sign && contractContent.sign.IDNumber" class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.iDNumber') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.iDNumber')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div v-if="contractContent.sign && contractContent.sign.phoneNumber" class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.contactInformation') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.contactInformation')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
               <div class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.signingDate')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium mt-20"></div>
               </div>
             </div>
@@ -286,11 +293,14 @@ const toUpdateContract = (id) => {
 .contract-list-detail-modal {
   .ant-modal {
     padding: 0 !important;
+
     .ant-modal-content {
       padding: 0 !important;
+
       .ant-modal-footer {
         margin-top: 0;
       }
+
       .ant-modal-header {
         margin-bottom: 0;
       }

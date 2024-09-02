@@ -1,0 +1,24 @@
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+/*!
+ * vanilla-picker v2.12.3
+ * https://vanilla-picker.js.org
+ *
+ * Copyright 2017-2024 Andreas Borgen (https://github.com/Sphinxxxx), Adam Brooks (https://github.com/dissimulate)
+ * Released under the ISC license.
+ */
+
+/*! #__NO_SIDE_EFFECTS__ */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
+/**
+* @vue/shared v3.4.38
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/

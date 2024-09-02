@@ -3,9 +3,9 @@
 namespace Biz\File\Dao\Impl;
 
 use Biz\File\Dao\UploadFileDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
+class UploadFileDaoImpl extends AdvancedDaoImpl implements UploadFileDao
 {
     protected $table = 'upload_files';
 

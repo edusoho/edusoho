@@ -1,12 +1,11 @@
 <script setup>
 import {useRoute} from 'vue-router';
 import {createVNode, onMounted, reactive, ref} from 'vue';
-import {ContractApi} from '../../api/Contract';
 import {CloudUploadOutlined, ExclamationCircleOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
-import router from './router';
-import {FileApi} from '../../api/File';
 import { t } from './vue-lang';
+import router from './router';
+import Api from 'vue3/api';
 import VueCropper from 'vue3/js/components/VueCropper.vue';
 
 message.config({
@@ -34,7 +33,6 @@ const sealUrl = ref('');
 const imgUrl = ref('');
 const cropperModalVisible = ref(false);
 
-
 const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
   filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
@@ -58,7 +56,7 @@ const initEditor = () => {
 
 onMounted(async () => {
   if (editType === 'update') {
-    const formData = await ContractApi.getContract(contractId);
+    const formData = await Api.contract.get(contractId);
     formState.name = formData.name;
     formState.content = formData.content;
     formState.seal = formData.sealFile.id;
@@ -118,7 +116,7 @@ const saveCropperImage = async () => {
     const formData = new FormData();
     formData.append('file', blob, sealName.value);
     formData.append('group', 'system');
-    fileData.value = await FileApi.uploadFile(formData);
+    fileData.value = await Api.file.upload(formData);
     formState.seal = fileData.value.id;
     sealUrl.value = canvas.toDataURL('image/png');
     cropperModalVisible.value = false;
@@ -158,10 +156,10 @@ const submitBtnDisabled = ref(false);
 const onFinish = async () => {
   submitBtnDisabled.value = true;
   if (editType === 'create') {
-    await ContractApi.create(formState);
+    await Api.contract.create(formState);
     message.success(`${ t('message.createdSuccessfully') }`);
   } else if (editType === 'update') {
-    await ContractApi.update(contractId, formState);
+    await Api.contract.update(contractId, formState);
     message.success(`${ t('message.editSuccessfully') }`);
   }
   await router.push({name: 'Index'});
