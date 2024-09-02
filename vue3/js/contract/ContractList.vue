@@ -36,6 +36,7 @@ const contractManagementColumns = [
     key: 'operation',
     title: `${t('list.title.controls')}`,
     width: 200,
+    fixed: 'right',
   },
 ];
 

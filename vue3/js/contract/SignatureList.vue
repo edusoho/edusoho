@@ -177,7 +177,7 @@ const view = async (record) => {
       :row-key="record => record.id"
       :pagination="false"
       :loading="loading"
-      :scroll="{ x: 1300 }"
+      :scroll="{ x: 1250 }"
       @change="handleTableChange"
     >
       <template #headerCell="{ column }">
