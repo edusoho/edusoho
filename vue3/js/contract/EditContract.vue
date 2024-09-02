@@ -255,6 +255,7 @@ const onFinish = async () => {
           <a-modal
             :mask-closable="false"
             class="flex justify-center"
+            zIndex="1050"
             v-model:open="cropperModalVisible"
             @cancel="cropperModalVisible = false; sealUrl = ''; formState.seal = ''">
 

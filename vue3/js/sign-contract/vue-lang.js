@@ -67,18 +67,18 @@ const i18n = createI18n({
     en: {
       btn: {
         cancel: 'Cancel',
-        goToSign: 'Go to sign',
+        goToSign: 'Go To Sign',
         clear: 'Clear',
         submit: 'Submit',
         close: 'Close',
-        confirmationSignature: 'Confirmation signature',
+        confirmationSignature: 'Confirmation Signature',
         return: 'Return',
       },
       modal: {
         title: {
-          electronicContractSigning: 'Electronic contract signing'
+          electronicContractSigning: 'Contract signing'
         },
-        SignAnElectronicContract: 'Sign an electronic contract',
+        SignAnElectronicContract: 'Sign an contract',
         confirmContentPart01: 'Please sign the ',
         confirmContentPart02: ' before starting the study to ensure normal access to subsequent services',
         signContract: 'Sign a contract',

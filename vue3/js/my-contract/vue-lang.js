@@ -52,7 +52,7 @@ const i18n = createI18n({
       },
       modal: {
         contractNumber: 'Contract number',
-        contractSigning: 'Electronic contract signing',
+        contractSigning: 'Contract signing',
         partyA: 'Party A',
         signingDate: 'Signing date',
         partyB: 'Party B',

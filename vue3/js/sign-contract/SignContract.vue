@@ -152,7 +152,7 @@ const submitIsDisabled = () => {
 <template>
   <div>
     <!--    签署合同确认框-->
-    <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false
+    <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false zIndex="1050"
              :cancelText="t('btn.cancel')" :okText="t('btn.goToSign')" width="416px"
              wrapClassName="to-sign-contract-modal" :onCancel="toCoursePage" :onOk="toSignContract">
       <div class="flex">
@@ -167,7 +167,7 @@ const submitIsDisabled = () => {
     </a-modal>
 
     <!--  签署合同页面-->
-    <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px"
+    <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px" zIndex="1050"
              wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
@@ -285,7 +285,7 @@ const submitIsDisabled = () => {
 
     <!--  合同详情页面-->
     <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw"
-             wrapClassName="contract-detail-modal" :closable=false>
+             wrapClassName="contract-detail-modal" :closable=false zIndex="1050">
       <template #title>
         <div class="px-20 py-16 flex items-center">
           <div class="hover:cursor-pointer flex items-center" @click="contractDetailVisible = false;">
@@ -301,7 +301,7 @@ const submitIsDisabled = () => {
     </a-modal>
 
     <!--合同签字-->
-    <a-modal v-model:open="signVisible" :centered="true" :maskClosable="false" :closable=false
+    <a-modal v-model:open="signVisible" :centered="true" :maskClosable="false" :closable=false zIndex="1050"
              :cancelText="t('btn.close')" :okText="t('btn.confirmationSignature')" width="572px"
              wrapClassName="sign-contract-modal">
       <template #title>
@@ -460,5 +460,4 @@ const submitIsDisabled = () => {
   left: 50%;
   transform: translateX(-50%)
 }
-
 </style>
