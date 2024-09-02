@@ -86,8 +86,9 @@ const view = async (id, name) => {
               </div>
             </div>
           </div>
-          <div class="my-contract-btn">
+          <div class="my-contract-btn space-x-16">
             <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">{{ t('btn.view') }}</a-button>
+            <a-button>下载</a-button>
           </div>
         </div>
         <div v-else class="border border-[#e4ecf3] border-x-0 border-t-0 border-solid">

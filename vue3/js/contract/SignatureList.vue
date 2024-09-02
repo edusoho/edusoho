@@ -44,12 +44,12 @@ const columns = [
     key: 'contractName',
     title: `${ t('list.title.contractName') }`,
     dataIndex: 'contractName',
-    width: 250,
+    width: 300,
   },
   {
     key: 'operation',
     title: `${ t('list.title.controls') }`,
-    width: 90,
+    width: 150,
   },
 ];
 
@@ -198,11 +198,12 @@ const view = async (record) => {
         <template v-else-if="column.key === 'contractName'">
           {{ record.contractName }}
           <br>
-          <span class="text-[#8A9099] text-12">{{ `${ t('content.signatureTime') }：${ formatDate(record.signTime) }` }}</span>
+          <span class="text-[#8A9099] text-12">{{ `${ t('list.content.signatureTime') }：${ formatDate(record.signTime) }` }}</span>
         </template>
         <template v-else-if="column.key === 'operation'">
-          <div class="signature-list-operation-btn">
+          <div class="signature-list-operation-btn space-x-16">
             <a-button type="link" @click="view(record)">{{ t('btn.view') }}</a-button>
+            <a-button type="link" >下载</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'mobile'">
