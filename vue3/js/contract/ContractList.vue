@@ -220,6 +220,7 @@ const toUpdateContract = (id) => {
              v-model:open="contractContentVisible"
              :closable=false
              :centered="true"
+             zIndex="1050"
              wrapClassName="contract-list-detail-modal"
              :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
     >
