@@ -261,7 +261,7 @@ const toUpdateContract = (id) => {
       </div>
       <template #footer>
         <div class="flex justify-center border-solid p-16 border-[#F0F0F0] border-b-0 border-x-0">
-          <a-button @click="contractContentVisible = false">关闭</a-button>
+          <a-button @click="contractContentVisible = false">{{ t('btn.close') }}</a-button>
         </div>
       </template>
     </a-modal>
