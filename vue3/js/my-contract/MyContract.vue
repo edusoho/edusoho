@@ -1,3 +1,68 @@
+<script setup>
+import {reactive, ref} from 'vue';
+import {MyContractApi} from '../../api/MyContract';
+import {Empty} from 'ant-design-vue';
+import { t } from './vue-lang';
+const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
+import AntConfigProvider from '../components/AntConfigProvider.vue';
+import {CloseOutlined} from '@ant-design/icons-vue';
+
+
+const pagination = reactive({
+  current: 1,
+  total: 0,
+  pageSize: 10,
+});
+const contracts = ref([]);
+
+function getTableTotal(total) {
+  return `${ t('pagination.total') } ${ total } ${ t('pagination.item') }`;
+}
+
+async function fetchMyContracts(params) {
+  const {data, paging} = await MyContractApi.getMyContracts(params);
+  pagination.total = Number(paging.total);
+  pagination.pageSize = Number(paging.limit);
+  contracts.value = data;
+}
+
+async function handleTableChange(paging) {
+  pagination.current = paging.current === 0 ? 1 : paging.current;
+  pagination.total = paging.total;
+  pagination.pageSize = paging.pageSize;
+  const params = {
+    limit: paging.pageSize,
+    offset: (paging.current - 1) * paging.pageSize,
+  };
+  await fetchMyContracts(params);
+}
+
+async function handlePaginationChange(page, pageSize) {
+  pagination.current = page;
+  pagination.pageSize = pageSize;
+  await handleTableChange(pagination);
+}
+
+const getList = async () => {
+  const params = {
+    limit: pagination.pageSize,
+    offset: (pagination.current - 1) * pagination.pageSize,
+  };
+  await fetchMyContracts(params);
+};
+getList();
+
+const signatureContent = ref();
+const myContentVisible = ref(false);
+const courseName = ref();
+const view = async (id, name) => {
+  signatureContent.value = await MyContractApi.getSignedContract(id);
+  courseName.value = name;
+  myContentVisible.value = true;
+};
+
+</script>
+
 <template>
   <ant-config-provider>
     <div class="w-full h-fit bg-white rounded-4 border border-[#e4ecf3] border-solid pt-24 px-24">
@@ -120,71 +185,6 @@
     </div>
   </ant-config-provider>
 </template>
-
-<script setup>
-import {reactive, ref} from 'vue';
-import {MyContractApi} from '../../api/MyContract';
-import {Empty} from 'ant-design-vue';
-import { t } from './vue-lang';
-const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
-import AntConfigProvider from '../components/AntConfigProvider.vue';
-import {CloseOutlined} from '@ant-design/icons-vue';
-
-
-const pagination = reactive({
-  current: 1,
-  total: 0,
-  pageSize: 10,
-});
-const contracts = ref([]);
-
-function getTableTotal(total) {
-  return `共 ${total} 项`;
-}
-
-async function fetchMyContracts(params) {
-  const {data, paging} = await MyContractApi.getMyContracts(params);
-  pagination.total = Number(paging.total);
-  pagination.pageSize = Number(paging.limit);
-  contracts.value = data;
-}
-
-async function handleTableChange(paging) {
-  pagination.current = paging.current === 0 ? 1 : paging.current;
-  pagination.total = paging.total;
-  pagination.pageSize = paging.pageSize;
-  const params = {
-    limit: paging.pageSize,
-    offset: (paging.current - 1) * paging.pageSize,
-  };
-  await fetchMyContracts(params);
-}
-
-async function handlePaginationChange(page, pageSize) {
-  pagination.current = page;
-  pagination.pageSize = pageSize;
-  await handleTableChange(pagination);
-}
-
-const getList = async () => {
-  const params = {
-    limit: pagination.pageSize,
-    offset: (pagination.current - 1) * pagination.pageSize,
-  };
-  await fetchMyContracts(params);
-};
-getList();
-
-const signatureContent = ref();
-const myContentVisible = ref(false);
-const courseName = ref();
-const view = async (id, name) => {
-  signatureContent.value = await MyContractApi.getSignedContract(id);
-  courseName.value = name;
-  myContentVisible.value = true;
-};
-
-</script>
 
 <style lang="less">
 .my-contract-btn {

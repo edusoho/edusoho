@@ -67,6 +67,10 @@ const i18n = createI18n({
           }
         }
       },
+      pagination: {
+        total: 'In total',
+        item: 'item'
+      },
     },
   },
 })
