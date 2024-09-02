@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import ContractPage from './ContractPage.vue'
-import CreateContract from './CreateContract.vue';
-import UpdateContract from './UpdateContract.vue';
+import EditContract from './EditContract.vue';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -12,14 +11,9 @@ const router = createRouter({
       component: ContractPage,
     },
     {
-      path: '/create',
-      name: 'CreateContract',
-      component: CreateContract,
-    },
-    {
-      path: '/update',
-      name: 'UpdateContract',
-      component: UpdateContract,
+      path: '/edit',
+      name: 'EditContract',
+      component: EditContract,
     }
   ]
 })

@@ -1,130 +1,7 @@
-<template>
-  <ant-config-provider>
-    <div class="w-full h-fit bg-white rounded-4 border border-[#e4ecf3] border-solid pt-24 px-24">
-      <div class="text-[#1E2226] text-18 font-medium w-full border border-[#e4ecf3] pb-16 border-x-0 border-t-0 border-solid">我的合同</div>
-      <div class="w-full h-full flex-col">
-        <div v-if="contracts.length !== 0" v-for="contract in contracts"
-             class="flex justify-between items-center px-16 py-36 border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
-          <div class="flex">
-            <img class="w-45 ml-11 mr-24" src="../../img/my-contract/icon-01.jpg" alt="">
-            <div class="flex flex-col">
-              <div
-                class="w-320 overflow-hidden text-ellipsis whitespace-nowrap mb-12 text-16 text-[#37393D] font-medium">
-                {{ contract.name }}
-              </div>
-              <div class="text-12 text-[#919399] font-normal"><span
-                v-if="contract.relatedGoods.type === 'course'">关联课程：</span><span
-                v-if="contract.relatedGoods.type === 'classroom'">关联班级：</span><span
-                v-if="contract.relatedGoods.type === 'itemBankExercise'">关联题库：</span>{{
-                  contract.relatedGoods.name
-                }}
-              </div>
-            </div>
-          </div>
-          <div class="my-contract-btn">
-            <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">查看</a-button>
-          </div>
-        </div>
-        <div v-else class="border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
-          <a-empty :image="simpleImage" description="暂无合同"/>
-        </div>
-      </div>
-      <a-modal :width="900"
-               v-model:open="myContentVisible"
-               :closable=false
-               :centered="true"
-               :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
-               wrapClassName="my-contract-detail-modal"
-      >
-        <template #title>
-          <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
-            <div class="text-16 text-[#1E2226] font-medium">{{ `${courseName}-电子合同签署` }}</div>
-            <CloseOutlined class="h-16 w-16" @click="myContentVisible = false"/>
-          </div>
-        </template>
-        <div class="w-full flex flex-col space-y-32 p-32">
-          <div class="flex items-end justify-between gap-4">
-            <span class="flex-none whitespace-nowrap opacity-0">{{ `合同编号: ${signatureContent.code}` }}</span>
-            <span class="grow text-center text-22 font-medium">{{ signatureContent.name }}</span>
-            <span class="flex-none whitespace-nowrap text-gray-500">{{ `合同编号: ${signatureContent.code}` }}</span>
-          </div>
-          <div v-html="signatureContent.content" class="text-gray-500 contract-content"></div>
-          <div class="flex space-x-64">
-            <div class="flex-1 flex flex-col items-start justify-between space-y-22">
-              <span class="text-18 font-medium">甲方：</span>
-              <div class="w-full flex flex-col space-y-22">
-                <img :src="signatureContent.seal" alt="甲方印章" class="w-150 h-150"/>
-                <div class="flex items-center">
-                  <span class="text-gray-500">签约日期：</span>
-                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                    {{ signatureContent.signDate }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="flex-1 flex flex-col items-start justify-between">
-              <span class="text-18 font-medium">乙方：</span>
-              <div class="w-full flex flex-col space-y-22">
-                <div v-if="signatureContent.sign && signatureContent.sign.handSignature" class="flex items-center">
-                  <span class="text-gray-500">手写签名：</span>
-                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                    <img :src="signatureContent.sign.handSignature" class="h-35" alt="手写签名"/>
-                  </div>
-                </div>
-                <div v-if="signatureContent.sign && signatureContent.sign.truename" class="flex items-center">
-                  <span class="text-gray-500">乙方姓名：</span>
-                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                    {{ signatureContent.sign.truename }}
-                  </div>
-                </div>
-                <div v-if="signatureContent.sign && signatureContent.sign.IDNumber" class="flex items-center">
-                  <span class="text-gray-500">身份证号：</span>
-                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                    {{ signatureContent.sign.IDNumber }}
-                  </div>
-                </div>
-                <div v-if="signatureContent.sign && signatureContent.sign.phoneNumber" class="flex items-center">
-                  <span class="text-gray-500">联系方式：</span>
-                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                    {{ signatureContent.sign.phoneNumber }}
-                  </div>
-                </div>
-                <div class="flex items-center">
-                  <span class="text-gray-500">签约日期：</span>
-                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                    {{ signatureContent.signDate }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <template #footer>
-          <div class="flex justify-center">
-            <a-button @click="myContentVisible = false; courseName = ''">关闭</a-button>
-          </div>
-        </template>
-      </a-modal>
-      <div
-        class="w-full bg-white px-40 py-24 flex justify-end">
-        <a-pagination
-          class="my-contract-pagination"
-          :show-total="total => getTableTotal(total)"
-          v-model="pagination.current"
-          :total="pagination.total"
-          @change="handlePaginationChange"
-          show-less-items
-          :disabled="pagination.total === 0"
-        />
-      </div>
-    </div>
-  </ant-config-provider>
-</template>
-
 <script setup>
 import {reactive, ref} from 'vue';
 import {Empty} from 'ant-design-vue';
-
+import { t } from './vue-lang';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import AntConfigProvider from '../components/AntConfigProvider.vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
@@ -138,7 +15,7 @@ const pagination = reactive({
 const contracts = ref([]);
 
 function getTableTotal(total) {
-  return `共 ${total} 项`;
+  return `${ t('pagination.total') } ${ total } ${ t('pagination.item') }`;
 }
 
 async function fetchMyContracts(params) {
@@ -184,6 +61,130 @@ const view = async (id, name) => {
 };
 
 </script>
+
+<template>
+  <ant-config-provider>
+    <div class="w-full h-fit bg-white rounded-4 border border-[#e4ecf3] border-solid pt-24 px-24">
+      <div class="text-[#1E2226] text-18 font-medium w-full border border-[#e4ecf3] pb-16 border-x-0 border-t-0 border-solid">{{ t('title') }}</div>
+      <div class="w-full h-full flex-col">
+        <div v-if="contracts.length !== 0" v-for="contract in contracts"
+             class="flex justify-between items-center px-16 py-36 border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
+          <div class="flex">
+            <img class="w-45 ml-11 mr-24" src="../../img/my-contract/icon-01.jpg" alt="">
+            <div class="flex flex-col">
+              <div
+                class="w-320 overflow-hidden text-ellipsis whitespace-nowrap mb-12 text-16 text-[#37393D] font-medium">
+                {{ contract.name }}
+              </div>
+              <div class="text-12 text-[#919399] font-normal"><span
+                v-if="contract.relatedGoods.type === 'course'">{{ `${ t('associatedCurriculum') }：` }}</span><span
+                v-if="contract.relatedGoods.type === 'classroom'">{{ `${ t('associatedClass') }：` }}</span><span
+                v-if="contract.relatedGoods.type === 'itemBankExercise'">{{ `${ t('relatedQuestionBank') }：` }}</span>{{
+                  contract.relatedGoods.name
+                }}
+              </div>
+            </div>
+          </div>
+          <div class="my-contract-btn space-x-16">
+            <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">{{ t('btn.view') }}</a-button>
+            <a-button>下载</a-button>
+          </div>
+        </div>
+        <div v-else class="border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
+          <a-empty :image="simpleImage" :description="t('message.noContract')"/>
+        </div>
+      </div>
+      <a-modal :width="900"
+               v-model:open="myContentVisible"
+               :closable=false
+               :centered="true"
+               :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
+               wrapClassName="my-contract-detail-modal"
+      >
+        <template #title>
+          <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
+            <div class="text-16 text-[#1E2226] font-medium">{{ `${courseName}-${ t('modal.contractSigning') }` }}</div>
+            <CloseOutlined class="h-16 w-16" @click="myContentVisible = false"/>
+          </div>
+        </template>
+        <div class="w-full flex flex-col space-y-32 p-32">
+          <div class="flex items-end justify-between gap-4">
+            <span class="flex-none whitespace-nowrap opacity-0">{{ `${ t('modal.contractNumber') }: ${signatureContent.code}` }}</span>
+            <span class="grow text-center text-22 font-medium">{{ signatureContent.name }}</span>
+            <span class="flex-none whitespace-nowrap text-gray-500">{{ `${ t('modal.contractNumber') }: ${signatureContent.code}` }}</span>
+          </div>
+          <div v-html="signatureContent.content" class="text-gray-500 contract-content"></div>
+          <div class="flex space-x-64">
+            <div class="flex-1 flex flex-col items-start justify-between space-y-22">
+              <span class="text-18 font-medium">{{ `${ t('modal.partyA') }：` }}</span>
+              <div class="w-full flex flex-col space-y-22">
+                <img :src="signatureContent.seal" alt="" class="w-150 h-150"/>
+                <div class="flex items-center">
+                  <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
+                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
+                    {{ signatureContent.signDate }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 flex flex-col items-start justify-between">
+              <span class="text-18 font-medium">{{ `${ t('modal.partyB') }：` }}</span>
+              <div class="w-full flex flex-col space-y-22">
+                <div v-if="signatureContent.sign && signatureContent.sign.handSignature" class="flex items-center">
+                  <span class="text-gray-500">{{ `${ t('modal.handSignature') }：` }}</span>
+                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
+                    <img :src="signatureContent.sign.handSignature" class="h-35" alt=""/>
+                  </div>
+                </div>
+                <div v-if="signatureContent.sign && signatureContent.sign.truename" class="flex items-center">
+                  <span class="text-gray-500">{{ `${ t('modal.partyBName') }：` }}</span>
+                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
+                    {{ signatureContent.sign.truename }}
+                  </div>
+                </div>
+                <div v-if="signatureContent.sign && signatureContent.sign.IDNumber" class="flex items-center">
+                  <span class="text-gray-500">{{ `${ t('modal.iDNumber') }：` }}</span>
+                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
+                    {{ signatureContent.sign.IDNumber }}
+                  </div>
+                </div>
+                <div v-if="signatureContent.sign && signatureContent.sign.phoneNumber" class="flex items-center">
+                  <span class="text-gray-500">{{ `${ t('modal.contactInformation') }：` }}</span>
+                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
+                    {{ signatureContent.sign.phoneNumber }}
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
+                  <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
+                    {{ signatureContent.signDate }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <template #footer>
+          <div class="flex justify-center">
+            <a-button @click="myContentVisible = false; courseName = ''">{{ t('btn.close') }}</a-button>
+          </div>
+        </template>
+      </a-modal>
+      <div
+        class="w-full bg-white px-40 py-24 flex justify-end">
+        <a-pagination
+          class="my-contract-pagination"
+          :show-total="total => getTableTotal(total)"
+          v-model="pagination.current"
+          :total="pagination.total"
+          @change="handlePaginationChange"
+          show-less-items
+          :disabled="pagination.total === 0"
+        />
+      </div>
+    </div>
+  </ant-config-provider>
+</template>
 
 <style lang="less">
 .my-contract-btn {
