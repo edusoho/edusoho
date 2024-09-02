@@ -175,7 +175,7 @@ const onFinish = async () => {
         ref="formRef"
         :model="formState"
         @finish="onFinish"
-        :label-col="{ span: 3 }"
+        :label-col="{ span: 4 }"
         :wrapper-col="{ span: 12 }"
       >
         <a-form-item>
@@ -245,8 +245,8 @@ const onFinish = async () => {
               @change="uploadCourseCover"
             >
               <img v-if="sealUrl" :src="sealUrl" style="width: 100%;" alt=""/>
-              <div v-else>
-                <div class="p-18 bg-[#006AFF]/5" style="border-radius: 9999px">
+              <div v-else class="flex flex-col items-center">
+                <div class="p-18 bg-[#006AFF]/5 w-fit" style="border-radius: 9999px">
                   <cloud-upload-outlined :style="{fontSize: '32px'}" class="text-[#006AFF]"/>
                 </div>
                 <div class="mt-8">{{ t('label.uploadStamp') }}</div>
