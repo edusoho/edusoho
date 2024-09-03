@@ -3,7 +3,7 @@ import {reactive, ref} from 'vue';
 import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate} from '../common';
 import { t } from './vue-lang';
-import Api from 'vue3/api';
+import Api from '../../api';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -177,7 +177,7 @@ const view = async (record) => {
       :row-key="record => record.id"
       :pagination="false"
       :loading="loading"
-      :scroll="{ x: 1300 }"
+      :scroll="{ x: 1250 }"
       @change="handleTableChange"
     >
       <template #headerCell="{ column }">

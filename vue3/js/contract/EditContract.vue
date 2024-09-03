@@ -5,7 +5,7 @@ import {CloudUploadOutlined, ExclamationCircleOutlined} from '@ant-design/icons-
 import {message, Modal} from 'ant-design-vue';
 import { t } from './vue-lang';
 import router from './router';
-import Api from 'vue3/api';
+import Api from '../../api';
 import VueCropper from 'vue3/js/components/VueCropper.vue';
 
 message.config({

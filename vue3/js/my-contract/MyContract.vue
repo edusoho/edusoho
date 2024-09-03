@@ -5,7 +5,7 @@ import { t } from './vue-lang';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import AntConfigProvider from '../components/AntConfigProvider.vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
-import Api from 'vue3/api';
+import Api from '../../api';
 
 const pagination = reactive({
   current: 1,
@@ -192,6 +192,10 @@ const view = async (id, name) => {
   .ant-btn-primary:hover {
     background-color: #BDF2D0;
     border-color: #BDF2D0;
+  }
+  .ant-btn-default:hover {
+    border-color: #46C37B;
+    color: #46C37B;
   }
 }
 
