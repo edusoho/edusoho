@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, nextTick, onMounted} from 'vue';
+import {ref, reactive, nextTick, onMounted, computed} from 'vue';
 import {
   ExclamationCircleOutlined,
   CloseOutlined,
@@ -10,6 +10,7 @@ import {message} from 'ant-design-vue';
 import SmoothSignature from 'smooth-signature';
 import {t} from './vue-lang';
 import Api from '../../api';
+import {useI18n} from 'vue-i18n';
 
 const contractTemplate = ref();
 const contract = ref();
@@ -147,12 +148,19 @@ const submitIsDisabled = () => {
     value === 0 || formState[key] !== undefined && formState[key] !== ''
   );
 };
+
+const { locale } = useI18n();
+const bgClass = computed(() => {
+  return locale.value.startsWith('zh')
+    ? "bg-[url('img/sign-contract/bg-01.svg')]"
+    : "bg-[url('img/sign-contract/bg-02.svg')]";
+});
 </script>
 
 <template>
   <div>
     <!--    签署合同确认框-->
-    <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false zIndex="1050"
+    <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false
              :cancelText="t('btn.cancel')" :okText="t('btn.goToSign')" width="416px"
              wrapClassName="to-sign-contract-modal" :onCancel="toCoursePage" :onOk="toSignContract">
       <div class="flex">
@@ -167,7 +175,7 @@ const submitIsDisabled = () => {
     </a-modal>
 
     <!--  签署合同页面-->
-    <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px" zIndex="1050"
+    <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px"
              wrapClassName="sign-contract-modal">
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
@@ -285,7 +293,7 @@ const submitIsDisabled = () => {
 
     <!--  合同详情页面-->
     <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw"
-             wrapClassName="contract-detail-modal" :closable=false zIndex="1050">
+             wrapClassName="contract-detail-modal" :closable=false>
       <template #title>
         <div class="px-20 py-16 flex items-center">
           <div class="hover:cursor-pointer flex items-center" @click="contractDetailVisible = false;">
@@ -301,7 +309,7 @@ const submitIsDisabled = () => {
     </a-modal>
 
     <!--合同签字-->
-    <a-modal v-model:open="signVisible" :centered="true" :maskClosable="false" :closable=false zIndex="1050"
+    <a-modal v-model:open="signVisible" :centered="true" :maskClosable="false" :closable=false
              :cancelText="t('btn.close')" :okText="t('btn.confirmationSignature')" width="572px"
              wrapClassName="sign-contract-modal">
       <template #title>
@@ -314,8 +322,7 @@ const submitIsDisabled = () => {
       </template>
       <div class="p-24 flex flex-col">
         <div class="text-center text-14 text-[#37393D] font-normal mb-32">{{ t('tip.makeSure') }}</div>
-        <div
-          class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat bg-[url('img/sign-contract/bg-01.svg')] border-dashed rounded-8 h-256 w-full mb-8">
+        <div class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat bg-[url('img/sign-contract/bg-01.svg')] border-dashed rounded-8 h-256 w-full mb-8" :class="bgClass">
           <canvas id="canvas" class="rounded-8"></canvas>
         </div>
       </div>
