@@ -2,6 +2,7 @@ import {createApp} from 'vue';
 import {Form, Input} from 'ant-design-vue';
 import WatermarkSetting from './WatermarkSetting.vue';
 import {createStyleTag} from 'vue3/js/common';
+import 'vue3/main.less';
 
 const app = createApp(WatermarkSetting);
 app.use(Form);
