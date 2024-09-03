@@ -29,7 +29,7 @@
             </div>
             <div class="watermark-field">
               透明度
-              <a-form-item name="alpha">
+              <a-form-item name="alpha" class="mb-0">
                 <a-input class="form-control watermark-alpha" type="number" v-model:value="formState.alpha"/>
                 1 ~ 100
               </a-form-item>
@@ -129,7 +129,7 @@ const fetchWatermarkSetting = async () => {
     color: formState.color,
   });
   picker.onChange = color => {
-    formState.color = color.rgbString;
+    formState.color = color.hex.slice(0, 7);
   };
 };
 
@@ -166,6 +166,7 @@ onMounted(fetchWatermarkSetting);
 }
 
 .watermark-alpha {
+  display: inline;
   width: 100px;
   margin-right: 10px;
 }
