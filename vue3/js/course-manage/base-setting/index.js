@@ -2,7 +2,7 @@ import ManageInfo from './ManageInfo.vue';
 import { createStyleTag, setCurrentPrimaryColor } from '../../common';
 import {createApp} from 'vue';
 import i18n from '../../sign-contract/vue-lang';
-import {Button, Form, Input, Select} from 'ant-design-vue';
+import {Button, Form, Input, Select, TreeSelect} from 'ant-design-vue';
 import 'vue3/main.less';
 
 const app = createApp(ManageInfo,
@@ -53,6 +53,7 @@ app.use(Button);
 app.use(Form);
 app.use(Input);
 app.use(Select);
+app.use(TreeSelect);
 
 
 setCurrentPrimaryColor(app);

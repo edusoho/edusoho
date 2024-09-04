@@ -15,6 +15,7 @@ const baseFormState = reactive({
 if (props.params.isUnMultiCourseSet) {
   Object.assign(baseFormState, {
     tags: props.params.tags,
+    categoryId: props.params.course.categoryId,
   });
 }
 
@@ -99,15 +100,34 @@ const courseTitleLengthValidator = async (rule, value) => {
   });
 };
 
-const tabOptions = ref([]);
+const tabOptions = ref();
 const getTabs = async () => {
-  const tabs = await Api.tag.searchTags('');
+  const tabs = await Api.tag.getTags('');
   tabOptions.value = tabs.data.map(item => ({
     label: item.name,
     value: item.name
   }));
-  console.log(tabOptions.value);
 }
+getTabs();
+
+const categoryOptions = ref();
+function transformCategoryData(data) {
+  return data.map(item => {
+    const transformedItem = {
+      value: item.id,
+      label: item.name,
+    };
+    if (item.children && item.children.length > 0) {
+      transformedItem.children = transformCategoryData(item.children);
+    }
+    return transformedItem;
+  });
+}
+const getCategory = async () => {
+  const Category = await Api.category.getCategory();
+  categoryOptions.value = transformCategoryData(Category.data);
+}
+getCategory();
 </script>
 
 <template>
@@ -146,9 +166,11 @@ const getTabs = async () => {
         >
           <a-textarea v-model:value.trim="baseFormState.subtitle" :rows="3"/>
         </a-form-item>
-        <div>课程</div>
       </a-form>
     </div>
+
+
+
     <div class="relative" v-if="props.params.isUnMultiCourseSet">
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]" style="width: calc(100% + 64px);">基础信息</div>
       <a-form
@@ -193,10 +215,21 @@ const getTabs = async () => {
             mode="multiple"
             placeholder="请选择"
             :options="tabOptions"
-            @focus="getTabs"
+            allow-clear
           ></a-select>
         </a-form-item>
-        <div>班级内的课程</div>
+
+        <a-form-item
+          label="分类"
+          name="categoryId"
+        >
+          <a-tree-select
+            v-model:value="baseFormState.categoryId"
+            :tree-data="categoryOptions"
+            allow-clear
+            tree-default-expand-all
+          ></a-tree-select>
+        </a-form-item>
       </a-form>
     </div>
   </div>

@@ -1,7 +1,6 @@
 <script setup>
 import BaseInfo from './BaseInfo.vue';
 import {provide, ref} from 'vue';
-import Api from '../../../api';
 
 const props = defineProps({
   isUnMultiCourseSet: { required: true },
