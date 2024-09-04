@@ -26,6 +26,7 @@ Vue.filter('trans', function (value, params) {
 });
 
 
+
 new Vue({
   el: '#app',
   render: createElement => createElement(ManageInfo, {

@@ -1,0 +1,64 @@
+import ManageInfo from './ManageInfo.vue';
+import { createStyleTag, setCurrentPrimaryColor } from '../../common';
+import {createApp} from 'vue';
+import i18n from '../../sign-contract/vue-lang';
+import {Button, Form, Input, Select} from 'ant-design-vue';
+import 'vue3/main.less';
+
+const app = createApp(ManageInfo,
+  {
+    course: $('#manage-info').data('course'),
+    courseSet: $('#manage-info').data('courseSet'),
+    // 是否是班级中的课程
+    isUnMultiCourseSet: $('#manage-info').data('isUnMultiCourseSet'),
+    lessonWatchLimit: $('#manage-info').data('lessonWatchLimit'),
+    hasRoleAdmin: $('#manage-info').data('hasRoleAdmin'),
+    wechatSetting: $('#manage-info').data('wechatSetting'),
+    hasWechatNotificationManageRole: $('#manage-info').data('hasWechatNotificationManageRole'),
+    hasMulCourses: $('#manage-info').data('hasMulCourses'),
+    wechatManageUrl: $('#manage-info').data('wechatManageUrl'),
+    liveCapacityUrl: $('#manage-info').data('liveCapacityUrl'),
+    contentCourseRuleUrl: $('#manage-info').data('contentCourseRuleUrl'),
+    canFreeTasks: $('#manage-info').data('canFreeTasks'),
+    freeTasks: $('#manage-info').data('freeTasks'),
+    taskName: $('#manage-info').data('taskName'),
+    activityMetas: $('#manage-info').data('activityMetas'),
+    courseRemindSendDays: $('#manage-info').data('courseRemindSendDays'),
+    uploadMode: $('#manage-info').data('uploadMode'),
+    serviceTags: $('#manage-info').data('serviceTags'),
+    audioServiceStatus: $('#manage-info').data('audioServiceStatus'),
+    videoConvertCompletion: $('#manage-info').data('videoConvertCompletion'),
+    courseSetManageFilesUrl: $('#manage-info').data('courseSetManageFilesUrl'),
+    courseProduct: $('#manage-info').data('courseProduct'),
+    notifies: $('#manage-info').data('notifies'),
+    canModifyCoursePrice: $('#manage-info').data('canModifyCoursePrice'),
+    buyBeforeApproval: $('#manage-info').data('buyBeforeApproval'),
+    canFreeActivityTypes: $('#manage-info').data('canFreeActivityTypes'),
+    freeTaskChangelog: $('#manage-info').data('freeTaskChangelog'),
+    courseManageUrl: $('#manage-info').data('courseManageUrl'),
+    tags: $('#manage-info').data('tags'),
+    imageSaveUrl: $('#manage-info').data('imageSaveUrl'),
+    imageSrc: $('#manage-info').data('imageSrc'),
+    imageUploadUrl: $('#manage-info').data('imageUploadUrl'),
+    vipInstalled: $('#manage-info').data('vipInstalled'),
+    vipEnabled: $('#manage-info').data('vipEnabled'),
+    vipLevels: $('#manage-info').data('vipLevels'),
+    enableOrg: $('#manage-info').data('enableOrg'),
+  }
+);
+
+app.use(i18n);
+
+app.use(Button);
+app.use(Form);
+app.use(Input);
+app.use(Select);
+
+
+setCurrentPrimaryColor(app);
+
+if (process.env.NODE_ENV === 'production') {
+  createStyleTag(`/static-dist/vue3/js/sign-contract/index.css?${window.app.version}`);
+}
+
+app.mount('#manage-info');

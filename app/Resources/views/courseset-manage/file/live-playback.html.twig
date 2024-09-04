@@ -10,6 +10,11 @@
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block paddingClass %}
   material-table-padding
 {% endblock %}

@@ -7,6 +7,15 @@ const apiClient = axios.create({
   timeout: 15000,
 });
 
+const ajaxClient = axios.create({
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
+  },
+  timeout: 15000,
+});
+
 const csrfToken = document.getElementsByTagName('meta')['csrf-token'];
 if (csrfToken) {
   localStorage.setItem('csrf-token', csrfToken.content);
@@ -48,4 +57,4 @@ apiClient.interceptors.response.use(
   }
 );
 
-export { apiClient };
+export { apiClient, ajaxClient };

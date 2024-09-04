@@ -254,8 +254,8 @@
                 },
             };
         },
-        mounted() {
-        }
+      mounted() {
+      }
     }
 </script>
 
