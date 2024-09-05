@@ -62,7 +62,6 @@ trait ContractDisplayTrait
         }
         $order = $this->getOrderService()->getOrder($member['orderId']);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
-        $content = str_replace("\n", '<br>', $content);
         $truename = $sign['truename'] ?? $userProfile['truename'] ?? '';
         $iDNumber = $sign['IDNumber'] ?? $userProfile['idcard'] ?? '';
 
