@@ -29,9 +29,7 @@ class DownloadContract extends AbstractResource
         }
         $signSnapshot['contract']['content'] = $this->replaceContentVariable($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode'], $signSnapshot['sign']);
         $html = $this->getHtmlByRecord($signSnapshot['contract']['content'], $signSnapshot);
-//        $html = '
-//	<body style="font-family:simsun">中文字体</body>
-//';
+
         $options = new Options();
         $options->setDefaultFont('simsun');
         // 创建一个 DomPDF 实例
@@ -52,6 +50,7 @@ class DownloadContract extends AbstractResource
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
         $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Content-Length', strlen($output));
 
         return $response;
     }
