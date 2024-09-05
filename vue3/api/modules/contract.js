@@ -34,4 +34,7 @@ export default {
   async getSignedContract(id) {
     return apiClient.get(`/signed_contract/${id}`);
   },
+  async downloadContract(id, responseType) {
+    return apiClient.get(`/downloadContract/${id}`, { responseType: responseType });
+  },
 };
