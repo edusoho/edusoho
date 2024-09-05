@@ -1,14 +1,12 @@
 <?php return array(
     'root' => array(
         'name' => 'topxia/edusoho',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '9346d7856ce71610b024776940b427bab6272156',
+        'pretty_version' => 'dev-develop',
+        'version' => 'dev-develop',
+        'reference' => 'a01aaa5d26fbb429c4431cf107abc28df3e40665',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
-        'aliases' => array(
-            0 => '2.8.x-dev',
-        ),
+        'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
@@ -455,6 +453,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'dompdf/dompdf' => array(
+            'pretty_version' => 'v2.0.8',
+            'version' => '2.0.8.0',
+            'reference' => 'c20247574601700e1f7c8dab39310fca1964dc52',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../dompdf/dompdf',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'edusoho-live/eslive-api-php-sdk' => array(
             'pretty_version' => 'v1.0.7',
             'version' => '1.0.7.0',
@@ -629,6 +636,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'masterminds/html5' => array(
+            'pretty_version' => '2.8.1',
+            'version' => '2.8.1.0',
+            'reference' => 'f47dcf3c70c584de14f21143c55d9939631bc6cf',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../masterminds/html5',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'mockery/mockery' => array(
             'pretty_version' => '0.9.11',
             'version' => '0.9.11.0',
@@ -716,6 +732,24 @@
             'reference' => '19dd1de9d3f5fc4d7d70175b4c344dee329f45fd',
             'type' => 'library',
             'install_path' => __DIR__ . '/../pclzip/pclzip',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'phenx/php-font-lib' => array(
+            'pretty_version' => '0.5.6',
+            'version' => '0.5.6.0',
+            'reference' => 'a1681e9793040740a405ac5b189275059e2a9863',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phenx/php-font-lib',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'phenx/php-svg-lib' => array(
+            'pretty_version' => '0.5.3',
+            'version' => '0.5.3.0',
+            'reference' => '0e46722c154726a5f9ac218197ccc28adba16fcf',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phenx/php-svg-lib',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -1066,6 +1100,15 @@
             'replaced' => array(
                 0 => '3.9.4',
             ),
+        ),
+        'sabberworm/php-css-parser' => array(
+            'pretty_version' => 'v8.5.2',
+            'version' => '8.5.2.0',
+            'reference' => 'ef8c59c02e54315ad6ab44113b42522878040010',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../sabberworm/php-css-parser',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'sebastian/code-unit-reverse-lookup' => array(
             'pretty_version' => '1.0.2',
@@ -1791,14 +1834,12 @@
             'dev_requirement' => false,
         ),
         'topxia/edusoho' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '9346d7856ce71610b024776940b427bab6272156',
+            'pretty_version' => 'dev-develop',
+            'version' => 'dev-develop',
+            'reference' => 'a01aaa5d26fbb429c4431cf107abc28df3e40665',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
-            'aliases' => array(
-                0 => '2.8.x-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'twig/twig' => array(
