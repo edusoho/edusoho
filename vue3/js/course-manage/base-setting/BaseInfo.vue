@@ -16,8 +16,12 @@ if (props.params.isUnMultiCourseSet) {
   Object.assign(baseFormState, {
     tags: props.params.tags,
     categoryId: props.params.course.categoryId,
+    orgCode: props.params.course.orgCode,
+    serializeMode: props.params.course.serializeMode,
   });
 }
+
+console.log(props.params.course.serializeMode);
 
 const parentMessage = inject('needValidatorForm', ref(false));
 watch(parentMessage, (newValue) => {
@@ -128,6 +132,18 @@ const getCategory = async () => {
   categoryOptions.value = transformCategoryData(Category.data);
 }
 getCategory();
+
+const getOrgCodes = async () => {
+  const OrgCodes = await Api.organization.getOrgCodes({ withoutFormGroup: true, orgCode: baseFormState.orgCode })
+  console.log(OrgCodes.data);
+}
+getOrgCodes();
+
+const serializeOption = [
+  { label: '非连载课程', value: 'none' },
+  { label: '更新中', value: 'serialized' },
+  { label: '已完结', value: 'finished' },
+]
 </script>
 
 <template>
@@ -228,13 +244,31 @@ getCategory();
             :tree-data="categoryOptions"
             allow-clear
             tree-default-expand-all
+            show-search
+            :treeNodeFilterProp="'label'"
           ></a-tree-select>
         </a-form-item>
+
+<!--        <a-form-item>-->
+<!--          <div class="bg-[#f5f5f5]">组织机构占位</div>-->
+<!--        </a-form-item>-->
+
+        <a-form-item
+          label="连载状态"
+          name="serializeMode"
+        >
+          <a-radio-group class="base-info-serialize-radio" v-model:value="baseFormState.serializeMode" :options="serializeOption" />
+        </a-form-item>
+
       </a-form>
     </div>
   </div>
 </template>
 
-<style scoped lang="less">
-
+<style lang="less">
+.base-info-serialize-radio {
+  .ant-radio-wrapper {
+    font-weight: 400 !important;
+  }
+}
 </style>
