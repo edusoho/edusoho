@@ -7,9 +7,6 @@ import Api from '../../api';
 import {message} from 'ant-design-vue';
 
 const dateFormat = 'YYYY-MM-DD';
-message.config({
-  top: `90px`,
-});
 
 const columns = [
   {
@@ -151,7 +148,25 @@ const view = async (record) => {
   signatureContentVisible.value = true;
 }
 
+const downloadContract = async (id, fileName) => {
+  try {
+    message.loading('下载中...', 0);
+    const response = await Api.contract.downloadContract(id, 'blob');
 
+    const url = window.URL.createObjectURL(response);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    message.destroy();
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    message.error("合同下载失败");
+  }
+}
 </script>
 
 <template>
