@@ -66,7 +66,7 @@ const view = async (id, name) => {
 
 const downloadContract = async (id, fileName) => {
   try {
-    message.loading('下载中...', 0);
+    message.loading(`${ t('message.downloading') }...`, 0);
     const response = await Api.contract.downloadContract(id, 'blob');
 
     const url = window.URL.createObjectURL(response);
@@ -80,7 +80,8 @@ const downloadContract = async (id, fileName) => {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
   } catch (error) {
-    message.error("合同下载失败");
+    message.destroy();
+    message.error(`${ t('message.contractDownloadFailure') }`);
   }
 }
 </script>
@@ -109,8 +110,8 @@ const downloadContract = async (id, fileName) => {
             </div>
           </div>
           <div class="my-contract-btn space-x-16">
+            <a-button @click="downloadContract(contract.id, `${contract.relatedGoods.name}-${contract.name}`)">{{ t('btn.download') }}</a-button>
             <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">{{ t('btn.view') }}</a-button>
-            <a-button @click="downloadContract(contract.id, `${contract.relatedGoods.name}-${contract.name}`)">下载</a-button>
           </div>
         </div>
         <div v-else class="border border-[#e4ecf3] border-x-0 border-t-0 border-solid">

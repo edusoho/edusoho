@@ -23,6 +23,7 @@ const i18n = createI18n(merge({
         leave: '离开',
         saveImage: '保存图片',
         reselect: '重新选择',
+        download: '下载',
       },
       label: {
         signatureTime: '签署时间',
@@ -111,6 +112,8 @@ const i18n = createI18n(merge({
         createdSuccessfully: '创建成功',
         editSuccessfully: '编辑成功',
         successfullyDelete: '删除成功',
+        downloading: '下载中',
+        contractDownloadFailure: '合同下载失败',
       },
     },
 
@@ -131,6 +134,7 @@ const i18n = createI18n(merge({
         leave: 'Leave',
         saveImage: 'Save The Image',
         reselect: 'Reselect',
+        download: 'Download',
       },
       label: {
         signatureTime: 'Signature time',
@@ -219,6 +223,8 @@ const i18n = createI18n(merge({
         createdSuccessfully: 'Created successfully',
         editSuccessfully: 'Edit successfully',
         successfullyDelete: 'Successfully delete',
+        downloading: 'Downloading',
+        contractDownloadFailure: 'Contract download failure',
       },
     }
   },
