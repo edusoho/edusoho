@@ -112,6 +112,7 @@ export default {
     cancel: 'Cancel',
     dropOut: 'Drop out',
     login: 'Login',
+    download: 'Download',
     forgetPassword: 'Forget password',
     registerNow: 'Register now',
     loginWithMobileNumber: 'Login with mobile number',
@@ -195,7 +196,9 @@ export default {
     signContractTips: 'Please sign the "{name}" before starting the study to ensure that you can enjoy the follow-up service normally',
     sign: 'Go sign',
     cancel: 'Cancel',
-    signEmpty: 'signature cannot be empty'
+    signEmpty: 'signature cannot be empty',
+    downloading: 'Downloading',
+    contractDownloadFailure: 'Contract download failure',
   },
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',

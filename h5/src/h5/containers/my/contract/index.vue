@@ -8,25 +8,33 @@
       style="padding: 16px;"
     >
       <template #finished>
-        <ListEmpty v-if="contractList.length === 0" />
+        <ListEmpty v-if="contractList.length === 0"/>
       </template>
       <div v-for="item in contractList" class="contract-item">
         <div class="flex">
-          <img src="static/images/contract-icon.png" class="mr-12 w-56" />
+          <img src="static/images/contract-icon.png" class="mr-12 w-56 h-56"/>
           <div class="flex flex-col justify-between">
             <div class="line-clamp-1 text-text-7 text-16 font-medium">{{ item.name }}</div>
             <div class="line-clamp-1 text-text-6 text-12">
               <template v-if="item.relatedGoods.type === 'course'">{{ $t('contract.relatedCourse') }}</template>
               <template v-if="item.relatedGoods.type === 'classroom'">{{ $t('contract.relatedClassRoom') }}</template>
-              <template v-if="item.relatedGoods.type === 'itemBankExercise'">{{ $t('contract.relatedItemBank') }}</template>
+              <template v-if="item.relatedGoods.type === 'itemBankExercise'">{{
+                  $t('contract.relatedItemBank')
+                }}
+              </template>
               ：
               {{ item.relatedGoods.name }}
             </div>
           </div>
         </div>
         <div class="mt-16 flex">
-          <!-- <van-button type="default" size="small" class="flex-1 mr-16 rounded-md">下载</van-button> -->
-          <van-button type="primary" size="small" class="flex-1 rounded-md" @click="viewContract(item)">{{ $t('btn.view') }}</van-button>
+          <van-button type="default" size="small" class="flex-1 mr-16 rounded-md"
+                      @click="downloadContract(item.id, `${item.relatedGoods.name}-${item.name}`)">
+            {{ $t('btn.download') }}
+          </van-button>
+          <van-button type="primary" size="small" class="flex-1 rounded-md" @click="viewContract(item)">
+            {{ $t('btn.view') }}
+          </van-button>
         </div>
       </div>
     </van-list>
@@ -35,7 +43,8 @@
 
 <script>
 import Api from '@/api';
-import ListEmpty from './ListEmpty.vue'
+import ListEmpty from './ListEmpty.vue';
+import {Notify} from 'vant';
 
 export default {
   name: 'MyContract',
@@ -51,7 +60,7 @@ export default {
       total: 0,
       limit: 0,
       contractList: []
-    }
+    };
   },
   methods: {
     onRefresh() {
@@ -67,24 +76,48 @@ export default {
         this.refreshing = false;
       }
 
-      const { paging, data } = await Api.getMyContract({
-        params: { offset: this.offset }
-      })
+      const {paging, data} = await Api.getMyContract({
+        params: {offset: this.offset}
+      });
 
-      this.contractList = this.contractList.concat(data)
-      this.total = Number(paging.total)
-      this.offset = Number(paging.offset) + Number(paging.limit)
-      this.loading = false
+      this.contractList = this.contractList.concat(data);
+      this.total = Number(paging.total);
+      this.offset = Number(paging.offset) + Number(paging.limit);
+      this.loading = false;
 
       if (this.contractList.length >= this.total) {
-        this.finished = true
+        this.finished = true;
       }
     },
     viewContract(item) {
-      this.$router.push({ name: 'myContractDetail', params: { id: item.id } })
+      this.$router.push({name: 'myContractDetail', params: {id: item.id}});
+    },
+    async downloadContract(id, fileName) {
+      try {
+        Notify({type: 'primary', message: `${ this.$t('contract.downloading') }...`, duration: 0,});
+        const response = await Api.downloadContract({
+          query: {id: id},
+          responseType: 'blob'
+        });
+
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        Notify.clear();
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } catch (error) {
+        console.log('error', error)
+        Notify.clear();
+        Notify({type: 'danger', message: `${ this.$t('contract.contractDownloadFailure') }`});
+      }
     }
   }
-}
+};
 </script>
 
 <style>

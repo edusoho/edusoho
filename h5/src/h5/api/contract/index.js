@@ -18,5 +18,10 @@ export default [
     name: 'signContract',
     url: '/contract/{id}/sign',
     method: 'POST',
+  },
+  {
+    name: 'downloadContract',
+    url: '/downloadContract/{id}',
+    method: 'GET',
   }
 ]
