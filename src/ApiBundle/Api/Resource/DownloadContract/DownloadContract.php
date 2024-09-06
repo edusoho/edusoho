@@ -38,23 +38,14 @@ class DownloadContract extends AbstractResource
         $output = $mpdf->Output('', 'S'); // 'S' 表示将 PDF 输出为字符串
         // 创建响应对象
         $response = new Response($output);
-        $disposition = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            rawurlencode($this->getFileName($signSnapshot)),
-            'utf-8'
-        );
         // 设置响应头
         $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', $disposition);
+        $fileName = $this->getGoodsName($signedContract['goodsKey']).'_'.$signSnapshot['contract']['name'].'.pdf';
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName."; filename*=UTF-8''".$fileName);
         $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
         $response->headers->set('Pragma', 'no-cache');
         $response->headers->set('Content-Length', strlen($output));
 
         return $response;
-    }
-
-    protected function getFileName($signSnapshot)
-    {
-        return $signSnapshot['contractCode'].'_'.$signSnapshot['sign']['truename'].'_'.$signSnapshot['contract']['name'].'.pdf';
     }
 }
