@@ -30,7 +30,10 @@
         <div class="mt-16 flex">
           <van-button type="default" size="small" class="flex-1 mr-16 rounded-md"
                       @click="downloadContract(item.id, `${item.relatedGoods.name}-${item.name}`)">
-            {{ $t('btn.download') }}
+            <div class="flex items-center space-x-8">
+              <div>{{ $t('btn.download') }}</div>
+              <van-loading color="#1989fa" size="16px" v-if="downloadLoading[item.id]"/>
+            </div>
           </van-button>
           <van-button type="primary" size="small" class="flex-1 rounded-md" @click="viewContract(item)">
             {{ $t('btn.view') }}
@@ -59,7 +62,8 @@ export default {
       offset: 0,
       total: 0,
       limit: 0,
-      contractList: []
+      contractList: [],
+      downloadLoading: {},
     };
   },
   methods: {
@@ -94,7 +98,7 @@ export default {
     },
     async downloadContract(id, fileName) {
       try {
-        Notify({type: 'primary', message: `${ this.$t('contract.downloading') }...`, duration: 0,});
+        this.$set(this.downloadLoading, id, true);
         const response = await Api.downloadContract({
           query: {id: id},
           responseType: 'blob'
@@ -105,14 +109,14 @@ export default {
         a.href = url;
         a.download = fileName;
         document.body.appendChild(a);
-        Notify.clear();
+        this.$set(this.downloadLoading, id, false);
         a.click();
 
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       } catch (error) {
         console.log('error', error)
-        Notify.clear();
+        this.$set(this.downloadLoading, id, false);
         Notify({type: 'danger', message: `${ this.$t('contract.contractDownloadFailure') }`});
       }
     }
