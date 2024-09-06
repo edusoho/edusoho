@@ -37,14 +37,15 @@ const CKEditorConfig = {
   filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
   filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
 };
+
 const initEditor = () => {
   const editor = CKEDITOR.replace('contract-content', {
+    extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,shortUrl,colorbutton,colordialog,justify,find,pasteimage,katex',
     allowedContent: true,
     toolbar: [
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
     ],
     fileSingleSizeLimit: app.fileSingleSizeLimit,
-    filebrowserImageUploadUrl: CKEditorConfig.filebrowserImageUploadUrl,
   });
 
   editor.setData(formState.content);

@@ -111,7 +111,7 @@ const i18n = createI18n({
       },
       tip: {
         clickOnThisArea: 'Please click on this area to sign by hand',
-        makeSure: 'Please make sure that the "handwriting is legible" and try to fill the "Make range"',
+        makeSure: 'Please make sure that the "handwriting is legible" and try to fill the "Sign range"',
       },
       message: {
         submitSuccessfully: 'Submit successfully',
