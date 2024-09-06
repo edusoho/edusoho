@@ -41,6 +41,7 @@ class DownloadContract extends AbstractResource
         // 设置响应头
         $response->headers->set('Content-Type', 'application/pdf');
         $fileName = $this->getGoodsName($signedContract['goodsKey']).'_'.$signSnapshot['contract']['name'].'.pdf';
+        $fileName = urlencode(str_replace(' ', '', $fileName));
         $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName."; filename*=UTF-8''".$fileName);
         $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
         $response->headers->set('Pragma', 'no-cache');
