@@ -69,7 +69,7 @@
     "symfony/http-client": "^4",
     "symfony/service-contracts": "^1",
     "symfony/http-client-contracts": "^1.1.10",
-    "dompdf/dompdf": "^2.0"
+    "mpdf/mpdf": "^8.2"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.27",

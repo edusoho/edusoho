@@ -50,7 +50,6 @@ return array(
     'Docopt\\Response' => $vendorDir . '/docopt/docopt/src/docopt.php',
     'Docopt\\SingleMatch' => $vendorDir . '/docopt/docopt/src/docopt.php',
     'Docopt\\Tokens' => $vendorDir . '/docopt/docopt/src/docopt.php',
-    'Dompdf\\Cpdf' => $vendorDir . '/dompdf/dompdf/lib/Cpdf.php',
     'Error' => $vendorDir . '/symfony/polyfill-php70/Resources/stubs/Error.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
