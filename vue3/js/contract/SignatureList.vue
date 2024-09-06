@@ -6,8 +6,11 @@ import {t} from './vue-lang';
 import Api from '../../api';
 import {message} from 'ant-design-vue';
 
-const dateFormat = 'YYYY-MM-DD';
+message.config({
+  top: `90px`,
+});
 
+const dateFormat = 'YYYY-MM-DD';
 const columns = [
   {
     key: 'contractCode',
@@ -150,7 +153,7 @@ const view = async (record) => {
 
 const downloadContract = async (id, fileName) => {
   try {
-    message.loading('下载中...', 0);
+    message.loading(`${ t('message.downloading') }...`, 0);
     const response = await Api.contract.downloadContract(id, 'blob');
 
     const url = window.URL.createObjectURL(response);
@@ -164,7 +167,8 @@ const downloadContract = async (id, fileName) => {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
   } catch (error) {
-    message.error("合同下载失败");
+    message.destroy();
+    message.error(`${ t('message.contractDownloadFailure') }`);
   }
 }
 </script>
@@ -224,7 +228,7 @@ const downloadContract = async (id, fileName) => {
         <template v-else-if="column.key === 'operation'">
           <div class="signature-list-operation-btn space-x-16">
             <a-button type="link" @click="view(record)">{{ t('btn.view') }}</a-button>
-            <a-button type="link" @click="downloadContract(record.id, `${record.goodsName}-${record.contractName}`)">下载</a-button>
+            <a-button type="link" @click="downloadContract(record.id, `${record.goodsName}-${record.contractName}`)">{{ t('btn.download') }}</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'mobile'">
