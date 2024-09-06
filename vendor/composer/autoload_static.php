@@ -37,12 +37,17 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'aef137864a7aaf34614936d4960886a7' => __DIR__ . '/..' . '/codeages/escloud-php-sdk/src/functions.php',
         '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
+        'db356362850385d08a5381de2638b5fd' => __DIR__ . '/..' . '/mpdf/mpdf/src/functions.php',
         '92c8763cd6170fce6fcfe7e26b4e8c10' => __DIR__ . '/..' . '/symfony/phpunit-bridge/bootstrap.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'setasign\\Fpdi\\' => 14,
+        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
@@ -94,14 +99,12 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Symfony\\Bridge\\Monolog\\' => 23,
             'Symfony\\Bridge\\Doctrine\\' => 24,
-            'Svg\\' => 4,
             'Silex\\' => 6,
             'Sentry\\SentryBundle\\' => 20,
             'Sensio\\Bundle\\GeneratorBundle\\' => 30,
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
             'Sensio\\Bundle\\DistributionBundle\\' => 33,
             'SensioLabs\\Security\\' => 20,
-            'Sabberworm\\CSS\\' => 15,
         ),
         'R' => 
         array (
@@ -134,9 +137,11 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         ),
         'M' => 
         array (
+            'Mpdf\\PsrLogAwareTrait\\' => 22,
+            'Mpdf\\PsrHttpMessageShim\\' => 24,
+            'Mpdf\\' => 5,
             'Monolog\\' => 8,
             'Money\\' => 6,
-            'Masterminds\\' => 12,
         ),
         'J' => 
         array (
@@ -164,7 +169,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         ),
         'F' => 
         array (
-            'FontLib\\' => 8,
             'Flow\\JSONPath\\' => 14,
             'Firebase\\JWT\\' => 13,
             'Fig\\Link\\' => 9,
@@ -178,7 +182,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         ),
         'D' => 
         array (
-            'Dompdf\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Inflector\\' => 26,
@@ -221,6 +224,10 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
     );
 
     public static $prefixDirsPsr4 = array (
+        'setasign\\Fpdi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
@@ -359,10 +366,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         array (
             0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bridge/Doctrine',
         ),
-        'Svg\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',
-        ),
         'Silex\\' => 
         array (
             0 => __DIR__ . '/..' . '/silex/silex/src/Silex',
@@ -386,10 +389,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'SensioLabs\\Security\\' => 
         array (
             0 => __DIR__ . '/..' . '/sensiolabs/security-checker/SensioLabs/Security',
-        ),
-        'Sabberworm\\CSS\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
         ),
         'Ramsey\\Uuid\\' => 
         array (
@@ -459,6 +458,18 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         array (
             0 => __DIR__ . '/..' . '/codeages/omnipay-alipay/src',
         ),
+        'Mpdf\\PsrLogAwareTrait\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/psr-log-aware-trait/src',
+        ),
+        'Mpdf\\PsrHttpMessageShim\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/psr-http-message-shim/src',
+        ),
+        'Mpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -466,10 +477,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'Money\\' => 
         array (
             0 => __DIR__ . '/..' . '/moneyphp/money/src',
-        ),
-        'Masterminds\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
         'JsonSchema\\' => 
         array (
@@ -520,10 +527,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         array (
             0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
-        'FontLib\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phenx/php-font-lib/src/FontLib',
-        ),
         'Flow\\JSONPath\\' => 
         array (
             0 => __DIR__ . '/..' . '/softcreatr/jsonpath/src',
@@ -551,10 +554,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'ESCloud\\SDK\\' => 
         array (
             0 => __DIR__ . '/..' . '/codeages/escloud-php-sdk/src',
-        ),
-        'Dompdf\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -842,7 +841,6 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'Docopt\\Response' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
         'Docopt\\SingleMatch' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
         'Docopt\\Tokens' => __DIR__ . '/..' . '/docopt/docopt/src/docopt.php',
-        'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
         'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
         'File_Iterator_Facade' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Facade.php',
