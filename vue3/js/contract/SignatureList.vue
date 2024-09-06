@@ -2,8 +2,9 @@
 import {reactive, ref} from 'vue';
 import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate} from '../common';
-import { t } from './vue-lang';
+import {t} from './vue-lang';
 import Api from '../../api';
+import {message} from 'ant-design-vue';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -147,6 +148,25 @@ const view = async (record) => {
   signatureContentVisible.value = true;
 }
 
+const downloadContract = async (id, fileName) => {
+  try {
+    message.loading('下载中...', 0);
+    const response = await Api.contract.downloadContract(id, 'blob');
+
+    const url = window.URL.createObjectURL(response);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    message.destroy();
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    message.error("合同下载失败");
+  }
+}
 </script>
 
 <template>
@@ -204,7 +224,7 @@ const view = async (record) => {
         <template v-else-if="column.key === 'operation'">
           <div class="signature-list-operation-btn space-x-16">
             <a-button type="link" @click="view(record)">{{ t('btn.view') }}</a-button>
-            <a-button type="link" >下载</a-button>
+            <a-button type="link" @click="downloadContract(record.id, `${record.goodsName}-${record.contractName}`)">下载</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'mobile'">

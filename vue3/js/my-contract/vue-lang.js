@@ -34,6 +34,10 @@ const i18n = createI18n({
           }
         }
       },
+      pagination: {
+        total: '共',
+        item: '项'
+      },
     },
 
 
