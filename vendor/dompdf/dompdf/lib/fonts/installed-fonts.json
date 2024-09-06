@@ -1,8 +1,0 @@
-{
-    "simsun": {
-        "normal": "\/var\/www\/jp.edusoho\/vendor\/dompdf\/dompdf\/lib\/fonts\/simsun",
-        "bold": "\/var\/www\/jp.edusoho\/vendor\/dompdf\/dompdf\/lib\/fonts\/simsunb",
-        "italic": "\/var\/www\/jp.edusoho\/vendor\/dompdf\/dompdf\/lib\/fonts\/simsun",
-        "bold_italic": "\/var\/www\/jp.edusoho\/vendor\/dompdf\/dompdf\/lib\/fonts\/simsun"
-    }
-}
