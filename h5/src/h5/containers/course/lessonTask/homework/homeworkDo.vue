@@ -74,11 +74,9 @@
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
 import { mapState, mapMutations, mapActions } from 'vuex';
-
 import { Toast, Dialog } from 'vant';
 import guidePage from '../component/guide-page';
 import itemBank from '../component/itemBank';
-
 import homeworkMixin from '@/mixins/lessonTask/homework.js';
 import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';
@@ -137,8 +135,8 @@ export default {
     // 可捕捉离开提醒
     if (
       this.info.length == 0 ||
-      this.isHandHomework || 
-      this.forceLeave || 
+      this.isHandHomework ||
+      this.forceLeave ||
       this.homework.status != 'doing'
     ) {
       next();

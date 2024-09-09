@@ -8,6 +8,7 @@ import learning from './learning';
 import my from './my';
 import Api from '@/api';
 import initShare from '@/utils/weiixn-share-sdk';
+import {initTaskWatermark, destroyWatermark} from '@/utils/watermark';
 
 /* eslint-disable no-new */
 Vue.use(Router);
@@ -1224,7 +1225,28 @@ router.beforeEach(async (to, from, next) => {
     link: window.location.href.split('#')[0] + '#' + to.path
   });
 
-  next()
+  if ([
+    'course',
+    'course_web',
+    'testpaperIntro',
+    'testpaperDo',
+    'testpaperResult',
+    'testpaperAnalysis',
+    'exerciseIntro',
+    'exerciseDo',
+    'exerciseResult',
+    'exerciseAnalysis',
+    'homeworkIntro',
+    'homeworkDo',
+    'homeworkResult',
+    'homeworkAnalysis',
+  ].includes(to.name)) {
+    initTaskWatermark();
+  } else {
+    destroyWatermark();
+  }
+
+  next();
 });
 
 export default router;

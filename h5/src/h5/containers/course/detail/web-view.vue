@@ -46,6 +46,8 @@ import { Toast } from 'vant';
 import report from '@/mixins/course/report';
 import finishDialog from '../components/finish-dialog';
 import OutFocusMask from '@/components/out-focus-mask.vue';
+import {getTaskWatermark, destroyWatermark} from '@/utils/watermark';
+
 export default {
   components: {
     finishDialog,
@@ -172,10 +174,10 @@ export default {
       const playerSDKUri =
         `//${this.cloudSdkCdn}/js-sdk-v2/sdk-v1.js?` +
         ~~(Date.now() / 1000 / 60);
-      loadScript(playerSDKUri, err => {
+      loadScript(playerSDKUri, async err => {
         if (err) throw err;
 
-        const player = new window.QiQiuYun.Player({
+        const options = {
           id: 'player', // 用于初始化的DOM节点id
           resNo: media.resNo, // 想要播放的资源编号
           token: media.token,
@@ -183,7 +185,17 @@ export default {
             type: playerParams.mediaType,
             args: media,
           },
-        });
+        };
+        const watermark = await getTaskWatermark();
+        if (watermark.text) {
+          options.fingerprint = {
+            html: watermark.text,
+            color: watermark.color,
+            alpha: watermark.alpha,
+          };
+        }
+        destroyWatermark();
+        const player = new window.QiQiuYun.Player(options);
         this.player = player;
         player.on('ready', () => {});
         player.on('pagechanged', e => {

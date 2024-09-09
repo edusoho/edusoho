@@ -134,6 +134,7 @@ import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
 import { getLanguage } from '@/lang/index.js'
 import { closedToast } from '@/utils/on-status.js';
+import {getTaskWatermark} from '@/utils/watermark';
 import openAppDialog from '../components/openAppDialog.vue'
 
 export default {
@@ -188,7 +189,8 @@ export default {
       nowWatchTime: 0, // 当前刚看时间计时
       activity: {},
       openAppUrl: '',
-      appShow: false
+      appShow: false,
+      watermark: {},
     };
   },
   inject: ['getDetailsContent'],
@@ -355,7 +357,8 @@ export default {
       }
       this.getData();
     },
-    getData() {
+    async getData() {
+      this.watermark = await getTaskWatermark();
       Api.getMedia(this.getParams())
         .then(async res => {
           const {
@@ -565,15 +568,23 @@ export default {
       loadScript(playerSDKUri, err => {
         if (err) throw err;
 
-        const player = new window.QiQiuYun.Player({
+        const options = {
           id: 'course-detail__head--video',
           resNo: media.resNo,
           token: media.token,
           source: {
             type: playerParams.mediaType,
-            args: media
-          }
-        });
+            args: media,
+          },
+        };
+        if (this.watermark.text) {
+          options.fingerprint = {
+            html: this.watermark.text,
+            color: this.watermark.color,
+            alpha: this.watermark.alpha,
+          };
+        }
+        const player = new window.QiQiuYun.Player(options);
         this.player = player;
         player.on('ready', () => {
           this.initReportData(
@@ -604,6 +615,14 @@ export default {
         if (err) throw err;
         if (options.language === 'zh-cn' || !options.language) {
           options.language = 'zh-CN'
+        }
+        if (this.watermark.text) {
+          options.fingerprint = {
+            isFull: true,
+            html: this.watermark.text,
+            color: this.watermark.color,
+            alpha: this.watermark.alpha,
+          };
         }
 
         const player = new window.QiQiuYun.Player(options);

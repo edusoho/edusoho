@@ -40,7 +40,6 @@
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 import { Toast } from 'vant';
-
 import homeworkMixin from '@/mixins/lessonTask/homework.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';

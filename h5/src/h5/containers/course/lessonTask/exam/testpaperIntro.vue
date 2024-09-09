@@ -277,7 +277,7 @@ export default {
 			if(this.startTime > Date.now()) {
 			 	Toast.fail(this.$t('courseLearning.examNotStart'))
 				return
-			} 
+			}
 
       this.testId = this.$route.query.testId;
       this.targetId = this.$route.query.targetId;

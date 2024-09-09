@@ -98,12 +98,9 @@ import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast, Dialog } from 'vant';
-
 import guidePage from '../component/guide-page';
 import itemBank from '../component/itemBank';
-
 import { getCountDown } from '@/utils/date-toolkit.js';
-
 import examMixin from '@/mixins/lessonTask/exam.js';
 import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';
