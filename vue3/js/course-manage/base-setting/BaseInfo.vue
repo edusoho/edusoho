@@ -1,10 +1,22 @@
 <script setup>
-import {inject, reactive, ref, watch} from 'vue';
+import {inject, onMounted, reactive, ref, watch} from 'vue';
 import Api from '../../../api';
 
 const props = defineProps({
   params: {type: Object, default: {}}
-})
+});
+
+const removeHtml = (input) => {
+  return input && input.replace(/<(?:.|\n)*?>/gm, '')
+    .replace(/(&rdquo;)/g, '\"')
+    .replace(/&ldquo;/g, '\"')
+    .replace(/&mdash;/g, '-')
+    .replace(/&nbsp;/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&gt;/g, '>')
+    .replace(/&lt;/g, '<')
+    .replace(/<[\w\s"':=\/]*/, '');
+}
 
 const formRef = ref(null);
 const baseFormState = reactive({
@@ -18,10 +30,11 @@ if (props.params.isUnMultiCourseSet) {
     categoryId: props.params.course.categoryId,
     orgCode: props.params.course.orgCode,
     serializeMode: props.params.course.serializeMode,
+    summary: props.params.courseSet.summary,
+    title: removeHtml(props.params.courseSet.title),
+    subtitle: removeHtml(props.params.courseSet.subtitle),
   });
 }
-
-console.log(props.params.course.serializeMode);
 
 const parentMessage = inject('needValidatorForm', ref(false));
 watch(parentMessage, (newValue) => {
@@ -111,10 +124,11 @@ const getTabs = async () => {
     label: item.name,
     value: item.name
   }));
-}
+};
 getTabs();
 
 const categoryOptions = ref();
+
 function transformCategoryData(data) {
   return data.map(item => {
     const transformedItem = {
@@ -127,29 +141,62 @@ function transformCategoryData(data) {
     return transformedItem;
   });
 }
+
 const getCategory = async () => {
   const Category = await Api.category.getCategory();
   categoryOptions.value = transformCategoryData(Category.data);
-}
+};
 getCategory();
 
 const getOrgCodes = async () => {
-  const OrgCodes = await Api.organization.getOrgCodes({ withoutFormGroup: true, orgCode: baseFormState.orgCode })
+  const OrgCodes = await Api.organization.getOrgCodes({withoutFormGroup: true, orgCode: baseFormState.orgCode});
   console.log(OrgCodes.data);
-}
+};
 getOrgCodes();
 
 const serializeOption = [
-  { label: '非连载课程', value: 'none' },
-  { label: '更新中', value: 'serialized' },
-  { label: '已完结', value: 'finished' },
-]
+  {label: '非连载课程', value: 'none'},
+  {label: '更新中', value: 'serialized'},
+  {label: '已完结', value: 'finished'},
+];
+
+const cover = ref();
+const getCover = async () => {
+  cover.value = await Api.file.getCourseCover({
+    saveUrl: props.params.imageSaveUrl,
+    targetImg: 'course-cover',
+    uploadToken: 'tmp',
+    imageText: '修改封面图片',
+    imageSrc: props.params.imageSrc,
+    imageClass: 'course-manage-cover',
+  });
+};
+getCover();
+
+const initEditor = () => {
+  const editor = CKEDITOR.replace('course-introduction', {
+    toolbar: 'Detail',
+    filebrowserImageUploadUrl: props.params.imageUploadUrl,
+  });
+
+  editor.setData(baseFormState.summary);
+
+  editor.on('change', () => {
+    baseFormState.summary = editor.getData();
+  });
+};
+
+onMounted( () => {
+  initEditor();
+} )
 </script>
 
 <template>
   <div class="flex flex-col w-full">
     <div class="flex flex-col relative" v-if="!props.params.isUnMultiCourseSet">
-      <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]" style="width: calc(100% + 64px);">基础信息</div>
+      <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
+           style="width: calc(100% + 64px);">基础信息
+      </div>
       <a-form
         ref="formRef"
         class="mt-66"
@@ -186,9 +233,10 @@ const serializeOption = [
     </div>
 
 
-
     <div class="relative" v-if="props.params.isUnMultiCourseSet">
-      <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]" style="width: calc(100% + 64px);">基础信息</div>
+      <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
+           style="width: calc(100% + 64px);">基础信息
+      </div>
       <a-form
         ref="formRef"
         class="mt-66"
@@ -249,15 +297,27 @@ const serializeOption = [
           ></a-tree-select>
         </a-form-item>
 
-<!--        <a-form-item>-->
-<!--          <div class="bg-[#f5f5f5]">组织机构占位</div>-->
-<!--        </a-form-item>-->
+        <!--        <a-form-item v-if="props.params.enableOrg">-->
+        <!--          <div class="bg-[#f5f5f5]">组织机构占位</div>-->
+        <!--        </a-form-item>-->
 
         <a-form-item
           label="连载状态"
           name="serializeMode"
         >
-          <a-radio-group class="base-info-serialize-radio" v-model:value="baseFormState.serializeMode" :options="serializeOption" />
+          <a-radio-group class="base-info-serialize-radio" v-model:value="baseFormState.serializeMode"
+                         :options="serializeOption"/>
+        </a-form-item>
+
+        <!--        <a-form-item>-->
+        <!--          <div class="bg-[#f5f5f5]">封面图片</div>-->
+        <!--        </a-form-item>-->
+
+        <a-form-item
+          label="课程简介"
+          name="categoryId"
+        >
+          <textarea id="course-introduction"></textarea>
         </a-form-item>
 
       </a-form>

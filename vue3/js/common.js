@@ -30,9 +30,9 @@ export const stopFunc = (e) => {
 };
 
 export const primaryColors = {
-  'default': '#006aff',
+  'default': '#46c37B',
   'blue-light': '#4bbbfa',
-  'blue': '#0081e6',
+  'blue': '#0a2a6b',
   'green-light': '#81d867',
   'green': '#46c37b',
   'orange-light': '#f9b469',
@@ -44,7 +44,7 @@ export const primaryColors = {
 };
 
 export const getCurrentPrimaryColor = () => {
-  return primaryColors[app.mainColor] || '#006aff';
+  return primaryColors[app.mainColor] || '#46c37B';
 };
 
 export const setCurrentPrimaryColor = (vueInstance) => {

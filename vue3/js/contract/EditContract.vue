@@ -39,7 +39,6 @@ const CKEditorConfig = {
 };
 const initEditor = () => {
   const editor = CKEDITOR.replace('contract-content', {
-    allowedContent: true,
     toolbar: [
       { items: ['Bold', 'Italic', 'Underline', 'TextColor'] },
     ],

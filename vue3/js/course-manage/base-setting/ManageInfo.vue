@@ -6,12 +6,22 @@ const props = defineProps({
   isUnMultiCourseSet: { required: true },
   course: { required: true },
   tags: { required: true },
+  imageSrc: { required: true },
+  imageSaveUrl: { required: true },
+  imageUploadUrl: { required: true },
+  enableOrg: { required: true },
+  courseSet: { required: true },
 });
 
 const baseInfoProps = {
   isUnMultiCourseSet: props.isUnMultiCourseSet,
   tags: props.tags,
   course: props.course,
+  imageSrc: props.imageSrc,
+  imageSaveUrl: props.imageSaveUrl,
+  imageUploadUrl: props.imageUploadUrl,
+  enableOrg: props.enableOrg,
+  courseSet: props.courseSet,
 }
 
 const baseInfoRef = ref(null);

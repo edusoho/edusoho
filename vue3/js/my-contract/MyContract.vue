@@ -85,7 +85,7 @@ const view = async (id, name) => {
               </div>
             </div>
           </div>
-          <div class="my-contract-btn space-x-16">
+          <div class="space-x-16">
             <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">{{ t('btn.view') }}</a-button>
             <a-button>下载</a-button>
           </div>
@@ -188,17 +188,6 @@ const view = async (id, name) => {
 </template>
 
 <style lang="less">
-.my-contract-btn {
-  .ant-btn-primary:hover {
-    background-color: #BDF2D0;
-    border-color: #BDF2D0;
-  }
-  .ant-btn-default:hover {
-    border-color: #46C37B;
-    color: #46C37B;
-  }
-}
-
 .contract-content {
   img {
     max-width: 100%;
