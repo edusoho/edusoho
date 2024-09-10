@@ -440,6 +440,7 @@ export default {
         },
         rememberLastPos: true,
         playlist: media.url,
+        disableFullscreen: true,
       };
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
@@ -511,7 +512,7 @@ export default {
         id: 'course-detail__head--video',
         user: this.user,
         autoplay: true,
-        disableFullscreen: this.sourceType === 'audio',
+        disableFullscreen: true,
         strictMode: !media.supportMobile, // 视频是否加密 1表示普通  0表示加密
         pluck: {
           timelimit: timelimit,
@@ -659,6 +660,15 @@ export default {
           this.clearComputeWatchTime();
           if (this.finishCondition && this.finishCondition.type === 'end') {
             this.reprtData({ eventName: 'finish' });
+          }
+        });
+        player.on('requestFullscreen', data => {
+          if (data.metas?.type === 'video') {
+            if (data.isFullscreen) {
+              player.iframe.classList.add('fullscreen');
+            } else {
+              player.iframe.classList.remove('fullscreen');
+            }
           }
         });
       });
@@ -945,3 +955,14 @@ export default {
   }
 };
 </script>
+
+<style>
+.fullscreen {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+}
+</style>
