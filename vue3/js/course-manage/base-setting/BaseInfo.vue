@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, reactive, ref, watch} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import Api from '../../../api';
 
 const props = defineProps({
@@ -16,16 +16,16 @@ const removeHtml = (input) => {
     .replace(/&gt;/g, '>')
     .replace(/&lt;/g, '<')
     .replace(/<[\w\s"':=\/]*/, '');
-}
+};
 
 const formRef = ref(null);
-const baseFormState = reactive({
+const formState = reactive({
   title: props.params.course.title,
   subtitle: props.params.course.subtitle,
 });
 
 if (props.params.isUnMultiCourseSet) {
-  Object.assign(baseFormState, {
+  Object.assign(formState, {
     tags: props.params.tags,
     categoryId: props.params.course.categoryId,
     orgCode: props.params.course.orgCode,
@@ -35,21 +35,6 @@ if (props.params.isUnMultiCourseSet) {
     subtitle: removeHtml(props.params.courseSet.subtitle),
   });
 }
-
-const parentMessage = inject('needValidatorForm', ref(false));
-watch(parentMessage, (newValue) => {
-  if (newValue === true) {
-    formRef.value.validate()
-      .then(() => {
-        // 表单验证成功
-        console.log('验证通过:', baseFormState);
-      })
-      .catch((error) => {
-        // 表单验证失败
-        console.log('验证失败:', error);
-      });
-  }
-});
 
 const courseTitleValidator = (rule, value) => {
   return new Promise((resolve, reject) => {
@@ -149,7 +134,7 @@ const getCategory = async () => {
 getCategory();
 
 const getOrgCodes = async () => {
-  const OrgCodes = await Api.organization.getOrgCodes({withoutFormGroup: true, orgCode: baseFormState.orgCode});
+  const OrgCodes = await Api.organization.getOrgCodes({withoutFormGroup: true, orgCode: formState.orgCode});
   console.log(OrgCodes.data);
 };
 getOrgCodes();
@@ -179,16 +164,30 @@ const initEditor = () => {
     filebrowserImageUploadUrl: props.params.imageUploadUrl,
   });
 
-  editor.setData(baseFormState.summary);
+  editor.setData(formState.summary);
 
   editor.on('change', () => {
-    baseFormState.summary = editor.getData();
+    formState.summary = editor.getData();
   });
 };
 
-onMounted( () => {
+onMounted(() => {
   initEditor();
-} )
+});
+
+
+const validateForm = () => {
+  return formRef.value.validate()
+    .then(() => {
+      return formState;
+    })
+    .catch((error) => {
+    });
+}
+
+defineExpose({
+  validateForm,
+});
 </script>
 
 <template>
@@ -200,7 +199,7 @@ onMounted( () => {
       <a-form
         ref="formRef"
         class="mt-66"
-        :model="baseFormState"
+        :model="formState"
         name="baseInfo"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 16 }"
@@ -216,7 +215,7 @@ onMounted( () => {
           { validator: courseTitleValidator },
           ]"
         >
-          <a-input v-model:value.trim="baseFormState.title"/>
+          <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
 
         <a-form-item
@@ -227,7 +226,7 @@ onMounted( () => {
           { validator: interByteValidator, maxSize: 100 }
           ]"
         >
-          <a-textarea v-model:value.trim="baseFormState.subtitle" :rows="3"/>
+          <a-textarea v-model:value.trim="formState.subtitle" :rows="3"/>
         </a-form-item>
       </a-form>
     </div>
@@ -240,7 +239,7 @@ onMounted( () => {
       <a-form
         ref="formRef"
         class="mt-66"
-        :model="baseFormState"
+        :model="formState"
         name="baseInfo"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 16 }"
@@ -256,7 +255,7 @@ onMounted( () => {
           { validator: courseTitleValidator },
           ]"
         >
-          <a-input v-model:value.trim="baseFormState.title"/>
+          <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
 
         <a-form-item
@@ -267,7 +266,7 @@ onMounted( () => {
           { max: 50, message: '最多支持50个字符' },
           ]"
         >
-          <a-textarea v-model:value="baseFormState.subtitle" :rows="3"/>
+          <a-textarea v-model:value="formState.subtitle" :rows="3"/>
         </a-form-item>
 
         <a-form-item
@@ -275,7 +274,7 @@ onMounted( () => {
           name="tabs"
         >
           <a-select
-            v-model:value="baseFormState.tags"
+            v-model:value="formState.tags"
             mode="multiple"
             placeholder="请选择"
             :options="tabOptions"
@@ -288,7 +287,7 @@ onMounted( () => {
           name="categoryId"
         >
           <a-tree-select
-            v-model:value="baseFormState.categoryId"
+            v-model:value="formState.categoryId"
             :tree-data="categoryOptions"
             allow-clear
             tree-default-expand-all
@@ -305,7 +304,7 @@ onMounted( () => {
           label="连载状态"
           name="serializeMode"
         >
-          <a-radio-group class="base-info-serialize-radio" v-model:value="baseFormState.serializeMode"
+          <a-radio-group class="base-info-radio" v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
         </a-form-item>
 
@@ -318,6 +317,7 @@ onMounted( () => {
           name="categoryId"
         >
           <textarea id="course-introduction"></textarea>
+          <div class="text-[#a1a1a1] font-normal text-14 leading-28">为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置</div>
         </a-form-item>
 
       </a-form>
@@ -326,7 +326,7 @@ onMounted( () => {
 </template>
 
 <style lang="less">
-.base-info-serialize-radio {
+.base-info-radio {
   .ant-radio-wrapper {
     font-weight: 400 !important;
   }

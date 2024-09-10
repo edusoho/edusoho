@@ -94,7 +94,7 @@
                         </ul>
 
                         <div class="help-block course-mange-space" :class="{'mt0': !canFreeTasks.length}">
-                            {{ 'course.marketing_setup.preview.set_task.free_tips'|trans({'taskName':taskName}) }}
+                                {{ 'course.marketing_setup.preview.set_task.free_tips'|trans({'taskName':taskName}) }}
                             {{ canFreeActivityTypes }}
                             <el-popover
                                 placement="right"
