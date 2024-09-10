@@ -50,7 +50,7 @@ export default {
     moreCourse: '更多好课等您加入',
     moreClass: '更多班级等您加入',
     moreQuestionBanks: '更多题库等您加入',
-    browse: '人浏览'
+    browse: '人浏览',
   },
   title: {
     me: '我的',
@@ -112,6 +112,7 @@ export default {
     cancel: '取消',
     dropOut: '退出登录',
     login: '登录',
+    download: '下载',
     forgetPassword: '忘记密码',
     registerNow: '立即注册',
     loginWithMobileNumber: '切换手机快捷登录',
@@ -193,7 +194,9 @@ export default {
     signContractTips: '开始学习前请签署《{name}》，以确保正常享受后续服务',
     sign: '去签署',
     cancel: '取消',
-    signEmpty: '签名不能为空'
+    signEmpty: '签名不能为空',
+    downloading: '下载中',
+    contractDownloadFailure: '合同下载失败',
   },
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
