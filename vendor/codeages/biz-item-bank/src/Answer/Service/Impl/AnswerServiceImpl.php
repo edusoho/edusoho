@@ -82,13 +82,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         try {
             $this->beginTransaction();
 
-            if ($this->getAnswerQuestionReportService()->count(
-                ['answer_record_id' => $answerRecord['id']]
-            )) {
-                $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
-            } else {
-                $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
-            }
+            $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
+            $this->savetAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
+            // todo 需要把丢失的题目提交上来
 
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
@@ -1074,13 +1070,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $assessmentResponse,
                 $reviewedQuestions ?? []
             );
-            if ($this->getAnswerQuestionReportService()->count(
-                ['answer_record_id' => $answerRecord['id']]
-            )) {
-                $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
-            } else {
-                $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
-            }
+            $this->savetAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
 
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
 
@@ -1229,6 +1219,35 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         ];
 
         $this->getSchedulerService()->register($autoSubmitJob);
+    }
+
+    protected function savetAnswerQuestionReport($answerQuestionReports, $answerRecordId)
+    {
+        $existIdentifies = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $answerRecordId], [], 0, PHP_INT_MAX, ['identify']);
+        if (empty($existIdentifies)) {
+            $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
+        }else {
+            // 对$answerQuestionReports分类，分成存在的数据和不存在的数据，然后存在的去更新，不存在的去创建
+            $existIdentifies = array_column($existIdentifies, 'identify'); // 获取已存在的 identify
+            $toCreate = [];
+            $toUpdate = [];
+            foreach ($answerQuestionReports as $report) {
+                if (in_array($report['identify'], $existIdentifies)) {
+                    $toUpdate[] = $report;
+                } else {
+                    $toCreate[] = $report;
+                }
+            }
+            // 对需要创建的数据进行批量创建
+            if (!empty($toCreate)) {
+                $this->getAnswerQuestionReportService()->batchCreate($toCreate);
+            }
+            // 对需要更新的数据进行批量更新
+            if (!empty($toUpdate)) {
+                $this->getAnswerQuestionReportService()->batchUpdate($toUpdate);
+            }
+
+        }
     }
 
     /**
