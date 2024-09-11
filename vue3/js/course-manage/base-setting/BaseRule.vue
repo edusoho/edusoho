@@ -33,6 +33,11 @@ const formState = reactive({
   freeTaskIds: Object.keys(props.params.freeTasks),
 });
 
+const canFreeTasks = ref(props.params.canFreeTasks.map(task => ({
+  ...task,
+  isSelected: false // 初始化 isSelected
+})));
+
 const validateForm = () => {
   return formRef.value.validate()
     .then(() => {
@@ -40,79 +45,79 @@ const validateForm = () => {
     })
     .catch((error) => {
     });
-}
+};
 
 defineExpose({
   validateForm,
 });
+
 </script>
 
 <template>
-  <div class="flex flex-col w-full">
-    <div class="flex flex-col relative" v-if="!props.params.isUnMultiCourseSet">
-      <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
-           style="width: calc(100% + 64px);">基础规则
-      </div>
-      <a-form
-        ref="formRef"
-        class="mt-66"
-        :model="formState"
-        name="baseInfo"
-        :label-col="{ span: 4 }"
-        :wrapper-col="{ span: 16 }"
-        autocomplete="off"
+  <div class="flex flex-col w-full relative">
+    <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
+         style="width: calc(100% + 64px);">基础规则
+    </div>
+    <a-form
+      ref="formRef"
+      class="mt-66"
+      :model="formState"
+      name="baseInfo"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 16 }"
+      autocomplete="off"
+    >
+
+      <a-form-item
+        name="learnMode"
       >
-
-        <a-form-item
-          name="learnMode"
-        >
-          <template #label>
-            <div class="flex items-center">
-              <div>学习模式</div>
-              <a-popover>
-                <template #content>
-                  <div class="text-14"><span class="font-medium">自由式：</span>学习过程自由安排</div>
-                  <div class="text-14"><span class="font-medium">解锁式：</span>根据既定顺序逐个解锁学习</div>
-                </template>
-                <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
-              </a-popover>
-            </div>
-          </template>
-          <a-radio-group class="base-rule-radio" v-model:value="formState.learnMode" :options="learnModeOptions"
-                         :disabled="props.params.course.status !== 'draft' || props.params.course.platform !== 'self'"/>
-        </a-form-item>
-
-        <a-form-item
-          v-if="props.params.lessonWatchLimit"
-          label="视频观看时长限制"
-          name="watchLimit"
-          :validateTrigger="['blur']"
-          :rules="[
-          { pattern: /^[0-9]\d*$/, message: '请输入非负整数' },
-          ]"
-        >
-          <div class="flex items-center space-x-8">
-            <a-input v-model:value="formState.watchLimit" style="width: 150px"></a-input>
-            <div class="text-[#a1a1a1] font-normal text-14 whitespace-nowrap">倍总时长</div>
+        <template #label>
+          <div class="flex items-center">
+            <div>学习模式</div>
             <a-popover>
               <template #content>
-                <div class="text-14 font-normal w-300">例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。
-                  对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
-                </div>
+                <div class="text-14"><span class="font-medium">自由式：</span>学习过程自由安排</div>
+                <div class="text-14"><span class="font-medium">解锁式：</span>根据既定顺序逐个解锁学习</div>
               </template>
-              <QuestionCircleOutlined class="text-14 leading-14"/>
+              <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
             </a-popover>
           </div>
-        </a-form-item>
+        </template>
+        <a-radio-group class="base-rule-radio" v-model:value="formState.learnMode" :options="learnModeOptions"
+                       :disabled="props.params.course.status !== 'draft' || props.params.course.platform !== 'self'"/>
+      </a-form-item>
 
-        <a-form-item
-          label="任务完成规则"
-          name="enableFinish"
-        >
-          <a-radio-group v-model:value="formState.enableFinish" class="base-rule-radio"
-                         :disabled="props.params.course.platform === 'supplier'">
-            <a-radio value="1">无限制</a-radio>
-            <a-radio value="0">由任务完成条件决定<span>
+      <a-form-item
+        v-if="props.params.lessonWatchLimit"
+        label="视频观看时长限制"
+        name="watchLimit"
+        :validateTrigger="['blur']"
+        :rules="[
+          { pattern: /^[0-9]\d*$/, message: '请输入非负整数' },
+          ]"
+      >
+        <div class="flex items-center space-x-8">
+          <a-input v-model:value="formState.watchLimit" style="width: 150px"></a-input>
+          <div class="text-[#a1a1a1] font-normal text-14 whitespace-nowrap">倍总时长</div>
+          <a-popover>
+            <template #content>
+              <div class="text-14 font-normal w-300">例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。
+                对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
+              </div>
+            </template>
+            <QuestionCircleOutlined class="text-14 leading-14"/>
+          </a-popover>
+        </div>
+      </a-form-item>
+
+      <a-form-item
+        label="任务完成规则"
+        name="enableFinish"
+      >
+        <a-radio-group v-model:value="formState.enableFinish" class="base-rule-radio"
+                       :disabled="props.params.course.platform === 'supplier'">
+          <a-radio value="1">无限制</a-radio>
+          <a-radio value="0">由任务完成条件决定<span>
               <a-popover>
                 <template #content>
                   <div class="text-14 font-normal">必须达到完成条件，任务才算完成</div>
@@ -120,25 +125,26 @@ defineExpose({
                 <QuestionCircleOutlined class="text-14 leading-14 ml-4"/>
               </a-popover>
             </span></a-radio>
-          </a-radio-group>
-        </a-form-item>
+        </a-radio-group>
+      </a-form-item>
 
-        <div v-if="props.params.courseSet !== 'live'">
-          <a-form-item
-            label="设置免费学习任务"
-            name="freeTaskIds"
-          >
-            <div class="flex flex-col">
-              <a-checkbox-group v-model:value="formState.freeTaskIds" class="base-rule-checkbox" style="width: 100%">
-                <a-list size="small" bordered style="width: 100%"
-                        v-if="props.params.canFreeTasks.length"
-                        class="max-h-195 overflow-y-auto"
+      <div v-if="props.params.courseSet !== 'live'">
+        <a-form-item
+          label="设置免费学习任务"
+          name="freeTaskIds"
+        >
+          <div class="flex flex-col">
+            <a-checkbox-group v-model:value="formState.freeTaskIds" class="base-rule-checkbox" style="width: 100%">
+              <a-list size="small" bordered style="width: 100%"
+                      v-if="canFreeTasks.length"
+                      class="max-h-196 overflow-y-auto"
+              >
+                <a-list-item
+                  v-for="task in canFreeTasks"
+                  :key="task.id"
                 >
-                  <a-list-item
-                    v-for="task in props.params.canFreeTasks"
-                    :key="task.id"
-                  >
-                    <a-checkbox :value="task.id" style="width: 100%">
+                  <div class="flex justify-between w-full">
+                    <a-checkbox v-model:checked="task.isSelected" :value="task.id" style="width: 100%">
                       <div>
                         <a-tooltip placement="top">
                           <template #title>
@@ -151,71 +157,72 @@ defineExpose({
                         <span>{{ props.params.taskName }} {{ task.number }} : {{ task.title }}</span>
                       </div>
                     </a-checkbox>
-                  </a-list-item>
-                </a-list>
-              </a-checkbox-group>
-              <div class="text-[#a1a1a1] text-14 mt-8 flex items-center">
-                免费{{ props.params.taskName }}仅支持{{ props.params.canFreeActivityTypes }}
-                <a-popover placement="right">
-                  <template #content>
-                    <div class="text-14">{{ props.params.freeTaskChangelog }}</div>
-                  </template>
-                  <i v-if="props.params.freeTaskChangelog" class="es-icon es-icon-tip admin-update__icon color-danger"
-                     slot="reference"></i>
-                </a-popover>
-              </div>
+                    <a-tag v-if="formState.freeTaskIds.includes(task.id)" color="#f46300">免费</a-tag>
+                  </div>
+                </a-list-item>
+              </a-list>
+            </a-checkbox-group>
+            <div class="text-[#a1a1a1] text-14 mt-8 flex items-center">
+              免费{{ props.params.taskName }}仅支持{{ props.params.canFreeActivityTypes }}
+              <a-popover placement="right">
+                <template #content>
+                  <div class="text-14">{{ props.params.freeTaskChangelog }}</div>
+                </template>
+                <i v-if="props.params.freeTaskChangelog" class="es-icon es-icon-tip admin-update__icon color-danger"
+                   slot="reference"></i>
+              </a-popover>
             </div>
-          </a-form-item>
-
-          <a-form-item
-            v-if="props.params.uploadMode !== 'local'"
-            name="tryLookLength"
-          >
-            <template #label>
-              <div class="flex items-center">
-                <div>视频试看</div>
-                <a-popover>
-                  <template #content>
-                    <div class="text-14">常用于收费视频内容的前几分钟免费试看</div>
-                  </template>
-                  <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
-                </a-popover>
-              </div>
-            </template>
-            <a-select
-              style="width: 250px"
-              v-model:value="formState.tryLookLength"
-            >
-              <a-select-option
-                v-for="option in tryLookLengthOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </a-select-option>
-            </a-select>
-          </a-form-item>
-
-        </div>
-
-        <a-form-item
-          v-if="props.params.audioServiceStatus !== 'needOpen' && props.params.course.type === 'normal'"
-          label="音频听课（试用）"
-          name="enableAudio"
-        >
-          <a-radio-group class="base-rule-radio mt-6" v-model:value="formState.enableAudio"
-                         :options="enableAudioOptions"
-                         :disabled="props.params.course.platform === 'supplier'"/>
-          <div class="text-12 text-[#adadad] mt-8">1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</div>
-          <div class="text-12 text-[#adadad] mt-8">2.当前转音频完成情况 ：{{ props.params.videoConvertCompletion }}<a
-            class="text-[#46c37b] text-14 ml-8 hover:text-[#34a263]" :href="props.params.courseSetManageFilesUrl"
-            target="__blank">查看详情</a></div>
-          <div class="text-12 text-[#adadad] mt-8">3.视频含弹题时，在APP端不支持转音频播放</div>
-
+          </div>
         </a-form-item>
 
-      </a-form>
-    </div>
+        <a-form-item
+          v-if="props.params.uploadMode !== 'local'"
+          name="tryLookLength"
+        >
+          <template #label>
+            <div class="flex items-center">
+              <div>视频试看</div>
+              <a-popover>
+                <template #content>
+                  <div class="text-14">常用于收费视频内容的前几分钟免费试看</div>
+                </template>
+                <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
+              </a-popover>
+            </div>
+          </template>
+          <a-select
+            style="width: 250px"
+            v-model:value="formState.tryLookLength"
+          >
+            <a-select-option
+              v-for="option in tryLookLengthOptions"
+              :key="option.value"
+              :value="option.value"
+            >
+              {{ option.label }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+
+      </div>
+
+      <a-form-item
+        v-if="props.params.audioServiceStatus !== 'needOpen' && props.params.course.type === 'normal'"
+        label="音频听课（试用）"
+        name="enableAudio"
+      >
+        <a-radio-group class="base-rule-radio mt-6" v-model:value="formState.enableAudio"
+                       :options="enableAudioOptions"
+                       :disabled="props.params.course.platform === 'supplier'"/>
+        <div class="text-12 text-[#adadad] mt-8">1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</div>
+        <div class="text-12 text-[#adadad] mt-8">2.当前转音频完成情况 ：{{ props.params.videoConvertCompletion }}<a
+          class="text-[#46c37b] text-14 ml-8 hover:text-[#34a263]" :href="props.params.courseSetManageFilesUrl"
+          target="__blank">查看详情</a></div>
+        <div class="text-12 text-[#adadad] mt-8">3.视频含弹题时，在APP端不支持转音频播放</div>
+
+      </a-form-item>
+
+    </a-form>
   </div>
 </template>
 

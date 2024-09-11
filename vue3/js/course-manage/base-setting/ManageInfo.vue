@@ -3,6 +3,7 @@ import BaseInfo from './BaseInfo.vue';
 import {ref} from 'vue';
 import BaseRule from './BaseRule.vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
+import MarketSetting from './MarketSetting.vue';
 
 const props = defineProps({
   isUnMultiCourseSet: {required: true},
@@ -53,8 +54,14 @@ const baseRuleProps = {
   freeTaskChangelog: props.freeTaskChangelog,
 }
 
+const marketSettingProps = {
+  course: props.course,
+  courseSet: props.courseSet,
+}
+
 const baseInfoRef = ref(null);
 const baseRuleRef = ref(null);
+const marketSettingRef = ref(null);
 
 const submitForm = async () => {
   if (baseInfoRef.value && baseRuleRef.value ) {
@@ -78,6 +85,10 @@ const submitForm = async () => {
     <base-rule
       ref="baseRuleRef"
       :params="baseRuleProps"
+    />
+    <market-setting
+      ref="marketSettingRef"
+      :params="marketSettingProps"
     />
     <a-button @click="submitForm">获取表单值</a-button>
   </ant-config-provider>
