@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import ContractPage from './ContractPage.vue'
+import ContractPage from './ContractPage.vue';
 import EditContract from './EditContract.vue';
 
 const router = createRouter({
@@ -16,6 +16,6 @@ const router = createRouter({
       component: EditContract,
     }
   ]
-})
+});
 
-export default router
+export default router;
