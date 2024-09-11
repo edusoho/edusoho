@@ -2,13 +2,10 @@ import { createApp } from 'vue';
 import MyContract from './MyContract.vue';
 import { Button, Modal, Pagination, Empty } from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
-import i18n from './vue-lang';
 import 'vue3/main.less';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 
 const app = createApp(MyContract);
-
-app.use(i18n);
 
 app.use(Button);
 app.use(Modal);
