@@ -1228,17 +1228,11 @@ router.beforeEach(async (to, from, next) => {
   if ([
     'course',
     'course_web',
-    'testpaperIntro',
     'testpaperDo',
-    'testpaperResult',
     'testpaperAnalysis',
-    'exerciseIntro',
     'exerciseDo',
-    'exerciseResult',
     'exerciseAnalysis',
-    'homeworkIntro',
     'homeworkDo',
-    'homeworkResult',
     'homeworkAnalysis',
     'live',
   ].includes(to.name)) {
