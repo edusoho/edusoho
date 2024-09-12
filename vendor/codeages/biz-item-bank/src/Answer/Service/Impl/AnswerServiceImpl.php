@@ -85,8 +85,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
             $this->savetAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
-            // todo 需要把丢失的题目提交上来
-
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
