@@ -84,7 +84,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $this->beginTransaction();
 
             $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
-            $this->savetAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
+            $this->saveAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
@@ -1069,7 +1069,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $assessmentResponse,
                 $reviewedQuestions ?? []
             );
-            $this->savetAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
+            $this->saveAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
 
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
 
@@ -1220,7 +1220,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $this->getSchedulerService()->register($autoSubmitJob);
     }
 
-    protected function savetAnswerQuestionReport($answerQuestionReports, $answerRecordId)
+    protected function saveAnswerQuestionReport($answerQuestionReports, $answerRecordId)
     {
         $existIdentifies = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $answerRecordId], [], 0, PHP_INT_MAX, ['identify']);
         if (empty($existIdentifies)) {
@@ -1268,7 +1268,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
         $savedIdentifies = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], [], 0, PHP_INT_MAX, ['identify']);
         $savedIdentifies = array_column($savedIdentifies, 'identify');
-
+        $answerQuestionReportIndex = ArrayToolkit::index($savedIdentifies, 'identify');
+        $missingIdentifies = array_diff($allIdentifies, $savedIdentifies);
+        if (empty($missingIdentifies)) {
+            return $assessmentResponse;
+        }
         $waitIdentifies = [];
         $answerResults = [];
         foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
@@ -1276,19 +1280,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
                     $waitIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'];
                     $answerResult['response'] = $questionResponse['response'] ?? [""];
-                    $answerResult['attachments'] = $questionResponse['attachments'] ?? [""];
-                    $answerResult['isTag'] = $questionResponse['isTag'] ?? false;
                     $answerResults[$sectionResponse['section_id']][$itemResponse['item_id']][$questionResponse['question_id']] = $answerResult;
                 }
             }
         }
-        $missingIdentifies = array_diff($allIdentifies, $savedIdentifies);
-        if (empty($missingIdentifies)) {
-            return $assessmentResponse;
-        }
         // 将缺失的问题添加到新的结构中
-        foreach ($missingIdentifies as $missingIdentify) {
-            list($answerRecordId, $questionId) = explode('_', $missingIdentify);
+        foreach ($allIdentifies as $identify) {
+            list($answerRecordId, $questionId) = explode('_', $identify);
             list($sectionId, $itemId) = explode('_', $sectionResponses[$questionId]);
             // 判断该section是否已经存在
             if (!isset($newSectionResponses[$sectionId])) {
@@ -1305,12 +1303,16 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 ];
             }
             // 添加缺失的问题
-            $answerResult = $answerResults[$sectionId][$itemId][$questionId] ?? [""];
+            if (in_array($identify, $savedIdentifies)) {
+                $answerResponse = $answerQuestionReportIndex[$identify]['response'];
+            }
+            if (!empty($answerResults[$sectionId][$itemId][$questionId])) {
+                $answerResponse = $answerResults[$sectionId][$itemId][$questionId];
+            }
+
             $newSectionResponses[$sectionId]['item_responses'][$itemId]['question_responses'][] = [
                 'question_id' => $questionId,
-                'response' => $answerResult['response'] ?? [""],
-                'attachments' => $answerResult['attachments'] ?? [""],
-                'isTag' => $answerResult['isTag'] ?? false
+                'response' => $answerResponse ?? [""]
             ];
         }
         // 重建后的section_responses替换掉原有的
