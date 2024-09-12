@@ -1262,7 +1262,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 }
             }
         }
-        $savedIdentifies = $this->getAnswerReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], 0, PHP_INT_MAX, ['identify']);
+        $savedIdentifies = $this->getAnswerReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], [], 0, PHP_INT_MAX, ['identify']);
         $savedIdentifies = array_column($identifies, 'identify');
         $waitIdentifies = [];
         foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
