@@ -29,10 +29,11 @@ const iosFullScreen = () => {
   }
 };
 
-const initPptPlayer = () => {
+const initPptPlayer = async () => {
   // 清空内容后切换
   $element.empty();
-  const pptPlayer = newPlayer();
+  
+  const pptPlayer = await newPlayer();
 
   $('.js-change-ppt-btn').on('click', (event) => {
     const $target = $(event.target);
@@ -80,6 +81,7 @@ const newPlayer = async () => {
       name: $element.data('userName')
     }
   };
+
   const watermark = await Api.watermark.get('task');
   if (watermark.text) {
     playerConfig.fingerprint = {

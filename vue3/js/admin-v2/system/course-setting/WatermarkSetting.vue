@@ -6,7 +6,7 @@
   >
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>任务详情页水印</label>
+        <label>{{ t('label.taskWatermark') }}</label>
       </div>
       <div class="controls col-md-8 radios">
         <label v-for="radio in radios">
@@ -14,21 +14,21 @@
           {{ radio.label }}
         </label>
         <div v-show="watermarkEnable === 1">
-          <div class="help-block">针对网站内容截图泄露，可进行威慑和溯源。</div>
-          <div class="help-block">设置水印信息：</div>
+          <div class="help-block">{{ t('tip.purpose') }}</div>
+          <div class="help-block">{{ t('tip.setting') }}</div>
           <div class="watermark-fields">
             <label v-for="watermarkField in watermarkFields" class="watermark-field">
               <input type="checkbox" name="fields" :value="watermarkField.key" v-model="formState.fields"/>
               {{ watermarkField.label }}
               <input v-if="watermarkField.key === 'custom'" class="form-control" type="text"
-                     v-model="formState.custom_text" placeholder="输入自定义文案"/>
+                     v-model="formState.custom_text" :placeholder="t('placeholder.customText')"/>
             </label>
             <div class="watermark-field">
-              颜色
+              {{ t('label.color') }}
               <div class="watermark-color-picker" id="color-picker" :style="{backgroundColor: formState.color}"></div>
             </div>
             <div class="watermark-field">
-              透明度
+              {{ t('label.alpha') }}
               <a-form-item name="alpha" class="mb-0">
                 <a-input class="form-control watermark-alpha" type="number" v-model:value="formState.alpha"/>
                 1 ~ 100
@@ -45,30 +45,31 @@
 import {onMounted, reactive, ref} from 'vue';
 import Picker from 'vanilla-picker';
 import Api from 'vue3/api';
+import {t} from './vue-lang';
 
 const watermarkEnable = ref(0);
 const radios = [
   {
-    label: '开启',
+    label: t('radio.open'),
     value: 1,
   },
   {
-    label: '关闭',
+    label: t('radio.close'),
     value: 0,
   },
 ];
 const watermarkFields = [
   {
     key: 'truename',
-    label: '姓名',
+    label: t('checkbox.name'),
   },
   {
     key: 'nickname',
-    label: '用户名',
+    label: t('checkbox.username'),
   },
   {
     key: 'mobile',
-    label: '手机号码',
+    label: t('checkbox.mobile'),
   },
   {
     key: 'custom',
@@ -83,14 +84,14 @@ const formState = reactive({
 });
 const alphaValidator = async (rule, value) => {
   if (!value) {
-    return Promise.reject('请输入透明度');
+    return Promise.reject(t('validate.alpha.required'));
   }
   value = Number(value);
   if (!Number.isInteger(value) || value < 1) {
-    return Promise.reject('请输入正整数');
+    return Promise.reject(t('validate.alpha.positiveInteger'));
   }
   if (value > 100) {
-    return Promise.reject('请输入不大于100的数值');
+    return Promise.reject(t('validate.alpha.max'));
   } else {
     return Promise.resolve();
   }
@@ -116,7 +117,7 @@ document.getElementById('submit').addEventListener('click', event => {
     });
 });
 
-const fetchWatermarkSetting = async () => {
+onMounted(async () => {
   const setting = await Api.setting.get('course');
   const watermark = setting.task_page_watermark;
   watermarkEnable.value = watermark.enable;
@@ -131,9 +132,7 @@ const fetchWatermarkSetting = async () => {
   picker.onChange = color => {
     formState.color = color.hex.slice(0, 7);
   };
-};
-
-onMounted(fetchWatermarkSetting);
+});
 
 </script>
 

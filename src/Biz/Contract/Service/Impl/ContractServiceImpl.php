@@ -42,7 +42,9 @@ class ContractServiceImpl extends BaseService implements ContractService
     public function getContract($id)
     {
         $contract = $this->getContractDao()->get($id);
-        $contract['sealFile'] = $this->getFileService()->findFilesByUris(array($contract['seal']))[0];
+        if (!empty($contract)) {
+            $contract['sealFile'] = $this->getFileService()->findFilesByUris([$contract['seal']])[0];
+        }
 
         return $contract;
     }
@@ -64,7 +66,7 @@ class ContractServiceImpl extends BaseService implements ContractService
 
     public function generateContractCode()
     {
-        return date('Ymd') . substr(microtime(true) * 10000, -6);
+        return date('Ymd').substr(microtime(true) * 10000, -6);
     }
 
     public function signContract($id, $sign)
@@ -95,7 +97,7 @@ class ContractServiceImpl extends BaseService implements ContractService
         }
         if (!empty($sign['handSignature'])) {
             if (0 !== strpos($sign['handSignature'], 'data:image/png;base64,')) {
-                $sign['handSignature'] = 'data:image/png;base64,' . $sign['handSignature'];
+                $sign['handSignature'] = 'data:image/png;base64,'.$sign['handSignature'];
             }
             $file = $this->fileDecode($sign['handSignature']);
             if (empty($file)) {
