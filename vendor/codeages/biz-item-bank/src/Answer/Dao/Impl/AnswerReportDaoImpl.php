@@ -41,7 +41,6 @@ class AnswerReportDaoImpl extends AdvancedDaoImpl implements AnswerReportDao
                 'answer_scene_id = :answer_scene_id',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'answer_record_id IN (:answer_record_ids)',
-                'answer_record_id = :answer_record_id',
                 'id != :exclude_id',
                 'assessment_id = :assessment_id',
                 'assessment_id IN (:assessment_ids)',
