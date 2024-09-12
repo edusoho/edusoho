@@ -1249,6 +1249,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
     }
 
+    /**
+     * @param $assessmentResponse
+     * @return mixed
+     */
     protected function appendNoAnswerQuestion($assessmentResponse)
     {
         $assessment = $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
@@ -1271,7 +1275,10 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
                     $waitIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'];
-                    $answerResults[$sectionResponse['section_id']][$itemResponse['item_id']][$questionResponse['question_id']] = $questionResponse['response'];
+                    $answerResult['response'] = $questionResponse['response'] ?? [""];
+                    $answerResult['attachments'] = $questionResponse['attachments'] ?? [""];
+                    $answerResult['isTag'] = $questionResponse['isTag'] ?? false;
+                    $answerResults[$sectionResponse['section_id']][$itemResponse['item_id']][$questionResponse['question_id']] = $answerResult;
                 }
             }
         }
@@ -1298,12 +1305,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 ];
             }
             // 添加缺失的问题
-            $questionResponse = $answerResults[$sectionId][$itemId][$questionId] ?? [""];
+            $answerResult = $answerResults[$sectionId][$itemId][$questionId] ?? [""];
             $newSectionResponses[$sectionId]['item_responses'][$itemId]['question_responses'][] = [
                 'question_id' => $questionId,
-                'response' => [""], // 默认空的响应
-                'attachments' => [""],
-                'isTag' => false
+                'response' => $answerResult['response'] ?? [""],
+                'attachments' => $answerResult['attachments'] ?? [""],
+                'isTag' => $answerResult['isTag'] ?? false
             ];
         }
         // 重建后的section_responses替换掉原有的
