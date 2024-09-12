@@ -2371,4 +2371,19 @@ item_bank_exercise.addTestpaper: Add test paper
 item_bank_exercise.abandonOperation: Are you sure to abandon this operation?
 item_bank_exercise.unsaved: The current operation has not been saved yet.
 
+course.market_setting.contract: My contract
+course.market_setting.contract.btn.view: View
+course.market_setting.contract.btn.close: Close
+course.market_setting.contract.tip: Once enabled, students are required to complete the electronic contract signing before starting the study
+course.market_setting.contract.mandatory_signature: Forced signature
+course.market_setting.contract.mandatory_signature.tip: After compulsory signing is enabled, students can only learn after signing the contract. For those who have not signed the contract, a pop-up prompts them to sign the contract every time they enter the learning page.
+course.market_setting.contract.model.contractNumber: Contract number
+course.market_setting.contract.model.contractSigning: '%name%-Contract signing'
+course.market_setting.contract.model.partyA: Party A
+course.market_setting.contract.model.signingDate: Signing date
+course.market_setting.contract.model.partyB: Party B
+course.market_setting.contract.model.handSignature: Hand signature
+course.market_setting.contract.model.partyBName: Party B's name
+course.market_setting.contract.model.iDNumber: ID number
+course.market_setting.contract.model.contactInformation: Contact information
 
