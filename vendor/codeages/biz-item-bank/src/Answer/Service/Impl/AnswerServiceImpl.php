@@ -65,61 +65,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         return Uuid::uuid1()->getHex();
     }
 
-    protected function getAnswer($assessmentResponse)
-    {
-        $assessment = $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
-        $allIdentifies = [];
-        $sectionResponses = [];
-        foreach ($assessment['sections'] as $section) {
-            foreach ($section['items'] as $item) {
-                foreach ($item['questions'] as $question) {
-                    $allIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $question['id'];
-                    $sectionResponses[$question['id']] = $section['id'].'_'.$item['id'];
-                }
-            }
-        }
-        $savedIdentifies = $this->getAnswerReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], 0, PHP_INT_MAX, ['identify']);
-        $savedIdentifies = array_column($identifies, 'identify');
-        $waitIdentifies = [];
-        foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
-            foreach ($sectionResponse['item_responses'] as $itemResponse) {
-                foreach ($itemResponse['question_responses'] as $questionResponse) {
-                    $waitIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'];
-                }
-            }
-        }
-        $mergedIdentifies = array_unique(array_merge($waitIdentifies, $savedIdentifies));
-        $missingIdentifies = array_diff($allIdentifies, $mergedIdentifies);
-        if (empty($missingIdentifies)) {
-            return $assessmentResponse;
-        }
-        foreach ($missingIdentifies as $missingIdentify) {
-            list($answerRecordId, $questionId) = explode('_', $missingIdentify);
-            list($sectionId, $itemId) = explode('_', $sectionResponses[$questionId]);
-            foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
-                if ($sectionResponse['section_id'] != $sectionId) {
-                    continue;
-                }
-                foreach ($sectionResponse['item_responses'] as &$itemResponse) {
-                    if ($itemResponse['item_id'] == $itemId) {
-                        $itemResponse['question_responses'][] = [
-                            'question_id' => $questionId,
-                            'response' => [""],
-                        ];
-                    }
-                }
-
-
-            }
-        }
-
-        return $assessmentResponse;
-
-    }
-
     public function submitAnswer(array $assessmentResponse)
     {
-
+        $this->appendNoAnswerQuestion($assessmentResponse);
         $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
@@ -1301,6 +1249,57 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             }
 
         }
+    }
+
+    protected function appendNoAnswerQuestion($assessmentResponse)
+    {
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
+        $allIdentifies = [];
+        $sectionResponses = [];
+        foreach ($assessment['sections'] as $section) {
+            foreach ($section['items'] as $item) {
+                foreach ($item['questions'] as $question) {
+                    $allIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $question['id'];
+                    $sectionResponses[$question['id']] = $section['id'].'_'.$item['id'];
+                }
+            }
+        }
+        $savedIdentifies = $this->getAnswerReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], 0, PHP_INT_MAX, ['identify']);
+        $savedIdentifies = array_column($identifies, 'identify');
+        $waitIdentifies = [];
+        foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
+            foreach ($sectionResponse['item_responses'] as $itemResponse) {
+                foreach ($itemResponse['question_responses'] as $questionResponse) {
+                    $waitIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'];
+                }
+            }
+        }
+        $mergedIdentifies = array_unique(array_merge($waitIdentifies, $savedIdentifies));
+        $missingIdentifies = array_diff($allIdentifies, $mergedIdentifies);
+        if (empty($missingIdentifies)) {
+            return $assessmentResponse;
+        }
+        foreach ($missingIdentifies as $missingIdentify) {
+            list($answerRecordId, $questionId) = explode('_', $missingIdentify);
+            list($sectionId, $itemId) = explode('_', $sectionResponses[$questionId]);
+            foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
+                if ($sectionResponse['section_id'] != $sectionId) {
+                    continue;
+                }
+                foreach ($sectionResponse['item_responses'] as &$itemResponse) {
+                    if ($itemResponse['item_id'] == $itemId) {
+                        $itemResponse['question_responses'][] = [
+                            'question_id' => $questionId,
+                            'response' => [""],
+                        ];
+                    }
+                }
+
+
+            }
+        }
+
+        return $assessmentResponse;
     }
 
     /**
