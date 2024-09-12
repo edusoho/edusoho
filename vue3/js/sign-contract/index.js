@@ -2,13 +2,10 @@ import { createApp } from 'vue';
 import SignContract from './SignContract.vue';
 import { Button, Form, Input, Modal, Divider } from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
-import i18n from './vue-lang';
 import 'vue3/main.less';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 
 const app = createApp(SignContract);
-
-app.use(i18n);
 
 app.use(Button);
 app.use(Form);
