@@ -1266,37 +1266,48 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $savedIdentifies = array_column($savedIdentifies, 'identify');
 
         $waitIdentifies = [];
+        $answerResults = [];
         foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
                     $waitIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'];
+                    $answerResults[$sectionResponse['section_id']][$itemResponse['item_id']][$questionResponse['question_id']] = $questionResponse['response'];
                 }
             }
         }
-        $mergedIdentifies = array_unique(array_merge($waitIdentifies, $savedIdentifies));
-        $missingIdentifies = array_diff($allIdentifies, $mergedIdentifies);
+        $missingIdentifies = array_diff($allIdentifies, $savedIdentifies);
         if (empty($missingIdentifies)) {
             return $assessmentResponse;
         }
+        // 将缺失的问题添加到新的结构中
         foreach ($missingIdentifies as $missingIdentify) {
             list($answerRecordId, $questionId) = explode('_', $missingIdentify);
             list($sectionId, $itemId) = explode('_', $sectionResponses[$questionId]);
-            foreach ($assessmentResponse['section_responses'] as &$sectionResponse) {
-                if ($sectionResponse['section_id'] != $sectionId) {
-                    continue;
-                }
-                foreach ($sectionResponse['item_responses'] as &$itemResponse) {
-                    if ($itemResponse['item_id'] == $itemId) {
-                        $itemResponse['question_responses'][] = [
-                            'question_id' => $questionId,
-                            'response' => [""],
-                        ];
-                    }
-                }
-
-
+            // 判断该section是否已经存在
+            if (!isset($newSectionResponses[$sectionId])) {
+                $newSectionResponses[$sectionId] = [
+                    'section_id' => $sectionId,
+                    'item_responses' => []
+                ];
             }
+            // 判断该item是否已经存在
+            if (!isset($newSectionResponses[$sectionId]['item_responses'][$itemId])) {
+                $newSectionResponses[$sectionId]['item_responses'][$itemId] = [
+                    'item_id' => $itemId,
+                    'question_responses' => []
+                ];
+            }
+            // 添加缺失的问题
+            $questionResponse = $answerResults[$sectionId][$itemId][$questionId] ?? [""];
+            $newSectionResponses[$sectionId]['item_responses'][$itemId]['question_responses'][] = [
+                'question_id' => $questionId,
+                'response' => [""], // 默认空的响应
+                'attachments' => [""],
+                'isTag' => false
+            ];
         }
+        // 重建后的section_responses替换掉原有的
+        $assessmentResponse['section_responses'] = array_values($newSectionResponses);
 
         return $assessmentResponse;
     }
