@@ -67,7 +67,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitAnswer(array $assessmentResponse)
     {
-        $this->appendNoAnswerQuestion($assessmentResponse);
+        $assessmentResponse = $this->appendNoAnswerQuestion($assessmentResponse);
         $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
