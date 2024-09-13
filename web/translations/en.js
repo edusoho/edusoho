@@ -2127,7 +2127,7 @@ t.add("certificate", "Certificate", "js", "en");
 t.add("item_bank_exercise.addTestpaper", "Add test paper", "js", "en");
 t.add("item_bank_exercise.abandonOperation", "Are you sure to abandon this operation?", "js", "en");
 t.add("item_bank_exercise.unsaved", "The current operation has not been saved yet.", "js", "en");
-t.add("course.market_setting.contract", "My contract", "js", "en");
+t.add("course.market_setting.contract", "Contract", "js", "en");
 t.add("course.market_setting.contract.btn.view", "View", "js", "en");
 t.add("course.market_setting.contract.btn.close", "Close", "js", "en");
 t.add("course.market_setting.contract.tip", "Once enabled, students are required to complete the electronic contract signing before starting the study", "js", "en");

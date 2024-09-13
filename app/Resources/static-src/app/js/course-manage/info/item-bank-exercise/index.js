@@ -1,6 +1,6 @@
 import Intro from '../intro';
 import Expiry from 'app/js/course-manage/expiry/expiry';
-import {Dropdown, Menu, Form, FormItem ,Switch } from '@codeages/design-vue';
+import {Dropdown, Menu} from '@codeages/design-vue';
 import ContractSetting from './contract-setting.vue';
 import Vue from 'common/vue';
 import Axios from 'axios';

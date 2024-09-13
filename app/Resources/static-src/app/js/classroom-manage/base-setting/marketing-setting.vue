@@ -48,10 +48,10 @@
       </el-form-item>
       <el-form-item>
         <label slot="label">
-          {{ '电子合同'|trans }}
+          {{ 'course.market_setting.contract'|trans }}
           <el-popover
             placement="top"
-            :content="'启用后，学员开始学习前需完成电子合同签署'|trans"
+            :content="'course.market_setting.contract.tip'|trans"
             trigger="hover">
             <a class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></a>
           </el-popover>
@@ -79,7 +79,7 @@
                     <span class="contract-dropdown-menu-item-label contract-name" @click="selectContract(contract.id, contract.name)" :title="contract.name">
                       {{ contract.name }}
                     </span>
-                    <span class="contract-dropdown-menu-item-preview" @click="previewContract(contract.id)">预览</span>
+                    <span class="contract-dropdown-menu-item-preview" @click="previewContract(contract.id)">{{ 'course.market_setting.contract.btn.view'|trans }}</span>
                   </div>
                 </a-menu-item>
               </a-menu>
@@ -89,10 +89,10 @@
       </el-form-item>
       <el-form-item v-if="contractEnableSwitch">
         <label slot="label">
-          {{ '强制签署'|trans }}
+          {{ 'course.market_setting.contract.mandatory_signature'|trans }}
           <el-popover
             placement="top"
-            :content="'开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。'|trans"
+            :content="'course.market_setting.contract.mandatory_signature.tip'|trans"
             trigger="hover">
             <a class="es-icon es-icon-help text-normal course-mangae-info__help" slot="reference"></a>
           </el-popover>
@@ -183,48 +183,48 @@
 
     <a-modal :width="900"
              v-model:open="contractPreviewModalVisible"
-             :title="`${contractPreview.goodsName}-电子合同签署`"
+             :title="'course.market_setting.contract.model.contractSigning'|trans({name: contractPreview.goodsName})"
              :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
     >
       <div class="w-full flex flex-col space-y-32 p-32">
         <div class="flex items-center justify-between">
-          <span class="opacity-0">{{ `合同编号: ${contractPreview.code}` }}</span>
+          <span style="opacity: 0">{{ 'course.market_setting.contract.model.contractNumber' | trans }}{{ `: ${contractPreview.code}` }}</span>
           <span class="text-22 font-medium">{{ contractPreview.name }}</span>
-          <span class="text-gray-500">{{ `合同编号: ${contractPreview.code}` }}</span>
+          <span class="text-gray-500">{{ 'course.market_setting.contract.model.contractNumber' | trans }}{{ `: ${contractPreview.code}` }}</span>
         </div>
         <div class="text-gray-500" v-html="contractPreview.content"></div>
         <div class="flex space-x-64">
           <div class="flex-1 flex flex-col items-start justify-between space-y-22">
-            <span class="text-18 font-medium">甲方：</span>
+            <span class="text-18 font-medium">{{ 'course.market_setting.contract.model.partyA' | trans }}：</span>
             <div class="w-full flex flex-col space-y-22">
-              <img :src="contractPreview.seal" alt="甲方印章" class="w-150 h-150" />
+              <img :src="contractPreview.seal" alt="" class="w-150 h-150" />
               <div class="flex items-center">
-                <span class="text-gray-500">签约日期：</span>
+                <span class="text-gray-500">{{ 'course.market_setting.contract.model.signingDate' | trans }}：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ contractPreview.signDate }}</div>
               </div>
             </div>
           </div>
           <div class="flex-1 flex flex-col items-start justify-between">
-            <span class="text-18 font-medium">乙方：</span>
+            <span class="text-18 font-medium">{{ 'course.market_setting.contract.model.partyB' | trans }}：</span>
             <div class="w-full flex flex-col space-y-22">
               <div v-if="contractPreview.sign && contractPreview.sign.handSignature" class="flex items-center">
-                <span class="text-gray-500">手写签名：</span>
+                <span class="text-gray-500">{{ 'course.market_setting.contract.model.handSignature' | trans }}：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span class="opacity-0">x</span></div>
               </div>
               <div class="flex items-center">
-                <span class="text-gray-500">乙方姓名：</span>
+                <span class="text-gray-500">{{ 'course.market_setting.contract.model.partyBName' | trans }}：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span class="opacity-0">x</span></div>
               </div>
               <div v-if="contractPreview.sign && contractPreview.sign.IDNumber" class="flex items-center">
-                <span class="text-gray-500">身份证号：</span>
+                <span class="text-gray-500">{{ 'course.market_setting.contract.model.iDNumber' | trans }}：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span class="opacity-0">x</span></div>
               </div>
               <div v-if="contractPreview.sign && contractPreview.sign.phoneNumber" class="flex items-center">
-                <span class="text-gray-500">联系方式：</span>
+                <span class="text-gray-500">{{ 'course.market_setting.contract.model.contactInformation' | trans }}：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span class="opacity-0">x</span></div>
               </div>
               <div class="flex items-center">
-                <span class="text-gray-500">签约日期：</span>
+                <span class="text-gray-500">{{ 'course.market_setting.contract.model.signingDate' | trans }}：</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ contractPreview.signDate }}</div>
               </div>
             </div>
@@ -233,7 +233,7 @@
       </div>
       <template #footer>
         <div class="flex justify-center">
-          <a-button @click="contractPreviewModalVisible = false">关闭</a-button>
+          <a-button @click="contractPreviewModalVisible = false">{{ 'course.market_setting.contract.btn.close' | trans }}</a-button>
         </div>
       </template>
     </a-modal>

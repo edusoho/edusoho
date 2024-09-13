@@ -2371,7 +2371,7 @@ item_bank_exercise.addTestpaper: Add test paper
 item_bank_exercise.abandonOperation: Are you sure to abandon this operation?
 item_bank_exercise.unsaved: The current operation has not been saved yet.
 
-course.market_setting.contract: My contract
+course.market_setting.contract: Contract
 course.market_setting.contract.btn.view: View
 course.market_setting.contract.btn.close: Close
 course.market_setting.contract.tip: Once enabled, students are required to complete the electronic contract signing before starting the study
