@@ -2088,7 +2088,7 @@ t.add("certificate", "\u8bc1", "js", "zh_CN");
 t.add("item_bank_exercise.addTestpaper", "\u6dfb\u52a0\u8bd5\u5377", "js", "zh_CN");
 t.add("item_bank_exercise.abandonOperation", "\u786e\u5b9a\u653e\u5f03\u6b64\u6b21\u64cd\u4f5c\u5417\uff1f", "js", "zh_CN");
 t.add("item_bank_exercise.unsaved", "\u5f53\u524d\u64cd\u4f5c\u5c1a\u672a\u4fdd\u5b58", "js", "zh_CN");
-t.add("course.market_setting.contract", "\u6211\u7684\u5408\u540c", "js", "zh_CN");
+t.add("course.market_setting.contract", "\u7535\u5b50\u5408\u540c", "js", "zh_CN");
 t.add("course.market_setting.contract.btn.view", "\u9884\u89c8", "js", "zh_CN");
 t.add("course.market_setting.contract.btn.close", "\u5173\u95ed", "js", "zh_CN");
 t.add("course.market_setting.contract.tip", "\u542f\u7528\u540e\uff0c\u5b66\u5458\u5f00\u59cb\u5b66\u4e60\u524d\u9700\u5b8c\u6210\u7535\u5b50\u5408\u540c\u7b7e\u7f72", "js", "zh_CN");

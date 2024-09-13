@@ -2339,7 +2339,7 @@ item_bank_exercise.addTestpaper: 添加试卷
 item_bank_exercise.abandonOperation: 确定放弃此次操作吗？
 item_bank_exercise.unsaved: 当前操作尚未保存
 
-course.market_setting.contract: 我的合同
+course.market_setting.contract: 电子合同
 course.market_setting.contract.btn.view: 预览
 course.market_setting.contract.btn.close: 关闭
 course.market_setting.contract.tip: 启用后，学员开始学习前需完成电子合同签署
