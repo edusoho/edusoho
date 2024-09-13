@@ -18,6 +18,7 @@
       :slide-index.sync="slideIndex"
       :all="info.length"
       :exerciseInfo="exerciseInfo"
+      :type="$route.query.type"
       :assessment_id="exerciseInfo.testId"
       :exerciseMode="exerciseMode"
       :admission_ticket="exerciseInfo.admission_ticket"
@@ -96,11 +97,9 @@
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
 import { mapState, mapMutations, mapActions } from 'vuex';
-
 import { Toast, Dialog } from 'vant';
 import guidePage from '../component/guide-page';
 import itemBank from '../component/itemBank';
-
 import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';

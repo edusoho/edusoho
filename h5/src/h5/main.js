@@ -60,9 +60,10 @@ import {
   Cascader,
   TreeSelect,
   Image,
-  Progress
+  Progress,
+  NoticeBar,
 } from 'vant';
-import { handleCourse, handleLocale, handleSite, handleStorage, handleUgc, handleVip, handleWap, handleGoods } from "./handleSettings";
+import { handleCourse, handleSite, handleStorage, handleUgc, handleVip, handleWap, handleGoods } from "./handleSettings";
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
 Vue.component('van-tabbar', Tabbar);
@@ -93,6 +94,7 @@ Vue.component('van-cascader', Cascader);
 Vue.component('van-tree-select', TreeSelect);
 Vue.component('van-image', Image);
 Vue.component('van-progress', Progress);
+Vue.component('van-notice-bar', NoticeBar);
 
 Vue.use(ActionSheet);
 Vue.use(filters);
@@ -142,7 +144,6 @@ Api.getAllSettings({
 }).then(async (res) => {
   handleSite(res.site)
   handleUgc(res.ugc)
-  handleLocale(res.locale.locale)
   handleStorage(res.storage)
   handleVip(res.vip)
   handleCourse(res.course)

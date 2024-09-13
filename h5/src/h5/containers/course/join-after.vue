@@ -127,7 +127,6 @@ import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 import closedFixed from '@/components/closed-fixed.vue'
 
-
 // tabs 子组件
 import firstDiscussion from './discussion/index.vue'; // 问答
 import secondDiscussion from './discussion/index.vue?second'; // 话题
@@ -221,9 +220,7 @@ export default {
     },
 
     isShowClosedFooter() {
-      const { status: courseSetStatus } = this.details.courseSet;
-      
-      return courseSetStatus == 'closed'
+      return this.details.courseSet?.status === 'closed';
     },
 
     summary() {

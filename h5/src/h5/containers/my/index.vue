@@ -2,7 +2,7 @@
   <div class="fixed top-0 bottom-0 left-0 right-0 bg-no-repeat bg-contain"
     style="background-color: #F2F5F7;background-image: url('static/images/home-bg.png');">
     <e-loading v-if="isLoading" />
-    
+
     <user />
 
     <div class="px-16 py-24 mx-16 bg-fill-1" style="border-radius: 6px;">
@@ -44,6 +44,14 @@
         <div class="flex items-center">
           <img class="mr-12" :src="icon.certificateIcon" :srcset="icon.certificateIcon2" style="height: 22px;" />
           <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('enter.myCertificate') }}</div>
+        </div>
+        <i class="van-icon van-icon-arrow" />
+      </div>
+
+      <div class="flex items-center justify-between mb-24" @click="$router.push({ name: 'myContract' })">
+        <div class="flex items-center">
+          <img class="mr-12" :src="icon.contractIcon" :srcset="icon.contractIcon" style="height: 22px;" />
+          <div class="text-text-5 text-14" style="line-height: 22px;">{{ $t('title.myContract') }}</div>
         </div>
         <i class="van-icon van-icon-arrow" />
       </div>

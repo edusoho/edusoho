@@ -38,6 +38,14 @@
               @showMaterialAnalysis="showMaterialAnalysis"
               v-bind="$attrs"
             >
+              <div class="ai-personal-notice" v-if="brushDo.assessment.type === 'aiPersonality'">
+                <van-notice-bar class="notice-border" mode="closeable" color="#37393D" :scrollable="false"  background="#edf9f2">
+                  <span>{{ $t('courseLearning.exerciseAiTips') }}</span>
+                  <template #left-icon>
+                    <img class="notice-ai-img" src="static/images/AI.png" />
+                  </template>
+                </van-notice-bar>
+              </div>
               <!-- 答题区 -->
               <singleChoice
                 v-if="question.answer_mode === 'single_choice'"

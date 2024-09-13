@@ -46,6 +46,7 @@ const mutations = {
     currentState.taskId = payload.taskId;
   },
   [types.UPDATE_PROGRESS](currentState, payload) {
+    currentState.details.progress = currentState.details.progress ?? {};
     currentState.details.progress.percent = payload;
   },
   [types.SET_ALL_TASK](currentState, payload) {

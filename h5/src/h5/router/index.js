@@ -8,6 +8,7 @@ import learning from './learning';
 import my from './my';
 import Api from '@/api';
 import initShare from '@/utils/weiixn-share-sdk';
+import {initTaskWatermark, destroyWatermark} from '@/utils/watermark';
 
 /* eslint-disable no-new */
 Vue.use(Router);
@@ -979,6 +980,30 @@ const routes = [
       ),
   },
   {
+    path: '/my/contract',
+    name: 'myContract',
+    meta: {
+      i18n: true,
+      title: 'title.myContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "my-contract" */ '@/containers/my/contract/index.vue'
+      ),
+  },
+  {
+    path: '/my/contract/:id',
+    name: 'myContractDetail',
+    meta: {
+      i18n: true,
+      title: 'title.viewContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "my-contract" */ '@/containers/my/contract/detail.vue'
+      ),
+  },
+  {
     path: '/my/wrong-quesition-book/exercise',
     name: 'myWrongQuestionBookExercise',
     component: () =>
@@ -1040,6 +1065,30 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "wrong-question-book" */ '@/containers/wrong-question-book/wrong-exercises/analysis.vue'
+      ),
+  },
+  {
+    path: '/sign_contract/:id/:goodsKey',
+    name: 'signContract',
+    meta: {
+      i18n: true,
+      title: 'contract.signContract',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "signContract" */ '@/containers/contract/SignContract.vue'
+      ),
+  },
+  {
+    path: '/contract_detail/:id/:goodsKey',
+    name: 'contractDetail',
+    meta: {
+      i18n: true,
+      title: 'contract.contractDetail',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "signContract" */ '@/containers/contract/ContractDetail.vue'
       ),
   },
 ];
@@ -1176,7 +1225,22 @@ router.beforeEach(async (to, from, next) => {
     link: window.location.href.split('#')[0] + '#' + to.path
   });
 
-  next()
+  if ([
+    'course',
+    'course_web',
+    'testpaperDo',
+    'testpaperAnalysis',
+    'exerciseDo',
+    'exerciseAnalysis',
+    'homeworkDo',
+    'homeworkAnalysis',
+  ].includes(to.name)) {
+    initTaskWatermark();
+  } else {
+    destroyWatermark();
+  }
+
+  next();
 });
 
 export default router;

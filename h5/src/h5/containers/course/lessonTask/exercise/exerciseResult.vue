@@ -87,11 +87,9 @@
 import Api from '@/api';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
-
 import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
-
 import { Toast } from 'vant';
 
 export default {
