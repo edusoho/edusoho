@@ -91,6 +91,7 @@
         <label slot="label">
           {{ 'course.market_setting.contract.mandatory_signature'|trans }}
           <el-popover
+            width="400"
             placement="top"
             :content="'course.market_setting.contract.mandatory_signature.tip'|trans"
             trigger="hover">
