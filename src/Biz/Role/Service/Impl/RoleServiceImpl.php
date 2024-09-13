@@ -258,16 +258,16 @@ class RoleServiceImpl extends BaseService implements RoleService
         $permissions = PermissionBuilder::instance()->loadPermissionsFromAllConfig();
         $tree = Tree::buildWithArray($permissions, null, 'code', 'parent');
         //获取老后台权限menus
-        $roles = $this->getAdminRoles($tree);
+//        $roles = $this->getAdminRoles($tree);
         //获取新后台权限menus
         $v2Roles = $this->getAdminV2Roles($tree);
-        foreach ($roles as $key => $value) {
+        foreach ($v2Roles as $key => $value) {
             $userRole = $this->getRoleDao()->getByCode($key);
 
             if (empty($userRole)) {
-                $this->initCreateRole($key, array_values($value), array_values($v2Roles[$key]));
+                $this->initCreateRole($key, [], array_values($value));
             } else {
-                $this->getRoleDao()->update($userRole['id'], ['data' => array_values($value), 'data_v2' => array_values($v2Roles[$key])]);
+                $this->getRoleDao()->update($userRole['id'], ['data' => [], 'data_v2' => array_values($value)]);
             }
         }
     }
