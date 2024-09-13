@@ -1234,7 +1234,6 @@ router.beforeEach(async (to, from, next) => {
     'exerciseAnalysis',
     'homeworkDo',
     'homeworkAnalysis',
-    'live',
   ].includes(to.name)) {
     initTaskWatermark();
   } else {
