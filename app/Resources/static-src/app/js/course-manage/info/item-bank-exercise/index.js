@@ -1,6 +1,6 @@
 import Intro from '../intro';
 import Expiry from 'app/js/course-manage/expiry/expiry';
-import {Dropdown, Menu} from '@codeages/design-vue';
+import {Dropdown, Menu, Popover} from '@codeages/design-vue';
 import ContractSetting from './contract-setting.vue';
 import Vue from 'common/vue';
 import Axios from 'axios';
@@ -20,6 +20,7 @@ Vue.prototype.$qs = qs;
 
 Vue.use(Dropdown);
 Vue.use(Menu);
+Vue.use(Popover);
 Vue.filter('trans', function (value, params) {
   if (!value) return '';
   return Translator.trans(value, params);
