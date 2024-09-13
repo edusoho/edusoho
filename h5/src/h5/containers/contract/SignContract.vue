@@ -75,7 +75,7 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { Toast } from 'vant'
 import Api from '@/api'
 import { truenameValidator, phoneNumberValidator, IDNumberValidator, handSignatureValidator } from './validator.js'

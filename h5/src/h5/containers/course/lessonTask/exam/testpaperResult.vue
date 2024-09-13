@@ -291,7 +291,7 @@ export default {
     calSubjectHeight() {
       this.$nextTick(() => {
         const dataHeight =
-          this.$refs.data.offsetHeight + this.$refs.tag.offsetHeight + 46;
+          this.$refs.data.offsetHeight + (this.$refs.tag?.offsetHeight ?? 0) + 46;
         const allHeight = document.documentElement.clientHeight;
         const footerHeight = this.$refs.footer.offsetHeight || 0;
         const finalHeight = allHeight - dataHeight - footerHeight;
@@ -374,7 +374,7 @@ export default {
       }).then(res => {
         this.courseId = res.testpaperResult.courseId
         const { canDoAgain  } = res.task.activity.testpaperInfo;
-        this.testpaperId = res.task.activity.mediaId;
+        this.testpaperId = res.testpaper.id;
         this.testpaperTitle = res.task.title;
         this.setNavbarTitle(res.task.title);
         this.redoInterval = Number(

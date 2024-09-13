@@ -19,6 +19,7 @@ import itemBank from './itemBank/index';
 import infoCollection from './infoCollection/index';
 import wrongQuestionBook from './wrong-question-book/index';
 import contract from './contract/index';
+import watermark from './watermark';
 
 const config = [
   ...openCourse,
@@ -42,6 +43,7 @@ const config = [
   ...infoCollection,
   ...wrongQuestionBook,
   ...contract,
+  ...watermark,
 ];
 
 export default config;

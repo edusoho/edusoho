@@ -87,7 +87,6 @@
 import Api from '@/api';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
-
 import homeworkMixin from '@/mixins/lessonTask/homework.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
