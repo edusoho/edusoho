@@ -59,6 +59,7 @@
           data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
           data-lesson-id="{{ context.lessonId|default(0)}}"
+          data-full-watermark="1"
           style="height:100%"
         ></div>
       </div>
@@ -72,5 +73,3 @@
     <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.cloud.file.not_find_tips'|trans}}</div>
   {% endif %}
 {% endif %}
-
-

@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // prefix: 't-',
   content: ['./js/**/*.{vue,js}', '../plugins/*Plugin/vue3/js/**/*.{vue,js}'],
   theme: {
     padding: Array.from({ length: 1000 }).reduce((map, _, index) => {
@@ -38,7 +37,4 @@ module.exports = {
       }, {}),
     },
   },
-  plugins: [
-    require('tailwind-scrollbar'),
-  ],
 };
