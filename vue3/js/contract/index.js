@@ -2,7 +2,6 @@ import { createApp } from 'vue';
 import Index from './Index.vue';
 import { Button, Form, Input, Menu, Select, Table, Pagination, Drawer, Anchor, Checkbox, Space, Popconfirm, Modal, Upload, Tabs, DatePicker, Tooltip } from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
-import i18n from './vue-lang';
 import 'vue3/main.less';
 import router from './router';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
@@ -10,7 +9,6 @@ import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 const app = createApp(Index);
 
 app.use(router);
-app.use(i18n);
 
 app.use(Button);
 app.use(Form);
@@ -27,10 +25,8 @@ app.use(Popconfirm);
 app.use(Modal);
 app.use(Upload);
 app.use(Tabs);
-app.use(Tabs.TabPane);
 app.use(DatePicker);
 app.use(Tooltip);
-// app.use(RangePicker);
 
 setCurrentPrimaryColor(app);
 

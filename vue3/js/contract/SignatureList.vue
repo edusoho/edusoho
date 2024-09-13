@@ -1,54 +1,60 @@
 <script setup>
-import {reactive, ref, watch} from 'vue';
-import {ContractApi} from '../../api/Contract.js';
+import {reactive, ref} from 'vue';
 import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate} from '../common';
+import {t} from './vue-lang';
+import Api from '../../api';
+import {message} from 'ant-design-vue';
+
+message.config({
+  top: `90px`,
+});
 
 const dateFormat = 'YYYY-MM-DD';
-
 const columns = [
   {
     key: 'contractCode',
-    title: '合同编号',
+    title: `${ t('list.title.contractNumber') }`,
     dataIndex: 'contractCode',
     width: 170,
   },
   {
     key: 'username',
-    title: '用户名',
+    title: `${ t('list.title.username') }`,
     dataIndex: 'username',
     align: 'center',
     width: 200,
   },
   {
     key: 'mobile',
-    title: '手机号',
+    title: `${ t('list.title.phoneNumber') }`,
     dataIndex: 'mobile',
-    width: 150,
+    width: 180,
   },
   {
     key: 'goodsType',
-    title: '商品类型',
+    title: `${ t('list.title.commodityType') }`,
     dataIndex: 'goodsType',
-    width: 100,
+    width: 150,
   },
   {
     key: 'goodsName',
-    title: '商品名称',
+    title: `${ t('list.title.tradeName') }`,
     dataIndex: 'goodsName',
     width: 250,
     ellipsis: true,
   },
   {
     key: 'contractName',
-    title: '电子合同名称',
+    title: `${ t('list.title.contractName') }`,
     dataIndex: 'contractName',
-    width: 250,
+    width: 300,
   },
   {
     key: 'operation',
-    title: '操作',
-    width: 90,
+    title: `${ t('list.title.controls') }`,
+    width: 150,
+    fixed: 'right',
   },
 ];
 
@@ -77,7 +83,7 @@ async function fetchContracts(params) {
       ...params
     }, {keywordType: keywordType.value, keyword: keyword.value}
   ) : params;
-  const {data, paging} = await ContractApi.searchSignature(searchQuery);
+  const {data, paging} = await Api.contract.searchSignedRecords(searchQuery);
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   pageData.value = data;
@@ -118,7 +124,7 @@ async function onReset() {
 }
 
 function getTableTotal(total) {
-  return `共 ${total} 项`;
+  return `${ t('pagination.total') } ${ total } ${ t('pagination.item') }`;
 }
 
 async function handlePaginationChange(page, pageSize) {
@@ -141,33 +147,53 @@ const signatureContentVisible = ref(false);
 const selectedSignatureContract = ref({});
 const view = async (record) => {
   selectedSignatureContract.value = record;
-  signatureContent.value = await ContractApi.getSignatureContent(record.id);
+  signatureContent.value = await Api.contract.getSignedContract(record.id);
   signatureContentVisible.value = true;
 }
 
+const downloadContract = async (id, fileName) => {
+  try {
+    message.loading(`${ t('message.downloading') }...`, 0);
+    const response = await Api.contract.downloadContract(id, 'blob');
+
+    const url = window.URL.createObjectURL(response);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    message.destroy();
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    message.destroy();
+    message.error(`${ t('message.contractDownloadFailure') }`);
+  }
+}
 </script>
 
 <template>
 
   <div class="flex flex-col space-y-24">
     <div class="flex items-center space-x-20">
-      <a-select v-model:value="goodsType" style="width: 100px" placeholder="商品类型" allow-clear>
-        <a-select-option value="course">课程</a-select-option>
-        <a-select-option value="itemBankExercise">题库</a-select-option>
-        <a-select-option value="classroom">班级</a-select-option>
+      <a-select v-model:value="goodsType" style="width: 150px" :placeholder="t('placeholder.commodityType')" allow-clear>
+        <a-select-option value="course">{{ t('select.curriculum') }}</a-select-option>
+        <a-select-option value="itemBankExercise">{{ t('select.questionBank') }}</a-select-option>
+        <a-select-option value="classroom">{{ t('select.class') }}</a-select-option>
       </a-select>
       <div class="flex items-center">
-        <span>签署时间：</span>
+        <span class="whitespace-nowrap">{{ t('label.signatureTime') }}：</span>
         <a-range-picker v-model:value="signTime" />
       </div>
-      <a-select v-model:value="keywordType" style="width: 100px">
-        <a-select-option value="username">用户名</a-select-option>
-        <a-select-option value="mobile">手机号</a-select-option>
-        <a-select-option value="goodsName">商品名称</a-select-option>
+      <a-select v-model:value="keywordType" style="width: 200px">
+        <a-select-option value="username">{{ t('select.username') }}</a-select-option>
+        <a-select-option value="mobile">{{ t('select.phoneNumber') }}</a-select-option>
+        <a-select-option value="goodsName">{{ t('select.tradeName') }}</a-select-option>
       </a-select>
-      <a-input v-model:value="keyword" placeholder="请输入名称" style="width: 360px"></a-input>
-      <a-button type="primary" ghost @click="onSearch">搜索</a-button>
-      <a-button @click="onReset">重置</a-button>
+      <a-input v-model:value="keyword" :placeholder="t('placeholder.enterName')" style="width: 360px"></a-input>
+      <a-button type="primary" ghost @click="onSearch">{{ t('btn.search') }}</a-button>
+      <a-button @click="onReset">{{ t('btn.reset') }}</a-button>
     </div>
     <a-table
       :columns="columns"
@@ -175,14 +201,14 @@ const view = async (record) => {
       :row-key="record => record.id"
       :pagination="false"
       :loading="loading"
-      :scroll="{ x: 1500 }"
+      :scroll="{ x: 1250 }"
       @change="handleTableChange"
     >
       <template #headerCell="{ column }">
         <template v-if="column.key === 'goodsName'">
           <span>
-            商品名称
-            <a-tooltip placement="topLeft" title="管理员手动加入课程/班级/题库的学员，如果没有生成订单，这里不展示订单号">
+            {{ t('list.title.tradeName') }}
+            <a-tooltip placement="topLeft" :title="t('tip.title')">
               <info-circle-outlined />
             </a-tooltip>
           </span>
@@ -192,23 +218,26 @@ const view = async (record) => {
         <template v-if="column.key === 'goodsName'">
           {{ record.goodsName }}
           <br>
-          <span class="text-[#8A9099] text-12">{{ `订单号：${record.orderSn ? record.orderSn : '-'}` }}</span>
+          <span class="text-[#8A9099] text-12">{{ `${ t('list.content.orderNumber') }：${record.orderSn ? record.orderSn : '-'}` }}</span>
         </template>
         <template v-else-if="column.key === 'contractName'">
           {{ record.contractName }}
           <br>
-          <span class="text-[#8A9099] text-12">{{ `签署时间：${formatDate(record.signTime)}` }}</span>
+          <span class="text-[#8A9099] text-12">{{ `${ t('list.content.signatureTime') }：${ formatDate(record.signTime) }` }}</span>
         </template>
         <template v-else-if="column.key === 'operation'">
-          <div class="signature-list-operation-btn">
-            <a-button type="link" @click="view(record)">查看</a-button>
+          <div class="signature-list-operation-btn space-x-16">
+            <a-button type="link" @click="view(record)">{{ t('btn.view') }}</a-button>
+            <a-button type="link" @click="downloadContract(record.id, `${record.goodsName}-${record.contractName}`)">{{ t('btn.download') }}</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'mobile'">
           {{ record.mobile ? record.mobile : '-' }}
         </template>
         <template v-else-if="column.key === 'goodsType'">
-          {{ record.goodsType === 'course' ? '课程' : record.goodsType === 'classroom' ? '班级' : record.goodsType === 'itemBankExercise' ? '题库' : record.goodsType  }}
+          {{
+            record.goodsType === 'course' ? `${ t('list.content.curriculum') }` : record.goodsType === 'classroom' ? `${ t('list.content.class') }` : record.goodsType === 'itemBankExercise' ? `${ t('list.content.questionBank') }` : record.goodsType
+          }}
         </template>
       </template>
     </a-table>
@@ -229,56 +258,57 @@ const view = async (record) => {
            wrapClassName="signature-list-detail-modal"
            v-model:open="signatureContentVisible"
            :closable=false
+           zIndex="1050"
            :centered="true"
            :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
   >
     <template #title>
       <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
-        <div class="text-16 text-[#1E2226] font-medium">{{ `${selectedSignatureContract.goodsName}-${selectedSignatureContract.username}-电子合同签署` }}</div>
+        <div class="text-16 text-[#1E2226] font-medium">{{ `${ selectedSignatureContract.goodsName }-${ selectedSignatureContract.username }-${ t('modal.contractSigning') }` }}</div>
         <CloseOutlined class="h-16 w-16" @click="signatureContentVisible = false"/>
       </div>
     </template>
     <div class="w-full flex flex-col space-y-32 p-32">
       <div class="flex items-end justify-between gap-4">
-        <span class="flex-none whitespace-nowrap opacity-0">{{ `合同编号: ${signatureContent.code}` }}</span>
+        <span class="flex-none whitespace-nowrap opacity-0">{{ `${ t('modal.contractNumber') }: ${ signatureContent.code }` }}</span>
         <span class="grow text-center text-22 font-medium">{{ signatureContent.name }}</span>
-        <span class="flex-none whitespace-nowrap text-gray-500">{{ `合同编号: ${signatureContent.code}` }}</span>
+        <span class="flex-none whitespace-nowrap text-gray-500">{{ `${ t('modal.contractNumber') }: ${ signatureContent.code }` }}</span>
       </div>
       <div v-html="signatureContent.content" class="text-gray-500"></div>
       <div class="flex space-x-64">
         <div class="flex-1 flex flex-col items-start justify-between space-y-22">
-          <span class="text-18 font-medium">甲方：</span>
+          <span class="text-18 font-medium">{{ `${ t('modal.partyA') }：` }}</span>
           <div class="w-full flex flex-col space-y-22">
-            <img :src="signatureContent.seal" alt="甲方印章" class="w-150 h-150" />
+            <img :src="signatureContent.seal" alt="" class="w-150 h-150" />
             <div class="flex items-center">
-              <span class="text-gray-500">签约日期：</span>
+              <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
               <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
             </div>
           </div>
         </div>
         <div class="flex-1 flex flex-col items-start justify-between">
-          <span class="text-18 font-medium">乙方：</span>
+          <span class="text-18 font-medium">{{ `${ t('modal.partyB') }：` }}</span>
           <div class="w-full flex flex-col space-y-22">
             <div v-if="signatureContent.sign && signatureContent.sign.handSignature" class="flex items-center">
-              <span class="text-gray-500">手写签名：</span>
+              <span class="text-gray-500">{{ `${ t('modal.handSignature') }：` }}</span>
               <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
                 <img :src="signatureContent.sign.handSignature" class="h-35" alt="手写签名"/>
               </div>
             </div>
             <div v-if="signatureContent.sign && signatureContent.sign.truename" class="flex items-center">
-              <span class="text-gray-500">乙方姓名：</span>
+              <span class="text-gray-500">{{ `${ t('modal.partyBName') }：` }}</span>
               <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.truename }}</div>
             </div>
             <div v-if="signatureContent.sign && signatureContent.sign.IDNumber" class="flex items-center">
-              <span class="text-gray-500">身份证号：</span>
+              <span class="text-gray-500">{{ `${ t('modal.iDNumber') }：` }}</span>
               <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.IDNumber }}</div>
             </div>
             <div v-if="signatureContent.sign && signatureContent.sign.phoneNumber" class="flex items-center">
-              <span class="text-gray-500">联系方式：</span>
+              <span class="text-gray-500">{{ `${ t('modal.contactInformation') }：` }}</span>
               <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.sign.phoneNumber }}</div>
             </div>
             <div class="flex items-center">
-              <span class="text-gray-500">签约日期：</span>
+              <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
               <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{ signatureContent.signDate }}</div>
             </div>
           </div>
@@ -287,11 +317,12 @@ const view = async (record) => {
     </div>
     <template #footer>
       <div class="flex justify-center p-16 border-solid border-[#F0F0F0] border-b-0 border-x-0">
-        <a-button @click="signatureContentVisible = false">关闭</a-button>
+        <a-button @click="signatureContentVisible = false">{{ t('btn.close') }}</a-button>
       </div>
     </template>
   </a-modal>
 </template>
+
 <style lang="less">
 .signature-list-operation-btn {
   .ant-btn {

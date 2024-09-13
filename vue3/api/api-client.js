@@ -3,10 +3,11 @@ import {message} from 'ant-design-vue';
 import { loginAgain } from 'common/ajaxError';
 
 const apiClient = axios.create({
-  timeout: 15000
+  baseURL: '/api',
+  timeout: 15000,
 });
 
-let csrfToken = document.getElementsByTagName('meta')['csrf-token'];
+const csrfToken = document.getElementsByTagName('meta')['csrf-token'];
 if (csrfToken) {
   localStorage.setItem('csrf-token', csrfToken.content);
 }
@@ -24,17 +25,15 @@ apiClient.interceptors.request.use(
   }
 );
 
-const unLoginStatus = [401]
-
 apiClient.interceptors.response.use(
   (response) => {
     return response.data;
   },
   (error) => {
-    if (unLoginStatus.includes(error.response.status)) {
-      loginAgain()
+    if ([401].includes(error.response.status)) {
+      loginAgain();
 
-      return
+      return;
     }
 
     try {
@@ -42,10 +41,11 @@ apiClient.interceptors.response.use(
         message.error(error.response.data.error.message);
       }
     } catch (e) {
-
+      console.log(e);
     }
 
     return Promise.reject(error);
-  });
+  }
+);
 
 export { apiClient };

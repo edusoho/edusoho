@@ -6,34 +6,81 @@ const i18n = createI18n({
   globalInjection: true,
   messages: {
     zh_CN: {
-      title: '签署合同',
-      contract_detail: '查看合同详情',
-      placeholder: {
-        truename: '请输入姓名',
-        IDNumber: '请输入身份证号',
-        phoneNumber: '请输入手机号'
+      title: '我的合同',
+      associatedCurriculum: '关联课程',
+      relatedQuestionBank: '关联题库',
+      associatedClass: '关联班级',
+      btn: {
+        view: '查看',
+        close: '关闭',
+        download: '下载',
       },
-      validator: {
-        IDNumber: '身份证号不符合格式',
-        phoneNumber: '手机号不符合格式'
+      message: {
+        noContract: '暂无合同',
+        downloading: '下载中',
+        contractDownloadFailure: '合同下载失败',
       },
-      handwritten: '手写签名',
-      confirmSign: '确认签署',
+      modal: {
+        contractNumber: '合同编号',
+        contractSigning: '电子合同签署',
+        partyA: '甲方',
+        signingDate: '签约日期',
+        partyB: '乙方',
+        handSignature: '手写签名',
+        partyBName: '乙方姓名',
+        iDNumber: '身份证号',
+        contactInformation: '联系方式',
+        dataWillDisappear: '离开后已编辑的数据将消失...',
+        footer: {
+          btn: {
+
+          }
+        }
+      },
+      pagination: {
+        total: '共',
+        item: '项'
+      },
     },
+
+
+
     en: {
-      title: 'Sign Contract',
-      contract_detail: 'View Contract details',
-      placeholder: {
-        truename: 'Please enter your name',
-        IDNumber: 'Please enter your ID number',
-        phoneNumber: 'Please enter your phone number'
+      title: 'My contract',
+      associatedCurriculum: 'Associated curriculum',
+      relatedQuestionBank: 'Related question bank',
+      associatedClass: 'Associated class',
+      btn: {
+        view: 'View',
+        close: 'Close',
+        download: 'Download',
       },
-      validator: {
-        IDNumber: 'The ID number does not match the format',
-        phoneNumber: 'The phone number does not match the format'
+      message: {
+        noContract: 'No contract',
+        downloading: 'Downloading',
+        contractDownloadFailure: 'Contract download failure',
       },
-      handwritten: 'Handwritten Signature',
-      confirmSign: 'Confirm Sign',
+      modal: {
+        contractNumber: 'Contract number',
+        contractSigning: 'Contract signing',
+        partyA: 'Party A',
+        signingDate: 'Signing date',
+        partyB: 'Party B',
+        handSignature: 'Hand signature',
+        partyBName: 'Party B\'s name',
+        iDNumber: 'ID number',
+        contactInformation: 'Contact information',
+        dataWillDisappear: 'The edited data will disappear when you leave...',
+        footer: {
+          btn: {
+
+          }
+        }
+      },
+      pagination: {
+        total: 'In total',
+        item: 'item'
+      },
     },
   },
 })

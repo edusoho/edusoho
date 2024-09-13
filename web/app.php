@@ -36,6 +36,16 @@ require_once __DIR__.'/../app/bootstrap.php.cache';
 $kernel = new AppKernel('prod', false);
 //$kernel->loadClassCache();
 $request = Request::createFromGlobals();
+
+if (file_exists(__DIR__.'/../app/config/proxy.php')) {
+    $ips = require_once __DIR__.'/../app/config/proxy.php';
+    // @see https://symfony.com/doc/3.x/deployment/proxies.html
+    Request::setTrustedProxies(
+        $ips,
+        Request::HEADER_X_FORWARDED_ALL
+    );
+}
+
 $kernel->setRequest($request);
 $response = $kernel->handle($request);
 $response->send();
