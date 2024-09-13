@@ -25,8 +25,9 @@ class DownloadContract extends AbstractResource
         if (!empty($signSnapshot['sign']['handSignature'])) {
             $signSnapshot['sign']['handSignature'] = AssetHelper::getFurl($signSnapshot['sign']['handSignature']);
         }
+        $signSnapshot['sign']['signDate'] = $signedContract['signDate'];
         $signSnapshot['contract']['content'] = $this->replaceContentVariable($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode'], $signSnapshot['sign']);
-        $html = $this->getHtmlByRecord($signSnapshot['contract']['content'], $signSnapshot);
+        $html = $this->getHtmlByRecord($signSnapshot['contract']['content'], $signSnapshot, $signedContract['signDate']);
         $mpdf = new Mpdf([
             'utf-8' => true,
             'autoScriptToLang' => true,
