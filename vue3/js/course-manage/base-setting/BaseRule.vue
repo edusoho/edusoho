@@ -35,7 +35,7 @@ const formState = reactive({
 
 const canFreeTasks = ref(props.params.canFreeTasks.map(task => ({
   ...task,
-  isSelected: false // 初始化 isSelected
+  isSelected: false
 })));
 
 const validateForm = () => {
@@ -137,7 +137,7 @@ defineExpose({
             <a-checkbox-group v-model:value="formState.freeTaskIds" class="base-rule-checkbox" style="width: 100%">
               <a-list size="small" bordered style="width: 100%"
                       v-if="canFreeTasks.length"
-                      class="max-h-196 overflow-y-auto"
+                      class="max-h-196 overflow-y-auto mb-8"
               >
                 <a-list-item
                   v-for="task in canFreeTasks"
@@ -162,7 +162,7 @@ defineExpose({
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
-            <div class="text-[#a1a1a1] text-14 mt-8 flex items-center">
+            <div class="text-[#a1a1a1] text-14 flex items-center">
               免费{{ props.params.taskName }}仅支持{{ props.params.canFreeActivityTypes }}
               <a-popover placement="right">
                 <template #content>

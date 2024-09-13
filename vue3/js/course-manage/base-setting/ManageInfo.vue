@@ -25,6 +25,12 @@ const props = defineProps({
   activityMetas: { required: true },
   canFreeActivityTypes: { required: true },
   freeTaskChangelog: { required: true },
+  canModifyCoursePrice: { required: true },
+  liveCapacityUrl: { required: true },
+  serviceTags: { required: true },
+  vipInstalled: { required: true },
+  vipEnabled: { required: true },
+  vipLevels: { required: true },
 });
 
 const baseInfoProps = {
@@ -57,6 +63,12 @@ const baseRuleProps = {
 const marketSettingProps = {
   course: props.course,
   courseSet: props.courseSet,
+  canModifyCoursePrice: props.canModifyCoursePrice,
+  liveCapacityUrl: props.liveCapacityUrl,
+  serviceTags: props.serviceTags,
+  vipInstalled: props.vipInstalled,
+  vipEnabled: props.vipEnabled,
+  vipLevels: props.vipLevels,
 }
 
 const baseInfoRef = ref(null);

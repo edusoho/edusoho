@@ -1,8 +1,7 @@
 import ManageInfo from './ManageInfo.vue';
 import { createStyleTag, setCurrentPrimaryColor } from '../../common';
 import {createApp} from 'vue';
-import i18n from '../../sign-contract/vue-lang';
-import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag} from 'ant-design-vue';
+import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag, DatePicker} from 'ant-design-vue';
 import 'vue3/main.less';
 
 const app = createApp(ManageInfo,
@@ -47,8 +46,6 @@ const app = createApp(ManageInfo,
   }
 );
 
-app.use(i18n);
-
 app.use(Button);
 app.use(Form);
 app.use(Input);
@@ -60,6 +57,7 @@ app.use(Checkbox);
 app.use(List);
 app.use(Tooltip);
 app.use(Tag);
+app.use(DatePicker);
 
 
 setCurrentPrimaryColor(app);
