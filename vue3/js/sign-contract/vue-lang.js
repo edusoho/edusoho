@@ -47,7 +47,7 @@ const i18n = createI18n({
         enterIDNumber: '请输入乙方身份证号',
         IDNumberFormat: '身份证号不符合格式',
         enterContactInformation: '请输入乙方联系方式',
-        enterNumber: '请填写数字',
+        enterNumber: '联系方式不符合格式',
         enterHandwrittenSignature: '请输入手写签名',
       },
       tip: {
@@ -111,7 +111,7 @@ const i18n = createI18n({
       },
       tip: {
         clickOnThisArea: 'Please click on this area to sign by hand',
-        makeSure: 'Please make sure that the "handwriting is legible" and try to fill the "Make range"',
+        makeSure: 'Please make sure that the "handwriting is legible" and try to fill the "Sign range"',
       },
       message: {
         submitSuccessfully: 'Submit successfully',

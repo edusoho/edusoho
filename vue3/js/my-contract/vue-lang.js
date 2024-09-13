@@ -13,9 +13,12 @@ const i18n = createI18n({
       btn: {
         view: '查看',
         close: '关闭',
+        download: '下载',
       },
       message: {
         noContract: '暂无合同',
+        downloading: '下载中',
+        contractDownloadFailure: '合同下载失败',
       },
       modal: {
         contractNumber: '合同编号',
@@ -34,6 +37,10 @@ const i18n = createI18n({
           }
         }
       },
+      pagination: {
+        total: '共',
+        item: '项'
+      },
     },
 
 
@@ -46,9 +53,12 @@ const i18n = createI18n({
       btn: {
         view: 'View',
         close: 'Close',
+        download: 'Download',
       },
       message: {
         noContract: 'No contract',
+        downloading: 'Downloading',
+        contractDownloadFailure: 'Contract download failure',
       },
       modal: {
         contractNumber: 'Contract number',

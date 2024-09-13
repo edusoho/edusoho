@@ -2338,3 +2338,19 @@ certificate: 证
 item_bank_exercise.addTestpaper: 添加试卷
 item_bank_exercise.abandonOperation: 确定放弃此次操作吗？
 item_bank_exercise.unsaved: 当前操作尚未保存
+
+course.market_setting.contract: 电子合同
+course.market_setting.contract.btn.view: 预览
+course.market_setting.contract.btn.close: 关闭
+course.market_setting.contract.tip: 启用后，学员开始学习前需完成电子合同签署
+course.market_setting.contract.mandatory_signature: 强制签署
+course.market_setting.contract.mandatory_signature.tip: 开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。
+course.market_setting.contract.model.contractNumber: 合同编号
+course.market_setting.contract.model.contractSigning: '%name%-电子合同签署'
+course.market_setting.contract.model.partyA: 甲方
+course.market_setting.contract.model.signingDate: 签约日期
+course.market_setting.contract.model.partyB: 乙方
+course.market_setting.contract.model.handSignature: 手写签名
+course.market_setting.contract.model.partyBName: 乙方姓名
+course.market_setting.contract.model.iDNumber: 身份证号
+course.market_setting.contract.model.contactInformation: 联系方式

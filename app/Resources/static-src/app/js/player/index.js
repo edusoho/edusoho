@@ -105,7 +105,8 @@ class Show {
       customPos: customPos,
       mediaLength: this.fileLength,
       strictMode: this.strictMode,
-      rememberLastPos: this.rememberLastPos
+      rememberLastPos: this.rememberLastPos,
+      disableProgressBar: this.isDisableProgressBar(),
     };
     if (this.fileStorage === 'local') {
       options = Object.assign(options, {
@@ -134,6 +135,25 @@ class Show {
       this.jsPlayer, options
     );
   }
+
+  isDisableProgressBar() {
+    if (!this.isCloudVideoPalyer()) {
+      return false;
+    }
+    const resultStatus = $('[name="task-result-status"]', window.parent.document).val();
+    if (!['none', 'start'].includes(resultStatus)) {
+      return false;
+    }
+    const mode = $('[name="mode"]', window.parent.document).val();
+    if ('learn' !== mode) {
+      return false;
+    }
+    const activityFinishType = $('#video-content').data('finishType');
+    const activityFinishData = $('#video-content').data('finishData');
+
+    return activityFinishType === 'end' && activityFinishData;
+  }
+
   transToTextrack(subtitles) {
     let textTracks = [];
     if (subtitles) {

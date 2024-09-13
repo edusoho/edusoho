@@ -2,11 +2,15 @@
 import {reactive, ref} from 'vue';
 import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate} from '../common';
-import { t } from './vue-lang';
+import {t} from './vue-lang';
 import Api from '../../api';
+import {message} from 'ant-design-vue';
+
+message.config({
+  top: `90px`,
+});
 
 const dateFormat = 'YYYY-MM-DD';
-
 const columns = [
   {
     key: 'contractCode',
@@ -147,6 +151,26 @@ const view = async (record) => {
   signatureContentVisible.value = true;
 }
 
+const downloadContract = async (id, fileName) => {
+  try {
+    message.loading(`${ t('message.downloading') }...`, 0);
+    const response = await Api.contract.downloadContract(id, 'blob');
+
+    const url = window.URL.createObjectURL(response);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    message.destroy();
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    message.destroy();
+    message.error(`${ t('message.contractDownloadFailure') }`);
+  }
+}
 </script>
 
 <template>
@@ -204,7 +228,7 @@ const view = async (record) => {
         <template v-else-if="column.key === 'operation'">
           <div class="signature-list-operation-btn space-x-16">
             <a-button type="link" @click="view(record)">{{ t('btn.view') }}</a-button>
-            <a-button type="link" >下载</a-button>
+            <a-button type="link" @click="downloadContract(record.id, `${record.goodsName}-${record.contractName}`)">{{ t('btn.download') }}</a-button>
           </div>
         </template>
         <template v-else-if="column.key === 'mobile'">

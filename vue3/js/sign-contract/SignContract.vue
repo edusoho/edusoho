@@ -187,7 +187,7 @@ const bgClass = computed(() => {
         <div class="flex flex-1 mr-32 border border-solid border-[#DFE2E6] rounded-8 relative min-h-380 max-h-400">
           <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 px-32"
                style="height: calc(100% - 53px);">
-            <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32"></div>
+            <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32 contract-content"></div>
           </div>
           <div
             class="absolute bottom-0 z-10 flex justify-center items-center rounded-b-8 w-full py-16 border-t border-x-0 border-b-0 border-[#DFE2E6] border-solid hover:cursor-pointer bg-white"
@@ -304,7 +304,7 @@ const bgClass = computed(() => {
           <div class="text-14 text-[#1E2226] font-normal mr-16">{{ t('label.contractParticular') }}</div>
         </div>
       </template>
-      <div v-html="contractTemplate.content" class="text-12 mt-24 text-[#626973] font-normal w-900 leading-20"></div>
+      <div v-html="contractTemplate.content" class="text-12 mt-24 text-[#626973] font-normal w-900 leading-20 contract-content"></div>
       <template #footer></template>
     </a-modal>
 
@@ -466,5 +466,11 @@ const bgClass = computed(() => {
 .ant-message {
   left: 50%;
   transform: translateX(-50%)
+}
+
+.contract-content {
+  /deep/ img {
+    max-width: 100%;
+  }
 }
 </style>

@@ -1,11 +1,15 @@
 <script setup>
 import {reactive, ref} from 'vue';
-import {Empty} from 'ant-design-vue';
+import {Empty, message} from 'ant-design-vue';
 import { t } from './vue-lang';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import AntConfigProvider from '../components/AntConfigProvider.vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
 import Api from '../../api';
+
+message.config({
+  top: `90px`,
+});
 
 const pagination = reactive({
   current: 1,
@@ -60,6 +64,26 @@ const view = async (id, name) => {
   myContentVisible.value = true;
 };
 
+const downloadContract = async (id, fileName) => {
+  try {
+    message.loading(`${ t('message.downloading') }...`, 0);
+    const response = await Api.contract.downloadContract(id, 'blob');
+
+    const url = window.URL.createObjectURL(response);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    message.destroy();
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    message.destroy();
+    message.error(`${ t('message.contractDownloadFailure') }`);
+  }
+}
 </script>
 
 <template>
@@ -85,9 +109,9 @@ const view = async (id, name) => {
               </div>
             </div>
           </div>
-          <div class="space-x-16">
+          <div class="my-contract-btn space-x-16">
+            <a-button @click="downloadContract(contract.id, `${contract.relatedGoods.name}-${contract.name}`)">{{ t('btn.download') }}</a-button>
             <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">{{ t('btn.view') }}</a-button>
-            <a-button>下载</a-button>
           </div>
         </div>
         <div v-else class="border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
@@ -218,5 +242,10 @@ const view = async (id, name) => {
   .ant-pagination-item-active a {
     color: #3DCD7F !important;
   }
+}
+
+.ant-message {
+  left: 50%;
+  transform: translateX(-50%)
 }
 </style>
