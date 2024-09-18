@@ -1284,6 +1284,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 }
             }
         }
+        $assessmentSectiones = $this->getAssessmentSectionService()->findSectionsByAssessmentId($assessment['id']);
+        $assessmentSectionesIndex = ArrayToolkit::index($assessmentSectiones, 'id');
+
         // 将缺失的问题添加到新的结构中
         foreach ($allIdentifies as $identify) {
             list($answerRecordId, $questionId) = explode('_', $identify);
@@ -1309,16 +1312,64 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             if (!empty($answerResults[$sectionId][$itemId][$questionId])) {
                 $answerResponse = $answerResults[$sectionId][$itemId][$questionId];
             }
+            $noResponse = [];
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '单选题') {
+                $noResponse = null;
+            }
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '多选题') {
+                $noResponse = [];
+            }
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '问答题') {
+                $noResponse = [""];
+            }
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '不定项选择题') {
+                $noResponse = [];
+            }
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '判断题') {
+                $noResponse = [""];
+            }
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '填空题') {
+                $question = $this->findQuestion($assessment['sections'], $sectionId, $itemId, $questionId);
+                if ($question) {
+                    $responsePointsCount = count($question['response_points']);
+                    $noResponse = array_fill(0, $responsePointsCount, "");
+                } else {
+                    $noResponse = [""];
+                }
+            }
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '材料题') {
+                $noResponse = [""];
+            }
 
             $newSectionResponses[$sectionId]['item_responses'][$itemId]['question_responses'][] = [
                 'question_id' => $questionId,
-                'response' => $answerResponse ?? [""]
+                'response' => $answerResponse ?? $noResponse
             ];
         }
         // 重建后的section_responses替换掉原有的
         $assessmentResponse['section_responses'] = array_values($newSectionResponses);
 
         return $assessmentResponse;
+    }
+
+    protected function findQuestion($data, $sectionId, $itemId, $questionId) {
+        // 遍历 sections
+        foreach ($data['sections'] as $section) {
+            if ($section['id'] == $sectionId) {
+                // 遍历 items
+                foreach ($section['items'] as $item) {
+                    if ($item['id'] == $itemId) {
+                        // 遍历 questions
+                        foreach ($item['questions'] as $question) {
+                            if ($question['id'] == $questionId) {
+                                return $question;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null; // 如果没有找到，返回 null
     }
 
     /**
