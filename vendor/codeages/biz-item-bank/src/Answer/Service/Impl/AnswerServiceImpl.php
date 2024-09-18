@@ -1350,7 +1350,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
             $newSectionResponses[$sectionId]['item_responses'][$itemId]['question_responses'][] = [
                 'question_id' => $questionId,
-                'response' => $answerResponse ?? $noResponse
+                'response' => array_values($answerResponse ?? $noResponse)
             ];
         }
         // 重建后的section_responses替换掉原有的
