@@ -1258,21 +1258,26 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $assessment = $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
         $allIdentifies = [];
         $sectionResponses = [];
+        $assessmentTotalQuestions = 0;
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
+                $assessmentTotalQuestions += count($item['questions']);
                 foreach ($item['questions'] as $question) {
                     $allIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $question['id'];
                     $sectionResponses[$question['id']] = $section['id'].'_'.$item['id'];
                 }
             }
         }
+        if ($assessmentTotalQuestions == $this->countTotalQuestions($assessmentResponse)) {
+            return $assessmentResponse;
+        }
         $savedQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], [], 0, PHP_INT_MAX);
         $savedIdentifies = array_column($savedQuestionReports, 'identify');
         $answerQuestionReportIndex = ArrayToolkit::index($savedQuestionReports, 'identify');
-        $missingIdentifies = array_diff($allIdentifies, $savedIdentifies);
-        if (empty($missingIdentifies)) {
-            return $assessmentResponse;
-        }
+//        $missingIdentifies = array_diff($allIdentifies, $savedIdentifies);
+//        if (empty($missingIdentifies)) {
+//            return $assessmentResponse;
+//        }
         $waitIdentifies = [];
         $answerResults = [];
         foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
@@ -1372,6 +1377,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             }
         }
         return null; // 如果没有找到，返回 null
+    }
+
+    function countTotalQuestions($data) {
+        $totalQuestions = 0;
+        // 遍历 sections
+        foreach ($data['section_responses'] as $section) {
+            // 遍历 items
+            foreach ($section['item_responses'] as $item) {
+                // 统计每个 item 的 questions 数量
+                $totalQuestions += count($item['question_responses']);
+            }
+        }
+
+        return $totalQuestions;
     }
 
     /**
