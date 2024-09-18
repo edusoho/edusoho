@@ -1266,9 +1266,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 }
             }
         }
-        $savedIdentifies = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], [], 0, PHP_INT_MAX, ['identify']);
-        $savedIdentifies = array_column($savedIdentifies, 'identify');
-        $answerQuestionReportIndex = ArrayToolkit::index($savedIdentifies, 'identify');
+        $savedQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], [], 0, PHP_INT_MAX);
+        $savedIdentifies = array_column($savedQuestionReports, 'identify');
+        $answerQuestionReportIndex = ArrayToolkit::index($savedQuestionReports, 'identify');
         $missingIdentifies = array_diff($allIdentifies, $savedIdentifies);
         if (empty($missingIdentifies)) {
             return $assessmentResponse;
@@ -1305,10 +1305,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                     'question_responses' => []
                 ];
             }
+            $answerResponse = "";
             // 添加缺失的问题
             if (in_array($identify, $savedIdentifies)) {
                 $answerResponse = $answerQuestionReportIndex[$identify]['response'];
             }
+            // 把最后提交的结果放到
             if (!empty($answerResults[$sectionId][$itemId][$questionId])) {
                 $answerResponse = $answerResults[$sectionId][$itemId][$questionId];
             }
