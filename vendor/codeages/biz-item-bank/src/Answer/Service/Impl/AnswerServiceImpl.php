@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
@@ -67,7 +68,11 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitAnswer(array $assessmentResponse)
     {
-        $assessmentResponse = $this->appendNoAnswerQuestion($assessmentResponse);
+        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
+        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
+        if (!empty($testpaperActivity)) {
+            $assessmentResponse = $this->appendNoAnswerQuestion($assessmentResponse);
+        }
         $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
@@ -1516,5 +1521,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getAnswerQuestionTagService()
     {
         return $this->biz->service('ItemBank:Answer:AnswerQuestionTagService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->biz->service('Activity:TestpaperActivityService');
     }
 }
