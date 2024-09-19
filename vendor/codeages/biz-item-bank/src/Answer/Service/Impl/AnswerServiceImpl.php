@@ -1284,19 +1284,17 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             foreach ($section_response['item_responses'] as $item_response) {
                 foreach ($item_response['question_responses'] as $question_response) {
                     $identify = $assessmentResponse['answer_record_id'] . '_' . $question_response['question_id'];
-                    $savedIdentifies[$identify] = $question_report['response'];
+                    $savedIdentifies[$identify] = $question_response['response'];
                 }
             }
         }
 //        $savedQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_report_id']], [], 0, PHP_INT_MAX);
 //        $savedIdentifies = array_column($savedQuestionReports, 'identify');
 //        $answerQuestionReportIndex = ArrayToolkit::index($savedQuestionReports, 'identify');
-        $waitIdentifies = [];
         $answerResults = [];
         foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
-                    $waitIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $questionResponse['question_id'];
                     $answerResult['response'] = $questionResponse['response'] ?? [""];
                     $answerResults[$sectionResponse['section_id']][$itemResponse['item_id']][$questionResponse['question_id']] = $answerResult;
                 }
