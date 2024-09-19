@@ -1278,12 +1278,12 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if ($assessmentTotalQuestions == $this->countTotalQuestions($assessmentResponse)) {
             return $assessmentResponse;
         }
-        $answerReport = $this->getAnswerReportService()->get($assessmentResponse['answer_report_id']);
+        $saveDassessmentResponse = $this->getAssessmentResponseByAnswerRecordId($assessmentResponse['answer_record_id']);
         $savedIdentifies = [];
-        foreach ($answerReport['section_reports'] as $section_report)  {
-            foreach ($section_report['item_reports'] as $item_report) {
-                foreach ($item_report['question_reports'] as $question_report) {
-                    $identify = $answerReport['answer_record_id'] . '_' . $question_report['question_id'];
+        foreach ($saveDassessmentResponse['section_responses'] as $section_response)  {
+            foreach ($section_response['item_responses'] as $item_response) {
+                foreach ($item_response['question_responses'] as $question_response) {
+                    $identify = $assessmentResponse['answer_record_id'] . '_' . $question_response['question_id'];
                     $savedIdentifies[$identify] = $question_report['response'];
                 }
             }
