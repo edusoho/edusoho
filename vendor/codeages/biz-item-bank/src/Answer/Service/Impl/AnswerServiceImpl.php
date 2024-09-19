@@ -1328,7 +1328,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             }
             // 把最后提交的结果放到
             if (!empty($answerResults[$sectionId][$itemId][$questionId])) {
-                $answerResponse = $answerResults[$sectionId][$itemId][$questionId];
+                $answerResponse = $answerResults[$sectionId][$itemId][$questionId]['response'];
             }
             // todo 兼容安卓
             $noResponse = [];
