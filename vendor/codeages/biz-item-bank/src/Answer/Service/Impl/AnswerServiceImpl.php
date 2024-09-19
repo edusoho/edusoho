@@ -68,6 +68,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitAnswer(array $assessmentResponse)
     {
+        // todo 背景信息
         $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
         $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
         if (!empty($testpaperActivity)) {
@@ -1273,16 +1274,23 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 }
             }
         }
+        // todo 需要拿答题快照， 确认共享快照还是独立快照
         if ($assessmentTotalQuestions == $this->countTotalQuestions($assessmentResponse)) {
             return $assessmentResponse;
         }
-        $savedQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_record_id']], [], 0, PHP_INT_MAX);
-        $savedIdentifies = array_column($savedQuestionReports, 'identify');
-        $answerQuestionReportIndex = ArrayToolkit::index($savedQuestionReports, 'identify');
-//        $missingIdentifies = array_diff($allIdentifies, $savedIdentifies);
-//        if (empty($missingIdentifies)) {
-//            return $assessmentResponse;
-//        }
+        $answerReport = $this->getAnswerReportService()->get($assessmentResponse['answer_report_id']);
+        $savedIdentifies = [];
+        foreach ($answerReport['section_reports'] as $section_report)  {
+            foreach ($section_report['item_reports'] as $item_report) {
+                foreach ($item_report['question_reports'] as $question_report) {
+                    $identify = $answerReport['answer_record_id'] . '_' . $question_report['question_id'];
+                    $savedIdentifies[$identify] = $question_report['response'];
+                }
+            }
+        }
+//        $savedQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_report_id']], [], 0, PHP_INT_MAX);
+//        $savedIdentifies = array_column($savedQuestionReports, 'identify');
+//        $answerQuestionReportIndex = ArrayToolkit::index($savedQuestionReports, 'identify');
         $waitIdentifies = [];
         $answerResults = [];
         foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
@@ -1317,13 +1325,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             }
             $answerResponse = "";
             // 添加缺失的问题
-            if (in_array($identify, $savedIdentifies)) {
-                $answerResponse = $answerQuestionReportIndex[$identify]['response'];
+            if (!empty($savedIdentifies[$identify])) {
+                $answerResponse = $savedIdentifies[$identify];
             }
             // 把最后提交的结果放到
             if (!empty($answerResults[$sectionId][$itemId][$questionId])) {
                 $answerResponse = $answerResults[$sectionId][$itemId][$questionId];
             }
+            // todo 兼容安卓
             $noResponse = [];
             if ($assessmentSectionesIndex[$sectionId]['name'] == '单选题') {
                 $noResponse = null;
