@@ -88,7 +88,11 @@
                     import('app/js/upload-image/index.js');
                     aboutEditor = CKEDITOR.replace('about', {
                         allowedContent: true,
-                        toolbar: 'Detail',
+                        toolbar: [
+                          {items: ['FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+                          {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
+                        ],
+                        extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
                         fileSingleSizeLimit: app.fileSingleSizeLimit,
                         filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
                         filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
