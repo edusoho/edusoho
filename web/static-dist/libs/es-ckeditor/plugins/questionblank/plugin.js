@@ -45,7 +45,7 @@
 		},
 
 		afterInit: function( editor ) {
-			var questionblankReplaceRegex = /\[\[(?:[^[\]]+|\[[^[\]]+\])+\]\]/g;
+			var questionblankReplaceRegex = /\[\[([^\[\]])+\]\]/g;
 
 			editor.dataProcessor.dataFilter.addRules( {
 				text: function( text, node ) {
