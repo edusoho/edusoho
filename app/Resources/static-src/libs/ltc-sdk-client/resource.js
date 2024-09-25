@@ -157,6 +157,7 @@ let editor = () => {
 
     return CKEDITOR.replace(value, Object.assign({
       toolbar: 'Task',
+      extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
       fileSingleSizeLimit: window.ltc.getEditorConfig()['fileSingleSizeLimit'],
       allowedContent: true,
       height: 300,
