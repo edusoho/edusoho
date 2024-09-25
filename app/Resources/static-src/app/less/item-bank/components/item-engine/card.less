@@ -1,6 +1,5 @@
 .ibs-card {
   width: 288px;
-  margin-top: 20px;
   padding: 16px;
   z-index: 999;
   background-color: #fff;
@@ -156,13 +155,6 @@
   }
 }
 
-// .ibs-card--fixed {
-//   @media (min-width: 481px) {
-//     position: fixed;
-//     top: 0
-//   }
-// }
-
 .ibs-card-confirm-modal {
   .ant-modal-confirm-body {
     .anticon-question-circle {
@@ -174,10 +166,116 @@
   }
 }
 
+.ibs-item-preview-container {
+  display: flex;
+  flex-direction: column;
+  .ant-alert {
+    margin-bottom: 10px;
+  }
+
+  .ant-alert-icon {
+    position: relative;
+    top: -2px;
+    left: -12px;
+
+    img {
+      height: 16.5px;
+    }
+  }
+}
+
+.ibs-item-header {
+  display: flex;
+  margin-bottom: 10px;
+  padding: 9px 16px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--Foundation-PC-pc-300, #83D7A7);
+  background: var(--Foundation-PC-pc-50, #EDF9F2);
+
+  .ant-alert-icon {
+    position: relative;
+    top: -2px;
+    left: -12px;
+
+    img {
+      height: 16.5px;
+    }
+  }
+}
+
+.ibs-item-header-text {
+  display: flex;
+  align-items: center;
+  flex: 1 0 0;
+}
+
+.ibs-item-header-select {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+
+.ibs-item-header-number {
+  color: var(--Foundation-PC-pc-700, #328A57);
+  font-weight: 600;
+  margin: 0 4px;
+}
+
+@media (min-width: 768px) {
+  .ibs-item-body {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+  }
+  .ibs-item-preview-container {
+    padding: 20px 8% 16px 8%;
+  }
+  .ibs-item-container {
+    .ibs-item-content {
+      margin-left: 8.33333333%;
+      margin-top: 20px;
+      width: 58.3333333%;
+      max-width: 58.3333333%;
+    }
+    .ibs-item-pendant {
+      margin-top: 20px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .ibs-item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .ibs-item-preview-container {
+    padding: 20px 0 16px 0;
+  }
+
+  .ibs-item-container {
+    .ibs-item-content {
+      margin-top: 20px;
+    }
+    .ibs-item-pendant {
+      margin-top: 20px;
+    }
+  }
+}
+
+.ibs-item-content {
+  flex: 1 0 0;
+}
+
+.ibs-item-pendant {
+  width: fit-content;
+  flex: none;
+}
+
 .ibs-item-list {
-  margin: 20px auto 16px;
   background-color: #fff;
-  // max-width: 912px;
   text-align: left;
 }
 

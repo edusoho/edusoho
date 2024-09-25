@@ -10,10 +10,12 @@
       v-bind="$attrs"
       :itemType="type"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     >
       <template v-slot:response_points>
         <div class="ibs-choice-wrap">
@@ -194,6 +196,10 @@ export default {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -445,7 +451,28 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
-    }
+    },
+    getAiAnalysis(disable, enable, complete, finish) {
+      let data = {};
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          let question = JSON.parse(JSON.stringify(this.questions));
+          question = Object.assign(question, values.questions);
+          data.stem = question.stem;
+          data.options = [];
+          values.options.forEach((item, index) => {
+            data.options.push(`${this.optionKey[index]}.${item}`);
+          });
+          data.answer = this.formatetAnswer(values.keys).join();
+          if (this.isSubItem) {
+            data.type = "material-choice";
+          } else {
+            data.type = "choice";
+          }
+        }
+      });
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+    },
   }
 };
 </script>

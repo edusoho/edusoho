@@ -1,6 +1,7 @@
 .ibs-choice-wrap {
   .ant-form-item-children {
     display: block;
+
     .ibs-delete-btn {
       position: absolute;
       top: 0;
@@ -8,15 +9,17 @@
       color: #616161;
       background-color: #f5f5f5;
       border-color: #dcdcdc;
+
       &:hover,
       &:focus {
         background-color: #e1e1e1;
       }
     }
   }
+
   .ant-radio-group,
-  .ant-checkbox-group{
-    display: block!important
+  .ant-checkbox-group {
+    display: block !important
   }
 }
 
@@ -40,12 +43,103 @@
   background-color: fade(@primary-color, 5%);
   line-height: 20px;
   border-radius: 4px;
+
   p {
     margin-bottom: 0;
   }
 }
+
+.ibs-ai-explain {
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0;
+  padding: 16px 24px;
+  background-color: #FAFAFA;
+  border: 1px dashed;
+  border-color: fade(@primary-color, 30%);
+  line-height: 16px;
+  border-radius: 4px;
+
+  .ibs-ai-left {
+    .ai-left-tittle {
+      line-height: 22px;
+      color: @primary-color;
+    }
+
+    .ai-left-btn {
+      padding: 4px 15px;
+      height: 32px;
+      background-color: @primary-color;
+      border-style: none;
+      border-radius: 4px;
+      .ai-left-text {
+        font-size: 14px;
+        color: #fff;
+        line-height: 16px;
+      }
+      .ai-left-img {
+        margin-right: 5px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .ai-left-stopbtn {
+      padding: 4px 15px;
+      height: 32px;
+      border: 1px solid;
+      border-color: @primary-color;
+      border-radius: 4px;
+      background: #fff;
+      .ai-left-text {
+        font-size: 14px;
+        color: @primary-color;
+        line-height: 16px;
+      }
+      .ai-left-img {
+        margin-right: 5px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .ai-left-content {
+      margin-left: 10px;
+      color: #919399;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+
+    .ai-left-tips {
+      margin: 0;
+      color:  #F53F3F;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+    }
+  }
+
+  .ibs-ai-right {
+    .ai-right-img {
+      width: 56px;
+      height: 70px;
+    }
+  }
+}
+
+.ibs-ai-label {
+  float: left;
+  width: 72px;
+  text-align: right;
+  color: #333;
+}
+
 .ibs-explain-attachment {
   border-top: 1px solid #ebebeb;
+
   .ibs-attachment-item {
     padding: 16px 16px 16px 24px;
     background-color: fade(@primary-color, 5%);
@@ -57,18 +151,20 @@
   margin-top: 16px;
   margin-bottom: 16px;
   line-height: 20px;
+
   p {
     margin-bottom: 0;
   }
 }
+
 .ibs-answer-part {
   padding-top: 16px;
   border-top: 1px solid #ebebeb;
 }
 
 .ibs-answer {
-  .ant-checkbox-wrapper  {
-    & + .ant-checkbox-wrapper  {
+  .ant-checkbox-wrapper {
+    &+.ant-checkbox-wrapper {
       margin-left: 0;
     }
   }
@@ -77,6 +173,7 @@
 .ibs-content {
   position: relative;
   margin-left: 70px;
+
   p {
     margin-bottom: 0;
   }
@@ -90,14 +187,16 @@
 
 .ibs-stem {
   color: #333;
+
   .ant-radio-group,
-  .ant-checkbox-group{
-    display: block!important
+  .ant-checkbox-group {
+    display: block !important
   }
 }
 
 .ibs-sub-operation {
   color: @primary-color;
+
   i {
     margin-right: 4px;
     font-size: 14px;
@@ -133,32 +232,39 @@
   padding-bottom: 8px;
   .ibs-transition;
   border: 1px solid #fff;
+
   &:hover,
   &:focus {
     .ibs-transition;
     border: 1px solid @primary-color;
   }
+
   .ibs-stem {
     margin-top: 0;
   }
+
   .ibs-engine {
     padding-top: 0;
     padding-bottom: 0;
     border-bottom: none;
+
     .ibs-engine-item {
       padding-top: 0;
     }
+
     .ibs-answer-part {
       padding-top: 0;
       border-top: none;
     }
   }
 }
+
 .ibs-engine {
   padding-top: 16px;
   padding-bottom: 28px;
   border-bottom: 1px solid #ebebeb;
-  .ant-col-offset-1{
+
+  .ant-col-offset-1 {
     margin-left: 3.166667%;
   }
 }
@@ -167,23 +273,27 @@
   padding-top: 16px;
   .ibs-transition;
   border: 1px solid #fff;
+
   .ibs-stem {
     margin-top: 0;
   }
+
   .ibs-answer,
-  .ant-form-item{
+  .ant-form-item {
     margin-bottom: 0;
   }
 }
 
-.ibs-engine-material{
+.ibs-engine-material {
   padding: 16px 0;
 
   color: #333333;
   border-bottom: 1px solid #EBEBEB;
+
   .ibs-label {
     font-weight: 500;
   }
+
   .ibs-content {
     padding-left: 8px;
   }
@@ -193,49 +303,54 @@
   position: relative;
   display: block;
   font-weight: 400 !important;
+
   &.ant-radio-wrapper {
     .ibs-table {
       white-space: normal;
     }
   }
+
   .ant-radio,
   .ant-checkbox {
     position: absolute;
     top: 50%;
     transform: translateY(-70%) !important;
   }
+
   .ibs-table {
     margin-left: 16px;
   }
 }
 
-.ibs-prevent-click{
+.ibs-prevent-click {
   pointer-events: none
 }
 
-.ibs-engin-section{
+.ibs-engin-section {
   color: #333333;
   font-size: 16px;
-  font-weight:500;
-  .ant-col-offset-1{
+  font-weight: 500;
+
+  .ant-col-offset-1 {
     margin-left: 3.166667%;
   }
 }
 
-.ibs-engin-section__span{
+.ibs-engin-section__span {
   color: #999999;
   font-size: 14px;
-  font-weight:400;
+  font-weight: 400;
 }
 
-.ibs-engin-section__title{
+.ibs-engin-section__title {
   position: relative;
   padding: 16px 0 8px 0;
   border-bottom: 1px solid #EBEBEB;
-  &::before{
+
+  &::before {
     position: absolute;
     content: '';
-    top:20px;
+    top: 20px;
     left: 0;
     width: 4px;
     height: 16px;
@@ -251,21 +366,26 @@
   .ibs-table {
     color: @ibs-brand-success;
   }
+
   .ant-radio-checked .ant-radio-inner {
     border-color: @ibs-brand-success;
+
     &:after {
       background-color: @ibs-brand-success;
     }
   }
+
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: @ibs-brand-success;
     border-color: @ibs-brand-success;
   }
+
   .ant-radio-checked {
     &:after {
       border: 1px solid @ibs-brand-success;
     }
   }
+
   .ibs-judge-choose {
     color: @ibs-brand-success;
   }
@@ -274,22 +394,27 @@
 .ibs-engine-radio--error {
   .ant-radio-checked .ant-radio-inner {
     border-color: @ibs-brand-danger;
+
     &:after {
       background-color: @ibs-brand-danger;
     }
   }
+
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: @ibs-brand-danger;
     border-color: @ibs-brand-danger;
   }
+
   .ant-radio-checked {
     &:after {
       border: 1px solid @ibs-brand-danger;
     }
   }
+
   .ibs-judge-choose {
     color: @ibs-brand-danger;
   }
+
   .ibs-table {
     color: @ibs-brand-danger;
   }
@@ -303,10 +428,12 @@
 }
 
 .ibs-choose-item {
+
   .ant-radio,
   .ant-checkbox {
     vertical-align: super;
-    & + span {
+
+    &+span {
       display: inline-block;
     }
   }
@@ -337,6 +464,7 @@
     border: 1px solid #FAAD14;
   }
 }
+
 .wrong-text {
   color: #FAAD14;
   font-size: 14px;
@@ -352,7 +480,7 @@
   margin-bottom: 8px;
   padding-top: 8px;
   padding-bottom: 8px;
-  background-color: rgba(255,136,54,0.05);
+  background-color: rgba(255, 136, 54, 0.05);
   color: @ibs-brand-warning;
   line-height: 20px;
   text-align: center;

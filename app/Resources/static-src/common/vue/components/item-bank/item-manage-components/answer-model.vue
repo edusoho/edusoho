@@ -87,6 +87,55 @@
                 { initialValue: questions.analysis }
               ]"
             />
+            <div
+              v-if="aiAnalysisEnable && questions.aiAnalysisEnable !== false"
+              class="ibs-ai-explain ibs-mt16"
+            >
+              <div class="ibs-ai-left">
+                <p class="ai-left-tittle">
+                  {{ t("itemEngine.aiProblemAssistant") }}
+                </p>
+                <button
+                  class="ai-left-btn"
+                  v-show="isShowAiExplain"
+                  @click="aiGeneration()"
+                >
+                  <img src="@/image/explain-ai.png" class="ai-left-img" />
+                  <span class="ai-left-text" ref="text">{{
+                      t("itemEngine.analysis")
+                    }}</span>
+                </button>
+                <button
+                  class="ai-left-stopbtn"
+                  v-show="stopAiExplain"
+                  @click="stopAiGeneration()"
+                >
+                  <img src="@/image/explain-stop.png" class="ai-left-img" />
+                  <span class="ai-left-text">{{
+                      t("itemEngine.stopGeneration")
+                    }}</span>
+                </button>
+                <button
+                  class="ai-left-stopbtn"
+                  v-show="anewAiExplain"
+                  @click="aiGeneration()"
+                >
+                  <img src="@/image/explain-anew.png" class="ai-left-img" />
+                  <span class="ai-left-text">{{
+                      t("itemEngine.reGenerate")
+                    }}</span>
+                </button>
+                <span class="ai-left-content">{{
+                    t("itemEngine.aiAnalysisRefer")
+                  }}</span>
+                <p class="ai-left-tips" v-show="unableGenerateTips">
+                  {{ t("itemEngine.aiUnableGenerate") }}
+                </p>
+              </div>
+              <div class="ibs-ai-right">
+                <img src="@/image/explain-ai-img.png" class="ai-right-img" />
+              </div>
+            </div>
           </a-form-item>
 
           <a-form-item
@@ -254,7 +303,14 @@ export default {
       inheritAttrs: false,
       scoreTypeHelp: "",
       scoreTypeValidateStatus: "success",
-      isWrong: false
+      isWrong: false,
+      isShowAiExplain: true,
+      stopAiExplain: false,
+      anewAiExplain: false,
+      unableGenerateTips: false,
+      isStopComplete: false,
+      isMessageEnd: false,
+      answers: [],
     };
   },
   props: {
@@ -275,6 +331,10 @@ export default {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -467,7 +527,61 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
-    }
+    },
+    aiGeneration() {
+      this.form.validateFields(err => {
+        if (err) {
+          this.getFromInfo();
+        } else {
+          this.$emit(
+            "getAiAnalysis",
+            this.disable,
+            this.enable,
+            this.complete,
+            this.finish
+          );
+        }
+      });
+    },
+    disable() {
+      this.unableGenerateTips = true;
+    },
+    enable() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.analysisEditor.setData("");
+      this.answers = [];
+      this.isStopComplete = false;
+      const typingTimer = setInterval(() => {
+        if (this.answers.length === 0) {
+          return;
+        }
+        if (this.isStopComplete) {
+          clearInterval(typingTimer);
+          return;
+        }
+        this.analysisEditor.insertHtml(this.answers.shift());
+        if (this.answers.length === 0 && this.isMessageEnd) {
+          this.finished();
+          clearInterval(typingTimer);
+        }
+      }, 50);
+    },
+    complete(answer) {
+      this.answers.push(answer);
+    },
+    finish() {
+      this.isMessageEnd = true;
+    },
+    finished() {
+      this.stopAiExplain = false;
+      this.anewAiExplain = true;
+    },
+    stopAiGeneration() {
+      this.finished();
+      this.isStopComplete = true;
+    },
   }
 };
 </script>

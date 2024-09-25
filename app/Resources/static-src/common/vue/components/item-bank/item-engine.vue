@@ -5,9 +5,76 @@
     v-if="this.section_responses.length > 0"
   >
     <!--  -->
-    <div v-show="!mobileShow">
-      <a-row>
-        <a-col :sm="{ span: widthCol, offset: offsetCol }" :xs="{ span: 24 }">
+    <div
+      v-show="!mobileShow"
+      :class="{
+        'ibs-item-preview-container':
+          assessmentStatus === 'preview' || assessment.type === 'aiPersonality',
+        'ibs-item-container':
+          assessmentStatus !== 'preview' && assessment.type !== 'aiPersonality'
+      }"
+    >
+      <div
+        v-if="assessment.type === 'random' && assessmentStatus === 'preview'"
+        class="ibs-item-header"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+        >
+          <path
+            d="M7 0C3.13438 0 0 3.13438 0 7C0 10.8656 3.13438 14 7 14C10.8656 14 14 10.8656 14 7C14 3.13438 10.8656 0 7 0ZM7.5 10.375C7.5 10.4438 7.44375 10.5 7.375 10.5H6.625C6.55625 10.5 6.5 10.4438 6.5 10.375V6.125C6.5 6.05625 6.55625 6 6.625 6H7.375C7.44375 6 7.5 6.05625 7.5 6.125V10.375ZM7 5C6.80374 4.99599 6.61687 4.91522 6.47948 4.775C6.3421 4.63478 6.26515 4.4463 6.26515 4.25C6.26515 4.0537 6.3421 3.86522 6.47948 3.725C6.61687 3.58478 6.80374 3.50401 7 3.5C7.19626 3.50401 7.38313 3.58478 7.52052 3.725C7.6579 3.86522 7.73485 4.0537 7.73485 4.25C7.73485 4.4463 7.6579 4.63478 7.52052 4.775C7.38313 4.91522 7.19626 4.99599 7 5Z"
+            fill="#46C37B"
+          />
+        </svg>
+        <div class="ibs-item-header-text">
+          <span>当前试卷为随机生成</span>
+          <span class="ibs-item-header-number">{{
+              randomAssessmentIds.length
+            }}</span>
+          <span>份试卷中的第</span>
+          <span class="ibs-item-header-number">{{
+              randomAssessmentIds.findIndex(id => id === assessment.id) + 1
+            }}</span>
+          <span>份，您可手动切换试卷</span>
+        </div>
+        <div class="ibs-item-header-select">
+          <span>切换试卷： </span>
+          <a-select
+            placeholder="请选择试卷"
+            :default-value="assessment.id"
+            @change="changeAssessment"
+            style="width: 110px"
+          >
+            <a-select-option
+              v-for="(id, index) in randomAssessmentIds"
+              :key="id"
+              :value="id"
+            >
+              {{ `试卷 ${index + 1}` }}
+            </a-select-option>
+          </a-select>
+        </div>
+      </div>
+      <a-alert
+        v-if="assessment.type === 'aiPersonality'"
+        message="个性卷练习 —— 提供量身定制的练习题库。根据您的掌握程度智能推荐，从基础巩固到高阶挑战，一步步见证学员的成长轨迹，让每一分努力都精准高效！"
+        type="success"
+        closable
+        show-icon
+      >
+        <template slot="icon">
+          <img
+            src="/static-dist/app/img/question-bank/testpaperAiIcon.png"
+            alt=""
+          />
+        </template>
+      </a-alert>
+      <div class="ibs-item-body">
+        <div class="ibs-item-content">
           <div class="ibs-item-list ibs-assessment-info ibs-mb8">
             <div v-show="mode === 'do'" class="ibs-assessment-heading">
               <div class="ibs-assessment-title ibs-clearfix">
@@ -146,6 +213,9 @@
                     @changeTag="changeTag"
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
+                    @aiGenerates="aiGenerates"
+                    @stopAiAnalysis="stopAiAnalysis"
+                    :isShowAiAnalysis="isShowAiAnalysis"
                   ></judge-type>
                   <single-choice
                     v-if="
@@ -187,6 +257,9 @@
                     @changeTag="changeTag"
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
+                    @aiGenerates="aiGenerates"
+                    @stopAiAnalysis="stopAiAnalysis"
+                    :isShowAiAnalysis="isShowAiAnalysis"
                   ></single-choice>
                   <choice
                     v-if="
@@ -229,6 +302,9 @@
                     @changeTag="changeTag"
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
+                    @aiGenerates="aiGenerates"
+                    @stopAiAnalysis="stopAiAnalysis"
+                    :isShowAiAnalysis="isShowAiAnalysis"
                   ></choice>
                   <essay
                     v-if="
@@ -281,6 +357,9 @@
                     @getEssayAttachment="getEssayAttachment"
                     @deleteEssayAttachment="deleteEssayAttachment"
                     @setMaterialAnalysis="setMaterialAnalysis"
+                    @aiGenerates="aiGenerates"
+                    @stopAiAnalysis="stopAiAnalysis"
+                    :isShowAiAnalysis="isShowAiAnalysis"
                   >
                     <template v-slot:review>
                       <review
@@ -341,6 +420,9 @@
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
                     @error-correction="errorCorrection"
+                    @aiGenerates="aiGenerates"
+                    @stopAiAnalysis="stopAiAnalysis"
+                    :isShowAiAnalysis="isShowAiAnalysis"
                   ></fill>
                   <answer-model
                     v-if="
@@ -369,9 +451,9 @@
             </div>
           </div>
           <slot name="review-footer" />
-        </a-col>
+        </div>
         <slot name="pendant">
-          <a-col :sm="5" :xs="24" class="ibs-ml24">
+          <div class="ibs-item-pendant">
             <a-affix :offset-top="0">
               <count-down
                 :mode="mode"
@@ -427,9 +509,9 @@
               </card>
               <slot name="inspection"></slot>
             </a-affix>
-          </a-col>
+          </div>
         </slot>
-      </a-row>
+      </div>
       <a-modal
         :closable="closable"
         :visible="visible"
@@ -517,6 +599,7 @@ export default {
   },
   data() {
     return {
+      randomAssessmentIds: [],
       sections: this.assessment.sections,
       responses: this.assessmentResponse.section_responses || [],
       analysis_reports: this.answerSceneReport.question_reports || [],
@@ -734,7 +817,11 @@ export default {
       default() {
         return {};
       }
-    }
+    },
+    isShowAiAnalysis: {
+      type: Boolean,
+      default: true
+    },
   },
   computed: {
     CKEditorData: function() {
@@ -820,6 +907,10 @@ export default {
     this.$on("previewFile", this.previewAttachment);
     this.$on("downloadFile", this.downloadAttachment);
     this.$on("getDeleteFile", this.deleteAttachment);
+    const ids = document.getElementById("randomAssessmentIds");
+    if (ids) {
+      this.randomAssessmentIds = JSON.parse(ids.value);
+    }
   },
   beforeDestroy() {
     if (this.intervalId) {
@@ -905,10 +996,10 @@ export default {
       finalData.used_time = localStorage.getItem(this.localUsedTime);
       this.$emit("reachTimeSubmitAnswerData", finalData);
     },
-    saveAnswerData() {
+    saveAnswerData(okCallback) {
       const finalData = this.getResponse();
       finalData.used_time = localStorage.getItem(this.localUsedTime);
-      this.$emit("saveAnswerData", finalData);
+      this.$emit("saveAnswerData", finalData, okCallback);
     },
     countTime() {
       if (this.intervalId != null) {
@@ -1248,7 +1339,24 @@ export default {
 
     handleViewHistoricalResult(params) {
       this.$emit("view-historical-result", params);
-    }
+    },
+
+    aiGenerates(questionId, finished) {
+      this.$emit("getAiAnalysis", questionId, finished);
+    },
+    stopAiAnalysis(questionId) {
+      this.$emit("stopAiAnalysis", questionId);
+    },
+    changeAssessment(value) {
+      if (parent !== window) {
+        window.location.href = `${location.origin}${location.pathname}?preview=1&assessmentId=${value}`;
+      } else {
+        window.location.href = window.location.href.replace(
+          `/testpaper/${this.assessment.id}`,
+          `/testpaper/${value}`
+        );
+      }
+    },
   }
 };
 </script>

@@ -16,6 +16,7 @@
     @error-correction="errorCorrection"
     :previewAttachmentCallback="previewAttachmentCallback"
     :downloadAttachmentCallback="downloadAttachmentCallback"
+    :isShowAiAnalysis="false"
   ></item-report>
 </template>
 <script>

@@ -22,10 +22,13 @@
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
       @error-correction="errorCorrection"
+      @getAiAnalysis="getAiAnalysis"
+      @stopAiAnalysis="stopAiAnalysis"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       :showDoAgainBtn="showDoAgainBtn"
       :courseSetStatus="courseSetStatus"
+      :isShowAiAnalysis="isShowAiAnalysis"
     >
       <template #returnBtn>
         <slot name="returnBtn"></slot>
@@ -185,6 +188,10 @@ export default {
       default() {
         return {};
       }
+    },
+    isShowAiAnalysis: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -264,7 +271,13 @@ export default {
     },
     errorCorrection(params) {
       this.$emit("error-correction", params);
-    }
+    },
+    getAiAnalysis(questionId, finished) {
+      this.$emit("getAiAnalysis", questionId, finished);
+    },
+    stopAiAnalysis(questionId) {
+      this.$emit("stopAiAnalysis", questionId);
+    },
   }
 };
 </script>

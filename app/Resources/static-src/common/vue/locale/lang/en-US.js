@@ -75,6 +75,7 @@ const lang = {
     },
     littleChoose: 'Choose at least ',
     answers: 'questions!',
+    answer: 'Answer',
     chooseItem: 'Option',
     judgeRule: 'Please choose the correct answer',
     clickEditOrButton: 'Click the button',
@@ -218,7 +219,14 @@ const lang = {
     itemUndo: 'Not Start',
     Explain: 'Analysis:',
     InspectionMobileTip:
-      'Cloud exams have been opened for this exam. Answering questions on the mobile terminal is currently not supported. Please go to the PC to answer the questions.'
+      'Cloud exams have been opened for this exam. Answering questions on the mobile terminal is currently not supported. Please go to the PC to answer the questions.',
+    aiAssistant: 'I am your AI problem assistant, click on \'AI analysis\' to see the problem analysis I searched for you。',
+    aiProblemAssistant: 'Hello teacher, I am your Al problem assistant, click \'Al analysis\' to view the problem analysis I searched for you.',
+    stopGeneration: 'stopGeneration',
+    reGenerate: 'reGenerate',
+    aiAnalysisRefer: 'AI parsing content is for reference only',
+    aiAnalysisTips: 'New online Al problem resolution function! Edit the content of the topic after a key to generate analysis.',
+    aiUnableGenerate: 'When the topic content is plain text, the AI will generate the parsing for you.'
   },
   attachmentPreview: {
     File_not_supported: 'Can not preview this type of file',

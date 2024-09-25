@@ -5,11 +5,13 @@
     :needScore="needScore"
     :mode="mode"
     :keys="keys"
+    :seq="seq"
     :section_responses="section_responses"
     v-bind="$attrs"
     v-on="$listeners"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
+    @genAiAnalysis="getAiAnalysis"
   >
     <template v-slot:response_points>
       <div class="ibs-answer ibs-answer--judge">
@@ -53,7 +55,7 @@
 
         <!-- 预览题目 -->
         <a-radio-group
-          v-if="mode == 'preview'"
+          v-if="mode === 'preview' || mode === 'import'"
           v-model="answer"
           class="ibs-prevent-click"
         >
@@ -104,7 +106,7 @@
 
         <div
           class="ibs-answer ibs-answer-part"
-          v-if="mode == 'preview' || mode == 'analysis'"
+          v-if="mode === 'preview' || mode === 'analysis' || mode === 'import'"
         >
           <div
             class="ibs-danger-color"
@@ -161,7 +163,8 @@ export default {
   data: function() {
     return {
       answer: this.userAnwer[0],
-      statusText: ""
+      statusText: "",
+      form: this.$form.createForm(this, { name: "base-question-type" }),
     };
   },
   computed: {
@@ -203,6 +206,9 @@ export default {
         return [];
       }
     },
+    seq: {
+      type: String
+    },
     userAnwer: {
       type: Array,
       default() {
@@ -232,7 +238,13 @@ export default {
       default() {
         return [];
       }
-    }
+    },
+    item: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
   },
   mounted() {
     this.initAnswer();
@@ -240,7 +252,11 @@ export default {
   },
   methods: {
     initAnswer() {
-      if (this.mode === "preview" || this.mode === "analysis") {
+      if (
+        this.mode === "preview" ||
+        this.mode === "analysis" ||
+        this.mode === "import"
+      ) {
         this.answer = this.question.answer[0];
       } else if (this.mode === "report") {
         this.answer = this.reportAnswer.response[0];
@@ -286,6 +302,19 @@ export default {
         return "";
       }
       return str === "T" ? this.t("Right") : this.t("Wrong");
+    },
+    getAiAnalysis(disable, enable, complete, finish) {
+      let data = {};
+      let question = JSON.parse(JSON.stringify(this.question));
+      data.stem = question.stem;
+      data.answer = question.answer === "T" ? "正确" : "错误";
+      if (this.item.type === "material") {
+        data.type = "material-determine";
+        data.material = this.item.material;
+      } else {
+        data.type = "determine";
+      }
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     }
   }
 };

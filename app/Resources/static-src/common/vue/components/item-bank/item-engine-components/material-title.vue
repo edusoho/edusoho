@@ -60,7 +60,7 @@ export default {
       default: ""
     },
     item: {
-      type: Object,
+      type: [Object, Array],
       default() {
         return {};
       }

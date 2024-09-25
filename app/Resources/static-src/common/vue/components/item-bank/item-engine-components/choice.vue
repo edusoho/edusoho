@@ -7,9 +7,11 @@
     v-bind="$attrs"
     v-on="$listeners"
     :keys="keys"
+    :seq="seq"
     :section_responses="section_responses"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
+    @genAiAnalysis="getAiAnalysis"
   >
     <template v-slot:response_points>
       <div class="ibs-answer">
@@ -41,7 +43,7 @@
             <div
               class="ibs-table"
               v-else-if="
-                mode === 'preview' &&
+                (mode === 'preview' || mode === 'import') &&
                   question.errors &&
                   question.errors[`options_${index}`]
               "
@@ -82,7 +84,7 @@
         </a-checkbox-group>
         <div
           class="ibs-answer ibs-answer-part"
-          v-if="mode == 'preview' || mode == 'analysis'"
+          v-if="mode === 'preview' || mode === 'analysis' || mode === 'import'"
         >
           <!-- word导入解析错误 -->
           <div
@@ -143,7 +145,30 @@ export default {
   data: function() {
     return {
       answer: this.userAnwer,
-      statusText: ""
+      statusText: "",
+      optionKey: [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T"
+      ],
+      form: this.$form.createForm(this, { name: "base-question-type" }),
     };
   },
   computed: {
@@ -185,6 +210,9 @@ export default {
         return [];
       }
     },
+    seq: {
+      type: String
+    },
     userAnwer: {
       type: Array,
       default() {
@@ -214,6 +242,12 @@ export default {
       default() {
         return [];
       }
+    },
+    item: {
+      type: Object,
+      default() {
+        return {};
+      }
     }
   },
   mounted() {
@@ -222,7 +256,11 @@ export default {
   },
   methods: {
     initAnswer() {
-      if (this.mode === "preview" || this.mode === "analysis") {
+      if (
+        this.mode === "preview" ||
+        this.mode === "analysis" ||
+        this.mode === "import"
+      ) {
         this.answer = this.question.answer;
       } else if (this.mode === "report") {
         this.answer = this.reportAnswer.response;
@@ -268,6 +306,23 @@ export default {
       } else {
         return "ibs-choose-item ibs-engine-radio";
       }
+    },
+    getAiAnalysis(disable, enable, complete, finish) {
+      let data = {};
+      let question = JSON.parse(JSON.stringify(this.question));
+      data.stem = question.stem;
+      data.answer = question.answer.join();
+      data.options = [];
+      this.question.response_points.forEach((item, index) => {
+        data.options.push(`${this.optionKey[index]}.${item.checkbox.text}`);
+      });
+      if (this.item.type === "material") {
+        data.type = "material-choice";
+        data.material = this.item.material;
+      } else {
+        data.type = "choice";
+      }
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     }
   }
 };

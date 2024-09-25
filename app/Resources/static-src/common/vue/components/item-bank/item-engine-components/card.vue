@@ -229,9 +229,7 @@ export default {
       return document.getElementById("item-bank-sdk-card");
     },
     saveAnswer() {
-      this.$emit("saveAnswerData");
       // 考试：取消按钮是离开考试，确定按钮是及选题
-      const self = this;
       let content = "";
 
       if (this.metaActivity.mediaType === "testpaper") {
@@ -244,24 +242,25 @@ export default {
         }
       }
 
-      this.$confirm({
-        title: this.t("testpaper.saveTips"),
-        icon: () => <a-icon type="check-circle" style="font-size: 22px;" />,
-        content,
-        okText: this.t("itemEngine.goThenDo"),
-        cancelText:
-          this.metaActivity.mediaType === "testpaper"
-            ? this.t("testpaper.exit")
-            : this.t("itemEngine.exit"),
-        class: "ibs-card-confirm-modal",
-        // getContainer: this.getContainer,
-        onOk() {
-          self.forceRemoveModalDom();
-        },
-        onCancel() {
-          self.$emit("exitAnswer");
-          self.forceRemoveModalDom();
-        }
+      this.$emit("saveAnswerData", () => {
+        this.$confirm({
+          title: this.t("testpaper.saveTips"),
+          icon: () => <a-icon type="check-circle" style="font-size: 22px;" />,
+          content,
+          okText: this.t("itemEngine.goThenDo"),
+          cancelText:
+            this.metaActivity.mediaType === "testpaper"
+              ? this.t("testpaper.exit")
+              : this.t("itemEngine.exit"),
+          class: "ibs-card-confirm-modal",
+          onOk: () => {
+            this.forceRemoveModalDom();
+          },
+          onCancel: () => {
+            this.$emit("exitAnswer");
+            this.forceRemoveModalDom();
+          }
+        });
       });
     },
     submitAnswer() {

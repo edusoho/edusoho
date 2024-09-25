@@ -73,6 +73,7 @@ const lang = {
     },
     littleChoose: '至少选择',
     answers: '个答案!',
+    answer: '答案',
     chooseItem: '选项',
     judgeRule: '请选择正确答案',
     clickEditOrButton: '点击编辑器按钮',
@@ -211,7 +212,16 @@ const lang = {
     openExplain: '查看解析',
     closeExplain: '收起解析',
     InspectionMobileTip:
-      '本场考试已开启云监考，暂不支持在移动端答题，请前往PC端答题。'
+      '本场考试已开启云监考，暂不支持在移动端答题，请前往PC端答题。',
+    aiAssistant: '我是你的AI题目助手,点击\'AI解析\'查看我为你搜寻的题目解析。',
+    aiProblemAssistant:
+      '老师好，我是您的 Al 题目助手，点击“Al 解析”查看我为您搜寻的题目解析。',
+    analysis: '解析',
+    stopGeneration: '停止生成',
+    reGenerate: '重新生成',
+    aiAnalysisRefer: 'AI解析内容仅供参考',
+    aiAnalysisTips: '全新上线 Al 题目解析功能！编辑题目内容后一键生成解析。',
+    aiUnableGenerate: '题目内容为纯文字时，AI将为你生成解析。'
   },
   attachmentPreview: {
     File_not_supported: '文件类型暂不支持预览',

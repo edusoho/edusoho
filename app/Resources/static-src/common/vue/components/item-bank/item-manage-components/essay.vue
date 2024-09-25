@@ -8,10 +8,12 @@
       :isSubItem="isSubItem"
       v-bind="$attrs"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     >
       <template v-slot:response_points>
         <a-form-item
@@ -90,6 +92,10 @@ export default {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -215,7 +221,24 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
-    }
+    },
+    getAiAnalysis(disable, enable, complete, finish) {
+      let data = {};
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          let question = JSON.parse(JSON.stringify(this.questions));
+          question = Object.assign(question, values.questions);
+          data.answer = [].concat(question.answer).join();
+          data.stem = question.stem;
+          if (this.isSubItem) {
+            data.type = "material-essay";
+          } else {
+            data.type = "essay";
+          }
+        }
+      });
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+    },
   }
 };
 </script>

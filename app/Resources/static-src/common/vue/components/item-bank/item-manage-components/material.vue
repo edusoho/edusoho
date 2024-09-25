@@ -93,7 +93,9 @@
                 :subQuestions="subQuestions"
                 :isSubItem="true"
                 :mode="subMode"
+                :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
+                @getAiAnalysis="getAiAnalysis"
               ></essay-type>
 
               <fill-type
@@ -103,8 +105,10 @@
                 :isSubItem="true"
                 :subQuestions="subQuestions"
                 :mode="subMode"
+                :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
                 @initStatus="initStatus"
+                @getAiAnalysis="getAiAnalysis"
               ></fill-type>
 
               <judge-type
@@ -114,7 +118,9 @@
                 :isSubItem="true"
                 :subQuestions="subQuestions"
                 :mode="subMode"
+                :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
+                @getAiAnalysis="getAiAnalysis"
               ></judge-type>
 
               <single-type
@@ -124,7 +130,9 @@
                 :isSubItem="true"
                 :subQuestions="subQuestions"
                 :mode="subMode"
+                :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
+                @getAiAnalysis="getAiAnalysis"
               ></single-type>
 
               <choice-type
@@ -135,7 +143,9 @@
                 :isSubItem="true"
                 :subQuestions="subQuestions"
                 :mode="subMode"
+                :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
+                @getAiAnalysis="getAiAnalysis"
               ></choice-type>
             </a-modal>
           </a-form-item>
@@ -197,6 +207,10 @@ export default {
       type: Boolean,
       default: false
     },
+    aiAnalysisEnable: {
+      type: Boolean,
+      default: false
+    },
     errorList: {
       type: Array,
       default() {
@@ -237,12 +251,12 @@ export default {
       values.base.attachments = this.subject.attachments;
       values.base.questions = this.questions;
       const data = values.base;
-      console.log(data);
       if (values.base.questions.length > 0) {
         this.$emit("patchData", data);
       } else {
         this.$message.error(this.t("itemManage.addSubItemRule"));
       }
+      return data;
     },
     cancel() {
       this.visible = false;
@@ -323,7 +337,15 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
-    }
+    },
+    getAiAnalysis(data, disable, enable, complete, finish) {
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          data.material = values.base.material;
+        }
+      });
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+    },
   }
 };
 </script>

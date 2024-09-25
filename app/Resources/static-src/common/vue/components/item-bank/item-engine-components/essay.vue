@@ -11,6 +11,7 @@
     :keys="keys"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
+    @genAiAnalysis="getAiAnalysis"
   >
     <template v-slot:response_points>
       <div class="ibs-mb16 ibs-mt16" v-if="mode === 'do'">
@@ -37,7 +38,10 @@
         </div>
       </div>
 
-      <div v-if="mode == 'preview'" class="ibs-answer-part">
+      <div
+        v-if="mode === 'preview' || mode === 'import'"
+        class="ibs-answer-part"
+      >
         <!-- word导入解析错误 -->
         <div
           class="ibs-danger-color"
@@ -88,7 +92,10 @@
         </div>
       </div>
 
-      <div v-if="mode == 'report' || mode == 'review'" class="ibs-answer-part">
+      <div
+        v-if="mode === 'report' || mode === 'review'"
+        class="ibs-answer-part"
+      >
         <span class="ibs-label">{{ t("itemEngine.answerResult") }}</span>
         <div class="ibs-content">
           <div class="ibs-mb4">
@@ -293,7 +300,13 @@ export default {
       default() {
         return [];
       }
-    }
+    },
+    item: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
   },
   inject: ["showCKEditorData", "showAttachment", "cdnHost"],
   mounted() {
@@ -378,6 +391,19 @@ export default {
       });
 
       return result;
+    },
+    getAiAnalysis(disable, enable, complete, finish) {
+      let data = {};
+      let question = JSON.parse(JSON.stringify(this.question));
+      data.stem = question.stem;
+      data.answer = [].concat(question.answer).join();
+      if (this.item.type === "material") {
+        data.type = "material-essay";
+        data.material = this.item.material;
+      } else {
+        data.type = "essay";
+      }
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     }
   }
 };

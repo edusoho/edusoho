@@ -9,10 +9,12 @@
       :showModelBtn="showModelBtn"
       @patchData="patchData"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     ></judge-type>
     <single-choice
       v-if="type === 'single_choice'"
@@ -20,10 +22,12 @@
       :showModelBtn="showModelBtn"
       @patchData="patchData"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     ></single-choice>
     <fill-type
       v-if="type === 'fill'"
@@ -31,10 +35,12 @@
       :showModelBtn="showModelBtn"
       @patchData="patchData"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     ></fill-type>
     <essay-type
       v-if="type === 'essay'"
@@ -42,10 +48,12 @@
       :showModelBtn="showModelBtn"
       @patchData="patchData"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     ></essay-type>
     <material-type
       v-if="type === 'material'"
@@ -57,9 +65,11 @@
       @previewMaterialAttachment="previewAttachment"
       @patchData="patchData"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     ></material-type>
     <choice
       v-if="type === 'choice' || type === 'uncertain_choice'"
@@ -68,10 +78,12 @@
       :showModelBtn="showModelBtn"
       @patchData="patchData"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     ></choice>
   </div>
 </template>
@@ -195,6 +207,10 @@ export default {
       type: Boolean,
       default: false
     },
+    aiAnalysisEnable: {
+      type: Boolean,
+      default: false
+    },
     errorList: {
       type: Array,
       default() {
@@ -275,7 +291,10 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
-    }
+    },
+    getAiAnalysis(data, disable, enable, complete, finish) {
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+    },
   }
 };
 </script>

@@ -5,11 +5,13 @@
     :needScore="needScore"
     :mode="mode"
     :keys="keys"
+    :seq="seq"
     :section_responses="section_responses"
     v-bind="$attrs"
     v-on="$listeners"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
+    @genAiAnalysis="getAiAnalysis"
   >
     <template v-slot:response_points>
       <div v-if="mode == 'do'">
@@ -24,7 +26,7 @@
       </div>
 
       <div
-        v-if="mode == 'preview' || mode == 'analysis'"
+        v-if="mode === 'preview' || mode === 'analysis' || mode === 'import'"
         class="ibs-answer-part"
       >
         <span class="ibs-label">{{ t("itemEngine.standard_answer") }}</span>
@@ -44,7 +46,7 @@
               >{{ t("itemEngine.rightAnswerErrorMessage") }}</span
             >
 
-            <span v-else-if="mode == 'preview'">{{ answerFill(item) }} </span>
+            <span v-else-if="mode === 'preview' || mode === 'import'">{{ answerFill(item) }}</span>
             <span v-else>
               <span class="ibs-success-color">{{ answerFill(item) }}</span>
               <span class="ibs-analysis-status"
@@ -178,6 +180,9 @@ export default {
         return [];
       }
     },
+    seq: {
+      type: String
+    },
     userAnwer: {
       type: Array,
       default() {
@@ -215,7 +220,13 @@ export default {
       default() {
         return [];
       }
-    }
+    },
+    item: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
   },
   computed: {
     formateQuestion() {
@@ -247,7 +258,8 @@ export default {
   methods: {
     filterFillHtml(text) {
       const reg =
-        this.mode === "preview" && this.previewType !== "item"
+        (this.mode === "preview" || this.mode === "import") &&
+        this.previewType !== "item"
           ? /\[\[.+?\]\]/g
           : /\[\[\]\]/g;
       if (text && !text.match(reg)) {
@@ -260,6 +272,38 @@ export default {
           return `<span class="ibs-stem-fill-blank">(${index++})</span>`;
         })
       );
+    },
+    reverseStr(value) {
+      let newStr = "";
+      for (let i = 0; i < value.length; i++) {
+        let s = value.charAt(value.length - 1 - i);
+        newStr += s;
+      }
+
+      return newStr;
+    },
+    getFillAnswer(value) {
+      let result = [];
+      let message = value;
+
+      do {
+        let reverseStrs = this.reverseStr(message);
+
+        const start = message.indexOf("[[");
+        if (start === -1) break;
+
+        const end = reverseStrs.lastIndexOf("]]");
+        if (end === -1) break;
+
+        const content = message.substring(
+          start + 2,
+          message.length - end - (end % 2 === 1 ? 2 : 1)
+        );
+        message = message.substring(message.length - end + 1);
+        result.push(content);
+      } while (message.length > 0);
+
+      return result;
     },
     filterFillAnswer(data) {
       return data.map(item => {
@@ -330,7 +374,20 @@ export default {
           this.correctionRequired.splice(i, 1, answer);
         }
       }
-    }
+    },
+    getAiAnalysis(disable, enable, complete, finish) {
+      let data = {};
+      let question = JSON.parse(JSON.stringify(this.question));
+      data.stem = question.stem;
+      data.answers = this.getFillAnswer(question.stem);
+      if (this.item.type === "material") {
+        data.type = "material-fill";
+        data.material = this.item.material;
+      } else {
+        data.type = "fill";
+      }
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+    },
   }
 };
 </script>

@@ -1,5 +1,18 @@
 <template>
   <div class="ibs-item-import" id="item-bank-sdk-import">
+    <div
+      class="ai-problem-analysis-tips"
+      v-if="analysisTipClose"
+      @click="closeTip"
+    >
+      <div class="ai-problem-analysis-tips-left">
+        <img src="@/image/ai-analysis-tips-info.png" alt="" />
+        <span>{{ t("itemEngine.aiAnalysisTips") }}</span>
+      </div>
+      <div class="ai-problem-analysis-tips-right">
+        <img src="@/image/ai-analysis-tips-close.png" alt="" />
+      </div>
+    </div>
     <a-row class="ibs-item-import-content">
       <a-col :span="6" class="ibs-import-left">
         <import-data
@@ -51,7 +64,7 @@
                 <material-title
                   v-show="item.type === 'material'"
                   :material="item.material"
-                  :item="item"
+                  :item="items"
                 ></material-title>
                 <!-- ------------题目区域------------ -->
                 <div
@@ -74,6 +87,9 @@
                         :item="item"
                         :mode="mode"
                         :showScoreAndSeq="false"
+                        :seq="`${itemIndex}-${questionIndex}`"
+                        @getAiAnalysis="getAiAnalysis"
+                        @changeAnalysis="changeAnalysis"
                       >
                       </judge-type>
                       <single-choice
@@ -82,6 +98,9 @@
                         :item="item"
                         :mode="mode"
                         :showScoreAndSeq="false"
+                        :seq="`${itemIndex}-${questionIndex}`"
+                        @getAiAnalysis="getAiAnalysis"
+                        @changeAnalysis="changeAnalysis"
                       ></single-choice>
                       <choice
                         v-if="
@@ -92,6 +111,9 @@
                         :item="item"
                         :mode="mode"
                         :showScoreAndSeq="false"
+                        :seq="`${itemIndex}-${questionIndex}`"
+                        @getAiAnalysis="getAiAnalysis"
+                        @changeAnalysis="changeAnalysis"
                       ></choice>
                       <essay
                         v-if="question.answer_mode === 'rich_text'"
@@ -99,6 +121,9 @@
                         :item="item"
                         :mode="mode"
                         :showScoreAndSeq="false"
+                        :seq="`${itemIndex}-${questionIndex}`"
+                        @getAiAnalysis="getAiAnalysis"
+                        @changeAnalysis="changeAnalysis"
                       ></essay>
                       <fill
                         v-if="question.answer_mode === 'text'"
@@ -106,6 +131,9 @@
                         :item="item"
                         :mode="mode"
                         :showScoreAndSeq="false"
+                        :seq="`${itemIndex}-${questionIndex}`"
+                        @getAiAnalysis="getAiAnalysis"
+                        @changeAnalysis="changeAnalysis"
                       ></fill>
                     </a-col>
                   </a-row>
@@ -211,10 +239,12 @@
         :type="modelData.type"
         :showModelBtn="true"
         :errorList="errorList"
+        :aiAnalysisEnable="aiAnalysisEnable"
         @renderFormula="renderFormula"
         @getData="getEditData"
         @changeEditor="changeEditor"
         @getInitRepeatQuestion="getInitRepeatQuestion"
+        @getAiAnalysis="getAiAnalysis"
       />
       <item-manage
         v-if="modelData.mode === 'create'"
@@ -231,10 +261,12 @@
         :type="modelData.type"
         :showModelBtn="true"
         :errorList="errorList"
+        :aiAnalysisEnable="aiAnalysisEnable"
         @renderFormula="renderFormula"
         @getData="getCreateData"
         @changeEditor="changeEditor"
         @getInitRepeatQuestion="getInitRepeatQuestion"
+        @getAiAnalysis="getAiAnalysis"
       />
     </a-modal>
 
@@ -935,11 +967,15 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    }
+    },
+    aiAnalysisEnable: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
-      mode: "preview",
+      mode: "import",
       btnoffsetTop: 0,
       showFixBtn: false,
       visible: false,
@@ -958,7 +994,8 @@ export default {
         type: ""
       },
       fileName: this.subject.fileName || "",
-      ids: this.subject.items.length
+      ids: this.subject.items.length,
+      analysisTipClose: true,
     };
   },
   components: {
@@ -1298,6 +1335,21 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
+    },
+    closeTip() {
+      this.analysisTipClose = false;
+    },
+    getAiAnalysis(data, disable, enable, complete, finish) {
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+    },
+    changeAnalysis(seq, analysis) {
+      const [itemIndex, questionIndex] = seq.split("-");
+      const item = this.items[itemIndex];
+      if (item.type !== "material") {
+        item.analysis = analysis;
+      }
+      item.questions[questionIndex].analysis = analysis;
+      this.$set(this.items, itemIndex, item);
     }
   }
 };

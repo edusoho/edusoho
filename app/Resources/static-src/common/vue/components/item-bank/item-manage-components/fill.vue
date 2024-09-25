@@ -9,10 +9,12 @@
       v-bind="$attrs"
       :itemType="type"
       :isDisable="isDisable"
+      :aiAnalysisEnable="aiAnalysisEnable"
       :errorList="errorList"
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
+      @getAiAnalysis="getAiAnalysis"
     >
       <template v-slot:stem>
         <a-form-item
@@ -40,6 +42,11 @@
             {{ t("itemManage.clickEditOrButton")
             }}<span class="ibs-danger-color"> [ ] </span
             >{{ t("itemManage.insertByself") }}
+          </div>
+          <div v-for="(answer, index) in answers" :key="index">
+            <span class="font-medium">{{ `答案[${index + 1}]:` }} </span>
+            <span style="color: #999">{{ answer }}</span
+            ><br />
           </div>
         </a-form-item>
 
@@ -99,7 +106,8 @@ export default {
       checked: true,
       type: "fill",
       publicPath: process.env.BASE_URL,
-      form: this.$form.createForm(this, { name: "base-question-type" })
+      form: this.$form.createForm(this, { name: "base-question-type" }),
+      answers: [],
     };
   },
   inject: ["bank_id", "subject", "showCKEditorData", "showAttachment"],
@@ -117,6 +125,10 @@ export default {
       default: "create"
     },
     isDisable: {
+      type: Boolean,
+      default: false
+    },
+    aiAnalysisEnable: {
       type: Boolean,
       default: false
     },
@@ -181,10 +193,12 @@ export default {
       );
       if (this.mode == "edit" && !this.isSubItem) {
         this.questions.stem = this.getEditFillStem(this.questions.stem);
+        this.answers = this.getFillAnswer(this.questions.stem);
       }
       this.stemEditor.setData(this.questions.stem);
       this.stemEditor.on("change", () => {
         const data = this.stemEditor.getData();
+        this.answers = this.getFillAnswer(data);
         if (this.errorList.length == 0) {
           this.$emit("changeEditor", data);
         }
@@ -192,8 +206,6 @@ export default {
           [`questions['stem']`]: data
         });
         this.checkFillRule(data);
-      });
-      this.stemEditor.on("blur", () => {
         this.form.setFieldsValue({
           [`questions['stem']`]: this.stemEditor.getData()
         });
@@ -231,31 +243,20 @@ export default {
     },
     getFillAnswer(value) {
       let result = [];
-      let message = value;
+      let regex = /\[\[(?:[^[\]]+|\[[^[\]]+\])+\]\]/g;
+      let match;
 
-      do {
-        let reverseStrs = this.reverseStr(message);
-
-        const start = message.indexOf("[[");
-        if (start === -1) break;
-
-        const end = reverseStrs.lastIndexOf("]]");
-        if (end === -1) break;
-
-        const content = message.substring(
-          start + 2,
-          message.length - end - (end % 2 === 1 ? 2 : 1)
-        );
-        message = message.substring(message.length - end + 1);
-        result.push(content);
-      } while (message.length > 0);
+      while ((match = regex.exec(value)) !== null) {
+        let content = match[0];
+        result.push(content.substring(2, content.length - 2));
+      }
 
       return result;
     },
     getEditFillStem(str) {
       let index = 0;
       const self = this;
-      return str.replace(/\[\[\]\]/g, function() {
+      return str.replace(/\[\[(?:[^[\]]+|\[[^[\]]+\])+\]\]/g, function() {
         return `[[${self.questions.answer[index++]}]]`;
       });
     },
@@ -323,6 +324,23 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
+    },
+    getAiAnalysis(disable, enable, complete, finish) {
+      let data = {};
+      this.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          let question = JSON.parse(JSON.stringify(this.questions));
+          question = Object.assign(question, values.questions);
+          data.stem = question.stem;
+          data.answers = this.getFillAnswer(question.stem);
+          if (this.isSubItem) {
+            data.type = "material-fill";
+          } else {
+            data.type = "fill";
+          }
+        }
+      });
+      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     }
   }
 };

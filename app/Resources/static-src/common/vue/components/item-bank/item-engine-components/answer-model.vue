@@ -58,7 +58,7 @@
           <div
             v-else
             class="ibs-stem ibs-editor-text"
-            v-html="question.stem"
+            v-html="replaceHtmlSpace(question.stem)"
           ></div>
 
           <div
@@ -101,6 +101,61 @@
               }}
             </a-button>
           </div>
+          <div v-show="this.mode === 'import' && question.aiAnalysisEnable">
+            <div class="ibs-ai-explain ibs-mt16">
+              <div class="ibs-ai-left">
+                <p class="ai-left-tittle">
+                  {{ t("itemEngine.aiProblemAssistant") }}
+                </p>
+                <button
+                  class="ai-left-btn"
+                  v-show="isShowAiExplain"
+                  @click="aiGenerationBtn()"
+                >
+                  <img src="@/image/explain-ai.png" class="ai-left-img" />
+                  <span class="ai-left-text" ref="text">{{
+                      t("itemEngine.analysis")
+                    }}</span>
+                </button>
+                <button
+                  class="ai-left-stopbtn"
+                  v-show="stopAiExplain"
+                  @click="stopAiGenerationBtn()"
+                >
+                  <img src="@/image/explain-stop.png" class="ai-left-img" />
+                  <span class="ai-left-text">{{
+                      t("itemEngine.stopGeneration")
+                    }}</span>
+                </button>
+                <button
+                  class="ai-left-stopbtn"
+                  v-show="anewAiExplain"
+                  @click="aiGenerationBtn()"
+                >
+                  <img src="@/image/explain-anew.png" class="ai-left-img" />
+                  <span class="ai-left-text">{{
+                      t("itemEngine.reGenerate")
+                    }}</span>
+                </button>
+                <span class="ai-left-content">{{
+                    t("itemEngine.aiAnalysisRefer")
+                  }}</span>
+                <p class="ai-left-tips" v-show="unableGenerateTips">
+                  {{ t("itemEngine.aiUnableGenerate") }}
+                </p>
+              </div>
+              <div class="ibs-ai-right">
+                <img src="@/image/explain-ai-img.png" class="ai-right-img" />
+              </div>
+            </div>
+            <a-textarea
+              :rows="4"
+              :data-image-download-url="
+                showCKEditorData.filebrowserImageDownloadUrl
+              "
+              :name="`analysis${this.seq}`"
+            />
+          </div>
           <div v-show="showAnalysis">
             <!--对于章节练习题需要和解析一起展示答案-->
             <slot
@@ -112,10 +167,60 @@
               v-html="
                 `<span class='ibs-label'>${t(
                   'itemEngine.Explain'
-                )}</span><div class='ibs-content ibs-editor-text ibs-mr8'>${question.analysis ||
+                )}</span><div class='ibs-content ibs-editor-text ibs-mr8 js-ai-analysis${question.id}'>${question.analysis ||
                   t('itemReport.no_analysis')}</div>`
               "
             ></div>
+            <div
+              class="ibs-ai-explain ibs-mt16"
+              v-show="
+                question.aiAnalysisEnable &&
+                  mode === 'report' &&
+                  isShowAiAnalysis
+              "
+            >
+              <div class="ibs-ai-left">
+                <p class="ai-left-tittle">
+                  {{ t("itemEngine.aiAssistant") }}
+                </p>
+                <button
+                  class="ai-left-btn"
+                  v-show="isShowAiExplain"
+                  @click="aiGeneration()"
+                >
+                  <img src="@/image/explain-ai.png" class="ai-left-img" />
+                  <span class="ai-left-text">{{
+                      t("itemEngine.analysis")
+                    }}</span>
+                </button>
+                <button
+                  class="ai-left-stopbtn"
+                  v-show="stopAiExplain"
+                  @click="stopAiGeneration()"
+                >
+                  <img src="@/image/explain-stop.png" class="ai-left-img" />
+                  <span class="ai-left-text">{{
+                      t("itemEngine.stopGeneration")
+                    }}</span>
+                </button>
+                <button
+                  class="ai-left-stopbtn"
+                  v-show="anewAiExplain"
+                  @click="aiGeneration()"
+                >
+                  <img src="@/image/explain-anew.png" class="ai-left-img" />
+                  <span class="ai-left-text">
+                    {{ t("itemEngine.reGenerate") }}</span
+                  >
+                </button>
+                <span class="ai-left-content">
+                  {{ t("itemEngine.aiAnalysisRefer") }}
+                </span>
+              </div>
+              <div class="ibs-ai-right">
+                <img src="@/image/explain-ai-img.png" class="ai-right-img" />
+              </div>
+            </div>
             <div
               v-if="getAttachmentTypeData('analysis').length > 0"
               class="ibs-mt16"
@@ -147,6 +252,7 @@
 import attachmentPreview from "../attachment-preview/src/attachment.vue";
 import Emitter from "common/vue/mixins/emitter";
 import Locale from "common/vue/mixins/locale";
+import loadScript from "load-script";
 
 export default {
   name: "answer-model",
@@ -155,7 +261,17 @@ export default {
     return {
       isTag: false,
       isCollect: false,
-      canShowAnalysis: false
+      canShowAnalysis: false,
+      isShowAiExplain: true,
+      isStopComplete: false,
+      isMessageEnd: false,
+      stopAiExplain: false,
+      anewAiExplain: false,
+      unableGenerateTips: false,
+      answers: [],
+      analysisEditor: "",
+      questionAnalysis: "",
+      analysisEditBySelf: false,
     };
   },
   components: {
@@ -180,7 +296,6 @@ export default {
         : "ib-icon ib-icon-favoriteoutline";
     },
     deleteTip() {
-      console.log(this.itemType);
       return this.itemType === "material"
         ? this.t("itemEngine.questionIsDeleted")
         : this.t("itemEngine.itemIsDeleted");
@@ -190,7 +305,7 @@ export default {
       if (this.doingLookAnalysis) {
         return this.canShowAnalysis;
       } else {
-        return this.mode !== "do" && this.mode !== "review";
+        return this.mode !== "do" && this.mode !== "review" && this.mode !== "import";
       }
     },
     showCollectBtn() {
@@ -240,7 +355,7 @@ export default {
       return score + this.t("itemEngine.score");
     }
   },
-  inject: ["cdnHost", "previewAttachmentCallback"],
+  inject: ["cdnHost", "previewAttachmentCallback", "showCKEditorData"],
   props: {
     question: {
       type: Object,
@@ -301,23 +416,75 @@ export default {
         return [];
       }
     },
+    seq: {
+      type: String,
+    },
     section_responses: {
       type: Array,
       default() {
         return [];
       }
-    }
+    },
+    isShowAiAnalysis: {
+      type: Boolean,
+      default: true,
+    },
   },
   mounted() {
     // 判断是否被收藏
     this.isTag = this.section_responses[0]?.item_responses[
       Number(this.question.seq) - 1
-    ].question_responses[0].isTag;
+    ]?.question_responses[0].isTag;
     if (this.questionFavoritesItem.question_id) {
       this.isCollect = true;
     }
+    if (this.mode === "import" && this.question.aiAnalysisEnable) {
+      this.$nextTick(() => {
+        loadScript(this.showCKEditorData.jqueryPath, err => {
+          if (err) {
+            console.log(err);
+          }
+          loadScript(this.showCKEditorData.publicPath, err => {
+            if (err) {
+              console.log(err);
+            }
+            this.initBaseAnalysis();
+          });
+        });
+      });
+    }
+  },
+  watch: {
+    question: {
+      handler(question) {
+        if (!this.analysisEditBySelf) {
+          this.analysisEditor.setData(question.analysis);
+        }
+        this.analysisEditBySelf = false;
+      },
+      deep: true
+    }
   },
   methods: {
+    replaceHtmlSpace(htmlStr) {
+      return htmlStr ? htmlStr.replace(/ /g, " ") : "";
+    },
+    initBaseAnalysis() {
+      this.analysisEditor = window.CKEDITOR.replace(`analysis${this.seq}`, {
+        toolbar: "Minimal",
+        fileSingleSizeLimit: this.showCKEditorData.fileSingleSizeLimit,
+        filebrowserImageUploadUrl: this.showCKEditorData
+          .filebrowserImageUploadUrl,
+        filebrowserImageDownloadUrl: this.showCKEditorData
+          .filebrowserImageDownloadUrl,
+        language: this.showCKEditorData.language
+      });
+      this.analysisEditor.setData(this.question.analysis);
+      this.analysisEditor.on("change", () => {
+        this.analysisEditBySelf = true;
+        this.$emit("changeAnalysis", this.seq, this.analysisEditor.getData());
+      });
+    },
     changeTag() {
       this.isTag = !this.isTag;
       this.$emit("changeTag", this.isTag);
@@ -341,7 +508,67 @@ export default {
     lookAnalysis() {
       this.canShowAnalysis = !this.canShowAnalysis;
       this.$emit("setMaterialAnalysis", this.canShowAnalysis, this.keys);
-    }
+    },
+    aiGeneration() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.$emit("aiGenerates", this.question.id, this.finished);
+    },
+    stopAiGeneration() {
+      this.stopAiExplain = false;
+      this.isShowAiExplain = false;
+      this.anewAiExplain = true;
+      this.$emit("stopAiAnalysis", this.question.id);
+    },
+    aiGenerationBtn() {
+      this.$emit(
+        "genAiAnalysis",
+        this.disable,
+        this.enable,
+        this.complete,
+        this.finish
+      );
+    },
+    disable() {
+      this.unableGenerateTips = true;
+    },
+    enable() {
+      this.isShowAiExplain = false;
+      this.stopAiExplain = true;
+      this.anewAiExplain = false;
+      this.analysisEditor.setData("");
+      this.answers = [];
+      this.isStopComplete = false;
+      const typingTimer = setInterval(() => {
+        if (this.answers.length === 0) {
+          return;
+        }
+        if (this.isStopComplete) {
+          clearInterval(typingTimer);
+          return;
+        }
+        this.analysisEditor.insertHtml(this.answers.shift());
+        if (this.answers.length === 0 && this.isMessageEnd) {
+          this.finished();
+          clearInterval(typingTimer);
+        }
+      }, 50);
+    },
+    complete(answer) {
+      this.answers.push(answer);
+    },
+    finish() {
+      this.isMessageEnd = true;
+    },
+    finished() {
+      this.stopAiExplain = false;
+      this.anewAiExplain = true;
+    },
+    stopAiGenerationBtn() {
+      this.finished();
+      this.isStopComplete = true;
+    },
   }
 };
 </script>

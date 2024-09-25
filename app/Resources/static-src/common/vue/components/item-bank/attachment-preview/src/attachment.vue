@@ -112,6 +112,7 @@
           :cancel-text="t('attachmentPreview.cancel')"
           @confirm="deleteAttachment"
         >
+          <a-icon slot="icon" type="question-circle-o" style="color: red" />
           <img
             width="30"
             class="ibs-mr16 ibs-cusor-pointer ibs-left"
@@ -310,7 +311,7 @@ export default {
     isDelete() {
       //   预览删除按钮-学员上传附件删除按钮。
       //   return this.finalMode === "create" || this.module === "answer";
-      return this.module === "answer";
+      return ['answer', 'stem', 'analysis'].includes(this.module);
     },
     buttonNum() {
       const btnArray = [this.isDelete, this.isDownload, this.isPreview];
