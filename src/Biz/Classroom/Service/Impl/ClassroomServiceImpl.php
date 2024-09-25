@@ -2263,9 +2263,29 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
     {
-        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+        try {
+            $this->beginTransaction();
+            $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+            $this->getCourseMemberService()->changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
+            $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
 
-        return $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+    public function changeMembersDeadlineByDate($classroomId, $date)
+    {
+        try {
+            $this->beginTransaction();
+            $this->updateMember($classroomId, $date);
+            $this->getCourseMemberService()->updateMembersDeadlineByClassroomId($classroomId, $date['deadline']);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function updateMember($id, $member)

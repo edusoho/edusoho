@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Assessment\AssessmentException;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Testpaper\ExerciseException;
@@ -17,9 +18,23 @@ class ItemBankExerciseAssessmentExerciseRecord extends AbstractResource
         if ('closed' == $exercise['status']) {
             throw ExerciseException::CLOSED_EXERCISE();
         }
+        $assessmentId = $request->request->get('assessmentId', '');
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        if ($assessment['status'] == 'closed') {
+            throw AssessmentException::ASSESSMENT_CLOSED();
+        }
+        if ('0' != $assessment['parent_id']) {
+            $assessmentParent = $this->getAssessmentService()->getAssessment($assessment['parent_id']);
+            if ('closed' == $assessmentParent['status']) {
+                throw AssessmentException::ASSESSMENT_CLOSED();
+            }
+        }
+        if ('aiPersonality' == $assessment['type'] && 0 != $assessment['parent_id']) {
+            $assessmentId = $assessment['parent_id'];
+        }
         $assessmentExerciseRecord = $this->getItemBankAssessmentExerciseService()->startAnswer(
             $request->request->get('moduleId', ''),
-            $request->request->get('assessmentId', ''),
+            $assessmentId,
             $user['id']
         );
         $answerRecord = $this->getAnswerRecordService()->get($assessmentExerciseRecord['answerRecordId']);

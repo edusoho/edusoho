@@ -24,7 +24,11 @@
               {% endif %}
             </div>
             {% set testMode = activity.ext.answerScene.start_time > 0 ? 'realTime' : 'normal' %}
-            {% if testpaper.item_count|default(0) == 0 %}
+            {% if not testpaper %}
+              <div class="content">
+                <div class="text-16">{{ 'course.testpaper_check.testpaper_delete'|trans }}</div>
+              </div>
+            {% elseif testpaper.item_count|default(0) == 0 %}
               <div class="content">
                 <div class="text-16">{{ 'course.start_answer.all_question_deleted'|trans }}</div>
               </div>

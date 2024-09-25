@@ -19,14 +19,29 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AnswerEngineController extends BaseController
 {
-    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0, $showSaveProgressBtn = 1)
+    public function doAction(Request $request, $answerRecordId, $submitGotoUrl, $saveGotoUrl, $showHeader = 0, $showSaveProgressBtn = 1, $returnUrl = '', $contract = [])
     {
+        // 修复当课程包含模拟考试，答题会出现两个签署弹窗
+        if (!str_contains($request->getUri(), 'module')) {
+            $contract['sign'] = 'no';
+        }
         return $this->render('answer-engine/answer.html.twig', [
             'answerRecord' => $this->getAnswerRecordService()->get($answerRecordId),
             'submitGotoUrl' => $submitGotoUrl,
             'saveGotoUrl' => $saveGotoUrl,
             'showHeader' => $showHeader,
             'showSaveProgressBtn' => $showSaveProgressBtn,
+            'returnUrl' => $returnUrl,
+            'contract' => $contract,
+        ]);
+    }
+
+    public function messageAction($message, $returnUrl, $showHeader = 1)
+    {
+        return $this->render('answer-engine/message.html.twig', [
+            'message' => $message,
+            'returnUrl' => $returnUrl,
+            'showHeader' => $showHeader,
         ]);
     }
 
@@ -39,6 +54,8 @@ class AnswerEngineController extends BaseController
             'collect' => true === $collect ? 1 : 0,
             'showDoAgainBtn' => isset($options['showDoAgainBtn']) ? $options['showDoAgainBtn'] : 1,
             'submitReturnUrl' => isset($options['submitReturnUrl']) ? $options['submitReturnUrl'] : '',
+            'returnUrl' => $options['returnUrl'] ?? '',
+            'assessmentStatus' => $options['assessmentStatus'] ?? '',
         ]);
     }
 

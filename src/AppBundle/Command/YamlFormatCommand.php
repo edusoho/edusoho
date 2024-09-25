@@ -29,7 +29,6 @@ class YamlFormatCommand extends BaseCommand
         $rootPath = $this->getContainer()->getParameter('kernel.root_dir');
         $routingPaths = [
             'app_routing' => "{$rootPath}/../src/AppBundle/Resources/config/routing.yml",
-            'app_routing_admin' => "{$rootPath}/../src/AppBundle/Resources/config/routing_admin.yml",
             'app_routing_admin_v2' => "{$rootPath}/../src/AppBundle/Resources/config/routing_admin_v2.yml",
         ];
         $parameterPaths = [

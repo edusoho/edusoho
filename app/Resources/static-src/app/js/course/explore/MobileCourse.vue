@@ -81,13 +81,13 @@
       </div>
       <div class="empty" v-else>暂无数据</div>
     </div>
-    <van-pagination 
+    <van-pagination
       v-if="total>10"
-      v-model="pageNum" 
+      v-model="pageNum"
       @change="changePage"
-      force-ellipses 
-      style="width: 200px; margin: 0 auto; justify-content: center;" 
-      :total-items="total" 
+      force-ellipses
+      style="width: 200px; margin: 0 auto; justify-content: center;"
+      :total-items="total"
       :show-page-size="5">
       <template #prev-text>
         <van-icon name="arrow-left" />
@@ -215,6 +215,9 @@ export default {
       console.log(data);
     },
     async getLevelInfo() {
+      if (!this.vipSetting.enabled) {
+        return;
+      }
       const data = await More.getVipLevels();
       this.vipLevels = data;
     },

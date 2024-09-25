@@ -31,6 +31,7 @@
         <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
         <input type="hidden" name="category" value="{{ categoryTree|json_encode }}">
         <input type="hidden" name="question_bank_attachment_setting" value="{{ setting('question_bank_attachment_setting')|json_encode }}">
+        <input type="hidden" name="ai_analysis_enable" value="{{ setting('question_ai_analysis.teacher_enabled', 0) }}">
         {% include 'attachment-upload/upload-data.html.twig' %}
         {% if mode == 'edit' %}
           <input type="hidden" name="update_url" value="{{ path('question_bank_manage_question_update', app.request.query.all|merge({id: questionBank.id, questionId: item.id})) }}">

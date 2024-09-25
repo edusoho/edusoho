@@ -78,6 +78,7 @@ class AssessmentExerciseDaoImpl extends AdvancedDaoImpl implements AssessmentExe
                 'exerciseId = :exerciseId',
                 'moduleId = :moduleId',
                 'assessmentId = :assessmentId',
+                'assessmentId in (:assessmentIds)',
             ],
         ];
     }

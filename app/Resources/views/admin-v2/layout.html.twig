@@ -252,6 +252,10 @@
     {% block faqSDK %}
       {% include 'admin-v2/faq/sdk.html.twig' %}
     {% endblock %}
+
+    {% if setting('copyright.thirdCopyright') != 1 and has_permission('admin_v2_cloud_center') %}
+      <input type="hidden" name="aiSurveyUrl" value="{{ path('admin_v2_ai_survey') }}">
+    {% endif %}
   </body>
 {% endblock %}
 </html>

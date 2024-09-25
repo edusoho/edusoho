@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use ApiBundle\Api\Exception\ErrorCode;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\OAuthClient\OAuthClientFactory;
 use Biz\Common\BizSms;
@@ -11,10 +12,13 @@ use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Biz\User\UserException;
 use Endroid\QrCode\QrCode;
+use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
+use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class LoginController extends BaseController
 {
@@ -160,6 +164,60 @@ class LoginController extends BaseController
             'error' => $error,
             '_target_path' => $this->getTargetPath($request),
         ]);
+    }
+
+    public function externalLoginAction(Request $request)
+    {
+        //新增开关校验
+        $setting = $this->getSettingService()->get('api');
+
+        if (empty($setting['external_switch'])) {
+            throw new BadRequestHttpException('API设置未开启', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        $token = $request->get('token', '');
+        if (!$token) {
+            throw new BadRequestHttpException('请求参数错误', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        $data = JWT::decode($token, $setting['api_app_secret_key'], ['HS256']);
+        if (empty($data) || empty($data->identifyValue) || empty($data->identifyType) || !in_array($data->identifyType, ['username', 'mobile', 'email'])) {
+            throw new BadRequestHttpException('请求参数错误', null, ErrorCode::INVALID_ARGUMENT);
+        }
+
+        $user = $this->getUserService()->getUserByLoginTypeAndField($data->identifyType, $data->identifyValue);
+        if (empty($user)) {
+            return $this->createMessageResponse('error', 'external.login.message.error', null, 0);
+        }
+
+        $this->authenticateUser($user);
+
+        return $this->redirect($this->generateUrl('homepage'));
+    }
+
+    public function h5LoginAction(Request $request)
+    {
+        $goto = $request->get('goto', '');
+        $requestToken = $this->getTokenService()->verifyToken('mobile_login', $request->get('token'));
+        if (empty($requestToken) || MobileBaseController::TOKEN_TYPE != $requestToken['type']) {
+            throw UserException::NOTFOUND_TOKEN();
+        }
+
+        $user = $this->getUserService()->getUser($requestToken['userId']);
+        if (empty($user)) {
+            throw UserException::NOTFOUND_USER();
+        }
+
+        if ($user['locked']) {
+            throw UserException::LOCKED_USER();
+        }
+        if (!strpos($goto, 'contract')) {
+            throw CommonException::ERROR_PARAMETER();
+        }
+
+        $this->authenticateUser($user);
+
+        return $this->redirect($goto);
     }
 
     public function ajaxAction(Request $request)

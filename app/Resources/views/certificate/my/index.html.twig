@@ -37,7 +37,7 @@
         </div>
         <div class="mycert-card-right pull-right" {% if app.request.getLocale() == 'en' %}style="width: 200px"{% endif %}>
           <p>
-            <a class="cd-btn cd-btn-primary" target="_blank" href="{{ path('certificate_record', {recordId:certificateRecord.id}) }}">{{ 'user.certificates.look_cert'|trans }}</a>
+            <a class="cd-btn cd-btn-primary" target="_blank" href="{{ path('certificate_record', {recordId: certificateRecord.certificateCode}) }}">{{ 'user.certificates.look_cert'|trans }}</a>
             <a class="cd-btn cd-btn-primary cd-ml16" download="{{ certificate.name|default('-') }}.png" href="{{ path('certificate_image_download', {recordId:certificateRecord.id}) }}">{{ 'user.certificates.download_cert'|trans }}</a>
           </p>
           <p class="cd-mt16 cd-mr8">

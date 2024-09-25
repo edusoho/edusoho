@@ -9,4 +9,8 @@ final class LogModule
     const LIVE = 'live';
 
     const OPEN_COURSE = 'open_course';
+
+    const AI = 'ai';
+
+    const CONTRACT = 'contract';
 }

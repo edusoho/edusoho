@@ -3,28 +3,17 @@
 namespace Biz\Testpaper\Wrapper;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Question\Traits\QuestionAIAnalysisTrait;
+use Biz\Question\Traits\QuestionAnswerModeTrait;
 use Biz\Question\Traits\QuestionFormulaImgTrait;
-use Codeages\Biz\ItemBank\Item\AnswerMode\ChoiceAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\RichTextAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\SingleChoiceAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\TextAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\TrueFalseAnswerMode;
-use Codeages\Biz\ItemBank\Item\AnswerMode\UncertainChoiceAnswerMode;
 use Codeages\Biz\ItemBank\Item\Service\AttachmentService;
 use Topxia\Service\Common\ServiceKernel;
 
 class TestpaperWrapper
 {
     use QuestionFormulaImgTrait;
-
-    protected $modeToType = [
-        SingleChoiceAnswerMode::NAME => 'single_choice',
-        ChoiceAnswerMode::NAME => 'choice',
-        UncertainChoiceAnswerMode::NAME => 'uncertain_choice',
-        TrueFalseAnswerMode::NAME => 'determine',
-        TextAnswerMode::NAME => 'fill',
-        RichTextAnswerMode::NAME => 'essay',
-    ];
+    use QuestionAIAnalysisTrait;
+    use QuestionAnswerModeTrait;
 
     protected $answerStatus = [
         'right' => 'right',
@@ -130,6 +119,21 @@ class TestpaperWrapper
                 if (1 != $item['isDelete']) {
                     $items[$item['id']] = $this->wrapItem($item);
                 }
+            }
+        }
+
+        return $items;
+    }
+
+    public function wrapAIAnalysis($items)
+    {
+        foreach ($items as &$item) {
+            if ('material' == $item['type']) {
+                foreach ($item['subs'] as &$question) {
+                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($question, $item);
+                }
+            } else {
+                $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($item);
             }
         }
 
@@ -275,8 +279,13 @@ class TestpaperWrapper
     /**
      * @return AttachmentService
      */
-    protected function getAttachmentService()
+    private function getAttachmentService()
     {
-        return ServiceKernel::instance()->createService('ItemBank:Item:AttachmentService');
+        return $this->getBiz()->service('ItemBank:Item:AttachmentService');
+    }
+
+    private function getBiz()
+    {
+        return ServiceKernel::instance()->getBiz();
     }
 }

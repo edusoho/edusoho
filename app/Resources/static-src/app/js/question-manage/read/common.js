@@ -238,7 +238,7 @@ const registerEvent = function ($importBox) {
   });
 
   $('[data-toggle="popover"]').popover();
-  if (!store.get('QUESTION_IMPORT_DUIDE')) {
+  if (!store.get('QUESTION_IMPORT_GUIDE')) {
     $modalGuideTitle.removeClass('hidden')
     $modalTitle.addClass('hidden')
     $modalGuideInfo.removeClass('hidden')
@@ -254,7 +254,7 @@ const registerEvent = function ($importBox) {
     $modalContent.removeClass('hidden')
     $modalGuideBtn.addClass('hidden')
     $importRuleBtn.removeClass('hidden')
-    store.set('QUESTION_IMPORT_DUIDE', true);
+    store.set('QUESTION_IMPORT_GUIDE', true);
   })
 };
 initTooltips()

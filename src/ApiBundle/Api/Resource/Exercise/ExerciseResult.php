@@ -155,6 +155,7 @@ class ExerciseResult extends AbstractResource
         $answerReport = $this->getAnswerReportService()->getSimple($exerciseRecord['answer_report_id']);
         $exerciseResult = $testpaperWrapper->wrapTestpaperResult($exerciseRecord, $exercise, $scene, $answerReport);
         $exerciseResult['items'] = array_values($testpaperWrapper->wrapTestpaperItems($assessment, $questionReports));
+        $exerciseResult['items'] = $testpaperWrapper->wrapAIAnalysis($exerciseResult['items']);
         $exerciseResult['items'] = $this->fillItems($exerciseResult['items'], $questionReports);
         $exerciseResult['rightRate'] = $this->getRightRate($exerciseResult['items']);
 

@@ -190,6 +190,8 @@ interface ClassroomService
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
 
+    public function changeMembersDeadlineByDate($classroomId, $date);
+
     public function updateMember($id, $member);
 
     public function searchMemberCount($conditions);

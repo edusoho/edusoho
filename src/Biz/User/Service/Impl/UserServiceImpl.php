@@ -287,6 +287,29 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function getUserByLoginTypeAndField($loginType, $loginValue)
+    {
+        switch ($loginType) {
+            case 'email':
+                $user = $this->getUserDao()->getByEmail($loginValue);
+                break;
+            case 'mobile':
+                $user = $this->getUserDao()->getByVerifiedMobile($loginValue);
+                break;
+            case 'username':
+                $user = $this->getUserDao()->getByNickname($loginValue);
+                break;
+            default:
+                throw $this->createInvalidArgumentException('Identify Type Invalid');
+        }
+
+        if ((isset($user['type']) && 'system' == $user['type']) || (!empty($user['locked']))) {
+            return null;
+        }
+
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
     public function getUserByVerifiedMobile($mobile)
     {
         if (empty($mobile)) {

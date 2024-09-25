@@ -595,6 +595,10 @@ admin_v2:
                                             router_name: admin_v2_question_bank_category_manage_create
                                             group: topBtn
                                             mode: modal
+                                admin_v2_question_ai_analysis:
+                                   name: admin_v2.question.ai_analysis_tab
+                                   router_name: admin_v2_question_ai_analysis
+                                   disable: true
         # 营销管理模块
         admin_v2_marketing:
             quick_entrance_icon_class: 'icon-color-orange'
@@ -1536,6 +1540,14 @@ admin_v2:
                                     name: admin_v2.system.user_content_ctrl.private_message
                                     router_name: admin_v2_user_content_control_private_message
                                     disable: true
+                        admin_v2_course_contract:
+                          router_name: admin_v2_contract
+                          name: admin_v2_system.contract
+                          children:
+                            admin_v2_contract_manage:
+                              name: admin_v2_system.contract_manage
+                              router_name: admin_v2_contract_manage
+                              disable: true
                         admin_v2_course_purchase_agreement:
                           router_name: admin_v2_course_purchase_agreement
                           name: admin_v2.system.course_purchase_agreement_tab

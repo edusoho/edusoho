@@ -1,0 +1,49 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog ai-apply-modal' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/admin-v2/ai/apply/index.js']) %}
+
+{% block modal_header %}
+    <div class="apply-modal-header">
+      <div class="apply-modal-title">
+        <span class="apply-modal-title-left"></span>
+        <p class="apply-modal-center">免费试用</p>
+        <span class="apply-modal-title-right"></span>
+      </div>
+      <button type="button" class="close apply-modal-close" data-dismiss="modal" aria-hidden="true">
+        <i class="cd-icon cd-icon-close"></i>
+      </button>         
+    </div>
+ {% endblock %}
+
+{% block body %}
+  <form id="apply-form" action="{{ path('admin_v2_ai_like_feature') }}" class="apply-modal-form">
+    <div class="controls">
+      <img src="{{ asset('static-dist/app/img/admin-v2/apply-modeal-user-line.png') }}" alt="" class="apply-modal-name-image">
+      <input type="text" name="name" value="{{ name }}" class="apply-modal-name" placeholder="请输入姓名"/>
+      <div class="help-block" style="display:none;"></div>
+    </div>
+    <div class="controls">
+      <img src="{{ asset('static-dist/app/img/admin-v2/apply-modeal-smartphone-line.png') }}" alt="" class="apply-modal-mobile-image">
+      <input type="text" name="mobile" value="{{ mobile }}" class="apply-modal-mobile" placeholder="请输入手机号"/>
+      <div class="help-block" style="display:none;"></div>
+    </div>
+    <input type="hidden" name="feature" value="{{ feature }}">
+    <div class="apply-modal-apply js-apply-btn">申请试用</div>
+  </form>
+  <div class="apply-success">
+    <span class="apply-success-img">
+      <img src="{{ asset('static-dist/app/img/admin-v2/success-img.png') }}" alt="">
+    </span>
+    <div class="apply-success-title">
+      <span class="apply-success-title-left"></span>
+      <span class="apply-success-title-center">提交申请成功</span>
+      <span class="apply-success-title-right"></span>
+    </div>
+    <div class="apply-success-text-wrap">
+      <p class="apply-success-text">在此期间，请保持您所提供的联系方式畅通。我们将尽快与您取得联系，以便进一步讨论您的需求或提供相关帮助。</p>
+    </div>
+    <div class="apply-modal-btn js-confirm">知道了</div>
+  </div>
+{% endblock %}

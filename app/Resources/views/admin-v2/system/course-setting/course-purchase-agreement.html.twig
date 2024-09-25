@@ -4,6 +4,11 @@
 
 {% do script(['app/vue/views/system/purchase_agreement/index.js']) %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/admin-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block content %}
   {% include 'admin-v2/widget/side-bar.html.twig' %}
   <div class="cd-layout-aside">

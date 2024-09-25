@@ -27,24 +27,19 @@ class TestpaperInfo extends AbstractResource
         if (!$user->isLogin()) {
             throw UserException::UN_LOGIN();
         }
-
         $assessment = $this->getAssessmentService()->showAssessment($testId);
 
         if (empty($assessment)) {
             throw TestpaperException::NOTFOUND_TESTPAPER();
         }
-
-        if ('closed' == $assessment['status']) {
-            throw TestpaperException::CLOSED_TESTPAPER();
-        }
-
-        $results = $this->wrapTeatpaper($assessment);
-
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         if (empty($targetType) || empty($targetId)) {
             throw CommonException::ERROR_PARAMETER();
         }
+
+        $results = $this->wrapTeatpaper($assessment);
+
         $method = 'handle'.$targetType;
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
@@ -73,7 +68,9 @@ class TestpaperInfo extends AbstractResource
 
         $scene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
         $testpaperRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
-
+        if ('closed' == $assessment['status'] && empty($testpaperRecord)) {
+            throw TestpaperException::CLOSED_TESTPAPER();
+        }
         if (empty($testpaperRecord) && $scene['end_time'] && $scene['end_time'] < time()) {
             $this->getAnswerService()->batchAutoSubmit($scene['id'], $activity['ext']['mediaId'], [$user['id']]);
 

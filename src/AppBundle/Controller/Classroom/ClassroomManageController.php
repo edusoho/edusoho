@@ -16,6 +16,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\MemberOperation\Service\MemberOperationService;
@@ -62,6 +63,10 @@ class ClassroomManageController extends BaseController
             $coursePrice += $course['originPrice'];
         }
         $courseNum = count($courses);
+        $relatedContract = $this->getContractService()->getRelatedContractByGoodsKey("classroom_{$id}");
+        $classroom['contractId'] = $relatedContract['contractId'] ?? 0;
+        $classroom['contractForceSign'] = empty($relatedContract['sign']) ? 0 : 1;
+        $classroom['contractName'] = $relatedContract['contractName'] ?? '';
 
         return $this->render(
             'classroom-manage/index.html.twig',
@@ -315,7 +320,8 @@ class ClassroomManageController extends BaseController
             if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
-            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $operateUser = $this->getUser();
+            $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
             $data['isNotify'] = 1;
             $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 
@@ -496,7 +502,7 @@ class ClassroomManageController extends BaseController
                     return $this->createJsonResponse(true);
                 }
                 $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
-                $this->getClassroomService()->updateMember(['classroomId' => $classroomId], ['deadline' => $date]);
+                $this->getClassroomService()->changeMembersDeadlineByDate(['classroomId' => $classroomId], ['deadline' => $date]);
 
                 return $this->createJsonResponse(true);
             }
@@ -684,6 +690,11 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->updateClassroomInfo($id, $class);
         if ($this->isPluginInstalled('Vip')) {
             $this->setVipRight($id, $class);
+        }
+        if (empty($class['contractEnable'])) {
+            $this->getContractService()->unRelateContract("classroom_{$id}");
+        } else {
+            $this->getContractService()->relateContract($class['contractId'], "classroom_{$id}", $class['contractForceSign']);
         }
 
         return $this->createJsonResponse(true);
@@ -1502,5 +1513,13 @@ class ClassroomManageController extends BaseController
     protected function getReportService()
     {
         return $this->getBiz()->service('Classroom:ReportService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }

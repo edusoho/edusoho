@@ -587,6 +587,7 @@ admin_v2.question_bank.basic_tab: 题库管理
 admin_v2.question_bank.basic_tab.create_btn: 创建题库
 admin_v2.question_bank.category_tab: 题库分类管理
 admin_v2.question_bank.category_tab.create_btn: 添加分类
+admin_v2.question.ai_analysis_tab: AI题目解析
 
 #通用按钮
 admin_v2.btn.recommend_cancel_btn: 取消推荐
@@ -940,6 +941,8 @@ admin_v2.system.user_content_audit_menu: 内容审核设置
 admin_v2.system.user_content_audit_tab: 用户内容审核设置
 admin_v2.system.course_purchase_agreement_tab: 购买协议设置
 admin_v2_system.course_purchase_agreement.eduit: 协议编辑
+admin_v2_system.contract: 电子合同
+admin_v2_system.contract_manage: 电子合同管理
 
 # 系统-交易设置-资产设置
 admin_v2.system.asset_menu: 资产设置

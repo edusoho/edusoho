@@ -1,0 +1,40 @@
+{
+  "name": "vue3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "engines": {
+    "node": "16.20.2"
+  },
+  "packageManager": "npm",
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "ant-design-vue": "^4.2.3",
+    "lodash-es": "^4.17.21",
+    "smooth-signature": "^1.0.15",
+    "vanilla-picker": "^2.12.3",
+    "vue": "^3.4.35",
+    "vue-i18n": "^9.8.0",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.5",
+    "@babel/preset-env": "^7.23.5",
+    "@codeages/webpack-vue3": "^1.6.1",
+    "autoprefixer": "^10.4.16",
+    "babel-plugin-import": "^1.13.8",
+    "postcss": "^8.0.0",
+    "postcss-preset-env": "^9.3.0",
+    "tailwindcss": "^3.4",
+    "webpack": "^5.90.3"
+  },
+  "scripts": {
+    "serve": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/@codeages/webpack-vue3/dist/webpack.dev.js",
+    "serve:analyzer": "npm run serve analyzer:true",
+    "build": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/@codeages/webpack-vue3/dist/webpack.prod.js"
+  },
+  "volta": {
+    "node": "16.20.2"
+  }
+}

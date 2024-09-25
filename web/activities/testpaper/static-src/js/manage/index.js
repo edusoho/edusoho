@@ -80,6 +80,7 @@ class Testpaper {
     this.$element = $element;
     this.$form = this.$element.find('#step2-form');
     this.$questionBankSelector = this.$element.find('#question-bank');
+    this.$testpaperTypeSelector = this.$element.find('#testpaper-type');
     this.$testpaperSelector = this.$element.find('#testpaper-media');
     this.$questionItemShow = this.$element.find('#questionItemShowDiv');
     this.$scoreItem = this.$element.find('.js-score-form-group');
@@ -92,6 +93,7 @@ class Testpaper {
     dateFormat();
     this.setValidateRule();
     this.initQuestionBankSelector();
+    this.initTestPaperTypeSelector();
     this.initTestPaperSelector();
     this.initSelectTestPaper(this.$testpaperSelector.select2('data'));
     this.initEvent();
@@ -99,6 +101,8 @@ class Testpaper {
     this.initAddComment();
     this.initDatePicker();
     this.initFormItemData();
+    this.initAdvancedSettings();
+    this.changeContentHight();
 
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
@@ -132,7 +136,17 @@ class Testpaper {
         $this.next().val(reverseEnable);
       });
     }
+  }
 
+  changeContentHight() {
+    $('.testpaperTimeRange').on('focus', function() {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
+    });
+    $('.testpaperTimeRange').on('blur', function() {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
+    });
   }
 
   initDatePicker() {
@@ -197,6 +211,25 @@ class Testpaper {
     }
   }
 
+  initAdvancedSettings() {
+    $('#toggle-advanced-settings').on('click', function() {
+      var $advancedSettings = $('#advanced-settings');
+      var $icon = $(this).find('.es-icon');
+
+      if ($icon.hasClass('es-icon-xiangshang')) {
+        $icon.removeClass('es-icon-xiangshang').addClass('es-icon-xiangxia');
+      } else {
+        $icon.removeClass('es-icon-xiangxia').addClass('es-icon-xiangshang');
+      }
+
+      if ($advancedSettings.css('display') === 'none') {
+        $advancedSettings.css('display', 'block');
+      } else {
+        $advancedSettings.css('display', 'none');
+      }
+    });
+  }
+
   setValidateRule() {
     $.validator.addMethod('arithmeticFloat', function (value, element) {
       return this.optional(element) || /^[0-9]+(\.[0-9]?)?$/.test(value);
@@ -213,6 +246,7 @@ class Testpaper {
 
   initEvent() {
     this.$element.find('#question-bank').on('change', event => this.changeQuestionBank(event));
+    this.$element.find('#testpaper-type').on('change', event => this.changeTestpaperType(event));
     this.$element.find('#testpaper-media').on('change', event => this.changeTestPaper(event));
     this.$element.find('input[name=validPeriodMode]').on('change', event => this.showRedoExamination(event));
     this.$element.find('input[name=isLimitDoTimes]').on('change', event => this.showRedoInterval(event));
@@ -230,7 +264,7 @@ class Testpaper {
         '                <input type="text" class="form-control" name="end[' + ii + ']" style="width: 47px; padding: 6px;">\n' +
         '              </td>\n' +
         '              <td class="form-inline">\n' +
-        '                <textarea name="comment[' + ii + ']" rows="1" maxlength="1500" class="form-control js-comment-content" style="width: 339px;margin-right: 15px;"></textarea>\n' +
+        '                <textarea name="comment[' + ii + ']" rows="1" maxlength="1500" class="form-control js-comment-content" style="width: 310px;margin-right: 15px;"></textarea>\n' +
         '                <div class="default-comment">\n' +
         '                  <a href="javascript:;" class="js-default-comment">' + Translator.trans('activity.testpaper_manage.default_comment') + '</a>\n' +
         '                   <div class="default-comment-list hidden">' +
@@ -255,7 +289,10 @@ class Testpaper {
       $(this).height(scrollHeight);
     });
     $customCommentTable.on('click', '.js-comment-remove', function () {
-      $(this).parent().parent().remove();
+      $(this).parent().parent().remove();  
+      if($customCommentTable.find('tr').length == 1) {
+        $customCommentTable.addClass('hidden')
+      }
     });
 
     $customCommentTable.on('click', '.js-default-comment-item', function () {
@@ -345,6 +382,32 @@ class Testpaper {
     }
   }
 
+  initSelectRandomTestPaper($selected) {
+    let mediaId = parseInt($selected.id);
+    if (mediaId) {
+      this.getItemsTable(this.$testpaperSelector.data('getTestpaperItems'), mediaId);
+      if (!$('input[name="title"]').val()) {
+        $('input[name="title"]').val($selected.text);
+      }
+      this.initScoreSlider();
+    } else {
+      $('#questionItemShowDiv').hide();
+      $('#js-test-and-comment').hide();
+    }
+  }
+
+  initEmptyTestPaperTypeSelector() {
+    this.$testpaperSelector.select2({
+      data: [
+        {
+          id: '0',
+          text: Translator.trans('activity.testpaper_manage.media_type_required'),
+          selected: true,
+        }
+      ],
+    });
+  }
+
   initEmptyTestPaperSelector() {
     this.$testpaperSelector.select2({
       data: [
@@ -357,11 +420,61 @@ class Testpaper {
     });
   }
 
+  initAjaxTestPaperTypeSelector() {
+    let self = this;
+    this.$testpaperTypeSelector.removeClass('hidden');
+    this.$testpaperTypeSelector.select2({
+      ajax: {
+        url: self.$testpaperTypeSelector.data('url'),
+        dataType: 'json',
+        quietMillis: 250,
+        results: function (data) {
+          if (data && Array.isArray(data.assessmentType)) {
+            let results = data.assessmentType.map(function(type) {
+              return {
+                id: type,
+                text: Translator.trans('activity.testpaper_'+type)
+              };
+            });
+            return {
+              results: results
+            };
+          } else {
+            return {
+              results: []
+            };
+          }
+        }
+      },
+      initSelection: function (element, callback) {
+        let testPaperType = $('#testPaperType').val();
+        let data = {
+          id: element.val(),
+          text: testPaperType ? Translator.trans('activity.testpaper_'+testPaperType) : Translator.trans('activity.testpaper_manage.media_type_required'),
+        };
+
+        callback(data);
+      },
+    });
+  }
+
+
   initAjaxTestPaperSelector() {
     let self = this;
+    let typeSelected = this.$testpaperTypeSelector.select2('data');
+    let type = typeSelected ? typeSelected.id : 0;
+
+    let baseUrl = self.$testpaperSelector.data('url');
+    let url = '';
+    if (type == 0) {
+      url = baseUrl + `?type=${$('#testPaperType').val()}`;
+    }else {
+      baseUrl = baseUrl.replace(/([&?]type=)[^&]+/, '');
+      url = baseUrl.includes('?') ? `${baseUrl}&type=${type}` : `${baseUrl}?type=${type}`;
+    }
     this.$testpaperSelector.select2({
       ajax: {
-        url: self.$testpaperSelector.data('url'),
+        url: url,
         dataType: 'json',
         quietMillis: 250,
         data: function (term, page) {
@@ -429,6 +542,14 @@ class Testpaper {
     });
   }
 
+  initTestPaperTypeSelector() {
+    if ($('#testPaperName').val()) {
+      this.initAjaxTestPaperTypeSelector();
+    } else {
+      this.initEmptyTestPaperTypeSelector();
+    }
+  }
+
   initTestPaperSelector() {
     if ($('#testPaperName').val()) {
       this.initAjaxTestPaperSelector();
@@ -438,6 +559,40 @@ class Testpaper {
   }
 
   changeQuestionBank(event) {
+    let $helpBlock = $('.js-help-block');
+    $helpBlock.addClass('hidden');
+    this.$testpaperSelector.addClass('hidden');
+    this.$testpaperTypeSelector.addClass('hidden');
+    this.$questionItemShow.hide();
+    this.$scoreItem.hide();
+    this.$testpaperSelector.val('0');
+    this.$testpaperTypeSelector.val('0');
+    let selected = this.$questionBankSelector.select2('data');
+    let bankId = selected.id;
+    if (!parseInt(bankId)) {
+      this.initEmptyTestPaperSelector();
+      return;
+    }
+    let url = this.$questionBankSelector.data('url');
+    url = url.replace(/[0-9]/, bankId);
+    let self = this;
+    $.post(url, function (resp) {
+      if (resp.totalCount === 0) {
+        $helpBlock.addClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.empty_tips')).show();
+        return;
+      }
+      if (resp.openCount === 0) {
+        $helpBlock.removeClass('color-danger').removeClass('hidden').text(Translator.trans('queston_bank.testpaper.no_open_tips')).show();
+        return;
+      }
+      self.$testpaperTypeSelector.data('url', url);
+      self.initAjaxTestPaperTypeSelector();
+    }).error(function (e) {
+      cd.message({ type: 'danger', message: e.responseJson.error.message });
+    });
+  }
+
+  changeTestpaperType(event) {
     let $helpBlock = $('.js-help-block');
     $helpBlock.addClass('hidden');
     this.$testpaperSelector.addClass('hidden');
@@ -451,8 +606,9 @@ class Testpaper {
       this.initEmptyTestPaperSelector();
       return;
     }
-    let url = this.$questionBankSelector.data('url');
-    url = url.replace(/[0-9]/, bankId);
+    let typeSelected = this.$testpaperTypeSelector.select2('data');
+    let type = typeSelected.id;
+    let url = this.$testpaperTypeSelector.data('url')+'?type='+type;
     let self = this;
     $.post(url, function (resp) {
       if (resp.totalCount === 0) {
@@ -474,7 +630,13 @@ class Testpaper {
 
   changeTestPaper(event) {
     let $selected = this.$testpaperSelector.select2('data');
-    this.initSelectTestPaper($selected);
+    let typeSelected = this.$testpaperTypeSelector.select2('data');
+    let type = typeSelected.id;
+    if (type == 'regular') {
+      this.initSelectTestPaper($selected);
+    }else if (type == 'random') {
+      this.initSelectRandomTestPaper($selected);
+    }
   }
 
   showRedoExamination(event) {

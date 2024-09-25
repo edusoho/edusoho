@@ -59,7 +59,7 @@
     "codeages/exam-parser": "dev-master",
     "doctrine/cache": "1.6.2",
     "codeages/biz-order-pay": "dev-master",
-    "codeages/escloud-php-sdk": "1.2.2",
+    "codeages/escloud-php-sdk": "1.2.8",
     "codeages/plumber2": "dev-master",
     "vlucas/valitron": "^1.4",
     "firebase/php-jwt": "^5.1",
@@ -68,7 +68,8 @@
     "edusoho-live/eslive-api-php-sdk": "^1.0",
     "symfony/http-client": "^4",
     "symfony/service-contracts": "^1",
-    "symfony/http-client-contracts": "^1.1.10"
+    "symfony/http-client-contracts": "^1.1.10",
+    "mpdf/mpdf": "^8.2"
   },
   "require-dev": {
     "phpunit/phpunit": "5.7.27",

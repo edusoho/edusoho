@@ -32,6 +32,12 @@ interface ItemService
 
     public function getItemCountGroupByTypes($conditions);
 
+    public function getItemCountGroupByDifficulty($conditions);
+
+    public function countItemGroupByCategoryIdAndType($conditions);
+
+    public function countItemGroupByCategoryId($conditions);
+
     public function findItemsByCategoryIds($categoryIds);
 
     public function deleteItem($id, $isBatch = false);
@@ -55,6 +61,8 @@ interface ItemService
     public function searchQuestions($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function getQuestionIncludeDeleted($questionId);
+
+    public function getQuestion($questionId);
 
     public function countItemTypesNum($items);
 

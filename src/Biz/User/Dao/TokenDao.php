@@ -2,15 +2,15 @@
 
 namespace Biz\User\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface TokenDao extends GeneralDaoInterface
+interface TokenDao extends AdvancedDaoInterface
 {
-    public function get($id, array $options = array());
+    public function get($id, array $options = []);
 
     public function getByToken($token);
 
-    public function create($token);
+    public function findByTokens(array $tokens);
 
     public function findByUserIdAndType($userId, $type);
 

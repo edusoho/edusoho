@@ -95,6 +95,9 @@ module.exports = {
       name: 'item-bank/lib/locale',
     },
     {
+      name: 'item-bank/lib/img',
+    },
+    {
       name: 'es5-shim/es5-shim.js',
     },
     {

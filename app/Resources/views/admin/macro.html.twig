@@ -1,32 +1,32 @@
 {% macro user_link(user, class) %}
   {% if user %}
-		<a {% if class %}class="{{ class }}"{% endif %} href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.uuid}) }}">{{ user.nickname }}</a>
-	{% else %}
-	  <span class="text-muted">{{'admin.macro.user_link.user_empty'|trans}}</span>
-	{% endif %}
+    <a {% if class %}class="{{ class }}"{% endif %} href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.uuid}) }}">{{ user.nickname }}</a>
+  {% else %}
+    <span class="text-muted">{{'admin.macro.user_link.user_empty'|trans}}</span>
+  {% endif %}
 {% endmacro %}
 
 {% macro bytesToSize(bytes) %}
-	{% spaceless %}
-	    
-	    {% set kilobyte = 1024 %}
-	    {% set megabyte = kilobyte * 1024 %}
-	    {% set gigabyte = megabyte * 1024 %}
-	    {% set terabyte = gigabyte * 1024 %}
+  {% spaceless %}
 
-	    {% if bytes < kilobyte %}
-	        {{ bytes ~ ' B' }}
-	    {% elseif bytes < megabyte %}
-	        {{ (bytes / kilobyte)|number_format(2, '.') ~ ' KB' }}
-	    {% elseif bytes < gigabyte %}
-	        {{ (bytes / megabyte)|number_format(2, '.') ~ ' MB' }}
-	    {% elseif bytes < terabyte %}
-	        {{ (bytes / gigabyte)|number_format(2, '.') ~ ' GB' }}
-	    {% else %}
-	        {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
-	    {% endif %}
+    {% set kilobyte = 1024 %}
+    {% set megabyte = kilobyte * 1024 %}
+    {% set gigabyte = megabyte * 1024 %}
+    {% set terabyte = gigabyte * 1024 %}
 
-	{% endspaceless %}
+    {% if bytes < kilobyte %}
+      {{ bytes ~ ' B' }}
+    {% elseif bytes < megabyte %}
+      {{ (bytes / kilobyte)|number_format(2, '.') ~ ' KB' }}
+    {% elseif bytes < gigabyte %}
+      {{ (bytes / megabyte)|number_format(2, '.') ~ ' MB' }}
+    {% elseif bytes < terabyte %}
+      {{ (bytes / gigabyte)|number_format(2, '.') ~ ' GB' }}
+    {% else %}
+      {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
+    {% endif %}
+
+  {% endspaceless %}
 {% endmacro %}
 
 {% macro paginator(paginator, class) %}
@@ -50,14 +50,14 @@
 				{{ (paginator.currentPage - 1) * paginator.perPageCount + 1 }}
       	-
 	      {% if paginator.currentPage == paginator.lastPage %}
-	        {{ paginator.itemCount }}
-	      {% else %}
-	        {{ paginator.currentPage * paginator.perPageCount }}
-	      {% endif %}
+          {{ paginator.itemCount }}
+        {% else %}
+          {{ paginator.currentPage * paginator.perPageCount }}
+        {% endif %}
 	      / {{ paginator.itemCount }}
 	    </span>
     </nav>
-    
+
   {% endif %}
 {% endmacro %}
 

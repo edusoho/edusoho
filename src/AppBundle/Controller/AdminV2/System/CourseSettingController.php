@@ -36,8 +36,8 @@ class CourseSettingController extends BaseController
             'coursesPrice' => '0',
             'allowAnonymousPreview' => '1',
             'copy_enabled' => '0',
-            'doc_water_mark_enabled' => 0,
-            'doc_water_mark_info' => '',
+            'task_page_watermark_enable' => 0,
+            'task_page_watermark_setting' => [],
             'testpaperCopy_enabled' => '0',
             'custom_chapter_enabled' => '0',
             'show_cover_num_mode' => 'studentNum',
@@ -93,6 +93,9 @@ class CourseSettingController extends BaseController
             $courseUpdateSetting = array_merge($courseDefaultSetting, $request->request->all());
 
             $courseSetting = array_merge($courseSetting, $courseUpdateSetting, $liveCourseSetting);
+            if (!empty($courseSetting['task_page_watermark_setting'])) {
+                $courseSetting['task_page_watermark_setting'] = json_decode($courseSetting['task_page_watermark_setting'], true);
+            }
 
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);

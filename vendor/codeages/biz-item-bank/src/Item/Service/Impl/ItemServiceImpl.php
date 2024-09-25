@@ -254,6 +254,23 @@ class ItemServiceImpl extends BaseService implements ItemService
         return $this->getItemDao()->getItemCountGroupByTypes($conditions);
     }
 
+    public function getItemCountGroupByDifficulty($conditions)
+    {
+        $conditions = $this->filterItemConditions($conditions);
+
+        return $this->getItemDao()->getItemCountGroupByDifficulty($conditions);
+    }
+
+    public function countItemGroupByCategoryIdAndType($conditions)
+    {
+        return $this->getItemDao()->countItemGroupByCategoryIdAndType($conditions);
+    }
+
+    public function countItemGroupByCategoryId($conditions)
+    {
+        return $this->getItemDao()->countItemGroupByCategoryId($conditions);
+    }
+
     public function findItemsByCategoryIds($categoryIds)
     {
         return $this->getItemDao()->findByCategoryIds($categoryIds);
@@ -516,6 +533,11 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function getQuestionIncludeDeleted($questionId)
     {
         return $this->getQuestionDao()->getIncludeDeleted($questionId);
+    }
+
+    public function getQuestion($questionId)
+    {
+        return $this->getQuestionDao()->get($questionId);
     }
 
     public function countItemTypesNum($items)
