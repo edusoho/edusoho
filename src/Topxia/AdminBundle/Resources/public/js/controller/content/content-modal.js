@@ -2,8 +2,6 @@ define(function(require, exports, module) {
     "use strict";
 
 	var Validator = require('bootstrap.validator');
-    // require('es-ckeditor');
-  window.CKEDITOR_BASEPATH = app.basePath + '/static-dist/libs/es-ckeditor/';
 
     Validator.addRule(
         'noNumberFirst',
