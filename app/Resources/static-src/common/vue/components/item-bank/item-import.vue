@@ -6,11 +6,11 @@
       @click="closeTip"
     >
       <div class="ai-problem-analysis-tips-left">
-        <img src="@/image/ai-analysis-tips-info.png" alt="" />
+        <img src="/static-dist/app/img/question-bank/ai-analysis-tips-info.png" alt="" />
         <span>{{ t("itemEngine.aiAnalysisTips") }}</span>
       </div>
       <div class="ai-problem-analysis-tips-right">
-        <img src="@/image/ai-analysis-tips-close.png" alt="" />
+        <img src="/static-dist/app/img/question-bank/ai-analysis-tips-close.png" alt="" />
       </div>
     </div>
     <a-row class="ibs-item-import-content">

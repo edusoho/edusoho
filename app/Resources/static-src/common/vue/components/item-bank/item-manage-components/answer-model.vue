@@ -100,7 +100,7 @@
                   v-show="isShowAiExplain"
                   @click="aiGeneration()"
                 >
-                  <img src="@/image/explain-ai.png" class="ai-left-img" />
+                  <img src="/static-dist/app/img/question-bank/explain-ai.png" class="ai-left-img" />
                   <span class="ai-left-text" ref="text">{{
                       t("itemEngine.analysis")
                     }}</span>
@@ -110,7 +110,7 @@
                   v-show="stopAiExplain"
                   @click="stopAiGeneration()"
                 >
-                  <img src="@/image/explain-stop.png" class="ai-left-img" />
+                  <img src="/static-dist/app/img/question-bank/explain-stop.png" class="ai-left-img" />
                   <span class="ai-left-text">{{
                       t("itemEngine.stopGeneration")
                     }}</span>
@@ -120,7 +120,7 @@
                   v-show="anewAiExplain"
                   @click="aiGeneration()"
                 >
-                  <img src="@/image/explain-anew.png" class="ai-left-img" />
+                  <img src="/static-dist/app/img/question-bank/explain-anew.png" class="ai-left-img" />
                   <span class="ai-left-text">{{
                       t("itemEngine.reGenerate")
                     }}</span>
@@ -133,7 +133,7 @@
                 </p>
               </div>
               <div class="ibs-ai-right">
-                <img src="@/image/explain-ai-img.png" class="ai-right-img" />
+                <img src="/static-dist/app/img/question-bank/explain-ai-img.png" class="ai-right-img" />
               </div>
             </div>
           </a-form-item>
