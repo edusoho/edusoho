@@ -114,11 +114,12 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
             }
 
             $sectionReportGroupByStatus = ArrayToolkit::group($sectionReport, 'status');
+            $sectionReportScore = array_sum(ArrayToolkit::column($sectionReport, 'score'));
             $sectionReport = [
                 'section_id' => $sectionId,
                 'section_name' => empty($assessmentSections[$sectionId]['name']) ? '' : $assessmentSections[$sectionId]['name'],
                 'total_score' => array_sum(ArrayToolkit::column($sectionReport, 'total_score')),
-                'score' => array_sum(ArrayToolkit::column($sectionReport, 'score')),
+                'score' => intval($sectionReportScore) == $sectionReportScore? $sectionReportScore: number_format($sectionReportScore, 2, '.', ''),
                 'question_count' => count($sectionReport),
                 'right_question_num' => empty($sectionReportGroupByStatus[AnswerQuestionReportService::STATUS_RIGHT]) ? 0 : count($sectionReportGroupByStatus[AnswerQuestionReportService::STATUS_RIGHT]),
                 'wrong_question_num' => empty($sectionReportGroupByStatus[AnswerQuestionReportService::STATUS_WRONG]) ? 0 : count($sectionReportGroupByStatus[AnswerQuestionReportService::STATUS_WRONG]),

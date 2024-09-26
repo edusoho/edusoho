@@ -625,7 +625,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $answerReport['answer_record_id']
             );
             $subjectiveScore = $this->sumSubjectiveScore($answerQuestionReports);
-            $subjectiveScore = number_format($subjectiveScore, 2, '.', '');
             $score = $this->sumScore($answerQuestionReports);
             $answerReport = $this->getAnswerReportService()->update($answerReport['id'], [
                 'review_user_id' => empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'],
