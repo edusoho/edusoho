@@ -7,9 +7,11 @@
 {% block stylesheets %}
   {{ parent() }}
   {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/app/css/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/app/css/item-bank-antdv-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
   {% else %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/app/css/item-bank.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/app/css/item-bank-antdv.css') }}" rel="stylesheet" />
   {% endif %}
 {% endblock %}
 
