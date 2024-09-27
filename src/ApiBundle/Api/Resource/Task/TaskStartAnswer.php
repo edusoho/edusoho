@@ -97,7 +97,7 @@ class TaskStartAnswer extends AbstractResource
         if (empty($latestAnswerRecord) || AnswerRecordStatus::FINISHED == $latestAnswerRecord['status']) {
             return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $activity['ext']['mediaId'], $this->getCurrentUser()['id']);
         } else {
-            return $latestAnswerRecord;
+            return $this->getAnswerService()->continueAnswer($latestAnswerRecord['id']);
         }
     }
 
