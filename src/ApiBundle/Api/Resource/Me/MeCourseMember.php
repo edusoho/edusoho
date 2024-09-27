@@ -38,7 +38,9 @@ class MeCourseMember extends AbstractResource
         }
         $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
         $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
-        $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
+        if ($courseMember) {
+            $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
+        }
 
         return $courseMember;
     }
