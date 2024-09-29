@@ -101,11 +101,11 @@
           // Drop all border styles before continue,
           // so there are no leftovers which may conflict with
           // new border styles.
-          for ( var key in tmpStyles ) {
-            if ( key.indexOf( 'border' ) == 0 ) {
-              delete tmpStyles[ key ];
-            }
-          }
+          // for ( var key in tmpStyles ) {
+          //   if ( key.indexOf( 'border' ) == 0 ) {
+          //     delete tmpStyles[ key ];
+          //   }
+          // }
 
           element.attributes.style = CKEDITOR.tools.writeCssText( tmpStyles );
 

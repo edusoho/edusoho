@@ -253,6 +253,7 @@
       } ) ),
       promises = CKEDITOR.tools.array.map( blobUrls, convertBlobUrlToBase64 );
 
+    CKEDITOR.tools.promise = Promise;
     CKEDITOR.tools.promise.all( promises ).then( function( dataUrls ) {
       CKEDITOR.tools.array.forEach( dataUrls, function( dataUrl, i ) {
         if ( !dataUrl ) {
