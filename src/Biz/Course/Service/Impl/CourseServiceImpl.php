@@ -250,6 +250,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['seq'] = empty($lastCourse['seq']) ? 1 : $lastCourse['seq'] + 1;
         $course['maxRate'] = $courseSet['maxRate'];
         $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
+        $course['recommended'] = $courseSet['recommended'];
+        $course['recommendedSeq'] = $courseSet['recommendedSeq'];
+        $course['recommendedTime'] = $courseSet['recommendedTime'];
         $course['title'] = $this->purifyHtml($course['title'], true);
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
