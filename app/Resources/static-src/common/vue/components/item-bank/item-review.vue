@@ -183,12 +183,12 @@ export default {
 
     getSubjectiveScore() {
       const subjective_score = this.answerReport.subjective_score || 0;
-      return this.subjectiveScore + Number(subjective_score);
+      return (this.subjectiveScore + Number(subjective_score)).toFixed(2);
     },
 
     getCommentScore() {
       const score = this.answerReport.score || 0;
-      return this.commentScore + Number(score);
+      return (this.commentScore + Number(score)).toFixed(2);
     },
 
     isPassed() {
