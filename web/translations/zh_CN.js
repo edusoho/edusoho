@@ -983,6 +983,7 @@ t.add("admin.cloud_file.re_transcode_fail_hint", "\u91cd\u65b0\u8f6c\u7801\u5931
 t.add("admin.cloud_file.detail_loading_hints", "\u6b63\u5728\u52a0\u8f7d\uff0c\u8bf7\u7b49\u5f85......", "js", "zh_CN");
 t.add("admin.cloud_file.select_course_placeholder", "\u9009\u62e9\u8bfe\u7a0b", "js", "zh_CN");
 t.add("admin.cloud_file.select_user_placeholder", "\u9009\u62e9\u7528\u6237", "js", "zh_CN");
+t.add("admin.cloud_file.add_tag_ok", "\u6dfb\u52a0\u6807\u7b7e\u6210\u529f", "js", "zh_CN");
 t.add("admin.coin.edit_success_hint", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
 t.add("admin.coin.edit_fail_hint", "\u64cd\u4f5c\u5931\u8d25", "js", "zh_CN");
 t.add("admin.coin.give_success_hint", "\u64cd\u4f5c\u6210\u529f", "js", "zh_CN");
