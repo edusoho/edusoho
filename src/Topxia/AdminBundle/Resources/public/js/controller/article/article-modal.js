@@ -100,11 +100,11 @@ define(function(require, exports, module) {
     // group: 'default'
     var ckeditor = CKEDITOR.replace('richeditor-body-field', {
       toolbar: 'Admin',
-      extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
+      extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe,autogrow',
       allowedContent: true,
       filebrowserImageUploadUrl: $('#richeditor-body-field').data('imageUploadUrl'),
       filebrowserFlashUploadUrl: $('#richeditor-body-field').data('flashUploadUrl'),
-      height: 300
+      height: 300,
     });
 
     $('#article_thumb_remove').on('click', function() {

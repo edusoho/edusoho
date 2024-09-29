@@ -138,6 +138,10 @@ a > img {
 	outline: 1px solid #0782C1;
 }
 
+img {
+	width: 100% !important;
+}
+
 /* Widget Styles */
 .code-featured
 {
