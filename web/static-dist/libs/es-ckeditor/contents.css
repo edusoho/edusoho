@@ -138,8 +138,8 @@ a > img {
 	outline: 1px solid #0782C1;
 }
 
-img {
-	width: 100% !important;
+.cke_image_nocaption {
+	max-width: 100%;
 }
 
 /* Widget Styles */
