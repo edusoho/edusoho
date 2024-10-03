@@ -101,126 +101,36 @@
               }}
             </a-button>
           </div>
-          <div v-show="this.mode === 'import' && question.aiAnalysisEnable">
-            <div class="ibs-ai-explain ibs-mt16">
-              <div class="ibs-ai-left">
-                <p class="ai-left-tittle">
-                  {{ t("itemEngine.aiProblemAssistant") }}
-                </p>
-                <button
-                  class="ai-left-btn"
-                  v-show="isShowAiExplain"
-                  @click="aiGenerationBtn()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-ai.png" class="ai-left-img" />
-                  <span class="ai-left-text" ref="text">{{
-                      t("itemEngine.analysis")
-                    }}</span>
-                </button>
-                <button
-                  class="ai-left-stopbtn"
-                  v-show="stopAiExplain"
-                  @click="stopAiGenerationBtn()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-stop.png" class="ai-left-img" />
-                  <span class="ai-left-text">{{
-                      t("itemEngine.stopGeneration")
-                    }}</span>
-                </button>
-                <button
-                  class="ai-left-stopbtn"
-                  v-show="anewAiExplain"
-                  @click="aiGenerationBtn()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-anew.png" class="ai-left-img" />
-                  <span class="ai-left-text">{{
-                      t("itemEngine.reGenerate")
-                    }}</span>
-                </button>
-                <span class="ai-left-content">{{
-                    t("itemEngine.aiAnalysisRefer")
-                  }}</span>
-                <p class="ai-left-tips" v-show="unableGenerateTips">
-                  {{ t("itemEngine.aiUnableGenerate") }}
-                </p>
-              </div>
-              <div class="ibs-ai-right">
-                <img src="/static-dist/app/img/question-bank/explain-ai-img.png" class="ai-right-img" />
-              </div>
-            </div>
-            <a-textarea
-              :rows="4"
-              :data-image-download-url="
-                showCKEditorData.filebrowserImageDownloadUrl
-              "
-              :name="`analysis${this.seq}`"
-            />
-          </div>
+
           <div v-show="showAnalysis">
             <!--对于章节练习题需要和解析一起展示答案-->
             <slot
               v-if="doingLookAnalysis"
               name="analysis_response_points"
             ></slot>
-            <div
-              class="ibs-explain ibs-mt16"
+            <div class="ibs-explain ibs-mt16"
+              v-if="mode !== 'import' || !question.aiAnalysisEnable"
               v-html="
                 `<span class='ibs-label'>${t(
                   'itemEngine.Explain'
-                )}</span><div class='ibs-content ibs-editor-text ibs-mr8 js-ai-analysis${question.id}'>${question.analysis ||
+                )}</span><div class='ibs-content ibs-editor-text ibs-mr8'>${question.analysis ||
                   t('itemReport.no_analysis')}</div>`
               "
             ></div>
-            <div
-              class="ibs-ai-explain ibs-mt16"
-              v-show="
-                question.aiAnalysisEnable &&
-                  mode === 'report' &&
-                  isShowAiAnalysis
-              "
-            >
-              <div class="ibs-ai-left">
-                <p class="ai-left-tittle">
-                  {{ t("itemEngine.aiAssistant") }}
-                </p>
-                <button
-                  class="ai-left-btn"
-                  v-show="isShowAiExplain"
-                  @click="aiGeneration()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-ai.png" class="ai-left-img" />
-                  <span class="ai-left-text">{{
-                      t("itemEngine.analysis")
-                    }}</span>
-                </button>
-                <button
-                  class="ai-left-stopbtn"
-                  v-show="stopAiExplain"
-                  @click="stopAiGeneration()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-stop.png" class="ai-left-img" />
-                  <span class="ai-left-text">{{
-                      t("itemEngine.stopGeneration")
-                    }}</span>
-                </button>
-                <button
-                  class="ai-left-stopbtn"
-                  v-show="anewAiExplain"
-                  @click="aiGeneration()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-anew.png" class="ai-left-img" />
-                  <span class="ai-left-text">
-                    {{ t("itemEngine.reGenerate") }}</span
-                  >
-                </button>
-                <span class="ai-left-content">
-                  {{ t("itemEngine.aiAnalysisRefer") }}
-                </span>
-              </div>
-              <div class="ibs-ai-right">
-                <img src="/static-dist/app/img/question-bank/explain-ai-img.png" class="ai-right-img" />
-              </div>
-            </div>
+            <ai-analysis
+              v-if="isShowAiAnalysis && question.aiAnalysisEnable && ['report', 'import'].includes(mode)"
+              :questionId="question.id"
+              @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
+              @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
+              @clearAnalysis="clearAnalysis"
+              @appendAnalysis="appendAnalysis"
+            ></ai-analysis>
+            <a-textarea
+              v-if="mode === 'import' && question.aiAnalysisEnable"
+              :rows="4"
+              :data-image-download-url="showCKEditorData.filebrowserImageDownloadUrl"
+              :name="`analysis${seq}`"
+            />
             <div
               v-if="getAttachmentTypeData('analysis').length > 0"
               class="ibs-mt16"
@@ -250,6 +160,7 @@
 
 <script>
 import attachmentPreview from "../attachment-preview/src/attachment.vue";
+import AiAnalysis from "../ai-analysis";
 import Emitter from "common/vue/mixins/emitter";
 import Locale from "common/vue/mixins/locale";
 import loadScript from "load-script";
@@ -269,12 +180,13 @@ export default {
       anewAiExplain: false,
       unableGenerateTips: false,
       answers: [],
-      analysisEditor: "",
+      analysisEditor: undefined,
       questionAnalysis: "",
       analysisEditBySelf: false,
     };
   },
   components: {
+    AiAnalysis,
     attachmentPreview
   },
   mixins: [Emitter, Locale],
@@ -300,12 +212,11 @@ export default {
         ? this.t("itemEngine.questionIsDeleted")
         : this.t("itemEngine.itemIsDeleted");
     },
-
     showAnalysis() {
       if (this.doingLookAnalysis) {
         return this.canShowAnalysis;
       } else {
-        return this.mode !== "do" && this.mode !== "review" && this.mode !== "import";
+        return !['do', 'review'].includes(this.mode);
       }
     },
     showCollectBtn() {
@@ -458,7 +369,7 @@ export default {
     question: {
       handler(question) {
         if (!this.analysisEditBySelf) {
-          this.analysisEditor.setData(question.analysis);
+          this.analysisEditor && this.analysisEditor.setData(question.analysis);
         }
         this.analysisEditBySelf = false;
       },
@@ -509,65 +420,25 @@ export default {
       this.canShowAnalysis = !this.canShowAnalysis;
       this.$emit("setMaterialAnalysis", this.canShowAnalysis, this.keys);
     },
-    aiGeneration() {
-      this.isShowAiExplain = false;
-      this.stopAiExplain = true;
-      this.anewAiExplain = false;
-      this.$emit("aiGenerates", this.question.id, this.finished);
+    prepareStudentAiAnalysis(gen) {
+      this.$emit('prepareStudentAiAnalysis', gen);
     },
-    stopAiGeneration() {
-      this.stopAiExplain = false;
-      this.isShowAiExplain = false;
-      this.anewAiExplain = true;
-      this.$emit("stopAiAnalysis", this.question.id);
+    prepareTeacherAiAnalysis(gen) {
+      this.$emit('prepareTeacherAiAnalysis', gen);
     },
-    aiGenerationBtn() {
-      this.$emit(
-        "genAiAnalysis",
-        this.disable,
-        this.enable,
-        this.complete,
-        this.finish
-      );
+    clearAnalysis() {
+      if (this.analysisEditor) {
+        this.analysisEditor.setData('');
+      } else {
+        this.question.analysis = '';
+      }
     },
-    disable() {
-      this.unableGenerateTips = true;
-    },
-    enable() {
-      this.isShowAiExplain = false;
-      this.stopAiExplain = true;
-      this.anewAiExplain = false;
-      this.analysisEditor.setData("");
-      this.answers = [];
-      this.isStopComplete = false;
-      const typingTimer = setInterval(() => {
-        if (this.answers.length === 0) {
-          return;
-        }
-        if (this.isStopComplete) {
-          clearInterval(typingTimer);
-          return;
-        }
-        this.analysisEditor.insertHtml(this.answers.shift());
-        if (this.answers.length === 0 && this.isMessageEnd) {
-          this.finished();
-          clearInterval(typingTimer);
-        }
-      }, 50);
-    },
-    complete(answer) {
-      this.answers.push(answer);
-    },
-    finish() {
-      this.isMessageEnd = true;
-    },
-    finished() {
-      this.stopAiExplain = false;
-      this.anewAiExplain = true;
-    },
-    stopAiGenerationBtn() {
-      this.finished();
-      this.isStopComplete = true;
+    appendAnalysis(analysis) {
+      if (this.analysisEditor) {
+        this.analysisEditor.insertHtml(analysis);
+      } else {
+        this.question.analysis += analysis;
+      }
     },
   }
 };

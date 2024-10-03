@@ -11,7 +11,7 @@
     :section_responses="section_responses"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
-    @genAiAnalysis="getAiAnalysis"
+    @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
       <div class="ibs-answer">
@@ -307,8 +307,8 @@ export default {
         return "ibs-choose-item ibs-engine-radio";
       }
     },
-    getAiAnalysis(disable, enable, complete, finish) {
-      let data = {};
+    prepareTeacherAiAnalysis(gen) {
+      const data = {};
       let question = JSON.parse(JSON.stringify(this.question));
       data.stem = question.stem;
       data.answer = question.answer.join();
@@ -322,7 +322,7 @@ export default {
       } else {
         data.type = "choice";
       }
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+      gen(data);
     }
   }
 };

@@ -95,7 +95,7 @@
                 :mode="subMode"
                 :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
-                @getAiAnalysis="getAiAnalysis"
+                @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
               ></essay-type>
 
               <fill-type
@@ -108,7 +108,7 @@
                 :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
                 @initStatus="initStatus"
-                @getAiAnalysis="getAiAnalysis"
+                @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
               ></fill-type>
 
               <judge-type
@@ -120,7 +120,7 @@
                 :mode="subMode"
                 :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
-                @getAiAnalysis="getAiAnalysis"
+                @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
               ></judge-type>
 
               <single-type
@@ -132,7 +132,7 @@
                 :mode="subMode"
                 :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
-                @getAiAnalysis="getAiAnalysis"
+                @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
               ></single-type>
 
               <choice-type
@@ -145,7 +145,7 @@
                 :mode="subMode"
                 :aiAnalysisEnable="aiAnalysisEnable"
                 @patchData="patchData"
-                @getAiAnalysis="getAiAnalysis"
+                @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
               ></choice-type>
             </a-modal>
           </a-form-item>
@@ -338,13 +338,13 @@ export default {
     renderFormula() {
       this.$emit("renderFormula");
     },
-    getAiAnalysis(data, disable, enable, complete, finish) {
+    prepareTeacherAiAnalysis(data, gen) {
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           data.material = values.base.material;
+          gen(data);
         }
       });
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     },
   }
 };

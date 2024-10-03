@@ -11,7 +11,7 @@
     :keys="keys"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
-    @genAiAnalysis="getAiAnalysis"
+    @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
       <div class="ibs-mb16 ibs-mt16" v-if="mode === 'do'">
@@ -392,8 +392,8 @@ export default {
 
       return result;
     },
-    getAiAnalysis(disable, enable, complete, finish) {
-      let data = {};
+    prepareTeacherAiAnalysis(gen) {
+      const data = {};
       let question = JSON.parse(JSON.stringify(this.question));
       data.stem = question.stem;
       data.answer = [].concat(question.answer).join();
@@ -403,7 +403,7 @@ export default {
       } else {
         data.type = "essay";
       }
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+      gen(data);
     }
   }
 };

@@ -11,7 +11,7 @@
     v-on="$listeners"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
-    @genAiAnalysis="getAiAnalysis"
+    @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
       <div class="ibs-answer ibs-answer--judge">
@@ -303,8 +303,8 @@ export default {
       }
       return str === "T" ? this.t("Right") : this.t("Wrong");
     },
-    getAiAnalysis(disable, enable, complete, finish) {
-      let data = {};
+    prepareTeacherAiAnalysis(gen) {
+      const data = {};
       let question = JSON.parse(JSON.stringify(this.question));
       data.stem = question.stem;
       data.answer = question.answer === "T" ? "正确" : "错误";
@@ -314,7 +314,7 @@ export default {
       } else {
         data.type = "determine";
       }
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+      gen(data);
     }
   }
 };

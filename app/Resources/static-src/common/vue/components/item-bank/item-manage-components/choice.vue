@@ -15,7 +15,7 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
+      @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
     >
       <template v-slot:response_points>
         <div class="ibs-choice-wrap">
@@ -452,10 +452,10 @@ export default {
     renderFormula() {
       this.$emit("renderFormula");
     },
-    getAiAnalysis(disable, enable, complete, finish) {
-      let data = {};
+    prepareTeacherAiAnalysis(gen) {
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
+          const data = {};
           let question = JSON.parse(JSON.stringify(this.questions));
           question = Object.assign(question, values.questions);
           data.stem = question.stem;
@@ -466,12 +466,13 @@ export default {
           data.answer = this.formatetAnswer(values.keys).join();
           if (this.isSubItem) {
             data.type = "material-choice";
+            this.$emit('prepareTeacherAiAnalysis', data, gen);
           } else {
             data.type = "choice";
+            gen(data);
           }
         }
       });
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     },
   }
 };
