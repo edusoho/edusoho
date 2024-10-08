@@ -6,7 +6,7 @@ import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import MarketSetting from './MarketSetting.vue';
 
 const manageProps = defineProps({
-  isUnMultiCourseSet: Number,
+  isUnMultiCourseSet: {type: [String, Number]},
   course: Object,
   tags: Object,
   imageSrc: String,

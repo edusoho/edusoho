@@ -169,10 +169,11 @@ const initEditor = () => {
     formState.summary = editor.getData();
   });
 };
-
 onMounted(() => {
-  initEditor();
-});
+  if (props.manage.isUnMultiCourseSet) {
+    initEditor();
+  }
+})
 
 
 const validateForm = () => {
@@ -231,7 +232,7 @@ defineExpose({
     </div>
 
 
-    <div class="relative" v-if="props.manage.isUnMultiCourseSet">
+    <div class="relative" v-else>
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
            style="width: calc(100% + 64px);">基础信息
       </div>
