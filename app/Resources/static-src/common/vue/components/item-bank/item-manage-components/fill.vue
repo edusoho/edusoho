@@ -14,7 +14,7 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
+      @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
     >
       <template v-slot:stem>
         <a-form-item
@@ -325,7 +325,7 @@ export default {
     renderFormula() {
       this.$emit("renderFormula");
     },
-    getAiAnalysis(disable, enable, complete, finish) {
+    prepareTeacherAiAnalysis(gen) {
       let data = {};
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
@@ -335,12 +335,13 @@ export default {
           data.answers = this.getFillAnswer(question.stem);
           if (this.isSubItem) {
             data.type = "material-fill";
+            this.$emit('prepareTeacherAiAnalysis', data, gen);
           } else {
             data.type = "fill";
+            gen(data);
           }
         }
       });
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     }
   }
 };

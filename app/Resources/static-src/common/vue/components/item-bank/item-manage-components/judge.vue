@@ -13,7 +13,7 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
+      @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
     >
       <template v-slot:response_points>
         <a-form-item
@@ -188,8 +188,8 @@ export default {
     renderFormula() {
       this.$emit("renderFormula");
     },
-    getAiAnalysis(disable, enable, complete, finish) {
-      let data = {};
+    prepareTeacherAiAnalysis(gen) {
+      const data = {};
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           let question = JSON.parse(JSON.stringify(this.questions));
@@ -198,12 +198,13 @@ export default {
           data.answer = values.answer === "T" ? "正确" : "错误";
           if (this.isSubItem) {
             data.type = "material-determine";
+            this.$emit("prepareTeacherAiAnalysis", data, gen);
           } else {
             data.type = "determine";
+            gen(data);
           }
         }
       });
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     },
   }
 };
