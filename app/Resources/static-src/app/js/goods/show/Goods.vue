@@ -219,7 +219,7 @@
             },
             summaryHtml() {
                 if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
-                return this.goods.summary;
+                return this.goods.summary.replace(/(<table[^>]*>.*?<\/table>)/gs, '<div style="width: 100%; overflow-x: auto;">$1</div>');
             },
             getReportType() {
                 if (this.goods.type === 'classroom') {

@@ -4665,10 +4665,10 @@
   "resolved" "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz"
   "version" "4.7.2-patch13"
 
-"es-ckeditor@4.9.3":
-  "integrity" "sha512-nKKW8bTCdOH5u20C5U2wnVhfulcdz+d7beEXSrgNqC8R8k70iNCZLISclgn0O7EE3zDN2w245C5oZDXkPhtdFQ=="
-  "resolved" "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.9.3.tgz"
-  "version" "4.9.3"
+"es-ckeditor@4.9.4":
+  "integrity" "sha512-+tjZWZ0Y23dR3OvaMM3qlbLUu9P4jlv/PWG62+orjBMV7wVDDUz2IrJgt/9WSGZH0ibV21cgnv3ZmuNJ+ARmNA=="
+  "resolved" "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.9.4.tgz"
+  "version" "4.9.4"
 
 "es-commit-msg-validator@1.0.2":
   "integrity" "sha512-Rx8YHulkOWvzZsXZaWfaPfDbdf6YTRc6hPgsVwSTOygCExGwpCbDQPSlIpt8r1cFp3cf8x58aCOfLYLiXDWiRQ=="

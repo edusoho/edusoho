@@ -79,6 +79,7 @@ class ContentController extends BaseController
     public function pageShowAction(Request $request, $alias)
     {
         $content = $this->getContentByAlias('page', $alias);
+        echo $content;
 
         if ('default' == $content['template']) {
             $template = 'content/page-show.html.twig';

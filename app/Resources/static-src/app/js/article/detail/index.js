@@ -56,5 +56,3 @@ document.addEventListener("DOMContentLoaded", function() {
     wrapperDiv.appendChild(table);
   });
 });
-
-
