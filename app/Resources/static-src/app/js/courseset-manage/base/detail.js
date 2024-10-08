@@ -18,7 +18,11 @@ export default class detail {
     let self = this;
     self.editor = CKEDITOR.replace('summary', {
       allowedContent: true,
-      toolbar: 'Detail',
+      toolbar: [
+        { items: [ 'FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize'] }
+      ],
+      extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
       height: 400,
       resize_enabled: true,
       fileSingleSizeLimit: app.fileSingleSizeLimit,

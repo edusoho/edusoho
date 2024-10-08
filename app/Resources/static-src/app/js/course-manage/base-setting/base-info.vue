@@ -110,7 +110,11 @@
                 this.$nextTick(() => {
                     import('app/js/upload-image/index.js');
                     summaryEditor = CKEDITOR.replace('courseset-summary-field', {
-                        toolbar: 'Detail',
+                        toolbar: [
+                          {items: ['FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+                          {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
+                        ],
+                        extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
                         filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
                     });
                 });

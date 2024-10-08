@@ -2,12 +2,16 @@
 
 namespace ApiBundle\Api\Resource\Watermark;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\User\Service\UserService;
 
 class Watermark extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $scene)
     {
         if ('task' == $scene) {
@@ -21,6 +25,9 @@ class Watermark extends AbstractResource
 
     private function getTaskWatermark()
     {
+        if ($this->getCurrentUser()->isLogin()) {
+            $courseSetting = $this->getSettingService()->get('course');
+        }
         $courseSetting = $this->getSettingService()->get('course');
         if (empty($courseSetting['task_page_watermark_enable']) || empty($courseSetting['task_page_watermark_setting']['fields'])) {
             return [

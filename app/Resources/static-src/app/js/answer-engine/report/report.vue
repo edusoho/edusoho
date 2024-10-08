@@ -43,47 +43,30 @@
 <script>
 import { Course } from "common/vue/service/index.js";
 import { ItemBankExercises } from "common/vue/service/index.js";
-import { Divider } from 'ant-design-vue';
 
 export default {
   data() {
     return {
       collect: $("[name='collect']").val() == 1,
-      answerShow: $("[name=answer_show]").val(),
+      answerShow: $('[name=answer_show]').val(),
       showCKEditorData: {
-        publicPath: $("[name=ckeditor_path]").val(),
-        filebrowserImageUploadUrl: $("[name=ckeditor_image_upload_url]").val(),
-        filebrowserImageDownloadUrl: $(
-          "[name=ckeditor_image_download_url]"
-        ).val(),
-        language:
-          document.documentElement.lang === "zh_CN"
-            ? "zh-cn"
-            : document.documentElement.lang,
-        jqueryPath: $("[name=jquery_path]").val(),
+        publicPath: $('[name=ckeditor_path]').val(),
+        filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),
+        filebrowserImageDownloadUrl: $('[name=ckeditor_image_download_url]').val(),
+        language: document.documentElement.lang === 'zh_CN' ? 'zh-cn' : document.documentElement.lang,
+        jqueryPath: $('[name=jquery_path]').val(),
       },
-      courseSetStatus: "",
-      showAttachment: $("[name=show_attachment]").val(),
-      cdnHost: $("[name=cdn_host]").val(),
+      courseSetStatus: '',
+      showAttachment: $('[name=show_attachment]').val(),
+      cdnHost: $('[name=cdn_host]').val(),
       fileId: 0,
-      showDoAgainBtn:
-        $("[name=show_do_again_btn]").val() === undefined
-          ? 1
-          : parseInt($("[name=show_do_again_btn]").val()),
-      showReturnBtn:
-        $("[name=submit_return_url]").val() === undefined
-          ? 0
-          : $("[name=submit_return_url]").val().length,
-      isDownload:
-        JSON.parse($("[name=question_bank_attachment_setting]").val())
-          .enable === "1",
+      showDoAgainBtn: $('[name=show_do_again_btn]').val() === undefined ? 1 : parseInt($('[name=show_do_again_btn]').val()),
+      showReturnBtn: $('[name=submit_return_url]').val() === undefined ? 0 : $('[name=submit_return_url]').val().length,
+      isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
       assessmentResponses: {},
-      isDownload:
-        JSON.parse($("[name=question_bank_attachment_setting]").val())
-          .enable === "1",
       exercise: {},
       answerText: {},
-      stopAnswer: {}
+      stopAnswer: {},
     };
   },
   provide() {

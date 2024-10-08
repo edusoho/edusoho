@@ -1040,6 +1040,7 @@ t.add("admin.cloud_file.re_transcode_fail_hint", "Retranscoding failed!", "js", 
 t.add("admin.cloud_file.detail_loading_hints", "Loading, please wait...", "js", "en");
 t.add("admin.cloud_file.select_course_placeholder", "Select Course", "js", "en");
 t.add("admin.cloud_file.select_user_placeholder", "Select User", "js", "en");
+t.add("admin.cloud_file.add_tag_ok", "Tag added successfully", "js", "en");
 t.add("admin.coin.edit_success_hint", "operation Successful", "js", "en");
 t.add("admin.coin.edit_fail_hint", "operation failed", "js", "en");
 t.add("admin.coin.give_success_hint", "operation Successful", "js", "en");

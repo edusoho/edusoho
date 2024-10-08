@@ -9564,6 +9564,7 @@ exception.courseset.unpublished: Course not published
 exception.courseset.no_course: There are no teaching plans available in the course
 exception.courseset.unlock_failed: Unlocking course failed
 exception.courseset.forbidden_create: No right to create
+exception.courseset.forbidden_publish: 'Sorry you do not have permission to publish the course, please contact the administrator'
 exception.classroom.member_not_in_classroom: Student not in classroom
 exception.classroom.not_found: The classroom doesn't exist
 exception.classroom.forbidden_manage_classroom: Forbidden manage classroom
