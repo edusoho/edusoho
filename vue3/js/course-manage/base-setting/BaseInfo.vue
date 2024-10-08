@@ -18,6 +18,34 @@ const removeHtml = (input) => {
     .replace(/<[\w\s"':=\/]*/, '');
 };
 
+const cover = ref();
+const categoryOptions = ref();
+const tabOptions = ref();
+
+const getCover = async () => {
+  cover.value = await Api.file.getCourseCover({
+    saveUrl: props.manage.imageSaveUrl,
+    targetImg: 'course-cover',
+    uploadToken: 'tmp',
+    imageText: '修改封面图片',
+    imageSrc: props.manage.imageSrc,
+    imageClass: 'course-manage-cover',
+  });
+};
+
+const getCategory = async () => {
+  const Category = await Api.category.getCategory();
+  categoryOptions.value = transformCategoryData(Category.data);
+};
+
+const getTabs = async () => {
+  const tabs = await Api.tag.getTags('');
+  tabOptions.value = tabs.data.map(item => ({
+    label: item.name,
+    value: item.name
+  }));
+};
+
 const formRef = ref(null);
 const formState = reactive({
   title: props.manage.course.title,
@@ -34,6 +62,9 @@ if (props.manage.isUnMultiCourseSet) {
     title: removeHtml(props.manage.courseSet.title),
     subtitle: removeHtml(props.manage.courseSet.subtitle),
   });
+  getCover();
+  getCategory();
+  getTabs();
 }
 
 const courseTitleValidator = (rule, value) => {
@@ -102,18 +133,6 @@ const courseTitleLengthValidator = async (rule, value) => {
   });
 };
 
-const tabOptions = ref();
-const getTabs = async () => {
-  const tabs = await Api.tag.getTags('');
-  tabOptions.value = tabs.data.map(item => ({
-    label: item.name,
-    value: item.name
-  }));
-};
-getTabs();
-
-const categoryOptions = ref();
-
 function transformCategoryData(data) {
   return data.map(item => {
     const transformedItem = {
@@ -127,12 +146,6 @@ function transformCategoryData(data) {
   });
 }
 
-const getCategory = async () => {
-  const Category = await Api.category.getCategory();
-  categoryOptions.value = transformCategoryData(Category.data);
-};
-getCategory();
-
 const getOrgCodes = async () => {
   const OrgCodes = await Api.organization.getOrgCodes({withoutFormGroup: true, orgCode: formState.orgCode});
 };
@@ -143,19 +156,6 @@ const serializeOption = [
   {label: '更新中', value: 'serialized'},
   {label: '已完结', value: 'finished'},
 ];
-
-const cover = ref();
-const getCover = async () => {
-  cover.value = await Api.file.getCourseCover({
-    saveUrl: props.manage.imageSaveUrl,
-    targetImg: 'course-cover',
-    uploadToken: 'tmp',
-    imageText: '修改封面图片',
-    imageSrc: props.manage.imageSrc,
-    imageClass: 'course-manage-cover',
-  });
-};
-getCover();
 
 const initEditor = () => {
   const editor = CKEDITOR.replace('course-introduction', {
@@ -169,12 +169,6 @@ const initEditor = () => {
     formState.summary = editor.getData();
   });
 };
-onMounted(() => {
-  if (props.manage.isUnMultiCourseSet) {
-    initEditor();
-  }
-})
-
 
 const validateForm = () => {
   return formRef.value.validate()
@@ -183,7 +177,13 @@ const validateForm = () => {
     })
     .catch((error) => {
     });
-}
+};
+
+onMounted(() => {
+  if (props.manage.isUnMultiCourseSet) {
+    initEditor();
+  }
+});
 
 defineExpose({
   validateForm,
@@ -230,7 +230,6 @@ defineExpose({
         </a-form-item>
       </a-form>
     </div>
-
 
     <div class="relative" v-else>
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
@@ -296,9 +295,12 @@ defineExpose({
           ></a-tree-select>
         </a-form-item>
 
-        <!--        <a-form-item v-if="props.params.enableOrg">-->
-        <!--          <div class="bg-[#f5f5f5]">组织机构占位</div>-->
-        <!--        </a-form-item>-->
+        <a-form-item
+          v-if="props.manage.enableOrg"
+          label="组织机构"
+        >
+
+        </a-form-item>
 
         <a-form-item
           label="连载状态"
@@ -308,16 +310,20 @@ defineExpose({
                          :options="serializeOption"/>
         </a-form-item>
 
-        <!--        <a-form-item>-->
-        <!--          <div class="bg-[#f5f5f5]">封面图片</div>-->
-        <!--        </a-form-item>-->
+        <a-form-item
+          label="封面图片"
+        >
+
+        </a-form-item>
 
         <a-form-item
           label="课程简介"
           name="categoryId"
         >
           <textarea id="course-introduction"></textarea>
-          <div class="text-[#a1a1a1] font-normal text-14 leading-28">为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置</div>
+          <div class="text-[#a1a1a1] font-normal text-14 leading-28">
+            为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+          </div>
         </a-form-item>
 
       </a-form>
