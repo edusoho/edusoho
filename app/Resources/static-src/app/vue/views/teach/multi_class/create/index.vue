@@ -712,7 +712,7 @@ export default {
       }
       this.$router.push({
         name: 'MultiClass',
-        params: manage
+        manage: manage
       });
     },
     async getMultiClassSetting() {

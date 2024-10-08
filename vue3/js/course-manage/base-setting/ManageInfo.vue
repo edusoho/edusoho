@@ -56,14 +56,14 @@ const submitForm = async () => {
       ref="baseInfoRef"
       :manage="manageProps"
     />
-<!--    <base-rule-->
-<!--      ref="baseRuleRef"-->
-<!--      :params="baseRuleProps"-->
-<!--    />-->
-<!--    <market-setting-->
-<!--      ref="marketSettingRef"-->
-<!--      :params="marketSettingProps"-->
-<!--    />-->
+    <base-rule
+      ref="baseRuleRef"
+      :manage="manageProps"
+    />
+    <market-setting
+      ref="marketSettingRef"
+      :manage="manageProps"
+    />
     <a-button @click="submitForm">获取表单值</a-button>
   </ant-config-provider>
 </template>

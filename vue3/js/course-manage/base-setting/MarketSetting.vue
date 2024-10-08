@@ -4,17 +4,17 @@ import {QuestionCircleOutlined} from '@ant-design/icons-vue';
 import dayjs from 'dayjs';
 
 const props = defineProps({
-  params: {type: Object, default: {}}
+  manage: {type: Object, default: {}}
 });
 
 const formRef = ref(null);
 const formState = reactive({
-  originPrice: props.params.course.originPrice,
-  buyable: props.params.course.buyable,
-  maxStudentNumL: props.params.course.maxStudentNum,
-  enableBuyExpiryTime: props.params.course.buyExpiryTime > 0 ? '1' : '0',
-  buyExpiryTime: props.params.course.buyExpiryTime === '0' ? null : props.params.course.buyExpiryTime,
-  taskDisplay: props.params.course.taskDisplay,
+  originPrice: props.manage.course.originPrice,
+  buyable: props.manage.course.buyable,
+  maxStudentNumL: props.manage.course.maxStudentNum,
+  enableBuyExpiryTime: props.manage.course.buyExpiryTime > 0 ? '1' : '0',
+  buyExpiryTime: props.manage.course.buyExpiryTime === '0' ? null : props.manage.course.buyExpiryTime,
+  taskDisplay: props.manage.course.taskDisplay,
 });
 
 const positivePrice = (rule, value) => {
@@ -30,16 +30,16 @@ const disabledDate = (current) => {
   return current && current < dayjs().endOf('day');
 };
 
-const selectTags = reactive(Array(props.params.serviceTags.length).fill(false));
+const selectTags = reactive(Array(props.manage.serviceTags.length).fill(false));
 const handleChange = (tag, checked) => {
   console.log(tag, checked);
 };
 
-if (props.params.vipInstalled && props.params.vipEnabled) {
-  Object.assign(formState, { vipLevelId: props.params.course.vipLevelId })
+if (props.manage.vipInstalled && props.manage.vipEnabled) {
+  Object.assign(formState, { vipLevelId: props.manage.course.vipLevelId })
 }
 
-console.log(props.params.vipLevels)
+console.log(props.manage.vipLevels)
 
 </script>
 
@@ -57,7 +57,7 @@ console.log(props.params.vipLevels)
       :wrapper-col="{ span: 16 }"
       autocomplete="off"
     >
-      <div v-if="props.params.course.platform === 'supplier'">
+      <div v-if="props.manage.course.platform === 'supplier'">
         <a-form-item
           label="合作面额"
         >
@@ -81,7 +81,7 @@ console.log(props.params.vipLevels)
           ]"
       >
         <a-input v-model:value="formState.originPrice"
-                 :disabled="props.params.course.platform === 'supplier' && !props.params.canModifyCoursePrice"
+                 :disabled="props.manage.course.platform === 'supplier' && !props.manage.canModifyCoursePrice"
                  suffix="元" style="width: 150px"></a-input>
       </a-form-item>
 
@@ -108,7 +108,7 @@ console.log(props.params.vipLevels)
       </a-form-item>
 
       <a-form-item
-        v-if="props.params.courseSet.type === 'live'"
+        v-if="props.manage.courseSet.type === 'live'"
         label="限制加入人数"
         :validateTrigger="['blur']"
         :rules="[
@@ -172,8 +172,8 @@ console.log(props.params.vipLevels)
         >
           <a-select-option value="0">无</a-select-option>
           <a-select-option
-            v-if="props.params.vipLevels"
-            v-for="level in props.params.vipLevels"
+            v-if="props.manage.vipLevels"
+            v-for="level in props.manage.vipLevels"
             :key="level.id"
             :value="level.id"
           >
@@ -186,7 +186,7 @@ console.log(props.params.vipLevels)
         label="承诺提供服务"
       >
         <a-checkable-tag
-          v-for="(tag, index) in props.params.serviceTags"
+          v-for="(tag, index) in props.manage.serviceTags"
           :key="tag"
           v-model:checked="selectTags[index]"
           @change="checked => handleChange(tag, checked)"

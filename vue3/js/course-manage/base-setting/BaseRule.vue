@@ -5,7 +5,7 @@ import {
 } from '@ant-design/icons-vue';
 
 const props = defineProps({
-  params: {type: Object, default: {}}
+  manage: {type: Object, default: {}}
 });
 
 const tryLookLengthOptions = Array.from({length: 11}, (v, i) => ({
@@ -25,15 +25,15 @@ const enableAudioOptions = [
 
 const formRef = ref(null);
 const formState = reactive({
-  learnMode: props.params.course.learnMode,
-  watchLimit: props.params.course.watchLimit,
-  enableFinish: props.params.course.enableFinish,
-  tryLookLength: props.params.course.tryLookLength,
-  enableAudio: props.params.course.enableAudio,
-  freeTaskIds: Object.keys(props.params.freeTasks),
+  learnMode: props.manage.course.learnMode,
+  watchLimit: props.manage.course.watchLimit,
+  enableFinish: props.manage.course.enableFinish,
+  tryLookLength: props.manage.course.tryLookLength,
+  enableAudio: props.manage.course.enableAudio,
+  freeTaskIds: Object.keys(props.manage.freeTasks),
 });
 
-const canFreeTasks = ref(props.params.canFreeTasks.map(task => ({
+const canFreeTasks = ref(props.manage.canFreeTasks.map(task => ({
   ...task,
   isSelected: false
 })));
@@ -84,11 +84,11 @@ defineExpose({
           </div>
         </template>
         <a-radio-group class="base-rule-radio" v-model:value="formState.learnMode" :options="learnModeOptions"
-                       :disabled="props.params.course.status !== 'draft' || props.params.course.platform !== 'self'"/>
+                       :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !== 'self'"/>
       </a-form-item>
 
       <a-form-item
-        v-if="props.params.lessonWatchLimit"
+        v-if="props.manage.lessonWatchLimit"
         label="视频观看时长限制"
         name="watchLimit"
         :validateTrigger="['blur']"
@@ -115,7 +115,7 @@ defineExpose({
         name="enableFinish"
       >
         <a-radio-group v-model:value="formState.enableFinish" class="base-rule-radio"
-                       :disabled="props.params.course.platform === 'supplier'">
+                       :disabled="props.manage.course.platform === 'supplier'">
           <a-radio value="1">无限制</a-radio>
           <a-radio value="0">由任务完成条件决定<span>
               <a-popover>
@@ -128,7 +128,7 @@ defineExpose({
         </a-radio-group>
       </a-form-item>
 
-      <div v-if="props.params.courseSet !== 'live'">
+      <div v-if="props.manage.courseSet !== 'live'">
         <a-form-item
           label="设置免费学习任务"
           name="freeTaskIds"
@@ -149,12 +149,12 @@ defineExpose({
                         <a-tooltip placement="top">
                           <template #title>
                             <div class="text-14 font-normal">
-                              {{ props.params.activityMetas[task.type].name }}{{ props.params.taskName }}
+                              {{ props.manage.activityMetas[task.type].name }}{{ props.manage.taskName }}
                             </div>
                           </template>
-                          <i class="text-[#999] mr-4" :class="props.params.activityMetas[task.type].icon"></i>
+                          <i class="text-[#999] mr-4" :class="props.manage.activityMetas[task.type].icon"></i>
                         </a-tooltip>
-                        <span>{{ props.params.taskName }} {{ task.number }} : {{ task.title }}</span>
+                        <span>{{ props.manage.taskName }} {{ task.number }} : {{ task.title }}</span>
                       </div>
                     </a-checkbox>
                     <a-tag v-if="formState.freeTaskIds.includes(task.id)" color="#f46300">免费</a-tag>
@@ -163,12 +163,12 @@ defineExpose({
               </a-list>
             </a-checkbox-group>
             <div class="text-[#a1a1a1] text-14 flex items-center">
-              免费{{ props.params.taskName }}仅支持{{ props.params.canFreeActivityTypes }}
+              免费{{ props.manage.taskName }}仅支持{{ props.manage.canFreeActivityTypes }}
               <a-popover placement="right">
                 <template #content>
-                  <div class="text-14">{{ props.params.freeTaskChangelog }}</div>
+                  <div class="text-14">{{ props.manage.freeTaskChangelog }}</div>
                 </template>
-                <i v-if="props.params.freeTaskChangelog" class="es-icon es-icon-tip admin-update__icon color-danger"
+                <i v-if="props.manage.freeTaskChangelog" class="es-icon es-icon-tip admin-update__icon color-danger"
                    slot="reference"></i>
               </a-popover>
             </div>
@@ -176,7 +176,7 @@ defineExpose({
         </a-form-item>
 
         <a-form-item
-          v-if="props.params.uploadMode !== 'local'"
+          v-if="props.manage.uploadMode !== 'local'"
           name="tryLookLength"
         >
           <template #label>
@@ -207,16 +207,16 @@ defineExpose({
       </div>
 
       <a-form-item
-        v-if="props.params.audioServiceStatus !== 'needOpen' && props.params.course.type === 'normal'"
+        v-if="props.manage.audioServiceStatus !== 'needOpen' && props.manage.course.type === 'normal'"
         label="音频听课（试用）"
         name="enableAudio"
       >
         <a-radio-group class="base-rule-radio mt-6" v-model:value="formState.enableAudio"
                        :options="enableAudioOptions"
-                       :disabled="props.params.course.platform === 'supplier'"/>
+                       :disabled="props.manage.course.platform === 'supplier'"/>
         <div class="text-12 text-[#adadad] mt-8">1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</div>
-        <div class="text-12 text-[#adadad] mt-8">2.当前转音频完成情况 ：{{ props.params.videoConvertCompletion }}<a
-          class="text-[#46c37b] text-14 ml-8 hover:text-[#34a263]" :href="props.params.courseSetManageFilesUrl"
+        <div class="text-12 text-[#adadad] mt-8">2.当前转音频完成情况 ：{{ props.manage.videoConvertCompletion }}<a
+          class="text-[#46c37b] text-14 ml-8 hover:text-[#34a263]" :href="props.manage.courseSetManageFilesUrl"
           target="__blank">查看详情</a></div>
         <div class="text-12 text-[#adadad] mt-8">3.视频含弹题时，在APP端不支持转音频播放</div>
 
