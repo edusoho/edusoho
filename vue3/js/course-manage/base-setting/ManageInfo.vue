@@ -5,71 +5,33 @@ import BaseRule from './BaseRule.vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import MarketSetting from './MarketSetting.vue';
 
-const props = defineProps({
-  isUnMultiCourseSet: {required: true},
-  course: {required: true},
-  tags: {required: true},
-  imageSrc: {required: true},
-  imageSaveUrl: {required: true},
-  imageUploadUrl: {required: true},
-  enableOrg: {required: true},
-  courseSet: {required: true},
-  lessonWatchLimit: { required: true },
-  uploadMode: { required: true },
-  audioServiceStatus: { required: true },
-  videoConvertCompletion: { required: true },
-  courseSetManageFilesUrl: { required: true },
-  freeTasks: { required: true },
-  canFreeTasks: { required: true },
-  taskName: { required: true },
-  activityMetas: { required: true },
-  canFreeActivityTypes: { required: true },
-  freeTaskChangelog: { required: true },
-  canModifyCoursePrice: { required: true },
-  liveCapacityUrl: { required: true },
-  serviceTags: { required: true },
-  vipInstalled: { required: true },
-  vipEnabled: { required: true },
-  vipLevels: { required: true },
+const manageProps = defineProps({
+  isUnMultiCourseSet: Number,
+  course: Object,
+  tags: Object,
+  imageSrc: String,
+  imageSaveUrl: String,
+  imageUploadUrl: String,
+  enableOrg: Number,
+  courseSet: Object,
+  lessonWatchLimit: Number,
+  uploadMode: String,
+  audioServiceStatus: String,
+  videoConvertCompletion: Number,
+  courseSetManageFilesUrl: String,
+  freeTasks: Object,
+  canFreeTasks: Object,
+  taskName: String,
+  activityMetas: Object,
+  canFreeActivityTypes: String,
+  freeTaskChangelog: String,
+  canModifyCoursePrice: Number,
+  liveCapacityUrl: String,
+  serviceTags: Object,
+  vipInstalled: String,
+  vipEnabled: String,
+  vipLevels: Object,
 });
-
-const baseInfoProps = {
-  isUnMultiCourseSet: props.isUnMultiCourseSet,
-  tags: props.tags,
-  course: props.course,
-  imageSrc: props.imageSrc,
-  imageSaveUrl: props.imageSaveUrl,
-  imageUploadUrl: props.imageUploadUrl,
-  enableOrg: props.enableOrg,
-  courseSet: props.courseSet,
-};
-
-const baseRuleProps = {
-  course: props.course,
-  lessonWatchLimit: props.lessonWatchLimit,
-  courseSet: props.courseSet,
-  uploadMode: props.uploadMode,
-  audioServiceStatus: props.audioServiceStatus,
-  videoConvertCompletion: props.videoConvertCompletion,
-  courseSetManageFilesUrl: props.courseSetManageFilesUrl,
-  freeTasks: props.freeTasks,
-  canFreeTasks: props.canFreeTasks,
-  taskName: props.taskName,
-  activityMetas: props.activityMetas,
-  canFreeActivityTypes: props.canFreeActivityTypes,
-  freeTaskChangelog: props.freeTaskChangelog,
-}
-
-const marketSettingProps = {
-  course: props.course,
-  courseSet: props.courseSet,
-  canModifyCoursePrice: props.canModifyCoursePrice,
-  liveCapacityUrl: props.liveCapacityUrl,
-  serviceTags: props.serviceTags,
-  vipInstalled: props.vipInstalled,
-  vipEnabled: props.vipEnabled,
-  vipLevels: props.vipLevels,
-}
 
 const baseInfoRef = ref(null);
 const baseRuleRef = ref(null);
@@ -92,16 +54,16 @@ const submitForm = async () => {
   <ant-config-provider>
     <base-info
       ref="baseInfoRef"
-      :params="baseInfoProps"
+      :manage="manageProps"
     />
-    <base-rule
-      ref="baseRuleRef"
-      :params="baseRuleProps"
-    />
-    <market-setting
-      ref="marketSettingRef"
-      :params="marketSettingProps"
-    />
+<!--    <base-rule-->
+<!--      ref="baseRuleRef"-->
+<!--      :params="baseRuleProps"-->
+<!--    />-->
+<!--    <market-setting-->
+<!--      ref="marketSettingRef"-->
+<!--      :params="marketSettingProps"-->
+<!--    />-->
     <a-button @click="submitForm">获取表单值</a-button>
   </ant-config-provider>
 </template>

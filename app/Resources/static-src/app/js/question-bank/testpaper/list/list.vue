@@ -178,7 +178,7 @@ export default {
     },
     async preview(record) {
       if (record.type === 'aiPersonality') {
-        await this.$router.push({name: 'preview', params: {id: record.id}});
+        await this.$router.push({name: 'preview', manage: {id: record.id}});
       } else {
         window.location.href = `/question_bank/${this.questionBankId}/testpaper/${record.id}/preview`;
       }
@@ -244,7 +244,7 @@ export default {
         window.location.href = `/question_bank/${this.questionBankId}/testpaper/${paper.id}/edit`;
       } else {
         await this.$router.push({
-          name: 'update', query: {type: paper.type}, params: {id: paper.id}
+          name: 'update', query: {type: paper.type}, manage: {id: paper.id}
         });
       }
     },

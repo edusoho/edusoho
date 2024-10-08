@@ -245,7 +245,7 @@
               this.isSearch = Boolean(value)
 
               axios.get(`/api/classrooms/${this.goods.product.targetId}/courses`, {
-                    params: {
+                    manage: {
                         title: value
                     }
                 }).then((res) => {
@@ -278,7 +278,7 @@
                 }
 
                 axios.get(`/api/goods/${this.goodsId}/components`, {
-                    params: {
+                    manage: {
                         componentTypes: this.goods.extensions
                     },
                     headers: {

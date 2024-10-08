@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'course.plan_base_info'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/base-setting/index.js', 'vue3/js/course-manage/base-setting/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'vue3/js/course-manage/base-setting/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -35,46 +35,6 @@
         {% set freeTaskChangelog = freeTaskChangelog~ changelog['freeTasks'] %}
       {% endif %}
     {% endfor %}
-
-    {# 计划基础信息 #}
-{#    <div id="app"#}
-{#         data-course-manage-url="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"#}
-{#         data-is-un-multi-course-set="{{ is_un_multi_courseset(courseSet.id) }}"#}
-{#         data-course="{{ course|json_encode }}"#}
-{#         data-course-set="{{ courseSet|default([])|json_encode }}"#}
-{#         data-has-mul-courses="{{ hasMulCourses }}"#}
-{#         data-lesson-watch-limit="{{ setting('magic.lesson_watch_limit') }}"#}
-{#         data-has-role-admin="{{ is_granted('ROLE_ADMIN') }}"#}
-{#         data-wechat-setting="{{ wechatSetting|json_encode }}"#}
-{#         data-has-wechat-notification-manage-role="{{ has_permission('admin_operation_wechat_notification_manage') or has_permission('admin_v2_operation_wechat_notification_manage') }}"#}
-{#         data-wechat-manage-url="{{ setting('backstage.is_v2',0)  == 0 ? path('admin_wechat_notification_manage') : path('admin_v2_wechat_notification_manage') }}"#}
-{#         data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}"#}
-{#         data-content-course-rule-url="{{ path('content_course_rule') }}"#}
-{#         data-free-tasks="{{ freeTasks|json_encode }}"#}
-{#         data-can-free-tasks="{{ canFreeTasks|json_encode }}"#}
-{#         data-task-name="{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}"#}
-{#         data-activity-metas="{{ activity_metas()|json_encode }}"#}
-{#         data-course-remind-send-days="{{ courseRemindSendDays }}"#}
-{#         data-upload-mode="{{ setting('storage.upload_mode', 'local') }}"#}
-{#         data-service-tags="{{ services(course.services|default([]))|json_encode }}"#}
-{#         data-audio-service-status="{{ audioServiceStatus }}"#}
-{#         data-video-convert-completion="{{ video_convert_completion(course.id) }}"#}
-{#         data-course-set-manage-files-url="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}"#}
-{#         data-course-product="{{ courseProduct|json_encode }}"#}
-{#         data-notifies="{{ notifies|json_encode }}"#}
-{#         data-can-modify-course-price="{{ s2b2c_has_behaviour_permission('canModifyCoursePrice') }}"#}
-{#         data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"#}
-{#         data-can-free-activity-types="{{ can_free_activity_types|join('word.seperator'|trans) }}"#}
-{#         data-free-task-changelog="{{ freeTaskChangelog }}"#}
-{#         data-tags="{{ tags|json_encode }}"#}
-{#         data-image-save-url="{{ path('course_set_manage_cover_crop', {id: courseSet.id}) }}"#}
-{#         data-image-src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"#}
-{#         data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"#}
-{#         data-vip-installed="{{ vipInstalled }}"#}
-{#         data-vip-enabled="{{ setting('vip.enabled') }}"#}
-{#         data-vip-levels="{{ vipLevels|json_encode }}"#}
-{#         data-enable-org="{{ setting('magic.enable_org','0') }}"#}
-{#    ></div>#}
 
     <div id="manage-info"
          data-course-manage-url="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"

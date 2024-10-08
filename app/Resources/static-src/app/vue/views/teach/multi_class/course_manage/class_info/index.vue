@@ -338,7 +338,7 @@ export default {
     goToEditorLesson() {
       this.$router.push({
         name: 'MultiClassEditorLesson',
-        params: {
+        manage: {
           id: this.courseId
         },
         query: {

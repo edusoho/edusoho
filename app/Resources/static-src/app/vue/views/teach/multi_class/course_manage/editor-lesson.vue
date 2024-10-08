@@ -50,7 +50,7 @@ export default {
     onClickGoToCourseManage() {
       this.$router.push({
         name: 'MultiClassCourseManage',
-        params: {
+        manage: {
           id: this.multiClassId
         }
       });

@@ -3,7 +3,7 @@ import {onMounted, reactive, ref} from 'vue';
 import Api from '../../../api';
 
 const props = defineProps({
-  params: {type: Object, default: {}}
+  manage: {type: Object, default: {}}
 });
 
 const removeHtml = (input) => {
@@ -20,19 +20,19 @@ const removeHtml = (input) => {
 
 const formRef = ref(null);
 const formState = reactive({
-  title: props.params.course.title,
-  subtitle: props.params.course.subtitle,
+  title: props.manage.course.title,
+  subtitle: props.manage.course.subtitle,
 });
 
-if (props.params.isUnMultiCourseSet) {
+if (props.manage.isUnMultiCourseSet) {
   Object.assign(formState, {
-    tags: props.params.tags,
-    categoryId: props.params.course.categoryId,
-    orgCode: props.params.course.orgCode,
-    serializeMode: props.params.course.serializeMode,
-    summary: props.params.courseSet.summary,
-    title: removeHtml(props.params.courseSet.title),
-    subtitle: removeHtml(props.params.courseSet.subtitle),
+    tags: props.manage.tags,
+    categoryId: props.manage.course.categoryId,
+    orgCode: props.manage.course.orgCode,
+    serializeMode: props.manage.course.serializeMode,
+    summary: props.manage.courseSet.summary,
+    title: removeHtml(props.manage.courseSet.title),
+    subtitle: removeHtml(props.manage.courseSet.subtitle),
   });
 }
 
@@ -147,11 +147,11 @@ const serializeOption = [
 const cover = ref();
 const getCover = async () => {
   cover.value = await Api.file.getCourseCover({
-    saveUrl: props.params.imageSaveUrl,
+    saveUrl: props.manage.imageSaveUrl,
     targetImg: 'course-cover',
     uploadToken: 'tmp',
     imageText: '修改封面图片',
-    imageSrc: props.params.imageSrc,
+    imageSrc: props.manage.imageSrc,
     imageClass: 'course-manage-cover',
   });
 };
@@ -160,7 +160,7 @@ getCover();
 const initEditor = () => {
   const editor = CKEDITOR.replace('course-introduction', {
     toolbar: 'Detail',
-    filebrowserImageUploadUrl: props.params.imageUploadUrl,
+    filebrowserImageUploadUrl: props.manage.imageUploadUrl,
   });
 
   editor.setData(formState.summary);
@@ -191,7 +191,7 @@ defineExpose({
 
 <template>
   <div class="flex flex-col w-full">
-    <div class="flex flex-col relative" v-if="!props.params.isUnMultiCourseSet">
+    <div class="flex flex-col relative" v-if="!props.manage.isUnMultiCourseSet">
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
            style="width: calc(100% + 64px);">基础信息
       </div>
@@ -231,7 +231,7 @@ defineExpose({
     </div>
 
 
-    <div class="relative" v-if="props.params.isUnMultiCourseSet">
+    <div class="relative" v-if="props.manage.isUnMultiCourseSet">
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
            style="width: calc(100% + 64px);">基础信息
       </div>

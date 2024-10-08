@@ -23,7 +23,7 @@ export default {
   methods: {
     requestCertificateData() {
       axios.get('/api/certificates', {
-          params: {
+          manage: {
             targetId: this.sku.targetId,
             limit: 4
           },
@@ -38,7 +38,7 @@ export default {
   },
   mounted() {
     this.requestCertificateData();
-  }, 
+  },
   watch: {
     sku() {
       this.requestCertificateData();
