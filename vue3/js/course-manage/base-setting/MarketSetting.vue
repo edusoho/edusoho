@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {reactive, ref, watch} from 'vue';
 import {QuestionCircleOutlined} from '@ant-design/icons-vue';
 import dayjs from 'dayjs';
 
@@ -15,6 +15,7 @@ const formState = reactive({
   enableBuyExpiryTime: props.manage.course.buyExpiryTime > 0 ? '1' : '0',
   buyExpiryTime: props.manage.course.buyExpiryTime === '0' ? null : props.manage.course.buyExpiryTime,
   taskDisplay: props.manage.course.taskDisplay,
+  drainageEnabled: props.manage.course.drainageEnabled,
 });
 
 const positivePrice = (rule, value) => {
@@ -39,8 +40,9 @@ if (props.manage.vipInstalled && props.manage.vipEnabled) {
   Object.assign(formState, { vipLevelId: props.manage.course.vipLevelId })
 }
 
-console.log(props.manage.vipLevels)
-
+watch( () => formState.drainageEnabled, () => {
+  console.log(formState.drainageEnabled)
+})
 </script>
 
 <template>
@@ -210,11 +212,45 @@ console.log(props.manage.vipLevels)
         </a-radio-group>
       </a-form-item>
 
-      <a-form-item
-        label="引流设置"
-      >
-
+      <a-form-item>
+        <template #label>
+          <div class="flex items-center">
+            <div>引流设置</div>
+            <a-popover>
+              <template #content>
+                <div class="text-14">
+                  将已购用户引流至私域流量池
+                </div>
+              </template>
+              <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
+            </a-popover>
+          </div>
+        </template>
+        <a-radio-group v-model:value="formState.drainageEnabled" class="market-setting-radio">
+          <a-radio :value=1>开启</a-radio>
+          <a-radio :value=0>关闭</a-radio>
+        </a-radio-group>
       </a-form-item>
+
+      <div v-if="formState.drainageEnabled === 1">
+        <a-form-item
+          label="二维码设置"
+        >
+
+        </a-form-item>
+
+        <a-form-item
+          label="引流文案"
+        >
+
+        </a-form-item>
+
+        <a-form-item
+          label="引流页样式"
+        >
+
+        </a-form-item>
+      </div>
 
 
     </a-form>
