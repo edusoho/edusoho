@@ -55,7 +55,7 @@
 
           // In case parent div has only align attr, move it to the table element (https://dev.ckeditor.com/ticket/16811).
           if ( parent.name && parent.name === 'div' && parent.attributes.align &&
-            tools.object.keys( parent.attributes ).length === 1 && parent.children.length === 1 ) {
+            Object.keys( parent.attributes ).length === 1 && parent.children.length === 1 ) {
 
             // If align is the only attribute of parent.
             element.attributes.align = parent.attributes.align;
@@ -101,11 +101,11 @@
           // Drop all border styles before continue,
           // so there are no leftovers which may conflict with
           // new border styles.
-          for ( var key in tmpStyles ) {
-            if ( key.indexOf( 'border' ) == 0 ) {
-              delete tmpStyles[ key ];
-            }
-          }
+          // for ( var key in tmpStyles ) {
+          //   if ( key.indexOf( 'border' ) == 0 ) {
+          //     delete tmpStyles[ key ];
+          //   }
+          // }
 
           element.attributes.style = CKEDITOR.tools.writeCssText( tmpStyles );
 

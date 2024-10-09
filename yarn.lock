@@ -4650,10 +4650,10 @@
     "string.prototype.trimstart" "^1.0.5"
     "unbox-primitive" "^1.0.2"
 
-"es-ckeditor@4.9.3":
-  "integrity" "sha512-nKKW8bTCdOH5u20C5U2wnVhfulcdz+d7beEXSrgNqC8R8k70iNCZLISclgn0O7EE3zDN2w245C5oZDXkPhtdFQ=="
-  "resolved" "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.9.3.tgz"
-  "version" "4.9.3"
+"es-ckeditor@4.9.5":
+  "integrity" "sha512-3/bFnqz7vfJv3GSkVlQFMZisefBQtXv1buoyF3yqL9kTS4sxJowI6t5Onx8qpknsqrIcLKRlTUaSRyhumIib7g=="
+  "resolved" "https://registry.npmmirror.com/es-ckeditor/-/es-ckeditor-4.9.5.tgz"
+  "version" "4.9.5"
 
 "es-commit-msg-validator@1.0.2":
   "integrity" "sha512-Rx8YHulkOWvzZsXZaWfaPfDbdf6YTRc6hPgsVwSTOygCExGwpCbDQPSlIpt8r1cFp3cf8x58aCOfLYLiXDWiRQ=="
