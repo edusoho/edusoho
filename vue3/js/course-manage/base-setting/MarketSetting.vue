@@ -16,6 +16,7 @@ const formState = reactive({
   buyExpiryTime: props.manage.course.buyExpiryTime === '0' ? null : props.manage.course.buyExpiryTime,
   taskDisplay: props.manage.course.taskDisplay,
   drainageEnabled: props.manage.course.drainageEnabled,
+  drainageText: props.manage.course.drainageText,
 });
 
 const positivePrice = (rule, value) => {
@@ -248,7 +249,15 @@ watch( () => formState.drainageEnabled, () => {
         <a-form-item
           label="引流页样式"
         >
-
+          <div class="flex">
+            <div class="opacity-65 text-14">加入/支付完成页</div>
+            <a-popover>
+              <template #content>
+                <img src="/static-dist/app/img/vue/drainage.png" alt="">
+              </template>
+              <div class="text-[#409EFF] font-medium text-14 ml-4">查看详情</div>
+            </a-popover>
+          </div>
         </a-form-item>
       </div>
 
@@ -261,6 +270,13 @@ watch( () => formState.drainageEnabled, () => {
 .market-setting-radio {
   .ant-radio-wrapper {
     font-weight: 400 !important;
+  }
+}
+
+.ant-popover-content {
+  .ant-popover-inner {
+    padding: 0 !important;
+    border-radius: 20px !important;
   }
 }
 </style>
