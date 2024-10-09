@@ -49,6 +49,21 @@ define(function(require, exports, module) {
         }
         var validator = new Validator({
           element: $form,
+          autoSubmit: false,
+          onFormValidated: function (error, results, $form) {
+            if (error) {
+              return false;
+            }
+
+            $.post($form.attr('action'), $form.serialize())
+              .success(function (response) {
+                $('#tag-modal').modal('hide');
+                Notify.success(Translator.trans('admin.cloud_file.add_tag_ok'));
+              })
+              .fail(function (xhr, status, error) {
+                Notify.danger(xhr.responseJSON.error.message);
+              });
+          }
         });
 
         validator.addItem({

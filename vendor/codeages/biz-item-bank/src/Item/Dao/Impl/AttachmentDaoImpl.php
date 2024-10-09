@@ -29,7 +29,7 @@ class AttachmentDaoImpl extends AdvancedDaoImpl implements AttachmentDao
         }
 
         $marks = str_repeat('?,', count($targetIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE target_id IN ({$marks}) AND target_type = ?;";
+        $sql = "SELECT * FROM {$this->table} WHERE target_id IN ({$marks}) AND target_type = ? AND {$this->deleteFlagField} = 0;";
 
         return $this->db()->fetchAll($sql, array_merge($targetIds, [$targetType]));
     }
