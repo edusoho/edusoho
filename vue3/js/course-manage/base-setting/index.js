@@ -1,7 +1,7 @@
 import ManageInfo from './ManageInfo.vue';
 import { createStyleTag, setCurrentPrimaryColor } from '../../common';
 import {createApp} from 'vue';
-import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag, DatePicker} from 'ant-design-vue';
+import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag, DatePicker, Upload, Switch, Dropdown, Menu, Modal} from 'ant-design-vue';
 import 'vue3/main.less';
 
 const app = createApp(ManageInfo,
@@ -58,6 +58,11 @@ app.use(List);
 app.use(Tooltip);
 app.use(Tag);
 app.use(DatePicker);
+app.use(Upload);
+app.use(Switch);
+app.use(Dropdown);
+app.use(Menu);
+app.use(Modal);
 
 
 setCurrentPrimaryColor(app);

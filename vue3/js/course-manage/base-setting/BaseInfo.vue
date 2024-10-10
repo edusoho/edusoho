@@ -52,21 +52,6 @@ const formState = reactive({
   subtitle: props.manage.course.subtitle,
 });
 
-if (props.manage.isUnMultiCourseSet) {
-  Object.assign(formState, {
-    tags: props.manage.tags,
-    categoryId: props.manage.course.categoryId,
-    orgCode: props.manage.course.orgCode,
-    serializeMode: props.manage.course.serializeMode,
-    summary: props.manage.courseSet.summary,
-    title: removeHtml(props.manage.courseSet.title),
-    subtitle: removeHtml(props.manage.courseSet.subtitle),
-  });
-  getCover();
-  getCategory();
-  getTabs();
-}
-
 const courseTitleValidator = (rule, value) => {
   return new Promise((resolve, reject) => {
     if (!/^[^<>]*$/.test(value)) {
@@ -183,6 +168,18 @@ onMounted(() => {
   if (props.manage.isUnMultiCourseSet) {
     initEditor();
   }
+  Object.assign(formState, {
+    tags: props.manage.tags,
+    categoryId: props.manage.course.categoryId,
+    orgCode: props.manage.course.orgCode,
+    serializeMode: props.manage.course.serializeMode,
+    summary: props.manage.courseSet.summary,
+    title: removeHtml(props.manage.courseSet.title),
+    subtitle: removeHtml(props.manage.courseSet.subtitle),
+  });
+  getCover();
+  getCategory();
+  getTabs();
 });
 
 defineExpose({
