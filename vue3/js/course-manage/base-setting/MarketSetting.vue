@@ -29,9 +29,13 @@ const formState = reactive({
   contractEnable: props.manage.course.contractId !== 0 ? 1 : 0,
   contractForceSign: props.manage.course.contractForceSign,
   contractId: props.manage.course.contractId,
+  services: props.manage.course.services ? props.manage.course.services : [],
   drainageImage: props.manage.course.drainageImage,
   drainageText: props.manage.course.drainageText,
 });
+if (props.manage.vipInstalled && props.manage.vipEnabled) {
+  Object.assign(formState, { vipLevelId: props.manage.course.vipLevelId })
+}
 
 const positivePrice = (rule, value) => {
   return new Promise((resolve, reject) => {
@@ -46,14 +50,19 @@ const disabledDate = (current) => {
   return current && current < dayjs().endOf('day');
 };
 
-const selectTags = reactive(Array(props.manage.serviceTags.length).fill(false));
-const handleChange = (tag, checked) => {
-  console.log(tag, checked);
+const serviceItem = ref(props.manage.serviceTags.map(item => ({
+  ...item,
+  active: item.active === 1
+})));
+const selectServiceItem = (tag, index, checked) => {
+  if (checked === true) {
+    serviceItem.value[index].active = true;
+    formState.services.push(tag.code);
+  } else {
+    serviceItem.value[index].active = false;
+    formState.services.splice(formState.services.indexOf(tag.code), 1)
+  }
 };
-
-if (props.manage.vipInstalled && props.manage.vipEnabled) {
-  Object.assign(formState, { vipLevelId: props.manage.course.vipLevelId })
-}
 
 const drainageLoading = ref(false);
 const fileData = ref();
@@ -117,8 +126,6 @@ const selectContract = (id, name) => {
 
 const previewContract = async (id) => {
   contractPreview.value = await Api.contract.previewContract(id, props.manage.course.id);
-  console.log(contractPreview.value);
-  console.log(contractPreview.value.code);
   contractPreviewModalVisible.value = true;
 };
 </script>
@@ -262,6 +269,10 @@ const previewContract = async (id) => {
 
       <a-form-item
         label="加入截止日期"
+        name="enableBuyExpiryTime"
+        :rules="[
+          { required: true, message: '' },
+          ]"
       >
         <a-radio-group v-model:value="formState.enableBuyExpiryTime" class="market-setting-radio">
           <a-radio value="0">不限时间</a-radio>
@@ -278,12 +289,13 @@ const previewContract = async (id) => {
       </a-form-item>
 
       <a-form-item
+        v-if="props.manage.vipInstalled && props.manage.vipEnabled"
         label="会员免费兑换"
         name="vipLevelId"
       >
         <a-select
           v-model:value="formState.vipLevelId"
-          style="width: 250px"
+          style="width: 200px"
         >
           <a-select-option value="0">无</a-select-option>
           <a-select-option
@@ -301,10 +313,10 @@ const previewContract = async (id) => {
         label="承诺提供服务"
       >
         <a-checkable-tag
-          v-for="(tag, index) in props.manage.serviceTags"
+          v-for="(tag, index) in serviceItem"
           :key="tag"
-          v-model:checked="selectTags[index]"
-          @change="checked => handleChange(tag, checked)"
+          v-model:checked="tag.active"
+          @change="checked => selectServiceItem(tag, index, checked)"
         >
           <a-popover>
             <template #content>
@@ -393,7 +405,7 @@ const previewContract = async (id) => {
     <a-modal :width="900"
              v-model:open="contractPreviewModalVisible"
              :closable=false
-             :zIndex="1050"
+             :zIndex=1050
              :centered="true"
              :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
              wrapClassName="market-setting-contract-detail-modal"
