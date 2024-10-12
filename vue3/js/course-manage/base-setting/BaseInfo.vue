@@ -275,7 +275,7 @@ defineExpose({
             placeholder="请选择"
             :options="tabOptions"
             allow-clear
-            style="width: 50%"
+            style="width: 250px"
           ></a-select>
           <div class="text-[#adadad] text-12 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
         </a-form-item>
@@ -290,7 +290,7 @@ defineExpose({
             tree-default-expand-all
             :show-search="true"
             :treeNodeFilterProp="'label'"
-            style="width: 50%"
+            style="width: 250px"
           ></a-tree-select>
         </a-form-item>
 

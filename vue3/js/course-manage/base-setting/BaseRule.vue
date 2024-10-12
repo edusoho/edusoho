@@ -62,14 +62,11 @@ defineExpose({
       ref="formRef"
       class="mt-66"
       :model="formState"
-      name="baseInfo"
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 16 }"
-      autocomplete="off"
     >
 
       <a-form-item
-        name="learnMode"
       >
         <template #label>
           <div class="flex items-center">
@@ -83,8 +80,11 @@ defineExpose({
             </a-popover>
           </div>
         </template>
-        <a-radio-group class="base-rule-radio" v-model:value="formState.learnMode" :options="learnModeOptions"
-                       :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !== 'self'"/>
+        <div class="flex h-32 items-center">
+          <a-radio-group class="base-rule-radio" v-model:value="formState.learnMode" :options="learnModeOptions"
+                         :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !== 'self'"/>
+        </div>
+        <div class="text-[#adadad] text-12 mt-8">计划发布后学习模式无法修改</div>
       </a-form-item>
 
       <a-form-item
