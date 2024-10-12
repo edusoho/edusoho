@@ -34,8 +34,9 @@ const getCover = async () => {
 };
 
 const getCategory = async () => {
-  const Category = await Api.category.getCategory();
-  categoryOptions.value = transformCategoryData(Category.data);
+  const category = await Api.category.getCategory();
+  categoryOptions.value = transformCategoryData(category.data);
+  categoryOptions.value.unshift({ value: '0', label: '无' });
 };
 
 const getTabs = async () => {
@@ -144,7 +145,11 @@ const serializeOption = [
 
 const initEditor = () => {
   const editor = CKEDITOR.replace('course-introduction', {
-    toolbar: 'Detail',
+    toolbar: [
+      {items: ['FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+      {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
+    ],
+    extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
     filebrowserImageUploadUrl: props.manage.imageUploadUrl,
   });
 
@@ -234,10 +239,8 @@ defineExpose({
         ref="formRef"
         class="mt-66"
         :model="formState"
-        name="baseInfo"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 16 }"
-        autocomplete="off"
       >
         <a-form-item
           label="课程标题"
@@ -265,7 +268,6 @@ defineExpose({
 
         <a-form-item
           label="标签"
-          name="tabs"
         >
           <a-select
             v-model:value="formState.tags"
@@ -273,20 +275,22 @@ defineExpose({
             placeholder="请选择"
             :options="tabOptions"
             allow-clear
+            style="width: 50%"
           ></a-select>
+          <div class="text-[#adadad] text-12 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
         </a-form-item>
 
         <a-form-item
           label="分类"
-          name="categoryId"
         >
           <a-tree-select
             v-model:value="formState.categoryId"
             :tree-data="categoryOptions"
             allow-clear
             tree-default-expand-all
-            show-search
+            :show-search="true"
             :treeNodeFilterProp="'label'"
+            style="width: 50%"
           ></a-tree-select>
         </a-form-item>
 
@@ -299,7 +303,6 @@ defineExpose({
 
         <a-form-item
           label="连载状态"
-          name="serializeMode"
         >
           <a-radio-group class="base-info-radio" v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
