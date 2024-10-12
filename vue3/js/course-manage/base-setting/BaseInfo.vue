@@ -169,13 +169,13 @@ onMounted(() => {
     initEditor();
   }
   Object.assign(formState, {
+    title: removeHtml(props.manage.courseSet.title),
+    subtitle: removeHtml(props.manage.courseSet.subtitle),
     tags: props.manage.tags,
     categoryId: props.manage.course.categoryId,
     orgCode: props.manage.course.orgCode,
     serializeMode: props.manage.course.serializeMode,
     summary: props.manage.courseSet.summary,
-    title: removeHtml(props.manage.courseSet.title),
-    subtitle: removeHtml(props.manage.courseSet.subtitle),
   });
   getCover();
   getCategory();
@@ -197,10 +197,8 @@ defineExpose({
         ref="formRef"
         class="mt-66"
         :model="formState"
-        name="baseInfo"
         :label-col="{ span: 4 }"
         :wrapper-col="{ span: 16 }"
-        autocomplete="off"
       >
         <a-form-item
           label="计划名字"

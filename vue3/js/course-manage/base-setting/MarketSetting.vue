@@ -26,6 +26,10 @@ const formState = reactive({
   buyExpiryTime: props.manage.course.buyExpiryTime === '0' ? null : props.manage.course.buyExpiryTime,
   taskDisplay: props.manage.course.taskDisplay,
   drainageEnabled: props.manage.course.drainageEnabled,
+  deadline: props.manage.course.expiryEndDate === 0 ? '' : props.manage.course.expiryEndDate,
+  deadlineType: props.manage.course.deadlineType ? props.manage.course.deadlineType : 'days',
+  expiryDays: props.manage.course.expiryDays > 0 ? props.manage.course.expiryDays : null,
+  expiryMode: props.manage.course.expiryMode,
   contractEnable: props.manage.course.contractId !== 0 ? 1 : 0,
   contractForceSign: props.manage.course.contractForceSign,
   contractId: props.manage.course.contractId,
@@ -34,8 +38,14 @@ const formState = reactive({
   drainageText: props.manage.course.drainageText,
 });
 if (props.manage.vipInstalled && props.manage.vipEnabled) {
-  Object.assign(formState, { vipLevelId: props.manage.course.vipLevelId })
+  Object.assign(formState, {vipLevelId: props.manage.course.vipLevelId});
 }
+
+const coursePublished = ref(props.manage.course.status ? props.manage.course.status === 'published' : false);
+const courseSetPublished = ref(props.manage.courseSet.status ? props.manage.courseSet.status === 'published' : false);
+const courseClosed = ref(props.manage.course.status ? props.manage.course.status === 'closed' : false);
+const courseSetClosed = ref(props.manage.courseSet.status ? props.manage.courseSet.status === 'closed' : false);
+const expiryValueDisabled = ref((coursePublished.value && courseSetPublished.value) || courseClosed.value || courseSetClosed.value);
 
 const positivePrice = (rule, value) => {
   return new Promise((resolve, reject) => {
@@ -60,7 +70,7 @@ const selectServiceItem = (tag, index, checked) => {
     formState.services.push(tag.code);
   } else {
     serviceItem.value[index].active = false;
-    formState.services.splice(formState.services.indexOf(tag.code), 1)
+    formState.services.splice(formState.services.indexOf(tag.code), 1);
   }
 };
 
@@ -81,7 +91,7 @@ const uploadDrainageImage = async (info) => {
     drainageLoading.value = false;
     formState.drainageImage = fileData.value.uri;
   }
-}
+};
 
 const contractEnableSwitch = computed({
   get() {
@@ -115,19 +125,25 @@ const fetchContracts = async () => {
     formState.contractId = contracts.value[0].id;
     contractName.value = contracts.value[0].name;
   }
-}
+};
 fetchContracts();
 
 const selectContract = (id, name) => {
   formState.contractId = id;
   contractName.value = name;
   contractMenuVisible.value = false;
-}
+};
 
 const previewContract = async (id) => {
   contractPreview.value = await Api.contract.previewContract(id, props.manage.course.id);
   contractPreviewModalVisible.value = true;
 };
+
+const expiryModeOptions = [
+  {label: '随到随学', value: 'days'},
+  {label: '固定周期', value: 'date'},
+  {label: '长期有效', value: 'forever'},
+];
 </script>
 
 <template>
@@ -229,18 +245,20 @@ const previewContract = async (id) => {
           <a-dropdown :trigger="['click']" placement="bottom" v-model:value="contractMenuVisible">
             <a-button>
               <div class="flex">
-                <div class="w-150 truncate text-left">{{contractName}}</div>
-                <DownOutlined class="ml-20 text-[#d9d9d9] text-12"/>
+                <div class="w-150 truncate text-left">{{ contractName }}</div>
+                <DownOutlined class="ml-16 text-[#d9d9d9] text-12"/>
               </div>
             </a-button>
             <template #overlay>
-              <a-menu>
+              <a-menu class="h-350 overflow-y-scroll">
                 <a-menu-item
                   v-for="contract in contracts"
                   :key="contract.id"
                 >
                   <div class="flex justify-between">
-                    <div class="w-150 truncate text-left" @click="selectContract(contract.id, contract.name)">{{contract.name}}</div>
+                    <div class="w-150 truncate text-left" @click="selectContract(contract.id, contract.name)">
+                      {{ contract.name }}
+                    </div>
                     <div class="text-[#46c37b]" @click="previewContract(contract.id)">预览</div>
                   </div>
                 </a-menu-item>
@@ -257,7 +275,9 @@ const previewContract = async (id) => {
               <div>强制签署</div>
               <a-popover>
                 <template #content>
-                  <div class="text-14 w-350">开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。</div>
+                  <div class="text-14 w-350">
+                    开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。
+                  </div>
                 </template>
                 <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
               </a-popover>
@@ -269,7 +289,6 @@ const previewContract = async (id) => {
 
       <a-form-item
         label="加入截止日期"
-        name="enableBuyExpiryTime"
         :rules="[
           { required: true, message: '' },
           ]"
@@ -278,14 +297,81 @@ const previewContract = async (id) => {
           <a-radio value="0">不限时间</a-radio>
           <a-radio value="1">自定义</a-radio>
         </a-radio-group>
-        <a-date-picker v-if="formState.enableBuyExpiryTime === '1'" :disabled-date="disabledDate" v-model:value="formState.buyExpiryTime"
-                       style="width: 150px"/>
+        <a-date-picker v-if="formState.enableBuyExpiryTime === '1'" :disabled-date="disabledDate"
+                       v-model:value="formState.buyExpiryTime" style="width: 150px"/>
       </a-form-item>
 
-      <a-form-item
-        label="学习有效期"
-      >
-
+      <a-form-item>
+        <template #label>
+          <div class="flex items-center">
+            <div>学习有效期</div>
+            <a-popover>
+              <template #content>
+                <div class="flex flex-col text-14">
+                  <div class="mb-10"><span class="font-medium">随到随学：</span>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
+                  </div>
+                  <div class="mb-10"><span class="font-medium">固定周期：</span>有固定的学习开始日期和结束日期</div>
+                  <div>过期后无法继续学习，系统会在到期前10天提醒学员。</div>
+                </div>
+              </template>
+              <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
+            </a-popover>
+          </div>
+        </template>
+        <div class="flex flex-col">
+          <div class="h-32 flex items-center">
+            <a-radio-group v-model:value="formState.expiryMode" class="market-setting-radio">
+              <a-radio
+                v-for="option in expiryModeOptions"
+                :key="option.value"
+                :value="option.value"
+                :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !=='self'"
+              >
+                {{ option.label }}
+              </a-radio>
+            </a-radio-group>
+          </div>
+          <div class="mt-16 max-w-600 bg-[#f5f5f5] px-24 pt-24 flex flex-col" v-if="formState.expiryMode !== 'forever'">
+            <a-radio-group
+              v-if="formState.expiryMode === 'days'"
+              :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !=='self'"
+              v-model:value="formState.deadlineType"
+              class="market-setting-radio"
+            >
+              <a-radio value="end_date">按截止日期</a-radio>
+              <a-radio value="days">按有效天数</a-radio>
+            </a-radio-group>
+            <div v-if="formState.expiryMode === 'days' && formState.deadlineType === 'end_date'">
+              <a-form-item>
+                <div class="flex items-center mt-16">
+                  <a-date-picker :disabled="props.manage.course.platform !=='self'" style="width: 150px"/>
+                  <div class="text-14 opacity-65 ml-10">在此日期前，学员可进行学习。</div>
+                </div>
+              </a-form-item>
+            </div>
+            <div class="flex" v-if="formState.expiryMode === 'days' && formState.deadlineType === 'days'">
+              <a-form-item>
+                <div class="flex items-center mt-16">
+                  <a-input v-model:value="formState.expiryDays" :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" style="width: 150px"/>
+                  <div class="text-14 opacity-65 ml-10">从加入当天起，在几天内可进行学习。</div>
+                </div>
+              </a-form-item>
+            </div>
+            <div v-if="formState.expiryMode === 'date'" class="flex">
+              <div class="text-14 mt-6 mr-4">开始日期</div>
+              <a-form-item>
+                <a-date-picker :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" style="width: 150px"/>
+              </a-form-item>
+              <div class="text-14 mt-6 mr-4 ml-8">结束日期</div>
+              <a-form-item>
+                <a-date-picker :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" style="width: 150px"/>
+              </a-form-item>
+            </div>
+          </div>
+          <div class="text-[#adadad] text-12 mt-8">
+            教学计划一旦发布，有效期类型不能修改；课程或教学计划下架后，可以修改日期，新的学习有效期仅对修改后加入的学员生效
+          </div>
+        </div>
       </a-form-item>
 
       <a-form-item
@@ -304,7 +390,7 @@ const previewContract = async (id) => {
             :key="level.id"
             :value="level.id"
           >
-            {{level.name}}
+            {{ level.name }}
           </a-select-option>
         </a-select>
       </a-form-item>
@@ -320,7 +406,7 @@ const previewContract = async (id) => {
         >
           <a-popover>
             <template #content>
-              <div>{{tag.summary}}</div>
+              <div>{{ tag.summary }}</div>
             </template>
             <div class="text-14">{{ tag.fullName }}</div>
           </a-popover>
@@ -393,7 +479,8 @@ const previewContract = async (id) => {
             <div class="opacity-65 text-14">加入/支付完成页</div>
             <a-popover>
               <template #content>
-                <img src="../../../img/course-manage/base-setting/drainage-style.png" alt="drainage" style="height: 500px">
+                <img src="../../../img/course-manage/base-setting/drainage-style.png" alt="drainage"
+                     style="height: 500px">
               </template>
               <div class="text-[#409EFF] font-medium text-14 ml-4">查看详情</div>
             </a-popover>
@@ -412,24 +499,30 @@ const previewContract = async (id) => {
     >
       <template #title>
         <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
-          <div class="text-16 text-[#1E2226] font-medium">{{ contractPreview.goodsName }}</div>
+          <div class="text-16 text-[#1E2226] font-medium">
+            {{ `${contractPreview.goodsName}-${t('modal.contractSigning')}` }}
+          </div>
           <CloseOutlined class="h-16 w-16" @click="contractPreviewModalVisible = false"/>
         </div>
       </template>
       <div class="w-full flex flex-col space-y-32 p-32">
         <div class="flex items-end justify-between gap-4">
-          <span class="flex-none whitespace-nowrap opacity-0">{{ `${ t('modal.contractNumber') }: ${contractPreview.code}` }}</span>
+          <span class="flex-none whitespace-nowrap opacity-0">{{
+              `${t('modal.contractNumber')}: ${contractPreview.code}`
+            }}</span>
           <span class="grow text-center text-22 font-medium">{{ contractPreview.name }}</span>
-          <span class="flex-none whitespace-nowrap text-gray-500">{{ `${ t('modal.contractNumber') }: ${contractPreview.code}` }}</span>
+          <span class="flex-none whitespace-nowrap text-gray-500">{{
+              `${t('modal.contractNumber')}: ${contractPreview.code}`
+            }}</span>
         </div>
         <div v-html="contractPreview.content" class="text-gray-500 contract-content"></div>
         <div class="flex space-x-64">
           <div class="flex-1 flex flex-col items-start justify-between space-y-22">
-            <span class="text-18 font-medium">{{ `${ t('modal.partyA') }：` }}</span>
+            <span class="text-18 font-medium">{{ `${t('modal.partyA')}：` }}</span>
             <div class="w-full flex flex-col space-y-22">
               <img :src="contractPreview.seal" alt="" class="w-150 h-150"/>
               <div class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.signingDate')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
                   {{ contractPreview.signDate }}
                 </div>
@@ -437,34 +530,34 @@ const previewContract = async (id) => {
             </div>
           </div>
           <div class="flex-1 flex flex-col items-start justify-between">
-            <span class="text-18 font-medium">{{ `${ t('modal.partyB') }：` }}</span>
+            <span class="text-18 font-medium">{{ `${t('modal.partyB')}：` }}</span>
             <div class="w-full flex flex-col space-y-22">
               <div v-if="contractPreview.sign && contractPreview.sign.handSignature" class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.handSignature') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.handSignature')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
                   <img :src="contractPreview.sign.handSignature" class="h-35" alt=""/>
                 </div>
               </div>
               <div v-if="contractPreview.sign && contractPreview.sign.truename" class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.partyBName') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.partyBName')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
                   {{ contractPreview.sign.truename }}
                 </div>
               </div>
               <div v-if="contractPreview.sign && contractPreview.sign.IDNumber" class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.iDNumber') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.iDNumber')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
                   {{ contractPreview.sign.IDNumber }}
                 </div>
               </div>
               <div v-if="contractPreview.sign && contractPreview.sign.phoneNumber" class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.contactInformation') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.contactInformation')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
                   {{ contractPreview.sign.phoneNumber }}
                 </div>
               </div>
               <div class="flex items-center">
-                <span class="text-gray-500">{{ `${ t('modal.signingDate') }：` }}</span>
+                <span class="text-gray-500">{{ `${t('modal.signingDate')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
                   {{ contractPreview.signDate }}
                 </div>
@@ -493,13 +586,16 @@ const previewContract = async (id) => {
 .market-setting-contract-detail-modal {
   .ant-modal {
     padding: 0 !important;
+
     .ant-modal-content {
       padding: 0 !important;
+
       .ant-modal-footer {
         border-top: 1px solid #ebebeb;
         padding: 10px 16px;
         margin-top: 0;
       }
+
       .ant-modal-header {
         padding: 0;
         margin-bottom: 0;
