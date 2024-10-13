@@ -155,10 +155,8 @@ const expiryModeOptions = [
       ref="formRef"
       class="mt-66"
       :model="formState"
-      name="baseInfo"
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 16 }"
-      autocomplete="off"
     >
       <div v-if="props.manage.course.platform === 'supplier'">
         <a-form-item
