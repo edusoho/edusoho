@@ -497,6 +497,19 @@ class CourseManageController extends BaseController
         );
     }
 
+    public function questionAction(Request $request, $courseSetId, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        return $this->render(
+            'course-manage/question.html.twig',
+            [
+                'course' => $course,
+                'courseSet' => $courseSet,
+            ]
+        );
+    }
+
     public function prepareExpiryMode($data)
     {
         if (empty($data['expiryMode']) || 'days' != $data['expiryMode']) {

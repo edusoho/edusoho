@@ -1,0 +1,13 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% set course_side_nav = 'question' %}
+
+{% do script(['vue3/js/course-manage/question/index.js']) %}
+
+{% block main %}
+  <div id="question-list"
+       data-course="{{ course|json_encode }}"
+       data-course-set="{{ courseSet|default([])|json_encode }}"
+       style="margin-left: 200px"
+  ></div>
+{% endblock %}
