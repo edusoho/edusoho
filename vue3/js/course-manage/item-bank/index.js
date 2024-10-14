@@ -1,14 +1,20 @@
 import {createApp} from 'vue';
 import 'vue3/main.less';
-import ItemBankList from './ItemBankList.vue';
+import ItemBankPage from './ItemBankPage.vue';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
-import { Button } from 'ant-design-vue';
+import { Button, Empty, Drawer, TreeSelect, Select, Input, Table } from 'ant-design-vue';
 
-const app = createApp(ItemBankList);
+const app = createApp(ItemBankPage);
 
 setCurrentPrimaryColor(app);
 
 app.use(Button);
+app.use(Empty);
+app.use(Drawer);
+app.use(TreeSelect);
+app.use(Select);
+app.use(Input);
+app.use(Table);
 
 if (process.env.NODE_ENV === 'production') {
   createStyleTag(`/static-dist/vue3/js/my-contract/index.css?${window.app.version}`);
