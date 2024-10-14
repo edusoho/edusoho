@@ -258,7 +258,7 @@ const downloadContract = async (id, fileName) => {
            wrapClassName="signature-list-detail-modal"
            v-model:open="signatureContentVisible"
            :closable=false
-           zIndex="1050"
+           :zIndex="1050"
            :centered="true"
            :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
   >
