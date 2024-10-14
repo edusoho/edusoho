@@ -1,11 +1,11 @@
 {% extends 'course-manage/layout.html.twig' %}
 
-{% set course_side_nav = 'question' %}
+{% set course_side_nav = 'item-bank' %}
 
-{% do script(['vue3/js/course-manage/question/index.js']) %}
+{% do script(['vue3/js/course-manage/item-bank/index.js']) %}
 
 {% block main %}
-  <div id="question-list"
+  <div id="item-bank"
        data-course="{{ course|json_encode }}"
        data-course-set="{{ courseSet|default([])|json_encode }}"
        style="margin-left: 200px"
