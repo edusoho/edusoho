@@ -16,6 +16,17 @@ class ItemBankExerciseBind extends AbstractResource
         return ['success' => true];
     }
 
+    public function search(ApiRequest $request, $exerciseId)
+    {
+        $conditions = $request->query->all();
+
+        return $this->getItemBankExerciseService()->findBindExercise($conditions['bindType'], $conditions['bindId']);
+    }
+
+    public function get(ApiRequest $request)
+    {
+    }
+
     /**
      * @return ExerciseService
      */

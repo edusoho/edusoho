@@ -71,4 +71,6 @@ interface ExerciseService
     public function unpublishExerciseChapter($exerciseId, $ids);
 
     public function bindExercise($bindType, $bindId, $exerciseId);
+
+    public function findBindExercise($bindType, $bindId);
 }
