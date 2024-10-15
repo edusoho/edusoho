@@ -42,6 +42,19 @@ const itemBankColumns = [
     title: '更新时间'
   },
 ]
+
+const rowSelection = ref({
+  checkStrictly: false,
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  onSelect: (record, selected, selectedRows) => {
+    console.log(record, selected, selectedRows);
+  },
+  onSelectAll: (selected, selectedRows, changeRows) => {
+    console.log(selected, selectedRows, changeRows);
+  },
+});
 </script>
 
 <template>
@@ -85,10 +98,14 @@ const itemBankColumns = [
           <a-button type="primary" ghost>搜索</a-button>
           <a-button>重置</a-button>
         </div>
-        <a-table :columns="itemBankColumns" class="item-bank-list-table"/>
+        <a-table :columns="itemBankColumns" :row-selection="rowSelection"/>
       </div>
       <div class="absolute bottom-0 left-0 bg-white w-full flex items-center justify-between px-36 py-16 border-x-0 border-b-0 border-[#EFF0F5] border-solid">
-        <div>选择...项</div>
+        <div class="flex space-x-12">
+          <a-checkbox/>
+          <div class="text-[#37393D] text-14 font-normal">全选</div>
+          <div class="text-[#37393D] text-14 font-normal">选择...项</div>
+        </div>
         <div class="space-x-16">
           <a-button @click="closeItemBankList">取消</a-button>
           <a-button type="primary">确认</a-button>
