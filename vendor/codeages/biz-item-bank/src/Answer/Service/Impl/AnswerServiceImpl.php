@@ -86,7 +86,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         try {
             $this->beginTransaction();
 
-            $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
             $this->saveAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
@@ -1301,8 +1300,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
         $assessmentSectiones = $this->getAssessmentSectionService()->findSectionsByAssessmentId($assessment['id']);
         $assessmentSectionesIndex = ArrayToolkit::index($assessmentSectiones, 'id');
-        $questions = $this->getItemService()->findQuestionsByQuestionIds($allQuestionIds);
-        $questionsIndex = ArrayToolkit::index($questions, 'id');
+        $questionsIndex = $this->getItemService()->findQuestionsByQuestionIds($allQuestionIds);
         // 将缺失的问题添加到新的结构中
         foreach ($allIdentifies as $identify) {
             list($answerRecordId, $questionId) = explode('_', $identify);
@@ -1347,7 +1345,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             if ($questionsIndex[$questionId]['answer_mode'] == 'true_false') {
                 $noResponse = [""];
             }
-            if ($assessmentSectionesIndex[$sectionId]['name'] == 'text') {
+            if ($questionsIndex[$questionId]['answer_mode'] == 'text') {
                 $question = $this->findQuestion($assessment['sections'], $sectionId, $itemId, $questionId);
                 if ($question) {
                     $responsePointsCount = count($question['response_points']);
