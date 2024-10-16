@@ -136,6 +136,7 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
                 'questionBankId = :questionBankId',
                 'categoryId in (:categoryIds)',
                 'creator = :creator',
+                'updated_user_id IN (updatedUsers)',
                 'title like :title',
                 'status = :status',
                 'status != :excludeStatus',
