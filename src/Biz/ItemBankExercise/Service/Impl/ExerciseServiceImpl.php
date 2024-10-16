@@ -11,6 +11,7 @@ use Biz\Exception\UnableJoinException;
 use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 use Biz\ItemBankExercise\Dao\AssessmentExerciseRecordDao;
 use Biz\ItemBankExercise\Dao\ChapterExerciseRecordDao;
+use Biz\ItemBankExercise\Dao\ExerciseBindDao;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
@@ -571,6 +572,21 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $this->getLogService()->info('item_bank_exercise', 'unpublish_exercise_chapter', "管理员{$this->getCurrentUser()['nickname']}取消发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
     }
 
+    public function bindExercise($bindType, $bindId, $exerciseId)
+    {
+        $this->getExerciseBindDao()->create([
+            'itemBankExerciseId' => $exerciseId,
+            'bindType' => $bindType,
+            'bindId' => $bindId,
+            'seq' => '0',
+        ]);
+    }
+
+    public function findBindExercise($bindType, $bindId)
+    {
+        return $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId], ['seq' => 'DESC'], 0, PHP_INT_MAX);
+    }
+
     /**
      * @return ExerciseDao
      */
@@ -689,5 +705,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getItemBankChapterExerciseService()
     {
         return $this->createService('ItemBankExercise:ChapterExerciseService');
+    }
+
+    /**
+     * @return ExerciseBindDao
+     */
+    protected function getExerciseBindDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseBindDao');
     }
 }

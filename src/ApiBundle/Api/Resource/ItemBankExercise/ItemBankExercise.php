@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Contract\Service\ContractService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\User\Service\UserService;
 
 class ItemBankExercise extends AbstractResource
 {
@@ -63,6 +64,15 @@ class ItemBankExercise extends AbstractResource
         if (isset($conditions['categoryId']) && '0' == $conditions['categoryId']) {
             unset($conditions['categoryId']);
         }
+        if (isset($conditions['bindId']) && isset($conditions['bindType'])) {
+            $exerciseBinds = $this->getItemBankExerciseService()->findBindExercise($conditions['bindType'], $conditions['bindId']);
+            $exerciseIds = array_column($exerciseBinds, 'itemBankExerciseId');
+            $conditions['excludeIds'] = $exerciseIds;
+        }
+        if (isset($conditions['updateUser'])) {
+            $user = $this->getUserService()->findUserLikeNickname($conditions['updateUser']);
+            $conditions['updatedUsers'] = array_column($user, 'id');
+        }
 
         $sort = $this->getSort($request) ?: ['recommendedSeq' => 'ASC'];
 
@@ -102,5 +112,13 @@ class ItemBankExercise extends AbstractResource
     private function getContractService()
     {
         return $this->service('Contract:ContractService');
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }
