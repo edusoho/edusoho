@@ -69,8 +69,8 @@ class ItemBankExercise extends AbstractResource
             $exerciseIds = array_column($exerciseBinds, 'itemBankExerciseId');
             $conditions['excludeIds'] = $exerciseIds;
         }
-        if (isset($conditions['updateUser'])) {
-            $user = $this->getUserService()->findUserLikeNickname($conditions['updateUser']);
+        if (isset($conditions['updatedUser'])) {
+            $user = $this->getUserService()->findUserLikeNickname($conditions['updatedUser']);
             $conditions['updatedUsers'] = array_column($user, 'id');
         }
 
@@ -85,6 +85,11 @@ class ItemBankExercise extends AbstractResource
             $itemBankExercises = $this->getItemBankExerciseService()->searchOrderByRatingAndLastDays($conditions, $conditions['lastDays'], $offset, $limit);
         } else {
             $itemBankExercises = $this->getItemBankExerciseService()->search($conditions, $sort, $offset, $limit);
+        }
+        $userIds = array_values(array_unique(array_column($itemBankExercises, 'updated_user_id')));
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        foreach ($itemBankExercises as &$itemBankExercise) {
+            $itemBankExercise['updatedUser'] = $users[$itemBankExercise['updated_user_id']] ?? null;
         }
 
         return $this->makePagingObject($itemBankExercises, $this->getItemBankExerciseService()->count($conditions), $offset, $limit);
