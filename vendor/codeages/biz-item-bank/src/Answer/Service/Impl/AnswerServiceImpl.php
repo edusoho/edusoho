@@ -1537,12 +1537,4 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         return $this->biz->service('Activity:TestpaperActivityService');
     }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->biz->service('Question:QuestionService');
-    }
 }
