@@ -15,7 +15,8 @@
     "vanilla-picker": "^2.12.3",
     "vue": "^3.4.35",
     "vue-i18n": "^9.8.0",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.4",
