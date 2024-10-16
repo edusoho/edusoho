@@ -14,6 +14,7 @@ class TeacherMember extends Member
             'userId' => $userId,
             'role' => self::ROLE,
             'remark' => '',
+            'canLearn' => '1'
         ];
 
         return $this->getMemberDao()->create($member);

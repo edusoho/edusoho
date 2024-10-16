@@ -62,7 +62,7 @@ async function fetchContracts(params) {
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   pageData.value = data;
-  loading.value = false;
+loading.value = false;
 }
 
 async function handleTableChange(paging) {

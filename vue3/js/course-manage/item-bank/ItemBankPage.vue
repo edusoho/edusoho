@@ -4,10 +4,10 @@ import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import ItemBankList from './ItemBankList.vue';
 import {InfoCircleOutlined} from '@ant-design/icons-vue';
 
-const course = ref($('#question-list').data('course'));
-const courseSet = ref($('#question-list').data('courseSet'));
-console.log('course', course.value)
-console.log('courseSet', courseSet.value)
+const course = ref($('#item-bank').data('course'));
+const courseSet = ref($('#item-bank').data('courseSet'));
+// console.log('course', course.value)
+// console.log('courseSet', courseSet.value)
 
 const selectedItemBank = ref([]);
 
@@ -34,7 +34,7 @@ const showItemBankList = () => {
 
       </div>
     </div>
-    <ItemBankList v-model:itemBankListVisible="itemBankListVisible"/>
+    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="courseSet.id" bind-type="course"/>
   </AntConfigProvider>
 </template>
 

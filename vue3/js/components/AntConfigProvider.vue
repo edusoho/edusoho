@@ -34,5 +34,4 @@ const token = ref({
   "borderRadius": 4
 })
 
-console.log(token.value)
 </script>
