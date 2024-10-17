@@ -9,6 +9,7 @@
   "packageManager": "npm",
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
+    "@vueuse/core": "^11.1.0",
     "ant-design-vue": "^4.2.3",
     "lodash-es": "^4.17.21",
     "smooth-signature": "^1.0.15",

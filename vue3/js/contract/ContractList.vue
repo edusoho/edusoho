@@ -283,7 +283,6 @@ const toUpdateContract = (id) => {
       </template>
     </a-modal>
   </div>
-  <!--  <contract-drawer v-model:visible="drawerVisible" :type="drawerType"/>-->
 </template>
 <style lang="less">
 .contract-list-operation-btn {

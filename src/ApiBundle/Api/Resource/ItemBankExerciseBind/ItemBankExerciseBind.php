@@ -11,7 +11,7 @@ class ItemBankExerciseBind extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseId']);
+        $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseIds']);
 
         return ['success' => true];
     }

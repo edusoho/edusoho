@@ -1,5 +1,6 @@
 <script setup>
-import {onBeforeMount, ref} from 'vue';
+import {computed, onBeforeMount, reactive, ref} from 'vue';
+import { useInfiniteScroll } from '@vueuse/core'
 
 const props = defineProps({
   bindId: {
@@ -18,7 +19,6 @@ const closeItemBankList = () => {
   itemBankListVisible.value = false;
 }
 
-const loading = ref(false);
 const itemBankCategoryOptions = ref();
 const keywordTypeOptions = ref([
   { label: '名称', value: 'title' },
@@ -29,50 +29,19 @@ const categoryId = ref();
 const keywordType = ref('title');
 const keyword = ref('');
 
-const itemBankExerciseData = ref();
-const itemBankExerciseColumns = [
-  {
-    key: 'id',
-    title: '编号',
-    dataIndex: 'id',
-  },
-  {
-    key: 'title',
-    title: '名称',
-    width: 300,
-    ellipsis: true,
-  },
-  {
-    key: 'price',
-    title: '价格（元）',
-    dataIndex: 'price',
-  },
-  {
-    key: 'studentNum',
-    title: '学员数',
-    dataIndex: 'studentNum',
-  },
-  {
-    title: '更新人'
-  },
-  {
-    key: 'updatedTime',
-    title: '更新时间',
-    dataIndex: 'updatedTime'
-  },
-];
+const itemBankExerciseData = ref([]);
+const itemBankExerciseState = ref([]);
+function transformItemBankExerciseState(itemBankExerciseData) {
+  return  itemBankExerciseData.map(item => ({
+    id: item.id,
+    checked: false
+  }));
+}
 
-const rowSelection = ref({
-  checkStrictly: false,
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows);
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows);
-  },
+const pagination = reactive({
+  current: 1,
+  total: 0,
+  pageSize: 10,
 });
 
 function transformItemBankCategory(data) {
@@ -88,16 +57,124 @@ function transformItemBankCategory(data) {
   });
 }
 
-async function fetchItemBankExercise() {
-  const searchQuery = Object.assign({bindId: props.bindId, bindType: props.bindType, categoryId: categoryId.value ? categoryId.value : ''}, keywordType.value === 'title' ? {title: keyword.value} : {updateUser: keyword.value});
+async function fetchItemBankExercise(params) {
+  const searchQuery = Object.assign({bindId: props.bindId, bindType: props.bindType, categoryId: categoryId.value ? categoryId.value : '', ...params}, keywordType.value === 'title' ? {title: keyword.value} : {updatedUser: keyword.value});
   const { data, paging } = await Api.itemBank.search(searchQuery);
-  itemBankExerciseData.value = data;
-  console.log(itemBankExerciseData.value);
+  return data;
 }
+
+let allDataLoaded = false;
+const itemBankTableBody = ref(null);
+const { reset } = useInfiniteScroll(
+  itemBankTableBody,
+  async () => {
+    const params = {
+      limit: pagination.pageSize,
+      offset: (pagination.current - 1) * pagination.pageSize,
+    };
+    const newData = await fetchItemBankExercise(params);
+    if (newData.length === 0) {
+      allDataLoaded = true;
+    }
+    itemBankExerciseData.value.push(...newData);
+    itemBankExerciseState.value.push(...transformItemBankExerciseState(newData));
+    pagination.current += 1;
+  },
+  { distance: 20, canLoadMore: () => {
+    return !allDataLoaded;
+    }},
+)
+
+function formattedDate(dateStr) {
+  const date = new Date(dateStr);
+  return date.getFullYear() + '-' +
+    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+    String(date.getDate()).padStart(2, '0') + ' ' +
+    String(date.getHours()).padStart(2, '0') + ':' +
+    String(date.getMinutes()).padStart(2, '0') + ':' +
+    String(date.getSeconds()).padStart(2, '0');
+}
+
+async function search() {
+  reset();
+  pagination.current = 1;
+  const params = {
+    limit: pagination.pageSize,
+    offset: (pagination.current - 1) * pagination.pageSize,
+  }
+  const newDate = await fetchItemBankExercise(params)
+  itemBankExerciseData.value = newDate;
+  itemBankExerciseState.value = transformItemBankExerciseState(newDate);
+}
+
+async function clear() {
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
+  reset();
+  categoryId.value = undefined;
+  keywordType.value = 'title';
+  keyword.value = undefined;
+}
+
+function toItemBankExercisePage(exerciseId) {
+  window.location.href = `/item_bank_exercise/${exerciseId}`
+}
+
+const checkedExerciseIdNum = computed(() => {
+  return itemBankExerciseState.value
+    .filter(item => item.checked === true).length;
+})
+
+const isSelectAll = computed(() => {
+  if (itemBankExerciseData.value.length === 0) {
+    return false;
+  }
+  const exerciseIds = itemBankExerciseData.value.map(item => item.id)
+  const checkedExerciseIds = itemBankExerciseState.value
+    .filter(item => item.checked === true)
+    .map(item => item.id);
+  for (const id of exerciseIds) {
+    if (!checkedExerciseIds.includes(id)) {
+      return false;
+    }
+  }
+  return true;
+})
+
+const isIndeterminate = computed(() => {
+  if (checkedExerciseIdNum.value === 0) {
+    return false
+  }
+  const exerciseIds = itemBankExerciseData.value.map(item => item.id)
+  const checkedExerciseIds = itemBankExerciseState.value
+    .filter(item => item.checked === true)
+    .map(item => item.id);
+  for (const id of exerciseIds) {
+    if (!checkedExerciseIds.includes(id)) {
+      return true;
+    }
+  }
+  return false;
+})
+
+function handleSelectAllChange(e) {
+  if (e.target.checked) {
+    itemBankExerciseState.value = itemBankExerciseState.value.map(item => ({
+      ...item,
+      checked: true,
+    }))
+  } else {
+    itemBankExerciseState.value = itemBankExerciseState.value.map(item => ({
+      ...item,
+      checked: false,
+    }))
+  }
+}
+
+const exerciseIds = ref([]);
 
 onBeforeMount(async () => {
   itemBankCategoryOptions.value = transformItemBankCategory(await Api.itemBank.getItemBankCategory());
-  await fetchItemBankExercise();
 })
 </script>
 
@@ -108,14 +185,14 @@ onBeforeMount(async () => {
     :closable="false"
     :maskClosable="false"
     :bodyStyle="{padding: 0}"
-    width="70vw"
+    width="75vw"
   >
     <div class="flex flex-col relative h-full">
-      <div class="flex justify-between px-20 py-14 border-x-0 border-t-0 border-[#EFF0F5] border-solid">
+      <div class="flex justify-between px-20 py-14 border-x-0 border-t-0 border-[#EFF0F5] border-b-1 border-solid">
         <div class="font-medium text-16 text-[#37393D]">绑定题库</div>
         <CloseOutlined @click="closeItemBankList"/>
       </div>
-      <div class="flex flex-col px-20 py-24">
+      <div class="flex flex-col px-20 pt-24">
         <div class="flex space-x-20 mb-20">
           <a-tree-select
             v-model:value="categoryId"
@@ -139,34 +216,76 @@ onBeforeMount(async () => {
             :placeholder="keywordType === 'name' ? '请输入名称' : '请输入更新人'"
           >
           </a-input>
-          <a-button type="primary" ghost>搜索</a-button>
-          <a-button>重置</a-button>
+          <a-button type="primary" ghost @click="search">搜索</a-button>
+          <a-button @click="clear">重置</a-button>
         </div>
-        <a-table :columns="itemBankExerciseColumns"
-                 :data-source="itemBankExerciseData"
-                 :row-selection="rowSelection"
-                 :loading="loading"
-                 :row-key="record => record.id"
-        >
-          <template #bodyCell="{ column, record }">
-            <template v-if="column.key === 'title'">
-              <div class="flex flex-col">
-                <div>{{record.title}}</div>
-                <div>{{record.title}}</div>
+        <div class="flex flex-col w-full">
+          <div class="flex rounded-t-4 bg-[#F5F5F5] w-full">
+            <div class="flex items-center w-[10%]">
+              <a-checkbox class="py-16 px-8" :indeterminate="isIndeterminate" :checked="checkedExerciseIdNum > 0 && isSelectAll" @change="handleSelectAllChange"/>
+              <div class="text-14 text-[#37393D] font-medium px-16 py-16">编号</div>
+            </div>
+            <div class="flex items-center px-16 py-13 w-[35%]">
+              <div class="text-14 text-[#37393D] font-medium">名称</div>
+            </div>
+            <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
+              <div class="text-14 text-[#37393D] font-medium">价格(元)</div>
+            </div>
+            <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
+              <div class="text-14 text-[#37393D] font-medium">学员数</div>
+            </div>
+            <div class="flex items-center px-16 py-13 w-[15%]">
+              <div class="text-14 text-[#37393D] font-medium">更新人</div>
+            </div>
+            <div class="flex items-center px-16 py-13 w-[20%]">
+              <div class="text-14 text-[#37393D] font-medium">更新时间</div>
+            </div>
+          </div>
+          <div ref="itemBankTableBody" class="flex flex-col w-full overflow-y-scroll h-[calc(100vh-248px)]">
+            <div v-if="itemBankExerciseData.length > 0" v-for="(record, index) in itemBankExerciseData">
+              <div class="flex border border-x-0 border-t-0 border-solid border-[#EFF0F5]">
+                <div class="flex items-center w-[10%]">
+                  <a-checkbox class="py-16 px-8" v-model:checked="itemBankExerciseState[index].checked"/>
+                  <div class="text-14 text-[#37393D] font-normal px-16 py-16">{{ record.id }}</div>
+                </div>
+                <div class="flex flex-col px-16 py-16 w-[35%]">
+                  <a-tooltip placement="topLeft">
+                    <template #title>
+                      <div class="max-w-216">{{ record.title }}</div>
+                    </template>
+                    <div class="text-14 text-[#37393D] font-normal truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
+                  </a-tooltip>
+                  <div class="text-12 text-[#919399] w-fit">分类:</div>
+                </div>
+                <div class="flex flex-row-reverse px-16 py-16 w-[10%]">
+                  <div class="text-14 text-[#37393D] font-normal">{{ record.price }}</div>
+                </div>
+                <div class="flex flex-row-reverse px-16 py-16 w-[10%]">
+                  <div class="text-14 text-[#37393D] font-normal">{{ record.studentNum }}</div>
+                </div>
+                <div class="flex px-16 py-16 w-[15%]">
+                  <div class="text-14 text-[#37393D] font-normal" v-if="record.updatedUser">{{ record.updatedUser.nickname }}</div>
+                </div>
+                <div class="flex px-16 py-16 w-[20%]">
+                  <div class="text-14 text-[#37393D] font-normal">{{ formattedDate(record.updatedTime) }}</div>
+                </div>
               </div>
-            </template>
-          </template>
-        </a-table>
+            </div>
+            <div v-else class="flex items-center justify-center w-full h-full">
+              <a-empty description="暂无题库"/>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="absolute bottom-0 left-0 bg-white w-full flex items-center justify-between px-36 py-16 border-x-0 border-b-0 border-[#EFF0F5] border-solid">
-        <div class="flex space-x-12">
-          <a-checkbox/>
+      <div class="fixed bottom-0 right-0 bg-white w-[75vw] flex items-center justify-between px-28 py-16 border-x-0 border-b-0 border-t-1 border-[#EFF0F5] border-solid">
+        <div class="flex space-x-24">
+          <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="checkedExerciseIdNum > 0 && isSelectAll" @change="handleSelectAllChange"/>
           <div class="text-[#37393D] text-14 font-normal">全选</div>
-          <div class="text-[#37393D] text-14 font-normal">选择...项</div>
+          <div class="text-[#37393D] text-14 font-normal">{{ `选择 ${ checkedExerciseIdNum } 项` }}</div>
         </div>
         <div class="space-x-16">
           <a-button @click="closeItemBankList">取消</a-button>
-          <a-button type="primary">确认</a-button>
+          <a-button type="primary" @click="console.log('isSelectAll', isSelectAll);console.log('isIndeterminate', isIndeterminate)">确认</a-button>
         </div>
       </div>
     </div>
