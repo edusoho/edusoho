@@ -91,6 +91,11 @@ class ItemBankExercise extends AbstractResource
         foreach ($itemBankExercises as &$itemBankExercise) {
             $itemBankExercise['updatedUser'] = $users[$itemBankExercise['updated_user_id']] ?? null;
         }
+        $categoryIds = array_values(array_unique(array_column($itemBankExercises, 'categoryId')));
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        foreach ($itemBankExercises as &$itemBankExercise) {
+            $itemBankExercise['category'] = $categories[$itemBankExercise['categoryId']] ?? null;
+        }
 
         return $this->makePagingObject($itemBankExercises, $this->getItemBankExerciseService()->count($conditions), $offset, $limit);
     }
@@ -125,5 +130,13 @@ class ItemBankExercise extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return \Biz\QuestionBank\Service\CategoryService
+     */
+    private function getCategoryService()
+    {
+        return $this->service('QuestionBank:CategoryService');
     }
 }
