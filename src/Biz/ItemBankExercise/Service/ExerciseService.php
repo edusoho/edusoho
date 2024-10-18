@@ -73,4 +73,8 @@ interface ExerciseService
     public function bindExercise($bindType, $bindId, $exerciseIds);
 
     public function findBindExercise($bindType, $bindId);
+
+    public function removeBindExercise($bindType, $bindId, $exerciseId);
+
+    public function updateBindExercise($itemBankExercises);
 }

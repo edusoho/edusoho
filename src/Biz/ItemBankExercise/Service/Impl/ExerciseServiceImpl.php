@@ -574,7 +574,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function bindExercise($bindType, $bindId, $exerciseIds)
     {
-        $data = array_map(function($exerciseId) use ($bindType, $bindId) {
+        $data = array_map(function ($exerciseId) use ($bindType, $bindId) {
             return [
                 'itemBankExerciseId' => $exerciseId,
                 'bindType' => $bindType,
@@ -590,6 +590,18 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function findBindExercise($bindType, $bindId)
     {
         return $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId], ['seq' => 'DESC'], 0, PHP_INT_MAX);
+    }
+
+    public function removeBindExercise($bindType, $bindId, $exerciseId)
+    {
+        $bindExercise = $this->getExerciseBindDao()->getBindExercise($bindType, $bindId, $exerciseId);
+
+        $this->getExerciseBindDao()->delete($bindExercise['id']);
+    }
+
+    public function updateBindExercise($itemBankExercises)
+    {
+        $this->getExerciseBindDao()->batchUpdate(array_column($itemBankExercises, 'id'), $itemBankExercises);
     }
 
     /**

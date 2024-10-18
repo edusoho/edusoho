@@ -8,6 +8,9 @@ const props = defineProps({
   },
   bindType: {
     required: true,
+  },
+  bindItemBankExerciseNum: {
+    required: true,
   }
 })
 

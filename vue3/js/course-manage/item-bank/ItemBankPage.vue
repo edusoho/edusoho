@@ -1,19 +1,24 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import ItemBankList from './ItemBankList.vue';
 import {InfoCircleOutlined} from '@ant-design/icons-vue';
 
 const course = ref($('#item-bank').data('course'));
 const courseSet = ref($('#item-bank').data('courseSet'));
-// console.log('course', course.value)
-// console.log('courseSet', courseSet.value)
 
-const selectedItemBank = ref([]);
+const bindItemBankExerciseList = ref([]);
+const bindItemBankExerciseNum = computed(() => {
+  return bindItemBankExerciseList.value.length;
+})
 
 const itemBankListVisible = ref(false);
 const showItemBankList = () => {
-  itemBankListVisible.value = true;
+  if (bindItemBankExerciseNum.value >= 100) {
+
+  } else {
+    itemBankListVisible.value = true;
+  }
 }
 </script>
 
@@ -32,14 +37,14 @@ const showItemBankList = () => {
           </a-button>
         </a-tooltip>
       </div>
-      <div v-if="selectedItemBank.length === 0">
+      <div v-if="bindItemBankExerciseList.length === 0">
         <a-empty description="暂无已绑定的题库" class="mt-150"/>
       </div>
       <div v-else>
 
       </div>
     </div>
-    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="courseSet.id" bind-type="course"/>
+    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="courseSet.id" bind-type="course" :bind-item-bank-exercise-num="bindItemBankExerciseNum"/>
   </AntConfigProvider>
 </template>
 
