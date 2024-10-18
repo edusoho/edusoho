@@ -12,16 +12,16 @@ class ItemBankExerciseBindSeq extends AbstractResource
     {
         $params = $request->request->all();
         $ids = $params['ids'];
-        $itemBankExercises = $this->getItemBankExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        $bindExercises = $this->getItemBankExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
 
         foreach ($ids as $index => $id) {
-            foreach ($itemBankExercises as $itemBankExercise) {
-                if ($itemBankExercise['id'] == $id) {
-                    $itemBankExercise['seq'] = $index + 1;
+            foreach ($bindExercises as &$bindExercise) {
+                if ($bindExercise['id'] == $id) {
+                    $bindExercise['seq'] = $index + 1;
                 }
             }
         }
-        $this->getItemBankExerciseService()->updateBindExercise($itemBankExercises);
+        $this->getItemBankExerciseService()->updateBindExercise($bindExercises);
 
         return ['success' => true];
     }

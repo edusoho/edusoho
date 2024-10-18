@@ -32,7 +32,7 @@ class ItemBankExerciseBind extends AbstractResource
     public function remove(ApiRequest $request)
     {
         $params = $request->request->all();
-        $this->getItemBankExerciseService()->removeBindExercise($params['bindType'], $params['bindId'], $params['exerciseId']);
+        $this->getItemBankExerciseService()->removeBindExercise($params['id']);
 
         return ['success' => true];
     }
