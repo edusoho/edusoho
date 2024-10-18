@@ -15,7 +15,7 @@ const itemBankListVisible = defineModel('itemBankListVisible');
 import {CloseOutlined} from '@ant-design/icons-vue';
 import Api from '../../../api';
 
-const closeItemBankList = () => {
+function closeItemBankList() {
   itemBankListVisible.value = false;
 }
 
@@ -171,7 +171,22 @@ function handleSelectAllChange(e) {
   }
 }
 
-const exerciseIds = ref([]);
+async function bindItemBankExercise() {
+  const exerciseIds = itemBankExerciseState.value
+    .filter(item => item.checked === true)
+    .map(item => item.id);
+  const params = {
+    bindType: props.bindType,
+    bindId: props.bindId,
+    exerciseIds: exerciseIds
+  }
+  await Api.itemBank.bindItemBankExercise(params);
+  closeItemBankList();
+}
+
+// const isDisabled = (record) => {
+//   return !record.checked && selectedCount.value >= 10;
+// };
 
 onBeforeMount(async () => {
   itemBankCategoryOptions.value = transformItemBankCategory(await Api.itemBank.getItemBankCategory());
@@ -221,11 +236,11 @@ onBeforeMount(async () => {
         </div>
         <div class="flex flex-col w-full">
           <div class="flex rounded-t-4 bg-[#F5F5F5] w-full">
-            <div class="flex items-center w-[10%]">
+            <div class="flex items-center w-[15%]">
               <a-checkbox class="py-16 px-8" :indeterminate="isIndeterminate" :checked="checkedExerciseIdNum > 0 && isSelectAll" @change="handleSelectAllChange"/>
               <div class="text-14 text-[#37393D] font-medium px-16 py-16">编号</div>
             </div>
-            <div class="flex items-center px-16 py-13 w-[35%]">
+            <div class="flex items-center px-16 py-13 w-[30%]">
               <div class="text-14 text-[#37393D] font-medium">名称</div>
             </div>
             <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
@@ -244,16 +259,16 @@ onBeforeMount(async () => {
           <div ref="itemBankTableBody" class="flex flex-col w-full overflow-y-scroll h-[calc(100vh-248px)]">
             <div v-if="itemBankExerciseData.length > 0" v-for="(record, index) in itemBankExerciseData">
               <div class="flex border border-x-0 border-t-0 border-solid border-[#EFF0F5]">
-                <div class="flex items-center w-[10%]">
+                <div class="flex items-center w-[15%]">
                   <a-checkbox class="py-16 px-8" v-model:checked="itemBankExerciseState[index].checked"/>
                   <div class="text-14 text-[#37393D] font-normal px-16 py-16">{{ record.id }}</div>
                 </div>
-                <div class="flex flex-col px-16 py-16 w-[35%]">
+                <div class="flex flex-col px-16 py-16 w-[30%]">
                   <a-tooltip placement="topLeft">
                     <template #title>
                       <div class="max-w-216">{{ record.title }}</div>
                     </template>
-                    <div class="text-14 text-[#37393D] font-normal truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
+                    <div class="text-14 text-[#37393D] font-normal w-fit max-w-300 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
                   </a-tooltip>
                   <div class="text-12 text-[#919399] w-fit">分类:</div>
                 </div>
@@ -285,7 +300,7 @@ onBeforeMount(async () => {
         </div>
         <div class="space-x-16">
           <a-button @click="closeItemBankList">取消</a-button>
-          <a-button type="primary" @click="console.log('isSelectAll', isSelectAll);console.log('isIndeterminate', isIndeterminate)">确认</a-button>
+          <a-button type="primary" @click="bindItemBankExercise">确认</a-button>
         </div>
       </div>
     </div>
