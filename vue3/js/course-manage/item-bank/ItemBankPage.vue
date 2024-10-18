@@ -3,6 +3,7 @@ import {computed, ref} from 'vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import ItemBankList from './ItemBankList.vue';
 import {InfoCircleOutlined} from '@ant-design/icons-vue';
+import { message } from 'ant-design-vue';
 
 const course = ref($('#item-bank').data('course'));
 const courseSet = ref($('#item-bank').data('courseSet'));
@@ -15,7 +16,7 @@ const bindItemBankExerciseNum = computed(() => {
 const itemBankListVisible = ref(false);
 const showItemBankList = () => {
   if (bindItemBankExerciseNum.value >= 100) {
-
+    message.error('已超出上限，最多可绑定100个题库练习');
   } else {
     itemBankListVisible.value = true;
   }

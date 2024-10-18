@@ -1,6 +1,7 @@
 <script setup>
-import {computed, onBeforeMount, reactive, ref} from 'vue';
+import {computed, onBeforeMount, reactive, ref, watch} from 'vue';
 import { useInfiniteScroll } from '@vueuse/core'
+import { message } from 'ant-design-vue';
 
 const props = defineProps({
   bindId: {
@@ -160,18 +161,28 @@ const isIndeterminate = computed(() => {
   return false;
 })
 
+const needResetCheckbox = ref(false);
 function handleSelectAllChange(e) {
-  if (e.target.checked) {
-    itemBankExerciseState.value = itemBankExerciseState.value.map(item => ({
-      ...item,
-      checked: true,
-    }))
-  } else {
-    itemBankExerciseState.value = itemBankExerciseState.value.map(item => ({
-      ...item,
-      checked: false,
-    }))
+  const isChecked = e.target.checked;
+  if (isChecked && needResetCheckbox.value) {
+    resetCheckboxes();
+    needResetCheckbox.value = false;
+    return;
   }
+  const limit = 100 - props.bindItemBankExerciseNum;
+  itemBankExerciseState.value = itemBankExerciseState.value.map((item, index) => ({
+    ...item,
+    checked: isChecked
+      ? (props.bindItemBankExerciseNum + itemBankExerciseState.value.length >= 100 ? index < limit : true)
+      : false
+  }));
+  if (isChecked) needResetCheckbox.value = true;
+}
+function resetCheckboxes() {
+  itemBankExerciseState.value = itemBankExerciseState.value.map(item => ({
+    ...item,
+    checked: false,
+  }));
 }
 
 async function bindItemBankExercise() {
@@ -183,13 +194,20 @@ async function bindItemBankExercise() {
     bindId: props.bindId,
     exerciseIds: exerciseIds
   }
+  console.log(params);
   await Api.itemBank.bindItemBankExercise(params);
   closeItemBankList();
 }
 
-// const isDisabled = (record) => {
-//   return !record.checked && selectedCount.value >= 10;
-// };
+function checkboxIsDisabled(item) {
+  return !item.checked && props.bindItemBankExerciseNum + checkedExerciseIdNum.value >= 100;
+}
+
+watch(() => props.bindItemBankExerciseNum + checkedExerciseIdNum.value, (newValue) => {
+  if (newValue === 100) {
+    message.error('最多可绑定100个题库练习');
+  }
+})
 
 onBeforeMount(async () => {
   itemBankCategoryOptions.value = transformItemBankCategory(await Api.itemBank.getItemBankCategory());
@@ -203,7 +221,7 @@ onBeforeMount(async () => {
     :closable="false"
     :maskClosable="false"
     :bodyStyle="{padding: 0}"
-    width="75vw"
+    width="60vw"
   >
     <div class="flex flex-col relative h-full">
       <div class="flex justify-between px-20 py-14 border-x-0 border-t-0 border-[#EFF0F5] border-b-1 border-solid">
@@ -263,7 +281,7 @@ onBeforeMount(async () => {
             <div v-if="itemBankExerciseData.length > 0" v-for="(record, index) in itemBankExerciseData">
               <div class="flex border border-x-0 border-t-0 border-solid border-[#EFF0F5]">
                 <div class="flex items-center w-[15%]">
-                  <a-checkbox class="py-16 px-8" v-model:checked="itemBankExerciseState[index].checked"/>
+                  <a-checkbox class="py-16 px-8" v-model:checked="itemBankExerciseState[index].checked" :disabled="checkboxIsDisabled(itemBankExerciseState[index])" @change="needResetCheckbox = false"/>
                   <div class="text-14 text-[#37393D] font-normal px-16 py-16">{{ record.id }}</div>
                 </div>
                 <div class="flex flex-col px-16 py-16 w-[30%]">
@@ -295,7 +313,7 @@ onBeforeMount(async () => {
           </div>
         </div>
       </div>
-      <div class="fixed bottom-0 right-0 bg-white w-[75vw] flex items-center justify-between px-28 py-16 border-x-0 border-b-0 border-t-1 border-[#EFF0F5] border-solid">
+      <div class="fixed bottom-0 right-0 bg-white w-[60vw] flex items-center justify-between px-28 py-16 border-x-0 border-b-0 border-t-1 border-[#EFF0F5] border-solid">
         <div class="flex space-x-24">
           <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="checkedExerciseIdNum > 0 && isSelectAll" @change="handleSelectAllChange"/>
           <div class="text-[#37393D] text-14 font-normal">全选</div>
