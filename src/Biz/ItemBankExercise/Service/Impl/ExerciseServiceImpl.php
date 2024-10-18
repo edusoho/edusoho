@@ -599,6 +599,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $this->getExerciseBindDao()->delete($bindExercise['id']);
     }
 
+    public function updateBindExercise($itemBankExercises)
+    {
+        $this->getExerciseBindDao()->batchUpdate(array_column($itemBankExercises, 'id'), $itemBankExercises);
+    }
+
     /**
      * @return ExerciseDao
      */
