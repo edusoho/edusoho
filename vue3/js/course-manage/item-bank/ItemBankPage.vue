@@ -1,9 +1,10 @@
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, onBeforeMount, ref} from 'vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import ItemBankList from './ItemBankList.vue';
 import {InfoCircleOutlined} from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
+import Api from '../../../api';
 
 const course = ref($('#item-bank').data('course'));
 const courseSet = ref($('#item-bank').data('courseSet'));
@@ -21,6 +22,14 @@ const showItemBankList = () => {
     itemBankListVisible.value = true;
   }
 }
+
+onBeforeMount(async () => {
+  const params = {
+    bindType: 'course',
+    bindId: courseSet.value.id,
+  }
+  bindItemBankExerciseList.value = await Api.itemBank.getBindItemBankExercise(params);
+})
 </script>
 
 <template>

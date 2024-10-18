@@ -10,4 +10,7 @@ export default {
   async bindItemBankExercise(params) {
     return apiClient.post('/itemBankExerciseBind', params);
   },
+  async getBindItemBankExercise(params) {
+    return apiClient.get('/itemBankExerciseBind', {params});
+  },
 }

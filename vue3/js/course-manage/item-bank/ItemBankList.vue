@@ -2,7 +2,10 @@
 import {computed, onBeforeMount, reactive, ref, watch} from 'vue';
 import { useInfiniteScroll } from '@vueuse/core'
 import { message } from 'ant-design-vue';
+import {CloseOutlined} from '@ant-design/icons-vue';
+import Api from '../../../api';
 
+const itemBankListVisible = defineModel('itemBankListVisible');
 const props = defineProps({
   bindId: {
     required: true,
@@ -14,10 +17,6 @@ const props = defineProps({
     required: true,
   }
 })
-
-const itemBankListVisible = defineModel('itemBankListVisible');
-import {CloseOutlined} from '@ant-design/icons-vue';
-import Api from '../../../api';
 
 function closeItemBankList() {
   itemBankListVisible.value = false;
@@ -44,7 +43,6 @@ function transformItemBankExerciseState(itemBankExerciseData) {
 
 const pagination = reactive({
   current: 1,
-  total: 0,
   pageSize: 10,
 });
 
