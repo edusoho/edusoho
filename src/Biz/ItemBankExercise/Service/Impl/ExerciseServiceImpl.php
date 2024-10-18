@@ -572,14 +572,19 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $this->getLogService()->info('item_bank_exercise', 'unpublish_exercise_chapter', "管理员{$this->getCurrentUser()['nickname']}取消发布题库练习《{$exercise['title']}》的章节", ['ids' => $ids]);
     }
 
-    public function bindExercise($bindType, $bindId, $exerciseId)
+    public function bindExercise($bindType, $bindId, $exerciseIds)
     {
-        $this->getExerciseBindDao()->create([
-            'itemBankExerciseId' => $exerciseId,
-            'bindType' => $bindType,
-            'bindId' => $bindId,
-            'seq' => '0',
-        ]);
+        $data = array_map(function ($exerciseId) use ($bindType, $bindId) {
+            return [
+                'itemBankExerciseId' => $exerciseId,
+                'bindType' => $bindType,
+                'bindId' => $bindId,
+                'seq' => '0',
+            ];
+        }, $exerciseIds);
+
+        // 批量插入数据
+        $this->getExerciseBindDao()->batchCreate($data);
     }
 
     public function findBindExercise($bindType, $bindId)
