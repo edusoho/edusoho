@@ -592,16 +592,14 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId], ['seq' => 'DESC'], 0, PHP_INT_MAX);
     }
 
-    public function removeBindExercise($bindType, $bindId, $exerciseId)
+    public function removeBindExercise($bindExerciseId)
     {
-        $bindExercise = $this->getExerciseBindDao()->getBindExercise($bindType, $bindId, $exerciseId);
-
-        $this->getExerciseBindDao()->delete($bindExercise['id']);
+        $this->getExerciseBindDao()->delete($bindExerciseId);
     }
 
-    public function updateBindExercise($itemBankExercises)
+    public function updateBindExercise($bindExercise)
     {
-        $this->getExerciseBindDao()->batchUpdate(array_column($itemBankExercises, 'id'), $itemBankExercises);
+        $this->getExerciseBindDao()->batchUpdate(array_column($bindExercise, 'id'), $bindExercise);
     }
 
     /**
