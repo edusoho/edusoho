@@ -248,7 +248,7 @@ onBeforeMount(async () => {
           <a-input
             v-model:value="keyword"
             allow-clear
-            :placeholder="keywordType === 'name' ? '请输入名称' : '请输入更新人'"
+            :placeholder="keywordType === 'title' ? '请输入名称' : '请输入更新人'"
           >
           </a-input>
           <a-button type="primary" ghost @click="search">搜索</a-button>
@@ -288,7 +288,7 @@ onBeforeMount(async () => {
                     <template #title>
                       <div class="max-w-216">{{ record.title }}</div>
                     </template>
-                    <div class="text-14 text-[#37393D] font-normal w-fit max-w-300 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
+                    <div class="text-14 text-[#37393D] font-normal w-fit max-w-280 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
                   </a-tooltip>
                   <div class="text-12 text-[#919399] w-fit">分类:</div>
                 </div>
