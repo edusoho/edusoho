@@ -30,9 +30,9 @@ export const stopFunc = (e) => {
 };
 
 export const primaryColors = {
-  'default': '#006aff',
+  'default': '#46c37B',
   'blue-light': '#4bbbfa',
-  'blue': '#0081e6',
+  'blue': '#0a2a6b',
   'green-light': '#81d867',
   'green': '#46c37b',
   'orange-light': '#f9b469',
@@ -44,7 +44,7 @@ export const primaryColors = {
 };
 
 export const getCurrentPrimaryColor = () => {
-  return primaryColors[app.mainColor] || '#006aff';
+  return primaryColors[app.mainColor] || '#46c37B';
 };
 
 export const setCurrentPrimaryColor = (vueInstance) => {
@@ -118,7 +118,7 @@ export const getQueryParam = (paramName, url) => {
 export const isMobileBrowser = () => {
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-  // Windows Phone must come first because its UA also contains "Android"  
+  // Windows Phone must come first because its UA also contains "Android"
   if (/windows phone/i.test(userAgent)) {
     return true;
   }
@@ -127,7 +127,7 @@ export const isMobileBrowser = () => {
     return true;
   }
 
-  // iOS detection  
+  // iOS detection
   if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
     return true;
   }
@@ -148,18 +148,18 @@ export function generateRandomString(length = 4) {
 }
 
 export function removeHTMLTagsAndEntities(str) {
-  // 去除HTML标签  
+  // 去除HTML标签
   str = str.replace(/<[^>]*>?/gm, '');
 
-  // 去除HTML实体（这里只列举了一些常见的，你可能需要添加更多）  
-  str = str.replace(/&nbsp;/g, ' '); // 替换&nbsp;为空格  
-  str = str.replace(/&lt;/g, '<');  // 替换&lt;为<  
-  str = str.replace(/&gt;/g, '>');  // 替换&gt;为>  
-  str = str.replace(/&amp;/g, '&'); // 替换&amp;为&  
-  str = str.replace(/&quot;/g, '"'); // 替换&quot;为"  
+  // 去除HTML实体（这里只列举了一些常见的，你可能需要添加更多）
+  str = str.replace(/&nbsp;/g, ' '); // 替换&nbsp;为空格
+  str = str.replace(/&lt;/g, '<');  // 替换&lt;为<
+  str = str.replace(/&gt;/g, '>');  // 替换&gt;为>
+  str = str.replace(/&amp;/g, '&'); // 替换&amp;为&
+  str = str.replace(/&quot;/g, '"'); // 替换&quot;为"
 
-  // 如果你想删除所有HTML实体，可以使用这个函数（但请注意，这可能会删除一些不是HTML实体的&符号）  
-  // str = str.replace(/&[^;]+;/g, '');  
+  // 如果你想删除所有HTML实体，可以使用这个函数（但请注意，这可能会删除一些不是HTML实体的&符号）
+  // str = str.replace(/&[^;]+;/g, '');
   return str;
 }
 

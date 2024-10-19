@@ -1,0 +1,12 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% set course_side_nav = 'item-bank' %}
+
+{% do script(['vue3/js/course-manage/item-bank/index.js']) %}
+
+{% block main %}
+  <div id="item-bank"
+       data-course-set="{{ courseSet|default([])|json_encode }}"
+       style="margin-left: 200px; min-height: 800px"
+  ></div>
+{% endblock %}

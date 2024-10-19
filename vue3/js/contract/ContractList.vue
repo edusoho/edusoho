@@ -62,7 +62,7 @@ async function fetchContracts(params) {
   pagination.total = Number(paging.total);
   pagination.pageSize = Number(paging.limit);
   pageData.value = data;
-  loading.value = false;
+loading.value = false;
 }
 
 async function handleTableChange(paging) {
@@ -221,7 +221,7 @@ const toUpdateContract = (id) => {
              v-model:open="contractContentVisible"
              :closable=false
              :centered="true"
-             zIndex="1050"
+             :zIndex="1050"
              wrapClassName="contract-list-detail-modal"
              :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
     >
@@ -283,7 +283,6 @@ const toUpdateContract = (id) => {
       </template>
     </a-modal>
   </div>
-  <!--  <contract-drawer v-model:visible="drawerVisible" :type="drawerType"/>-->
 </template>
 <style lang="less">
 .contract-list-operation-btn {

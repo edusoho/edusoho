@@ -121,7 +121,7 @@ const downloadContract = async (id, fileName) => {
       <a-modal :width="900"
                v-model:open="myContentVisible"
                :closable=false
-               zIndex="1050"
+               :zIndex="1050"
                :centered="true"
                :bodyStyle="{ 'height': '563px', 'overflow': 'auto'}"
                wrapClassName="my-contract-detail-modal"
@@ -212,17 +212,6 @@ const downloadContract = async (id, fileName) => {
 </template>
 
 <style lang="less">
-.my-contract-btn {
-  .ant-btn-primary:hover {
-    background-color: #BDF2D0;
-    border-color: #BDF2D0;
-  }
-  .ant-btn-default:hover {
-    border-color: #46C37B;
-    color: #46C37B;
-  }
-}
-
 .contract-content {
   img {
     max-width: 100%;
@@ -235,6 +224,8 @@ const downloadContract = async (id, fileName) => {
     .ant-modal-content {
       padding: 0 !important;
       .ant-modal-footer {
+        border-top: 1px solid #ebebeb;
+        padding: 10px 16px;
         margin-top: 0;
       }
       .ant-modal-header {
