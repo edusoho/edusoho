@@ -222,7 +222,7 @@ onBeforeMount(async () => {
     width="60vw"
   >
     <div class="flex flex-col relative h-full">
-      <div class="flex justify-between px-20 py-14 border-x-0 border-t-0 border-[#EFF0F5] border-b-1 border-solid">
+      <div class="flex justify-between px-20 py-14 border border-x-0 border-t-0 border-[#EFF0F5] border-solid">
         <div class="font-medium text-16 text-[#37393D]">绑定题库</div>
         <CloseOutlined @click="closeItemBankList"/>
       </div>
@@ -311,7 +311,7 @@ onBeforeMount(async () => {
           </div>
         </div>
       </div>
-      <div class="fixed bottom-0 right-0 bg-white w-[60vw] flex items-center justify-between px-28 py-16 border-x-0 border-b-0 border-t-1 border-[#EFF0F5] border-solid">
+      <div class="fixed bottom-0 right-0 bg-white w-[60vw] flex items-center justify-between px-28 py-16 border border-x-0 border-b-0 border-[#EFF0F5] border-solid">
         <div class="flex space-x-24">
           <a-checkbox :indeterminate="isIndeterminate && !isSelectAll" :checked="checkedExerciseIdNum > 0 && isSelectAll" @change="handleSelectAllChange"/>
           <div class="text-[#37393D] text-14 font-normal">全选</div>

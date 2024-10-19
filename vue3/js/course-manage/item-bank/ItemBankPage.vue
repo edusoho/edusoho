@@ -5,6 +5,7 @@ import ItemBankList from './ItemBankList.vue';
 import {InfoCircleOutlined} from '@ant-design/icons-vue';
 import { message } from 'ant-design-vue';
 import Api from '../../../api';
+import draggable from 'vuedraggable'
 
 const course = ref($('#item-bank').data('course'));
 const courseSet = ref($('#item-bank').data('courseSet'));
@@ -29,13 +30,14 @@ onBeforeMount(async () => {
     bindId: courseSet.value.id,
   }
   bindItemBankExerciseList.value = await Api.itemBank.getBindItemBankExercise(params);
+  console.log(bindItemBankExerciseList.value);
 })
 </script>
 
 <template>
   <AntConfigProvider>
     <div class="flex flex-col px-32 pt-20">
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center mb-20">
         <div class="text-16 font-medium text-black/[.88]">题库练习管理</div>
         <a-tooltip placement="topLeft">
           <template #title>
@@ -51,7 +53,9 @@ onBeforeMount(async () => {
         <a-empty description="暂无已绑定的题库" class="mt-150"/>
       </div>
       <div v-else>
+        <div>
 
+        </div>
       </div>
     </div>
     <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="courseSet.id" bind-type="course" :bind-item-bank-exercise-num="bindItemBankExerciseNum"/>
