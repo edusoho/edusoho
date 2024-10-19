@@ -4,7 +4,7 @@ export default {
   async getItemBankCategory() {
     return apiClient.get('/itemBankCategory');
   },
-  async search(params) {
+  async searchItemBank(params) {
     return apiClient.get('/itemBankExercise', {params});
   },
   async bindItemBankExercise(params) {
@@ -12,5 +12,11 @@ export default {
   },
   async getBindItemBankExercise(params) {
     return apiClient.get('/itemBankExerciseBind', {params});
+  },
+  async sequenceBindItemBankExercise(params) {
+    return apiClient.post('/itemBankExerciseBindSeq', params);
+  },
+  async deleteBindItemBank(params) {
+    return apiClient.delete('/itemBankExerciseBind', params);
   },
 }

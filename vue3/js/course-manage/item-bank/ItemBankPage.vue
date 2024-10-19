@@ -1,14 +1,19 @@
 <script setup>
-import {computed, onBeforeMount, ref} from 'vue';
+import {computed, createVNode, onBeforeMount, ref} from 'vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import ItemBankList from './ItemBankList.vue';
-import {InfoCircleOutlined} from '@ant-design/icons-vue';
-import { message } from 'ant-design-vue';
+import {ExclamationCircleOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
+import {message} from 'ant-design-vue';
 import Api from '../../../api';
-import draggable from 'vuedraggable'
+import draggable from 'vuedraggable';
+import { Modal } from 'ant-design-vue';
 
-const course = ref($('#item-bank').data('course'));
-const courseSet = ref($('#item-bank').data('courseSet'));
+const props = defineProps({
+  bindType: {required: true},
+  courseSet: {required: true},
+})
+
+console.log(props.courseSet)
 
 const bindItemBankExerciseList = ref([]);
 const bindItemBankExerciseNum = computed(() => {
@@ -24,13 +29,53 @@ const showItemBankList = () => {
   }
 }
 
-onBeforeMount(async () => {
+function integerPart(num) {
+  return num.split('.')[0];
+}
+
+function decimalPart(num) {
+  return num.split('.')[1];
+}
+
+async function getBindItemBankExercise() {
   const params = {
-    bindType: 'course',
-    bindId: courseSet.value.id,
+    bindType: props.bindType,
+    bindId: props.courseSet.id,
   }
   bindItemBankExerciseList.value = await Api.itemBank.getBindItemBankExercise(params);
-  console.log(bindItemBankExerciseList.value);
+}
+
+async function sequenceItemBankExerciseBind() {
+  const params = {
+    ids: bindItemBankExerciseList.value.map(item => item.id),
+    bindType: props.bindType,
+    bindId: props.courseSet.id,
+  }
+  await Api.itemBank.sequenceBindItemBankExercise(params);
+  await getBindItemBankExercise();
+}
+
+async function deleteBindItemBank(id) {
+  await Api.itemBank.deleteBindItemBank({id: id});
+  await getBindItemBankExercise();
+}
+
+function showDeleteConfirm(id) {
+  Modal.confirm({
+    title: '移除题库练习',
+    icon: createVNode(ExclamationCircleOutlined),
+    content: createVNode('div', { style: 'font-size: 14px; color: #5E6166; font-weight: 400; ' }, '是否要从班级中移除该题库练习？'),
+    async onOk() {
+      await deleteBindItemBank(id)
+      message.success('删除成功');
+    },
+    onCancel() {
+    },
+  });
+}
+
+onBeforeMount(async () => {
+  await getBindItemBankExercise();
 })
 </script>
 
@@ -52,13 +97,50 @@ onBeforeMount(async () => {
       <div v-if="bindItemBankExerciseList.length === 0">
         <a-empty description="暂无已绑定的题库" class="mt-150"/>
       </div>
-      <div v-else>
-        <div>
-
-        </div>
+      <div v-else class="h-800 overflow-y-auto mb-20">
+        <draggable
+          v-model="bindItemBankExerciseList"
+          group="people"
+          @end="sequenceItemBankExerciseBind"
+          item-key="id">
+          <template #item="{element}">
+            <div class="flex space-x-24 px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16">
+              <div class="flex items-center">
+                <img src="../../../img/course-manage/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
+              </div>
+              <div class="relative">
+                <img src="../../../img/course-manage/item-bank/list-state-bg.jpg" class="h-90 rounded-5" draggable="false" alt="">
+                <div class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已发布</div>
+              </div>
+              <div class="flex flex-1 flex-col justify-between">
+                <div class="text-16 font-medium text-[#37393D] max-w-320 truncate">{{ element.itemBankExercise.title }}</div>
+                <div class="flex space-x-12">
+                  <img :src="element.operateUser.nickname.smallAvatar" class="w-40" draggable="false" alt="">
+                  <div class="flex flex-col">
+                    <div class="text-12 font-medium text-[#1D2129] leading-20">{{ element.operateUser.nickname }}</div>
+                    <div class="text-12 font-normal text-[#86909C] leading-20">测试</div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-col flex-1 justify-between items-end">
+                <div class="text-20 font-semibold text-[#FF7E56]"><span class="text-12 mr-2">¥</span>{{ `${integerPart(element.itemBankExercise.price)}.` }}<span class="text-12">{{ decimalPart(element.itemBankExercise.price) }}</span></div>
+                <div class="flex">
+                  <div class="text-12 text-[#919399] font-normal"><span class="text-[#37393D] mr-2">{{ element.itemBankExercise.studentNum }}</span>学员</div>
+                  <div class="mx-6 text-[#E5E6EB] text-12">|</div>
+                  <div class="text-12 text-[#919399] font-normal"><span class="text-[#37393D] mr-2">{{ element.chapterExerciseNum }}</span>章节练习</div>
+                  <div class="mx-6 text-[#E5E6EB] text-12">|</div>
+                  <div class="text-12 text-[#919399] font-normal"><span class="text-[#37393D] mr-2">{{ element.assessmentNum }}</span>试卷练习</div>
+                  <div class="mx-6 text-[#E5E6EB] text-12">|</div>
+                  <div class="text-12 text-[#919399] font-normal">有效期：<span class="text-[#37393D] mr-2">{{ element.itemBankExercise.studentNum }}</span></div>
+                </div>
+                <a-button size="small" @click="showDeleteConfirm(element.id)">删除</a-button>
+              </div>
+            </div>
+          </template>
+        </draggable>
       </div>
     </div>
-    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="courseSet.id" bind-type="course" :bind-item-bank-exercise-num="bindItemBankExerciseNum"/>
+    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.courseSet.id" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
   </AntConfigProvider>
 </template>
 

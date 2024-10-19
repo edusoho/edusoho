@@ -4,7 +4,10 @@ import ItemBankPage from './ItemBankPage.vue';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 import { Button, Empty, Drawer, TreeSelect, Select, Input, Table, Checkbox, Tooltip } from 'ant-design-vue';
 
-const app = createApp(ItemBankPage);
+const app = createApp(ItemBankPage, {
+  bindType: 'course',
+  courseSet: $('#item-bank').data('courseSet'),
+});
 
 setCurrentPrimaryColor(app);
 

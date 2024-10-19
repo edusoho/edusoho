@@ -5,6 +5,7 @@ import { message } from 'ant-design-vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
 import Api from '../../../api';
 
+const emit = defineEmits(['needGetBindItemBank'])
 const itemBankListVisible = defineModel('itemBankListVisible');
 const props = defineProps({
   bindId: {
@@ -61,7 +62,7 @@ function transformItemBankCategory(data) {
 
 async function fetchItemBankExercise(params) {
   const searchQuery = Object.assign({bindId: props.bindId, bindType: props.bindType, categoryId: categoryId.value ? categoryId.value : '', ...params}, keywordType.value === 'title' ? {title: keyword.value} : {updatedUser: keyword.value});
-  const { data, paging } = await Api.itemBank.search(searchQuery);
+  const { data, paging } = await Api.itemBank.searchItemBank(searchQuery);
   return data;
 }
 
@@ -192,9 +193,9 @@ async function bindItemBankExercise() {
     bindId: props.bindId,
     exerciseIds: exerciseIds
   }
-  console.log(params);
   await Api.itemBank.bindItemBankExercise(params);
   closeItemBankList();
+  emit('needGetBindItemBank');
 }
 
 function checkboxIsDisabled(item) {
