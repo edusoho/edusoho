@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\ItemBankExerciseBind;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\User\Service\UserService;
 
 class ItemBankExerciseBind extends AbstractResource
 {
@@ -24,7 +25,14 @@ class ItemBankExerciseBind extends AbstractResource
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
         foreach ($bindExercises as &$bindExercise) {
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
+            $bindExercise['chapterExerciseNum'] = 0;
+            $bindExercise['assessmentNum'] = 0;
+            $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
         }
+        // 绑定人
+        // 章节练习数量
+
+        // 试卷练习数量
 
         return $bindExercises;
     }
@@ -43,5 +51,14 @@ class ItemBankExerciseBind extends AbstractResource
     protected function getItemBankExerciseService()
     {
         return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }
