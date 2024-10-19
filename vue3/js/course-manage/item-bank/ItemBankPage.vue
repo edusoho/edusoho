@@ -13,8 +13,6 @@ const props = defineProps({
   courseSet: {required: true},
 })
 
-console.log(props.courseSet)
-
 const bindItemBankExerciseList = ref([]);
 const bindItemBankExerciseNum = computed(() => {
   return bindItemBankExerciseList.value.length;
