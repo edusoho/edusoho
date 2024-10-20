@@ -5,8 +5,8 @@ import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 import { Button, Empty, Drawer, TreeSelect, Select, Input, Table, Checkbox, Tooltip } from 'ant-design-vue';
 
 const app = createApp(ItemBankPage, {
-  bindType: 'course',
-  bindId: $('#item-bank').data('courseSet').id,
+  bindType: 'classroom',
+  bindId: $('#item-bank').data('classroom').id,
 });
 
 setCurrentPrimaryColor(app);

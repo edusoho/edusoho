@@ -795,6 +795,17 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function itemBankAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        return $this->render(
+            'classroom-manage/item-bank.html.twig',
+            [
+                'classroom' => $classroom,
+            ]
+        );
+    }
+
     public function statisticsAction(Request $request, $id)
     {
         $this->getClassroomService()->tryHandleClassroom($id);

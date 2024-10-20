@@ -1,0 +1,12 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% set side_nav = 'itemBank' %}
+
+{% do script(['vue3/js/classroom-manage/item-bank/index.js']) %}
+
+{% block main %}
+  <div id="item-bank"
+       data-classroom="{{ classroom|default([])|json_encode }}"
+       style="min-height: 800px"
+  ></div>
+{% endblock %}
