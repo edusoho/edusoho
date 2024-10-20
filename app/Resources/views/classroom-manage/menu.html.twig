@@ -12,6 +12,11 @@
             {{ 'classroom.course_manage'|trans }}
           </a>
         </li>
+        <li class="cd-sidebar__item {% if side_nav == 'itemBank' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_item_bank', {id: classroom.id}) }}">
+            题库练习管理
+          </a>
+        </li>
         <li class="cd-sidebar__item {% if side_nav == 'announcements' %}active{% endif %}">
           <a href="{{ path('announcement_list', {targetId: classroom.id, targetType: 'classroom'}) }}">
             {{ 'classroom.announcement_manage'|trans }}

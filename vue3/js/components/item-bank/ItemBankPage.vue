@@ -1,6 +1,6 @@
 <script setup>
 import {computed, createVNode, onBeforeMount, ref} from 'vue';
-import AntConfigProvider from '../../components/AntConfigProvider.vue';
+import AntConfigProvider from '../AntConfigProvider.vue';
 import ItemBankList from './ItemBankList.vue';
 import {ExclamationCircleOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
@@ -10,7 +10,7 @@ import { Modal } from 'ant-design-vue';
 
 const props = defineProps({
   bindType: {required: true},
-  courseSet: {required: true},
+  bindId: {required: true},
 })
 
 const bindItemBankExerciseList = ref([]);
@@ -38,7 +38,7 @@ function decimalPart(num) {
 async function getBindItemBankExercise() {
   const params = {
     bindType: props.bindType,
-    bindId: props.courseSet.id,
+    bindId: props.bindId,
   }
   bindItemBankExerciseList.value = await Api.itemBank.getBindItemBankExercise(params);
 }
@@ -47,7 +47,7 @@ async function sequenceItemBankExerciseBind() {
   const params = {
     ids: bindItemBankExerciseList.value.map(item => item.id),
     bindType: props.bindType,
-    bindId: props.courseSet.id,
+    bindId: props.bindId,
   }
   await Api.itemBank.sequenceBindItemBankExercise(params);
   await getBindItemBankExercise();
@@ -142,7 +142,7 @@ onBeforeMount(async () => {
         </draggable>
       </div>
     </div>
-    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.courseSet.id" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
+    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.bindId" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
   </AntConfigProvider>
 </template>
 
