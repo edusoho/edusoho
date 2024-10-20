@@ -106,7 +106,7 @@ onBeforeMount(async () => {
           @end="sequenceItemBankExerciseBind"
           item-key="id">
           <template #item="{element}">
-            <div class="flex space-x-24 px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16">
+            <div class="flex space-x-24 px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16 bg-white">
               <div class="flex items-center">
                 <img src="../../../img/course-manage/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
               </div>
