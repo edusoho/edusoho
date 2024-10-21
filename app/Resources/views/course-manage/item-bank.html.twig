@@ -6,7 +6,7 @@
 
 {% block main %}
   <div id="item-bank"
-       data-course-set="{{ courseSet|default([])|json_encode }}"
+       data-course-id="{{ course.id }}"
        style="margin-left: 200px; min-height: 800px"
   ></div>
 {% endblock %}

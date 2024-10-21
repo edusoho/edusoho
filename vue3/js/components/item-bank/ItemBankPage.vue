@@ -115,7 +115,9 @@ onBeforeMount(async () => {
                 <div class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已发布</div>
               </div>
               <div class="flex flex-1 flex-col justify-between">
-                <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
+                <a-tooltip placement="top" :title="element.itemBankExercise.title">
+                  <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] hover:cursor-pointer w-fit" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
+                </a-tooltip>
                 <div class="flex space-x-12">
                   <img :src="element.operateUser.nickname.mediumAvatar" class="w-40" draggable="false" alt="">
                   <div class="flex flex-col">

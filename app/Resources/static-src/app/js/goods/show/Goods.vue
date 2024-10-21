@@ -21,12 +21,14 @@
                         <ul class="info-left__nav pull-left">
                             <li :class="howActive == 1 ? 'active' : ''"><a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                             </li>
-                            <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
+                            <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">课程题库</a>
+                            </li>
+                            <li :class="howActive == 3 ? 'active' : ''"><a href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                             </li>
                             <li v-if="ugcReviewSetting.enable_review == 1
                                  && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
-                                 :class="howActive == 3 ? 'active' : ''">
-                                <a href="#info-left-3">{{ 'goods.show_page.tab.reviews'|trans }}</a>
+                                 :class="howActive == 4 ? 'active' : ''">
+                                <a href="#info-left-4">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
@@ -40,11 +42,14 @@
                         <a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                     </li>
                     <li :class="howActive == 2 ? 'active' : ''">
-                        <a href="#info-left-2">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
+                      <a href="#info-left-1">课程题库</a>
+                    </li>
+                    <li :class="howActive == 3 ? 'active' : ''">
+                        <a href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                     </li>
                     <li v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 3 ? 'active' : ''">
-                        <a href="#info-left-3">{{ 'goods.show_page.tab.reviews'|trans }}</a>
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" :class="howActive == 4 ? 'active' : ''">
+                        <a href="#info-left-4">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                     </li>
                 </ul>
 
@@ -55,7 +60,84 @@
                              style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
-                    <div v-if="goods.product.targetType === 'course'" id="info-left-2"
+                    <div id="info-left-2" style="background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                        <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px">课程题库</div>
+                        <div v-if="bindItemBankExerciseList.length > 1" style="display: flex; align-items: center; font-size: 14px; font-weight: 400; color: #919399; cursor: pointer;" @click="showItemBanKDrawer">
+                          <div>{{ `查看全部（${bindItemBankExerciseList.length}）` }}</div>
+                          <a-icon type="right" style="line-height: 14px"/>
+                        </div>
+                      </div>
+                      <div v-if="bindItemBankExerciseList.length === 0" style="font-size: 14px; font-weight: 400; color: rgba(0, 0, 0, 0.56); ">暂无绑定的题库哦～</div>
+                      <div v-else style="display: flex; justify-content: space-between;">
+                        <div style="display: flex">
+                          <img src="/static-dist/app/img/vue/goods/item-bank-icon.jpg" alt="" style="height: 96px; margin-right: 16px">
+                          <div style="display: flex; flex-direction: column;; justify-content: space-between;">
+                            <div>
+                              <a-tooltip placement="top">
+                                <template slot="title">
+                                  <div style="max-width: 216px;">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
+                                </template>
+                                <div style="font-size: 16px; color: #37393D; font-weight: 500; margin-bottom: 4px; width: fit-content; max-width: 320px;">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
+                              </a-tooltip>
+                              <div style="display: flex">
+                                <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">章节练习：<span style="color: #37393D;">{{ bindItemBankExerciseList[0].chapterExerciseNum }}</span></div>
+                                <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">试卷练习：<span style="color: #37393D;">{{ bindItemBankExerciseList[0].assessmentNum }}</span></div>
+                              </div>
+                            </div>
+                            <div style="font-size: 20px; font-weight: 600; color: #FF7E56;"><span style="font-size: 12px; margin-right: 2px">¥</span>{{ `${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span style="font-size: 12px;">{{ decimalPart(bindItemBankExerciseList[0].itemBankExercise.price) }}</span></div>
+                          </div>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                          <a-button type="primary" @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
+                        </div>
+                      </div>
+                    </div>
+                    <a-drawer
+                      placement="right"
+                      width="50vw"
+                      :closable="false"
+                      :visible="bindItemBankDrawerVisible"
+                      @close="closeItemBanKDrawer"
+                      :bodyStyle="{padding: '0',}"
+                    >
+                      <div style="padding: 14px 20px; border-bottom: 1px solid #EFF0F5; display: flex; align-items: center; justify-content: space-between; width: 50vw; position: fixed; z-index: 10;; top: 0; right: 0; background-color: #FFF;">
+                        <div style="font-size: 16px; font-weight: 500; color: #37393D;">课程题库</div>
+                        <a-icon type="close" style="font-size: 16px" @click="closeItemBanKDrawer"/>
+                      </div>
+                      <div style="margin-top: 53px; margin-bottom: 69px; padding: 18px 20px 0 20px; display: flex; flex-direction: column;">
+                        <div v-for="item in bindItemBankExerciseList">
+                          <div style="display: flex; justify-content: space-between; padding: 16px 24px; border: 1px solid #EFF0F5; border-radius: 6px; margin-bottom: 16px;">
+                            <div style="display: flex">
+                              <img src="/static-dist/app/img/vue/goods/item-bank-icon.jpg" alt="" style="height: 96px; margin-right: 16px">
+                              <div style="display: flex; flex-direction: column;; justify-content: space-between;">
+                                <div>
+                                  <a-tooltip placement="top">
+                                    <template slot="title">
+                                      <div style="max-width: 216px;">{{ item.itemBankExercise.title }}</div>
+                                    </template>
+                                    <div style="font-size: 16px; color: #37393D; font-weight: 500; margin-bottom: 4px; width: fit-content; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">{{ item.itemBankExercise.title }}</div>
+                                  </a-tooltip>
+                                  <div style="display: flex">
+                                    <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">章节练习：<span style="color: #37393D;">{{ item.chapterExerciseNum }}</span></div>
+                                    <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">试卷练习：<span style="color: #37393D;">{{ item.assessmentNum }}</span></div>
+                                  </div>
+                                </div>
+                                <div style="font-size: 20px; font-weight: 600; color: #FF7E56;"><span style="font-size: 12px; margin-right: 2px">¥</span>{{ `${integerPart(item.itemBankExercise.price)}.` }}<span style="font-size: 12px;">{{ decimalPart(item.itemBankExercise.price) }}</span></div>
+                              </div>
+                            </div>
+                            <div style="display: flex; align-items: center;">
+                              <a-button type="primary" @click="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="padding: 16px 24px; border-top: 1px solid #EFF0F5; display: flex; flex-direction: row-reverse; width: 50vw; position: fixed; bottom: 0; right: 0; background-color: #FFF;">
+                        <a-button @click="closeItemBanKDrawer">关闭</a-button>
+                      </div>
+                    </a-drawer>
+
+                    <div v-if="goods.product.targetType === 'course'" id="info-left-3"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <course-tasks v-show="currentSku.taskDisplay == 1" :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
@@ -64,7 +146,7 @@
                           <p>{{ 'goods.show_page.tab.catalogue.empty' | trans }}</p>
                         </div>
                     </div>
-                    <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
+                    <div v-if="goods.product.targetType === 'classroom'" id="info-left-3"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <div class="searchInput">
@@ -82,7 +164,7 @@
                     </div>
 
                     <div v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" id="info-left-4" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
                         <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage"
                                  :report-type="getReportType"
@@ -136,7 +218,9 @@
                 timerScroll: null,
                 goodsId: window.location.pathname.replace(/[^0-9]/ig, ""),
                 currentSku: {},
-                searchResult: []
+                searchResult: [],
+                bindItemBankExerciseList: [],
+                bindItemBankDrawerVisible: false,
             }
         },
         props: {
@@ -185,7 +269,7 @@
                 default: '',
             },
             drpRecruitSwitch: {
-                type: Number,
+                type: Number | String,
                 default: 0
             },
             vipEnabled: {
@@ -251,6 +335,32 @@
                 }).then((res) => {
                     this.searchResult = res.data
                 });
+            },
+            getBindItemBankExercise() {
+              axios.get('/api/itemBankExerciseBind', {
+                params: {
+                  bindType: this.goods.type,
+                  bindId: this.currentSku.targetId,
+                }
+              }).then((res) => {
+                this.bindItemBankExerciseList = res.data;
+                console.log(this.bindItemBankExerciseList);
+              })
+            },
+            integerPart(num) {
+              return num.split('.')[0];
+            },
+            decimalPart(num) {
+              return num.split('.')[1];
+            },
+            toItemBankExercisePage(exerciseId) {
+                window.location.href = `/item_bank_exercise/${exerciseId}`
+            },
+            showItemBanKDrawer() {
+              this.bindItemBankDrawerVisible = true;
+            },
+            closeItemBanKDrawer() {
+              this.bindItemBankDrawerVisible = false;
             },
             getGoodsInfo() {
                 axios.get(`/api/good/${this.goodsId}`, {
@@ -365,6 +475,9 @@
             if (this.goods.product.target.defaultCourseId) {
                 return this.changeSku(this.goods.product.target.defaultCourseId);
             }
+        },
+        beforeMount() {
+          this.getBindItemBankExercise();
         },
         watch: {
             goods(newVal, oldVal) {
