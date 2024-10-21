@@ -54,7 +54,7 @@ async function sequenceItemBankExerciseBind() {
 }
 
 async function deleteBindItemBank(id) {
-  await Api.itemBank.deleteBindItemBank({id: id});
+  await Api.itemBank.deleteBindItemBank(id);
   await getBindItemBankExercise();
 }
 
@@ -117,7 +117,7 @@ onBeforeMount(async () => {
               <div class="flex flex-1 flex-col justify-between">
                 <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
                 <div class="flex space-x-12">
-                  <img :src="element.operateUser.nickname.smallAvatar" class="w-40" draggable="false" alt="">
+                  <img :src="element.operateUser.nickname.mediumAvatar" class="w-40" draggable="false" alt="">
                   <div class="flex flex-col">
                     <div class="text-12 font-medium text-[#1D2129] leading-20">{{ element.operateUser.nickname }}</div>
                     <div class="text-12 font-normal text-[#86909C] leading-20">测试</div>

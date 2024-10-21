@@ -16,7 +16,7 @@ export default {
   async sequenceBindItemBankExercise(params) {
     return apiClient.post('/itemBankExerciseBindSeq', params);
   },
-  async deleteBindItemBank(params) {
-    return apiClient.delete('/itemBankExerciseBind', params);
+  async deleteBindItemBank(id) {
+    return apiClient.delete(`/itemBankExerciseBind/${id}`);
   },
 }
