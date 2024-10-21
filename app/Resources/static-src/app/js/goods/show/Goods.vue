@@ -21,7 +21,7 @@
                         <ul class="info-left__nav pull-left">
                             <li :class="howActive == 1 ? 'active' : ''"><a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                             </li>
-                            <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">课程题库</a>
+                            <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">{{ goods.type === 'course' ? '课程题库' : '班级题库' }}</a>
                             </li>
                             <li :class="howActive == 3 ? 'active' : ''"><a href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                             </li>
@@ -42,7 +42,7 @@
                         <a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                     </li>
                     <li :class="howActive == 2 ? 'active' : ''">
-                      <a href="#info-left-1">课程题库</a>
+                      <a href="#info-left-1">{{ goods.type === 'course' ? '课程题库' : '班级题库' }}</a>
                     </li>
                     <li :class="howActive == 3 ? 'active' : ''">
                         <a href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
@@ -62,7 +62,7 @@
 
                     <div id="info-left-2" style="background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;">
                       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-                        <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px">课程题库</div>
+                        <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px">{{ goods.type === 'course' ? '课程题库' : '班级题库' }}</div>
                         <div v-if="bindItemBankExerciseList.length > 1" style="display: flex; align-items: center; font-size: 14px; font-weight: 400; color: #919399; cursor: pointer;" @click="showItemBanKDrawer">
                           <div>{{ `查看全部（${bindItemBankExerciseList.length}）` }}</div>
                           <a-icon type="right" style="line-height: 14px"/>
@@ -102,7 +102,7 @@
                       :bodyStyle="{padding: '0',}"
                     >
                       <div style="padding: 14px 20px; border-bottom: 1px solid #EFF0F5; display: flex; align-items: center; justify-content: space-between; width: 50vw; position: fixed; z-index: 10;; top: 0; right: 0; background-color: #FFF;">
-                        <div style="font-size: 16px; font-weight: 500; color: #37393D;">课程题库</div>
+                        <div style="font-size: 16px; font-weight: 500; color: #37393D;">{{ goods.type === 'course' ? '课程题库' : '班级题库' }}</div>
                         <a-icon type="close" style="font-size: 16px" @click="closeItemBanKDrawer"/>
                       </div>
                       <div style="margin-top: 53px; margin-bottom: 69px; padding: 18px 20px 0 20px; display: flex; flex-direction: column;">
@@ -269,7 +269,7 @@
                 default: '',
             },
             drpRecruitSwitch: {
-                type: Number | String,
+                type: [Number, String],
                 default: 0
             },
             vipEnabled: {
