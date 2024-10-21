@@ -795,7 +795,7 @@ class ClassroomManageController extends BaseController
         );
     }
 
-    public function itemBankAction(Request $request, $id)
+    public function itemBankAction($id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
         return $this->render(

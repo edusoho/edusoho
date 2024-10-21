@@ -6,7 +6,7 @@
 
 {% block main %}
   <div id="item-bank"
-       data-classroom="{{ classroom|default([])|json_encode }}"
+       data-classroom-id="{{ classroom.id }}"
        style="min-height: 800px"
   ></div>
 {% endblock %}

@@ -6,7 +6,7 @@ import { Button, Empty, Drawer, TreeSelect, Select, Input, Table, Checkbox, Tool
 
 const app = createApp(ItemBankPage, {
   bindType: 'classroom',
-  bindId: $('#item-bank').data('classroom').id,
+  bindId: $('#item-bank').data('classroomId'),
 });
 
 setCurrentPrimaryColor(app);

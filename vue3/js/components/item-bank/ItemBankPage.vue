@@ -54,7 +54,7 @@ async function sequenceItemBankExerciseBind() {
 }
 
 async function deleteBindItemBank(id) {
-  await Api.itemBank.deleteBindItemBank({id: id});
+  await Api.itemBank.deleteBindItemBank(id);
   await getBindItemBankExercise();
 }
 
@@ -106,7 +106,7 @@ onBeforeMount(async () => {
           @end="sequenceItemBankExerciseBind"
           item-key="id">
           <template #item="{element}">
-            <div class="flex space-x-24 px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16">
+            <div class="flex space-x-24 px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16 bg-white">
               <div class="flex items-center">
                 <img src="../../../img/course-manage/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
               </div>
@@ -115,9 +115,11 @@ onBeforeMount(async () => {
                 <div class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已发布</div>
               </div>
               <div class="flex flex-1 flex-col justify-between">
-                <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
+                <a-tooltip placement="top" :title="element.itemBankExercise.title">
+                  <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] hover:cursor-pointer w-fit" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
+                </a-tooltip>
                 <div class="flex space-x-12">
-                  <img :src="element.operateUser.nickname.smallAvatar" class="w-40" draggable="false" alt="">
+                  <img :src="element.operateUser.nickname.mediumAvatar" class="w-40" draggable="false" alt="">
                   <div class="flex flex-col">
                     <div class="text-12 font-medium text-[#1D2129] leading-20">{{ element.operateUser.nickname }}</div>
                     <div class="text-12 font-normal text-[#86909C] leading-20">测试</div>
