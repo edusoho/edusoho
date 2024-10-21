@@ -89,7 +89,7 @@
                           </div>
                         </div>
                         <div style="display: flex; align-items: center;">
-                          <a-button type="primary" @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
+                          <a-button type="primary" ghost @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
                         </div>
                       </div>
                     </div>
@@ -127,7 +127,7 @@
                               </div>
                             </div>
                             <div style="display: flex; align-items: center;">
-                              <a-button type="primary" @click="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
+                              <a-button type="primary" ghost @click="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
                             </div>
                           </div>
                         </div>

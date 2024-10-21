@@ -147,7 +147,3 @@ onBeforeMount(async () => {
     <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.bindId" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
   </AntConfigProvider>
 </template>
-
-<style scoped lang="less">
-
-</style>
