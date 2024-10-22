@@ -70,6 +70,7 @@ class ItemBankExerciseBind extends AbstractResource
                 }
                 $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
             }
+            $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();
             throw $e;
