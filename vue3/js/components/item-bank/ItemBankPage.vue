@@ -109,10 +109,10 @@ onBeforeMount(async () => {
             <div class="flex justify-between px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16 bg-white">
               <div class="flex space-x-16">
                 <div class="flex items-center">
-                  <img src="../../../img/course-manage/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
+                  <img src="../../../img/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
                 </div>
                 <div class="relative">
-                  <img src="../../../img/course-manage/item-bank/list-state-bg.jpg" class="h-90 rounded-5" draggable="false" alt="">
+                  <img src="../../../img/item-bank/list-state-bg.jpg" class="h-90 rounded-5" draggable="false" alt="">
                   <div class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已发布</div>
                 </div>
                 <div class="flex flex-col justify-between">
