@@ -1,5 +1,10 @@
 {% extends 'classroom/content-layout.html.twig' %}
 {% set nav = 'itemBankBind' %}
+
+{% do script(['vue3/js/classroom/item-bank/index.js']) %}
+
 {% block main %}
-{{ dump(classroom) }}
+  <div id="item-bank"
+       data-classroom-id="{{ classroom.id }}"
+  ></div>
 {% endblock %}
