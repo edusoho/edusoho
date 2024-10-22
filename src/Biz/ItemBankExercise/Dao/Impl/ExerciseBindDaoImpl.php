@@ -18,12 +18,18 @@ class ExerciseBindDaoImpl extends AdvancedDaoImpl implements ExerciseBindDao
         ]);
     }
 
+    public function findBindExerciseByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['seq', 'createdTime'],
             'conditions' => [
+                'ids in ()',
                 'bindId = :bindId',
                 'bindType = :bindType',
                 'itemBankExerciseId = :itemBankExerciseId',
