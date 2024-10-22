@@ -5,7 +5,7 @@
 {% set bodyClass = 'my-course cd-design' %}
 {% set side_nav = 'my-question-bank' %}
 
-{% block title %}{% endblock %}
+{% block title %}{{'my.learning.question_bank_menu'|trans}} - {{ parent() }}{% endblock %}
 
 {% block main %}
   <div id="item-bank-list"></div>

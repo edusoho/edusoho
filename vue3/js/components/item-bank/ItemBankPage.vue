@@ -1,11 +1,12 @@
 <script setup>
 import {computed, createVNode, onBeforeMount, ref} from 'vue';
 import AntConfigProvider from '../AntConfigProvider.vue';
-import ItemBankList from './ItemBankList.vue';
+import ItemBankDrawer from './ItemBankDrawer.vue';
 import {ExclamationCircleOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
 import Api from '../../../api';
 import draggable from 'vuedraggable';
+import {formatDate} from '../../common';
 
 const props = defineProps({
   bindType: {required: true},
@@ -75,14 +76,6 @@ function toItemBankExercisePage(exerciseId) {
   window.location.href = `/item_bank_exercise/${exerciseId}`
 }
 
-function formatDate(timestamp) {
-  const date = new Date(parseInt(timestamp) * 1000);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
 onBeforeMount(async () => {
   await getBindItemBankExercise();
 })
@@ -146,7 +139,7 @@ onBeforeMount(async () => {
                   <div class="mx-6 text-[#E5E6EB] text-12">|</div>
                   <div class="text-12 text-[#919399] font-normal">有效期：
                     <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'forever'">长期有效</span>
-                    <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'date' || element.itemBankExercise.expiryMode === 'end_date'">{{ `截止至 ${formatDate(element.itemBankExercise.expiryEndDate)}` }}</span>
+                    <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'date' || element.itemBankExercise.expiryMode === 'end_date'">{{ `截止至 ${formatDate(element.itemBankExercise.expiryEndDate, 'YYYY-MM-DD')}` }}</span>
                     <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'days'">{{ `共 ${element.itemBankExercise.expiryDays} 天` }}</span>
                   </div>
                 </div>
@@ -157,6 +150,6 @@ onBeforeMount(async () => {
         </draggable>
       </div>
     </div>
-    <ItemBankList v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.bindId" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
+    <ItemBankDrawer v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.bindId" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
   </AntConfigProvider>
 </template>

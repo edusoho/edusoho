@@ -19,4 +19,7 @@ export default {
   async deleteBindItemBank(id) {
     return apiClient.delete(`/itemBankExerciseBind/${id}`);
   },
+  async getMyBindItemBank(params) {
+    return apiClient.get('/me/item_bank_exercises', {params});
+  },
 }
