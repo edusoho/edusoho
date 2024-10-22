@@ -10,6 +10,7 @@ use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Service\GoodsService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
@@ -71,6 +72,7 @@ class OrderInfo extends AbstractResource
         $orderInfo = [
             'targetId' => $product->targetId,
             'targetType' => $product->targetType,
+            'exerciseBind' => $this->getItemBankExerciseService()->findBindExercise($product->targetType, $product->targetId),
             'goodsSpecsId' => $product->goodsSpecsId,
             'goodsId' => $product->goodsId,
             'cover' => $product->cover,
@@ -244,5 +246,13 @@ class OrderInfo extends AbstractResource
         $biz = $this->getBiz();
 
         return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 }

@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\Coupon\Service\CouponService;
 use Biz\Distributor\Util\DistributorCookieToolkit;
 use Biz\Goods\GoodsEntityFactory;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
@@ -32,6 +33,7 @@ class OrderController extends BaseController
         return $this->render('order/show/index.html.twig', [
             'product' => $product,
             'informationCollectEvent' => $informationCollectEvent,
+            'exerciseBind' => $this->getItemBankExerciseService()->findBindExercise($product->targetType, $product->targetId),
         ]);
     }
 
@@ -264,5 +266,13 @@ class OrderController extends BaseController
         $biz = $this->getBiz();
 
         return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }

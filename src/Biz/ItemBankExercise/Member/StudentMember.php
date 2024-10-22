@@ -35,6 +35,7 @@ class StudentMember extends Member
             'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
             'role' => self::ROLE,
             'remark' => $info['remark'],
+            'canLearn' => 1,
             'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
         ];
 

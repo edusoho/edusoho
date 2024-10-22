@@ -23,7 +23,7 @@ class InitItemBankExerciseBind extends Migration
               KEY `idx_bindType_bindId` (`bindType`, `bindId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-            CREATE TABLE `item_ban_exercise_auto_join_record`  (
+            CREATE TABLE `item_bank_exercise_auto_join_record`  (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `userId` int(10) NOT NULL,
               `itemBankExerciseId` int(11) NOT NULL,
@@ -48,7 +48,7 @@ class InitItemBankExerciseBind extends Migration
     {
         $this->getConnection()->exec('
           DROP TABLE IF EXISTS `item_bank_exercise_bind`;
-          DROP TABLE IF EXISTS `item_ban_exercise_auto_join_record`;
+          DROP TABLE IF EXISTS `item_bank_exercise_auto_join_record`;
           ALTER TABLE item_bank_exercise_member DROP COLUMN canLearn;
           ALTER TABLE item_bank_exercise DROP COLUMN updated_user_id;
         ');

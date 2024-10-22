@@ -5,6 +5,8 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 
 class MeItemBankExercise extends AbstractResource
 {
@@ -23,12 +25,47 @@ class MeItemBankExercise extends AbstractResource
         );
 
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
+        $exerciseAutoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdAndExerciseIds($this->getCurrentUser()->getId(), array_column($members, 'exerciseId'));
+        $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($exerciseAutoJoinRecords, 'itemBankExerciseBindId'));
+        $courseIds = [];
+        $classroomIds = [];
+
+        foreach ($exerciseBinds as $exerciseBind) {
+            if ('course' == $exerciseBind['bindType']) {
+                $courseIds[] = $exerciseBind['bindId'];
+            } else {
+                $classroomIds[] = $exerciseBind['bindId'];
+            }
+        }
+
+        // 批量获取课程和课堂数据
+
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        foreach ($courses as $course) {
+            $courseTitles[$course['id']] = $course['courseSetTitle'];
+        }
+
+        foreach ($classrooms as $classroom) {
+            $classroomTitles[$classroom['id']] = $classroom['title'];
+        }
+        $bindTitles = [];
+
+        foreach ($exerciseBinds as $exerciseBind) {
+            if ('course' == $exerciseBind['bindType']) {
+                $bindTitles[$exerciseBind['itemBankExerciseId']] = '《'.$courseTitles[$exerciseBind['bindId']].'》、';
+            } else {
+                $bindTitles[$exerciseBind['itemBankExerciseId']] = '《'.$classroomTitles[$exerciseBind['bindId']].'》、';
+            }
+        }
         foreach ($members as $key => &$member) {
             if (empty($itemBankExercises[$member['exerciseId']])) {
                 unset($members[$key]);
             } else {
                 $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
                 $member['isExpired'] = $this->isExpired($members['deadline']);
+                $member['bindTitle'] = $bindTitles[$member['exerciseId']];
             }
         }
 
@@ -59,5 +96,21 @@ class MeItemBankExercise extends AbstractResource
     protected function getItemBankExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
     }
 }
