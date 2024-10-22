@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class ExerciseAutoJoinRecordDaoImpl extends AdvancedDaoImpl implements ExerciseAutoJoinRecordDao
 {
-    protected $table = 'item_ban_exercise_auto_join_record';
+    protected $table = 'item_bank_exercise_auto_join_record';
 
     public function declares()
     {
