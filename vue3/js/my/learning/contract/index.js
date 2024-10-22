@@ -1,11 +1,11 @@
 import { createApp } from 'vue';
-import MyContract from './MyContract.vue';
+import ContractList from './ContractList.vue';
 import { Button, Modal, Pagination, Empty } from 'ant-design-vue';
 import 'ant-design-vue/dist/reset.css';
 import 'vue3/main.less';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 
-const app = createApp(MyContract);
+const app = createApp(ContractList);
 
 app.use(Button);
 app.use(Modal);

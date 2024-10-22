@@ -3,9 +3,9 @@ import {reactive, ref} from 'vue';
 import {Empty, message} from 'ant-design-vue';
 import { t } from './vue-lang';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
-import AntConfigProvider from '../components/AntConfigProvider.vue';
+import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
-import Api from '../../api';
+import Api from '../../../../api';
 
 message.config({
   top: `90px`,
@@ -94,7 +94,7 @@ const downloadContract = async (id, fileName) => {
         <div v-if="contracts.length !== 0" v-for="contract in contracts"
              class="flex justify-between items-center px-16 py-36 border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
           <div class="flex">
-            <img class="w-45 ml-11 mr-24" src="../../img/my-contract/icon-01.jpg" alt="">
+            <img class="w-45 ml-11 mr-24" src="../../../../img/my-contract/icon-01.jpg" alt="">
             <div class="flex flex-col">
               <div
                 class="w-320 overflow-hidden text-ellipsis whitespace-nowrap mb-12 text-16 text-[#37393D] font-medium">
