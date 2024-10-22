@@ -64,6 +64,7 @@ class ClassroomController extends BaseController
             'classroom' => $classroom,
             'nav' => $nav,
             'member' => $member,
+            'itemBankBindNum' => 0,
         ]);
     }
 

@@ -1403,6 +1403,7 @@ t.add("course.plan_info", "<p class=\"cd-dark-minor cd-mb24\">\u6559\u5b66\u8ba1
 t.add("course.tab.tasks", "\u76ee\u5f55", "js", "zh_CN");
 t.add("course.tab.threads", "\u8bdd\u9898", "js", "zh_CN");
 t.add("course.tab.discussions", "\u8bdd\u9898", "js", "zh_CN");
+t.add("course.tab.discussions", "\u8bdd\u9898", "js", "zh_CN");
 t.add("course.tab.questions", "\u95ee\u9898", "js", "zh_CN");
 t.add("course.tab.notes", "\u7b14\u8bb0", "js", "zh_CN");
 t.add("course.tab.material", "\u8d44\u6599\u533a", "js", "zh_CN");

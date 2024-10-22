@@ -11,6 +11,7 @@
     {% if not planMember|default(null) %}
       <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">{{'course'|trans}} <small >({{classroom.courseNum}})</small></a></li>
     {% endif %}
+    <li role="presentation" class="{% if nav == 'itemBankBind' %}active{% endif %}"><a href="{{ path('classroom_itemBankBind', {classroomId:classroom.id}) }}">{{'classroom.itemBankBind'|trans}} <small >({{itemBankBindNum}})</small></a></li>
 
     {% if is_plugin_installed('ClassroomPlan') %}
       {{ render(controller('ClassroomPlanBundle:ClassroomPlan:planNav',{classroomId:classroom.id, nav:nav})) }}

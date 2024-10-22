@@ -326,9 +326,3 @@ onBeforeMount(async () => {
     </div>
   </a-drawer>
 </template>
-
-<style lang="less">
-  .ant-table-cel {
-    border-bottom: 0;
-  }
-</style>
