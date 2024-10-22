@@ -3083,6 +3083,10 @@ classroom_courses:
     path: '/classroom/{classroomId}/courses'
     defaults:
         _controller: 'AppBundle:Classroom/Course:list'
+classroom_itemBankBind:
+    path: '/classroom/{classroomId}/itemBankBind'
+    defaults:
+        _controller: 'AppBundle:Classroom/ClassroomItemBankBind:list'
 classroom_member_access:
     path: '/classroom/{classroomId}/member/{memberId}/access'
     defaults:

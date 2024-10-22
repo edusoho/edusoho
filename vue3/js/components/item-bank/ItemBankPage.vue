@@ -99,7 +99,7 @@ onBeforeMount(async () => {
       <div v-if="bindItemBankExerciseList.length === 0">
         <a-empty description="暂无已绑定的题库" class="mt-150"/>
       </div>
-      <div v-else class="h-800 overflow-y-auto mb-20">
+      <div v-else class="max-h-800 overflow-y-auto mb-20">
         <draggable
           v-model="bindItemBankExerciseList"
           group="people"
@@ -116,7 +116,7 @@ onBeforeMount(async () => {
               </div>
               <div class="flex flex-1 flex-col justify-between">
                 <a-tooltip placement="top" :title="element.itemBankExercise.title">
-                  <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] hover:cursor-pointer w-fit" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
+                  <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] cursor-pointer w-fit" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
                 </a-tooltip>
                 <div class="flex space-x-12">
                   <img :src="element.operateUser.nickname.mediumAvatar" class="w-40" draggable="false" alt="">
