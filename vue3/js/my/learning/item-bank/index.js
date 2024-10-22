@@ -1,7 +1,7 @@
 import {createApp} from 'vue';
 import 'vue3/main.less';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
-import { Tooltip } from 'ant-design-vue';
+import { Button, Tooltip, Pagination } from 'ant-design-vue';
 import ItemBankList from './ItemBankList.vue';
 
 const app = createApp(ItemBankList);
@@ -9,6 +9,8 @@ const app = createApp(ItemBankList);
 setCurrentPrimaryColor(app);
 
 app.use(Tooltip);
+app.use(Button);
+app.use(Pagination);
 
 if (process.env.NODE_ENV === 'production') {
   createStyleTag(`/static-dist/vue3/js/my-contract/index.css?${window.app.version}`);
