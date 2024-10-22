@@ -5,8 +5,6 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -82,37 +80,6 @@ class ItemBankExerciseController extends BaseController
             $paginator->getPerPageCount()
         );
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
-        $exerciseAutoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdAndExerciseIds($currentUser['id'], array_column($itemBankExercises, 'id'));
-        $exerciseAutoJoinRecords = array_column($exerciseAutoJoinRecords, 'itemBankExerciseBindId');
-        $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($exerciseAutoJoinRecords, 'itemBankExerciseBindId'));
-
-        $courseIds = [];
-        $classroomIds = [];
-
-        foreach ($exerciseBinds as $exerciseBind) {
-            if ('course' == $exerciseBind['type']) {
-                $courseIds[] = $exerciseBind['bindId'];
-            } else {
-                $classroomIds[] = $exerciseBind['bindId'];
-            }
-        }
-
-        // 批量获取课程和课堂数据
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-
-        // 将课程和课堂的 title 映射为 [id => title] 的数组
-        $courseTitles = array_column($courses, 'title', 'id');
-        $classroomTitles = array_column($classrooms, 'title', 'id');
-
-        // 将 title 赋值到 $exerciseBinds 中
-        foreach ($exerciseBinds as &$exerciseBind) {
-            if ('course' == $exerciseBind['type']) {
-                $exerciseBind['bindTitle'] = '《'.$courseTitles[$exerciseBind['bindId']].'》、';
-            } else {
-                $exerciseBind['bindTitle'] = '《'.$classroomTitles[$exerciseBind['bindId']].'》、';
-            }
-        }
 
         foreach ($members as $key => &$member) {
             if (empty($itemBankExercises[$member['exerciseId']])) {
@@ -236,21 +203,5 @@ class ItemBankExerciseController extends BaseController
     protected function getAssessmentExerciseService()
     {
         return $this->createService('ItemBankExercise:AssessmentExerciseService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    protected function getClassroomService()
-    {
-        return $this->createService('Classroom:ClassroomService');
     }
 }
