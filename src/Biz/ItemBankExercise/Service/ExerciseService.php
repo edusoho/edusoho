@@ -83,4 +83,6 @@ interface ExerciseService
     public function updateBindExercise($bindExercise);
 
     public function findExerciseAutoJoinRecordByUserIdAndExerciseIds($userId, $exerciseIds);
+
+    public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
 }

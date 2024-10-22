@@ -4,6 +4,11 @@ namespace ApiBundle\Api\Resource\ItemBankExerciseBind;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\MemberService;
+use Biz\ItemBankExercise\OperateReason;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserService;
 
@@ -12,7 +17,63 @@ class ItemBankExerciseBind extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseIds']);
+        try {
+            $this->biz['db']->beginTransaction();
+            $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseIds']);
+            if ('course' == $params['bindType']) {
+                $member = $this->getCourseMemberService()->findCourseStudents($params['bindId'], 0, PHP_INT_MAX);
+            } else {
+                $member = $this->getClassroomService()->findClassroomMembersByRole($params['bindId'], 'student', 0, PHP_INT_MAX);
+            }
+            $studentIds = array_column($member, 'userId');
+            $userData = $this->getUserService()->findUsersByIds($studentIds);
+            foreach ($params['exerciseIds'] as $exerciseId) {
+                foreach ($userData as $key => $user) {
+                    if (!empty($user['nickname'])) {
+                        $user = $this->getUserService()->getUserByNickname($user['nickname']);
+                    } else {
+                        if (!empty($user['email'])) {
+                            $user = $this->getUserService()->getUserByEmail($user['email']);
+                        } else {
+                            $user = $this->getUserService()->getUserByVerifiedMobile($user['verifiedMobile']);
+                        }
+                    }
+
+                    $isExerciseMember = $this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id']);
+
+                    if ($isExerciseMember) {
+                        ++$existsUserCount;
+                    } else {
+                        $data = [
+                            'price' => 0,
+                            'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
+                            'source' => 'outside',
+                            'reason' => OperateReason::JOIN_BY_IMPORT,
+                            'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
+                        ];
+                        $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
+
+                        ++$successCount;
+                    }
+                }
+            }
+            $exerciseBinds = $this->getItemBankExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+            $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
+            $exerciseAutoJoinRecords = [];
+            foreach ($params['exerciseIds'] as $exerciseId) {
+                foreach ($studentIds as $studentId) {
+                    $exerciseAutoJoinRecords[] = [
+                        'userId' => $studentId,
+                        'itemBankExerciseId' => $exerciseId,
+                        'itemBankExerciseBindId' => $exerciseBindsIndex[$exerciseId]['id'],
+                    ];
+                }
+                $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
+            }
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
 
         return ['success' => true];
     }
@@ -59,5 +120,29 @@ class ItemBankExerciseBind extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->service('ItemBankExercise:ExerciseMemberService');
     }
 }

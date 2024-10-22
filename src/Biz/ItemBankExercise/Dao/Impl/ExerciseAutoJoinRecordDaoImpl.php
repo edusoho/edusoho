@@ -12,7 +12,7 @@ class ExerciseAutoJoinRecordDaoImpl extends AdvancedDaoImpl implements ExerciseA
     public function declares()
     {
         return [
-            'timestamps' => ['createdTime', 'updatedTime'],
+            'timestamps' => ['createdTime'],
             'orderbys' => ['createdTime'],
             'conditions' => [
                 'userId = :userId',

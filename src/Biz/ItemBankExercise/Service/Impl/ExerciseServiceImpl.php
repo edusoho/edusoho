@@ -587,7 +587,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         // 批量插入数据
         $this->getExerciseBindDao()->batchCreate($data);
         // 用job去做
-        $this->dispatchEvent('itemBankExercise.bind', new Event($bindType, $bindId, $exerciseIds));
+//        $this->dispatchEvent('itemBankExercise.bind', new Event($bindType, $bindId, $exerciseIds));
         // 查询对应的学员ID，然后加入
     }
 
@@ -627,6 +627,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function findExerciseAutoJoinRecordByUserIdAndExerciseIds($userId, $exerciseIds)
     {
         return $this->getExerciseAutoJoinRecordDao()->search(['userId' => $userId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
+    }
+
+    public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords)
+    {
+        $this->getExerciseAutoJoinRecordDao()->batchCreate($exerciseAutoJoinRecords);
     }
 
     /**
