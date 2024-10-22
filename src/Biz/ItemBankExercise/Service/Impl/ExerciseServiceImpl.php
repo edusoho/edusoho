@@ -11,6 +11,7 @@ use Biz\Exception\UnableJoinException;
 use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
 use Biz\ItemBankExercise\Dao\AssessmentExerciseRecordDao;
 use Biz\ItemBankExercise\Dao\ChapterExerciseRecordDao;
+use Biz\ItemBankExercise\Dao\ExerciseAutoJoinRecordDao;
 use Biz\ItemBankExercise\Dao\ExerciseBindDao;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
@@ -585,6 +586,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
         // 批量插入数据
         $this->getExerciseBindDao()->batchCreate($data);
+        // 用job去做
+//        $this->dispatchEvent('itemBankExercise.bind', new Event($bindType, $bindId, $exerciseIds));
+        // 查询对应的学员ID，然后加入
     }
 
     public function findBindExercise($bindType, $bindId)
@@ -592,14 +596,42 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId], ['seq' => 'DESC'], 0, PHP_INT_MAX);
     }
 
+    public function findBindExerciseByBindId($bindId)
+    {
+        return $this->getExerciseBindDao()->search(['bindId' => $bindId], ['seq' => 'DESC'], 0, PHP_INT_MAX);
+    }
+
+    public function findBindExerciseByIds($bindIds)
+    {
+        return $this->getExerciseBindDao()->findBindExerciseByIds($bindIds);
+    }
+
     public function removeBindExercise($bindExerciseId)
     {
         $this->getExerciseBindDao()->delete($bindExerciseId);
+        // 查询绑定信息
+        $exerciseAutoJoinRecords = $this->getExerciseAutoJoinRecordDao()->findExerciseAutoJoinRecordByUserId($bindExerciseId);
+        // 移除对应的学员
+        $this->getExerciseMemberService()->removeStudents('', array_column($exerciseAutoJoinRecords, 'userId'));
+        // 批量删除绑定记录
+        $this->getExerciseAutoJoinRecordDao()->batchDelete(array_column($exerciseAutoJoinRecords, 'id'));
+        // 注册job删除学员
+        $this->dispatchEvent('itemBankExercise.unbind', new Event($bindExerciseId));
     }
 
     public function updateBindExercise($bindExercise)
     {
         $this->getExerciseBindDao()->batchUpdate(array_column($bindExercise, 'id'), $bindExercise);
+    }
+
+    public function findExerciseAutoJoinRecordByUserIdAndExerciseIds($userId, $exerciseIds)
+    {
+        return $this->getExerciseAutoJoinRecordDao()->search(['userId' => $userId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
+    }
+
+    public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords)
+    {
+        $this->getExerciseAutoJoinRecordDao()->batchCreate($exerciseAutoJoinRecords);
     }
 
     /**
@@ -728,5 +760,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getExerciseBindDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseBindDao');
+    }
+
+    /**
+     * @return ExerciseAutoJoinRecordDao
+     */
+    protected function getExerciseAutoJoinRecordDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseAutoJoinRecordDao');
     }
 }
