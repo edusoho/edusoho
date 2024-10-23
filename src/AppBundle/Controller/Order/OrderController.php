@@ -33,8 +33,20 @@ class OrderController extends BaseController
         return $this->render('order/show/index.html.twig', [
             'product' => $product,
             'informationCollectEvent' => $informationCollectEvent,
-            'exerciseBind' => $this->getItemBankExerciseService()->findBindExercise($product->targetType, $product->targetId),
+            'exerciseBind' => $this->getExerciseBind($product->targetType, $product->targetId),
         ]);
+    }
+
+    private function getExerciseBind($targetType, $targetId)
+    {
+        $bindExercises = $this->getItemBankExerciseService()->findBindExercise($targetType, $targetId);
+        $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
+        $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
+        foreach ($bindExercises as &$bindExercise) {
+            $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
+        }
+
+        return $bindExercises;
     }
 
     public function createAction(Request $request)
