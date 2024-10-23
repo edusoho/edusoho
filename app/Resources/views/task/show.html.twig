@@ -4,7 +4,7 @@
 
 {% set bodyClass = "" %}
 {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
-{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js', 'vue3/js/sign-contract/index.js']) %}
+{% do script(['libs/ltc-sdk-server.js', 'libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js', 'vue3/js/components/sign-contract/index.js']) %}
 
 {% set showSidebar = app.request.cookies.get('show-sidebar') | default(1) %}
 
@@ -39,7 +39,7 @@
           <i class="es-icon es-icon-chevronleft"></i>{{ 'course.task.learning.back_course_btn'|trans }}
         </a>
         {{ display_task_title(task) }}
-        
+
         {% if setting('wechat.wechat_notification_enabled')|default(false) and not weChatUser.isSubscribe|default(false) %}
           {% if course.canLearn == '1' %}
           <span class="pull-right cd-text-lg js-wechat-qrcode-btn wechat-inform-task hidden-xs" {% if not weChatUser %}data-url="{{ path('login_wechat_qrcode') }}"{% endif %}><span class="wechat-inform-task__tip cd-mr8">{{ 'wechat.notification.course_notification_open'|trans}}</span><i class="es-icon es-icon-qr-code"></i></span>

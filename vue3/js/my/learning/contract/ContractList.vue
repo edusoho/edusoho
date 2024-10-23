@@ -127,7 +127,7 @@ const downloadContract = async (id, fileName) => {
                wrapClassName="my-contract-detail-modal"
       >
         <template #title>
-          <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
+          <div class="flex justify-between items-center px-24 py-16 border border-solid border-[#F0F0F0] border-t-0 border-x-0">
             <div class="text-16 text-[#1E2226] font-medium">{{ `${courseName}-${ t('modal.contractSigning') }` }}</div>
             <CloseOutlined class="h-16 w-16" @click="myContentVisible = false"/>
           </div>

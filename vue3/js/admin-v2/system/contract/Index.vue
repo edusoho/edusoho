@@ -1,5 +1,5 @@
 <script>
-import AntConfigProvider from '../components/AntConfigProvider.vue';
+import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import {defineComponent} from 'vue';
 
 export default defineComponent({

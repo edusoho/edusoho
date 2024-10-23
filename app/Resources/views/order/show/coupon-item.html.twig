@@ -1,4 +1,8 @@
-{% do script(['app/js/order/coupon-item/index.js']) %}
+{% do script(['app/js/order/coupon-item/index.js', 'vue3/js/order/index.js']) %}
+
+<div id="item-bank-gift"
+  data-exercise-bind="{{ exerciseBind|json_encode }}"
+></div>
 
 <div class="order-center-deduction">
   <span class="order-center-deduction__title">
@@ -11,7 +15,7 @@
 <div class="order-center-coupon" id="order-coupon">
   <div class="order-center-coupon__select" id="order-center-coupon__select">
     <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="coupon-form-group">
-      <input type="text" class="form-control form-control-sm" name="couponCode" value=""  
+      <input type="text" class="form-control form-control-sm" name="couponCode" value=""
         data-display="{{'plugin.coupon.use.input_display'|trans}}"  placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}">
       <div class="action-button">
         <button type="button" data-loading-text="{{'order.confirm.coupon.use_loading'|trans}}" class="btn cd-btn cd-btn-sm cd-btn-ghost-primary" data-url="{{ path('coupon_check') }}" id="use-coupon-btn">{{'form.btn.use'|trans}}</button>
@@ -33,7 +37,7 @@
   <div class="order-center-coupon__selected" style="display:none"  id="order-center-coupon__selected">
     <span class="cd-dark-major">
       {{'order.confirm.coupon.used_coupon'|trans}} <span id="coupon-code-label"></span> {{'order.confirm.coupon.deduction'|trans}} <span id="deduct-amount-label"></span>
-    </span> 
+    </span>
     <a href="javascript:;" class="cd-link-primary" id="cancel-use-coupon-btn">{{'form.btn.cancel'|trans}}</a>
   </div>
 </div>

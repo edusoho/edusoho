@@ -9,7 +9,7 @@ import {
 import {message} from 'ant-design-vue';
 import SmoothSignature from 'smooth-signature';
 import {t} from './vue-lang';
-import Api from '../../api';
+import Api from '../../../api';
 import {useI18n} from 'vue-i18n';
 
 const contractTemplate = ref();
@@ -192,7 +192,7 @@ const bgClass = computed(() => {
           <div
             class="absolute bottom-0 z-10 flex justify-center items-center rounded-b-8 w-full py-16 border-t border-x-0 border-b-0 border-[#DFE2E6] border-solid hover:cursor-pointer bg-white"
             @click="showContractDetailModal">
-            <img src="../../img/sign-contract/icon-01.jpg" class="w-16 h-16 mr-10" alt="">
+            <img src="../../../img/sign-contract/icon-01.jpg" class="w-16 h-16 mr-10" alt="">
             <div class="text-[#3DCD7F] text-14 font-normal">{{ t('modal.viewContractDetails') }}</div>
           </div>
         </div>

@@ -1,9 +1,9 @@
 <script setup>
 import {reactive, ref} from 'vue';
 import {CloseOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
-import {formatDate} from '../common';
+import {formatDate} from '../../../common';
 import {t} from './vue-lang';
-import Api from '../../api';
+import Api from '../../../../api';
 import {message} from 'ant-design-vue';
 
 message.config({
