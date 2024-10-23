@@ -206,6 +206,8 @@ class OrderInfo extends AbstractResource
         foreach ($bindExercises as &$bindExercise) {
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
         }
+
+        return $bindExercises;
     }
 
     /**
