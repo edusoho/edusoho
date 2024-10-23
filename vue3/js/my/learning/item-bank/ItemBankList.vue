@@ -74,10 +74,13 @@ onBeforeMount(async() => {
                   <div class="text-14 text-[#919399] font-normal">掌握率：<span class="text-[#37393D]">{{ `${item.masteryRate}%` }}</span></div>
                 </div>
               </div>
-              <div v-if="item.bindTitle" class="flex text-14 font-normal">
-                <div class="mr-8 text-[#919399] max-w-320 truncate">{{ item.bindTitle }}</div>
-                <div class="text-[#5E6166]">赠送的题库</div>
-              </div>
+              <a-tooltip placement="top">
+                <template #title>{{ item.bindTitle }}</template>
+                <div v-if="item.bindTitle" class="flex text-14 font-normal">
+                  <div class="mr-8 text-[#919399] max-w-320 truncate">{{ item.bindTitle }}</div>
+                  <div class="text-[#5E6166]">赠送的题库</div>
+                </div>
+              </a-tooltip>
             </div>
           </div>
           <div class="flex items-center">
