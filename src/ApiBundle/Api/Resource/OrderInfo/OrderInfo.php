@@ -72,7 +72,7 @@ class OrderInfo extends AbstractResource
         $orderInfo = [
             'targetId' => $product->targetId,
             'targetType' => $product->targetType,
-            'exerciseBind' => $this->getItemBankExerciseService()->findBindExercise($product->targetType, $product->targetId),
+            'exerciseBind' => $this->getExerciseBind($product->targetType, $product->targetId),
             'goodsSpecsId' => $product->goodsSpecsId,
             'goodsId' => $product->goodsId,
             'cover' => $product->cover,
@@ -196,6 +196,16 @@ class OrderInfo extends AbstractResource
         $product->init($params);
 
         return $product;
+    }
+
+    private function getExerciseBind($targetType, $targetId)
+    {
+        $bindExercises = $this->getItemBankExerciseService()->findBindExercise($targetType, $targetId);
+        $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
+        $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
+        foreach ($bindExercises as &$bindExercise) {
+            $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
+        }
     }
 
     /**
