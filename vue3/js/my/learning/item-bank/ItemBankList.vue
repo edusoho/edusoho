@@ -38,6 +38,10 @@ async function handlePaginationChange(page, pageSize) {
   await handleTableChange(pagination);
 }
 
+function toItemBankExercisePage(exerciseId) {
+  window.location.href = `/item_bank_exercise/${exerciseId}`
+}
+
 onBeforeMount(async() => {
   const params = {
     limit: pagination.pageSize,
@@ -54,27 +58,30 @@ onBeforeMount(async() => {
       <div class="flex flex-col px-24 pt-24 space-y-20 mb-20">
         <div class="text-18 text-[#1E2226] font-medium">我的题库</div>
         <div v-if="bindItemBankList.length === 0">
-          <div>11111111</div>
+          <a-empty description="暂无题库"/>
         </div>
         <div v-else v-for="item in bindItemBankList" class="flex justify-between border border-[#E5E6EB] border-solid rounded-6 px-24 py-16">
           <div class="flex space-x-16">
             <div class="relative">
               <img :src="item.itemBankExercise.cover.middle" class="h-90 rounded-6" draggable="false" alt="">
-              <div class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已发布</div>
+              <div v-if="item.itemBankExercise.status === 'closed'" class="text-12 text-white font-medium px-8 py-2 bg-[#F53F3F] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已关闭</div>
             </div>
             <div class="flex flex-col justify-between">
               <div class="flex flex-col">
-                <div class="text-16 font-medium text-[#37393D] mb-8">{{ item.itemBankExercise.title }}</div>
+                <div class="text-16 font-medium text-[#37393D] mb-8 max-w-320 truncate">{{ item.itemBankExercise.title }}</div>
                 <div class="flex">
                   <div class="text-14 text-[#919399] font-normal mr-20">答题率：<span class="text-[#37393D]">{{ `${item.completionRate}%` }}</span></div>
                   <div class="text-14 text-[#919399] font-normal">掌握率：<span class="text-[#37393D]">{{ `${item.masteryRate}%` }}</span></div>
                 </div>
               </div>
-              <div>33333</div>
+              <div v-if="item.bindTitle" class="flex text-14 font-normal">
+                <div class="mr-8 text-[#919399] max-w-320 truncate">{{ item.bindTitle }}</div>
+                <div class="text-[#5E6166]">赠送的题库</div>
+              </div>
             </div>
           </div>
           <div class="flex items-center">
-            <a-button type="primary">去学习</a-button>
+            <a-button type="primary" @click="toItemBankExercisePage(item.itemBankExercise.id)">去学习</a-button>
           </div>
         </div>
       </div>
