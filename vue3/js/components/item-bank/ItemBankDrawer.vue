@@ -320,7 +320,7 @@ onBeforeMount(async () => {
         </div>
         <div class="space-x-16">
           <a-button @click="closeItemBankList">取消</a-button>
-          <a-button type="primary" @click="bindItemBankExercise">确认</a-button>
+          <a-button type="primary" @click="bindItemBankExercise" :disabled="checkedExerciseIdNum === 0">确认</a-button>
         </div>
       </div>
     </div>
