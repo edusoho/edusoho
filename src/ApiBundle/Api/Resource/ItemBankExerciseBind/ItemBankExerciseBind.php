@@ -90,7 +90,6 @@ class ItemBankExerciseBind extends AbstractResource
         $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
         $userId = $this->getCurrentUser()->getId();
-        file_put_contents('/tmp/jc123', json_encode($user), 8);
         foreach ($bindExercises as &$bindExercise) {
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
             if (!empty($userId)) {
