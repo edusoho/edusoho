@@ -11,7 +11,7 @@ function toItemBankExercisePage(exerciseId) {
 <template>
   <div class="flex justify-between p-12 bg-[#FAFAFA] rounded-6">
     <div class="flex items-center">
-      <img class="w-18 mr-8" src="../../img/item-bank/item-bank-gift-icon.jpg" alt="">
+      <img class="w-18 mr-8" src="../../img/item-bank/item-bank-gift-icon.png" alt="">
       <div class="text-14 text-[#5E6166] font-normal max-w-400 truncate cursor-pointer hover:text-[#46C37B]" @click="toItemBankExercisePage(item.itemBankExercise.id)">{{ item.itemBankExercise.title }}</div>
     </div>
     <div>
