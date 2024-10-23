@@ -95,7 +95,7 @@
 
           var styles = tools.parseCssText( element.attributes.style, true ),
             borderStyles = styles.border ? CKEDITOR.tools.style.border.fromCssRule( styles.border ) : {},
-            borders = tools.style.border && tools.style.border.splitCssValues( styles, borderStyles ),
+            borders = tools.style.border.splitCssValues( styles, borderStyles ),
             tmpStyles = CKEDITOR.tools.clone( styles );
 
           // Drop all border styles before continue,
