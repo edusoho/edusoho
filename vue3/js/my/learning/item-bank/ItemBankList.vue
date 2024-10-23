@@ -53,7 +53,10 @@ onBeforeMount(async() => {
     <div class="flex flex-col w-full border border-[#E5E6EB] border-solid bg-white rounded-4">
       <div class="flex flex-col px-24 pt-24 space-y-20 mb-20">
         <div class="text-18 text-[#1E2226] font-medium">我的题库</div>
-        <div v-for="item in bindItemBankList" class="flex justify-between border border-[#E5E6EB] border-solid rounded-6 px-24 py-16">
+        <div v-if="bindItemBankList.length === 0">
+          <div>11111111</div>
+        </div>
+        <div v-else v-for="item in bindItemBankList" class="flex justify-between border border-[#E5E6EB] border-solid rounded-6 px-24 py-16">
           <div class="flex space-x-16">
             <div class="relative">
               <img :src="item.itemBankExercise.cover.middle" class="h-90 rounded-6" draggable="false" alt="">
