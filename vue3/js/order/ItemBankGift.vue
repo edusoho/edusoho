@@ -43,7 +43,7 @@ function closeItemBankModal() {
              wrapClassName="item-bank-list-modal"
     >
       <template #title>
-        <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
+        <div class="flex justify-between items-center px-24 py-16 border border-solid border-[#F0F0F0] border-t-0 border-x-0">
           <div class="text-16 text-[#1E2226] font-medium">赠送题库</div>
           <CloseOutlined class="h-16 w-16" @click="closeItemBankModal"/>
         </div>
@@ -70,7 +70,7 @@ function closeItemBankModal() {
       padding: 0 !important;
       .ant-modal-footer {
         border-top: 1px solid #ebebeb;
-        padding: 10px 16px;
+        padding: 20px 24px;
         margin-top: 0;
       }
       .ant-modal-header {
