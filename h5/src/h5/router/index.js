@@ -761,8 +761,7 @@ const routes = [
       ),
   },
   {
-    path:
-      '/goods/:id/classroom' /* 不要采用此路由，入口统一为/goods/:id/show */,
+    path: '/goods/:id/classroom' /* 不要采用此路由，入口统一为/goods/:id/show */,
     name: 'goods_classroom',
     meta: {
       i18n: true,
@@ -774,8 +773,23 @@ const routes = [
       ),
   },
   {
-    path:
-      '/goods/:id/show' /* 商品的扩展必然不能通过入口来实现，入口只有一个，内部分为商品常态数据以及商品额外数据，借助插槽或者插件分开取舍 */,
+    path: '/goods/itemBank' /* 不要采用此路由，入口统一为/goods/:id/show */,
+    name: 'goods_itemBank',
+    meta: {
+      i18n: true,
+      title: '课程题库'
+    },
+    beforeEnter: (to, from, next) => {
+      to.meta.title = to.query.bindType === 'course' ? '课程题库' : '班级题库'
+      next();
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "old-goods" */ '@/containers/goods/item-bank.vue'
+        ),
+  },
+  {
+    path: '/goods/:id/show' /* 商品的扩展必然不能通过入口来实现，入口只有一个，内部分为商品常态数据以及商品额外数据，借助插槽或者插件分开取舍 */,
     name: 'goods_show',
     meta: {
       i18n: true,
