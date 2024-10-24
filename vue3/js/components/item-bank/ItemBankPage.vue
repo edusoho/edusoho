@@ -88,7 +88,7 @@ onBeforeMount(async () => {
         <div class="text-16 font-medium text-black/[.88]">题库练习管理</div>
         <a-tooltip placement="topLeft">
           <template #title>
-            <div class="w-216">绑定后课程学员自动加入题库练习，学员在课程内的学习有效期和学习权限同步影响其在题库练习内的有效期和答题权限。</div>
+            <div class="w-216">{{ props.bindType === 'course' ? '绑定后课程学员自动加入题库练习，学员在课程内的学习有效期和学习权限同步影响其在题库练习内的有效期和答题权限。' : '绑定后班级学员可同步加入到题库练习内（包括在绑定前加入班级的学员），班级学员获得绑定的题库练习的学员权限。' }}</div>
           </template>
           <a-button type="primary" class="flex items-center" @click="showItemBankList">
             <InfoCircleOutlined style="font-size: 16px"/>

@@ -184,6 +184,8 @@ function resetCheckboxes() {
   }));
 }
 
+const loading = ref(false);
+
 async function bindItemBankExercise() {
   const exerciseIds = itemBankExerciseState.value
     .filter(item => item.checked === true)
@@ -193,7 +195,12 @@ async function bindItemBankExercise() {
     bindId: props.bindId,
     exerciseIds: exerciseIds
   }
-  await Api.itemBank.bindItemBankExercise(params);
+  loading.value = true;
+  try {
+    await Api.itemBank.bindItemBankExercise(params);
+  } finally {
+    loading.value = false;
+  }
   closeItemBankList();
   emit('needGetBindItemBank');
 }
@@ -320,7 +327,7 @@ onBeforeMount(async () => {
         </div>
         <div class="space-x-16">
           <a-button @click="closeItemBankList">取消</a-button>
-          <a-button type="primary" @click="bindItemBankExercise" :disabled="checkedExerciseIdNum === 0">确认</a-button>
+          <a-button type="primary" @click="bindItemBankExercise" :disabled="checkedExerciseIdNum === 0" :loading="loading">确认</a-button>
         </div>
       </div>
     </div>
