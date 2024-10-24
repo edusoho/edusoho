@@ -387,15 +387,12 @@ export default {
       await this.getBindItemBank();
     },
     async getBindItemBank() {
-      console.log('bindType',this.goods.product.targetType)
-      console.log('bindId',this.currentSku.targetId)
       this.bindItemBankList = await Api.getBindItemBank({
         params: {
           bindType: this.goods.product.targetType,
           bindId: this.currentSku.targetId,
         }
       })
-      console.log(this.bindItemBankList);
     }
   },
   created() {

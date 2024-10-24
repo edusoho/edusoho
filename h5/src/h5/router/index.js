@@ -777,7 +777,7 @@ const routes = [
     name: 'goods_itemBank',
     meta: {
       i18n: true,
-      title: '课程题库'
+      title: ''
     },
     beforeEnter: (to, from, next) => {
       to.meta.title = to.query.bindType === 'course' ? '课程题库' : '班级题库'
