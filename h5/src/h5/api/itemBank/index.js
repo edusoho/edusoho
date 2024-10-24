@@ -48,5 +48,12 @@ export default [
     url: '/answer_record/{id}/review_single_answer',
     disableLoading: true,
     method: 'POST',
-  }
+  },
+  {
+    // 获取绑定的题库
+    name: 'getBindItemBank',
+    url: '/itemBankExerciseBind',
+    disableLoading: true,
+    method: 'GET',
+  },
 ];

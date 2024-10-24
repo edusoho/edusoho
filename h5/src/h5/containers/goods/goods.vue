@@ -53,17 +53,20 @@
           <li @click="onActive(1, 'teacher')">
             <a :class="active == 1 ? 'active' : ''" href="javascript:;">{{ $t('goods.teacher') }}</a>
           </li>
-          <li @click="onActive(2, 'catalog')">
-            <a :class="active == 2 ? 'active' : ''" href="javascript:;">{{ $t('goods.catalogue') }}</a>
+          <li @click="onActive(2, 'bindItemBank')">
+            <a :class="active == 2 ? 'active' : ''" href="javascript:;">课程题库</a>
+          </li>
+          <li @click="onActive(3, 'catalog')">
+            <a :class="active == 3 ? 'active' : ''" href="javascript:;">{{ $t('goods.catalogue') }}</a>
           </li>
           <li
-            @click="onActive(3, 'evaluate')"
+            @click="onActive(4, 'evaluate')"
             v-if="
               (show_course_review == 1 && goods.type === 'course') ||
                 (show_classroom_review == 1 && goods.type === 'classroom')
             "
           >
-            <a :class="active == 3 ? 'active' : ''" href="javascript:;">{{ $t('goods.comment') }}</a>
+            <a :class="active == 4 ? 'active' : ''" href="javascript:;">{{ $t('goods.comment') }}</a>
           </li>
         </ul>
 
@@ -77,6 +80,24 @@
         <section class="js-scroll-top goods-info__item" id="teacher">
           <div class="goods-info__title">{{ $t('goods.teacherStyle') }}</div>
           <teacher :teachers="currentSku.teachers" />
+        </section>
+
+        <!-- 绑定的题库-->
+        <section class="js-scroll-top goods-info__item flex flex-col space-y-12" id="bindItemBank">
+          <div class="flex justify-between">
+            <div class="goods-info__title">{{ goods.product.targetType === 'course' ? '课程题库' : '班级题库' }}</div>
+            <div v-if="bindItemBankList.length > 2" class="flex items-center goods-info__title" style="color: #919399; font-weight: 400;" @click="goItemBank">
+              <div class="">{{ `查看全部（${bindItemBankList.length}）` }}</div>
+              <van-icon name="arrow" />
+            </div>
+          </div>
+          <div v-if="bindItemBankList.length === 0">
+            <div class="goods-info__title" style="color: #919399; font-weight: 400;">{{ goods.product.targetType === 'course' ? '暂无课程题库' : '暂无班级题库' }}</div>
+          </div>
+          <div v-else class="space-y-12">
+            <item-bank-item :item="bindItemBankList[0]"/>
+            <item-bank-item v-if="bindItemBankList.length > 1" :item="bindItemBankList[1]"/>
+          </div>
         </section>
 
         <!-- 目录： 课程和班级在这里的表现不一致，需要通过product.targetType来做变化，其他应该以数据为准 -->
@@ -176,7 +197,7 @@ import Specs from './components/specs';
 import Certificate from './components/certificate';
 import Vip from './components/vip';
 import EnterLearning from './components/enter-learning';
-import IconSearch from '&/components/IconSvg/IconSearch.vue'
+import IconSearch from '&/components/IconSvg/IconSearch.vue';
 import Teacher from './components/teacher';
 import Reviews from '@/containers/review';
 import Recommend from './components/recommend';
@@ -185,10 +206,11 @@ import BackToTop from './components/back-to-top';
 import AfterjoinDirectory from './components/afterjoin-directory';
 import ClassroomCourses from './components/classroom-courses';
 import initShare from '@/utils/weiixn-share-sdk';
+import ItemBankItem from '@/containers/goods/components/item-bank-item.vue';
 
 import Api from '@/api';
-import { Toast } from 'vant';
-import { mapState, mapActions } from 'vuex';
+import {Toast} from 'vant';
+import {mapActions, mapState} from 'vuex';
 
 export default {
   data() {
@@ -205,6 +227,7 @@ export default {
       show_review: this.$store.state.goods.show_review,
       show_course_review: this.$store.state.goods.show_course_review,
       show_classroom_review: this.$store.state.goods.show_classroom_review,
+      bindItemBankList: [],
     };
   },
   components: {
@@ -221,7 +244,8 @@ export default {
     Certificate,
     EnterLearning,
     Vip,
-    IconSearch
+    IconSearch,
+    ItemBankItem,
   },
   computed: {
     ...mapState(['vipSwitch']),
@@ -235,43 +259,42 @@ export default {
   },
   methods: {
     ...mapActions('course', ['getCourse', 'getCourseLessons']),
-    getGoodsCourse() {
-      Api.getGoodsCourse({
-        query: {
-          id: this.$route.params.id
-        },
-        params: {
-          preview: 1
-        }
-      })
-        .then(res => {
-          this.goods = res;
-          if (this.$route.query.targetId) {
-            this.changeSku(this.$route.query.targetId);
-          } else if (this.goods.product.target.defaultCourseId) {
-            this.changeSku(this.goods.product.target.defaultCourseId);
-          } else {
-            this.changeSku(this.goods.product.target.id);
+    async getGoodsCourse() {
+      try {
+        this.goods = await Api.getGoodsCourse({
+          query: {
+            id: this.$route.params.id
+          },
+          params: {
+            preview: 1
           }
-
-          this.isLoading = false;
-          document.documentElement.scrollTop = 0;
-          const message = {
-            title: this.goods.title,
-            link: window.location.href.split('#')[0] + '#' + this.$route.path,
-            imgUrl: this.goods.images.small,
-            desc: this.goods.summary
-          };
-          console.log(message);
-          this.share(message);
-        })
-        .catch(err => {
-          Toast.fail(err.message);
         });
-      this.getGoodsCourseComponents();
+        if (this.$route.query.targetId) {
+          this.changeSku(this.$route.query.targetId);
+        } else if (this.goods.product.target.defaultCourseId) {
+          this.changeSku(this.goods.product.target.defaultCourseId);
+        } else {
+          this.changeSku(this.goods.product.target.id);
+        }
+        this.isLoading = false;
+        document.documentElement.scrollTop = 0;
+        const message = {
+          title: this.goods.title,
+          link: window.location.href.split('#')[0] + '#' + this.$route.path,
+          imgUrl: this.goods.images.small,
+          desc: this.goods.summary
+        };
+        this.share(message);
+      } catch (err) {
+        Toast.fail(err.message);
+      }
+      await this.getGoodsCourseComponents();
     },
     goSearch() {
       this.$router.push({ path: '/search', query: { id: this.goods.product.targetId } });
+    },
+    goItemBank() {
+      this.$router.push({ path: '/goods/itemBank', query: { bindId: this.currentSku.targetId, bindType: this.goods.product.targetType } });
     },
     share(message) {
       let desc = ''
@@ -286,8 +309,8 @@ export default {
       };
       initShare({ ...shareMessage });
     },
-    getGoodsCourseComponents() {
-      Api.getGoodsCourseComponents({
+    async getGoodsCourseComponents() {
+      this.componentsInfo = await Api.getGoodsCourseComponents({
         query: {
           id: this.$route.params.id,
         },
@@ -299,8 +322,6 @@ export default {
             'classroomCourses',
           ],
         },
-      }).then(res => {
-        this.componentsInfo = res;
       });
     },
     changeSku(targetId) {
@@ -361,9 +382,18 @@ export default {
     updateFavorite(value) {
       this.goods.isFavorite = value;
     },
-    init() {
-      this.getGoodsCourse();
+    async init() {
+      await this.getGoodsCourse();
+      await this.getBindItemBank();
     },
+    async getBindItemBank() {
+      this.bindItemBankList = await Api.getBindItemBank({
+        params: {
+          bindType: this.goods.product.targetType,
+          bindId: this.currentSku.targetId,
+        }
+      })
+    }
   },
   created() {
     const targetId = this.$route.query.targetId;
