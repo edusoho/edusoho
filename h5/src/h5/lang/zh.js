@@ -681,6 +681,7 @@ export default {
   classLearning: {
     intor: '班级介绍',
     teacher: '教师介绍',
+    classroomItemBank: '班级题库',
     classTeacher: '班主任',
     headTeacherHasNotBeenSet: '尚未设置班主任',
     course: '班级课程',

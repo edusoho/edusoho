@@ -695,6 +695,7 @@ export default {
   classLearning: {
     intor: 'Intro',
     teacher: 'Teahcer',
+    classroomItemBank: 'Classroom item bank',
     classTeacher: 'Class teacher',
     headTeacherHasNotBeenSet: 'Head teacher has not been set',
     course: 'Course',
