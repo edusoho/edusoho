@@ -13,7 +13,7 @@
       </van-tabs>
 
       <!-- 班级介绍 -->
-      <div v-show="active == 0">
+      <div v-show="active === 0">
         <detail-plan
           :details="planDetails"
           :join-status="details.joinStatus"
@@ -49,7 +49,7 @@
       </div>
 
       <!-- 班级课程 -->
-      <div v-show="active == 1">
+      <div v-show="active === 1">
         <course-set-list
           ref="course"
           :details="details"
@@ -61,6 +61,19 @@
           :classId="details.classId"
           @click.native="showDialog('click')"
         />
+      </div>
+
+      <!--班级题库-->
+      <div v-show="active === 2" class="e-panel relative">
+        <div class="e-panel-heading">班级题库</div>
+        <div v-if="bindItemBankList.length === 0">
+          <van-empty description="暂无题库" />
+        </div>
+        <div v-else class="flex flex-col gap-12">
+          <div v-for="item in bindItemBankList" :key="item.id">
+            <item-bank-item :item="item"/>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -81,7 +94,7 @@
     </van-action-sheet>
     <e-footer
       @click.native="gotoGoodsPage"
-      v-if="active == 0 && details.goodsId && details.status !== 'closed'"
+      v-if="active === 0 && details.goodsId && details.status !== 'closed'"
     >
       {{ $t('classLearning.viewDetails') }}
     </e-footer>
@@ -89,7 +102,7 @@
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
 
     <div class="footer">
-    <closedFixed v-if="details.status == 'closed'" :isJoin="true" :title="$t('closed.classroomTitle')" :content="$t('closed.classroomContent')" />
+    <closedFixed v-if="details.status === 'closed'" :isJoin="true" :title="$t('closed.classroomTitle')" :content="$t('closed.classroomContent')" />
   </div>
   </div>
 </template>
@@ -108,12 +121,14 @@ import { Dialog, Toast } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 import closedFixed from '@/components/closed-fixed.vue'
+import ItemBankItem from '@/components/item-bank/item-bank-item.vue';
 
 // eslint-disable-next-line no-unused-vars
 const TAB_HEIGHT = 44;
 
 export default {
   components: {
+    ItemBankItem,
     // eslint-disable-next-line vue/no-unused-components
     directory,
     detailHead,
@@ -130,7 +145,7 @@ export default {
       headBottom: 0,
       active: 1,
       scrollFlag: false,
-      tabs: ['classLearning.intor', 'classLearning.course'],
+      tabs: ['classLearning.intor', 'classLearning.course', 'classLearning.classroomItemBank'],
       tabsClass: '',
       errorMsg: '',
       classroomSettings: {},
@@ -142,6 +157,7 @@ export default {
       },
       show: false,
       show_classroom_review: this.$store.state.goods.show_classroom_review,
+      bindItemBankList: [],
     };
   },
   mixins: [collectUserInfo],
@@ -200,8 +216,8 @@ export default {
   },
   mounted() {
     window.addEventListener('touchmove', this.handleScroll);
-
     this.showDialog();
+    this.getBindItemBank();
   },
   destroyed() {
     window.removeEventListener('touchmove', this.handleScroll);
@@ -408,6 +424,15 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
+    },
+
+    async getBindItemBank() {
+      this.bindItemBankList = await Api.getBindItemBank({
+        params: {
+          bindType: 'course',
+          bindId: this.details.id,
+        }
+      })
     }
   },
 };
