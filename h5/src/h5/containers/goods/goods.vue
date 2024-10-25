@@ -206,7 +206,7 @@ import BackToTop from './components/back-to-top';
 import AfterjoinDirectory from './components/afterjoin-directory';
 import ClassroomCourses from './components/classroom-courses';
 import initShare from '@/utils/weiixn-share-sdk';
-import ItemBankItem from '@/containers/goods/components/item-bank-item.vue';
+import ItemBankItem from '@/components/item-bank/item-bank-item.vue';
 
 import Api from '@/api';
 import {Toast} from 'vant';

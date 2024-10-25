@@ -463,6 +463,7 @@ export default {
     closed_content: "Cannot continue viewing",
   },
   courseLearning: {
+    courseItemBank: 'course item bank',
     selfJudging: 'Self judging',
     haveMastered: 'Have mastered',
     notQuiteUnderstand: 'Not quite understand',

@@ -1,6 +1,6 @@
 <script>
 import Api from '@/api';
-import ItemBankItem from '@/containers/goods/components/item-bank-item.vue';
+import ItemBankItem from '@/components/item-bank/item-bank-item.vue';
 
 export default {
   data() {
