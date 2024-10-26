@@ -1109,6 +1109,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom.quit',
             new Event($classroom, ['userId' => $member['userId'], 'member' => $member])
         );
+        $this->dispatchEvent('exercise.unBind', new Event(['userId' => $member['userId'], 'bindId' => $classroomId, 'bindType' => 'classroom']));
     }
 
     public function removeStudents($classroomId, $userIds, $info = [])
@@ -1271,6 +1272,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom.join',
             new Event($classroom, ['userId' => $member['userId'], 'member' => $member])
         );
+        $this->dispatchEvent('course.member.join', new Event($classroom, ['userId' => $member['userId'], 'member' => $member]));
+        $this->dispatchEvent('exercise.bind', new Event(['userIds' => [$member['userId']], 'bindId' => $classroomId, 'bindType' => 'classroom']));
 
         return $member;
     }

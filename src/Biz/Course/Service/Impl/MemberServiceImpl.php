@@ -193,7 +193,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         $this->dispatchEvent('course.quit', $course, ['userId' => $userId, 'member' => $member]);
-        $this->dispatchEvent('exercise.unBind', new Event(['userId' => $member['userId'], 'course' => $courseId, 'bindType' => 'course']));
+        $this->dispatchEvent('exercise.unBind', new Event(['userId' => $member['userId'], 'bindId' => $courseId, 'bindType' => 'course']));
 
         if ($this->getCurrentUser()->isAdmin()) {
             $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
