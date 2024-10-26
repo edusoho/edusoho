@@ -16,6 +16,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         return [
             'exercise.bind' => 'onExerciseBind',
             'exercise.unBind' => 'onExerciseUnBind',
+            'exercise.banLearn' => 'onExerciseBanLearn',
         ];
     }
 
@@ -93,6 +94,54 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 // 需要更新$usersWithMultipleRecords的加入方式
             }
         }
+    }
+
+    public function onExerciseBanLearn(Event $event)
+    {
+        $params = $event->getSubject();
+        $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
+        // 单个就不可以学习
+        $userIds = array_column($exerciseAutoJoinRecords, 'userId');
+        // 统计每个用户的记录数量
+        $userRecordCount = array_count_values($userIds);
+        // 使用 array_filter 分离出有多条记录和单条记录的用户
+        $usersWithMultipleRecords = array_keys(array_filter($userRecordCount, function ($count) {
+            return $count > 1;
+        }));
+        $usersWithSingleRecord = array_keys(array_filter($userRecordCount, function ($count) {
+            return 1 == $count;
+        }));
+        $exerciseMembers = $this->getExerciseMemberService()->search(['userId' => $usersWithSingleRecord], [], 0, PHP_INT_MAX);
+        foreach ($exerciseMembers as &$exerciseMember) {
+            $exerciseMember['canLearn'] = 0;
+        }
+        $this->getExerciseMemberService()->batchUpdateMembers($exerciseMembers);
+        // 当有多个，需要重新计算学习有效期
+    }
+
+    public function onExerciseCanLearn(Event $event)
+    {
+        $params = $event->getSubject();
+        $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
+        // 单个就不可以学习
+        $userIds = array_column($exerciseAutoJoinRecords, 'userId');
+        // 统计每个用户的记录数量
+        $userRecordCount = array_count_values($userIds);
+        // 使用 array_filter 分离出有多条记录和单条记录的用户
+        $usersWithMultipleRecords = array_keys(array_filter($userRecordCount, function ($count) {
+            return $count > 1;
+        }));
+        $usersWithSingleRecord = array_keys(array_filter($userRecordCount, function ($count) {
+            return 1 == $count;
+        }));
+        $exerciseMembers = $this->getExerciseMemberService()->search(['userId' => $usersWithSingleRecord], [], 0, PHP_INT_MAX);
+        foreach ($exerciseMembers as &$exerciseMember) {
+            $exerciseMember['canLearn'] = 1;
+        }
+        $this->getExerciseMemberService()->batchUpdateMembers($exerciseMembers);
+        // 当有多个，需要重新计算学习有效期
     }
 
     /**
