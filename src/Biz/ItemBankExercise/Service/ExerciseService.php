@@ -84,5 +84,9 @@ interface ExerciseService
 
     public function findExerciseAutoJoinRecordByUserIdAndExerciseIds($userId, $exerciseIds);
 
+    public function deleteExerciseAutoJoinRecordByUserIdsAndExerciseIds($userIds, $exerciseIds);
+
+    public function findExerciseAutoJoinRecordByItemBankExerciseBindIds($itemBankExerciseBindIds);
+
     public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
 }

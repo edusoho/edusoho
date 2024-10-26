@@ -206,6 +206,51 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $this->getExerciseMemberDao()->batchUpdate(array_keys($updateFields), $updateFields);
     }
 
+    public function batchBecomeStudent($exerciseIds, $userIds, $info, $exercise)
+    {
+        $this->beginTransaction();
+
+        $exercise['expiryMode'] = $info['expiryMode'] ?? $exercise['expiryMode'];
+        $exercise['expiryDays'] = $info['expiryDays'] ?? $exercise['expiryDays'];
+
+        $members = [];
+        foreach ($userIds as $userId) {
+            $members[] = [
+                'exerciseId' => $exercise['id'],
+                'questionBankId' => $exercise['questionBankId'],
+                'userId' => $userId,
+                'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
+                'role' => 'student',
+                'remark' => $info['remark'],
+                'canLearn' => 1,
+                'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+            ];
+        }
+        if (empty($members)) {
+            return;
+        }
+        $members = $this->getExerciseMemberDao()->batchCreate($members);
+        foreach ($exerciseIds as $exerciseId) {
+            $exercise = $this->getExerciseService()->get($exerciseId);
+            $this->dispatchEvent('exercise.join', $exercise, ['member' => $members[0]]);
+        }
+
+        $this->commit();
+    }
+
+    public function batchRemoveStudent($exerciseIds, $userIds, $info, $exercise)
+    {
+        $this->beginTransaction();
+        $this->getExerciseMemberDao()->batchDelete($userIds);
+        $member = $this->getExerciseMember($exerciseIds[0], $userIds[0]);
+        foreach ($exerciseIds as $exerciseId) {
+            $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
+        }
+        foreach ($userIds as $userId) {
+            $this->removeStudent($exercise['id'], $userId, $info);
+        }
+    }
+
     public function getExerciseMember($exerciseId, $userId)
     {
         return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);

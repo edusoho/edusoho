@@ -608,15 +608,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function removeBindExercise($bindExerciseId)
     {
+        $bindExercise = $this->getExerciseBindDao()->get($bindExerciseId);
+        $this->dispatchEvent('exercise.unBind', new Event($bindExercise));
         $this->getExerciseBindDao()->delete($bindExerciseId);
-        // 查询绑定信息
-        $exerciseAutoJoinRecords = $this->getExerciseAutoJoinRecordDao()->findExerciseAutoJoinRecordByUserId($bindExerciseId);
-        // 移除对应的学员
-        $this->getExerciseMemberService()->removeStudents('', array_column($exerciseAutoJoinRecords, 'userId'));
-        // 批量删除绑定记录
-        $this->getExerciseAutoJoinRecordDao()->batchDelete(array_column($exerciseAutoJoinRecords, 'id'));
-        // 注册job删除学员
-        $this->dispatchEvent('itemBankExercise.unbind', new Event($bindExerciseId));
     }
 
     public function updateBindExercise($bindExercise)
@@ -627,6 +621,16 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function findExerciseAutoJoinRecordByUserIdAndExerciseIds($userId, $exerciseIds)
     {
         return $this->getExerciseAutoJoinRecordDao()->search(['userId' => $userId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
+    }
+
+    public function deleteExerciseAutoJoinRecordByUserIdsAndExerciseIds($userIds, $exerciseIds)
+    {
+        $this->getExerciseAutoJoinRecordDao()->batchDelete(['userIds' => $userIds, 'itemBankExerciseIds' => $exerciseIds]);
+    }
+
+    public function findExerciseAutoJoinRecordByItemBankExerciseBindIds($itemBankExerciseBindIds)
+    {
+        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseIds' => $itemBankExerciseBindIds], [], 0, PHP_INT_MAX);
     }
 
     public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords)

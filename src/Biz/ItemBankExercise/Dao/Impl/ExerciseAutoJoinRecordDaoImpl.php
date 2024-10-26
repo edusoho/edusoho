@@ -16,9 +16,11 @@ class ExerciseAutoJoinRecordDaoImpl extends AdvancedDaoImpl implements ExerciseA
             'orderbys' => ['createdTime'],
             'conditions' => [
                 'userId = :userId',
+                'userId IN (:userIds)',
                 'itemBankExerciseId IN (:itemBankExerciseIds)',
                 'itemBankExerciseId = :itemBankExerciseId',
                 'itemBankExerciseBindId = :itemBankExerciseBindId',
+                'itemBankExerciseBindId IN (:itemBankExerciseBindIds)',
             ],
         ];
     }
