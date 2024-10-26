@@ -89,14 +89,11 @@ class ItemBankExerciseBind extends AbstractResource
         $bindExercises = $this->getItemBankExerciseService()->findBindExercise($conditions['bindType'], $conditions['bindId']);
         $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
-        $userId = $this->getCurrentUser()->getId();
         foreach ($bindExercises as &$bindExercise) {
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
-            if (!empty($userId)) {
-                $bindExercise['chapterExerciseNum'] = 0;
-                $bindExercise['assessmentNum'] = 0;
-                $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
-            }
+            $bindExercise['chapterExerciseNum'] = 0;
+            $bindExercise['assessmentNum'] = 0;
+            $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
         }
         // 绑定人
         // 章节练习数量
