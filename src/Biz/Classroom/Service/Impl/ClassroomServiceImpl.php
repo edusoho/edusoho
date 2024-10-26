@@ -855,6 +855,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->canLearningByIds($courseIds);
         $this->dispatchEvent('classroom.publish', new Event($classroom));
+        $this->dispatchEvent('exercise.canLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
 
         return $classroom;
     }
@@ -868,6 +869,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->banLearningByIds($courseIds);
         $this->dispatchEvent('classroom.close', new Event($classroom));
+        $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
 
         return $classroom;
     }

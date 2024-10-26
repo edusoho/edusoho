@@ -17,6 +17,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             'exercise.bind' => 'onExerciseBind',
             'exercise.unBind' => 'onExerciseUnBind',
             'exercise.banLearn' => 'onExerciseBanLearn',
+            'exercise.canLearn' => 'onExerciseCanLearn',
         ];
     }
 

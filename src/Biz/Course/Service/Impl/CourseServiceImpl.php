@@ -820,6 +820,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
+            $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'course', 'bindId' => $course['id']]));
             $this->unpublishGoodsSpecs($course);
         } catch (\Exception $exception) {
             $this->rollback();
@@ -869,6 +870,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
         $this->dispatchEvent('course.publish', $course);
+        $this->dispatchEvent('exercise.canLearn', ['bindType' => 'course', 'bindId' => $id]);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
         $this->publishGoodsSpecs($course);
