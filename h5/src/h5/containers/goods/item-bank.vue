@@ -1,6 +1,6 @@
 <script>
 import Api from '@/api';
-import ItemBankItem from '@/components/item-bank/item-bank-item.vue';
+import GoodsItemBank from '@/components/item-bank/goods-item-bank.vue';
 
 export default {
   data() {
@@ -9,7 +9,7 @@ export default {
     }
   },
   components: {
-    ItemBankItem,
+    GoodsItemBank,
   },
   methods: {
     async getBindItemBank() {
@@ -30,7 +30,7 @@ export default {
 <template>
   <div class="flex flex-col gap-12 p-16">
     <div v-for="item in bindItemBankList" :key="item.id">
-      <item-bank-item :item="item"/>
+      <goods-item-bank :item="item"/>
     </div>
   </div>
 </template>

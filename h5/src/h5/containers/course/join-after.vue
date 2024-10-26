@@ -71,7 +71,7 @@
           </div>
           <div v-else class="flex flex-col p-16 gap-12">
             <div v-for="item in bindItemBankList" :key="item.id">
-              <item-bank-item :item="item"/>
+              <goods-item-bank :item="item"/>
             </div>
           </div>
         </div>
@@ -143,7 +143,7 @@ import firstDiscussion from './discussion/index.vue'; // 问答
 import secondDiscussion from './discussion/index.vue?second'; // 话题
 import Notes from './notes/index.vue';
 import Reviews from './reviews/index.vue';
-import ItemBankItem from '@/components/item-bank/item-bank-item.vue';
+import GoodsItemBank from '@/components/item-bank/goods-item-bank.vue';
 // 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
 const tabComponent = {
   catalogue: {
@@ -172,7 +172,7 @@ export default {
   inheritAttrs: true,
 
   components: {
-    ItemBankItem,
+    GoodsItemBank,
     // eslint-disable-next-line vue/no-unused-components
     Directory,
     DetailHead,

@@ -81,6 +81,43 @@
         <span>{{ $t('order.validity') }}</span>
         <span class="gray-dark" v-html="getValidity" />
       </div>
+
+      <!--绑定的题库-->
+      <div class="flex flex-col space-y-12 py-20" style="margin-left: 5.33333vw; margin-right: 5.33333vw; border-top: 1px solid #eee;">
+        <div class="flex justify-between">
+          <div class="font-normal" style="color: #9ba5b0; font-size: 3.73333vw;">{{ course.targetType === 'course' ? '课程题库' : '班级题库' }}</div>
+          <div v-if="bindItemBankList.length > 2" class="flex items-center font-normal" style="color: #9ba5b0; font-weight: 400; font-size: 3.73333vw;" @click="itemBankPopupVisible = true">
+            <div class="">{{ `查看全部（${bindItemBankList.length}）` }}</div>
+            <van-icon name="arrow" />
+          </div>
+        </div>
+        <div v-if="bindItemBankList.length === 0">
+          <div class="goods-info__title" style="color: #919399; font-weight: 400;">{{ course.targetType === 'course' ? '暂无课程题库' : '暂无班级题库' }}</div>
+        </div>
+        <div v-else class="space-y-12">
+          <order-item-bank :item="bindItemBankList[0]"/>
+          <order-item-bank v-if="bindItemBankList.length > 1" :item="bindItemBankList[1]"/>
+        </div>
+      </div>
+
+      <van-popup
+        v-model="itemBankPopupVisible"
+        round
+        position="bottom"
+        :style="{ height: '80%' }"
+        @close="itemBankPopupVisible = false"
+      >
+        <div class="fixed w-full left-0 flex items-center justify-between p-16" style="background-color: #fff; 	border-top-left-radius: 16px; border-top-right-radius: 16px;">
+          <van-icon class="opacity-0" name="cross" />
+          <div class="text-16 font-normal" style="color: #37393D">赠送题库</div>
+          <van-icon name="cross" @click="itemBankPopupVisible = false"/>
+        </div>
+        <div class="flex flex-col" style="margin-top: 56px">
+          <div class="flex flex-col px-16 mb-12" v-for="item in bindItemBankList" :key="item.id">
+            <order-item-bank :item="item"/>
+          </div>
+        </div>
+      </van-popup>
     </div>
     <!-- 报名信息填写 -->
     <div
@@ -222,8 +259,10 @@ import { Toast } from 'vant';
 import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
 import infoCollection from '@/components/info-collection.vue';
 import _ from 'lodash';
+import OrderItemBank from '@/components/item-bank/order-item-bank.vue';
 export default {
   components: {
+    OrderItemBank,
     eCourse,
     coupon,
     infoCollection,
@@ -259,7 +298,9 @@ export default {
       isAgree: false,
       purchaseAgreement: {},
       showPurchaseAgreement: false,
-      agreementDisabled: true
+      agreementDisabled: true,
+      bindItemBankList: [],
+      itemBankPopupVisible: false,
     };
   },
   created() {
@@ -270,6 +311,7 @@ export default {
     this.fetchPurchaseAgreement();
     this.confirmOrder();
     this.getSettings();
+    this.getBindItemBank();
   },
   computed: {
     ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch']),
@@ -712,6 +754,15 @@ export default {
       } else {
         this.agreementDisabled = true;
       }
+    },
+
+    async getBindItemBank() {
+      this.bindItemBankList = await Api.getBindItemBank({
+        params: {
+          bindType: this.course.targetType,
+          bindId: this.course.goodsId,
+        }
+      })
     }
   },
 };

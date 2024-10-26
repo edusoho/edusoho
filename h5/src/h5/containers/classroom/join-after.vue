@@ -71,7 +71,7 @@
         </div>
         <div v-else class="flex flex-col gap-12">
           <div v-for="item in bindItemBankList" :key="item.id">
-            <item-bank-item :item="item"/>
+            <goods-item-bank :item="item"/>
           </div>
         </div>
       </div>
@@ -121,14 +121,14 @@ import { Dialog, Toast } from 'vant';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 import closedFixed from '@/components/closed-fixed.vue'
-import ItemBankItem from '@/components/item-bank/item-bank-item.vue';
+import GoodsItemBank from '@/components/item-bank/goods-item-bank.vue';
 
 // eslint-disable-next-line no-unused-vars
 const TAB_HEIGHT = 44;
 
 export default {
   components: {
-    ItemBankItem,
+    GoodsItemBank,
     // eslint-disable-next-line vue/no-unused-components
     directory,
     detailHead,

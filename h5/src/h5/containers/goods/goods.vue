@@ -95,8 +95,8 @@
             <div class="goods-info__title" style="color: #919399; font-weight: 400;">{{ goods.product.targetType === 'course' ? '暂无课程题库' : '暂无班级题库' }}</div>
           </div>
           <div v-else class="space-y-12">
-            <item-bank-item :item="bindItemBankList[0]"/>
-            <item-bank-item v-if="bindItemBankList.length > 1" :item="bindItemBankList[1]"/>
+            <goods-item-bank :item="bindItemBankList[0]"/>
+            <goods-item-bank v-if="bindItemBankList.length > 1" :item="bindItemBankList[1]"/>
           </div>
         </section>
 
@@ -206,7 +206,7 @@ import BackToTop from './components/back-to-top';
 import AfterjoinDirectory from './components/afterjoin-directory';
 import ClassroomCourses from './components/classroom-courses';
 import initShare from '@/utils/weiixn-share-sdk';
-import ItemBankItem from '@/components/item-bank/item-bank-item.vue';
+import GoodsItemBank from '@/components/item-bank/goods-item-bank.vue';
 
 import Api from '@/api';
 import {Toast} from 'vant';
@@ -245,7 +245,7 @@ export default {
     EnterLearning,
     Vip,
     IconSearch,
-    ItemBankItem,
+    GoodsItemBank
   },
   computed: {
     ...mapState(['vipSwitch']),
