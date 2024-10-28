@@ -14,7 +14,7 @@ app.use(Pagination);
 app.use(Empty);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/my-contract/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/my/learning/item-bank/index.css?${window.app.version}`);
 }
 
 app.mount('#item-bank-list')

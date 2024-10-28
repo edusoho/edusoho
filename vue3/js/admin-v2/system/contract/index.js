@@ -31,7 +31,7 @@ app.use(Tooltip);
 setCurrentPrimaryColor(app);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/contract/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/admin-v2/system/contract/index.css?${window.app.version}`);
 }
 
 app.mount('#app');

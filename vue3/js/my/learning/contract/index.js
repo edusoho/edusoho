@@ -16,7 +16,7 @@ app.use(Empty);
 setCurrentPrimaryColor(app);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/my-contract/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/my/learning/contract/index.css?${window.app.version}`);
 }
 
 app.mount('#my-contract');

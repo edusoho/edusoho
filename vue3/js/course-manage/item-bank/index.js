@@ -22,7 +22,7 @@ app.use(Checkbox);
 app.use(Tooltip);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/my-contract/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/course-manage/item-bank/index.css?${window.app.version}`);
 }
 
 app.mount('#item-bank')

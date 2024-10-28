@@ -20,7 +20,7 @@ app.use(Divider);
 setCurrentPrimaryColor(app);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/sign-contract/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/components/sign-contract/index.css?${window.app.version}`);
 }
 
 app.mount('#sign-contract-modal');
