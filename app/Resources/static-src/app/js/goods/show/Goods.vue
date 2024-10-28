@@ -109,6 +109,7 @@
                         <div v-for="item in bindItemBankExerciseList">
                           <div style="display: flex; justify-content: space-between; padding: 16px 24px; border: 1px solid #EFF0F5; border-radius: 6px; margin-bottom: 16px;">
                             <div style="display: flex">
+<!--                              <img :src="item.itemBankExercise.cover.middle" alt="" style="height: 96px; margin-right: 16px">-->
                               <img src="/static-dist/app/img/vue/goods/item-bank-icon.jpg" alt="" style="height: 96px; margin-right: 16px">
                               <div style="display: flex; flex-direction: column;; justify-content: space-between;">
                                 <div>

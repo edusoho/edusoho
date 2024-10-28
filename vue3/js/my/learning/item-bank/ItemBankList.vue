@@ -60,16 +60,16 @@ onBeforeMount(async() => {
         <div v-if="bindItemBankList.length === 0">
           <a-empty description="暂无题库"/>
         </div>
-        <div v-else v-for="item in bindItemBankList" class="flex justify-between border border-[#E5E6EB] border-solid rounded-6 px-24 py-16">
-          <div class="flex space-x-16">
-            <div class="relative">
-              <img :src="item.itemBankExercise.cover.middle" class="h-90 rounded-6" draggable="false" alt="">
+        <div v-else v-for="item in bindItemBankList" class="flex flex-col md:flex-row md:justify-between border border-[#E5E6EB] border-solid rounded-6 px-24 py-16">
+          <div class="flex flex-col md:flex-row mb-16 md:mb-0">
+            <div class="relative md:mr-16">
+              <img :src="item.itemBankExercise.cover.middle" class="w-full md:w-176 rounded-6" draggable="false" alt="">
               <div v-if="item.itemBankExercise.status === 'closed'" class="text-12 text-white font-medium px-8 py-2 bg-[#F53F3F] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已关闭</div>
             </div>
             <div class="flex flex-col justify-between">
               <div class="flex flex-col">
-                <div class="text-16 font-medium text-[#37393D] mb-8 max-w-320 truncate">{{ item.itemBankExercise.title }}</div>
-                <div class="flex">
+                <div class="text-16 font-medium text-[#37393D] mb-8 max-w-320 truncate mt-16 md:mt-0">{{ item.itemBankExercise.title }}</div>
+                <div class="flex mb-24 md:mb-0">
                   <div class="text-14 text-[#919399] font-normal mr-20">答题率：<span class="text-[#37393D]">{{ `${item.completionRate}%` }}</span></div>
                   <div class="text-14 text-[#919399] font-normal">掌握率：<span class="text-[#37393D]">{{ `${item.masteryRate}%` }}</span></div>
                 </div>
@@ -77,14 +77,13 @@ onBeforeMount(async() => {
               <a-tooltip placement="top">
                 <template #title>{{ item.bindTitle }}</template>
                 <div v-if="item.bindTitle" class="flex text-14 font-normal">
-                  <div class="mr-8 text-[#919399] max-w-320 truncate">{{ item.bindTitle }}</div>
-                  <div class="text-[#5E6166]">赠送的题库</div>
+                  <div class="text-[#919399] max-w-320 truncate">{{ item.bindTitle }}<span class="text-[#5E6166] ml-8">赠送的题库</span></div>
                 </div>
               </a-tooltip>
             </div>
           </div>
           <div class="flex items-center">
-            <a-button type="primary" @click="toItemBankExercisePage(item.itemBankExercise.id)">去学习</a-button>
+            <a-button class="w-full md:w-fit" type="primary" @click="toItemBankExercisePage(item.itemBankExercise.id)">去学习</a-button>
           </div>
         </div>
       </div>

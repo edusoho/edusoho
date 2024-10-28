@@ -117,6 +117,14 @@ async function clear() {
   categoryId.value = undefined;
   keywordType.value = 'title';
   keyword.value = undefined;
+  pagination.current = 1;
+  const params = {
+    limit: pagination.pageSize,
+    offset: (pagination.current - 1) * pagination.pageSize,
+  }
+  const newDate = await fetchItemBankExercise(params)
+  itemBankExerciseData.value = newDate;
+  itemBankExerciseState.value = transformItemBankExerciseState(newDate);
 }
 
 function toItemBankExercisePage(exerciseId) {
@@ -228,6 +236,7 @@ onBeforeMount(async () => {
     :maskClosable="false"
     :bodyStyle="{padding: 0}"
     width="60vw"
+    @close="closeItemBankList"
   >
     <div class="flex flex-col relative h-full">
       <div class="flex justify-between px-20 py-14 border border-x-0 border-t-0 border-[#EFF0F5] border-solid">
@@ -283,7 +292,7 @@ onBeforeMount(async () => {
               <div class="text-14 text-[#37393D] font-medium">更新时间</div>
             </div>
           </div>
-          <div ref="itemBankTableBody" class="flex flex-col w-full overflow-y-scroll h-[calc(100vh-248px)]">
+          <div ref="itemBankTableBody" class="flex flex-col w-full overflow-y-scroll h-[calc(100vh-247px)]">
             <div v-if="itemBankExerciseData.length > 0" v-for="(record, index) in itemBankExerciseData">
               <div class="flex border border-x-0 border-t-0 border-solid border-[#EFF0F5]">
                 <div class="flex items-center w-[15%]">
