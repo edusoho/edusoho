@@ -106,9 +106,15 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject();
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-        list($usersWithMultipleRecords, $usersWithSingleRecord) = $this->getUsersWithRecordCounts($exerciseBinds);
-        $this->batchBanLearn($usersWithSingleRecord);
-        $this->updateMemberExpiredTime($usersWithMultipleRecords);
+        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
+        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIds(array_column($exerciseBinds, 'itemBankExerciseId'));
+
+        $exerciseAutoJoinRecordsGroup = ArrayToolkit::group($exerciseAutoJoinRecords, 'itemBankExerciseId');
+        foreach ($exerciseAutoJoinRecordsGroup as $exerciseId => $exerciseAutoJoinRecord) {
+            list($singleRecordUsers, $multipleRecordUsers) = $this->getUsersWithRecordCounts($exerciseAutoJoinRecord, $exerciseBindsIndex[$exerciseId]['id']);
+            $this->batchBanLearn(array_column($singleRecordUsers, 'userId'));
+            $this->updateMemberExpiredTime($multipleRecordUsers);
+        }
     }
 
     /** 发布班级/发布课程时，开启学习
