@@ -167,7 +167,7 @@ const bgClass = computed(() => {
         <ExclamationCircleOutlined class="mr-16 w-22 h-22 text-[#FAAD14]" style="font-size: 22px"/>
         <div class="flex flex-col">
           <div class="text-16 text-[#1E2226] font-medium mb-8">{{ t('modal.SignAnElectronicContract') }}</div>
-          <div class="text-14 text-[#626973] font-normal">
+          <div class="max-w-314 text-14 text-[#626973] font-normal">
             {{ `${t('modal.confirmContentPart01')}《${contractTemplate.name}》${t('modal.confirmContentPart02')}` }}
           </div>
         </div>
