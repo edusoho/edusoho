@@ -97,38 +97,58 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
     }
 
+    /** 关闭班级/关闭课程时，禁止学习
+     * @return void
+     */
     public function onExerciseBanLearn(Event $event)
     {
         $params = $event->getSubject();
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
         list($usersWithMultipleRecords, $usersWithSingleRecord) = $this->getUsersWithRecordCounts($exerciseBinds);
         $this->batchBanLearn($usersWithSingleRecord);
-        // 当有多个，需要重新计算学习有效期
+        $this->updateMemberExpiredTime($usersWithMultipleRecords);
     }
 
+    /** 发布班级/发布课程时，开启学习
+     * @return void
+     */
     public function onExerciseCanLearn(Event $event)
     {
         $params = $event->getSubject();
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-        list($usersWithMultipleRecords, $usersWithSingleRecord) = $this->getUsersWithRecordCounts($exerciseBinds);
-        $this->batchCanLearn($usersWithSingleRecord);
-        // 当有多个，需要重新计算学习有效期
+        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
+        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIds(array_column($exerciseBinds, 'itemBankExerciseId'));
+
+        $exerciseAutoJoinRecordsGroup = ArrayToolkit::group($exerciseAutoJoinRecords, 'itemBankExerciseId');
+        foreach ($exerciseAutoJoinRecordsGroup as $exerciseId => $exerciseAutoJoinRecord) {
+            list($singleRecordUsers, $multipleRecordUsers) = $this->getUsersWithRecordCounts($exerciseAutoJoinRecord, $exerciseBindsIndex[$exerciseId]['id']);
+            $this->batchCanLearn(array_column($singleRecordUsers, 'userId'));
+            $this->updateMemberExpiredTime($multipleRecordUsers);
+        }
     }
 
-    protected function getUsersWithRecordCounts($exerciseBinds)
+    /** 根据用户查询
+     * @param $exerciseBinds
+     *
+     * @return array
+     */
+    protected function getUsersWithRecordCounts($exerciseAutoJoinRecords, $exerciseBindId)
     {
-        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
+        $exerciseAutoJoinRecordsGroup = ArrayToolkit::group($exerciseAutoJoinRecords, 'userId');
+        $singleRecordUsers = [];
+        $multipleRecordUsers = [];
+        foreach ($exerciseAutoJoinRecordsGroup as $userId => $exerciseAutoJoinRecords) {
+            if (count($exerciseAutoJoinRecords) > 1) {
+                $filteredRecords = array_filter($exerciseAutoJoinRecords, function ($record) use ($exerciseBindId) {
+                    return $record['exerciseBindId'] != $exerciseBindId;
+                });
+                $multipleRecordUsers = array_merge($multipleRecordUsers, $filteredRecords);
+            } else {
+                $singleRecordUsers = array_merge($singleRecordUsers, $exerciseAutoJoinRecords);
+            }
+        }
 
-        $userIds = array_column($exerciseAutoJoinRecords, 'userId');
-        $userRecordCount = array_count_values($userIds);
-        $usersWithMultipleRecords = array_keys(array_filter($userRecordCount, function ($count) {
-            return $count > 1;
-        }));
-        $usersWithSingleRecord = array_keys(array_filter($userRecordCount, function ($count) {
-            return 1 == $count;
-        }));
-
-        return [$usersWithMultipleRecords, $usersWithSingleRecord];
+        return [$singleRecordUsers, $multipleRecordUsers];
     }
 
     public function batchBanLearn($usersWithSingleRecord)
@@ -147,8 +167,30 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         foreach ($exerciseMembers as &$exerciseMember) {
             $exerciseMember['canLearn'] = $canLearn;
         }
-        // 批量更新成员信息
         $this->getExerciseMemberService()->batchUpdateMembers($exerciseMembers);
+    }
+
+    protected function updateMemberExpiredTime($multipleRecordUsers)
+    {
+        if (empty($multipleRecordUsers)) {
+            return;
+        }
+        // 先要查询数据的有效期
+        $itemBankExerciseBindIds = array_unique(array_column($multipleRecordUsers, 'itemBankExerciseBindId'));
+        $exerciseBinds = $this->getExerciseService()->findBindExerciseByIds($itemBankExerciseBindIds);
+        $courseIds = array_column(array_filter($exerciseBinds, function ($item) {
+            return 'course' == $item['bindType'];
+        }), 'bindId');
+        $classroomIds = array_column(array_filter($exerciseBinds, function ($item) {
+            return 'classroom' == $item['bindType'];
+        }), 'bindId');
+//        if ()
+            // 先根据bindId去重，查询到对应的班级或者课程，查询对应有效期，根据（bindId）做index
+            // userId, exerciseBindId, expiredTime
+            // 去更新成员信息
+        // 查询对应的成员
+
+        // 更新成员有效期
     }
 
     /**
