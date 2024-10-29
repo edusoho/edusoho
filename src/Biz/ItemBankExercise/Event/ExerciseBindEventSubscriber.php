@@ -3,6 +3,8 @@
 namespace Biz\ItemBankExercise\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Event\Event;
@@ -178,19 +180,62 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         // 先要查询数据的有效期
         $itemBankExerciseBindIds = array_unique(array_column($multipleRecordUsers, 'itemBankExerciseBindId'));
         $exerciseBinds = $this->getExerciseService()->findBindExerciseByIds($itemBankExerciseBindIds);
+        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'id');
         $courseIds = array_column(array_filter($exerciseBinds, function ($item) {
             return 'course' == $item['bindType'];
         }), 'bindId');
         $classroomIds = array_column(array_filter($exerciseBinds, function ($item) {
             return 'classroom' == $item['bindType'];
         }), 'bindId');
-//        if ()
-            // 先根据bindId去重，查询到对应的班级或者课程，查询对应有效期，根据（bindId）做index
-            // userId, exerciseBindId, expiredTime
-            // 去更新成员信息
-        // 查询对应的成员
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $coursesIndex = ArrayToolkit::index($courses, 'id');
+        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classroomsIndex = ArrayToolkit::index($classrooms, 'id');
+        foreach ($multipleRecordUsers as &$multipleRecord) {
+            $exerciseBind = $exerciseBindsIndex[$multipleRecord['itemBankExerciseBindId']];
+            if ('course' == $exerciseBind['bindType']) {
+                $multipleRecord['deadline'] = $coursesIndex[$exerciseBind['bindId']]['expiredTime'];
+            } else {
+                $multipleRecord['deadline'] = $classroomsIndex[$exerciseBind['bindId']]['expiredTime'];
+            }
+        }
+        $groupedRecords = [];
 
-        // 更新成员有效期
+        foreach ($multipleRecordUsers as $record) {
+            // 定义一个唯一键来标识每组
+            $key = $record['exerciseId'].'-'.$record['userId'];
+            // 如果该组已经存在，检查是否需要更新记录
+            if (isset($groupedRecords[$key])) {
+                // 如果当前记录的 deadline 为 0 或者大于已存在的 deadline
+                if (0 == $record['deadline'] || ($record['deadline'] > $groupedRecords[$key]['deadline'] && 0 != $groupedRecords[$key]['deadline'])) {
+                    // 更新记录
+                    $groupedRecords[$key] = $record;
+                }
+            } else {
+                // 新增组
+                $groupedRecords[$key] = $record;
+            }
+        }
+        $exerciseIds = [];
+        $userIds = [];
+        foreach ($groupedRecords as $groupedRecord) {
+            $exerciseIds[] = $groupedRecord['exerciseId'];
+            $userIds[] = $groupedRecord['userId'];
+        }
+        $members = $this->getExerciseMemberService()->search(['exerciseIds' => $exerciseIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
+        $memberMap = [];
+        foreach ($members as $member) {
+            $key = $member['exerciseId'].'_'.$member['userId'];
+            $memberMap[$key] = $member;
+        }
+        foreach ($groupedRecords as $groupedRecord) {
+            $key = $groupedRecord['exerciseId'].'_'.$groupedRecord['userId'];
+            if (isset($memberMap[$key])) {
+                $member = $memberMap[$key];
+                $member['deadline'] = $groupedRecord['deadline'];
+            }
+        }
+        $this->getExerciseMemberService()->batchUpdateMembers($members);
     }
 
     /**
@@ -215,5 +260,21 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getItemBankExerciseService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }
