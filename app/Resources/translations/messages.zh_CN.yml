@@ -9481,6 +9481,7 @@ task.learn_data_detail.unfinished_number: 未完成(人)
 task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
+join.channel: 加入方式
 
 register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 
