@@ -65,7 +65,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
      */
     public function onExerciseUnBind(Event $event)
     {
-        $params = $event->getSubject(); // userId, bindType, bindId, exerciseId
+        $params = $event->getSubject();
         $exerciseBind = $this->getExerciseService()->getExerciseBindById($params['id']);
         // 查询成员、获取成员IDs
         $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($params['userIds'], $exerciseBind['itemBankExerciseId']);
