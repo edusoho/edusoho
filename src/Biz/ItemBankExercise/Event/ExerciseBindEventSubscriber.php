@@ -31,7 +31,22 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseBind(Event $event)
     {
         $params = $event->getSubject(); // userIds, bindType, bindId
-        $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        $exerciseBinds = $this->getExerciseService()->findBindExerciseByIds($params['bindIds']);
+        // 获取全部成员
+        // 按exercise循环
+        //
+        foreach ($exerciseBinds as $exerciseBind) {
+            // 查询学员是不是当前题库练习的成员
+            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $params['userIds'], 'exerciseIds' => array_column($exerciseBinds, 'itemBankExerciseId')], [], 0, PHP_INT_MAX);
+            // 拆分是题库成员的部分，不是题库成员的部分
+            $exerciseMemberUserIds = array_column($exerciseUsers, 'userId');
+            $notMemberUserIds = array_diff($params['userIds'], $exerciseMemberUserIds);
+            if (!empty($notMemberUserIds)) {
+                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, '', $params['bindId']);
+            }
+            // 是题库成员直接添加自动加入记录，不成题库成员添加为成员后添加自动加入记录
+            //
+        }
         $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
         if (empty($params['userIds'])) {
             return;
