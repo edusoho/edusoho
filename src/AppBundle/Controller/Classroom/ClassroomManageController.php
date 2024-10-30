@@ -365,7 +365,7 @@ class ClassroomManageController extends BaseController
             $start,
             $limit,
             $exportAllowCount,
-            $request->query->all(),
+            $request->query->all()
         );
         $file = '';
         if (0 == $start) {
