@@ -28,23 +28,12 @@ class ItemBankExerciseBind extends AbstractResource
             }
             $studentIds = array_column($member, 'userId');
             $userData = $this->getUserService()->findUsersByIds($studentIds);
+            $exerciseMembers = $this->getExerciseMemberService()->search(['exerciseIds' => $params['exerciseIds'], 'userIds' => $studentIds], 0, PHP_INT_MAX);
+
             foreach ($params['exerciseIds'] as $exerciseId) {
                 foreach ($userData as $key => $user) {
-                    if (!empty($user['nickname'])) {
-                        $user = $this->getUserService()->getUserByNickname($user['nickname']);
-                    } else {
-                        if (!empty($user['email'])) {
-                            $user = $this->getUserService()->getUserByEmail($user['email']);
-                        } else {
-                            $user = $this->getUserService()->getUserByVerifiedMobile($user['verifiedMobile']);
-                        }
-                    }
-
                     $isExerciseMember = $this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id']);
-
-                    if ($isExerciseMember) {
-                        ++$existsUserCount;
-                    } else {
+                    if (!$isExerciseMember) {
                         $data = [
                             'price' => 0,
                             'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
@@ -53,8 +42,6 @@ class ItemBankExerciseBind extends AbstractResource
                             'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
                         ];
                         $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
-
-                        ++$successCount;
                     }
                 }
             }
@@ -69,8 +56,8 @@ class ItemBankExerciseBind extends AbstractResource
                         'itemBankExerciseBindId' => $exerciseBindsIndex[$exerciseId]['id'],
                     ];
                 }
-                $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
             }
+            $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();

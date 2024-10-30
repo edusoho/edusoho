@@ -14,6 +14,11 @@ class ExerciseAutoJoinRecordDaoImpl extends AdvancedDaoImpl implements ExerciseA
         return $this->db()->delete($this->table(), ['itemBankExerciseId' => $exerciseId]);
     }
 
+    public function deleteByExerciseBindId($exerciseBindId)
+    {
+        return $this->db()->delete($this->table(), ['itemBankExerciseBindId' => $exerciseBindId]);
+    }
+
     public function declares()
     {
         return [

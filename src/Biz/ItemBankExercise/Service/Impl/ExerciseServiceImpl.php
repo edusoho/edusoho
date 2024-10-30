@@ -612,8 +612,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function removeBindExercise($bindExerciseId)
     {
-        $bindExercise = $this->getExerciseBindDao()->get($bindExerciseId);
-        $this->dispatchEvent('exercise.unBind', new Event($bindExercise));
+        $this->dispatchEvent('exercise.unBind', new Event(['id' => $bindExerciseId]));
         $this->getExerciseBindDao()->delete($bindExerciseId);
     }
 
@@ -627,9 +626,19 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseAutoJoinRecordDao()->search(['userId' => $userId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
     }
 
+    public function findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseId)
+    {
+        return $this->getExerciseAutoJoinRecordDao()->search(['userIds' => $userIds, 'itemBankExerciseId' => $exerciseId], [], 0, PHP_INT_MAX);
+    }
+
     public function deleteExerciseAutoJoinRecordByUserIdsAndExerciseIds($userIds, $exerciseIds)
     {
         $this->getExerciseAutoJoinRecordDao()->batchDelete(['userIds' => $userIds, 'itemBankExerciseIds' => $exerciseIds]);
+    }
+
+    public function deleteExerciseAutoJoinRecordByExerciseBindId($itemBankExerciseId)
+    {
+        $this->getExerciseAutoJoinRecordDao()->deleteByExerciseBindId($itemBankExerciseId);
     }
 
     public function findExerciseAutoJoinRecordByItemBankExerciseBindIds($itemBankExerciseBindIds)
@@ -645,6 +654,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords)
     {
         $this->getExerciseAutoJoinRecordDao()->batchCreate($exerciseAutoJoinRecords);
+    }
+
+    public function getExerciseBindById($id)
+    {
+        return $this->getExerciseBindById($id);
     }
 
     /**

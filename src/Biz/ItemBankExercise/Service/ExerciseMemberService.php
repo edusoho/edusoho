@@ -48,5 +48,5 @@ interface ExerciseMemberService
 
     public function batchBecomeStudent($exerciseIds, $userIds, $info, $exercise);
 
-    public function batchRemoveStudent($exerciseIds, $userIds, $info, $exercise);
+    public function batchRemoveStudent($exerciseId, $userIds);
 }

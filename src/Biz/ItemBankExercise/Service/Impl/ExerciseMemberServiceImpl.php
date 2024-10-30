@@ -238,17 +238,12 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $this->commit();
     }
 
-    public function batchRemoveStudent($exerciseIds, $userIds, $info, $exercise)
+    public function batchRemoveStudent($exerciseId, $userIds)
     {
         $this->beginTransaction();
-        $this->getExerciseMemberDao()->batchDelete($userIds);
-        $member = $this->getExerciseMember($exerciseIds[0], $userIds[0]);
-        foreach ($exerciseIds as $exerciseId) {
-            $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
-        }
-        foreach ($userIds as $userId) {
-            $this->removeStudent($exercise['id'], $userId, $info);
-        }
+        $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userId' => $userIds]);
+        $exercise = $this->getExerciseService()->get($exerciseId);
+        $this->dispatchEvent('exercise.quit', $exercise, ['member' => ['role' => 'student']]);
     }
 
     public function getExerciseMember($exerciseId, $userId)

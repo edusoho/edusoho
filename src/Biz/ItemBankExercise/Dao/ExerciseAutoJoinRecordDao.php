@@ -7,4 +7,6 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 interface ExerciseAutoJoinRecordDao extends GeneralDaoInterface
 {
     public function deleteByExerciseId($exerciseId);
+
+    public function deleteByExerciseBindId($exerciseBindId);
 }
