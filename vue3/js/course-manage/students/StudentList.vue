@@ -574,10 +574,6 @@ const removeStudent = async userId => {
 
 <style lang="less">
 
-tr.ant-table-measure-row {
-  visibility: collapse;
-}
-
 .ant-table-tbody>tr>td {
   padding: 16px !important;
 }
