@@ -5,10 +5,8 @@ namespace ApiBundle\Api\Resource\ItemBankExerciseBind;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\MemberService;
-use Biz\ItemBankExercise\OperateReason;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserService;
@@ -18,51 +16,7 @@ class ItemBankExerciseBind extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        try {
-            $this->biz['db']->beginTransaction();
-            $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseIds']);
-            if ('course' == $params['bindType']) {
-                $member = $this->getCourseMemberService()->findCourseStudents($params['bindId'], 0, PHP_INT_MAX);
-            } else {
-                $member = $this->getClassroomService()->findClassroomMembersByRole($params['bindId'], 'student', 0, PHP_INT_MAX);
-            }
-            $studentIds = array_column($member, 'userId');
-            $userData = $this->getUserService()->findUsersByIds($studentIds);
-            $exerciseMembers = $this->getExerciseMemberService()->search(['exerciseIds' => $params['exerciseIds'], 'userIds' => $studentIds], 0, PHP_INT_MAX);
-
-            foreach ($params['exerciseIds'] as $exerciseId) {
-                foreach ($userData as $key => $user) {
-                    $isExerciseMember = $this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id']);
-                    if (!$isExerciseMember) {
-                        $data = [
-                            'price' => 0,
-                            'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
-                            'source' => 'outside',
-                            'reason' => OperateReason::JOIN_BY_IMPORT,
-                            'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
-                        ];
-                        $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
-                    }
-                }
-            }
-            $exerciseBinds = $this->getItemBankExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-            $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
-            $exerciseAutoJoinRecords = [];
-            foreach ($params['exerciseIds'] as $exerciseId) {
-                foreach ($studentIds as $studentId) {
-                    $exerciseAutoJoinRecords[] = [
-                        'userId' => $studentId,
-                        'itemBankExerciseId' => $exerciseId,
-                        'itemBankExerciseBindId' => $exerciseBindsIndex[$exerciseId]['id'],
-                    ];
-                }
-            }
-            $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
-            $this->biz['db']->commit();
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
-            throw $e;
-        }
+        $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseIds']);
 
         return ['success' => true];
     }

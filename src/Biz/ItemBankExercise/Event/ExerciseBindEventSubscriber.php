@@ -5,6 +5,7 @@ namespace Biz\ItemBankExercise\Event;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Event\Event;
@@ -18,8 +19,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         return [
             'exercise.bind' => 'onExerciseBind',
             'exercise.unBind' => 'onExerciseUnBind',
-            'exercise.bind.add.student' => 'onExerciseBindAddStudent',
-            'exercise.bind.remove.student' => 'onExerciseBindRemoveStudent',
+            'exercise.bind.add.student' => 'on1ExerciseBindAddStudent',
+            'exercise.bind.remove.student' => 'on2ExerciseBindRemoveStudent',
             'exercise.banLearn' => 'onExerciseBanLearn',
             'exercise.canLearn' => 'onExerciseCanLearn',
         ];
@@ -30,47 +31,27 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
      */
     public function onExerciseBind(Event $event)
     {
-        $params = $event->getSubject(); // userIds, bindType, bindId
-        $exerciseBinds = $this->getExerciseService()->findBindExerciseByIds($params['bindIds']);
-        // 获取全部成员
-        // 按exercise循环
-        //
-        foreach ($exerciseBinds as $exerciseBind) {
-            // 查询学员是不是当前题库练习的成员
-            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $params['userIds'], 'exerciseIds' => array_column($exerciseBinds, 'itemBankExerciseId')], [], 0, PHP_INT_MAX);
-            // 拆分是题库成员的部分，不是题库成员的部分
-            $exerciseMemberUserIds = array_column($exerciseUsers, 'userId');
-            $notMemberUserIds = array_diff($params['userIds'], $exerciseMemberUserIds);
-            if (!empty($notMemberUserIds)) {
-                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, '', $params['bindId']);
-            }
-            // 是题库成员直接添加自动加入记录，不成题库成员添加为成员后添加自动加入记录
-            //
-        }
-        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
-        if (empty($params['userIds'])) {
+        $params = $event->getSubject(); // exerciseBinds, bindType, bindId
+        $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
+        if (empty($userIds)) {
             return;
         }
-        $exerciseUsers = $this->getExerciseMemberService()->search([], [], 0, PHP_INT_MAX);
-        $exerciseUsersGroups = ArrayToolkit::group($exerciseUsers, 'exerciseId');
-        foreach ($exerciseUsersGroups as $exerciseId => $exerciseUsers) {
-            // 分流，已经是成员的ID，不是成员的id
+        foreach ($params['exerciseBinds'] as $exerciseBind) {
+            // 查询学员是不是当前题库练习的成员
+            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $userIds, 'exerciseIds' => array_column($params['exerciseBinds'], 'itemBankExerciseId')], [], 0, PHP_INT_MAX);
+            // 拆分是题库成员的部分，不是题库成员的部分
             $exerciseMemberUserIds = array_column($exerciseUsers, 'userId');
-            $notMemberUserIds = array_diff($params['userIds'], $exerciseMemberUserIds);
+            $notMemberUserIds = array_diff($userIds, $exerciseMemberUserIds);
+            $exercise = $this->getExerciseService()->get($exerciseBind['itemBankExerciseId']);
+            $exercise = $this->resetExerciseDeadLine($params['bindType'], $params['bindId'], $exercise);
             if (!empty($notMemberUserIds)) {
-                $this->getExerciseMemberService()->batchBecomeStudent($exerciseId, $notMemberUserIds, $params['bindType'], $params['bindId']);
+                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, '', $exercise);
             }
-            if (!empty($exerciseMemberUserIds)) {
-                $this->getExerciseMemberService()->batchUpdateMembers($exerciseId);
+            if (!empty($exerciseUsers)) {
+                $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords(array_column($exerciseUsers, 'userId'), $exerciseBind);
+                $this->updateMemberExpiredTime($exerciseAutoJoinRecords);
             }
-            // 重新计算题库有效期
-            foreach ($notMemberUserIds as $studentId) {
-                $exerciseAutoJoinRecords[] = [
-                    'userId' => $studentId,
-                    'itemBankExerciseId' => $exerciseId,
-                    'itemBankExerciseBindId' => $exerciseBindsIndex[$exerciseId]['bindId'],
-                ];
-            }
+            $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords($userIds, $exerciseBind);
             $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
         }
     }
@@ -275,7 +256,50 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 $member['deadline'] = $groupedRecord['deadline'];
             }
         }
+        if (empty($members)) {
+            return;
+        }
         $this->getExerciseMemberService()->batchUpdateMembers($members);
+    }
+
+    protected function buildExerciseAutoJoinRecords($userIds, $exerciseBind)
+    {
+        $exerciseAutoJoinRecords = [];
+        foreach ($userIds as $userId) {
+            $exerciseAutoJoinRecords[] = [
+                'userId' => $userId,
+                'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
+                'itemBankExerciseBindId' => $exerciseBind['id'],
+            ];
+        }
+
+        return $exerciseAutoJoinRecords;
+    }
+
+    protected function getStudentIds($bindType, $bindId)
+    {
+        if ('course' == $bindType) {
+            $member = $this->getCourseMemberService()->findCourseStudents($bindId, 0, PHP_INT_MAX);
+        } else {
+            $member = $this->getClassroomService()->findClassroomMembersByRole($bindId, 'student', 0, PHP_INT_MAX);
+        }
+
+        return array_column($member, 'userId');
+    }
+
+    protected function resetExerciseDeadLine($bindType, $bindId, $exercise)
+    {
+        if ('course' == $bindType) {
+            $course = $this->getCourseService()->getCourse($bindId);
+            $exercise['expiryMode'] = $course['expiryMode'];
+            $exercise['expiryDays'] = $course['expiryDays'];
+        } else {
+            $classroom = $this->getClassroomService()->getClassroom($bindId);
+            $exercise['expiryMode'] = $classroom['expiryMode'];
+            $exercise['expiryDays'] = $classroom['expiryValue'];
+        }
+
+        return $exercise;
     }
 
     /**
@@ -316,5 +340,13 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

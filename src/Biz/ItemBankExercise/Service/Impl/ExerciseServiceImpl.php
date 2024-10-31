@@ -579,20 +579,24 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function bindExercise($bindType, $bindId, $exerciseIds)
     {
-        $data = array_map(function ($exerciseId) use ($bindType, $bindId) {
-            return [
+        try {
+            $this->beginTransaction();
+            $data = array_map(function ($exerciseId) use ($bindType, $bindId) {
+                return [
                 'itemBankExerciseId' => $exerciseId,
                 'bindType' => $bindType,
                 'bindId' => $bindId,
                 'seq' => '0',
             ];
-        }, $exerciseIds);
-
-        // 批量插入数据
-        $this->getExerciseBindDao()->batchCreate($data);
-        // 用job去做
-//        $this->dispatchEvent('itemBankExercise.bind', new Event($bindType, $bindId, $exerciseIds));
-        // 查询对应的学员ID，然后加入
+            }, $exerciseIds);
+            $this->getExerciseBindDao()->batchCreate($data);
+            $exerciseBinds = $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
+            $this->dispatchEvent('exercise.bind', new Event(['bindType' => $bindType, 'bindId' => $bindId, 'exerciseBinds' => $exerciseBinds]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function findBindExercise($bindType, $bindId)

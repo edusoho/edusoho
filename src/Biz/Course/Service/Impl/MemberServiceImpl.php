@@ -920,7 +920,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $course,
             ['userId' => $member['userId'], 'member' => $member]
         );
-        $this->dispatchEvent('exercise.bind', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
+//        $this->dispatchEvent('exercise.bind', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
 
         return $member;
     }

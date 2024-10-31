@@ -203,6 +203,8 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
     public function batchUpdateMembers($updateFields)
     {
+        file_put_contents('/tmp/jc123', '___________'.json_encode($updateFields), 8);
+
         return $this->getExerciseMemberDao()->batchUpdate(array_keys($updateFields), $updateFields);
     }
 
@@ -221,7 +223,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 'userId' => $userId,
                 'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
                 'role' => 'student',
-                'remark' => $info['remark'],
+                'remark' => $info['remark'] ?? '',
                 'canLearn' => 1,
                 'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
             ];
