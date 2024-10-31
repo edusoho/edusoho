@@ -207,7 +207,7 @@ class StudentManageController extends BaseController
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            if ($fields['all']) {
+            if ($all) {
                 if ('day' == $fields['updateType']) {
                     $this->getCourseMemberService()->changeMembersDeadlineByCourseId($courseId, $fields['day'], $fields['waveType']);
 
