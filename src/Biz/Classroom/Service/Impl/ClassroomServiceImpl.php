@@ -1374,6 +1374,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => 0,
                     'note' => $params['remark'],
                 ];
+                if (!empty($params['reason'])) {
+                    $info['reason'] = $params['reason'];
+                }
+                if (!empty($params['reason_type'])) {
+                    $info['reason_type'] = $params['reason_type'];
+                }
                 $this->becomeStudent($classroom['id'], $user['id'], $info);
                 $order = ['id' => 0];
             }

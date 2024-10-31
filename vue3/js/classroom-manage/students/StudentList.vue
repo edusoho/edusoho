@@ -105,16 +105,19 @@
                 <div class="flex items-center gap-12 shrink-0">
                   <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
                   <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
-                    <template #title>{{ record.user.nickname }}</template>
-                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer max-w-160 overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">{{ record.user.nickname }}</span>
+                    <template #title>{{ record.user.nickname }}{{ record.joinedChannel === 'import_join' ? `(${record.remark})` : '' }}</template>
+                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer max-w-160 overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">
+                      {{ record.user.nickname }}
+                      <span class="text-12 text-[#999999]">{{ record.joinedChannel === 'import_join' ? `(${record.remark})` : '' }}</span>
+                    </span>
                   </a-tooltip>
                 </div>
               </template>
               <template v-else-if="column.key === 'mobile'">
                 <div class="flex gap-8 min-w-50">
-                  <span class="text-[#37393D] text-14 font-normal leading-22">{{
-                      mobile(record.user.id, record.user.verifiedMobile)
-                    }}</span>
+                  <span class="text-[#37393D] text-14 font-normal leading-22">
+                    {{ mobile(record.user.id, record.user.verifiedMobile) }}
+                  </span>
                   <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
                   <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
                 </div>
