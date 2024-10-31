@@ -266,6 +266,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $studentIds = $request->request->get('studentIds', []);
+        $studentIds = is_array($studentIds) ? $studentIds : explode(',', $studentIds);
         if (empty($this->getUserService()->findUsersByIds($studentIds))) {
             return $this->createJsonResponse(['success' => false]);
         }
@@ -322,6 +323,8 @@ class ClassroomManageController extends BaseController
             }
             $operateUser = $this->getUser();
             $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
+            $data['reason'] = $data['remark'];
+            $data['reason_type'] = 'import_join';
             $data['isNotify'] = 1;
             $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 
@@ -363,7 +366,8 @@ class ClassroomManageController extends BaseController
             $role,
             $start,
             $limit,
-            $exportAllowCount
+            $exportAllowCount,
+            $request->query->all()
         );
         $file = '';
         if (0 == $start) {
@@ -391,15 +395,27 @@ class ClassroomManageController extends BaseController
         return ExportHelp::exportCsv($request, $fileName);
     }
 
-    private function getExportContent($id, $role, $start, $limit, $exportAllowCount)
+    private function getExportContent($id, $role, $start, $limit, $exportAllowCount, $condition)
     {
+        $condition = ArrayToolkit::parts($condition, [
+            'startTimeGreaterThan',
+            'startTimeLessThan',
+            'joinedChannel',
+            'deadlineAfter',
+            'deadlineBefore',
+            'userKeyword',
+        ]);
+        if (isset($condition['userKeyword']) && $condition['userKeyword'] != '') {
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($condition['userKeyword']);
+            unset($condition['userKeyword']);
+        }
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = ['female' => '女', 'male' => '男', 'secret' => '秘密'];
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $condition = [
+        $condition = array_merge($condition, [
             'classroomId' => $classroom['id'],
             'role' => 'student' == $role ? 'student' : 'auditor',
-        ];
+        ]);
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
         $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount : $classroomMemberCount;
         if ($classroomMemberCount < ($start + $limit + 1)) {
@@ -422,7 +438,7 @@ class ClassroomManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
         $this->appendLearningProgress($classroomMembers, $id);
-        $str = '用户名,Email,加入学习时间,学习进度,学习有效期,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔,累加学习时长';
+        $str = '用户名,Email,加入学习时间,加入方式,学习进度,学习有效期,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔,累加学习时长';
         foreach ($fields as $key => $value) {
             $str .= ','.$value;
         }
@@ -434,6 +450,7 @@ class ClassroomManageController extends BaseController
             ) ? $users[$classroomMember['userId']]['nickname']."\t".',' : $users[$classroomMember['userId']]['nickname'].',';
             $member .= $users[$classroomMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
+            $member .= $this->transJoinChannel($classroomMember).',';
             $member .= $classroomMember['learningProgressPercent'].',';
             $member .= (empty($classroomMember['deadline']) ? $this->trans('course.expiry_date.forever_mode') : date(
                     'Y-n-d H:i',
@@ -1302,6 +1319,19 @@ class ClassroomManageController extends BaseController
         ];
 
         return $routes[$mode][$type];
+    }
+
+    private function transJoinChannel($member)
+    {
+        if ('import_join' === $member['joinedChannel']) {
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                return "{$operator['nickname']}添加";
+            }
+        }
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
     }
 
     private function getTagIdsFromRequest($request)

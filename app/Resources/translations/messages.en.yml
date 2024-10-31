@@ -3759,6 +3759,7 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
+my.teaching.course_set.select_type.live_open_course.no_permission: 'You do not have permission to create open course'
 my.teaching.multi_class.my_students: My Students
 my.teaching.multi_class.status: Status
 my.teaching.multi_class.student_num: Student Number
@@ -8171,6 +8172,7 @@ task.learn_data_detail.completed_number: completed number
 task.learn_data_detail.unfinished_number: unfinished number
 task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
+join.channel: 'Join Channel'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
@@ -9566,6 +9568,7 @@ exception.courseset.unpublished: Course not published
 exception.courseset.no_course: There are no teaching plans available in the course
 exception.courseset.unlock_failed: Unlocking course failed
 exception.courseset.forbidden_create: No right to create
+exception.courseset.forbidden_publish: 'Sorry you do not have permission to publish the course, please contact the administrator'
 exception.classroom.member_not_in_classroom: Student not in classroom
 exception.classroom.not_found: The classroom doesn't exist
 exception.classroom.forbidden_manage_classroom: Forbidden manage classroom

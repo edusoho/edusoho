@@ -1134,6 +1134,7 @@ admin.cloud_file.re_transcode_fail_hint: 重新转码失败!
 admin.cloud_file.detail_loading_hints: 正在加载，请等待......
 admin.cloud_file.select_course_placeholder: 选择课程
 admin.cloud_file.select_user_placeholder: 选择用户
+admin.cloud_file.add_tag_ok: 添加标签成功
 admin.coin.edit_success_hint: 操作成功
 admin.coin.edit_fail_hint: 操作失败
 admin.coin.give_success_hint: 操作成功

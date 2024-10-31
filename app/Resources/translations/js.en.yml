@@ -1193,6 +1193,7 @@ admin.cloud_file.re_transcode_fail_hint: Retranscoding failed!
 admin.cloud_file.detail_loading_hints: Loading, please wait...
 admin.cloud_file.select_course_placeholder: Select Course
 admin.cloud_file.select_user_placeholder: Select User
+admin.cloud_file.add_tag_ok: Tag added successfully
 admin.coin.edit_success_hint: operation Successful
 admin.coin.edit_fail_hint: operation failed
 admin.coin.give_success_hint: operation Successful

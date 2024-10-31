@@ -136,17 +136,23 @@ const submitContract = async () => {
   }
 };
 
+const isValidInfo = (str, regex) => {
+  return regex.test(str);
+}
+
 const submitIsDisabled = () => {
   const {IDNumber, phoneNumber, handSignature} = contract.value.sign;
   const fieldsToCheck = [
-    {key: 'truename', value: formState.truename},
-    {key: 'IDNumber', value: IDNumber},
-    {key: 'phoneNumber', value: phoneNumber},
-    {key: 'handSignature', value: handSignature}
+    {key: 'truename', value: formState.truename, required: true, pattern: /^[\u4e00-\u9fa5a-zA-Z]+$/},
+    {key: 'IDNumber', value: formState.IDNumber, required: IDNumber === 1, pattern: /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/},
+    {key: 'phoneNumber', value: formState.phoneNumber, required: phoneNumber === 1, pattern: /^1\d{10}$/},
+    {key: 'handSignature', value: formState.handSignature, required: handSignature === 1}
   ];
-  return !fieldsToCheck.every(({key, value}) =>
-    value === 0 || formState[key] !== undefined && formState[key] !== ''
-  );
+
+  return !fieldsToCheck.every(({key, value, required, pattern}) => {
+    if (!required) return true;
+    return value !== undefined && value !== '' && (!pattern || isValidInfo(value, pattern));
+  });
 };
 
 const { locale } = useI18n();
@@ -322,7 +328,7 @@ const bgClass = computed(() => {
       </template>
       <div class="p-24 flex flex-col">
         <div class="text-center text-14 text-[#37393D] font-normal mb-32">{{ t('tip.makeSure') }}</div>
-        <div class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat bg-[url('img/sign-contract/bg-01.svg')] border-dashed rounded-8 h-256 w-full mb-8" :class="bgClass">
+        <div class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat border-dashed rounded-8 h-256 w-full mb-8" :class="bgClass">
           <canvas id="canvas" class="rounded-8"></canvas>
         </div>
       </div>

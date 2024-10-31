@@ -7,8 +7,11 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
+use Biz\MemberOperation\Service\MemberOperationService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CourseMember extends AbstractResource
@@ -21,16 +24,22 @@ class CourseMember extends AbstractResource
         $conditions = $request->query->all();
         $conditions['courseId'] = $courseId;
         $conditions['locked'] = 0;
+        if (isset($conditions['userKeyword']) && $conditions['userKeyword'] != '') {
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+        }
+        unset($conditions['userKeyword']);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $members = $this->service('Course:MemberService')->searchMembers(
+        $members = $this->getMemberService()->searchMembers(
             $conditions,
             ['createdTime' => 'DESC'],
             $offset,
             $limit
         );
+        $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
+        $members = $this->convertJoinedChannel($members);
 
-        $total = $this->service('Course:MemberService')->countMembers($conditions);
+        $total = $this->getMemberService()->countMembers($conditions);
 
         $this->getOCUtil()->multiple($members, ['userId']);
 
@@ -87,6 +96,23 @@ class CourseMember extends AbstractResource
         return $member;
     }
 
+    private function convertJoinedChannel($members)
+    {
+        foreach ($members as &$member) {
+            if ('import_join' === $member['joinedChannel']) {
+                $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+                if (!empty($records)) {
+                    $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                    $member['joinedChannelText'] = "{$operator['nickname']}添加";
+                }
+            } else {
+                $member['joinedChannelText'] = ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
+            }
+        }
+
+        return $members;
+    }
+
     /**
      * @return \Biz\System\Service\Impl\LogServiceImpl
      */
@@ -109,5 +135,29 @@ class CourseMember extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
+    {
+        return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->service('User:UserService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    private function getMemberOperationService()
+    {
+        return $this->service('MemberOperation:MemberOperationService');
     }
 }
