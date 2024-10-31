@@ -7,8 +7,10 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CourseMember extends AbstractResource
@@ -21,16 +23,21 @@ class CourseMember extends AbstractResource
         $conditions = $request->query->all();
         $conditions['courseId'] = $courseId;
         $conditions['locked'] = 0;
+        if (isset($conditions['userKeyword']) && $conditions['userKeyword'] != '') {
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+        }
+        unset($conditions['userKeyword']);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $members = $this->service('Course:MemberService')->searchMembers(
+        $members = $this->getMemberService()->searchMembers(
             $conditions,
             ['createdTime' => 'DESC'],
             $offset,
             $limit
         );
+        $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
 
-        $total = $this->service('Course:MemberService')->countMembers($conditions);
+        $total = $this->getMemberService()->countMembers($conditions);
 
         $this->getOCUtil()->multiple($members, ['userId']);
 
@@ -109,5 +116,21 @@ class CourseMember extends AbstractResource
     private function getCourseService()
     {
         return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
+    {
+        return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }

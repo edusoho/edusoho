@@ -8169,6 +8169,7 @@ task.learn_data_detail.completed_number: completed number
 task.learn_data_detail.unfinished_number: unfinished number
 task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
+join.channel: 'Join Channel'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
