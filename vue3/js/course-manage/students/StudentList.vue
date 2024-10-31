@@ -111,7 +111,7 @@
                 </div>
               </template>
               <template v-else-if="column.key === 'mobile'">
-                <div class="flex gap-8">
+                <div class="flex gap-8 min-w-50">
                   <span class="text-[#37393D] text-14 font-normal leading-22">
                     {{ mobile(record.user.id, record.user.verifiedMobile) }}
                   </span>
@@ -145,7 +145,9 @@
                 </div>
               </template>
               <template v-else-if="column.key === 'learnDeadline'">
-                {{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}
+                <div class="min-w-100">
+                  {{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}
+                </div>
               </template>
               <template v-else-if="column.key === 'operation'">
                 <div class="flex justify-start items-center gap-16 shrink-0">
