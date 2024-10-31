@@ -88,7 +88,7 @@
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 1500, y: 300 }"
+            :scroll="{ x: 'max-content', y: 300 }"
           >
             <template #headerCell="{ column }">
               <template v-if="column.key === 'learnDeadline'">
@@ -106,15 +106,15 @@
                   <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
                   <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
                     <template #title>{{ record.user.nickname }}</template>
-                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">{{ record.user.nickname }}</span>
+                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer max-w-160 overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">{{ record.user.nickname }}</span>
                   </a-tooltip>
                 </div>
               </template>
               <template v-else-if="column.key === 'mobile'">
                 <div class="flex gap-8">
-                  <span class="text-[#37393D] text-14 font-normal leading-22">{{
-                      mobile(record.user.id, record.user.verifiedMobile)
-                    }}</span>
+                  <span class="text-[#37393D] text-14 font-normal leading-22">
+                    {{ mobile(record.user.id, record.user.verifiedMobile) }}
+                  </span>
                   <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
                   <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
                 </div>
@@ -126,7 +126,7 @@
                 <span v-else-if="record.joinedChannel === 'import_join'">
                   <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
                     <template #title>{{ record.remark }}</template>
-                    <span class="text-[#37393D] text-14 font-normal leading-22 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.remark }}</span>
+                    <span class="text-[#37393D] text-14 font-normal leading-22 max-w-320 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.remark }}</span>
                   </a-tooltip>
                 </span>
               </template>
@@ -134,11 +134,11 @@
                 {{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}
               </template>
               <template v-else-if="column.key === 'learnProgress'">
-                <div class="flex gap-8 items-center">
+                <div class="flex gap-8 items-center cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/process`">
                   <div class="flex flex-col justify-center items-start h-16 w-100 p-2 rounded-99 bg-[#F5F5F5]">
                     <div class="h-12 rounded-99" :style="`width: ${record.learningProgressPercent}px;`" style="background-image: linear-gradient(90deg, rgba(0, 194, 97, 0.4), rgb(0, 194, 97));"></div>
                   </div>
-                  <span class="flex items-center gap-4 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/process`">
+                  <span class="flex items-center gap-4">
                     <span class="text-[#37393D] hover:text-[--primary-color] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
                     <img class="w-16 h-16" src="../../../img/goto.png" alt="">
                   </span>
@@ -308,39 +308,31 @@ const table = {
     {
       key: 'user',
       title: '学员',
-      fixed: 'left',
-      width: 244,
     },
     {
       key: 'mobile',
       title: '手机号',
-      width: 160,
     },
     {
       key: 'joinedChannel',
       title: '加入方式',
-      maxWidth: 352,
     },
     {
       key: 'joinTime',
       title: '加入时间',
-      width: 157,
     },
     {
       key: 'learnProgress',
       title: '学习进度',
-      width: 190,
     },
     {
       key: 'learnDeadline',
       title: '学习有效期',
-      width: 157,
     },
     {
       key: 'operation',
       title: '操作',
       fixed: 'right',
-      width: 182,
     },
   ],
   loading: false,
@@ -422,7 +414,7 @@ const mobile = computed(() => {
       return wholeMobiles[userId];
     }
 
-    return maskMobile;
+    return maskMobile ? maskMobile : '-';
   };
 });
 

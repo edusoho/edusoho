@@ -88,7 +88,7 @@
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 1500, y: 300 }"
+            :scroll="{ x: 'max-content', y: 300 }"
           >
             <template #headerCell="{ column }">
               <template v-if="column.key === 'learnDeadline'">
@@ -106,7 +106,7 @@
                   <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
                   <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
                     <template #title>{{ record.user.nickname }}</template>
-                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">{{ record.user.nickname }}</span>
+                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer max-w-160 overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">{{ record.user.nickname }}</span>
                   </a-tooltip>
                 </div>
               </template>
@@ -126,7 +126,7 @@
                 <span v-else-if="record.joinedChannel === 'import_join'">
                   <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
                     <template #title>{{ record.remark }}</template>
-                    <span class="text-[#37393D] text-14 font-normal leading-22 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.remark }}</span>
+                    <span class="text-[#37393D] text-14 font-normal leading-22 max-w-320 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.remark }}</span>
                   </a-tooltip>
                 </span>
               </template>
@@ -303,39 +303,31 @@ const table = {
     {
       key: 'user',
       title: '学员',
-      fixed: 'left',
-      width: 244,
     },
     {
       key: 'mobile',
       title: '手机号',
-      width: 160,
     },
     {
       key: 'joinedChannel',
       title: '加入方式',
-      maxWidth: 352,
     },
     {
       key: 'joinTime',
       title: '加入时间',
-      width: 157,
     },
     {
       key: 'learnProgress',
       title: '学习进度',
-      width: 190,
     },
     {
       key: 'learnDeadline',
       title: '学习有效期',
-      width: 157,
     },
     {
       key: 'operation',
       title: '操作',
       fixed: 'right',
-      width: 182,
     },
   ],
   loading: false,
@@ -410,7 +402,7 @@ const mobile = computed(() => {
       return wholeMobiles[userId];
     }
 
-    return maskMobile;
+    return maskMobile ? maskMobile : '-';
   };
 });
 
