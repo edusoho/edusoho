@@ -6,6 +6,8 @@
   <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{'my.teaching.course_set.select_type.live_open_course.available_after_open'|trans}}" data-type="{{ type }}">
 {% elseif liveAccount.isExpired %}
   <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="{{ type }}">
+{% elseif not has_permission('admin_v2_open_course_manage') %}
+  <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{ 'my.teaching.course_set.select_type.live_open_course.no_permission'|trans }}" data-type="{{ type }}">
 {% else %}
   <div class="course-select js-courseSetType {% if defaultType|default('normal') == type %}active{% endif %}" data-type="{{ type }}">
 {% endif %}

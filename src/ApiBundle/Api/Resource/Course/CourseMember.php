@@ -10,6 +10,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -36,6 +37,7 @@ class CourseMember extends AbstractResource
             $limit
         );
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
+        $members = $this->convertJoinedChannel($members);
 
         $total = $this->getMemberService()->countMembers($conditions);
 
@@ -94,6 +96,23 @@ class CourseMember extends AbstractResource
         return $member;
     }
 
+    private function convertJoinedChannel($members)
+    {
+        foreach ($members as &$member) {
+            if ('import_join' === $member['joinedChannel']) {
+                $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+                if (!empty($records)) {
+                    $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                    $member['joinedChannelText'] = "{$operator['nickname']}添加";
+                }
+            } else {
+                $member['joinedChannelText'] = ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
+            }
+        }
+
+        return $members;
+    }
+
     /**
      * @return \Biz\System\Service\Impl\LogServiceImpl
      */
@@ -132,5 +151,13 @@ class CourseMember extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    private function getMemberOperationService()
+    {
+        return $this->service('MemberOperation:MemberOperationService');
     }
 }

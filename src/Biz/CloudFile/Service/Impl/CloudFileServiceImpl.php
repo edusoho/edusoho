@@ -174,8 +174,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         if (!empty($attachmentFile)) {
-            $this->getAttachmentService()->updateAttachment($attachmentFile['id'], ['status' => 'delete']);
+            $this->getAttachmentService()->deleteAttachment($attachmentFile['id']);
             $this->getLogService()->info('question_bank', 'delete_attachment', "管理员 {$user['nickname']}删除了附件《{$attachmentFile['file_name']}》");
+            $this->getCloudFileImplementor()->deleteFile(['globalId' => $globalId]);
 
             return ['success' => true];
         }
