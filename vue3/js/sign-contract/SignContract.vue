@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, nextTick, onMounted, computed, watch} from 'vue';
+import {ref, reactive, nextTick, onMounted, computed} from 'vue';
 import {
   ExclamationCircleOutlined,
   CloseOutlined,
