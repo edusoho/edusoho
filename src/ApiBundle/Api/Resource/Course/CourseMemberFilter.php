@@ -16,7 +16,7 @@ class CourseMemberFilter extends Filter
 
     protected $publicFields = [
         'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access', 'learnedCompulsoryTaskNum', 'expire',
-        'isContractSigned', 'learningProgressPercent', 'joinedChannelText',
+        'isContractSigned', 'learningProgressPercent', 'joinedChannel', 'joinedChannelText', 'remark',
     ];
 
     protected function simpleFields(&$data)

@@ -122,7 +122,7 @@ class ClassroomMember extends AbstractResource
     private function convertJoinedChannel($member)
     {
         if ('import_join' === $member['joinedChannel']) {
-            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
             if (!empty($records)) {
                 $operator = $this->getUserService()->getUser($records[0]['operator_id']);
                 return "{$operator['nickname']}添加";

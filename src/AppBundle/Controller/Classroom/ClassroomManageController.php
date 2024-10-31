@@ -323,6 +323,8 @@ class ClassroomManageController extends BaseController
             }
             $operateUser = $this->getUser();
             $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
+            $data['reason'] = $data['remark'];
+            $data['reason_type'] = 'import_join';
             $data['isNotify'] = 1;
             $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 
