@@ -143,15 +143,19 @@ const isValidInfo = (str, regex) => {
 const submitIsDisabled = () => {
   const {IDNumber, phoneNumber, handSignature} = contract.value.sign;
   const fieldsToCheck = [
-    {key: 'truename', value: formState.truename},
-    {key: 'IDNumber', value: IDNumber},
-    {key: 'phoneNumber', value: phoneNumber},
-    {key: 'handSignature', value: handSignature}
+    {key: 'truename', value: formState.truename, required: true},
+    {key: 'IDNumber', value: formState.IDNumber, required: IDNumber === 1},
+    {key: 'phoneNumber', value: formState.phoneNumber, required: phoneNumber === 1},
+    {key: 'handSignature', value: formState.handSignature, required: handSignature === 1}
   ];
-  return !fieldsToCheck.every(({key, value}) => value === 0 || formState[key] !== undefined && formState[key] !== '')
+  const allFieldsValid = fieldsToCheck.every(({key, value, required}) => {
+    if (!required) return true;
+    return formState[key] !== undefined && formState[key] !== '';
+  });
+  return !allFieldsValid
     || !isValidInfo(formState.truename, /^[\u4e00-\u9fa5a-zA-Z]+$/)
-    || !isValidInfo(formState.IDNumber, /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/)
-    || !isValidInfo(formState.phoneNumber, /^1\d{10}$/);
+    || (fieldsToCheck.find(f => f.key === 'IDNumber')?.required && !isValidInfo(formState.IDNumber, /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/))
+    || (fieldsToCheck.find(f => f.key === 'phoneNumber')?.required && !isValidInfo(formState.phoneNumber, /^1\d{10}$/));
 };
 
 const { locale } = useI18n();
