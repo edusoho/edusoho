@@ -4362,6 +4362,7 @@ my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
+my.teaching.course_set.select_type.live_open_course.no_permission: 没有创建公开课的权限
 
 #班课
 my.teaching.multi_class.my_students: 我的学员

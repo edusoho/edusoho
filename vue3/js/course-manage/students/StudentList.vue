@@ -120,15 +120,10 @@
                 </div>
               </template>
               <template v-else-if="column.key === 'joinedChannel'">
-                <span v-if="record.joinedChannel === 'free_join'" class="text-[#37393D] text-14 font-normal leading-22">免费加入</span>
-                <span v-if="record.joinedChannel === 'buy_join'" class="text-[#37393D] text-14 font-normal leading-22">购买加入</span>
-                <span v-if="record.joinedChannel === 'vip_join'" class="text-[#37393D] text-14 font-normal leading-22">会员加入</span>
-                <span v-else-if="record.joinedChannel === 'import_join'">
-                  <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
-                    <template #title>{{ record.remark }}</template>
-                    <span class="text-[#37393D] text-14 font-normal leading-22 max-w-320 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.remark }}</span>
-                  </a-tooltip>
-                </span>
+                <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
+                  <template #title>{{ record.joinedChannelText }}</template>
+                  <span class="text-[#37393D] text-14 font-normal leading-22 max-w-320 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.joinedChannelText }}</span>
+                </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">
                 {{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}

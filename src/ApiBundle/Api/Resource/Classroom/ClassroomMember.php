@@ -8,6 +8,7 @@ use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Exception\UnableJoinException;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use ApiBundle\Api\Annotation\ApiConf;
@@ -77,6 +78,7 @@ class ClassroomMember extends AbstractResource
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
         foreach ($members as &$member) {
             $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
+            $member['joinedChannelText'] = $this->convertJoinedChannel($member);
         }
 
         return $this->makePagingObject($members, $total, $offset, $limit);
@@ -117,6 +119,19 @@ class ClassroomMember extends AbstractResource
         }
     }
 
+    private function convertJoinedChannel($member)
+    {
+        if ('import_join' === $member['joinedChannel']) {
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                return "{$operator['nickname']}添加";
+            }
+        }
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
+    }
+
     /**
      * @return \Biz\System\Service\Impl\LogServiceImpl
      */
@@ -152,5 +167,13 @@ class ClassroomMember extends AbstractResource
     private function getCoursePlanLearnDataDailyStatisticsService()
     {
         return $this->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    private function getMemberOperationService()
+    {
+        return $this->service('MemberOperation:MemberOperationService');
     }
 }

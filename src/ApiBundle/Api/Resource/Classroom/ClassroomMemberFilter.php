@@ -15,7 +15,7 @@ class ClassroomMemberFilter extends Filter
      */
     protected $publicFields = [
         'id', 'classroomId', 'userId', 'noteNum', 'threadNum', 'locked', 'role', 'deadline', 'access', 'user', 'isOldUser', 'expire', 'joinedChannel',
-        'remark', 'createdTime', 'learningProgressPercent',
+        'joinedChannelText', 'createdTime', 'learningProgressPercent',
     ];
 
     protected function publicFields(&$data)
