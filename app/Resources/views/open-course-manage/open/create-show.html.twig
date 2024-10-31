@@ -1,4 +1,4 @@
-<div class="course-select js-courseSetType {% if defaultType|default('normal') == type %}active{% endif %}" data-type="{{ type }}">
+<div class="course-select {% if not has_permission('admin_v2_open_course_manage') %}disabled{% endif %} js-courseSetType {% if defaultType|default('normal') == type %}active{% endif %}" {% if not has_permission('admin_v2_open_course_manage') %}data-toggle="tooltip" data-placement="top" title="{{ '没有创建公开课的权限'|trans }}"{% endif %} data-type="{{ type }}">
   <i class="es-icon es-icon-lubogongkaike"></i>
   <div class="course-type">{{ 'my.teaching.course_set.select_type.record_open_course'|trans }}</div>
   <div class="course-intro">{{ 'my.teaching.course_set.select_type.record_open_course.tips'|trans }}</div>
