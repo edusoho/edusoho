@@ -114,16 +114,29 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject(); // bindType、bindId、userIds
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
-        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
-        $userIds = array_column($exerciseAutoJoinRecords, 'userId');
-        $exerciseAutoJoinRecordsGroup = ArrayToolkit::group($exerciseAutoJoinRecords, 'itemBankExerciseId');
-        foreach ($exerciseAutoJoinRecordsGroup as $exerciseId => $exerciseAutoJoinRecord) {
-            list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($exerciseAutoJoinRecord, $exerciseBindsIndex[$exerciseId]['id']);
-            $this->getExerciseMemberService()->batchRemoveStudent($exerciseId, array_column($singleExerciseAutoJoinRecords, 'userId'));
+        foreach ($exerciseBinds as $exerciseBind) {
+            // 查询成员、获取成员IDs
+            $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($params['userIds'], $exerciseBind['itemBankExerciseId']);
+            list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($autoJoinRecords, $exerciseBind['id']);
+            // 只有一条记录直接移除学员
+            if (!empty($singleExerciseAutoJoinRecords)) {
+                $this->getExerciseMemberService()->batchRemoveStudent($exerciseBind['itemBankExerciseId'], array_column($singleExerciseAutoJoinRecords, 'userId'));
+            }
+            // 有多条记录重新计算有效期
             $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
+            // 移除自动加入记录
+            $this->getExerciseService()->deleteExerciseAutoJoinRecordByUserIdsAndExerciseBindId($params['userIds'], $exerciseBind['id']);
         }
-        $this->getExerciseService()->deleteExerciseAutoJoinRecordByUserIdsAndExerciseIds($userIds, array_column($exerciseId, 'itemBankExerciseId'));
+//        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
+//        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
+//        $userIds = array_column($exerciseAutoJoinRecords, 'userId');
+//        $exerciseAutoJoinRecordsGroup = ArrayToolkit::group($exerciseAutoJoinRecords, 'itemBankExerciseId');
+//        foreach ($exerciseAutoJoinRecordsGroup as $exerciseId => $exerciseAutoJoinRecord) {
+//            list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($exerciseAutoJoinRecord, $exerciseBindsIndex[$exerciseId]['id']);
+//            $this->getExerciseMemberService()->batchRemoveStudent($exerciseId, array_column($singleExerciseAutoJoinRecords, 'userId'));
+//            $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
+//        }
+//        $this->getExerciseService()->deleteExerciseAutoJoinRecordByUserIdsAndExerciseIds($userIds, array_column($exerciseId, 'itemBankExerciseId'));
     }
 
     /** 关闭班级/关闭课程时，禁止学习
