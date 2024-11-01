@@ -203,8 +203,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
     public function batchUpdateMembers($updateFields)
     {
-        file_put_contents('/tmp/jc123', '___________'.json_encode($updateFields), 8);
-
         return $this->getExerciseMemberDao()->batchUpdate(array_keys($updateFields), $updateFields);
     }
 
@@ -242,10 +240,16 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
     public function batchRemoveStudent($exerciseId, $userIds)
     {
-        $this->beginTransaction();
-        $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userId' => $userIds]);
-        $exercise = $this->getExerciseService()->get($exerciseId);
-        $this->dispatchEvent('exercise.quit', $exercise, ['member' => ['role' => 'student']]);
+        try {
+            $this->beginTransaction();
+            $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userIds' => $userIds]);
+            $exercise = $this->getExerciseService()->get($exerciseId);
+            $this->dispatchEvent('exercise.quit', $exercise, ['member' => ['role' => 'student']]);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function getExerciseMember($exerciseId, $userId)

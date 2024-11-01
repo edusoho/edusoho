@@ -616,8 +616,15 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function removeBindExercise($bindExerciseId)
     {
-        $this->dispatchEvent('exercise.unBind', new Event(['id' => $bindExerciseId]));
-        $this->getExerciseBindDao()->delete($bindExerciseId);
+        try {
+            $this->beginTransaction();
+            $this->dispatchEvent('exercise.unBind', new Event(['id' => $bindExerciseId]));
+            $this->getExerciseBindDao()->delete($bindExerciseId);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function updateBindExercise($bindExercise)
@@ -662,7 +669,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function getExerciseBindById($id)
     {
-        return $this->getExerciseBindById($id);
+        return $this->getExerciseBindDao()->get($id);
     }
 
     /**

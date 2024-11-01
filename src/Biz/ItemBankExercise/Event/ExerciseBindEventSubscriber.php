@@ -63,11 +63,14 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject();
         $exerciseBind = $this->getExerciseService()->getExerciseBindById($params['id']);
+        $userIds = $this->getStudentIds($exerciseBind['bindType'], $exerciseBind['bindId']);
         // 查询成员、获取成员IDs
-        $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($params['userIds'], $exerciseBind['itemBankExerciseId']);
+        $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
         list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($autoJoinRecords, $exerciseBind['id']);
         // 只有一条记录直接移除学员
-        $this->getExerciseMemberService()->batchRemoveStudent($exerciseBind['itemBankExerciseId'], array_column($singleExerciseAutoJoinRecords, 'userId'));
+        if (!empty($singleExerciseAutoJoinRecords)) {
+            $this->getExerciseMemberService()->batchRemoveStudent($exerciseBind['itemBankExerciseId'], array_column($singleExerciseAutoJoinRecords, 'userId'));
+        }
         // 有多条记录重新计算有效期
         $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
         // 移除自动加入记录
