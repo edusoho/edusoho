@@ -9,70 +9,70 @@
 {% endblock %}
 
 {% block main_body %}
-    <div id="student-table-container" role="course-manage-student-index">
-      {{ web_macro.flash_messages() }}
-      {% include 'item-bank-exercise-manage/student-manage/panel-nav.html.twig' with {'panelNav': 'manage'} %}
+  <div id="student-table-container" role="course-manage-student-index">
+    {{ web_macro.flash_messages() }}
+    {% include 'item-bank-exercise-manage/student-manage/panel-nav.html.twig' with {'panelNav': 'manage'} %}
 
-      <form class="form-inline well well-sm" action="#" method="get" novalidate>
-        <div class="form-group col-md-7">
-          <input class="form-control" type="text" style="width:45%" placeholder="{{'course.members_manage.official_student.input_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
-          <button type="submit" class="cd-btn cd-btn-primary">{{'course.members_manage.official_student.search'|trans}}</button>
-        </div>
-        <div class="clearfix"></div>
-      </form>
-      {% if students|length > 0 %}
-        <button id="batch-remove" type="button" class="cd-btn cd-btn-default mr8" data-url="{{ path('item_bank_exercise_manage_remove_students', {exerciseId: exercise.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
+    <form class="form-inline well well-sm" action="#" method="get" novalidate>
+      <div class="form-group col-md-7">
+        <input class="form-control" type="text" style="width:45%" placeholder="{{'course.members_manage.official_student.input_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+        <button type="submit" class="cd-btn cd-btn-primary">{{'course.members_manage.official_student.search'|trans}}</button>
+      </div>
+      <div class="clearfix"></div>
+    </form>
+    {% if students|length > 0 %}
+      <button id="batch-remove" type="button" class="cd-btn cd-btn-default mr8" data-url="{{ path('item_bank_exercise_manage_remove_students', {exerciseId: exercise.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
 
-        <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
-          <button type="button" class="cd-btn cd-btn-default dropdown-toggle">
-            {{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}
-            <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li>
-              <a id="batch-update-expiry-day"
-                 class="clearfix"
-                 href="javascript:;"
-                 data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">
-                {{ 'classroom.student_batch_update_expiry_date'|trans }}
-              </a>
-            </li>
-            <li>
-              <a id="all-update-expiry-day"
-                 class="clearfix"
-                 href="javascript:;"
-                 data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">
-                {{ 'course.members_manage.official_student.all_update_deadline'|trans }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      {% endif %}
-      <table class="table table-striped" id="course-student-list">
-        <thead>
-          <tr>
-            <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
-            <th>{{'site.default.student'|trans}}</th>
-            <th>{{'site.default.mobile'|trans}}</th>
-            <th>{{'join.time'|trans}}</th>
-            <th>{{'course.expiry_date'|trans}}</th>
-            <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for student in students if student %}
-            {% set user = users[student.userId]|default(null) %}
-            {% set userProfile = userProfiles[student.userId]|default(null) %}
-            {% include 'item-bank-exercise-manage/student-manage/tr-v2.html.twig' %}
-          {% else %}
-            <tr class="empty"><td colspan="20">{{'course.members_manage.official_student.empty'|trans}}</td></tr>
-          {% endfor %}
+      <div class="cd-dropdown cd-dropdown-right" data-toggle="cd-dropdown">
+        <button type="button" class="cd-btn cd-btn-default dropdown-toggle">
+          {{ 'course.members_manage.official_student.batch_upload_deadline'|trans }}
+          <i class="cd-icon cd-icon-arrow-down cd-text-sm"></i>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li>
+            <a id="batch-update-expiry-day"
+               class="clearfix"
+               href="javascript:;"
+               data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">
+              {{ 'classroom.student_batch_update_expiry_date'|trans }}
+            </a>
+          </li>
+          <li>
+            <a id="all-update-expiry-day"
+               class="clearfix"
+               href="javascript:;"
+               data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">
+              {{ 'course.members_manage.official_student.all_update_deadline'|trans }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
+    <table class="table table-striped" id="course-student-list">
+      <thead>
+      <tr>
+        <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
+        <th>{{'site.default.student'|trans}}</th>
+        <th>{{'site.default.mobile'|trans}}</th>
+        <th>{{'join.time'|trans}}</th>
+        <th>{{'course.expiry_date'|trans}}</th>
+        <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for student in students if student %}
+        {% set user = users[student.userId]|default(null) %}
+        {% set userProfile = userProfiles[student.userId]|default(null) %}
+        {% include 'item-bank-exercise-manage/student-manage/tr-v2.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">{{'course.members_manage.official_student.empty'|trans}}</td></tr>
+      {% endfor %}
 
-        </tbody>
-      </table>
-      <nav class="text-center">
-        {{ web_macro.paginator(paginator) }}
-      </nav>
-    </div>
+      </tbody>
+    </table>
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+  </div>
 {% endblock %}
 
