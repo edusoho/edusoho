@@ -1,7 +1,8 @@
 import Intro from '../info/intro';
 import ManageInfo from './manage-info';
 import * as ElementUI from 'element-ui';
-import {Dropdown, Menu} from '@codeages/design-vue';
+import {Dropdown, Menu, Button, Icon, Modal} from '@codeages/design-vue';
+import Vue from 'common/vue';
 import Axios from 'axios';
 import qs from 'qs';
 
@@ -18,16 +19,18 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$qs = qs;
 
 Vue.use(ElementUI);
+
 Vue.use(Dropdown);
 Vue.use(Menu);
+Vue.use(Button);
+Vue.use(Icon);
+Vue.use(Modal);
 Vue.filter('trans', function (value, params) {
   if (!value) return '';
   return Translator.trans(value, params);
 });
 
-
 new Vue({
-  el: '#app',
   render: createElement => createElement(ManageInfo, {
     props: {
       course: $('#app').data('course'),
@@ -68,7 +71,7 @@ new Vue({
       enableOrg: $('#app').data('enableOrg'),
     },
   }),
-});
+}).$mount('#app');
 
 class CourseInfo {
   constructor() {

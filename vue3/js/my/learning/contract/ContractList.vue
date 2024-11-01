@@ -88,11 +88,11 @@ const downloadContract = async (id, fileName) => {
 
 <template>
   <ant-config-provider>
-    <div class="w-full h-fit bg-white rounded-4 border border-[#e4ecf3] border-solid pt-24 px-24">
-      <div class="text-[#1E2226] text-18 font-medium w-full border border-[#e4ecf3] pb-16 border-x-0 border-t-0 border-solid">{{ t('title') }}</div>
+    <div class="w-full h-fit bg-white rounded-4 border border-[#F0F0F0] border-solid pt-24 px-24">
+      <div class="text-[#1E2226] text-18 font-medium w-full border border-[#F0F0F0] pb-16 border-x-0 border-t-0 border-solid">{{ t('title') }}</div>
       <div class="w-full h-full flex-col">
         <div v-if="contracts.length !== 0" v-for="contract in contracts"
-             class="flex justify-between items-center px-16 py-36 border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
+             class="flex justify-between items-center px-16 py-36 border border-[#F0F0F0] border-x-0 border-t-0 border-solid">
           <div class="flex">
             <img class="w-45 ml-11 mr-24" src="../../../../img/my-contract/icon-01.jpg" alt="">
             <div class="flex flex-col">
@@ -114,7 +114,7 @@ const downloadContract = async (id, fileName) => {
             <a-button type="primary" @click="view(contract.id, contract.relatedGoods.name)">{{ t('btn.view') }}</a-button>
           </div>
         </div>
-        <div v-else class="border border-[#e4ecf3] border-x-0 border-t-0 border-solid">
+        <div v-else class="border border-[#F0F0F0] border-x-0 border-t-0 border-solid">
           <a-empty :image="simpleImage" :description="t('message.noContract')"/>
         </div>
       </div>
@@ -190,7 +190,7 @@ const downloadContract = async (id, fileName) => {
           </div>
         </div>
         <template #footer>
-          <div class="flex justify-center">
+          <div class="flex justify-center py-10 border border-solid border-[#F0F0F0] border-b-0 border-x-0">
             <a-button @click="myContentVisible = false; courseName = ''">{{ t('btn.close') }}</a-button>
           </div>
         </template>
@@ -198,7 +198,6 @@ const downloadContract = async (id, fileName) => {
       <div
         class="w-full bg-white px-40 py-24 flex justify-end">
         <a-pagination
-          class="my-contract-pagination"
           :show-total="total => getTableTotal(total)"
           v-model="pagination.current"
           :total="pagination.total"
@@ -212,42 +211,17 @@ const downloadContract = async (id, fileName) => {
 </template>
 
 <style lang="less">
-.contract-content {
-  img {
-    max-width: 100%;
-  }
-}
-
 .my-contract-detail-modal {
   .ant-modal {
-    padding: 0 !important;
     .ant-modal-content {
-      padding: 0 !important;
+      padding: 0;
       .ant-modal-footer {
-        border-top: 1px solid #ebebeb;
-        padding: 10px 16px;
         margin-top: 0;
       }
       .ant-modal-header {
-        padding: 0;
         margin-bottom: 0;
-        border: none;
       }
     }
   }
-}
-
-.my-contract-pagination {
-  .ant-pagination-item-active {
-    border-color: #3DCD7F !important;
-  }
-  .ant-pagination-item-active a {
-    color: #3DCD7F !important;
-  }
-}
-
-.ant-message {
-  left: 50%;
-  transform: translateX(-50%)
 }
 </style>

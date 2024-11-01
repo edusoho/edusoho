@@ -28,7 +28,6 @@ Vue.filter('trans', function (value, params) {
 let $app = $('#app');
 
 new Vue({
-  el: '#app',
   render: createElement => createElement(ManageInfo, {
     props: {
       classroom: $app.data('classroom'),
@@ -52,4 +51,4 @@ new Vue({
       infoSaveUrl: $app.data('infoSaveUrl'),
     }
   })
-});
+}).$mount('#app');

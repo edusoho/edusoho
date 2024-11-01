@@ -1,16 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-<<<<<<< HEAD
-{% set lang = app.request.getLocale() %}
-
-{% if lang == 'en' %}
-  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/answer-engine/answer/index.js', 'vue3/js/components/sign-contract/index.js']) %}
-{% else %}
-  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/answer-engine/answer/index.js', 'vue3/js/components/sign-contract/index.js']) %}
-{% endif %}
-=======
 {% do script(['libs/vue.js', 'app/js/answer-engine/answer/index.js', 'vue3/js/sign-contract/index.js']) %}
->>>>>>> 5cc4b0cedd3d273272638dfc18c1ac0350ed7b99
 
 {% block stylesheets %}
   {{ parent() }}

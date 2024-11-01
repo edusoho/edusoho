@@ -11,6 +11,7 @@ import SmoothSignature from 'smooth-signature';
 import {t} from './vue-lang';
 import Api from '../../../api';
 import {useI18n} from 'vue-i18n';
+import AntConfigProvider from '../AntConfigProvider.vue';
 
 const contractTemplate = ref();
 const contract = ref();
@@ -164,7 +165,7 @@ const bgClass = computed(() => {
 </script>
 
 <template>
-  <div>
+  <AntConfigProvider>
     <!--    签署合同确认框-->
     <a-modal v-model:open="signContractConfirmVisible" :centered="true" :maskClosable="false" :closable=false
              :cancelText="t('btn.cancel')" :okText="t('btn.goToSign')" width="416px"
@@ -184,19 +185,19 @@ const bgClass = computed(() => {
     <a-modal v-model:open="signContractVisible" :centered="true" :maskClosable="false" :closable=false width="900px"
              wrapClassName="sign-contract-modal">
       <template #title>
-        <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
+        <div class="flex justify-between items-center px-24 py-16 border border-solid border-x-0 border-t-0 border-[#DCDEE0]">
           <div class="text-16 text-[#1E2226] font-medium">{{ t('modal.signContract') }}</div>
           <CloseOutlined class="h-16 w-16" @click="toCoursePage"/>
         </div>
       </template>
       <div class="p-24 flex">
-        <div class="flex flex-1 mr-32 border border-solid border-[#DFE2E6] rounded-8 relative min-h-380 max-h-400">
+        <div class="flex flex-1 mr-32 border border-solid border-[#DCDEE0] rounded-8 relative min-h-380 max-h-400">
           <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 px-32"
                style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32 contract-content"></div>
           </div>
           <div
-            class="absolute bottom-0 z-10 flex justify-center items-center rounded-b-8 w-full py-16 border-t border-x-0 border-b-0 border-[#DFE2E6] border-solid hover:cursor-pointer bg-white"
+            class="absolute bottom-0 z-10 flex justify-center items-center rounded-b-8 w-full py-16 border-t border-x-0 border-b-0 border-[#DCDEE0] border-solid hover:cursor-pointer bg-white"
             @click="showContractDetailModal">
             <img src="../../../img/sign-contract/icon-01.jpg" class="w-16 h-16 mr-10" alt="">
             <div class="text-[#3DCD7F] text-14 font-normal">{{ t('modal.viewContractDetails') }}</div>
@@ -217,9 +218,9 @@ const bgClass = computed(() => {
               :wrapper-col="{ span: 10 }"
               name="truename"
               :rules="[
-                { required: true, message: t('validation.enterName') },
-                { pattern: /^[\u4e00-\u9fa5a-zA-Z]+$/, message: t('validation.enterNumberOrChineseCharacters') }
-              ]"
+              { required: true, message: t('validation.enterName') },
+              { pattern: /^[\u4e00-\u9fa5a-zA-Z]+$/, message: t('validation.enterNumberOrChineseCharacters') }
+            ]"
             >
               <a-input v-model:value="formState.truename" :placeholder="t('placeholder.pleaseEnter')"/>
             </a-form-item>
@@ -231,9 +232,9 @@ const bgClass = computed(() => {
               name="IDNumber"
               v-if="contract.sign.IDNumber === 1"
               :rules="[
-                { required: true, message: t('validation.enterIDNumber') },
-                { pattern: /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/, message: t('validation.IDNumberFormat') }
-              ]"
+              { required: true, message: t('validation.enterIDNumber') },
+              { pattern: /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[\dXx]$/, message: t('validation.IDNumberFormat') }
+            ]"
             >
               <a-input v-model:value="formState.IDNumber" class="w-full" :placeholder="t('placeholder.pleaseEnter')"/>
             </a-form-item>
@@ -245,9 +246,9 @@ const bgClass = computed(() => {
               name="phoneNumber"
               v-if="contract.sign.phoneNumber === 1"
               :rules="[
-                { required: true, message: t('validation.enterContactInformation') },
-                { pattern:  /^1\d{10}$/, message: t('validation.enterNumber') }
-              ]"
+              { required: true, message: t('validation.enterContactInformation') },
+              { pattern:  /^1\d{10}$/, message: t('validation.enterNumber') }
+            ]"
             >
               <a-input v-model:value="formState.phoneNumber" :maxlength="11"
                        :placeholder="t('placeholder.pleaseEnter')"/>
@@ -259,11 +260,11 @@ const bgClass = computed(() => {
               name="handSignature"
               v-if="contract.sign.handSignature === 1"
               :rules="[
-                { required: true, message: t('validation.enterHandwrittenSignature') },
-              ]"
+              { required: true, message: t('validation.enterHandwrittenSignature') },
+            ]"
             >
               <div
-                class="border-[#ebebeb] border-dashed border h-200 rounded-4 flex justify-center items-center mb-6 hover:cursor-pointer"
+                class="border-[#DCDEE0] border-dashed border h-200 rounded-4 flex justify-center items-center mb-6 hover:cursor-pointer"
                 @click="showSignModal">
                 <div class="flex items-center" v-if="!formState.handSignature">
                   <EditOutlined class="h-16 mr-8"/>
@@ -273,13 +274,12 @@ const bgClass = computed(() => {
                 <div
                   class="absolute bg-black/40 rounded-4 justify-center items-center h-200 w-full flex opacity-0 hover:opacity-100"
                   v-if="formState.handSignature">
-                  <div class="bg-white px-15 py-6 flex border h-fit border-solid border-[#DFE2E6] rounded-6">
+                  <div class="bg-white px-15 py-6 flex border h-fit border-solid border-[#DCDEE0] rounded-6">
                     <EditOutlined class="h-16 mr-8"/>
                     <div class="text-[#1E2226] text-14 font-normal">{{ t('label.reSign') }}</div>
                   </div>
                 </div>
               </div>
-
               <div class="text-12 text-[#8A9099] font-normal">{{ t('tip.clickOnThisArea') }}</div>
             </a-form-item>
 
@@ -287,7 +287,7 @@ const bgClass = computed(() => {
         </div>
       </div>
       <template #footer>
-        <div class="flex justify-center px-24 py-20">
+        <div class="flex justify-center px-24 py-20 border border-solid border-x-0 border-b-0 border-[#DCDEE0]">
           <a-button class="mr-8" @click="toCoursePage">{{ t('btn.close') }}</a-button>
           <a-button type="primary" @click="submitContract"
                     :disabled="submitIsDisabled()">
@@ -299,19 +299,18 @@ const bgClass = computed(() => {
 
     <!--  合同详情页面-->
     <a-modal v-model:open="contractDetailVisible" :maskClosable="false" width="100vw"
-             wrapClassName="contract-detail-modal" :closable=false>
+             wrapClassName="contract-detail-modal" :closable=false :footer="null">
       <template #title>
-        <div class="px-20 py-16 flex items-center">
+        <div class="px-20 py-16 flex items-center border border-solid border-x-0 border-t-0 border-[#DCDEE0]">
           <div class="hover:cursor-pointer flex items-center" @click="contractDetailVisible = false;">
             <LeftOutlined class="h-14 mr-8"/>
             <div class="text-14 text-[#1E2226] font-normal">{{ t('btn.return') }}</div>
           </div>
-          <a-divider type="vertical" class="mx-16"/>
+          <a-divider type="vertical" class="mx-16" style="border-color: #DCDEE0;"/>
           <div class="text-14 text-[#1E2226] font-normal mr-16">{{ t('label.contractParticular') }}</div>
         </div>
       </template>
       <div v-html="contractTemplate.content" class="text-12 mt-24 text-[#626973] font-normal w-900 leading-20 contract-content"></div>
-      <template #footer></template>
     </a-modal>
 
     <!--合同签字-->
@@ -319,7 +318,7 @@ const bgClass = computed(() => {
              :cancelText="t('btn.close')" :okText="t('btn.confirmationSignature')" width="572px"
              wrapClassName="sign-contract-modal">
       <template #title>
-        <div class="flex justify-between items-center px-24 py-16 border-b border-[#DCDEE0]">
+        <div class="flex justify-between items-center px-24 py-16 border border-solid border-x-0 border-t-0 border-[#DCDEE0]">
           <div class="text-16 text-[#1E2226] font-medium">
             {{ `${targetTitle}-${nickname}-${t('modal.title.electronicContractSigning')}` }}
           </div>
@@ -328,18 +327,18 @@ const bgClass = computed(() => {
       </template>
       <div class="p-24 flex flex-col">
         <div class="text-center text-14 text-[#37393D] font-normal mb-32">{{ t('tip.makeSure') }}</div>
-        <div class="relative flex items-center justify-center border-[#86909C] border bg-center bg-no-repeat border-dashed rounded-8 h-256 w-full mb-8" :class="bgClass">
+        <div class="relative flex items-center justify-center border-[#DCDEE0] border bg-center bg-no-repeat border-dashed rounded-8 h-256 w-full mb-8" :class="bgClass">
           <canvas id="canvas" class="rounded-8"></canvas>
         </div>
       </div>
       <template #footer>
-        <div class="py-20 flex justify-center">
+        <div class="py-20 flex justify-center border border-solid border-x-0 border-b-0 border-[#DCDEE0]">
           <a-button class="mr-8" @click="clearSignature">{{ t('btn.clear') }}</a-button>
           <a-button type="primary" @click="submitSignature">{{ t('btn.submit') }}</a-button>
         </div>
       </template>
     </a-modal>
-  </div>
+  </AntConfigProvider>
 </template>
 
 <style lang="less">
@@ -347,86 +346,37 @@ const bgClass = computed(() => {
   .ant-modal-content {
     padding: 32px 32px 24px 32px;
   }
-
-  .ant-modal-body {
-    padding: 0;
-  }
-
-  .ant-modal-footer {
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    margin-top: 24px;
-  }
-
-  .ant-btn-primary:hover {
-    background-color: #BDF2D0;
-    border-color: #BDF2D0;
-  }
-
-  .ant-btn-default:hover {
-    border-color: #46C37B;
-    color: #46C37B;
-  }
 }
 
 .sign-contract-modal {
-  .ant-modal-header {
-    padding: 0;
-    margin-bottom: 0;
-  }
-
   .ant-modal-content {
     padding: 0;
   }
-
-  .ant-modal-body {
-    padding: 0;
-  }
-
-  .ant-modal-footer {
-    padding: 0;
-    margin-top: 0;
-  }
-
-  .ant-btn-primary:hover {
-    background-color: #BDF2D0;
-    border-color: #BDF2D0;
-  }
-
-  .ant-btn-default:hover {
-    border-color: #46C37B;
-    color: #46C37B;
-  }
-
-  .ant-form-item-label {
-    .ant-form-item-required {
-      color: #626973;
-      font-size: 14px;
-      line-height: 22px;
-      font-weight: 400;
-      margin-right: 10px;
-    }
-  }
-
-  .ant-form-item:last-child {
+  .ant-modal-header {
     margin-bottom: 0;
   }
-
-  .ant-btn[disabled] {
-    background-color: #BDF2D0;
-    border: 1px #BDF2D0;
-    color: #F0FFF4;
+  .ant-modal-footer {
+    margin-top: 0;
+  }
+  .ant-modal-body {
+    .ant-form-item-label {
+      .ant-form-item-required {
+        color: #626973;
+        font-size: 14px;
+        font-weight: 400;
+        margin-right: 10px;
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
 .contract-detail-modal {
   .ant-modal {
-    max-width: 100%;
+    height: 100vh;
     top: 0;
     padding-bottom: 0;
-    margin: 0;
-
+    max-width: 100%;
     .ant-modal-content {
       display: flex;
       flex-direction: column;
@@ -434,44 +384,17 @@ const bgClass = computed(() => {
       padding: 0;
       border-radius: 0;
       top: 0;
-    }
-
-    .ant-modal-body {
-      padding-top: 0;
-      bottom: 0;
-      padding-bottom: 120px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 960px;
-    }
-
-    .ant-modal-footer {
-      padding: 0;
-      border: none;
-      border-radius: 0;
-      margin-top: 24px;
-    }
-
-    .ant-btn-primary:hover {
-      background-color: #BDF2D0;
-      border-color: #BDF2D0;
-    }
-
-    .ant-btn-default:hover {
-      border-color: #46C37B;
-      color: #46C37B;
-    }
-
-    .ant-modal-header {
-      padding: 0;
-      margin-bottom: 0;
+      .ant-modal-body {
+        padding-bottom: 120px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 960px;
+      }
+      .ant-modal-header {
+        margin-bottom: 0;
+      }
     }
   }
-}
-
-.ant-message {
-  left: 50%;
-  transform: translateX(-50%)
 }
 
 .contract-content {
