@@ -6,7 +6,10 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Exception\UnableJoinException;
+use Biz\MemberOperation\Service\MemberOperationService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use ApiBundle\Api\Annotation\ApiConf;
 use AppBundle\Common\ArrayToolkit;
@@ -48,7 +51,19 @@ class ClassroomMember extends AbstractResource
         }
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $conditions = array('classroomId' => $classroomId);
+        $conditions = ArrayToolkit::parts($request->query->all(), [
+            'startTimeGreaterThan',
+            'startTimeLessThan',
+            'joinedChannel',
+            'deadlineAfter',
+            'deadlineBefore',
+            'userKeyword',
+        ]);
+        $conditions['classroomId'] = $classroomId;
+        if (isset($conditions['userKeyword']) && '' != $conditions['userKeyword']) {
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+            unset($conditions['userKeyword']);
+        }
 
         if ($request->query->get('role', '')) {
             $conditions['role'] = $request->query->get('role');
@@ -56,10 +71,14 @@ class ClassroomMember extends AbstractResource
 
         $total = $this->getClassroomService()->searchMemberCount($conditions);
         $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime' => 'DESC'), $offset, $limit);
+        if ('student' == $conditions['role'] ?? '') {
+            $this->appendLearningProgress($members, $classroomId);
+        }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
         foreach ($members as &$member) {
             $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
+            $member['joinedChannelText'] = $this->convertJoinedChannel($member);
         }
 
         return $this->makePagingObject($members, $total, $offset, $limit);
@@ -81,6 +100,38 @@ class ClassroomMember extends AbstractResource
         return $member;
     }
 
+    private function appendLearningProgress(&$classroomMembers, $classroomId)
+    {
+        $courses = $this->getClassroomService()->findByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($courses, 'courseId');
+        foreach ($classroomMembers as &$classroomMember) {
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(
+                $classroomMember['classroomId'],
+                $classroomMember['userId']
+            );
+            $classroomMember['learningProgressPercent'] = $progress['percent'];
+            $conditions = [
+                'userId' => $classroomMember['userId'],
+                'courseIds' => $courseIds,
+            ];
+            $learningTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions($conditions);
+            $classroomMember['learningTime'] = round($learningTime / 60);
+        }
+    }
+
+    private function convertJoinedChannel($member)
+    {
+        if ('import_join' === $member['joinedChannel']) {
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                return "{$operator['nickname']}添加";
+            }
+        }
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
+    }
+
     /**
      * @return \Biz\System\Service\Impl\LogServiceImpl
      */
@@ -100,5 +151,29 @@ class ClassroomMember extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->service('Classroom:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    private function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    private function getMemberOperationService()
+    {
+        return $this->service('MemberOperation:MemberOperationService');
     }
 }

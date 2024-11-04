@@ -48,15 +48,14 @@ const columns = [
 ];
 
 export default {
-  props: {
-    itemBankId: null
-  },
   components: {
     ListHeader,
     TestPaperTypeTag
   },
   data() {
     return {
+      itemBankId: document.getElementById('itemBankId').value,
+      questionBankId: document.getElementById('questionBankId').value,
       status: undefined,
       type: undefined,
       keywordType: 'name',
@@ -181,7 +180,7 @@ export default {
       if (record.type === 'aiPersonality') {
         await this.$router.push({name: 'preview', params: {id: record.id}});
       } else {
-        window.location.href = `${window.location.origin}/question_bank/${this.itemBankId}/testpaper/${record.id}/preview`
+        window.location.href = `/question_bank/${this.questionBankId}/testpaper/${record.id}/preview`;
       }
     },
     async handleChangeTab(tab) {
@@ -238,17 +237,20 @@ export default {
       await this.fetchTestPaper(params);
     },
     exportPaper(paper) {
-      window.open(`/question_bank/${this.itemBankId}/testpaper/${paper.id}/export`, '_blank')
+      window.open(`/question_bank/${this.questionBankId}/testpaper/${paper.id}/export`, '_blank');
+    },
+    async toEdit(paper) {
+      if (paper.type === 'regular') {
+        window.location.href = `/question_bank/${this.questionBankId}/testpaper/${paper.id}/edit`;
+      } else {
+        await this.$router.push({
+          name: 'update', query: {type: paper.type}, params: {id: paper.id}
+        });
+      }
     },
     async handleEdit(paper) {
       if (paper.status === 'draft') {
-        if (paper.type === 'regular') {
-          window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
-        } else {
-          await this.$router.push({
-            name: 'update', query: {type: paper.type}, params: {id: paper.id}
-          });
-        }
+        await this.toEdit(paper);
       } else  {
         this.$confirm({
           title: '确定要进行编辑吗？',
@@ -258,13 +260,7 @@ export default {
           cancelText: Translator.trans("site.cancel"),
           centered: true,
           onOk: async () => {
-            if (paper.type === 'regular') {
-              window.location.href = `/question_bank/${this.itemBankId}/testpaper/${paper.id}/edit`
-            } else {
-              await this.$router.push({
-                name: 'update', query: {type: paper.type}, params: {id: paper.id}
-              });
-            }
+            await this.toEdit(paper);
           }
         });
       }

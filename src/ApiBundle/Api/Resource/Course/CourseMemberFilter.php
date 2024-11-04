@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use Biz\InfoSecurity\Service\MobileMaskService;
 use Topxia\Service\Common\ServiceKernel;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -15,7 +16,7 @@ class CourseMemberFilter extends Filter
 
     protected $publicFields = [
         'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'access', 'learnedCompulsoryTaskNum', 'expire',
-        'isContractSigned',
+        'isContractSigned', 'learningProgressPercent', 'joinedChannel', 'joinedChannelText', 'remark',
     ];
 
     protected function simpleFields(&$data)
@@ -46,8 +47,13 @@ class CourseMemberFilter extends Filter
             $data['levelId'] = empty($vipMember) ? 0 : $vipMember['levelId'];
         }
 
+        $user = $data['user'];
         $userFilter = new UserFilter();
         $userFilter->filter($data['user']);
+        $data['user']['encryptedMobile'] = empty($user['verifiedMobile']) ? '' : $this->getMobileMaskService()->encryptMobile($user['verifiedMobile']);
+        $data['user']['verifiedMobile'] = empty($user['verifiedMobile']) ? '' : $this->getMobileMaskService()->maskMobile($user['verifiedMobile']);
+        global $kernel;
+        $data['user']['canSendMessage'] = $kernel->getContainer()->get('web.twig.extension')->canSendMessage($user['id']);
     }
 
     /**
@@ -56,5 +62,13 @@ class CourseMemberFilter extends Filter
     private function getVipService()
     {
         return ServiceKernel::instance()->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return MobileMaskService
+     */
+    private function getMobileMaskService()
+    {
+        return $this->createService('InfoSecurity:MobileMaskService');
     }
 }

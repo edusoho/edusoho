@@ -46,7 +46,7 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
     {
         $attachment = $this->getAttachment($attachmentId);
         if (empty($attachment)) {
-            throw new ItemException('attachment not exist', ErrorCode::ITEM_ATTACHMENT_NOTFOUND());
+            throw new ItemException('attachment not exist', ErrorCode::ITEM_ATTACHMENT_NOTFOUND);
         }
 
         $fields = $this->validateAttachment($fields);
@@ -58,7 +58,7 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
     {
         $attachment = $this->getAttachment($attachmentId);
         if (empty($attachment)) {
-            throw new ItemException('attachment not exist', ErrorCode::ITEM_ATTACHMENT_NOTFOUND());
+            throw new ItemException('attachment not exist', ErrorCode::ITEM_ATTACHMENT_NOTFOUND);
         }
 
         return $this->getAttachmentDao()->update($attachmentId, ['status' => 'finish']);
@@ -68,7 +68,7 @@ class AttachmentServiceImpl extends BaseService implements AttachmentService
     {
         $attachment = $this->getAttachment($attachmentId);
         if (empty($attachment)) {
-            throw new ItemException('attachment not exist', ErrorCode::ITEM_ATTACHMENT_NOTFOUND());
+            throw new ItemException('attachment not exist', ErrorCode::ITEM_ATTACHMENT_NOTFOUND);
         }
 
         $result = $this->getAttachmentDao()->delete($attachmentId);

@@ -1247,7 +1247,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     public function addCourseSet($courseSet)
     {
-        if (!$this->hasCourseSetManageRole()) {
+        if (!$this->hasCourseSetManageRole() && !$this->getCurrentUser()->hasPermission('admin_v2_course_add')) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 

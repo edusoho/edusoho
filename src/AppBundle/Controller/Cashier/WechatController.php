@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Cashier;
 use ApiBundle\Api\ApiRequest;
 use AppBundle\Component\Payment\Wxpay\JsApiPay;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class WechatController extends PaymentController
@@ -149,6 +150,6 @@ class WechatController extends PaymentController
     {
         $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
 
-        return $this->createJsonResponse($result);
+        return new Response($result);
     }
 }

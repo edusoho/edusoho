@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/students.html.twig' %}
 {% block title %}{{ 'classroom.student_manage'|trans }} - {{ parent() }}{% endblock %}
 {% set submenu = 'student' %}
-{% do script(['libs/bootstrap-datetimepicker.js', 'app/js/classroom-manage/students-manage/index.js']) %}
+{% do script(['libs/bootstrap-datetimepicker.js', 'app/js/classroom-manage/students-manage/index.js', 'vue3/js/classroom-manage/students/index.js']) %}
 
 {% block maincontent %}
 
@@ -78,4 +78,13 @@
 
   {{ web_macro.advanced_paginator(paginator) }}
 
+{% endblock %}
+
+{% block main %}
+  <div>
+    <div id="student-list-app"
+         data-classroom-id="{{ classroom.id }}"
+         data-classroom-status="{{ classroom.status }}"
+    ></div>
+  </div>
 {% endblock %}

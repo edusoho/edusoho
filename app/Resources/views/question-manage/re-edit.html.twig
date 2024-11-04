@@ -1,22 +1,12 @@
 {% extends 'layout.html.twig' %}
 
-{% set lang = app.request.getLocale() %}
-
-{% if lang == 'en' %}
-  {% do script(['libs/vue.js', 'libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/re-edit/index.js']) %}
-{% else %}
-  {% do script(['libs/vue.js', 'libs/item-bank/lib/itemBank.umd.min.js', 'app/js/re-edit/index.js']) %}
-{% endif %}
+{% do script(['libs/vue.js', 'app/js/re-edit/index.js']) %}
 
 {% block title %}{{ 'course.testpaper_manage.import.re_edit.title'|trans }} - {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
-  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet"/>
-  {% else %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet"/>
-  {% endif %}
+  {% include 'item-bank-css-loader.html.twig' %}
 {% endblock %}
 
 {% block body %}

@@ -38,7 +38,7 @@ class CourseSetManageController extends BaseController
             return $this->forward($visibleCourseTypes[$type]['saveAction'], ['request' => $request]);
         }
 
-        if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
+        if (!$this->getCourseSetService()->hasCourseSetManageRole() && !$this->getCurrentUser()->hasPermission('admin_v2_course_add')) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
@@ -235,6 +235,9 @@ class CourseSetManageController extends BaseController
 
     public function publishAction($id)
     {
+        if (!$this->getCurrentUser()->isTeacher() && !$this->getCurrentUser()->hasPermission('admin_v2_course_set_publish')) {
+            $this->createNewException(CourseSetException::FORBIDDEN_PUBLISH());
+        }
         $courseSet = $this->getCourseSetService()->getCourseSet($id);
 
         if ('supplier' == $courseSet['platform']) {

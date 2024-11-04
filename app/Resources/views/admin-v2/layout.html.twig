@@ -36,9 +36,10 @@
   {% endif %}
 
   {% block stylesheets %}
-  <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
-  <link href="{{ asset('static-dist/app/css/admin.css') }}" rel="stylesheet" />
-  <link href="{{ asset('static-dist/app/css/admin-v2.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/app/css/admin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('static-dist/app/css/admin-v2.css') }}" rel="stylesheet" />
+    {% include 'css_loader.html.twig' %}
   {% endblock %}
 
   {% block javascripts %}{% endblock %}
