@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\ThreadService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
@@ -154,7 +155,11 @@ class StudentExporter extends Exporter
     private function transJoinChannel($member)
     {
         if ('import_join' === $member['joinedChannel']) {
-            return $member['remark'];
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                return "{$operator['nickname']}添加";
+            }
         }
 
         return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
@@ -295,5 +300,13 @@ class StudentExporter extends Exporter
     protected function getCoursePlanLearnDataDailyStatisticsService()
     {
         return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    protected function getMemberOperationService()
+    {
+        return $this->getBiz()->service('MemberOperation:MemberOperationService');
     }
 }
