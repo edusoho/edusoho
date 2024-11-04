@@ -23,6 +23,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             'exercise.bind.remove.student' => 'onExerciseBindRemoveStudent',
             'exercise.banLearn' => 'onExerciseBanLearn',
             'exercise.canLearn' => 'onExerciseCanLearn',
+            'exercise.member.deadline.update' => 'onExerciseMemberDeadlineUpdate',
         ];
     }
 
@@ -162,6 +163,53 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($exerciseAutoJoinRecord, $exerciseBindsIndex[$exerciseId]['id']);
             $this->batchCanLearn(array_column($singleExerciseAutoJoinRecords, 'userId'));
             $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
+        }
+    }
+
+    /**
+     * 时间
+     *
+     * @return void
+     */
+    public function onExerciseMemberDeadlineUpdate(Event $event)
+    {
+        $params = $event->getSubject();
+        $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        $bindTypeMembers = [];
+        if ($params['all']) {
+            if ('course' == $params['bindType']) {
+                $bindTypeMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $params['bindId'], 'role' => 'student'], ['id' => 'ASC'], 0, PHP_INT_MAX, ['userId', 'deadline']);
+            } else {
+                $bindTypeMembers = $this->getClassroomService()->searchMembers(['classroomId' => $params['bindId'], 'role' => 'student'], ['id' => 'ASC'], 0, PHP_INT_MAX, ['userId', 'deadline']);
+            }
+        } else {
+            if ('course' == $params['bindType']) {
+                $bindTypeMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $params['bindId'], 'role' => 'student', 'userIds' => $params['userIds']], ['id' => 'ASC'], 0, PHP_INT_MAX, ['userId', 'deadline']);
+            } else {
+                $bindTypeMembers = $this->getClassroomService()->searchMembers(['classroomId' => $params['bindId'], 'role' => 'student', 'userIds' => $params['userIds']], ['id' => 'ASC'], 0, PHP_INT_MAX, ['userId', 'deadline']);
+            }
+        }
+        $bindTypeMembersIndex = ArrayToolkit::index($bindTypeMembers, 'userId');
+        foreach ($exerciseBinds as $exerciseBind) {
+            $exerciseMembers = $this->getExerciseMemberService()->search(['userIds' => array_column($bindTypeMembers, 'userId'), 'exerciseId' => $exerciseBind['itemBankExerciseId']], [], 0, PHP_INT_MAX);
+            foreach ($exerciseMembers as &$exerciseMember) {
+                if ('day' == $params['updateType']) {
+                    if ('plus' == $params['waveType']) {
+                        if ($bindTypeMembersIndex[$exerciseMember['userId']]['deadline'] > $exerciseMember['deadline']) {
+                            $exerciseMember['deadline'] = $bindTypeMembersIndex[$exerciseMember['userId']]['deadline'];
+                        }
+                    } else {
+                        if ($bindTypeMembersIndex[$exerciseMember['userId']]['deadline'] < $exerciseMember['deadline']) {
+                            $exerciseMember['deadline'] = $bindTypeMembersIndex[$exerciseMember['userId']]['deadline'];
+                        }
+                    }
+                } else {
+                    if ($bindTypeMembersIndex[$exerciseMember['userId']]['deadline'] > $exerciseMember['deadline']) {
+                        $exerciseMember['deadline'] = $bindTypeMembersIndex[$exerciseMember['userId']]['deadline'];
+                    }
+                }
+            }
+            $this->getExerciseMemberService()->batchUpdateMembers($exerciseMembers);
         }
     }
 
