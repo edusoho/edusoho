@@ -263,29 +263,34 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         $classroomIds = array_column(array_filter($exerciseBinds, function ($item) {
             return 'classroom' == $item['bindType'];
         }), 'bindId');
-        $courseMembers = $this->getCourseMemberService()->searchMembers(['courseIds' => $courseIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
-        $courseMembersGroups = ArrayToolkit::group($courseMembers, 'userId');
-        $classroomMembers = $this->getClassroomService()->searchMembers(['classroomIds' => $classroomIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
-        $classroomMembersGroups = ArrayToolkit::group($classroomMembers, 'userId');
+        if (!empty($courseIds)) {
+            $courseMembers = $this->getCourseMemberService()->searchMembers(['courseIds' => $courseIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
+            $courseMembersGroups = ArrayToolkit::group($courseMembers, 'userId');
+        }
+        if (!empty($classroomIds)) {
+            $classroomMembers = $this->getClassroomService()->searchMembers(['classroomIds' => $classroomIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
+            $classroomMembersGroups = ArrayToolkit::group($classroomMembers, 'userId');
+        }
+
         $groupedRecords = [];
         foreach ($multipleRecordUsersGroups as $userId => $multipleRecordUsersGroup) {
-            if (!empty($courseMembersGroups)) {
+            if (!empty($courseMembersGroups[$userId])) {
                 foreach ($courseMembersGroups[$userId] as $multipleRecord) {
-                    if (empty($groupedRecords)) {
+                    if (empty($groupedRecords[$userId])) {
                         $groupedRecords[$userId]['deadline'] = $multipleRecord['deadline'];
                     }
                     if (0 == $multipleRecord['deadline'] || ($multipleRecord['deadline'] > $groupedRecords[$userId]['deadline'] && 0 != $groupedRecords[$userId]['deadline'])) {
-                        $groupedRecords[$userId] = $multipleRecord['deadline'];
+                        $groupedRecords[$userId]['deadline'] = $multipleRecord['deadline'];
                     }
                 }
             }
-            if (!empty($classroomMembersGroups)) {
+            if (!empty($classroomMembersGroups[$userId])) {
                 foreach ($classroomMembersGroups[$userId] as $multipleRecord) {
-                    if (empty($groupedRecords)) {
+                    if (empty($groupedRecords[$userId])) {
                         $groupedRecords[$userId]['deadline'] = $multipleRecord['deadline'];
                     }
                     if (0 == $multipleRecord['deadline'] || ($multipleRecord['deadline'] > $groupedRecords[$userId]['deadline'] && 0 != $groupedRecords[$userId]['deadline'])) {
-                        $groupedRecords[$userId] = $multipleRecord['deadline'];
+                        $groupedRecords[$userId]['deadline'] = $multipleRecord['deadline'];
                     }
                 }
             }
