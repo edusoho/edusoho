@@ -5,9 +5,13 @@ namespace ApiBundle\Api\Resource\ItemBankExerciseBind;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\MemberService;
+use Biz\ItemBankExercise\Service\AssessmentExerciseService;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserService;
 
@@ -31,17 +35,32 @@ class ItemBankExerciseBind extends AbstractResource
         $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
         foreach ($bindExercises as &$bindExercise) {
+            $exercise = $this->getItemBankExerciseService()->tryManageExercise($bindExercise['itemBankExerciseId']);
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
-            $bindExercise['chapterExerciseNum'] = 0;
-            $bindExercise['assessmentNum'] = 0;
+            $bindExercise['chapterExerciseNum'] = $this->getChapterExerciseNum($exercise);
+            $bindExercise['assessmentNum'] = $this->getAssessmentNum($exercise);
             $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
         }
-        // 绑定人
-        // 章节练习数量
-
-        // 试卷练习数量
-
         return $bindExercises;
+    }
+
+    protected function getAssessmentNum($exercise)
+    {
+        if (!$exercise['assessmentEnable']) {
+            return 0;
+        }
+        $modules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], 'assessment');
+        $moduleIds = ArrayToolkit::column($modules, 'id');
+        return $this->getAssessmentExerciseService()->count(['moduleIds' => $moduleIds]);
+    }
+
+    protected function getChapterExerciseNum($exercise)
+    {
+        if (!$exercise['chapterEnable']) {
+            return 0;
+        }
+        $chapterTreeList = $this->getItemBankChapterExerciseService()->getChapterTreeList($exercise['questionBankId']);
+        return count($chapterTreeList);
     }
 
     public function remove(ApiRequest $request, $id)
@@ -89,5 +108,29 @@ class ItemBankExerciseBind extends AbstractResource
     protected function getExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    protected function getExerciseModuleService()
+    {
+        return $this->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return AssessmentExerciseService
+     */
+    protected function getAssessmentExerciseService()
+    {
+        return $this->service('ItemBankExercise:AssessmentExerciseService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->service('ItemBankExercise:ChapterExerciseService');
     }
 }
