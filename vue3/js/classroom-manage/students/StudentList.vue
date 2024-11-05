@@ -88,7 +88,7 @@
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 'max-content', y: 300 }"
+            :scroll="{ x: 1200, y: 300 }"
           >
             <template #headerCell="{ column }">
               <template v-if="column.key === 'learnDeadline'">
@@ -170,7 +170,7 @@
               </template>
             </template>
           </a-table>
-          <div class="flex justify-between items-center self-stretch pb-28 pl-22 pr-16 w-full">
+          <div class="flex justify-between items-center self-stretch pb-28 px-8 w-full">
             <div class="">
               <a-checkbox
                 :indeterminate="table.rowSelection.selectedRowKeys.length > 0 && !table.isSelectAll"
@@ -303,31 +303,38 @@ const table = {
     {
       key: 'user',
       title: '学员',
+      width: 300,
     },
     {
       key: 'mobile',
       title: '手机号',
+      width: 150,
     },
     {
       key: 'joinedChannel',
       title: '加入方式',
+      width: 300,
     },
     {
       key: 'joinTime',
       title: '加入时间',
+      width: 150,
     },
     {
       key: 'learnProgress',
       title: '学习进度',
+      width: 200,
     },
     {
       key: 'learnDeadline',
       title: '学习有效期',
+      width: 150,
     },
     {
       key: 'operation',
       title: '操作',
       fixed: 'right',
+      width: 200,
     },
   ],
   loading: false,
@@ -508,11 +515,6 @@ const removeStudent = async userId => {
 </script>
 
 <style lang="less">
-
-.ant-table-tbody>tr>td {
-  padding: 16px !important;
-}
-
 .student-header-operate-button {
   display: flex;
   height: 32px;
