@@ -174,7 +174,6 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseMemberDeadlineUpdate(Event $event)
     {
         $params = $event->getSubject();
-        $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
         $bindTypeMembers = [];
         if ($params['all']) {
             if ('course' == $params['bindType']) {
@@ -190,6 +189,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             }
         }
         $bindTypeMembersIndex = ArrayToolkit::index($bindTypeMembers, 'userId');
+        $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
         foreach ($exerciseBinds as $exerciseBind) {
             $exerciseMembers = $this->getExerciseMemberService()->search(['userIds' => array_column($bindTypeMembers, 'userId'), 'exerciseId' => $exerciseBind['itemBankExerciseId']], [], 0, PHP_INT_MAX);
             foreach ($exerciseMembers as &$exerciseMember) {
