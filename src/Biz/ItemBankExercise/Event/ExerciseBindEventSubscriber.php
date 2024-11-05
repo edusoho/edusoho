@@ -368,6 +368,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             $course = $this->getCourseService()->getCourse($bindId);
             $exercise['expiryMode'] = $course['expiryMode'];
             $exercise['expiryDays'] = $course['expiryDays'];
+            $exercise['expiryStartDate'] = $course['expiryStartDate'];
+            $exercise['expiryEndDate'] = $course['expiryEndDate'];
         } else {
             $classroom = $this->getClassroomService()->getClassroom($bindId);
             $exercise['expiryMode'] = $classroom['expiryMode'];
