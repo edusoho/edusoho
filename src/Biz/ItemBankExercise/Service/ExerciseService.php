@@ -99,4 +99,6 @@ interface ExerciseService
     public function getExerciseBindById($id);
 
     public function findExerciseBindByExerciseId($exerciseId);
+
+    public function countExerciseBind($conditions);
 }
