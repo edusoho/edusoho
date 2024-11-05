@@ -299,6 +299,9 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         foreach ($members as &$member) {
             $member['deadline'] = $groupedRecords[$member['userId']]['deadline'];
         }
+        if (empty($members)) {
+            return;
+        }
         $members = ArrayToolkit::index($members, 'id');
         $this->getExerciseMemberService()->batchUpdateMembers($members);
     }
