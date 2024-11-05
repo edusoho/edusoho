@@ -174,6 +174,9 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseMemberDeadlineUpdate(Event $event)
     {
         $params = $event->getSubject();
+        if (empty($params['userIds'])) {
+            return;
+        }
         $bindTypeMembers = [];
         if ($params['all']) {
             if ('course' == $params['bindType']) {
@@ -181,35 +184,12 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             } else {
                 $bindTypeMembers = $this->getClassroomService()->searchMembers(['classroomId' => $params['bindId'], 'role' => 'student'], ['id' => 'ASC'], 0, PHP_INT_MAX, ['userId', 'deadline']);
             }
-        } else {
-            if ('course' == $params['bindType']) {
-                $bindTypeMembers = $this->getCourseMemberService()->searchMembers(['courseId' => $params['bindId'], 'role' => 'student', 'userIds' => $params['userIds']], ['id' => 'ASC'], 0, PHP_INT_MAX, ['userId', 'deadline']);
-            } else {
-                $bindTypeMembers = $this->getClassroomService()->searchMembers(['classroomId' => $params['bindId'], 'role' => 'student', 'userIds' => $params['userIds']], ['id' => 'ASC'], 0, PHP_INT_MAX, ['userId', 'deadline']);
-            }
         }
-        $bindTypeMembersIndex = ArrayToolkit::index($bindTypeMembers, 'userId');
+        $userIds = $bindTypeMembers ? array_column($bindTypeMembers, 'userId') : $params['userIds'];
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
         foreach ($exerciseBinds as $exerciseBind) {
-            $exerciseMembers = $this->getExerciseMemberService()->search(['userIds' => array_column($bindTypeMembers, 'userId'), 'exerciseId' => $exerciseBind['itemBankExerciseId']], [], 0, PHP_INT_MAX);
-            foreach ($exerciseMembers as &$exerciseMember) {
-                if ('day' == $params['updateType']) {
-                    if ('plus' == $params['waveType']) {
-                        if ($bindTypeMembersIndex[$exerciseMember['userId']]['deadline'] > $exerciseMember['deadline']) {
-                            $exerciseMember['deadline'] = $bindTypeMembersIndex[$exerciseMember['userId']]['deadline'];
-                        }
-                    } else {
-                        if ($bindTypeMembersIndex[$exerciseMember['userId']]['deadline'] < $exerciseMember['deadline']) {
-                            $exerciseMember['deadline'] = $bindTypeMembersIndex[$exerciseMember['userId']]['deadline'];
-                        }
-                    }
-                } else {
-                    if ($bindTypeMembersIndex[$exerciseMember['userId']]['deadline'] > $exerciseMember['deadline']) {
-                        $exerciseMember['deadline'] = $bindTypeMembersIndex[$exerciseMember['userId']]['deadline'];
-                    }
-                }
-            }
-            $this->getExerciseMemberService()->batchUpdateMembers($exerciseMembers);
+            $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+            $this->updateMemberExpiredTime($exerciseAutoJoinRecords);
         }
     }
 
@@ -273,67 +253,48 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         if (empty($multipleRecordUsers)) {
             return;
         }
-        // 先要查询数据的有效期
         $itemBankExerciseBindIds = array_unique(array_column($multipleRecordUsers, 'itemBankExerciseBindId'));
         $exerciseBinds = $this->getExerciseService()->findBindExerciseByIds($itemBankExerciseBindIds);
-        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'id');
+        $multipleRecordUsersGroups = ArrayToolkit::group($multipleRecordUsers, 'userId');
+        $userIds = array_column($multipleRecordUsers, 'userId');
         $courseIds = array_column(array_filter($exerciseBinds, function ($item) {
             return 'course' == $item['bindType'];
         }), 'bindId');
         $classroomIds = array_column(array_filter($exerciseBinds, function ($item) {
             return 'classroom' == $item['bindType'];
         }), 'bindId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $coursesIndex = ArrayToolkit::index($courses, 'id');
-        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-        $classroomsIndex = ArrayToolkit::index($classrooms, 'id');
-        foreach ($multipleRecordUsers as &$multipleRecord) {
-            $exerciseBind = $exerciseBindsIndex[$multipleRecord['itemBankExerciseBindId']];
-            if ('course' == $exerciseBind['bindType']) {
-                $multipleRecord['deadline'] = $coursesIndex[$exerciseBind['bindId']]['expiredTime'];
-            } else {
-                $multipleRecord['deadline'] = $classroomsIndex[$exerciseBind['bindId']]['expiredTime'];
-            }
-        }
+        $courseMembers = $this->getCourseMemberService()->searchMembers(['courseIds' => $courseIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
+        $courseMembersGroups = ArrayToolkit::group($courseMembers, 'userId');
+        $classroomMembers = $this->getClassroomService()->searchMembers(['classroomIds' => $classroomIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
+        $classroomMembersGroups = ArrayToolkit::group($classroomMembers, 'userId');
         $groupedRecords = [];
-
-        foreach ($multipleRecordUsers as $record) {
-            // 定义一个唯一键来标识每组
-            $key = $record['exerciseId'].'-'.$record['userId'];
-            // 如果该组已经存在，检查是否需要更新记录
-            if (isset($groupedRecords[$key])) {
-                // 如果当前记录的 deadline 为 0 或者大于已存在的 deadline
-                if (0 == $record['deadline'] || ($record['deadline'] > $groupedRecords[$key]['deadline'] && 0 != $groupedRecords[$key]['deadline'])) {
-                    // 更新记录
-                    $groupedRecords[$key] = $record;
+        foreach ($multipleRecordUsersGroups as $userId => $multipleRecordUsersGroup) {
+            if (!empty($courseMembersGroups)) {
+                foreach ($courseMembersGroups[$userId] as $multipleRecord) {
+                    if (empty($groupedRecords)) {
+                        $groupedRecords[$userId]['deadline'] = $multipleRecord['deadline'];
+                    }
+                    if (0 == $multipleRecord['deadline'] || ($multipleRecord['deadline'] > $groupedRecords[$userId]['deadline'] && 0 != $groupedRecords[$userId]['deadline'])) {
+                        $groupedRecords[$userId] = $multipleRecord['deadline'];
+                    }
                 }
-            } else {
-                // 新增组
-                $groupedRecords[$key] = $record;
+            }
+            if (!empty($classroomMembersGroups)) {
+                foreach ($classroomMembersGroups[$userId] as $multipleRecord) {
+                    if (empty($groupedRecords)) {
+                        $groupedRecords[$userId]['deadline'] = $multipleRecord['deadline'];
+                    }
+                    if (0 == $multipleRecord['deadline'] || ($multipleRecord['deadline'] > $groupedRecords[$userId]['deadline'] && 0 != $groupedRecords[$userId]['deadline'])) {
+                        $groupedRecords[$userId] = $multipleRecord['deadline'];
+                    }
+                }
             }
         }
-        $exerciseIds = [];
-        $userIds = [];
-        foreach ($groupedRecords as $groupedRecord) {
-            $exerciseIds[] = $groupedRecord['exerciseId'];
-            $userIds[] = $groupedRecord['userId'];
+        $members = $this->getExerciseMemberService()->search(['exerciseId' => $exerciseBinds[0]['itemBankExerciseId'], 'userIds' => $userIds, 'role' => 'student'], [], 0, PHP_INT_MAX);
+        foreach ($members as &$member) {
+            $member['deadline'] = $groupedRecords[$member['userId']]['deadline'];
         }
-        $members = $this->getExerciseMemberService()->search(['exerciseIds' => $exerciseIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
-        $memberMap = [];
-        foreach ($members as $member) {
-            $key = $member['exerciseId'].'_'.$member['userId'];
-            $memberMap[$key] = $member;
-        }
-        foreach ($groupedRecords as $groupedRecord) {
-            $key = $groupedRecord['exerciseId'].'_'.$groupedRecord['userId'];
-            if (isset($memberMap[$key])) {
-                $member = $memberMap[$key];
-                $member['deadline'] = $groupedRecord['deadline'];
-            }
-        }
-        if (empty($members)) {
-            return;
-        }
+        $members = ArrayToolkit::index($members, 'id');
         $this->getExerciseMemberService()->batchUpdateMembers($members);
     }
 

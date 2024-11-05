@@ -672,6 +672,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseBindDao()->get($id);
     }
 
+    public function findExerciseBindByExerciseId($exerciseId)
+    {
+        return $this->getExerciseBindDao()->search(['itemBankExerciseId' => $exerciseId], [], 0, PHP_INT_MAX);
+    }
+
     /**
      * @return ExerciseDao
      */
