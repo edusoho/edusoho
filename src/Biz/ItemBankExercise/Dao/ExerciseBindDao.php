@@ -9,4 +9,6 @@ interface ExerciseBindDao extends AdvancedDaoInterface
     public function getBindExercise($bindType, $bindId, $exerciseId);
 
     public function findBindExerciseByIds($ids);
+
+    public function deleteByExerciseId($exerciseId);
 }

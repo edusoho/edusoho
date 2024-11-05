@@ -774,6 +774,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->getClassroomGoodsMediator()->onDelete($classroom);
             $this->dispatchEvent('classroom.delete', $classroom);
             $this->dispatchEvent('wrong_question_pool.delete', ['target_id' => $id, 'target_type' => 'classroom']);
+            $this->dispatchEvent('exercise.unBind', new Event(['bindId' => $id, 'bindType' => 'classroom']));
 
             $this->commit();
         } catch (\Exception $exception) {
@@ -855,6 +856,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->canLearningByIds($courseIds);
         $this->dispatchEvent('classroom.publish', new Event($classroom));
+        $this->dispatchEvent('exercise.canLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
 
         return $classroom;
     }
@@ -868,6 +870,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->banLearningByIds($courseIds);
         $this->dispatchEvent('classroom.close', new Event($classroom));
+        $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
 
         return $classroom;
     }
@@ -1107,6 +1110,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom.quit',
             new Event($classroom, ['userId' => $member['userId'], 'member' => $member])
         );
+        $this->dispatchEvent('exercise.bind.remove.student', new Event(['userIds' => [$member['userId']], 'bindId' => $classroomId, 'bindType' => 'classroom']));
     }
 
     public function removeStudents($classroomId, $userIds, $info = [])
@@ -1269,6 +1273,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom.join',
             new Event($classroom, ['userId' => $member['userId'], 'member' => $member])
         );
+        $this->dispatchEvent('course.member.join', new Event($classroom, ['userId' => $member['userId'], 'member' => $member]));
+        $this->dispatchEvent('exercise.bind.add.student', new Event(['userIds' => [$member['userId']], 'bindId' => $classroomId, 'bindType' => 'classroom']));
 
         return $member;
     }

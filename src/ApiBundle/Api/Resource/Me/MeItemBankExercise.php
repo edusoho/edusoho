@@ -65,7 +65,7 @@ class MeItemBankExercise extends AbstractResource
             } else {
                 $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
                 $member['isExpired'] = $this->isExpired($members['deadline']);
-                $member['bindTitle'] = $bindTitles[$member['exerciseId']];
+                $member['bindTitle'] = mb_substr($bindTitles[$member['exerciseId']], 0, mb_strlen($bindTitles[$member['exerciseId']], 'UTF-8') - 1);
             }
         }
 

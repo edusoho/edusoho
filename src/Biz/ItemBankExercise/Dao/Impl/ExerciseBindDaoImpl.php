@@ -23,6 +23,11 @@ class ExerciseBindDaoImpl extends AdvancedDaoImpl implements ExerciseBindDao
         return $this->findInField('id', $ids);
     }
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['itemBankExerciseId' => $exerciseId]);
+    }
+
     public function declares()
     {
         return [
@@ -33,6 +38,7 @@ class ExerciseBindDaoImpl extends AdvancedDaoImpl implements ExerciseBindDao
                 'bindId = :bindId',
                 'bindType = :bindType',
                 'itemBankExerciseId = :itemBankExerciseId',
+                'itemBankExerciseId IN (itemBankExerciseIds)',
             ],
         ];
     }
