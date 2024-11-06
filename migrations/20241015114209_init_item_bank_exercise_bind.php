@@ -34,6 +34,8 @@ class InitItemBankExerciseBind extends Migration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
             ALTER TABLE `item_bank_exercise_member` ADD COLUMN `canLearn` tinyint(1) NOT NULL COMMENT '可以学习' AFTER `deadlineNotified`;
+
+            ALTER TABLE `item_bank_exercise_member` ADD COLUMN `joinedChannel` varchar(255) NOT NULL DEFAULT '' COMMENT '加入来源' AFTER `canLearn`;
             
             ALTER TABLE `item_bank_exercise` ADD COLUMN `updated_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新人' AFTER `creator`;
             
@@ -50,6 +52,7 @@ class InitItemBankExerciseBind extends Migration
           DROP TABLE IF EXISTS `item_bank_exercise_bind`;
           DROP TABLE IF EXISTS `item_bank_exercise_auto_join_record`;
           ALTER TABLE item_bank_exercise_member DROP COLUMN canLearn;
+          ALTER TABLE item_bank_exercise_member DROP COLUMN joinedChannel;
           ALTER TABLE item_bank_exercise DROP COLUMN updated_user_id;
         ');
     }
