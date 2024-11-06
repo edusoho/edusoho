@@ -35,12 +35,13 @@ class ItemBankExerciseBind extends AbstractResource
         $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
         foreach ($bindExercises as &$bindExercise) {
-            $exercise = $this->getItemBankExerciseService()->tryManageExercise($bindExercise['itemBankExerciseId']);
+            $exercise = $this->getItemBankExerciseService()->get($bindExercise['itemBankExerciseId']);
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
             $bindExercise['chapterExerciseNum'] = $this->getChapterExerciseNum($exercise);
             $bindExercise['assessmentNum'] = $this->getAssessmentNum($exercise);
             $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
         }
+
         return $bindExercises;
     }
 
@@ -51,6 +52,7 @@ class ItemBankExerciseBind extends AbstractResource
         }
         $modules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], 'assessment');
         $moduleIds = ArrayToolkit::column($modules, 'id');
+
         return $this->getAssessmentExerciseService()->count(['moduleIds' => $moduleIds]);
     }
 
@@ -60,6 +62,7 @@ class ItemBankExerciseBind extends AbstractResource
             return 0;
         }
         $chapterTreeList = $this->getItemBankChapterExerciseService()->getChapterTreeList($exercise['questionBankId']);
+
         return count($chapterTreeList);
     }
 
