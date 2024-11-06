@@ -32,8 +32,7 @@ onBeforeMount(async () => {
     <div v-else class="px-16 pt-15 max-h-800 overflow-y-auto">
       <div v-for="item in bindItemBankList" class="flex justify-between px-24 py-16 border border-[#E5E6EB] border-solid rounded-6 mb-16">
         <div class="flex">
-<!--          <img :src="item.itemBankExercise.cover.middle" class="h-90 rounded-5 mr-16" draggable="false" alt="">-->
-          <img src="../../../img/item-bank/list-state-bg.jpg" class="h-90 rounded-5 mr-16" draggable="false" alt="">
+          <img :src="item.itemBankExercise.cover.middle" class="h-90 rounded-5 mr-16" draggable="false" alt="">
           <div class="flex flex-col justify-between mx-12">
             <a-tooltip placement="top" :title="item.itemBankExercise.title">
               <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] cursor-pointer w-fit" @click="toItemBankExercisePage(item.itemBankExercise.id)">{{ item.itemBankExercise.title }}</div>
