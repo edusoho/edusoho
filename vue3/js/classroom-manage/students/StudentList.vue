@@ -387,7 +387,7 @@ const getFormParams = () => {
   return params;
 };
 
-const fetchStudents = async () => {
+async function fetchStudents() {
   table.loading = true;
   const params = getFormParams();
   params.role = 'student';
@@ -397,7 +397,7 @@ const fetchStudents = async () => {
   students.value = resp.data;
   pagination.total = resp.paging.total;
   table.loading = false;
-};
+}
 
 fetchStudents();
 

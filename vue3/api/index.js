@@ -4,7 +4,7 @@ import courseMember from './modules/courseMember';
 import exportData from './modules/export';
 import file from './modules/file';
 import setting from './modules/setting';
-import itemBank from './modules/item-bank'
+import itemBank from './modules/itemBank'
 import security from './modules/security';
 import me from './modules/me';
 import itemBankExerciseMember from './modules/itemBankExerciseMember';

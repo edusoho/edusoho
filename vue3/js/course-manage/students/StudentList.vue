@@ -380,7 +380,7 @@ const followUsers = reactive({});
 
 const students = ref([]);
 
-const getFormParams = () => {
+function getFormParams() {
   const params = {
     startTimeGreaterThan: formState.joinDateGreaterThan,
     startTimeLessThan: formState.joinDateLessThan,
@@ -390,9 +390,8 @@ const getFormParams = () => {
   if (formState.learnDeadline) {
     params[formState.learnDeadline] = Math.round(Date.now() / 1000);
   }
-
   return params;
-};
+}
 
 const fetchStudents = async () => {
   table.loading = true;

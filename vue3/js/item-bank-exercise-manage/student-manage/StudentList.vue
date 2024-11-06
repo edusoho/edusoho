@@ -167,6 +167,7 @@ const fetchStudents = async () => {
     followUsers[student.user.id] = ['friend', 'following'].includes(followStatus[index]);
   });
 };
+fetchStudents();
 
 const resetForm = () => {
   formState.joinDate = undefined;
@@ -178,7 +179,7 @@ const resetForm = () => {
   fetchStudents();
 };
 
-const getFormParams = () => {
+function getFormParams() {
   const params = {
     startTimeGreaterThan: formState.joinDateGreaterThan,
     startTimeLessThan: formState.joinDateLessThan,
@@ -188,9 +189,8 @@ const getFormParams = () => {
   if (formState.learnDeadline) {
     params[formState.learnDeadline] = Math.round(Date.now() / 1000);
   }
-
   return params;
-};
+}
 
 const onDateChange = (date, dateString) => {
   formState.joinDate = date;
