@@ -339,7 +339,7 @@ const table = {
       key: 'operation',
       title: '操作',
       fixed: 'right',
-      width: 200,
+      width: 182,
     },
   ],
   loading: false,
