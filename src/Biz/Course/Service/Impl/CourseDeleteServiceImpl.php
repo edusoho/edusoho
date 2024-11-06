@@ -63,6 +63,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         }
 
         foreach ($courses as $course) {
+            $this->dispatchEvent('exercise.unBind', new Event(['bindId' => $course['id'], 'bindType' => 'course']));
             $this->deleteCourse($course['id']);
         }
     }

@@ -8,8 +8,10 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\MemberService;
-use Biz\ItemBankExercise\OperateReason;
+use Biz\ItemBankExercise\Service\AssessmentExerciseService;
+use Biz\ItemBankExercise\Service\ChapterExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\Service\UserService;
 
@@ -18,64 +20,7 @@ class ItemBankExerciseBind extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        try {
-            $this->biz['db']->beginTransaction();
-            $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseIds']);
-            if ('course' == $params['bindType']) {
-                $member = $this->getCourseMemberService()->findCourseStudents($params['bindId'], 0, PHP_INT_MAX);
-            } else {
-                $member = $this->getClassroomService()->findClassroomMembersByRole($params['bindId'], 'student', 0, PHP_INT_MAX);
-            }
-            $studentIds = array_column($member, 'userId');
-            $userData = $this->getUserService()->findUsersByIds($studentIds);
-            foreach ($params['exerciseIds'] as $exerciseId) {
-                foreach ($userData as $key => $user) {
-                    if (!empty($user['nickname'])) {
-                        $user = $this->getUserService()->getUserByNickname($user['nickname']);
-                    } else {
-                        if (!empty($user['email'])) {
-                            $user = $this->getUserService()->getUserByEmail($user['email']);
-                        } else {
-                            $user = $this->getUserService()->getUserByVerifiedMobile($user['verifiedMobile']);
-                        }
-                    }
-
-                    $isExerciseMember = $this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id']);
-
-                    if ($isExerciseMember) {
-                        ++$existsUserCount;
-                    } else {
-                        $data = [
-                            'price' => 0,
-                            'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
-                            'source' => 'outside',
-                            'reason' => OperateReason::JOIN_BY_IMPORT,
-                            'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
-                        ];
-                        $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
-
-                        ++$successCount;
-                    }
-                }
-            }
-            $exerciseBinds = $this->getItemBankExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-            $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
-            $exerciseAutoJoinRecords = [];
-            foreach ($params['exerciseIds'] as $exerciseId) {
-                foreach ($studentIds as $studentId) {
-                    $exerciseAutoJoinRecords[] = [
-                        'userId' => $studentId,
-                        'itemBankExerciseId' => $exerciseId,
-                        'itemBankExerciseBindId' => $exerciseBindsIndex[$exerciseId]['id'],
-                    ];
-                }
-                $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
-            }
-            $this->biz['db']->commit();
-        } catch (\Exception $e) {
-            $this->biz['db']->rollback();
-            throw $e;
-        }
+        $this->getItemBankExerciseService()->bindExercise($params['bindType'], $params['bindId'], $params['exerciseIds']);
 
         return ['success' => true];
     }
@@ -89,21 +34,33 @@ class ItemBankExerciseBind extends AbstractResource
         $bindExercises = $this->getItemBankExerciseService()->findBindExercise($conditions['bindType'], $conditions['bindId']);
         $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
-        $userId = $this->getCurrentUser()->getId();
         foreach ($bindExercises as &$bindExercise) {
+            $exercise = $this->getItemBankExerciseService()->tryManageExercise($bindExercise['itemBankExerciseId']);
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
-            if (!empty($userId)) {
-                $bindExercise['chapterExerciseNum'] = 0;
-                $bindExercise['assessmentNum'] = 0;
-                $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
-            }
+            $bindExercise['chapterExerciseNum'] = $this->getChapterExerciseNum($exercise);
+            $bindExercise['assessmentNum'] = $this->getAssessmentNum($exercise);
+            $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
         }
-        // 绑定人
-        // 章节练习数量
-
-        // 试卷练习数量
-
         return $bindExercises;
+    }
+
+    protected function getAssessmentNum($exercise)
+    {
+        if (!$exercise['assessmentEnable']) {
+            return 0;
+        }
+        $modules = $this->getExerciseModuleService()->findByExerciseIdAndType($exercise['id'], 'assessment');
+        $moduleIds = ArrayToolkit::column($modules, 'id');
+        return $this->getAssessmentExerciseService()->count(['moduleIds' => $moduleIds]);
+    }
+
+    protected function getChapterExerciseNum($exercise)
+    {
+        if (!$exercise['chapterEnable']) {
+            return 0;
+        }
+        $chapterTreeList = $this->getItemBankChapterExerciseService()->getChapterTreeList($exercise['questionBankId']);
+        return count($chapterTreeList);
     }
 
     public function remove(ApiRequest $request, $id)
@@ -151,5 +108,29 @@ class ItemBankExerciseBind extends AbstractResource
     protected function getExerciseMemberService()
     {
         return $this->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    protected function getExerciseModuleService()
+    {
+        return $this->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return AssessmentExerciseService
+     */
+    protected function getAssessmentExerciseService()
+    {
+        return $this->service('ItemBankExercise:AssessmentExerciseService');
+    }
+
+    /**
+     * @return ChapterExerciseService
+     */
+    protected function getItemBankChapterExerciseService()
+    {
+        return $this->service('ItemBankExercise:ChapterExerciseService');
     }
 }

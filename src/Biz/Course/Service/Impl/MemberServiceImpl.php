@@ -193,6 +193,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         $this->dispatchEvent('course.quit', $course, ['userId' => $userId, 'member' => $member]);
+        $this->dispatchEvent('exercise.bind.remove.student', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
 
         if ($this->getCurrentUser()->isAdmin()) {
             $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -358,7 +359,8 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMembers($conditions, $updateFields)
     {
-        return $this->getMemberDao()->updateMembers($conditions, $updateFields);
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $conditions['courseId'], 'bindType' => 'course']));
+        $this->getMemberDao()->updateMembers($conditions, $updateFields);
     }
 
     public function isMemberNonExpired($course, $member)
@@ -919,6 +921,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $course,
             ['userId' => $member['userId'], 'member' => $member]
         );
+        $this->dispatchEvent('exercise.bind.add.student', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
 
         return $member;
     }
@@ -1437,8 +1440,8 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function changeMembersDeadlineByCourseId($courseId, $day, $waveType)
     {
         $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
-
-        return $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
+        $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day']));
     }
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
@@ -1466,6 +1469,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 );
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day', 'userIds' => $userIds]));
     }
 
     public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
@@ -1507,6 +1511,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 );
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $courseId, 'bindType' => 'course', 'userIds' => $userIds]));
     }
 
     public function checkDeadlineForUpdateDeadline($date)
