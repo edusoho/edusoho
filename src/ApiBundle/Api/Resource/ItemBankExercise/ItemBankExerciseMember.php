@@ -5,6 +5,9 @@ namespace ApiBundle\Api\Resource\ItemBankExercise;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
+use Biz\MemberOperation\Service\MemberOperationService;
+use Biz\User\Service\UserService;
 
 class ItemBankExerciseMember extends AbstractResource
 {
@@ -18,12 +21,31 @@ class ItemBankExerciseMember extends AbstractResource
         $conditions['locked'] = 0;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $conditions = ArrayToolkit::parts($request->query->all(), [
+            'startTimeGreaterThan',
+            'startTimeLessThan',
+            'joinedChannel',
+            'deadlineAfter',
+            'deadlineBefore',
+            'userKeyword',
+        ]);
+        $conditions['exerciseId'] = $exerciseId;
+        if (isset($conditions['userKeyword']) && '' != $conditions['userKeyword']) {
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+            unset($conditions['userKeyword']);
+        }
         $members = $this->getItemBankExerciseMemberService()->search(
             $conditions,
             ['createdTime' => 'DESC'],
             $offset,
             $limit
         );
+
+        foreach ($members as &$member) {
+            $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
+            $member['joinedChannelText'] = $this->convertJoinedChannel($member);
+            $member['learningProgressPercent'] = 0;
+        }
 
         $total = $this->getItemBankExerciseMemberService()->count($conditions);
 
@@ -45,6 +67,39 @@ class ItemBankExerciseMember extends AbstractResource
         return $member;
     }
 
+//    private function appendLearningProgress(&$classroomMembers, $classroomId)
+//    {
+//        $courses = $this->getClassroomService()->findByClassroomId($classroomId);
+//        $courseIds = ArrayToolkit::column($courses, 'courseId');
+//        foreach ($classroomMembers as &$classroomMember) {
+//            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(
+//                $classroomMember['classroomId'],
+//                $classroomMember['userId']
+//            );
+//            $classroomMember['learningProgressPercent'] = $progress['percent'];
+//            $conditions = [
+//                'userId' => $classroomMember['userId'],
+//                'courseIds' => $courseIds,
+//            ];
+//            $learningTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByConditions($conditions);
+//            $classroomMember['learningTime'] = round($learningTime / 60);
+//        }
+//    }
+
+    private function convertJoinedChannel($member)
+    {
+        if ('import_join' === $member['joinedChannel']) {
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+
+                return "{$operator['nickname']}添加";
+            }
+        }
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
+    }
+
     /**
      * @return \Biz\ItemBankExercise\Service\ExerciseMemberService
      */
@@ -59,5 +114,21 @@ class ItemBankExerciseMember extends AbstractResource
     protected function getItemBankExerciseService()
     {
         return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    private function getMemberOperationService()
+    {
+        return $this->service('MemberOperation:MemberOperationService');
     }
 }
