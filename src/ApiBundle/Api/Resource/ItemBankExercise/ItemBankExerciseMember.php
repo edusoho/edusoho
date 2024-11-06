@@ -6,6 +6,8 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\User\Service\UserService;
 
@@ -76,8 +78,37 @@ class ItemBankExerciseMember extends AbstractResource
                 return "{$operator['nickname']}添加";
             }
         }
+        if ('bind_join' === $member['joinedChannel']) {
+            $autoRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId([$member['userId']], $member['exerciseId']);
+            $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($autoRecords, 'itemBankExerciseBindId'));
+            $exerciseBindGroups = ArrayToolkit::group($exerciseBinds, 'bindType');
 
-        return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'bind_join' => '绑定加入'][$member['joinedChannel']] ?? '';
+            $joinedChannels = [];
+
+            // 处理课程绑定
+            if (!empty($exerciseBindGroups['course'])) {
+                $courseIds = array_column($exerciseBindGroups['course'], 'bindId');
+                $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+                foreach ($courses as $course) {
+                    $joinedChannels[] = '《' . $course['courseSetTitle'] . '》课程加入';
+                }
+            }
+
+            // 处理班级绑定
+            if (!empty($exerciseBindGroups['classroom'])) {
+                $classroomIds = array_column($exerciseBindGroups['classroom'], 'bindId');
+                $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+                foreach ($classrooms as $classroom) {
+                    $joinedChannels[] = '《' . $classroom['title'] . '》班级加入';
+                }
+            }
+
+            // 拼接所有加入渠道，并去掉最后的 "、"
+            return rtrim(implode('、', $joinedChannels), '、');
+        }
+
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入'][$member['joinedChannel']] ?? '';
     }
 
     /**
@@ -110,5 +141,21 @@ class ItemBankExerciseMember extends AbstractResource
     private function getMemberOperationService()
     {
         return $this->service('MemberOperation:MemberOperationService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
