@@ -85,14 +85,14 @@
       <!--绑定的题库-->
       <div class="flex flex-col space-y-12 py-20" style="margin-left: 5.33333vw; margin-right: 5.33333vw; border-top: 1px solid #eee;">
         <div class="flex justify-between">
-          <div class="font-normal" style="color: #9ba5b0; font-size: 3.73333vw;">{{ course.targetType === 'course' ? '课程题库' : '班级题库' }}</div>
+          <div class="font-normal" style="color: #9ba5b0; font-size: 3.73333vw;">题库</div>
           <div v-if="bindItemBankList.length > 2" class="flex items-center font-normal" style="color: #9ba5b0; font-weight: 400; font-size: 3.73333vw;" @click="itemBankPopupVisible = true">
             <div class="">{{ `查看全部（${bindItemBankList.length}）` }}</div>
             <van-icon name="arrow" />
           </div>
         </div>
         <div v-if="bindItemBankList.length === 0">
-          <div class="goods-info__title" style="color: #919399; font-weight: 400;">{{ course.targetType === 'course' ? '暂无课程题库' : '暂无班级题库' }}</div>
+          <div class="goods-info__title" style="color: #919399; font-weight: 400;">暂无题库</div>
         </div>
         <div v-else class="space-y-12">
           <order-item-bank :item="bindItemBankList[0]"/>

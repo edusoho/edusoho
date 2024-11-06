@@ -456,7 +456,7 @@ export default {
     closed_content: '无法继续查看'
   },
   courseLearning: {
-    courseItemBank: '课程题库',
+    courseItemBank: '题库',
     selfJudging: '答题自判',
     haveMastered: '已掌握',
     notQuiteUnderstand: '不太懂',

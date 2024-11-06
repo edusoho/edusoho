@@ -54,7 +54,7 @@
             <a :class="active == 1 ? 'active' : ''" href="javascript:;">{{ $t('goods.teacher') }}</a>
           </li>
           <li @click="onActive(2, 'bindItemBank')">
-            <a :class="active == 2 ? 'active' : ''" href="javascript:;">课程题库</a>
+            <a :class="active == 2 ? 'active' : ''" href="javascript:;">题库</a>
           </li>
           <li @click="onActive(3, 'catalog')">
             <a :class="active == 3 ? 'active' : ''" href="javascript:;">{{ $t('goods.catalogue') }}</a>
@@ -85,14 +85,14 @@
         <!-- 绑定的题库-->
         <section class="js-scroll-top goods-info__item flex flex-col space-y-12" id="bindItemBank">
           <div class="flex justify-between">
-            <div class="goods-info__title">{{ goods.product.targetType === 'course' ? '课程题库' : '班级题库' }}</div>
+            <div class="goods-info__title">题库</div>
             <div v-if="bindItemBankList.length > 2" class="flex items-center goods-info__title" style="color: #919399; font-weight: 400;" @click="goItemBank">
               <div class="">{{ `查看全部（${bindItemBankList.length}）` }}</div>
               <van-icon name="arrow" />
             </div>
           </div>
           <div v-if="bindItemBankList.length === 0">
-            <div class="goods-info__title" style="color: #919399; font-weight: 400;">{{ goods.product.targetType === 'course' ? '暂无课程题库' : '暂无班级题库' }}</div>
+            <div class="goods-info__title" style="color: #919399; font-weight: 400;">暂无题库</div>
           </div>
           <div v-else class="space-y-12">
             <goods-item-bank :item="bindItemBankList[0]"/>
