@@ -124,6 +124,9 @@ class ExerciseController extends BaseController
     {
         $bindType = $request->query->get('bindType');
         $bindId = $request->query->get('bindId');
+        if (empty($bindType) || empty($bindId)) {
+            return;
+        }
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
