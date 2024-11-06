@@ -1,7 +1,7 @@
 {% extends 'item-bank-exercise-manage/exercise-set/layout.html.twig' %}
 
 {% block title %}{{'course.members_manage'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
-{% do script(['app/js/item-bank-exercise/students/manage/index.js', 'vue3/js/item-bank-exercise-manage/student-manage/index.js']) %}
+{% do script(['app/js/item-bank-exercise/students/manage/index.js', 'vue3/js/item-bank-exercise-manage/students/index.js']) %}
 {% set course_side_nav = 'students' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 {% block main_heading %}

@@ -68,8 +68,7 @@
                           <a-icon type="right" style="line-height: 14px"/>
                         </div>
                       </div>
-                      <div v-if="bindItemBankExerciseList.length === 0" style="font-size: 14px; font-weight: 400; color: rgba(0, 0, 0, 0.56); ">暂无绑定的题库哦～</div>
-                      <div v-else style="display: flex; justify-content: space-between;">
+                      <div v-if="bindItemBankExerciseList.length && bindItemBankExerciseList.length > 0" style="display: flex; justify-content: space-between;">
                         <div style="display: flex">
                           <img :src=bindItemBankExerciseList[0].itemBankExercise.cover.middle alt="" style="height: 96px; margin-right: 16px; border-radius: 6px">
                           <div style="display: flex; flex-direction: column;; justify-content: space-between;">
@@ -78,7 +77,7 @@
                                 <template slot="title">
                                   <div style="max-width: 216px;">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
                                 </template>
-                                <div style="font-size: 16px; color: #37393D; font-weight: 500; margin-bottom: 4px; width: fit-content; max-width: 320px;">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
+                                <div style="font-size: 16px; color: #37393D; font-weight: 500; margin-bottom: 4px; width: fit-content; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
                               </a-tooltip>
                               <div style="display: flex">
                                 <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">章节练习：<span style="color: #37393D;">{{ bindItemBankExerciseList[0].chapterExerciseNum }}</span></div>
@@ -92,6 +91,7 @@
                           <a-button type="primary" ghost @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
                         </div>
                       </div>
+                      <div v-else style="font-size: 14px; font-weight: 400; color: rgba(0, 0, 0, 0.56); ">暂无绑定的题库哦～</div>
                     </div>
                     <a-drawer
                       placement="right"

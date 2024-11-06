@@ -1646,7 +1646,7 @@ course.testpaper_export.btn: 导出成绩单
 course.tab.tasks: '目录'
 course.tab.threads: '话题'
 course.tab.discussions: '话题'
-course.tab.itemBankBind: '课程题库'
+course.tab.itemBankBind: '题库'
 course.tab.questions: '问题'
 course.tab.notes: '笔记'
 course.tab.material: '资料区'

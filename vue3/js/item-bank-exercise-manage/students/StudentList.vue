@@ -85,13 +85,13 @@ const table = {
     {
       key: 'learnDeadline',
       title: '学习有效期',
-      width: 150,
+      width: 200,
     },
     {
       key: 'operation',
       title: '操作',
       fixed: 'right',
-      width: 200,
+      width: 182,
     },
   ],
   loading: false,
@@ -477,13 +477,12 @@ const removeStudent = async userId => {
                 {{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}
               </template>
               <template v-else-if="column.key === 'learnProgress'">
-                <div class="flex gap-8 items-center cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/students/${record.user.id}/process`">
+                <div class="flex gap-8 items-center">
                   <div class="flex flex-col justify-center items-start h-16 w-100 p-2 rounded-99 bg-[#F5F5F5]">
                     <div class="h-12 rounded-99" :style="`width: ${record.learningProgressPercent}px;`" style="background-image: linear-gradient(90deg, rgba(0, 194, 97, 0.4), rgb(0, 194, 97));"></div>
                   </div>
                   <span class="flex items-center gap-4">
-                    <span class="text-[#37393D] hover:text-[--primary-color] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
-                    <img class="w-16 h-16" src="../../../img/goto.png" alt="">
+                    <span class="text-[#37393D] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
                   </span>
                 </div>
               </template>
@@ -493,7 +492,7 @@ const removeStudent = async userId => {
                 </div>
               </template>
               <template v-else-if="column.key === 'operation'">
-                <div class="flex justify-start items-center gap-16 shrink-0">
+                <div class="flex justify-end items-center gap-16 shrink-0">
                   <span v-if="record.user.canSendMessage" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">发私信</span>
                   <span v-if="isAdmin" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/students/${record.user.id}/show`">查看资料</span>
                   <a-dropdown placement="bottomRight" trigger="['click']">

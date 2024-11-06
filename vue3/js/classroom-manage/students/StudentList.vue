@@ -145,7 +145,7 @@
                 </div>
               </template>
               <template v-else-if="column.key === 'operation'">
-                <div class="flex justify-start items-center gap-16 shrink-0">
+                <div class="flex justify-end items-center gap-16 shrink-0">
                   <span v-if="record.user.canSendMessage" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">发私信</span>
                   <span v-if="isAdmin" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/0/manage/course/0/students/${record.user.id}/show`">查看资料</span>
                   <a-dropdown placement="bottomRight" trigger="['click']">
