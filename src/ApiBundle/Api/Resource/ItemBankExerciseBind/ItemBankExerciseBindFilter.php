@@ -37,7 +37,7 @@ class ItemBankExerciseBindFilter extends Filter
             }
         }
 
-        return $data['operateUser']['roles'];
+        return (array) $data['operateUser']['roles'];
     }
 
     protected function getAllRoles()

@@ -222,6 +222,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                 'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
                 'role' => 'student',
                 'remark' => $info['remark'] ?? '',
+                'joinedChannel' => $info['joinedChannel'] ?? 'free_join',
                 'canLearn' => 1,
                 'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
             ];
