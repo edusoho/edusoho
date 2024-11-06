@@ -79,7 +79,7 @@ function showDeleteConfirm(id) {
 }
 
 function toItemBankExercisePage(exerciseId) {
-  window.location.href = `/item_bank_exercise/${exerciseId}`
+  window.location.href = `/item_bank_exercise/${exerciseId}?bindId=${props.bindId}&bindType=${props.bindType}`
 }
 
 onBeforeMount(async () => {
