@@ -14,7 +14,7 @@ app.use(Modal);
 app.use(Button);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/my-contract/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/order/index.css?${window.app.version}`);
 }
 
 app.mount('#item-bank-gift')
