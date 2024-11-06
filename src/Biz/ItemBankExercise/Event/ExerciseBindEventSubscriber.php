@@ -46,7 +46,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             $exercise = $this->getExerciseService()->get($exerciseBind['itemBankExerciseId']);
             $exercise = $this->resetExerciseDeadLine($params['bindType'], $params['bindId'], $exercise);
             if (!empty($notMemberUserIds)) {
-                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, '', $exercise);
+                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, ['joinedChannel' => 'bind_join'], $exercise);
             }
             if (!empty($exerciseUsers)) {
                 $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords(array_column($exerciseUsers, 'userId'), $exerciseBind);
@@ -97,7 +97,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             $exercise = $this->getExerciseService()->get($exerciseBind['itemBankExerciseId']);
             $exercise = $this->resetExerciseDeadLine($params['bindType'], $params['bindId'], $exercise);
             if (!empty($notMemberUserIds)) {
-                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, '', $exercise);
+                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, ['joinedChannel' => 'bind_join'], $exercise);
             }
             if (!empty($exerciseUsers)) {
                 $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords(array_column($exerciseUsers, 'userId'), $exerciseBind);

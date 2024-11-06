@@ -40,6 +40,8 @@ class InitItemBankExerciseBind extends Migration
             ALTER TABLE `item_bank_exercise` ADD COLUMN `updated_user_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新人' AFTER `creator`;
             
             UPDATE `item_bank_exercise` SET `updated_user_id` = `creator`;
+            UPDATE `item_bank_exercise_member` SET `joinedChannel` = 'free_join' where orderId = 0;
+            UPDATE `item_bank_exercise_member` SET `joinedChannel` = 'buy_join' where orderId != 0;
         ");
     }
 
