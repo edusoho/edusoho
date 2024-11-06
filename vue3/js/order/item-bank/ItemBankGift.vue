@@ -1,7 +1,7 @@
 <script setup>
 import {CloseOutlined, RightOutlined} from '@ant-design/icons-vue';
 import ItemBankListItem from './ItemBankListItem.vue';
-import AntConfigProvider from '../components/AntConfigProvider.vue';
+import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import {ref} from 'vue';
 
 const props = defineProps({
