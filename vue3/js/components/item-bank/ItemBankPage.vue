@@ -112,8 +112,7 @@ onBeforeMount(async () => {
                   <img src="../../../img/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
                 </div>
                 <div class="relative">
-<!--                  <img :src="element.itemBankExercise.cover.middle" class="h-90 rounded-5" draggable="false" alt="">-->
-                  <img src="../../../img/item-bank/list-state-bg.jpg" class="h-90 rounded-5" draggable="false" alt="">
+                  <img :src="element.itemBankExercise.cover.middle" class="h-90 rounded-5" draggable="false" alt="">
                   <div v-if="element.itemBankExercise.status === 'published'" class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已发布</div>
                   <div v-if="element.itemBankExercise.status === 'closed'" class="text-12 text-white font-medium px-8 py-2 rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0 bg-[rgba(0,0,0,0.6)]">已关闭</div>
                 </div>
@@ -122,7 +121,7 @@ onBeforeMount(async () => {
                     <div class="text-16 font-medium text-[#37393D] max-w-250 truncate hover:text-[#18AD3B] cursor-pointer w-fit" @click="toItemBankExercisePage(element.itemBankExercise.id)">{{ element.itemBankExercise.title }}</div>
                   </a-tooltip>
                   <div class="flex space-x-12">
-                    <img :src="element.operateUser.nickname.mediumAvatar" class="w-40" draggable="false" alt="">
+                    <img :src="element.operateUser.avatar.middle" class="w-40 h-40" draggable="false" alt="" style="border-radius: 9999px;">
                     <div class="flex flex-col">
                       <div class="text-12 font-medium text-[#1D2129] leading-20">{{ element.operateUser.nickname }}</div>
                       <div class="text-12 font-normal text-[#86909C] leading-20">测试</div>
