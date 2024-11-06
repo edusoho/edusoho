@@ -62,7 +62,7 @@
 
                     <div id="info-left-2" style="background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;">
                       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-                        <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px">题库</div>
+                        <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px; padding-left: 6px">题库</div>
                         <div v-if="bindItemBankExerciseList.length > 1" style="display: flex; align-items: center; font-size: 14px; font-weight: 400; color: #919399; cursor: pointer;" @click="showItemBanKDrawer">
                           <div>{{ `查看全部（${bindItemBankExerciseList.length}）` }}</div>
                           <a-icon type="right" style="line-height: 14px"/>
