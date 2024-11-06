@@ -7,7 +7,6 @@ import {ref} from 'vue';
 const props = defineProps({
   exerciseBind: Array,
 })
-console.log(props.exerciseBind);
 
 const itemBankModalVisible = ref(false);
 function showItemBankModal() {
