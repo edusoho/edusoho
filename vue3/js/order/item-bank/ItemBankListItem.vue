@@ -4,7 +4,7 @@ const props = defineProps({
 })
 
 function toItemBankExercisePage(exerciseId) {
-  window.location.href = `/item_bank_exercise/${exerciseId}?bindId=${this.currentSku.targetId}&bindType=${this.goods.type}`
+  window.location.href = `/item_bank_exercise/${exerciseId}`
 }
 </script>
 
