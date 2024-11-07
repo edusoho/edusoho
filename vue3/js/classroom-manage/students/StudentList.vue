@@ -125,7 +125,7 @@
               <template v-else-if="column.key === 'joinedChannel'">
                 <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
                   <template #title>{{ record.joinedChannelText }}</template>
-                  <span class="text-[#37393D] text-14 font-normal leading-22 max-w-320 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.joinedChannelText }}</span>
+                  <span class="text-[#37393D] text-14 font-normal leading-22 max-w-250 w-fit truncate">{{ record.joinedChannelText }}</span>
                 </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">
@@ -318,7 +318,7 @@ const table = {
     {
       key: 'joinTime',
       title: '加入时间',
-      width: 150,
+      width: 200,
     },
     {
       key: 'learnProgress',
