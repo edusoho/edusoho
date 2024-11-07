@@ -10,6 +10,7 @@ class ItemBankExerciseMemberFilter extends Filter
 {
     protected $publicFields = [
         'id', 'exerciseId', 'questionBankId', 'role', 'locked', 'user', 'joinedChannel', 'deadline', 'createdTime', 'joinedChannelText', 'learningProgressPercent',
+        'remark'
     ];
 
     protected function publicFields(&$data)
