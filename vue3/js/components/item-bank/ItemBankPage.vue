@@ -113,7 +113,7 @@ onBeforeMount(async () => {
             @end="sequenceItemBankExerciseBind"
             item-key="id">
             <template #item="{element}">
-              <div class="flex justify-between px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16 bg-white">
+              <div class="flex justify-between px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16 bg-white cursor-grab">
                 <div class="flex space-x-16">
                   <div class="flex items-center">
                     <img src="../../../img/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
@@ -159,6 +159,6 @@ onBeforeMount(async () => {
         </div>
       </a-spin>
     </div>
-    <ItemBankDrawer v-if="itemBankListVisible" v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.bindId" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
+    <ItemBankDrawer v-model:itemBankListVisible="itemBankListVisible" :bind-id="props.bindId" :bind-type="props.bindType" :bind-item-bank-exercise-num="bindItemBankExerciseNum" @need-get-bind-item-bank="getBindItemBankExercise"/>
   </AntConfigProvider>
 </template>
