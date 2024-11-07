@@ -14,6 +14,7 @@ const props = defineProps({
 })
 
 const bindItemBankExerciseList = ref([]);
+const ids = ref([]);
 const bindItemBankExerciseNum = computed(() => {
   return bindItemBankExerciseList.value.length;
 })
@@ -44,14 +45,19 @@ async function getBindItemBankExercise() {
   try {
     loading.value = true;
     bindItemBankExerciseList.value = await Api.itemBank.getBindItemBankExercise(params);
+    ids.value = bindItemBankExerciseList.value.map(item => item.id);
   } finally {
     loading.value = false;
   }
 }
 
 async function sequenceItemBankExerciseBind() {
+  const newIds = bindItemBankExerciseList.value.map(item => item.id);
+  if (ids.value.every((value, index) => value === newIds[index])) {
+    return;
+  }
   const params = {
-    ids: bindItemBankExerciseList.value.map(item => item.id),
+    ids: newIds,
     bindType: props.bindType,
     bindId: props.bindId,
   }
