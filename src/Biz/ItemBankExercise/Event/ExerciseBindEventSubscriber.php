@@ -88,6 +88,9 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         //
         $params = $event->getSubject(); // bindType、bindId、userIds
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        if (empty($exerciseBinds)) {
+            return;
+        }
         foreach ($exerciseBinds as $exerciseBind) {
             // 查询学员是不是当前题库练习的成员
             $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $params['userIds'], 'exerciseIds' => array_column($exerciseBinds, 'itemBankExerciseId')], [], 0, PHP_INT_MAX);
@@ -155,6 +158,9 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject();
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        if (empty($exerciseBinds)) {
+            return;
+        }
         $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
         $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
 
