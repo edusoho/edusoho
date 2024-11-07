@@ -230,7 +230,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         if (empty($members)) {
             return;
         }
-        $members = $this->getExerciseMemberDao()->batchCreate($members);
+        $this->getExerciseMemberDao()->batchCreate($members);
         foreach ($exerciseIds as $exerciseId) {
             $exercise = $this->getExerciseService()->get($exerciseId);
             $this->dispatchEvent('exercise.join', $exercise, ['member' => $members[0]]);
