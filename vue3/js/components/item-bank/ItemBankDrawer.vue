@@ -280,7 +280,7 @@ onBeforeMount(async () => {
               <div class="text-14 text-[#37393D] font-medium">名称</div>
             </div>
             <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
-              <div class="text-14 text-[#37393D] font-medium">价格(元)</div>
+              <div class="text-14 text-[#37393D] font-medium whitespace-nowrap">价格(元)</div>
             </div>
             <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
               <div class="text-14 text-[#37393D] font-medium">学员数</div>
