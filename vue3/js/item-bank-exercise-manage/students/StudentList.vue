@@ -465,7 +465,7 @@ const removeStudent = async userId => {
               <template v-else-if="column.key === 'joinedChannel'">
                 <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
                   <template #title>{{ record.joinedChannelText }}</template>
-                  <span class="text-[#37393D] text-14 font-normal leading-22 max-w-320 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.joinedChannelText }}</span>
+                  <div class="text-[#37393D] text-14 font-normal leading-22 truncate">{{ record.joinedChannelText }}</div>
                 </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">

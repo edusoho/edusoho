@@ -19,7 +19,7 @@ app.use(Pagination);
 setCurrentPrimaryColor(app);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/item-bank-exercise-manage/student-manage/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/item-bank-exercise-manage/students/index.css?${window.app.version}`);
 }
 
 app.mount('#student-list-app');

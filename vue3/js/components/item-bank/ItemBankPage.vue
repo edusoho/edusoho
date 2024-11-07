@@ -130,8 +130,8 @@ onBeforeMount(async () => {
                     <div class="flex space-x-12">
                       <img :src="element.operateUser.avatar.middle" class="w-40 h-40" draggable="false" alt="" style="border-radius: 9999px;">
                       <div class="flex flex-col">
-                        <div class="text-12 font-medium text-[#1D2129] leading-20">{{ element.operateUser.nickname }}</div>
-                        <div class="text-12 font-normal text-[#86909C] leading-20">测试</div>
+                        <div class="text-12 font-medium text-[#1D2129] leading-20 max-w-250 w-fit truncate">{{ element.operateUser.nickname }}</div>
+                        <div class="text-12 font-normal text-[#86909C] leading-20 max-w-250 w-fit truncate">{{ element.roles }}</div>
                       </div>
                     </div>
                   </div>
