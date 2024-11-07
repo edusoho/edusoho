@@ -355,7 +355,7 @@
               return num.split('.')[1];
             },
             toItemBankExercisePage(exerciseId) {
-              window.location.href = `/item_bank_exercise/${exerciseId}?bindId=${this.currentSku.targetId}&bindType=${this.goods.type}`
+              window.location.href = `/item_bank_exercise/${exerciseId}`
             },
             showItemBanKDrawer() {
               this.bindItemBankDrawerVisible = true;
