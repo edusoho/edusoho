@@ -96,6 +96,7 @@
                     <a-drawer
                       placement="right"
                       width="50vw"
+                      z-index="1020"
                       :closable="false"
                       :visible="bindItemBankDrawerVisible"
                       @close="closeItemBanKDrawer"
