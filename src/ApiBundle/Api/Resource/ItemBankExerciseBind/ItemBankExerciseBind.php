@@ -39,7 +39,7 @@ class ItemBankExerciseBind extends AbstractResource
             $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
             $bindExercise['chapterExerciseNum'] = $this->getChapterExerciseNum($exercise);
             $bindExercise['assessmentNum'] = $this->getAssessmentNum($exercise);
-            $bindExercise['operateUser'] = $this->getUserService()->getUser(2);
+            $bindExercise['operateUser'] = $this->getUserService()->getUser($bindExercise['operatorId']);
         }
 
         return $bindExercises;

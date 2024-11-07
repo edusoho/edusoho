@@ -16,6 +16,7 @@ class InitItemBankExerciseBind extends Migration
               `bindType` varchar(64) NOT NULL COMMENT '绑定类型classroom, course',
               `itemBankExerciseId` int(11) NOT NULL,
               `seq` int(11) NOT NULL COMMENT '顺序',
+              `operatorId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作用户ID',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
