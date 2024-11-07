@@ -170,8 +170,11 @@ const isIndeterminate = computed(() => {
 
 const needResetCheckbox = ref(false);
 function handleSelectAllChange(e) {
+  if (itemBankExerciseState.value.every(item => item.checked)) {
+    needResetCheckbox.value = true;
+  }
   const isChecked = e.target.checked;
-  if (isChecked && needResetCheckbox.value) {
+  if (!isChecked && needResetCheckbox.value) {
     resetCheckboxes();
     needResetCheckbox.value = false;
     return;
