@@ -78,11 +78,6 @@ const table = {
       width: 150,
     },
     {
-      key: 'learnProgress',
-      title: '学习进度',
-      width: 200,
-    },
-    {
       key: 'learnDeadline',
       title: '学习有效期',
       width: 200,
@@ -433,7 +428,7 @@ const removeStudent = async userId => {
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 1200, y: 300 }"
+            :scroll="{ x: 1000, y: 300 }"
           >
             <template #headerCell="{ column }">
               <template v-if="column.key === 'learnDeadline'">
@@ -475,16 +470,6 @@ const removeStudent = async userId => {
               </template>
               <template v-else-if="column.key === 'joinTime'">
                 {{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}
-              </template>
-              <template v-else-if="column.key === 'learnProgress'">
-                <div class="flex gap-8 items-center">
-                  <div class="flex flex-col justify-center items-start h-16 w-100 p-2 rounded-99 bg-[#F5F5F5]">
-                    <div class="h-12 rounded-99" :style="`width: ${record.learningProgressPercent}px;`" style="background-image: linear-gradient(90deg, rgba(0, 194, 97, 0.4), rgb(0, 194, 97));"></div>
-                  </div>
-                  <span class="flex items-center gap-4">
-                    <span class="text-[#37393D] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
-                  </span>
-                </div>
               </template>
               <template v-else-if="column.key === 'learnDeadline'">
                 <div class="min-w-100">

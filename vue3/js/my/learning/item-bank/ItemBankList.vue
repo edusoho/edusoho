@@ -48,7 +48,6 @@ onBeforeMount(async() => {
     offset: (pagination.current - 1) * pagination.pageSize,
   };
   await fetchMyBindItemBank(params);
-  console.log(bindItemBankList.value);
 })
 </script>
 

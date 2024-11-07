@@ -128,7 +128,7 @@ async function clear() {
 }
 
 function toItemBankExercisePage(exerciseId) {
-  window.location.href = `/item_bank_exercise/${exerciseId}`
+  window.location.href = `/item_bank_exercise/${exerciseId}?bindId=${props.bindId}&bindType=${props.bindType}`
 }
 
 const checkedExerciseIdNum = computed(() => {
@@ -302,7 +302,7 @@ onBeforeMount(async () => {
                 <div class="flex flex-col px-16 py-16 w-[30%]">
                   <a-tooltip placement="topLeft">
                     <template #title>
-                      <div class="max-w-216">{{ record.title }}</div>
+                      <div class="max-w-180">{{ record.title }}</div>
                     </template>
                     <div class="text-14 text-[#37393D] font-normal w-fit max-w-280 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
                   </a-tooltip>
