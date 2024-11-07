@@ -170,24 +170,21 @@ const isIndeterminate = computed(() => {
 
 const needResetCheckbox = ref(false);
 function handleSelectAllChange(e) {
-  if (itemBankExerciseState.value.every(item => item.checked)) {
-    needResetCheckbox.value = true;
-  }
   const isChecked = e.target.checked;
+  const limit = 100 - props.bindItemBankExerciseNum;
+  const totalItems = props.bindItemBankExerciseNum + itemBankExerciseState.value.length;
   if (!isChecked && needResetCheckbox.value) {
     resetCheckboxes();
     needResetCheckbox.value = false;
     return;
   }
-  const limit = 100 - props.bindItemBankExerciseNum;
   itemBankExerciseState.value = itemBankExerciseState.value.map((item, index) => ({
     ...item,
-    checked: isChecked
-      ? (props.bindItemBankExerciseNum + itemBankExerciseState.value.length >= 100 ? index < limit : true)
-      : false
+    checked: isChecked ? (totalItems >= 100 ? index < limit : true) : false
   }));
-  if (isChecked) needResetCheckbox.value = true;
+  needResetCheckbox.value = isChecked || itemBankExerciseState.value.every(item => item.checked);
 }
+
 function resetCheckboxes() {
   itemBankExerciseState.value = itemBankExerciseState.value.map(item => ({
     ...item,
