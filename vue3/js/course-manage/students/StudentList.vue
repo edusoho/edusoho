@@ -507,7 +507,7 @@ const exportData = async (start, fileName, name) => {
       $modal.modal('hide');
       message.warning('unexpected error, try again');
     }
-    window.location.href = `/export/course-students?fileNames[]=${response.csvName}`;
+    goto(`/export/course-students?fileNames[]=${response.csvName}`);
     $modal.find('#progress-bar').width('100%').parent().removeClass('active');
     setTimeout(() => {
       message.success($modal.find('.modal-title').data('success'));

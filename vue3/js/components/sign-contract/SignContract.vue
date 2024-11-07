@@ -12,6 +12,7 @@ import {t} from './vue-lang';
 import Api from '../../../api';
 import {useI18n} from 'vue-i18n';
 import AntConfigProvider from '../AntConfigProvider.vue';
+import {goto} from '../../common';
 
 const contractTemplate = ref();
 const contract = ref();
@@ -72,9 +73,9 @@ const toSignContract = async () => {
 const toCoursePage = () => {
   if (sign.value === 'required') {
     if (goodsKey.value.includes('itemBankExercise')) {
-      window.location.href = `/my/item_bank_exercise/${exerciseId.value}/${pathname.value}/${moduleId.value}`;
+      goto(`/my/item_bank_exercise/${exerciseId.value}/${pathname.value}/${moduleId.value}`);
     } else {
-      window.location.href = `/my/course/${courseId.value}`;
+      goto(`/my/course/${courseId.value}`);
     }
   } else if (sign.value === 'optional') {
     signContractConfirmVisible.value = false;

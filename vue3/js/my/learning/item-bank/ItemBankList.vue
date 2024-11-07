@@ -2,6 +2,7 @@
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import {onBeforeMount, reactive, ref} from 'vue';
 import Api from '../../../../api';
+import {goto} from '../../../common';
 
 const bindItemBankList = ref([]);
 const pagination = reactive({
@@ -36,10 +37,6 @@ async function handlePaginationChange(page, pageSize) {
   pagination.current = page;
   pagination.pageSize = pageSize;
   await handleTableChange(pagination);
-}
-
-function toItemBankExercisePage(exerciseId) {
-  window.location.href = `/item_bank_exercise/${exerciseId}`
 }
 
 onBeforeMount(async() => {
@@ -82,7 +79,7 @@ onBeforeMount(async() => {
             </div>
           </div>
           <div class="flex items-center">
-            <a-button class="w-full md:w-fit" type="primary" @click="toItemBankExercisePage(item.itemBankExercise.id)">去学习</a-button>
+            <a-button class="w-full md:w-fit" type="primary" @click="goto(`/item_bank_exercise/${item.itemBankExercise.id}`)">去学习</a-button>
           </div>
         </div>
       </div>
