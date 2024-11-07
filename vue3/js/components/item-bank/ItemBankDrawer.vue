@@ -60,9 +60,12 @@ function transformItemBankCategory(data) {
   });
 }
 
+const spinning = ref(false);
 async function fetchItemBankExercise(params) {
   const searchQuery = Object.assign({bindId: props.bindId, bindType: props.bindType, categoryId: categoryId.value ? categoryId.value : '', ...params}, keywordType.value === 'title' ? {title: keyword.value} : {updatedUser: keyword.value});
+  spinning.value = true;
   const { data, paging } = await Api.itemBank.searchItemBank(searchQuery);
+  spinning.value = false;
   return data;
 }
 
@@ -271,61 +274,63 @@ onBeforeMount(async () => {
           <a-button @click="clear">重置</a-button>
         </div>
         <div class="flex flex-col w-full">
-          <div class="flex rounded-t-4 bg-[#F5F5F5] w-full">
-            <div class="flex items-center w-[15%]">
-              <a-checkbox class="py-16 px-8" :indeterminate="isIndeterminate" :checked="checkedExerciseIdNum > 0 && isSelectAll" @change="handleSelectAllChange"/>
-              <div class="text-14 text-[#37393D] font-medium px-16 py-16">编号</div>
-            </div>
-            <div class="flex items-center px-16 py-13 w-[30%]">
-              <div class="text-14 text-[#37393D] font-medium">名称</div>
-            </div>
-            <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
-              <div class="text-14 text-[#37393D] font-medium whitespace-nowrap">价格(元)</div>
-            </div>
-            <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
-              <div class="text-14 text-[#37393D] font-medium">学员数</div>
-            </div>
-            <div class="flex items-center px-16 py-13 w-[15%]">
-              <div class="text-14 text-[#37393D] font-medium">更新人</div>
-            </div>
-            <div class="flex items-center px-16 py-13 w-[20%]">
-              <div class="text-14 text-[#37393D] font-medium">更新时间</div>
-            </div>
-          </div>
-          <div ref="itemBankTableBody" class="flex flex-col w-full overflow-y-scroll h-[calc(100vh-247px)]">
-            <div v-if="itemBankExerciseData.length > 0" v-for="(record, index) in itemBankExerciseData">
-              <div class="flex border border-x-0 border-t-0 border-solid border-[#EFF0F5]">
-                <div class="flex items-center w-[15%]">
-                  <a-checkbox class="py-16 px-8" v-model:checked="itemBankExerciseState[index].checked" :disabled="checkboxIsDisabled(itemBankExerciseState[index])" @change="needResetCheckbox = false"/>
-                  <div class="text-14 text-[#37393D] font-normal px-16 py-16">{{ record.id }}</div>
-                </div>
-                <div class="flex flex-col px-16 py-16 w-[30%]">
-                  <a-tooltip placement="topLeft">
-                    <template #title>
-                      <div class="max-w-180">{{ record.title }}</div>
-                    </template>
-                    <div class="text-14 text-[#37393D] font-normal w-fit max-w-280 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
-                  </a-tooltip>
-                  <div class="text-12 text-[#919399] w-fit">分类:</div>
-                </div>
-                <div class="flex flex-row-reverse px-16 py-16 w-[10%]">
-                  <div class="text-14 text-[#37393D] font-normal">{{ record.price }}</div>
-                </div>
-                <div class="flex flex-row-reverse px-16 py-16 w-[10%]">
-                  <div class="text-14 text-[#37393D] font-normal">{{ record.studentNum }}</div>
-                </div>
-                <div class="flex px-16 py-16 w-[15%]">
-                  <div class="text-14 text-[#37393D] font-normal truncate" v-if="record.updatedUser">{{ record.updatedUser.nickname }}</div>
-                </div>
-                <div class="flex px-16 py-16 w-[20%]">
-                  <div class="text-14 text-[#37393D] font-normal whitespace-nowrap">{{ formattedDate(record.updatedTime) }}</div>
-                </div>
+          <a-spin :spinning="spinning" tip="加载中...">
+            <div class="flex rounded-t-4 bg-[#F5F5F5] w-full">
+              <div class="flex items-center w-[15%]">
+                <a-checkbox class="py-16 px-8" :indeterminate="isIndeterminate" :checked="checkedExerciseIdNum > 0 && isSelectAll" @change="handleSelectAllChange"/>
+                <div class="text-14 text-[#37393D] font-medium px-16 py-16">编号</div>
+              </div>
+              <div class="flex items-center px-16 py-13 w-[30%]">
+                <div class="text-14 text-[#37393D] font-medium">名称</div>
+              </div>
+              <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
+                <div class="text-14 text-[#37393D] font-medium whitespace-nowrap">价格(元)</div>
+              </div>
+              <div class="flex items-center flex-row-reverse px-16 py-13 w-[10%]">
+                <div class="text-14 text-[#37393D] font-medium">学员数</div>
+              </div>
+              <div class="flex items-center px-16 py-13 w-[15%]">
+                <div class="text-14 text-[#37393D] font-medium">更新人</div>
+              </div>
+              <div class="flex items-center px-16 py-13 w-[20%]">
+                <div class="text-14 text-[#37393D] font-medium">更新时间</div>
               </div>
             </div>
-            <div v-else class="flex items-center justify-center w-full h-full">
-              <a-empty description="暂无题库"/>
+            <div ref="itemBankTableBody" class="flex flex-col w-full overflow-y-scroll h-[calc(100vh-247px)]">
+              <div v-if="itemBankExerciseData.length > 0" v-for="(record, index) in itemBankExerciseData">
+                <div class="flex border border-x-0 border-t-0 border-solid border-[#EFF0F5]">
+                  <div class="flex items-center w-[15%]">
+                    <a-checkbox class="py-16 px-8" v-model:checked="itemBankExerciseState[index].checked" :disabled="checkboxIsDisabled(itemBankExerciseState[index])" @change="needResetCheckbox = false"/>
+                    <div class="text-14 text-[#37393D] font-normal px-16 py-16">{{ record.id }}</div>
+                  </div>
+                  <div class="flex flex-col px-16 py-16 w-[30%]">
+                    <a-tooltip placement="topLeft">
+                      <template #title>
+                        <div class="max-w-180">{{ record.title }}</div>
+                      </template>
+                      <div class="text-14 text-[#37393D] font-normal w-fit max-w-280 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="toItemBankExercisePage(record.id)">{{ record.title }}</div>
+                    </a-tooltip>
+                    <div class="text-12 text-[#919399] w-fit">分类:</div>
+                  </div>
+                  <div class="flex flex-row-reverse px-16 py-16 w-[10%]">
+                    <div class="text-14 text-[#37393D] font-normal">{{ record.price }}</div>
+                  </div>
+                  <div class="flex flex-row-reverse px-16 py-16 w-[10%]">
+                    <div class="text-14 text-[#37393D] font-normal">{{ record.studentNum }}</div>
+                  </div>
+                  <div class="flex px-16 py-16 w-[15%]">
+                    <div class="text-14 text-[#37393D] font-normal truncate" v-if="record.updatedUser">{{ record.updatedUser.nickname }}</div>
+                  </div>
+                  <div class="flex px-16 py-16 w-[20%]">
+                    <div class="text-14 text-[#37393D] font-normal whitespace-nowrap">{{ formattedDate(record.updatedTime) }}</div>
+                  </div>
+                </div>
+              </div>
+              <div v-else class="flex items-center justify-center w-full h-full">
+                <a-empty description="暂无题库"/>
+              </div>
             </div>
-          </div>
+          </a-spin>
         </div>
       </div>
       <div class="fixed bottom-0 right-0 bg-white w-[60vw] flex items-center justify-between px-28 py-16 border border-x-0 border-b-0 border-[#EFF0F5] border-solid">
