@@ -37,6 +37,7 @@ npm run dev:admin
 npm run build
 npm run build:h5
 npm run build:admin
+cp -r dist/* /var/www/edusoho/web/h5/
 
 # analyze 分析项目依赖
 npm run analyze:h5
