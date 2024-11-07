@@ -469,7 +469,7 @@ const removeStudent = async userId => {
                 </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">
-                {{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}
+                <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
               </template>
               <template v-else-if="column.key === 'learnDeadline'">
                 <div class="min-w-100">

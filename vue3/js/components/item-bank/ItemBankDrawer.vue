@@ -315,10 +315,10 @@ onBeforeMount(async () => {
                   <div class="text-14 text-[#37393D] font-normal">{{ record.studentNum }}</div>
                 </div>
                 <div class="flex px-16 py-16 w-[15%]">
-                  <div class="text-14 text-[#37393D] font-normal" v-if="record.updatedUser">{{ record.updatedUser.nickname }}</div>
+                  <div class="text-14 text-[#37393D] font-normal truncate" v-if="record.updatedUser">{{ record.updatedUser.nickname }}</div>
                 </div>
                 <div class="flex px-16 py-16 w-[20%]">
-                  <div class="text-14 text-[#37393D] font-normal">{{ formattedDate(record.updatedTime) }}</div>
+                  <div class="text-14 text-[#37393D] font-normal whitespace-nowrap">{{ formattedDate(record.updatedTime) }}</div>
                 </div>
               </div>
             </div>

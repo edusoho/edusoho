@@ -129,7 +129,7 @@
                 </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">
-                {{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}
+                <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
               </template>
               <template v-else-if="column.key === 'learnProgress'">
                 <div class="flex gap-8 items-center cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/process`">

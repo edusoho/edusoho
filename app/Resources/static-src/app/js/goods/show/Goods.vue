@@ -42,7 +42,7 @@
                         <a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
                     </li>
                     <li :class="howActive == 2 ? 'active' : ''">
-                      <a href="#info-left-1">题库</a>
+                      <a href="#info-left-2">题库</a>
                     </li>
                     <li :class="howActive == 3 ? 'active' : ''">
                         <a href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
