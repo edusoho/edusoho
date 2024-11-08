@@ -1105,6 +1105,8 @@ class MemberServiceImpl extends BaseService implements MemberService
             );
         }
 
+        $this->dispatchEvent('exercise.bind.remove.student', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
+
         $this->dispatchEvent(
             'course.quit',
             $course,

@@ -68,10 +68,13 @@ class ItemBankExercise extends AbstractResource
             $exerciseBinds = $this->getItemBankExerciseService()->findBindExercise($conditions['bindType'], $conditions['bindId']);
             $exerciseIds = array_column($exerciseBinds, 'itemBankExerciseId');
             $conditions['excludeIds'] = $exerciseIds;
+            unset($conditions['bindId']);
+            unset($conditions['bindType']);
         }
         if (isset($conditions['updatedUser'])) {
             $user = $this->getUserService()->findUserLikeNickname($conditions['updatedUser']);
             $conditions['updatedUsers'] = array_column($user, 'id');
+            unset($conditions['updatedUser']);
         }
 
         $sort = $this->getSort($request) ?: ['recommendedSeq' => 'ASC'];
