@@ -313,7 +313,7 @@ onBeforeMount(async () => {
                       </template>
                       <div class="text-14 text-[#37393D] font-normal w-fit max-w-full truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="open(`/item_bank_exercise/${record.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ record.title }}</div>
                     </a-tooltip>
-                    <div class="text-12 text-[#919399] w-fit">分类:{{ record.category.name }}</div>
+                    <div class="text-12 text-[#919399] w-fit">分类：{{ record.category.name }}</div>
                   </div>
                   <div class="flex flex-row-reverse px-16 py-16 w-[10%]">
                     <div class="text-14 text-[#37393D] font-normal">{{ record.price }}</div>
