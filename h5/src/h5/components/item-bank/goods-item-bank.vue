@@ -22,7 +22,7 @@ export default {
 
 <template>
 <div class="flex border border-[#F2F3F5] border-solid" style="border-radius: 8px;" @click="goItemBankExercise(item.itemBankExerciseId)">
-  <img class="h-96" :src="item.itemBankExercise.cover.middle" alt="" style="border-radius: 8px;">
+  <img class="h-96" :src="item.itemBankExercise.cover.middle" alt="" style="border-top-left-radius: 6px; border-bottom-left-radius: 6px">
   <div class="flex flex-col w-full px-12 justify-center">
     <div>
       <div class="text-16 font-medium truncate mb-8" style="color: #37393D; max-width: 140px">{{ item.itemBankExercise.title }}</div>

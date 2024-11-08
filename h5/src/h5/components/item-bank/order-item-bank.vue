@@ -12,12 +12,10 @@ export default {
 </script>
 
 <template>
-  <div class="flex justify-between p-12 rounded-6" style="background-color: #FAFAFA; border-radius: 6px;">
-    <div class="flex items-center">
-      <img class="mr-8" style="width: 18px" src="static/images/itemBankExercise/order-item-bank-icon.png" alt="">
-      <div class="text-14 font-normal w-112 truncate cursor-pointer" style="color: #5E6166" @click="goItemBankExercise(item.itemBankExercise.id)">{{ item.itemBankExercise.title }}</div>
-    </div>
-    <div>
+  <div class="flex items-center w-full p-12 rounded-6" style="background-color: #FAFAFA; border-radius: 6px;" @click="goItemBankExercise(item.itemBankExercise.id)">
+    <img class="mr-8 flex-none" style="width: 18px" src="static/images/itemBankExercise/order-item-bank-icon.png" alt="">
+    <div class="text-14 w-full font-normal truncate" style="color: #5E6166">{{ item.itemBankExercise.title }}</div>
+    <div class="flex-none whitespace-nowrap ml-24">
       <div v-if="item.itemBankExercise.price === '0.00'" class="text-16 font-semibold" style="color: #FF7E56">免费</div>
       <div v-else class="flex items-center space-x-8">
         <div class="text-12 font-semibold" style="color: #FF7E56">¥<span class="text-16 ml-2">0.</span>00</div>
