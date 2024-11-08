@@ -8,6 +8,7 @@ import {message} from 'ant-design-vue';
 const exerciseId = getData('student-list-app', 'exercise-id');
 const enableAddAndRemove = getData('student-list-app', 'enable-add-and-remove');
 const enableExport = getData('student-list-app', 'enable-export');
+const exerciseStatus = getData('student-list-app', 'exercise-status');
 
 const tabs = [
   {
@@ -345,7 +346,7 @@ const removeStudent = async userId => {
     <div class="flex flex-col grow shrink-0 justify-start items-start self-stretch gap-20 bg-white min-h-800">
       <div class="flex w-full justify-between items-center">
         <span class="text-16 font-medium leading-24 text-black/[.88]">学员管理</span>
-        <div v-if="enableAddAndRemove" class="flex items-center gap-20">
+        <div v-if="enableAddAndRemove && ['published', 'unpublished'].includes(exerciseStatus)" class="flex items-center gap-20">
           <button class="student-header-operate-button"
                   data-toggle="modal"
                   data-target="#modal"
