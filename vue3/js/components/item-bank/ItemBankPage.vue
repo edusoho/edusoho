@@ -128,7 +128,7 @@ onBeforeMount(async () => {
                   </div>
                   <div class="flex flex-col justify-between">
                     <a-tooltip placement="top" :title="element.itemBankExercise.title">
-                      <div class="text-16 font-medium text-[#37393D] max-w-250 truncate hover:text-[#18AD3B] cursor-pointer w-fit" @click="open(`/item_bank_exercise/${element.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ element.itemBankExercise.title }}</div>
+                      <div class="text-16 font-medium text-[#37393D] max-w-250 truncate hover:text-[#18AD3B] cursor-pointer w-fit" @click="open(`/item_bank_exercise/${element.itemBankExercise.id}`)">{{ element.itemBankExercise.title }}</div>
                     </a-tooltip>
                     <div class="flex space-x-12">
                       <img :src="element.operateUser.avatar.middle" class="w-40 h-40" draggable="false" alt="" style="border-radius: 9999px;">
