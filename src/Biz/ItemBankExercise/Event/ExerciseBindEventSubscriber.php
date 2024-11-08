@@ -39,7 +39,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
         foreach ($params['exerciseBinds'] as $exerciseBind) {
             // 查询学员是不是当前题库练习的成员
-            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $userIds, 'exerciseIds' => array_column($params['exerciseBinds'], 'itemBankExerciseId')], [], 0, PHP_INT_MAX);
+            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $userIds, 'exerciseId' => $exerciseBind['itemBankExerciseId']], [], 0, PHP_INT_MAX);
             // 拆分是题库成员的部分，不是题库成员的部分
             $exerciseMemberUserIds = array_column($exerciseUsers, 'userId');
             $notMemberUserIds = array_diff($userIds, $exerciseMemberUserIds);
