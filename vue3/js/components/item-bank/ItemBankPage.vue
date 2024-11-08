@@ -72,7 +72,7 @@ async function deleteBindItemBank(id) {
 
 function showDeleteConfirm(id) {
   Modal.confirm({
-    title: '移除题库练习',
+    title: '删除题库练习',
     centered: true,
     icon: createVNode(ExclamationCircleOutlined),
     content: createVNode('div', { style: 'font-size: 14px; color: #5E6166; font-weight: 400; ' }, props.bindType === 'course' ? '是否要从课程中删除该题库练习？' : '是否要从班级中删除该题库练习？'),
