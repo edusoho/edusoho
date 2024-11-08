@@ -22,6 +22,7 @@ const props = defineProps({
 
 function closeItemBankList() {
   itemBankListVisible.value = false;
+  remake();
 }
 
 const itemBankCategoryOptions = ref();
@@ -114,7 +115,7 @@ async function search() {
   itemBankExerciseState.value = transformItemBankExerciseState(newDate);
 }
 
-async function clear() {
+function remake() {
   itemBankExerciseData.value = [];
   itemBankExerciseState.value = [];
   reset();
@@ -122,6 +123,10 @@ async function clear() {
   keywordType.value = 'title';
   keyword.value = undefined;
   pagination.current = 1;
+}
+
+async function clear() {
+  remake();
   const params = {
     limit: pagination.pageSize,
     offset: (pagination.current - 1) * pagination.pageSize,
@@ -209,7 +214,6 @@ async function bindItemBankExercise() {
   } finally {
     loading.value = false;
   }
-  itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
   closeItemBankList();
   emit('needGetBindItemBank');
 }
