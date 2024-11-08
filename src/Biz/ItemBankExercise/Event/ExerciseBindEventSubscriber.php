@@ -259,7 +259,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         if (empty($multipleRecordUsers)) {
             return;
         }
-        $itemBankExerciseBindIds = array_unique(array_column($multipleRecordUsers, 'itemBankExerciseBindId'));
+        $itemBankExerciseBindIds = array_values(array_unique(array_column($multipleRecordUsers, 'itemBankExerciseBindId')));
         $exerciseBinds = $this->getExerciseService()->findBindExerciseByIds($itemBankExerciseBindIds);
         $multipleRecordUsersGroups = ArrayToolkit::group($multipleRecordUsers, 'userId');
         $userIds = array_column($multipleRecordUsers, 'userId');
