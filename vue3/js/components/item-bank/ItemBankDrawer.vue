@@ -4,7 +4,7 @@ import { useInfiniteScroll } from '@vueuse/core'
 import { message } from 'ant-design-vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
 import Api from '../../../api';
-import {goto} from '../../common';
+import {open} from '../../common';
 
 const emit = defineEmits(['needGetBindItemBank'])
 const itemBankListVisible = defineModel('itemBankListVisible');
@@ -305,7 +305,7 @@ onBeforeMount(async () => {
                       <template #title>
                         <div class="max-w-180">{{ record.title }}</div>
                       </template>
-                      <div class="text-14 text-[#37393D] font-normal w-fit max-w-280 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="goto(`/item_bank_exercise/${record.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ record.title }}</div>
+                      <div class="text-14 text-[#37393D] font-normal w-fit max-w-280 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="open(`/item_bank_exercise/${record.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ record.title }}</div>
                     </a-tooltip>
                     <div class="text-12 text-[#919399] w-fit">分类:{{ record.category.name }}</div>
                   </div>

@@ -2,7 +2,7 @@
 import {onBeforeMount, ref} from 'vue';
 import Api from '../../../api';
 import AntConfigProvider from '../AntConfigProvider.vue';
-import {goto} from '../../common';
+import {open} from '../../common';
 
 const props = defineProps({
   bindType: {required: true},
@@ -32,7 +32,7 @@ onBeforeMount(async () => {
           <img :src="item.itemBankExercise.cover.middle" class="h-90 rounded-5 mr-16" draggable="false" alt="">
           <div class="flex flex-col justify-between mx-12">
             <a-tooltip placement="top" :title="item.itemBankExercise.title">
-              <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] cursor-pointer w-fit" @click="goto(`/item_bank_exercise/${item.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ item.itemBankExercise.title }}</div>
+              <div class="text-16 font-medium text-[#37393D] max-w-320 truncate hover:text-[#18AD3B] cursor-pointer w-fit" @click="open(`/item_bank_exercise/${item.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ item.itemBankExercise.title }}</div>
             </a-tooltip>
             <div class="flex">
               <div class="text-12 text-[#919399] font-normal mr-16"><span class="text-[#37393D] mr-2">{{ item.chapterExerciseNum }}</span>章节练习</div>
@@ -41,7 +41,7 @@ onBeforeMount(async () => {
           </div>
         </div>
         <div class="flex items-center">
-          <a-button type="primary" ghost @click="goto(`/item_bank_exercise/${item.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">查看</a-button>
+          <a-button type="primary" ghost @click="open(`/item_bank_exercise/${item.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">查看</a-button>
         </div>
       </div>
     </div>
