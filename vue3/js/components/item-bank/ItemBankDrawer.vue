@@ -303,9 +303,9 @@ onBeforeMount(async () => {
                   <div class="flex flex-col px-16 py-16 w-[30%]">
                     <a-tooltip placement="topLeft">
                       <template #title>
-                        <div class="max-w-180">{{ record.title }}</div>
+                        <div class="max-w-250">{{ record.title }}</div>
                       </template>
-                      <div class="text-14 text-[#37393D] font-normal w-fit max-w-280 truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="open(`/item_bank_exercise/${record.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ record.title }}</div>
+                      <div class="text-14 text-[#37393D] font-normal w-fit max-w-full truncate mb-4 hover:text-[#18AD3B] hover:cursor-pointer" @click="open(`/item_bank_exercise/${record.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ record.title }}</div>
                     </a-tooltip>
                     <div class="text-12 text-[#919399] w-fit">分类:{{ record.category.name }}</div>
                   </div>
