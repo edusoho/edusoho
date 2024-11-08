@@ -116,8 +116,6 @@ async function search() {
 }
 
 function remake() {
-  itemBankExerciseData.value = [];
-  itemBankExerciseState.value = [];
   reset();
   categoryId.value = undefined;
   keywordType.value = 'title';
@@ -214,6 +212,9 @@ async function bindItemBankExercise() {
   } finally {
     loading.value = false;
   }
+  itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
+  itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
+  remake();
   closeItemBankList();
   emit('needGetBindItemBank');
 }
