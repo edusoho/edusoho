@@ -18,10 +18,6 @@ class ItemBankExerciseMember extends AbstractResource
      */
     public function search(ApiRequest $request, $exerciseId)
     {
-        $conditions['role'] = 'student';
-        $conditions['exerciseId'] = $exerciseId;
-        $conditions['locked'] = 0;
-
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = ArrayToolkit::parts($request->query->all(), [
             'startTimeGreaterThan',
@@ -31,7 +27,9 @@ class ItemBankExerciseMember extends AbstractResource
             'deadlineBefore',
             'userKeyword',
         ]);
+        $conditions['role'] = 'student';
         $conditions['exerciseId'] = $exerciseId;
+        $conditions['locked'] = 0;
         if (isset($conditions['userKeyword']) && '' != $conditions['userKeyword']) {
             $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
             unset($conditions['userKeyword']);
@@ -90,7 +88,7 @@ class ItemBankExerciseMember extends AbstractResource
                 $courseIds = array_column($exerciseBindGroups['course'], 'bindId');
                 $courses = $this->getCourseService()->findCoursesByIds($courseIds);
                 foreach ($courses as $course) {
-                    $joinedChannels[] = '《' . $course['courseSetTitle'] . '》课程加入';
+                    $joinedChannels[] = '《'.$course['courseSetTitle'].'》课程加入';
                 }
             }
 
@@ -99,14 +97,13 @@ class ItemBankExerciseMember extends AbstractResource
                 $classroomIds = array_column($exerciseBindGroups['classroom'], 'bindId');
                 $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
                 foreach ($classrooms as $classroom) {
-                    $joinedChannels[] = '《' . $classroom['title'] . '》班级加入';
+                    $joinedChannels[] = '《'.$classroom['title'].'》班级加入';
                 }
             }
 
             // 拼接所有加入渠道，并去掉最后的 "、"
             return rtrim(implode('、', $joinedChannels), '、');
         }
-
 
         return ['free_join' => '免费加入', 'buy_join' => '购买加入'][$member['joinedChannel']] ?? '';
     }
