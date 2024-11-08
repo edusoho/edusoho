@@ -53,9 +53,9 @@ class MeItemBankExercise extends AbstractResource
         $bindTitles = [];
 
         foreach ($exerciseBinds as $exerciseBind) {
-            if ('course' == $exerciseBind['bindType']) {
+            if ('course' == $exerciseBind['bindType'] && !empty($courseTitles[$exerciseBind['bindId']])) {
                 $bindTitles[$exerciseBind['itemBankExerciseId']] = '《'.$courseTitles[$exerciseBind['bindId']].'》、';
-            } else {
+            } elseif ('classroom' != $exerciseBind['bindType'] && !empty($classroomTitles[$exerciseBind['bindId']])) {
                 $bindTitles[$exerciseBind['itemBankExerciseId']] = '《'.$classroomTitles[$exerciseBind['bindId']].'》、';
             }
         }
