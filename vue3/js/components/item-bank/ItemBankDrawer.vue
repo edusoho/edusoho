@@ -209,8 +209,8 @@ async function bindItemBankExercise() {
   } finally {
     loading.value = false;
   }
+  itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
   closeItemBankList();
-  itemBankExerciseState.value = [];
   emit('needGetBindItemBank');
 }
 

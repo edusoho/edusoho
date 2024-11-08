@@ -140,15 +140,15 @@ onBeforeMount(async () => {
                   </div>
                 </div>
                 <div class="flex flex-col justify-between items-end">
-                  <div class="text-20 font-semibold text-[#FF7E56]"><span class="text-12 mr-2">¥</span>{{ `${integerPart(element.itemBankExercise.price)}.` }}<span class="text-12">{{ decimalPart(element.itemBankExercise.price) }}</span></div>
+                  <div class="text-20 font-semibold text-[#FF7E56] whitespace-nowrap"><span class="text-12 mr-2">¥</span>{{ `${integerPart(element.itemBankExercise.price)}.` }}<span class="text-12">{{ decimalPart(element.itemBankExercise.price) }}</span></div>
                   <div class="flex">
-                    <div class="text-12 text-[#919399] font-normal"><span class="text-[#37393D] mr-2">{{ element.itemBankExercise.studentNum }}</span>学员</div>
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.itemBankExercise.studentNum }}</span>学员</div>
                     <div class="mx-6 text-[#E5E6EB] text-12">|</div>
-                    <div class="text-12 text-[#919399] font-normal"><span class="text-[#37393D] mr-2">{{ element.chapterExerciseNum }}</span>章节练习</div>
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.chapterExerciseNum }}</span>章节练习</div>
                     <div class="mx-6 text-[#E5E6EB] text-12">|</div>
-                    <div class="text-12 text-[#919399] font-normal"><span class="text-[#37393D] mr-2">{{ element.assessmentNum }}</span>试卷练习</div>
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.assessmentNum }}</span>试卷练习</div>
                     <div class="mx-6 text-[#E5E6EB] text-12">|</div>
-                    <div class="text-12 text-[#919399] font-normal">有效期：
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap">有效期：
                       <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'forever'">长期有效</span>
                       <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'date' || element.itemBankExercise.expiryMode === 'end_date'">{{ `截止至 ${formatDate(element.itemBankExercise.expiryEndDate, 'YYYY-MM-DD')}` }}</span>
                       <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'days'">{{ `共 ${element.itemBankExercise.expiryDays} 天` }}</span>
