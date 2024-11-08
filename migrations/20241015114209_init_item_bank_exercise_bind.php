@@ -16,11 +16,11 @@ class InitItemBankExerciseBind extends Migration
               `bindType` varchar(64) NOT NULL COMMENT '绑定类型classroom, course',
               `itemBankExerciseId` int(11) NOT NULL,
               `seq` int(11) NOT NULL COMMENT '顺序',
-              `operatorId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作用户ID',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
               KEY `idx_itemBankExerciseId` (`itemBankExerciseId`),
+              UNIQUE KEY `uniq_bindType_bindId_itemBankExerciseId` (`bindType`, `bindId`, `itemBankExerciseId`),
               KEY `idx_bindType_bindId` (`bindType`, `bindId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -32,6 +32,7 @@ class InitItemBankExerciseBind extends Migration
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
               KEY `idx_itemBankExerciseId` (`itemBankExerciseId`)
+              UNIQUE KEY `uniq_userId_itemBankExerciseId_itemBankExerciseBindId` (`userId`, `itemBankExerciseId`, `itemBankExerciseBindId`),
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
             ALTER TABLE `item_bank_exercise_member` ADD COLUMN `canLearn` tinyint(1) NOT NULL COMMENT '可以学习' AFTER `deadlineNotified`;
