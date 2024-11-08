@@ -210,6 +210,7 @@ async function bindItemBankExercise() {
     loading.value = false;
   }
   closeItemBankList();
+  itemBankExerciseState.value = [];
   emit('needGetBindItemBank');
 }
 
