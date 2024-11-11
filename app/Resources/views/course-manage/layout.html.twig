@@ -3,8 +3,6 @@
   {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
 {% endblock %}
 
-{% do css(['app/css/main-ant.css']) %}
-
 {% set hasMulCourses = has_mul_courses(courseSet.id) %}
 {% set side_nav =  hasMulCourses ? 'plan' : 'default-course-info' %}
 

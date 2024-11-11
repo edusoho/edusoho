@@ -3,6 +3,7 @@
 {% block title %}{{'学员错题'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'wrong-questions' %}
 {% do script(['app/vue/views/classroom_manage/wrong_question/index.js']) %}
+{% do css(['app/css/main-ant.css']) %}
 
 {% block stylesheets %}
   {{ parent() }}
