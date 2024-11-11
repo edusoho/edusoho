@@ -409,7 +409,7 @@
                         this.currentSku = this.goods.specs[key];
                     }
                 }
-
+                this.getBindItemBankExercise();
                 // this.goods.hasExtension = true;
                 // this.initGoodsComponents();
             },
