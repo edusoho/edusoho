@@ -22,7 +22,7 @@
   <div class="container cd-container classroom-manage-content">
     <div class="cd-content">
       {{ render(controller('AppBundle:Classroom/ClassroomManage:menu',{classroom:classroom,sideNav:side_nav, context: _context})) }}
-      <div class="cd-main">
+      <div class="cd-main" style="min-height: 800px">
         {% block main %}
         {% endblock %}
       </div>
