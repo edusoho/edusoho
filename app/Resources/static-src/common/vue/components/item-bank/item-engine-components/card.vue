@@ -245,7 +245,7 @@ export default {
       this.$emit("saveAnswerData", () => {
         this.$confirm({
           title: this.t("testpaper.saveTips"),
-          icon: () => <a-icon type="check-circle" style="font-size: 22px;" />,
+          icon: 'check-circle',
           content,
           okText: this.t("itemEngine.goThenDo"),
           cancelText:
