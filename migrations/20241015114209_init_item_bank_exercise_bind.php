@@ -31,8 +31,8 @@ class InitItemBankExerciseBind extends Migration
               `itemBankExerciseBindId` int(11) NOT NULL,
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `idx_itemBankExerciseId` (`itemBankExerciseId`)
-              UNIQUE KEY `uniq_userId_itemBankExerciseId_itemBankExerciseBindId` (`userId`, `itemBankExerciseId`, `itemBankExerciseBindId`),
+              KEY `idx_itemBankExerciseId` (`itemBankExerciseId`),
+              UNIQUE KEY `uniq_userId_itemBankExerciseId_itemBankExerciseBindId` (`userId`, `itemBankExerciseId`, `itemBankExerciseBindId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
             ALTER TABLE `item_bank_exercise_member` ADD COLUMN `canLearn` tinyint(1) NOT NULL COMMENT '可以学习' AFTER `deadlineNotified`;
