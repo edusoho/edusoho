@@ -304,7 +304,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 }
             }
         }
-        $members = $this->getExerciseMemberService()->search(['exerciseId' => $exerciseBinds[0]['itemBankExerciseId'], 'userIds' => $userIds, 'role' => 'student', 'joinedChannel' => 'bind_join'], [], 0, PHP_INT_MAX);
+        $members = $this->getExerciseMemberService()->search(['exerciseId' => $exerciseBinds[0]['itemBankExerciseId'], 'userIds' => $userIds, 'role' => 'student', 'joinedChannels' => ['course_join', 'classroom_join']], [], 0, PHP_INT_MAX);
         foreach ($members as &$member) {
             $member['deadline'] = empty($groupedRecords[$member['userId']]['deadline']) ? 0 : $groupedRecords[$member['userId']]['deadline'];
         }
