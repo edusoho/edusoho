@@ -84,7 +84,9 @@ const { reset } = useInfiniteScroll(
     if (newData.length === 0) {
       allDataLoaded = true;
     }
-    itemBankExerciseData.value.push(...newData);
+    const ids = itemBankExerciseData.value.map(item => item.id);
+    const filteredData = newData.filter(item => !ids.includes(item.id));
+    itemBankExerciseData.value.push(...filteredData);
     itemBankExerciseState.value.push(...transformItemBankExerciseState(newData));
     pagination.current += 1;
   },
