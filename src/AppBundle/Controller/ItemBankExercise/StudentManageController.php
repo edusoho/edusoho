@@ -97,7 +97,6 @@ class StudentManageController extends BaseController
 
             try {
                 $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
-                $this->setFlashMessage('success', 'site.add.success');
             } catch (\Exception $e) {
                 $this->setFlashMessage('danger', $e->getMessage());
             } finally {
