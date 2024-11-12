@@ -41,6 +41,14 @@ const joinedChannelSelectOptions = [
     value: 'import_join',
     label: '教师添加',
   },
+  {
+    value: 'course_join',
+    label: '课程加入',
+  },
+  {
+    value: 'classroom_join',
+    label: '班级加入',
+  },
 ];
 
 const learnDeadlineSelectOptions = [
