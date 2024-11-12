@@ -23,42 +23,8 @@ class MeItemBankExercise extends AbstractResource
             $offset,
             $limit
         );
-
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
-        $exerciseAutoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdAndExerciseIds($this->getCurrentUser()->getId(), array_column($members, 'exerciseId'));
-        $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($exerciseAutoJoinRecords, 'itemBankExerciseBindId'));
-        $courseIds = [];
-        $classroomIds = [];
-
-        foreach ($exerciseBinds as $exerciseBind) {
-            if ('course' == $exerciseBind['bindType']) {
-                $courseIds[] = $exerciseBind['bindId'];
-            } else {
-                $classroomIds[] = $exerciseBind['bindId'];
-            }
-        }
-
-        // 批量获取课程和课堂数据
-
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
-
-        foreach ($courses as $course) {
-            $courseTitles[$course['id']] = $course['courseSetTitle'];
-        }
-
-        foreach ($classrooms as $classroom) {
-            $classroomTitles[$classroom['id']] = $classroom['title'];
-        }
-        $bindTitles = [];
-
-        foreach ($exerciseBinds as $exerciseBind) {
-            if ('course' == $exerciseBind['bindType'] && !empty($courseTitles[$exerciseBind['bindId']])) {
-                $bindTitles[$exerciseBind['itemBankExerciseId']] = '《'.$courseTitles[$exerciseBind['bindId']].'》、';
-            } elseif ('classroom' != $exerciseBind['bindType'] && !empty($classroomTitles[$exerciseBind['bindId']])) {
-                $bindTitles[$exerciseBind['itemBankExerciseId']] = '《'.$classroomTitles[$exerciseBind['bindId']].'》、';
-            }
-        }
+        $bindTitles = $this->findBindExerciseTitle($members);
         foreach ($members as $key => &$member) {
             if (empty($itemBankExercises[$member['exerciseId']])) {
                 unset($members[$key]);
@@ -75,6 +41,42 @@ class MeItemBankExercise extends AbstractResource
     private function isExpired($deadline)
     {
         return 0 != $deadline && $deadline < time();
+    }
+
+    protected function findBindExerciseTitle($members)
+    {
+        $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
+        $exerciseAutoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdAndExerciseIds($this->getCurrentUser()->getId(), array_column($members, 'exerciseId'));
+        $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($exerciseAutoJoinRecords, 'itemBankExerciseBindId'));
+        $courseIds = [];
+        $classroomIds = [];
+        foreach ($exerciseBinds as $exerciseBind) {
+            if ('course' == $exerciseBind['bindType']) {
+                $courseIds[] = $exerciseBind['bindId'];
+            } else {
+                $classroomIds[] = $exerciseBind['bindId'];
+            }
+        }
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        foreach ($courses as $course) {
+            $courseTitles[$course['id']] = $course['courseSetTitle'];
+        }
+
+        foreach ($classrooms as $classroom) {
+            $classroomTitles[$classroom['id']] = $classroom['title'];
+        }
+        $bindTitles = [];
+        foreach ($exerciseBinds as $exerciseBind) {
+            if ('course' == $exerciseBind['bindType'] && !empty($courseTitles[$exerciseBind['bindId']])) {
+                $bindTitles[$exerciseBind['itemBankExerciseId']] .= '《'.$courseTitles[$exerciseBind['bindId']].'》、';
+            } elseif ('classroom' != $exerciseBind['bindType'] && !empty($classroomTitles[$exerciseBind['bindId']])) {
+                $bindTitles[$exerciseBind['itemBankExerciseId']] .= '《'.$classroomTitles[$exerciseBind['bindId']].'》、';
+            }
+        }
+
+        return $bindTitles;
     }
 
     protected function getUserService()
