@@ -51,6 +51,7 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
             'remark' => $order['created_reason'],
             'reason' => OperateReason::JOIN_BY_PURCHASE,
             'reasonType' => OperateReason::JOIN_BY_PURCHASE_TYPE,
+            'joinedChannel' => OperateReason::JOIN_BY_PURCHASE_TYPE,
         ];
 
         try {
@@ -85,7 +86,7 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
 
         $member = $this->getExerciseMemberService()->getExerciseMember($orderItem['target_id'], $orderItem['user_id']);
         if (!empty($member)) {
-            $this->getExerciseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id'], ['reason'=>'同意退款','reasonType'=>'exit']);
+            $this->getExerciseMemberService()->removeStudent($orderItem['target_id'], $orderItem['user_id'], ['reason' => '同意退款', 'reasonType' => 'exit']);
         }
 
         $this->updateMemberRecordByRefundItem($orderItem);
