@@ -10,7 +10,6 @@
 
 {% block main_body %}
   <div id="student-table-container" role="course-manage-student-index">
-    {{ web_macro.flash_messages() }}
     {% include 'course-manage/student/panel-nav.html.twig' with {'panelNav': 'manage'} %}
 
     <form class="form-inline well well-sm" action="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id}) }}" method="get" novalidate>
