@@ -20,11 +20,6 @@ const props = defineProps({
   }
 })
 
-function closeItemBankList() {
-  itemBankListVisible.value = false;
-  remake();
-}
-
 const itemBankCategoryOptions = ref();
 const keywordTypeOptions = ref([
   { label: '名称', value: 'title' },
@@ -37,6 +32,14 @@ const keyword = ref('');
 
 const itemBankExerciseData = ref([]);
 const itemBankExerciseState = ref([]);
+
+function closeItemBankList() {
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
+  itemBankListVisible.value = false;
+  reset();
+}
+
 function transformItemBankExerciseState(itemBankExerciseData) {
   return  itemBankExerciseData.map(item => ({
     id: item.id,
@@ -120,6 +123,7 @@ function formattedDate(dateStr) {
 // }
 
 async function search() {
+  allDataLoaded = false;
   pagination.current = 1;
   itemBankExerciseData.value = [];
   itemBankExerciseState.value = [];
@@ -134,11 +138,11 @@ async function search() {
 }
 
 function remake() {
-  reset();
   categoryId.value = undefined;
   keywordType.value = 'title';
   keyword.value = undefined;
   pagination.current = 1;
+  allDataLoaded = false;
 }
 
 // async function clear() {
@@ -153,11 +157,7 @@ function remake() {
 // }
 
 async function clear() {
-  categoryId.value = undefined;
-  keywordType.value = 'title';
-  keyword.value = undefined;
-  pagination.current = 1;
-  pagination.current = 1;
+  remake();
   itemBankExerciseData.value = [];
   itemBankExerciseState.value = [];
   reset();
@@ -243,7 +243,9 @@ async function bindItemBankExercise() {
   }
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
   itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
+  remake();
   closeItemBankList();
+  allDataLoaded = false;
   emit('needGetBindItemBank');
 }
 
