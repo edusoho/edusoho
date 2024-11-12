@@ -92,6 +92,7 @@ class StudentManageController extends BaseController
             $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
             $data['reason'] = OperateReason::JOIN_BY_IMPORT;
             $data['reasonType'] = OperateReason::JOIN_BY_IMPORT_TYPE;
+            $data['joinedChannel'] = OperateReason::JOIN_BY_IMPORT_TYPE;
             $data['source'] = 'outside';
 
             try {
