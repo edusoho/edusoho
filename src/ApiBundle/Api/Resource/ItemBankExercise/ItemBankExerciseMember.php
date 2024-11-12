@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
-use Biz\MemberOperation\Service\MemberOperationService;
+use Biz\ItemBankExercise\Service\MemberOperationRecordService;
 use Biz\User\Service\UserService;
 
 class ItemBankExerciseMember extends AbstractResource
@@ -44,6 +44,7 @@ class ItemBankExerciseMember extends AbstractResource
         foreach ($members as &$member) {
             $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
             $member['joinedChannelText'] = $this->convertJoinedChannel($member);
+            $member['remark'] = 'site.join_by_free' == $member['remark'] ? '' : $member['remark'];
         }
 
         $total = $this->getItemBankExerciseMemberService()->count($conditions);
@@ -69,9 +70,9 @@ class ItemBankExerciseMember extends AbstractResource
     private function convertJoinedChannel($member)
     {
         if ('import_join' === $member['joinedChannel']) {
-            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            $records = $this->getMemberOperationRecordService()->search(['exerciseId' => $member['exerciseId'], 'memberId' => $member['id'], 'operateType' => 'join'], ['id' => 'DESC'], 0, 1);
             if (!empty($records)) {
-                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                $operator = $this->getUserService()->getUser($records[0]['operatorId']);
 
                 return "{$operator['nickname']}添加";
             }
@@ -133,11 +134,11 @@ class ItemBankExerciseMember extends AbstractResource
     }
 
     /**
-     * @return MemberOperationService
+     * @return MemberOperationRecordService
      */
-    private function getMemberOperationService()
+    protected function getMemberOperationRecordService()
     {
-        return $this->service('MemberOperation:MemberOperationService');
+        return $this->service('ItemBankExercise:MemberOperationRecordService');
     }
 
     /**
