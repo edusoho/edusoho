@@ -153,10 +153,14 @@ function remake() {
 // }
 
 async function clear() {
+  categoryId.value = undefined;
+  keywordType.value = 'title';
+  keyword.value = undefined;
+  pagination.current = 1;
   pagination.current = 1;
   itemBankExerciseData.value = [];
   itemBankExerciseState.value = [];
-  remake();
+  reset();
 }
 
 const checkedExerciseIdNum = computed(() => {
@@ -239,7 +243,6 @@ async function bindItemBankExercise() {
   }
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
   itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
-  remake();
   closeItemBankList();
   emit('needGetBindItemBank');
 }
