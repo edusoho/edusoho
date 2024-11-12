@@ -246,6 +246,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         foreach ($exerciseMembers as &$exerciseMember) {
             $exerciseMember['canLearn'] = $canLearn;
         }
+        $exerciseMembers = ArrayToolkit::index($exerciseMembers, 'id');
         $this->getExerciseMemberService()->batchUpdateMembers($exerciseMembers);
     }
 
