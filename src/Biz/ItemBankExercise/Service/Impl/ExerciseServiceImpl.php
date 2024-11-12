@@ -493,6 +493,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
                 $this->getCurrentUser()->getId(),
                 [
                     'remark' => OperateReason::JOIN_BY_FREE,
+                    'joinedChannel' => OperateReason::JOIN_BY_FREE_TYPE,
                     'reason' => OperateReason::JOIN_BY_FREE,
                     'reasonType' => OperateReason::JOIN_BY_FREE_TYPE,
                 ]
@@ -586,7 +587,6 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
                 'itemBankExerciseId' => $exerciseId,
                 'bindType' => $bindType,
                 'bindId' => $bindId,
-                'operatorId' => $this->getCurrentUser()->getId(),
                 'seq' => '0',
             ];
             }, $exerciseIds);

@@ -303,7 +303,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
         $members = $this->getExerciseMemberService()->search(['exerciseId' => $exerciseBinds[0]['itemBankExerciseId'], 'userIds' => $userIds, 'role' => 'student', 'joinedChannel' => 'bind_join'], [], 0, PHP_INT_MAX);
         foreach ($members as &$member) {
-            $member['deadline'] = $groupedRecords[$member['userId']]['deadline'];
+            $member['deadline'] = empty($groupedRecords[$member['userId']]['deadline']) ? 0 : $groupedRecords[$member['userId']]['deadline'];
         }
         if (empty($members)) {
             return;

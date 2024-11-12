@@ -20,11 +20,6 @@ const props = defineProps({
   }
 })
 
-function closeItemBankList() {
-  itemBankListVisible.value = false;
-  remake();
-}
-
 const itemBankCategoryOptions = ref();
 const keywordTypeOptions = ref([
   { label: '名称', value: 'title' },
@@ -37,6 +32,14 @@ const keyword = ref('');
 
 const itemBankExerciseData = ref([]);
 const itemBankExerciseState = ref([]);
+
+function closeItemBankList() {
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
+  itemBankListVisible.value = false;
+  reset();
+}
+
 function transformItemBankExerciseState(itemBankExerciseData) {
   return  itemBankExerciseData.map(item => ({
     id: item.id,
@@ -104,34 +107,26 @@ function formattedDate(dateStr) {
 }
 
 async function search() {
-  reset();
+  allDataLoaded = false;
   pagination.current = 1;
-  const params = {
-    limit: pagination.pageSize,
-    offset: (pagination.current - 1) * pagination.pageSize,
-  }
-  const newDate = await fetchItemBankExercise(params)
-  itemBankExerciseData.value = newDate;
-  itemBankExerciseState.value = transformItemBankExerciseState(newDate);
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
+  reset();
 }
 
 function remake() {
-  reset();
   categoryId.value = undefined;
   keywordType.value = 'title';
   keyword.value = undefined;
   pagination.current = 1;
+  allDataLoaded = false;
 }
 
 async function clear() {
   remake();
-  const params = {
-    limit: pagination.pageSize,
-    offset: (pagination.current - 1) * pagination.pageSize,
-  }
-  const newDate = await fetchItemBankExercise(params)
-  itemBankExerciseData.value = newDate;
-  itemBankExerciseState.value = transformItemBankExerciseState(newDate);
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
+  reset();
 }
 
 const checkedExerciseIdNum = computed(() => {
@@ -216,6 +211,7 @@ async function bindItemBankExercise() {
   itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
   remake();
   closeItemBankList();
+  allDataLoaded = false;
   emit('needGetBindItemBank');
 }
 

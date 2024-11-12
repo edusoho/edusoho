@@ -88,8 +88,8 @@ onBeforeMount(async() => {
           :show-total="total => getTableTotal(total)"
           v-model="pagination.current"
           :total="pagination.total"
+          show-size-changer
           @change="handlePaginationChange"
-          show-less-items
           :disabled="pagination.total === 0"
         />
       </div>
