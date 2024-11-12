@@ -84,10 +84,12 @@ const { reset } = useInfiniteScroll(
     if (newData.length === 0) {
       allDataLoaded = true;
     }
-    const ids = itemBankExerciseData.value.map(item => item.id);
-    const filteredData = newData.filter(item => !ids.includes(item.id));
-    itemBankExerciseData.value.push(...filteredData);
-    itemBankExerciseState.value.push(...transformItemBankExerciseState(filteredData));
+    // const ids = itemBankExerciseData.value.map(item => item.id);
+    // const filteredData = newData.filter(item => !ids.includes(item.id));
+    // itemBankExerciseData.value.push(...filteredData);
+    // itemBankExerciseState.value.push(...transformItemBankExerciseState(filteredData));
+    itemBankExerciseData.value.push(...newData);
+    itemBankExerciseState.value.push(...transformItemBankExerciseState(newData));
     pagination.current += 1;
   },
   { distance: 20, canLoadMore: () => {
@@ -105,16 +107,30 @@ function formattedDate(dateStr) {
     String(date.getSeconds()).padStart(2, '0');
 }
 
+// async function search() {
+//   reset();
+//   pagination.current = 1;
+//   const params = {
+//     limit: pagination.pageSize,
+//     offset: (pagination.current - 1) * pagination.pageSize,
+//   }
+//   const newDate = await fetchItemBankExercise(params)
+//   itemBankExerciseData.value = newDate;
+//   itemBankExerciseState.value = transformItemBankExerciseState(newDate);
+// }
+
 async function search() {
-  reset();
   pagination.current = 1;
-  const params = {
-    limit: pagination.pageSize,
-    offset: (pagination.current - 1) * pagination.pageSize,
-  }
-  const newDate = await fetchItemBankExercise(params)
-  itemBankExerciseData.value = newDate;
-  itemBankExerciseState.value = transformItemBankExerciseState(newDate);
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
+  reset();
+  // const params = {
+  //   limit: pagination.pageSize,
+  //   offset: (pagination.current - 1) * pagination.pageSize,
+  // }
+  // const newDate = await fetchItemBankExercise(params)
+  // itemBankExerciseData.value = newDate;
+  // itemBankExerciseState.value = transformItemBankExerciseState(newDate);
 }
 
 function remake() {
