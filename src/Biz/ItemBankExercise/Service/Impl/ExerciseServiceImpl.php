@@ -586,7 +586,6 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
                 'itemBankExerciseId' => $exerciseId,
                 'bindType' => $bindType,
                 'bindId' => $bindId,
-                'operatorId' => $this->getCurrentUser()->getId(),
                 'seq' => '0',
             ];
             }, $exerciseIds);
