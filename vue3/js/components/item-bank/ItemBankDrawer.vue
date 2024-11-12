@@ -141,15 +141,22 @@ function remake() {
   pagination.current = 1;
 }
 
+// async function clear() {
+//   remake();
+//   const params = {
+//     limit: pagination.pageSize,
+//     offset: (pagination.current - 1) * pagination.pageSize,
+//   }
+//   const newDate = await fetchItemBankExercise(params)
+//   itemBankExerciseData.value = newDate;
+//   itemBankExerciseState.value = transformItemBankExerciseState(newDate);
+// }
+
 async function clear() {
+  pagination.current = 1;
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
   remake();
-  const params = {
-    limit: pagination.pageSize,
-    offset: (pagination.current - 1) * pagination.pageSize,
-  }
-  const newDate = await fetchItemBankExercise(params)
-  itemBankExerciseData.value = newDate;
-  itemBankExerciseState.value = transformItemBankExerciseState(newDate);
 }
 
 const checkedExerciseIdNum = computed(() => {
