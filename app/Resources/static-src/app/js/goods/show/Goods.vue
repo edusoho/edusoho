@@ -63,7 +63,7 @@
         </ul>
 
         <div class="info-left__content">
-          <div id="info-left-1" class="content-item js-content-item">
+          <div id="info-left-1" class="content-item js-content-item" style="scroll-margin-top: 52px;">
             <h3 class="content-item__title">{{ 'goods.show_page.tab.intro'|trans }}</h3>
             <div v-html="summaryHtml" class="description-content"
                  style="padding-left: 14px; padding-top: 10px;"></div>
@@ -475,7 +475,7 @@ export default {
       const eleArr = document.querySelectorAll('.js-content-item');
       if (eleArr.length > 0) {
         const firstElementTop = eleArr[0].offsetTop;
-        if (value < firstElementTop) {
+        if (value < firstElementTop - 52 ) {
           this.howActive = 1;
           return;
         }
@@ -487,17 +487,6 @@ export default {
           return;
         }
       }
-    },
-    clickType(value) {
-      clearTimeout(this.timer);
-      this.timerClick = null;
-      this.flag = false;
-      this.howActive = value;
-      let ele = '#info-left-' + value;
-      document.documentElement.scrollTop = document.body.scrollTop = $(ele).offset().top - 80;
-      this.timerClick = setTimeout(() => {
-        this.flag = true;
-      }, 300);
     },
   },
   filters: {
