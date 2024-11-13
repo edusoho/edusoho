@@ -759,8 +759,8 @@ export default {
     async getBindItemBank() {
       this.bindItemBankList = await Api.getBindItemBank({
         params: {
-          bindType: this.course.targetType,
-          bindId: this.course.goodsId,
+          bindType: this.targetType,
+          bindId: this.targetId,
         }
       })
     }
