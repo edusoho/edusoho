@@ -54,13 +54,13 @@
                 </ul>
 
                 <div class="info-left__content">
-                    <div id="info-left-1" class="content-item js-content-item" style="scroll-margin-top: 80px;">
+                    <div id="info-left-1" class="content-item js-content-item" style="scroll-margin-top: 100px;">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.intro'|trans }}</h3>
                         <div v-html="summaryHtml" class="description-content"
                              style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
-                    <div id="info-left-2" style="scroll-margin-top: 80px; background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;">
+                    <div id="info-left-2" style="scroll-margin-top: 100px; background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;">
                       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
                         <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px; padding-left: 6px">题库</div>
                         <div v-if="bindItemBankExerciseList.length > 1" style="display: flex; align-items: center; font-size: 14px; font-weight: 400; color: #919399; cursor: pointer;" @click="showItemBanKDrawer">
@@ -139,7 +139,7 @@
                     </a-drawer>
 
                     <div v-if="goods.product.targetType === 'course'" id="info-left-3"
-                         class="content-item js-content-item" style="scroll-margin-top: 80px;">
+                         class="content-item js-content-item" style="scroll-margin-top: 100px;">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <course-tasks v-show="currentSku.taskDisplay == 1" :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
                         <div v-show="currentSku.taskDisplay != 1" class="goods-empty-content">
@@ -148,7 +148,7 @@
                         </div>
                     </div>
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-3"
-                         class="content-item js-content-item" style="scroll-margin-top: 80px;">
+                         class="content-item js-content-item" style="scroll-margin-top: 100px;">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <div class="searchInput">
                           <a-input-search :placeholder="'course.search.placeholder'|trans" enter-button @search="searchCourse" />
@@ -165,7 +165,7 @@
                     </div>
 
                     <div v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" id="info-left-4" class="info-left-reviews content-item js-content-item reviews" style="scroll-margin-top: 80px;">
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" id="info-left-4" class="info-left-reviews content-item js-content-item reviews" style="scroll-margin-top: 100px;">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
                         <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage"
                                  :report-type="getReportType"
@@ -429,7 +429,7 @@
                 const eleArr = document.querySelectorAll('.js-content-item');
                 for (let i = eleArr.length - 1; i >= 0; i--) {
                     const elementTop = eleArr[i].offsetTop;
-                    if (value >= elementTop - 80) {
+                    if (value >= elementTop - 100) {
                       if (this.howActive !== i + 2) this.howActive = i + 2;
                       return;
                     }
