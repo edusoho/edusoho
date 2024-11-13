@@ -42,6 +42,7 @@ class ItemBankExerciseMember extends AbstractResource
             $bindExerciseIds = array_column($bindExercises, 'id');
             $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($exerciseId, $bindExerciseIds);
             $conditions['userIds'] = array_column($autoJoinRecords, 'userId');
+            unset($conditions['joinedChannel']);
         }
         if (isset($conditions['userKeyword']) && '' != $conditions['userKeyword']) {
             $userIdsByKeyword = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
@@ -51,6 +52,9 @@ class ItemBankExerciseMember extends AbstractResource
                 $conditions['userIds'] = $userIdsByKeyword;
             }
             unset($conditions['userKeyword']);
+        }
+        if (isset($conditions['userIds']) && empty($conditions['userIds'])) {
+            $conditions['userIds'] = [-1];
         }
         $members = $this->getItemBankExerciseMemberService()->search(
             $conditions,
