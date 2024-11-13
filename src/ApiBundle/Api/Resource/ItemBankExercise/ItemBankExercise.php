@@ -62,11 +62,11 @@ class ItemBankExercise extends AbstractResource
         $conditions['status'] = 'published';
 
         if (isset($conditions['categoryId'])) {
-            if ('0' == $conditions['categoryId']) {
-                unset($conditions['categoryId']);
-            } else {
+            if ('0' != $conditions['categoryId']) {
                 $conditions['categoryIds'] = $this->getCategoryService()->findAllChildrenIdsByParentId($conditions['categoryId']);
+                array_unshift($conditions['categoryIds'], $conditions['categoryId']);
             }
+            unset($conditions['categoryId']);
         }
         if (isset($conditions['bindId']) && isset($conditions['bindType'])) {
             $exerciseBinds = $this->getItemBankExerciseService()->findBindExercise($conditions['bindType'], $conditions['bindId']);
