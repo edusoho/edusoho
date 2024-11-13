@@ -165,7 +165,7 @@
                     </div>
 
                     <div v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" id="info-left-4" class="info-left-reviews content-item js-content-item reviews">
+                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))" id="info-left-4" class="info-left-reviews content-item js-content-item reviews" style="scroll-margin-top: 80px;">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
                         <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage"
                                  :report-type="getReportType"
