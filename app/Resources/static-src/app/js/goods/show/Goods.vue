@@ -54,7 +54,7 @@
                 </ul>
 
                 <div class="info-left__content">
-                    <div id="info-left-1" class="content-item js-content-item">
+                    <div id="info-left-1" class="content-item js-content-item" style="scroll-margin-top: 80px;">
                         <h3 class="content-item__title">{{ 'goods.show_page.tab.intro'|trans }}</h3>
                         <div v-html="summaryHtml" class="description-content"
                              style="padding-left: 14px; padding-top: 10px;"></div>
