@@ -73,7 +73,7 @@ onBeforeMount(async() => {
               <a-tooltip placement="top">
                 <template #title>{{ item.bindTitle }}</template>
                 <div v-if="item.bindTitle" class="flex text-14 font-normal">
-                  <div class="text-[#919399] max-w-320 w-fit truncate">{{ item.bindTitle }}</div>
+                  <div class="text-[#919399] max-w-240 w-fit truncate">{{ item.bindTitle }}</div>
                   <div class="text-[#5E6166] ml-8">赠送的题库</div>
                 </div>
               </a-tooltip>
