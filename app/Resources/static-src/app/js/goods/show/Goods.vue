@@ -432,21 +432,18 @@ export default {
     },
     calcScrollTop(value) {
       const eleArr = document.querySelectorAll('.js-content-item');
-      if (eleArr.length > 0) {
-        const firstElementTop = eleArr[0].offsetTop;
-        if (value < firstElementTop - 52 ) {
-          this.howActive = 1;
-          return;
-        }
+      if (eleArr.length > 0 && value < eleArr[0].offsetTop - 52) {
+        this.howActive = 1;
+        return;
       }
-      for (let i = eleArr.length - 1; i > 0; i--) {
+      for (let i = 1; i < eleArr.length; i++) {
         const elementTop = eleArr[i].offsetTop;
         if (value >= elementTop - 100) {
-          if (this.howActive !== i + 2) this.howActive = i + 2;
+          if (this.howActive !== i + 1) this.howActive = i + 1;
           return;
         }
       }
-    },
+    }
   },
   filters: {
     removeHtml(input) {
