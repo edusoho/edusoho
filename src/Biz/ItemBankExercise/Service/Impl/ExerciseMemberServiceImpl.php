@@ -184,9 +184,9 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                     "《{$exercise['title']}》(#{$exercise['id']})，移除学员{$user['nickname']}(#{$user['id']})}"
                 );
             }
-            if ('course_join' == $member['joinedChannel'] || 'classroom_join' == $member['joinedChannel']) {
-                $this->getExerciseService()->deleteExerciseAutoJoinRecordByUserIdsAndExerciseBindId([$user['id']], $exercise['id']);
-            }
+            // 退出，删除所有的计入记录
+            $exerciseBinds = $this->getExerciseService()->findExerciseBindByExerciseId($exerciseId);
+            $this->getExerciseService()->deleteExerciseAutoJoinRecordByUserIdAndExerciseBindIds($userId, array_column($exerciseBinds, 'id'));
 
             $this->commit();
         } catch (\Exception $e) {
