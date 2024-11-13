@@ -248,7 +248,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
      */
     protected function batchUpdateLearnStatus($usersWithSingleRecord, $canLearn)
     {
-        $exerciseMembers = $this->getExerciseMemberService()->search(['userId' => $usersWithSingleRecord], [], 0, PHP_INT_MAX);
+        $exerciseMembers = $this->getExerciseMemberService()->search(['userIds' => $usersWithSingleRecord], [], 0, PHP_INT_MAX);
         foreach ($exerciseMembers as &$exerciseMember) {
             $exerciseMember['canLearn'] = $canLearn;
         }

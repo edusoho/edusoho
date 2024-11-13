@@ -52,6 +52,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $this->beginTransaction();
 
             $exercise['creator'] = $this->getCurrentUser()->getId();
+            $exercise['updated_user_id'] = $this->getCurrentUser()->getId();
             $exercise = $this->getExerciseDao()->create($exercise);
             $this->getExerciseMemberService()->addTeacher($exercise['id']);
             $this->createChapterModule($exercise);
