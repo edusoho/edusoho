@@ -1,5 +1,3 @@
-import notify from 'common/notify';
-
 let $exportBtn = $('#export-students-transcript');
 
 $exportBtn.on('click', function () {
