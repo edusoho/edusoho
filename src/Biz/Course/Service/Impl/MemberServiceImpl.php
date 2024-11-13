@@ -359,8 +359,15 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMembers($conditions, $updateFields)
     {
-        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $conditions['courseId'], 'bindType' => 'course', 'all' => true]));
-        $this->getMemberDao()->updateMembers($conditions, $updateFields);
+        try {
+            $this->beginTransaction();
+            $this->getMemberDao()->updateMembers($conditions, $updateFields);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $conditions['courseId'], 'bindType' => 'course', 'all' => true]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function isMemberNonExpired($course, $member)
