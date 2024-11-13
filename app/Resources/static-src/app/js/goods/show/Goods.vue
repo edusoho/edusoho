@@ -436,14 +436,14 @@ export default {
       if (eleArr.length > 0) {
         const firstElementTop = eleArr[0].offsetTop;
         if (value < firstElementTop - 52 ) {
-          this.howActive = 1;
+          this.howActive = 2;
           return;
         }
       }
       for (let i = eleArr.length - 1; i > 0; i--) {
         const elementTop = eleArr[i].offsetTop;
         if (value >= elementTop - 100) {
-          if (this.howActive !== i + 1) this.howActive = i + 1;
+          if (this.howActive !== i + 2) this.howActive = i + 2;
           return;
         }
       }
