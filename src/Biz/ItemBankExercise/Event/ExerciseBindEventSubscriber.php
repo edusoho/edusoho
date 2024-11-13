@@ -73,6 +73,9 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         if (!empty($singleExerciseAutoJoinRecords)) {
             $this->getExerciseMemberService()->batchRemoveStudent($exerciseBind['itemBankExerciseId'], array_column($singleExerciseAutoJoinRecords, 'userId'));
         }
+        $multipleExerciseAutoJoinRecords = array_filter($multipleExerciseAutoJoinRecords, function ($record) use ($params) {
+            return $record['itemBankExerciseBindId'] != $params['id'];
+        });
         // 有多条记录重新计算有效期
         $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
         // 移除自动加入记录
