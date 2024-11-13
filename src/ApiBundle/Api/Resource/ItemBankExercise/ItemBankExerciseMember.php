@@ -30,8 +30,26 @@ class ItemBankExerciseMember extends AbstractResource
         $conditions['role'] = 'student';
         $conditions['exerciseId'] = $exerciseId;
         $conditions['locked'] = 0;
+        if (isset($conditions['joinedChannel']) && '' != $conditions['joinedChannel']) {
+            $bindExercises = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($exerciseId);
+            $bindExercises = array_filter($bindExercises, function ($bindExercise) use ($conditions) {
+                if ('course_join' == $conditions['joinedChannel']) {
+                    return 'course' == $bindExercise['bindType'];
+                } elseif ('classroom_join' == $conditions['joinedChannel']) {
+                    return 'classroom' == $bindExercise['bindType'];
+                }
+            });
+            $bindExerciseIds = array_column($bindExercises, 'id');
+            $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($exerciseId, $bindExerciseIds);
+            $conditions['userIds'] = array_column($autoJoinRecords, 'userId');
+        }
         if (isset($conditions['userKeyword']) && '' != $conditions['userKeyword']) {
-            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+            $userIdsByKeyword = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+            if (!empty($conditions['userIds'])) {
+                $conditions['userIds'] = array_intersect($userIdsByKeyword, $conditions['userIds']);
+            } else {
+                $conditions['userIds'] = $userIdsByKeyword;
+            }
             unset($conditions['userKeyword']);
         }
         $members = $this->getItemBankExerciseMemberService()->search(
@@ -77,7 +95,7 @@ class ItemBankExerciseMember extends AbstractResource
                 return "{$operator['nickname']}添加";
             }
         }
-        if ('course_join' === $member['joinedChannel'] || 'classroom_join' === $member['joinedChannel']) {
+        if ('bind_join' === $member['joinedChannel']) {
             $autoRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId([$member['userId']], $member['exerciseId']);
             $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($autoRecords, 'itemBankExerciseBindId'));
             $exerciseBindGroups = ArrayToolkit::group($exerciseBinds, 'bindType');

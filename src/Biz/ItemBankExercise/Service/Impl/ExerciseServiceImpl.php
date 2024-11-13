@@ -639,6 +639,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseAutoJoinRecordDao()->search(['userId' => $userId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
     }
 
+    public function findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($itemBankExerciseId, $itemBankExerciseBindIds)
+    {
+        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseId' => $itemBankExerciseId, 'itemBankExerciseBindIds' => $itemBankExerciseBindIds], [], 0, PHP_INT_MAX);
+    }
+
     public function findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseId)
     {
         return $this->getExerciseAutoJoinRecordDao()->search(['userIds' => $userIds, 'itemBankExerciseId' => $exerciseId], [], 0, PHP_INT_MAX);
