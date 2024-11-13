@@ -305,6 +305,7 @@ form.btn.view: View
 form.btn.bind: Bind
 form.btn.bind_account: 'Bind account'
 form.btn.search: Search
+form.btn.export_search_result: 'Export search result'
 form.btn.use: Use
 form.btn.reply: Publish
 form.btn.bind_cancel: 'Unbind'
