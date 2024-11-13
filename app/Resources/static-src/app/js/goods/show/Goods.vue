@@ -436,7 +436,7 @@ export default {
       if (eleArr.length > 0) {
         const firstElementTop = eleArr[0].offsetTop;
         if (value < firstElementTop - 52 ) {
-          this.howActive = 2;
+          this.howActive = 1;
           return;
         }
       }
