@@ -383,6 +383,7 @@ form.btn.view: 查看
 form.btn.bind: 绑定
 form.btn.bind_account: 绑定帐号
 form.btn.search: 搜索
+form.btn.export_search_result: 导出搜索结果
 form.btn.use: 使用
 form.btn.reply: 发表
 form.btn.bind_cancel: 取消绑定
