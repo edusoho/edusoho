@@ -318,32 +318,18 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     protected function buildExerciseAutoJoinRecords($userIds, $exerciseBind)
     {
         $exerciseAutoJoinRecords = [];
-        $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
-        if (empty($autoJoinRecords)) {
-            foreach ($userIds as $userId) {
-                $exerciseAutoJoinRecords[] = [
-                    'userId' => $userId,
-                    'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
-                    'itemBankExerciseBindId' => $exerciseBind['id'],
-                ];
-            }
-
-            return $exerciseAutoJoinRecords;
-        }
-        $autoJoinRecords = ArrayToolkit::group($autoJoinRecords, 'userId');
         foreach ($userIds as $userId) {
-            $userAutoJoinRecords = $autoJoinRecords[$userId];
-            foreach ($userAutoJoinRecords as $exerciseAutoJoinRecord) {
-                if ($exerciseAutoJoinRecord['userId'] == $userId && $exerciseAutoJoinRecord['itemBankExerciseId'] == $exerciseBind['itemBankExerciseId'] && $exerciseAutoJoinRecord['itemBankExerciseBindId'] == $exerciseBind['id']) {
-                    continue;
-                }
-                $exerciseAutoJoinRecords[] = [
-                    'userId' => $userId,
-                    'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
-                    'itemBankExerciseBindId' => $exerciseBind['id'],
-                ];
-            }
+            $exerciseAutoJoinRecords[] = [
+                'userId' => $userId,
+                'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
+                'itemBankExerciseBindId' => $exerciseBind['id'],
+            ];
         }
+        $exerciseAutoJoinRecords = array_unique(
+            array_map('serialize', $exerciseAutoJoinRecords)
+        );
+
+        $exerciseAutoJoinRecords = array_map('unserialize', $exerciseAutoJoinRecords);
 
         return $exerciseAutoJoinRecords;
     }
