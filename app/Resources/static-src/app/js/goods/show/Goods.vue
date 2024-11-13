@@ -428,7 +428,7 @@
             calcScrollTop(value) {
                 let eleArr = $('.js-content-item');
                 for (let i = eleArr.length - 1; i >= 0; i--) {
-                    const elementTop = eleArr[i].offsetTop;
+                    const elementTop = eleArr[i].offsetTop - 240;
                     if (value >= elementTop) {
                         if (this.howActive != i + 1) this.howActive = i + 1;
                         return;
