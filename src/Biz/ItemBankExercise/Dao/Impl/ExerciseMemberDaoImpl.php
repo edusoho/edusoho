@@ -57,6 +57,7 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
                 'deadline = 0 or deadline > :deadlineAfter',
                 'deadline > 0 and deadline <= :deadlineBefore',
                 'joinedChannel = :joinedChannel',
+                'joinedChannel IN (:joinedChannels)',
             ],
         ];
     }
