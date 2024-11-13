@@ -109,7 +109,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             }
             if (!empty($exerciseUsers)) {
                 $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords(array_column($exerciseUsers, 'userId'), $exerciseBind);
-                $this->updateMemberExpiredTime($exerciseAutoJoinRecords);
+                $savedAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId(array_column($exerciseUsers, 'userId'), $exerciseBind['itemBankExerciseId']);
+                $this->updateMemberExpiredTime(array_merge($exerciseAutoJoinRecords, $savedAutoJoinRecords));
             }
             $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords($params['userIds'], $exerciseBind);
             $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
@@ -185,7 +186,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseMemberDeadlineUpdate(Event $event)
     {
         $params = $event->getSubject();
-        if (empty($params['userIds'])) {
+        if (empty($params['userIds']) && empty($params['all'])) {
             return;
         }
         $bindTypeMembers = [];
