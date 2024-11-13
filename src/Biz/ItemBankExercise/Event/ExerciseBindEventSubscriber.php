@@ -53,6 +53,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 $this->updateMemberExpiredTime($exerciseAutoJoinRecords);
             }
             $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords($userIds, $exerciseBind);
+            $existingRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+            $exerciseAutoJoinRecords = $this->filterExistAutoJoinRecords($exerciseAutoJoinRecords, $existingRecords);
             $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
         }
     }
@@ -362,6 +364,24 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
 
         return $exercise;
+    }
+
+    protected function filterExistAutoJoinRecords($exerciseAutoJoinRecords, $existingRecords)
+    {
+        foreach ($exerciseAutoJoinRecords as $key => $record) {
+            foreach ($existingRecords as $existingRecord) {
+                if (
+                    $record['userId'] === $existingRecord['userId'] &&
+                    $record['itemBankExerciseId'] === $existingRecord['itemBankExerciseId'] &&
+                    $record['itemBankExerciseBindId'] === $existingRecord['itemBankExerciseBindId']
+                ) {
+                    unset($exerciseAutoJoinRecords[$key]);
+                    break;
+                }
+            }
+        }
+
+        return array_values($exerciseAutoJoinRecords);
     }
 
     /**
