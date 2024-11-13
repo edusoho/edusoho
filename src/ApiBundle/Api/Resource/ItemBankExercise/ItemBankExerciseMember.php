@@ -30,7 +30,7 @@ class ItemBankExerciseMember extends AbstractResource
         $conditions['role'] = 'student';
         $conditions['exerciseId'] = $exerciseId;
         $conditions['locked'] = 0;
-        if (isset($conditions['joinedChannel']) && '' != $conditions['joinedChannel']) {
+        if (isset($conditions['joinedChannel']) && in_array($conditions['joinedChannel'], ['course_join', 'classroom_join'])) {
             $bindExercises = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($exerciseId);
             $bindExercises = array_filter($bindExercises, function ($bindExercise) use ($conditions) {
                 if ('course_join' == $conditions['joinedChannel']) {
