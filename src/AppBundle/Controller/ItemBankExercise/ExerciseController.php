@@ -133,8 +133,8 @@ class ExerciseController extends BaseController
             return;
         }
 
-        $memberService = $bindType == 'course' ? $this->getCourseMemberService() : $this->getClassroomService();
-        $member = $bindType == 'course'
+        $memberService = 'course' == $bindType ? $this->getCourseMemberService() : $this->getClassroomService();
+        $member = 'course' == $bindType
             ? $memberService->getCourseMember($bindId, $user['id'])
             : $memberService->getClassroomMember($bindId, $user['id']);
 
@@ -142,16 +142,15 @@ class ExerciseController extends BaseController
             return;
         }
 
-        $entityService = $bindType == 'course' ? $this->getCourseService() : $this->getClassroomService();
-        $entity = $bindType == 'course'
+        $entityService = 'course' == $bindType ? $this->getCourseService() : $this->getClassroomService();
+        $entity = 'course' == $bindType
             ? $entityService->getCourse($bindId)
             : $entityService->getClassroom($bindId);
 
-        $displayContent = $bindType == 'course' ? $entity['courseSetTitle'].'课程' : $entity['title'].'班级';
+        $displayContent = 'course' == $bindType ? $entity['courseSetTitle'].'课程' : $entity['title'].'班级';
 
         return ['display' => true, 'displayContent' => $displayContent];
     }
-
 
     public function exitAction(Request $request, $exerciseId)
     {

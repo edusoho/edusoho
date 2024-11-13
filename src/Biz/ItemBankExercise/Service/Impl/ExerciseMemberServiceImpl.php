@@ -184,6 +184,9 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                     "《{$exercise['title']}》(#{$exercise['id']})，移除学员{$user['nickname']}(#{$user['id']})}"
                 );
             }
+            if ('course_join' == $member['joinedChannel'] || 'classroom_join' == $member['joinedChannel']) {
+                $this->getExerciseService()->deleteExerciseAutoJoinRecordByUserIdsAndExerciseBindId([$user['id']], $exercise['id']);
+            }
 
             $this->commit();
         } catch (\Exception $e) {
@@ -243,7 +246,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         try {
             $this->beginTransaction();
-            $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userIds' => $userIds, 'joinedChannel' => 'bind_join']);
+            $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userIds' => $userIds, 'joinedChannels' => ['course_join', 'classroom_join']]);
             $exercise = $this->getExerciseService()->get($exerciseId);
             $this->dispatchEvent('exercise.quit', $exercise, ['member' => ['role' => 'student']]);
             $this->commit();

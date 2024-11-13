@@ -77,7 +77,7 @@ class ItemBankExerciseMember extends AbstractResource
                 return "{$operator['nickname']}添加";
             }
         }
-        if ('bind_join' === $member['joinedChannel']) {
+        if ('course_join' === $member['joinedChannel'] || 'classroom_join' === $member['joinedChannel']) {
             $autoRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId([$member['userId']], $member['exerciseId']);
             $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($autoRecords, 'itemBankExerciseBindId'));
             $exerciseBindGroups = ArrayToolkit::group($exerciseBinds, 'bindType');
