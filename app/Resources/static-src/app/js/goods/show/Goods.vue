@@ -409,44 +409,6 @@ export default {
     closeItemBanKDrawer() {
       this.bindItemBankDrawerVisible = false;
     },
-    getGoodsInfo() {
-      axios.get(`/api/good/${this.goodsId}`, {
-        headers: {'Accept': 'application/vnd.edusoho.v2+json'}
-      }).then((res) => {
-        this.goods = res.data;
-
-        if (this.goods.type == 'classroom') {
-          return this.changeSku(this.goods.product.target.id);
-        }
-
-        if (this.goods.type == 'course' && this.targetId) {
-          return this.changeSku(this.targetId);
-        }
-
-        if (this.goods.product.target.defaultCourseId) {
-          return this.changeSku(this.goods.product.target.defaultCourseId);
-        }
-
-      });
-    },
-    initGoodsComponents() {
-      if (!this.goods.hasExtension) {
-        return;
-      }
-
-      axios.get(`/api/goods/${this.goodsId}/components`, {
-        params: {
-          componentTypes: this.goods.extensions
-        },
-        headers: {
-          'Accept': 'application/vnd.edusoho.v2+json',
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
-        }
-      }).then(res => {
-        this.componentsData = res.data;
-      });
-    },
     changeSku(targetId) {
       for (const key in this.goods.specs) {
         this.$set(this.goods.specs[key], 'active', false);
@@ -456,8 +418,6 @@ export default {
         }
       }
       this.getBindItemBankExercise();
-      // this.goods.hasExtension = true;
-      // this.initGoodsComponents();
     },
     handleScroll() {
       let eleTop = this.$refs.infoLeftNav.offsetTop + this.$refs.infoLeftNav.offsetHeight;
@@ -483,7 +443,7 @@ export default {
       for (let i = eleArr.length - 1; i > 0; i--) {
         const elementTop = eleArr[i].offsetTop;
         if (value >= elementTop - 100) {
-          if (this.howActive !== i + 2) this.howActive = i + 2;
+          if (this.howActive !== i + 1) this.howActive = i + 1;
           return;
         }
       }
