@@ -32,12 +32,11 @@ const keyword = ref('');
 
 const itemBankExerciseData = ref([]);
 const itemBankExerciseState = ref([]);
+const allDataLoaded = ref(false);
 
-function closeItemBankList() {
-  itemBankExerciseData.value = [];
-  itemBankExerciseState.value = [];
+function closeItemBankDrawer() {
+  clear();
   itemBankListVisible.value = false;
-  reset();
 }
 
 function transformItemBankExerciseState(itemBankExerciseData) {
@@ -74,7 +73,6 @@ async function fetchItemBankExercise(params) {
   return data;
 }
 
-let allDataLoaded = false;
 const itemBankTableBody = ref(null);
 const { reset } = useInfiniteScroll(
   itemBankTableBody,
@@ -85,14 +83,14 @@ const { reset } = useInfiniteScroll(
     };
     const newData = await fetchItemBankExercise(params);
     if (newData.length === 0) {
-      allDataLoaded = true;
+      allDataLoaded.value = true;
     }
     itemBankExerciseData.value.push(...newData);
     itemBankExerciseState.value.push(...transformItemBankExerciseState(newData));
     pagination.current += 1;
   },
   { distance: 20, canLoadMore: () => {
-    return !allDataLoaded;
+    return !allDataLoaded.value;
     }},
 )
 
@@ -107,7 +105,7 @@ function formattedDate(dateStr) {
 }
 
 async function search() {
-  allDataLoaded = false;
+  allDataLoaded.value = false;
   pagination.current = 1;
   itemBankExerciseData.value = [];
   itemBankExerciseState.value = [];
@@ -119,7 +117,7 @@ function remake() {
   keywordType.value = 'title';
   keyword.value = undefined;
   pagination.current = 1;
-  allDataLoaded = false;
+  allDataLoaded.value = false;
 }
 
 async function clear() {
@@ -210,8 +208,7 @@ async function bindItemBankExercise() {
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
   itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
   remake();
-  closeItemBankList();
-  allDataLoaded = false;
+  closeItemBankDrawer();
   emit('needGetBindItemBank');
 }
 
@@ -238,12 +235,12 @@ onBeforeMount(async () => {
     :maskClosable="false"
     :bodyStyle="{padding: 0}"
     width="60vw"
-    @close="closeItemBankList"
+    @close="closeItemBankDrawer"
   >
     <div class="flex flex-col relative h-full">
       <div class="flex justify-between px-20 py-14 border border-x-0 border-t-0 border-[#EFF0F5] border-solid">
         <div class="font-medium text-16 text-[#37393D]">绑定题库</div>
-        <CloseOutlined @click="closeItemBankList"/>
+        <CloseOutlined @click="closeItemBankDrawer"/>
       </div>
       <div class="flex flex-col px-20 pt-24">
         <div class="flex space-x-20 mb-20">
@@ -339,7 +336,7 @@ onBeforeMount(async () => {
           <div class="text-[#37393D] text-14 font-normal">{{ `选择 ${ checkedExerciseIdNum } 项` }}</div>
         </div>
         <div class="space-x-16">
-          <a-button @click="closeItemBankList">取消</a-button>
+          <a-button @click="closeItemBankDrawer">取消</a-button>
           <a-button type="primary" @click="bindItemBankExercise" :disabled="checkedExerciseIdNum === 0" :loading="loading">确认</a-button>
         </div>
       </div>
