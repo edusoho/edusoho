@@ -426,16 +426,15 @@
                 }, 200);
             },
             calcScrollTop(value) {
-                let eleArr = $('.js-content-item');
+                const eleArr = document.querySelectorAll('.js-content-item');
                 for (let i = eleArr.length - 1; i >= 0; i--) {
-                    const elementTop = eleArr[i].offsetTop - 240;
-                    if (value >= elementTop) {
-                        if (this.howActive != i + 1) this.howActive = i + 1;
-                        return;
-                    } else {
-                        this.howActive = 1;
+                    const elementTop = eleArr[i].offsetTop;
+                    if (value >= elementTop - 80) {
+                      if (this.howActive !== i + 1) this.howActive = i + 1;
+                      return;
                     }
                 }
+                this.howActive = 1;
             },
             clickType(value) {
                 clearTimeout(this.timer);
