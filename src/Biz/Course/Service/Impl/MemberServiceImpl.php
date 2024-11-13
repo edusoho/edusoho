@@ -359,7 +359,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMembers($conditions, $updateFields)
     {
-        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $conditions['courseId'], 'bindType' => 'course']));
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $conditions['courseId'], 'bindType' => 'course', 'all' => true]));
         $this->getMemberDao()->updateMembers($conditions, $updateFields);
     }
 
@@ -1443,7 +1443,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
         $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
-        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day']));
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day', 'all' => true]));
     }
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
