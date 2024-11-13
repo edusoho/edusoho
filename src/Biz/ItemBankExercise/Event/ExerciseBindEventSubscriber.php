@@ -318,12 +318,20 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     protected function buildExerciseAutoJoinRecords($userIds, $exerciseBind)
     {
         $exerciseAutoJoinRecords = [];
+        $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+        $autoJoinRecords = ArrayToolkit::group($autoJoinRecords, 'userId');
         foreach ($userIds as $userId) {
-            $exerciseAutoJoinRecords[] = [
-                'userId' => $userId,
-                'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
-                'itemBankExerciseBindId' => $exerciseBind['id'],
-            ];
+            $userAutoJoinRecords = $autoJoinRecords[$userId];
+            foreach ($userAutoJoinRecords as $exerciseAutoJoinRecord) {
+                if ($exerciseAutoJoinRecord['userId'] == $userId && $exerciseAutoJoinRecord['itemBankExerciseId'] == $exerciseBind['itemBankExerciseId'] && $exerciseAutoJoinRecord['itemBankExerciseBindId'] == $exerciseBind['id']) {
+                    continue;
+                }
+                $exerciseAutoJoinRecords[] = [
+                    'userId' => $userId,
+                    'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
+                    'itemBankExerciseBindId' => $exerciseBind['id'],
+                ];
+            }
         }
 
         return $exerciseAutoJoinRecords;
