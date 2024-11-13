@@ -22,18 +22,18 @@
         <div v-if="isFixed" class="fixed">
           <div class="cd-container clearfix">
             <ul class="info-left__nav pull-left">
-              <li :class="howActive == 1 ? 'active' : ''"><a href="#info-left-1">{{
+              <li :class="howActive === 1 ? 'active' : ''"><a href="#info-left-1">{{
                   'goods.show_page.tab.intro'|trans
                 }}</a>
               </li>
-              <li :class="howActive == 2 ? 'active' : ''"><a href="#info-left-2">题库</a>
+              <li :class="howActive === 2 ? 'active' : ''"><a href="#info-left-2">题库</a>
               </li>
-              <li :class="howActive == 3 ? 'active' : ''"><a
+              <li :class="howActive === 3 ? 'active' : ''"><a
                 href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
               </li>
               <li v-if="ugcReviewSetting.enable_review == 1
                                  && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
-                  :class="howActive == 4 ? 'active' : ''">
+                  :class="howActive === 4 ? 'active' : ''">
                 <a href="#info-left-4">{{ 'goods.show_page.tab.reviews'|trans }}</a>
               </li>
             </ul>
@@ -46,18 +46,18 @@
         </div>
 
         <ul class="info-left__nav" ref="infoLeftNav">
-          <li :class="howActive == 1 ? 'active' : ''">
+          <li :class="howActive === 1 ? 'active' : ''">
             <a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
           </li>
-          <li :class="howActive == 2 ? 'active' : ''">
+          <li :class="howActive === 2 ? 'active' : ''">
             <a href="#info-left-2">题库</a>
           </li>
-          <li :class="howActive == 3 ? 'active' : ''">
+          <li :class="howActive === 3 ? 'active' : ''">
             <a href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
           </li>
           <li v-if="ugcReviewSetting.enable_review == 1
                                  && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
-              :class="howActive == 4 ? 'active' : ''">
+              :class="howActive === 4 ? 'active' : ''">
             <a href="#info-left-4">{{ 'goods.show_page.tab.reviews'|trans }}</a>
           </li>
         </ul>
@@ -428,18 +428,22 @@ export default {
       this.timerScroll = null;
       this.timerScroll = setTimeout(() => {
         if (this.flag) this.calcScrollTop(scrollTop);
-      }, 200);
+      }, 100);
     },
     calcScrollTop(value) {
       const eleArr = document.querySelectorAll('.js-content-item');
-      if (eleArr.length > 0 && value < eleArr[0].offsetTop - 52) {
+      if (eleArr.length === 0) return;
+      const firstElementTop = eleArr[0].offsetTop;
+      if (value < firstElementTop - 52) {
         this.howActive = 1;
         return;
       }
       for (let i = 1; i < eleArr.length; i++) {
         const elementTop = eleArr[i].offsetTop;
-        if (value >= elementTop - 100) {
-          if (this.howActive !== i + 1) this.howActive = i + 1;
+        if (value <= elementTop - 100) {
+          if (this.howActive !== i + 1) {
+            this.howActive = i + 1;
+          }
           return;
         }
       }
