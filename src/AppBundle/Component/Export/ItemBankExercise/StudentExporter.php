@@ -130,7 +130,7 @@ class StudentExporter extends Exporter
                 return "{$operator['nickname']}添加";
             }
         }
-        if ('course_join' === $member['joinedChannel'] || 'classroom_join' === $member['joinedChannel']) {
+        if ('bind_join' === $member['joinedChannel']) {
             $autoRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId([$member['userId']], $member['exerciseId']);
             $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($autoRecords, 'itemBankExerciseBindId'));
             $exerciseBindGroups = ArrayToolkit::group($exerciseBinds, 'bindType');
@@ -172,10 +172,92 @@ class StudentExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return [
+        // 处理 joinedChannel 的情况
+        if ($this->hasJoinedChannel($conditions)) {
+            $conditions = $this->processJoinedChannel($conditions);
+        }
+
+        // 处理 userKeyword 的情况
+        if ($this->hasUserKeyword($conditions)) {
+            $conditions = $this->processUserKeyword($conditions);
+        }
+
+        // 确保 userIds 不为空
+        $conditions['userIds'] = $this->ensureUserIds($conditions);
+
+        // 返回最终条件
+        return $this->buildFinalConditions($conditions);
+    }
+
+    private function hasJoinedChannel($conditions)
+    {
+        return isset($conditions['joinedChannel']) && '' != $conditions['joinedChannel'];
+    }
+
+    private function processJoinedChannel($conditions)
+    {
+        $exerciseId = $conditions['exerciseId'];
+        $bindExercises = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($exerciseId);
+
+        $bindExercises = array_filter($bindExercises, function ($bindExercise) use ($conditions) {
+            if ('course_join' == $conditions['joinedChannel']) {
+                return 'course' == $bindExercise['bindType'];
+            } elseif ('classroom_join' == $conditions['joinedChannel']) {
+                return 'classroom' == $bindExercise['bindType'];
+            }
+
+            return false;
+        });
+
+        $bindExerciseIds = array_column($bindExercises, 'id');
+        $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($exerciseId, $bindExerciseIds);
+        $conditions['userIds'] = array_column($autoJoinRecords, 'userId');
+        unset($conditions['joinedChannel']);
+
+        return $conditions;
+    }
+
+    private function hasUserKeyword($conditions)
+    {
+        return isset($conditions['userKeyword']) && '' != $conditions['userKeyword'];
+    }
+
+    private function processUserKeyword($conditions)
+    {
+        $userIdsByKeyword = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+        if (!empty($conditions['userIds'])) {
+            $conditions['userIds'] = array_intersect($userIdsByKeyword, $conditions['userIds']);
+        } else {
+            $conditions['userIds'] = $userIdsByKeyword;
+        }
+        unset($conditions['userKeyword']);
+
+        return $conditions;
+    }
+
+    private function ensureUserIds($conditions)
+    {
+        if (isset($conditions['userIds']) && empty($conditions['userIds'])) {
+            return [-1];
+        }
+
+        return $conditions['userIds'] ?? [];
+    }
+
+    private function buildFinalConditions($conditions)
+    {
+        $defaultConditions = [
             'exerciseId' => $conditions['exerciseId'],
             'role' => 'student',
+            'startTimeGreaterThan' => $conditions['startTimeGreaterThan'] ?? '',
+            'startTimeLessThan' => $conditions['startTimeLessThan'] ?? '',
+            'joinedChannel' => $conditions['joinedChannel'] ?? '',
+            'deadlineAfter' => $conditions['deadlineAfter'] ?? '',
+            'deadlineBefore' => $conditions['deadlineBefore'] ?? '',
+            'userIds' => $conditions['userIds'] ?? [],
         ];
+
+        return $defaultConditions;
     }
 
     public function postExport()
