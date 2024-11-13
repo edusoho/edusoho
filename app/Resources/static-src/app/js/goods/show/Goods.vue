@@ -70,7 +70,7 @@
           </div>
 
           <div id="info-left-2"
-               style="scroll-margin-top: 100px; background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;">
+               style="scroll-margin-top: 100px; background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;" class="content-item js-content-item">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
               <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px; padding-left: 6px">题库
               </div>
@@ -391,7 +391,6 @@ export default {
         }
       }).then((res) => {
         this.bindItemBankExerciseList = res.data;
-        console.log(this.bindItemBankExerciseList);
       });
     },
     integerPart(num) {
