@@ -1441,9 +1441,16 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function changeMembersDeadlineByCourseId($courseId, $day, $waveType)
     {
-        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
-        $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
-        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day', 'all' => true]));
+        try {
+            $this->beginTransaction();
+            $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+            $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day', 'all' => true]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
