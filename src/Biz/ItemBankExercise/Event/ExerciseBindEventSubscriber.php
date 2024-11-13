@@ -46,8 +46,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             $exercise = $this->getExerciseService()->get($exerciseBind['itemBankExerciseId']);
             $exercise = $this->resetExerciseDeadLine($params['bindType'], $params['bindId'], $exercise);
             if (!empty($notMemberUserIds)) {
-                $joinedChannel = 'course' == $exerciseBind['bindType'] ? 'course_join' : 'classroom_join';
-                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, ['joinedChannel' => $joinedChannel], $exercise);
+                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, ['joinedChannel' => 'bind_join'], $exercise);
             }
             if (!empty($exerciseUsers)) {
                 $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords(array_column($exerciseUsers, 'userId'), $exerciseBind);
@@ -104,8 +103,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             $exercise = $this->getExerciseService()->get($exerciseBind['itemBankExerciseId']);
             $exercise = $this->resetExerciseDeadLine($params['bindType'], $params['bindId'], $exercise);
             if (!empty($notMemberUserIds)) {
-                $joinedChannel = 'course' == $exerciseBind['bindType'] ? 'course_join' : 'classroom_join';
-                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, ['joinedChannel' => $joinedChannel], $exercise);
+                $this->getExerciseMemberService()->batchBecomeStudent([$exerciseBind['itemBankExerciseId']], $notMemberUserIds, ['joinedChannel' => 'bind_join'], $exercise);
             }
             if (!empty($exerciseUsers)) {
                 $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords(array_column($exerciseUsers, 'userId'), $exerciseBind);
@@ -308,7 +306,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 }
             }
         }
-        $members = $this->getExerciseMemberService()->search(['exerciseId' => $exerciseBinds[0]['itemBankExerciseId'], 'userIds' => $userIds, 'role' => 'student', 'joinedChannels' => ['course_join', 'classroom_join']], [], 0, PHP_INT_MAX);
+        $members = $this->getExerciseMemberService()->search(['exerciseId' => $exerciseBinds[0]['itemBankExerciseId'], 'userIds' => $userIds, 'role' => 'student', 'joinedChannel' => 'bind_join'], [], 0, PHP_INT_MAX);
         foreach ($members as &$member) {
             $member['deadline'] = empty($groupedRecords[$member['userId']]['deadline']) ? 0 : $groupedRecords[$member['userId']]['deadline'];
         }

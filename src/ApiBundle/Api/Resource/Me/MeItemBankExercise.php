@@ -45,7 +45,6 @@ class MeItemBankExercise extends AbstractResource
 
     protected function findBindExerciseTitle($members)
     {
-        $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
         $exerciseAutoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdAndExerciseIds($this->getCurrentUser()->getId(), array_column($members, 'exerciseId'));
         $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($exerciseAutoJoinRecords, 'itemBankExerciseBindId'));
         $courseIds = [];
@@ -71,7 +70,7 @@ class MeItemBankExercise extends AbstractResource
         foreach ($exerciseBinds as $exerciseBind) {
             if ('course' == $exerciseBind['bindType'] && !empty($courseTitles[$exerciseBind['bindId']])) {
                 $bindTitles[$exerciseBind['itemBankExerciseId']] .= '《'.$courseTitles[$exerciseBind['bindId']].'》、';
-            } elseif ('classroom' != $exerciseBind['bindType'] && !empty($classroomTitles[$exerciseBind['bindId']])) {
+            } elseif ('classroom' == $exerciseBind['bindType'] && !empty($classroomTitles[$exerciseBind['bindId']])) {
                 $bindTitles[$exerciseBind['itemBankExerciseId']] .= '《'.$classroomTitles[$exerciseBind['bindId']].'》、';
             }
         }
