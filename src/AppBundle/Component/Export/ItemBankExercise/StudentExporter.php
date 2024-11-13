@@ -41,7 +41,6 @@ class StudentExporter extends Exporter
             'join.channel',
             'join.time',
             'course.marketing_setup.rule.expiry_date',
-            'user.fields.phone_label',
             'task.learn_data_detail.createdTime',
             'exercise.answers.done_num',
             'exercise.answers.completion_rate',
