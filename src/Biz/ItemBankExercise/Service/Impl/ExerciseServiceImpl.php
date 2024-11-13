@@ -648,6 +648,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $this->getExerciseAutoJoinRecordDao()->batchDelete(['userIds' => $userIds, 'itemBankExerciseBindId' => $exerciseBindId]);
     }
 
+    public function deleteExerciseAutoJoinRecordByUserIdAndExerciseBindIds($userId, $exerciseBindIds)
+    {
+        $this->getExerciseAutoJoinRecordDao()->batchDelete(['userId' => $userId, 'itemBankExerciseBindIds' => $exerciseBindIds]);
+    }
+
     public function deleteExerciseAutoJoinRecordByExerciseBindId($itemBankExerciseId)
     {
         $this->getExerciseAutoJoinRecordDao()->deleteByExerciseBindId($itemBankExerciseId);
