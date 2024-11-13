@@ -319,6 +319,17 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $exerciseAutoJoinRecords = [];
         $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+        if (empty($autoJoinRecords)) {
+            foreach ($userIds as $userId) {
+                $exerciseAutoJoinRecords[] = [
+                    'userId' => $userId,
+                    'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
+                    'itemBankExerciseBindId' => $exerciseBind['id'],
+                ];
+            }
+
+            return $exerciseAutoJoinRecords;
+        }
         $autoJoinRecords = ArrayToolkit::group($autoJoinRecords, 'userId');
         foreach ($userIds as $userId) {
             $userAutoJoinRecords = $autoJoinRecords[$userId];
