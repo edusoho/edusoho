@@ -35,6 +35,12 @@ class ItemBankExercise extends AbstractResource
         $goodsKey = 'itemBankExercise_'.$itemBankExercise['id'];
         $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
         $itemBankExercise['isContractSigned'] = empty($signRecord) ? 0 : 1;
+        if (0 == $itemBankExercise['isContractSigned']) {
+            $member = $this->getItemBankExerciseMemberService()->getExerciseMember($id, $user['id']);
+            if ('bind_join' == $member['joinedChannel']) {
+                $itemBankExercise['isContractSigned'] = 1;
+            }
+        }
         $itemBankExercise['contract'] = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
         if (empty($itemBankExercise['contract'])) {
             $itemBankExercise['contract'] = [
