@@ -208,6 +208,7 @@ async function bindItemBankExercise() {
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
   itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
   closeItemBankDrawer();
+  message.destroy();
   emit('needGetBindItemBank');
 }
 
