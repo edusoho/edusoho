@@ -4,6 +4,7 @@ namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
+use Biz\Question\Service\QuestionService;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -69,11 +70,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     public function submitAnswer(array $assessmentResponse)
     {
         // todo 背景信息
-        $answerRecord = $this->getAnswerRecordService()->get($assessmentResponse['answer_record_id']);
-        $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerRecord['answer_scene_id']);
-        if (!empty($testpaperActivity)) {
-            $assessmentResponse = $this->appendNoAnswerQuestion($assessmentResponse);
-        }
+        $assessmentResponse = $this->appendNoAnswerQuestion($assessmentResponse);
         $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
@@ -89,7 +86,6 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         try {
             $this->beginTransaction();
 
-            $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
             $this->saveAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
@@ -1265,12 +1261,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         $allIdentifies = [];
         $sectionResponses = [];
         $assessmentTotalQuestions = 0;
+        $allQuestionIds = [];
         foreach ($assessment['sections'] as $section) {
             foreach ($section['items'] as $item) {
                 $assessmentTotalQuestions += count($item['questions']);
                 foreach ($item['questions'] as $question) {
                     $allIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $question['id'];
                     $sectionResponses[$question['id']] = $section['id'].'_'.$item['id'];
+                    $allQuestionIds[] = $question['id'];
                 }
             }
         }
@@ -1302,7 +1300,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
         $assessmentSectiones = $this->getAssessmentSectionService()->findSectionsByAssessmentId($assessment['id']);
         $assessmentSectionesIndex = ArrayToolkit::index($assessmentSectiones, 'id');
-
+        $questionsIndex = $this->getItemService()->findQuestionsByQuestionIds($allQuestionIds);
         // 将缺失的问题添加到新的结构中
         foreach ($allIdentifies as $identify) {
             list($answerRecordId, $questionId) = explode('_', $identify);
@@ -1332,22 +1330,22 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             }
             // todo 兼容安卓
             $noResponse = [];
-            if ($assessmentSectionesIndex[$sectionId]['name'] == '单选题') {
+            if ($questionsIndex[$questionId]['answer_mode'] == 'single_choice') {
                 $noResponse = null;
             }
-            if ($assessmentSectionesIndex[$sectionId]['name'] == '多选题') {
+            if ($questionsIndex[$questionId]['answer_mode'] == 'choice') {
                 $noResponse = [];
             }
-            if ($assessmentSectionesIndex[$sectionId]['name'] == '问答题') {
+            if ($questionsIndex[$questionId]['answer_mode'] == 'rich_text') {
                 $noResponse = [""];
             }
-            if ($assessmentSectionesIndex[$sectionId]['name'] == '不定项选择题') {
+            if ($questionsIndex[$questionId]['answer_mode'] == 'uncertain_choice') {
                 $noResponse = [];
             }
-            if ($assessmentSectionesIndex[$sectionId]['name'] == '判断题') {
+            if ($questionsIndex[$questionId]['answer_mode'] == 'true_false') {
                 $noResponse = [""];
             }
-            if ($assessmentSectionesIndex[$sectionId]['name'] == '填空题') {
+            if ($questionsIndex[$questionId]['answer_mode'] == 'text') {
                 $question = $this->findQuestion($assessment['sections'], $sectionId, $itemId, $questionId);
                 if ($question) {
                     $responsePointsCount = count($question['response_points']);

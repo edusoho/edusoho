@@ -75,7 +75,7 @@
               </li>
             {% endfor %}
           </ul>
-          {% include 'file-chooser/file-choose.html.twig' with {courseId: activity.fromCourseId, mediaType: mediaType, fileType:'document',file: null } %}
+          {% include 'file-chooser/file-choose.html.twig' with {courseId: activity.fromCourseId, mediaType: mediaType, fileType: 'document', fileTypes: 'document,ppt', file: null} %}
           <input id="materials" class="form-control" type="hidden" name="materials"
             {% if medias|default() %} value="{{ medias|default()|json_encode }}" {% endif %} >
         </div>

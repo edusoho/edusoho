@@ -632,6 +632,8 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'learnedNum < :learnedNumLessThan',
                 'deadline <= :deadlineLessThen',
                 'deadline >= :deadlineGreaterThan',
+                'deadline = 0 or deadline > :deadlineAfter',
+                'deadline > 0 and deadline <= :deadlineBefore',
                 'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime = :lastLearnTime',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
@@ -645,6 +647,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'deadlineNotified = :deadlineNotified',
                 'classroomId IN (:classroomIds)',
                 'startLearnTime > :startLearnTime_GT',
+                'joinedChannel = :joinedChannel',
             ],
         ];
     }

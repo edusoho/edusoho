@@ -22,20 +22,16 @@ class ExportController extends BaseController
         }
 
         $batchExporter->findExporter($names, $conditions);
-        $counts = $batchExporter->getCount();
-
-        $response = ['success' => 1, 'counts' => $counts];
-
         if (!$batchExporter->canExport()) {
             $response = ['success' => 0, 'message' => 'export.not_allowed'];
         }
 
-        $magic = $this->getSettingService()->get('magic');
-
+        $counts = $batchExporter->getCount();
         if (0 == count($counts)) {
             $response = ['success' => 0, 'message' => 'export.empty'];
         }
 
+        $magic = $this->getSettingService()->get('magic');
         if (empty($magic['export_allow_count'])) {
             $magic['export_allow_count'] = 10000;
         }
@@ -47,6 +43,7 @@ class ExportController extends BaseController
                 'parameters' => ['exportAllowCount' => $magic['export_allow_count'], 'count' => max($counts)],
             ];
         }
+        $response = $response ?? ['success' => 1, 'counts' => $counts];
 
         return $this->createJsonResponse($response);
     }

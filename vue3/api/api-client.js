@@ -48,4 +48,22 @@ apiClient.interceptors.response.use(
   }
 );
 
-export { apiClient };
+const ajaxClient = axios.create({
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'X-CSRF-Token': csrfToken?.content,
+  },
+  timeout: 15000,
+});
+
+ajaxClient.interceptors.response.use(
+  response => {
+    return response.data;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
+
+export { apiClient, ajaxClient };
