@@ -786,7 +786,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $result = $this->getCourseDeleteService()->deleteCourse($id);
             $this->getCourseSpecsMediator()->onDelete($course);
-            $this->dispatchEvent('exercise.unBind', new Event(['course' => $courseId, 'bindType' => 'course']));
+            $this->dispatchEvent('exercise.unBind', new Event(['bindId' => $id, 'bindType' => 'course']));
             $this->commit();
 
             return $result;

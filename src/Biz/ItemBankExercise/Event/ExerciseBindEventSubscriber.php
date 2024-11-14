@@ -53,6 +53,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 $this->updateMemberExpiredTime($exerciseAutoJoinRecords);
             }
             $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords($userIds, $exerciseBind);
+            $existingRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+            $exerciseAutoJoinRecords = $this->filterExistAutoJoinRecords($exerciseAutoJoinRecords, $existingRecords);
             $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
         }
     }
@@ -64,21 +66,37 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject();
         $exerciseBind = $this->getExerciseService()->getExerciseBindById($params['id']);
+        if (empty($exerciseBind)) {
+            $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+            foreach ($exerciseBinds as $exerciseBind) {
+                $this->unBindByExerciseBind($exerciseBind);
+            }
+        } else {
+            $this->unBindByExerciseBind($exerciseBind);
+        }
+    }
+
+    protected function unBindByExerciseBind($exerciseBind)
+    {
         $userIds = $this->getStudentIds($exerciseBind['bindType'], $exerciseBind['bindId']);
+        if (empty($userIds)) {
+            return;
+        }
         // 查询成员、获取成员IDs
         $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
         list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($autoJoinRecords, $exerciseBind['id']);
         // 只有一条记录直接移除学员
+        file_put_contents('/tmp/jc123', json_encode($singleExerciseAutoJoinRecords), 8);
         if (!empty($singleExerciseAutoJoinRecords)) {
             $this->getExerciseMemberService()->batchRemoveStudent($exerciseBind['itemBankExerciseId'], array_column($singleExerciseAutoJoinRecords, 'userId'));
         }
-        $multipleExerciseAutoJoinRecords = array_filter($multipleExerciseAutoJoinRecords, function ($record) use ($params) {
-            return $record['itemBankExerciseBindId'] != $params['id'];
+        $multipleExerciseAutoJoinRecords = array_filter($multipleExerciseAutoJoinRecords, function ($record) use ($exerciseBind) {
+            return $record['itemBankExerciseBindId'] != $exerciseBind['id'];
         });
         // 有多条记录重新计算有效期
         $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
         // 移除自动加入记录
-        $this->getExerciseService()->deleteExerciseAutoJoinRecordByExerciseBindId($params['id']);
+        $this->getExerciseService()->deleteExerciseAutoJoinRecordByExerciseBindId($exerciseBind['id']);
     }
 
     /** 课程/班级添加学员
@@ -111,6 +129,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 $this->updateMemberExpiredTime(array_merge($exerciseAutoJoinRecords, $savedAutoJoinRecords));
             }
             $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords($params['userIds'], $exerciseBind);
+            $existingRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($params['userIds'], $exerciseBind['itemBankExerciseId']);
+            $exerciseAutoJoinRecords = $this->filterExistAutoJoinRecords($exerciseAutoJoinRecords, $existingRecords);
             $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
         }
     }
@@ -214,14 +234,17 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         $singleExerciseAutoJoinRecords = [];
         $multipleExerciseAutoJoinRecords = [];
         foreach ($exerciseAutoJoinRecordsGroup as $userId => $exerciseAutoJoinRecords) {
-            // 过滤掉当前exerciseBind创建的添加记录
-            if (count($exerciseAutoJoinRecords) > 1) {
-                $filteredRecords = array_filter($exerciseAutoJoinRecords, function ($record) use ($exerciseBindId) {
-                    return $record['exerciseBindId'] != $exerciseBindId;
-                });
-                $multipleExerciseAutoJoinRecords = array_merge($multipleExerciseAutoJoinRecords, $filteredRecords);
-            } else {
-                $singleExerciseAutoJoinRecords = array_merge($singleExerciseAutoJoinRecords, $exerciseAutoJoinRecords);
+            $exerciseAutoJoinRecordsGroups = ArrayToolkit::group($exerciseAutoJoinRecords, 'itemBankExerciseId');
+            foreach ($exerciseAutoJoinRecordsGroups as $exerciseId => $exerciseAutoJoinRecordsGroup) {
+                // 过滤掉当前exerciseBind创建的添加记录
+                if (count($exerciseAutoJoinRecordsGroup) > 1) {
+                    $filteredRecords = array_filter($exerciseAutoJoinRecordsGroup, function ($record) use ($exerciseBindId) {
+                        return $record['exerciseBindId'] != $exerciseBindId;
+                    });
+                    $multipleExerciseAutoJoinRecords = array_merge($multipleExerciseAutoJoinRecords, $filteredRecords);
+                } else {
+                    $singleExerciseAutoJoinRecords = array_merge($singleExerciseAutoJoinRecords, $exerciseAutoJoinRecordsGroup);
+                }
             }
         }
 
@@ -362,6 +385,24 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
 
         return $exercise;
+    }
+
+    protected function filterExistAutoJoinRecords($exerciseAutoJoinRecords, $existingRecords)
+    {
+        foreach ($exerciseAutoJoinRecords as $key => $record) {
+            foreach ($existingRecords as $existingRecord) {
+                if (
+                    $record['userId'] === $existingRecord['userId'] &&
+                    $record['itemBankExerciseId'] === $existingRecord['itemBankExerciseId'] &&
+                    $record['itemBankExerciseBindId'] === $existingRecord['itemBankExerciseBindId']
+                ) {
+                    unset($exerciseAutoJoinRecords[$key]);
+                    break;
+                }
+            }
+        }
+
+        return array_values($exerciseAutoJoinRecords);
     }
 
     /**
