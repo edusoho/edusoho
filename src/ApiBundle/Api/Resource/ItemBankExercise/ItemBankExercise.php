@@ -27,6 +27,9 @@ class ItemBankExercise extends AbstractResource
         }
 
         $itemBankExercise['isMember'] = !empty($member);
+        if ($itemBankExercise['isMember']) {
+            $itemBankExercise['canLearn'] = (int) ($member['canLearn'] && $itemBankExercise['canLearn']);
+        }
         if (!empty($member)) {
             $itemBankExercise['access'] = $this->getItemBankExerciseService()->canLearnExercise($id);
         } else {
