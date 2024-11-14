@@ -81,13 +81,14 @@ export default class UploaderChooser extends Chooser {
   }
 
   _onFileUploadFinish(uploadFile) {
-    let file = {
-      'source' : 'self',
-      'id' : uploadFile.fileId,
-      'name' : uploadFile.name,
-      'hashId' : uploadFile.initResponse.hashId,
-      'globalId' : uploadFile.globalId,
-      'length' : uploadFile.length ? uploadFile.length : 0,
+    const file = {
+      source: 'self',
+      id: uploadFile.fileId,
+      name: uploadFile.name,
+      ext: uploadFile.ext,
+      hashId: uploadFile.initResponse.hashId,
+      globalId: uploadFile.globalId,
+      length: uploadFile.length ? uploadFile.length : 0,
     };
 
     let placeFileName = (name) => {
