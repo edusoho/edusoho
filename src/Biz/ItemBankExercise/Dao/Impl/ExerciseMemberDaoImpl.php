@@ -49,6 +49,7 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
                 'exerciseId IN (:exerciseIds)',
                 'role = :role',
                 'locked = :locked',
+                'canLearn = :canLearn',
                 'doneQuestionNum > :doneQuestionNum',
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',

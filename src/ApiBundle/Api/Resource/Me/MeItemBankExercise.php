@@ -13,7 +13,7 @@ class MeItemBankExercise extends AbstractResource
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
-        $conditions = ['role' => 'student', 'userId' => $user['id']];
+        $conditions = ['role' => 'student', 'userId' => $user['id'], 'canLearn' => '1'];
         $total = $this->getItemBankExerciseMemberService()->count($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
