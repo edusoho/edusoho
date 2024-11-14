@@ -74,6 +74,7 @@ export default {
   methods: {
     clickBtn() {
       const status = this.section.latestAnswerRecord?.status;
+      console.log(status)
       switch (status) {
         case 'doing':
         case 'paused':
@@ -89,9 +90,9 @@ export default {
       }
     },
     startDo(item) {
-      if (this.ItemBankExercise?.status == 'closed') {
+      if (this.ItemBankExercise?.status === 'closed' || this.ItemBankExercise?.canLearn === '1') {
         closedToast('exercise')
-        return 
+        return
       }
 
       const query = {
@@ -102,9 +103,9 @@ export default {
       this.$router.push({ path: '/brushIntro', query });
     },
     continueDo(item) {
-      if (this.ItemBankExercise?.status == 'closed') {
+      if (this.ItemBankExercise?.status == 'closed' || this.ItemBankExercise?.canLearn === '1') {
         closedToast('exercise')
-        return 
+        return
       }
 
       const query = {
