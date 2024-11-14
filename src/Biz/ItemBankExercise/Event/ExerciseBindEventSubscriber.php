@@ -162,6 +162,18 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseBanLearn(Event $event)
     {
         $params = $event->getSubject();
+        if ('courseSet' == $params['bindType']) {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($params['bindId']);
+            foreach ($courses as $course) {
+                $this->exerciseBanLearnByCourse(['bindType' => 'course', 'bindId' => $course['id']]);
+            }
+        } else {
+            $this->exerciseBanLearnByCourse($params);
+        }
+    }
+
+    protected function exerciseBanLearnByCourse($params)
+    {
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
         $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
         foreach ($exerciseBinds as $exerciseBind) {
@@ -192,7 +204,22 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseCanLearn(Event $event)
     {
         $params = $event->getSubject();
+        if ('courseSet' == $params['bindType']) {
+            $courses = $this->getCourseService()->findCoursesByCourseSetId($params['bindId']);
+            foreach ($courses as $course) {
+                $this->exerciseCanLearnByCourse(['bindType' => 'course', 'bindId' => $course['id']]);
+            }
+        } else {
+            $this->exerciseCanLearnByCourse($params);
+        }
+    }
+
+    protected function exerciseCanLearnByCourse($params)
+    {
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+        if (empty($exerciseBinds)) {
+            return;
+        }
         $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
         foreach ($exerciseBinds as $exerciseBind) {
             $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
