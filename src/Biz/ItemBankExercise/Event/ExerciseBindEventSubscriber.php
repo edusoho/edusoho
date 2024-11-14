@@ -217,10 +217,10 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     protected function exerciseCanLearnByCourse($params)
     {
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-        if (empty($exerciseBinds)) {
+        $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
+        if (empty($exerciseBinds) || empty($userIds)) {
             return;
         }
-        $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
         foreach ($exerciseBinds as $exerciseBind) {
             $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
             $invalidAutoJoin = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseIdAndBindId($userIds, $exerciseBind['itemBankExerciseId'], $exerciseBind['id']);
