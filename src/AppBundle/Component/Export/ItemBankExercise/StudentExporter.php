@@ -212,7 +212,7 @@ class StudentExporter extends Exporter
         $bindExerciseIds = array_column($bindExercises, 'id');
         $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($exerciseId, $bindExerciseIds);
         $conditions['userIds'] = array_column($autoJoinRecords, 'userId');
-        unset($conditions['joinedChannel']);
+        $conditions['joinedChannel'] = 'bind_join';
 
         return $conditions;
     }
