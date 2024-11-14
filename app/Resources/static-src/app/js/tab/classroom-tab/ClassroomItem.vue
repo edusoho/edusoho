@@ -12,7 +12,7 @@
         <a class="cd-link-major text-16" :href="'/classroom/'+classItem.id">
           {{ classItem.title }}</a>
       </div>
-      <div class="my-course-item__classroom"><span>已学了{{classItem.spec.usageDays}}天</span></div>
+      <div class="my-course-item__classroom"><span>已学了{{ classItem.joinedDays }}天</span></div>
 
       <div class="my-course-item__progress cd-mt32 cd-clearfix">
         <span class="my-course-item__progress__text">学习进度</span>
@@ -54,7 +54,7 @@ export default {
         class: '',
         text: ''
       }
-      
+
       if (this.classItem.status == 'closed') {
         status = {
           class: 'course-status-expired',
