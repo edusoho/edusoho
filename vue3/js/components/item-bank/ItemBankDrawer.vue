@@ -204,9 +204,9 @@ async function bindItemBankExercise() {
   }
   loading.value = true;
   try {
+    stopWatching();
     await Api.itemBank.bindItemBankExercise(params);
   } finally {
-    stopWatching();
     loading.value = false;
   }
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
