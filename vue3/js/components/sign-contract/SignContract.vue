@@ -192,7 +192,7 @@ const bgClass = computed(() => {
         </div>
       </template>
       <div class="p-24 flex">
-        <div class="flex flex-1 border border-solid border-[#DCDEE0] rounded-8 relative min-h-380 max-h-400">
+        <div class="flex flex-1 border border-solid border-[#DCDEE0] rounded-8 relative min-h-380 max-h-414">
           <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 px-32"
                style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32 contract-content"></div>
