@@ -87,7 +87,11 @@ class ItemBankExercise extends AbstractResource
         if (isset($conditions['updatedUser'])) {
             $user = $this->getUserService()->findUserLikeNickname($conditions['updatedUser']);
             $conditions['updatedUsers'] = array_column($user, 'id');
+
             unset($conditions['updatedUser']);
+        }
+        if (isset($conditions['updatedUsers']) && empty($conditions['updatedUsers'])) {
+            $conditions['updatedUsers'] = [-1];
         }
 
         $sort = $this->getSort($request) ?: ['recommendedSeq' => 'ASC'];
