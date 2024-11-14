@@ -590,7 +590,7 @@ export default {
       this.bindItemBankList = await Api.getBindItemBank({
         params: {
           bindType: 'course',
-          bindId: this.details.id,
+          bindId: this.$route.params.id,
         }
       })
     }
