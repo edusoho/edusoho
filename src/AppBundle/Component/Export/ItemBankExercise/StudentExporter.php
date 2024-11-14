@@ -205,7 +205,7 @@ class StudentExporter extends Exporter
         $bindExerciseIds = array_column($bindExercises, 'id');
         $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($exerciseId, $bindExerciseIds);
         $conditions['userIds'] = array_column($autoJoinRecords, 'userId');
-        if (in_array($conditions['joinedChannel'], ['course_join', 'classroom_join')) {
+        if (in_array($conditions['joinedChannel'], ['course_join', 'classroom_join'])) {
             $conditions['joinedChannel'] = 'bind_join';
         }
 
