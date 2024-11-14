@@ -315,6 +315,9 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $userIds = array_column($singleExerciseAutoJoinRecords, 'userId');
         $exerciseIds = array_column($singleExerciseAutoJoinRecords, 'itemBankExerciseId');
+        if (empty($userIds) || empty($exerciseIds)) {
+            return;
+        }
         $exerciseMembers = $this->getExerciseMemberService()->search(
             ['userIds' => $userIds, 'exerciseId' => $exerciseIds], [], 0, PHP_INT_MAX
         );
