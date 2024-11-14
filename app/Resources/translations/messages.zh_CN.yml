@@ -2035,8 +2035,7 @@ course.plan_task.edit_tips: 编辑以创建直播教室
 course.plan_task.live_finish_tips: 直播已经结束
 course.plan_task.converting: 转码中
 course.plan_task.convert_failed: 转码失败
-course.plan_task.which_chapter: >
-  </i>第%chapterNumber%%chapter%%colon%%title%
+course.plan_task.which_chapter: 第%chapterNumber%%chapter%%colon%%title%
 course.plan_task.which_lesson: >
   </i>课时<span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>
 course.plan_task.create_btn: 添加
