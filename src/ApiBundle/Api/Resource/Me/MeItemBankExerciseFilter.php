@@ -9,6 +9,7 @@ class MeItemBankExerciseFilter extends Filter
 {
     protected $publicFields = [
         'id', 'exerciseId', 'questionBankId', 'doneQuestionNum', 'rightQuestionNum', 'masteryRate', 'completionRate', 'itemBankExercise', 'isExpired', 'canLearn', 'bindTitle',
+        'category',
     ];
 
     protected function publicFields(&$data)

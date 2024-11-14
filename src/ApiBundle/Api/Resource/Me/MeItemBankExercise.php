@@ -25,14 +25,21 @@ class MeItemBankExercise extends AbstractResource
         );
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
         $bindTitles = $this->findBindExerciseTitle($members);
+        $categoryIds = array_values(array_unique(array_column($itemBankExercises, 'categoryId')));
+        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
         foreach ($members as $key => &$member) {
             if (empty($itemBankExercises[$member['exerciseId']])) {
                 unset($members[$key]);
             } else {
+                $member['category'] = $categories[$itemBankExercises[$member['exerciseId']]['categoryId']] ?? null;
                 $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
                 $member['isExpired'] = $this->isExpired($members['deadline']);
                 $member['bindTitle'] = mb_substr($bindTitles[$member['exerciseId']], 0, mb_strlen($bindTitles[$member['exerciseId']], 'UTF-8') - 1);
             }
+        }
+
+        foreach ($itemBankExercises as &$itemBankExercise) {
+            $itemBankExercise['category'] = $categories[$itemBankExercise['categoryId']] ?? null;
         }
 
         return $this->makePagingObject(array_values($members), $total, $offset, $limit);
@@ -113,5 +120,13 @@ class MeItemBankExercise extends AbstractResource
     protected function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return \Biz\QuestionBank\Service\CategoryService
+     */
+    private function getCategoryService()
+    {
+        return $this->service('QuestionBank:CategoryService');
     }
 }
