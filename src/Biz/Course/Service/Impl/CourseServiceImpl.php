@@ -818,10 +818,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
                 }
             }
-            $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
             $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'course', 'bindId' => $course['id']]));
             $this->unpublishGoodsSpecs($course);
+            $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;

@@ -29,6 +29,7 @@ class ExerciseAutoJoinRecordDaoImpl extends AdvancedDaoImpl implements ExerciseA
                 'userId IN (:userIds)',
                 'itemBankExerciseId IN (:itemBankExerciseIds)',
                 'itemBankExerciseId = :itemBankExerciseId',
+                'isValid = :isValid',
                 'itemBankExerciseBindId = :itemBankExerciseBindId',
                 'itemBankExerciseBindId IN (:itemBankExerciseBindIds)',
             ],

@@ -864,13 +864,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function closeClassroom($id)
     {
         $this->tryManageClassroom($id, 'admin_classroom_close');
-
-        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
-        $this->getClassroomGoodsMediator()->onClose($classroom);
-        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
-        $this->getCourseSetService()->banLearningByIds($courseIds);
-        $this->dispatchEvent('classroom.close', new Event($classroom));
-        $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
+        try {
+            $this->beginTransaction();
+            $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
+            $this->getClassroomGoodsMediator()->onClose($classroom);
+            $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+            $this->getCourseSetService()->banLearningByIds($courseIds);
+            $this->dispatchEvent('classroom.close', new Event($classroom));
+            $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
 
         return $classroom;
     }

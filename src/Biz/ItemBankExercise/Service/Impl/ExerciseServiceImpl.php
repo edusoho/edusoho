@@ -636,17 +636,22 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function findExerciseAutoJoinRecordByUserIdAndExerciseIds($userId, $exerciseIds)
     {
-        return $this->getExerciseAutoJoinRecordDao()->search(['userId' => $userId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
+        return $this->getExerciseAutoJoinRecordDao()->search(['userId' => $userId, 'itemBankExerciseIds' => $exerciseIds, 'isValid' => 1], [], 0, PHP_INT_MAX);
     }
 
     public function findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($itemBankExerciseId, $itemBankExerciseBindIds)
     {
-        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseId' => $itemBankExerciseId, 'itemBankExerciseBindIds' => $itemBankExerciseBindIds], [], 0, PHP_INT_MAX);
+        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseId' => $itemBankExerciseId, 'itemBankExerciseBindIds' => $itemBankExerciseBindIds, 'isValid' => 1], [], 0, PHP_INT_MAX);
     }
 
     public function findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseId)
     {
-        return $this->getExerciseAutoJoinRecordDao()->search(['userIds' => $userIds, 'itemBankExerciseId' => $exerciseId], [], 0, PHP_INT_MAX);
+        return $this->getExerciseAutoJoinRecordDao()->search(['userIds' => $userIds, 'itemBankExerciseId' => $exerciseId, 'isValid' => 1], [], 0, PHP_INT_MAX);
+    }
+
+    public function findExerciseAutoJoinRecordByUserIdsAndExerciseIdAndBindId($userIds, $exerciseId, $bindId)
+    {
+        return $this->getExerciseAutoJoinRecordDao()->search(['userIds' => $userIds, 'itemBankExerciseId' => $exerciseId, 'itemBankExerciseBindId' => $bindId, 'isValid' => 0], [], 0, PHP_INT_MAX);
     }
 
     public function deleteExerciseAutoJoinRecordByUserIdsAndExerciseBindId($userIds, $exerciseBindId)
@@ -666,17 +671,22 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function findExerciseAutoJoinRecordByItemBankExerciseBindIds($itemBankExerciseBindIds)
     {
-        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseIds' => $itemBankExerciseBindIds], [], 0, PHP_INT_MAX);
+        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseIds' => $itemBankExerciseBindIds, 'isValid' => 1], [], 0, PHP_INT_MAX);
     }
 
     public function findExerciseAutoJoinRecordByItemBankExerciseIds($itemBankExerciseIds)
     {
-        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseIds' => $itemBankExerciseIds], [], 0, PHP_INT_MAX);
+        return $this->getExerciseAutoJoinRecordDao()->search(['itemBankExerciseIds' => $itemBankExerciseIds, 'isValid' => 1], [], 0, PHP_INT_MAX);
     }
 
     public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords)
     {
         $this->getExerciseAutoJoinRecordDao()->batchCreate($exerciseAutoJoinRecords);
+    }
+
+    public function batchUpdateExerciseAutoJoinRecord($exerciseAutoJoinRecords)
+    {
+        $this->getExerciseAutoJoinRecordDao()->batchUpdate(array_column($exerciseAutoJoinRecords, 'id'), $exerciseAutoJoinRecords);
     }
 
     public function getExerciseBindById($id)
