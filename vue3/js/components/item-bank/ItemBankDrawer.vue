@@ -203,7 +203,9 @@ async function bindItemBankExercise() {
   try {
     await Api.itemBank.bindItemBankExercise(params);
   } finally {
-    stopWatching();
+    if (props.bindItemBankExerciseNum + checkedExerciseIdNum.value === 100) {
+      stopWatching();
+    }
     loading.value = false;
   }
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
