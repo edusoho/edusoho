@@ -35,7 +35,7 @@ const itemBankExerciseState = ref([]);
 const allDataLoaded = ref(false);
 
 function closeItemBankDrawer() {
-  clear();
+  remake();
   itemBankListVisible.value = false;
 }
 
@@ -118,12 +118,12 @@ function remake() {
   keyword.value = undefined;
   pagination.current = 1;
   allDataLoaded.value = false;
+  itemBankExerciseData.value = [];
+  itemBankExerciseState.value = [];
 }
 
 function clear() {
   remake();
-  itemBankExerciseData.value = [];
-  itemBankExerciseState.value = [];
   reset();
 }
 
@@ -218,6 +218,12 @@ function checkboxIsDisabled(item) {
 watch(() => props.bindItemBankExerciseNum + checkedExerciseIdNum.value, (newValue) => {
   if (newValue === 100) {
     message.error('最多可绑定100个题库练习');
+  }
+})
+
+watch(() => itemBankListVisible.value, (newValue) => {
+  if (newValue === true) {
+    reset();
   }
 })
 
