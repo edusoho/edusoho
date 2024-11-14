@@ -25,6 +25,9 @@ class LearnExerciseMemberAccessor extends AccessorAdapter
         if ($member['deadline'] > 0 && $member['deadline'] < time()) {
             return $this->buildResult('member.expired', ['userId' => $user['id']]);
         }
+        if ($member['canLearn'] == 0) {
+            return $this->buildResult('item_bank_exercise.closed');
+        }
 
         return null;
     }
