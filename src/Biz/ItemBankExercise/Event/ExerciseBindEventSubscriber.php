@@ -322,7 +322,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             return;
         }
         $exerciseMembers = $this->getExerciseMemberService()->search(
-            ['userIds' => $userIds, 'exerciseId' => $exerciseIds], [], 0, PHP_INT_MAX
+            ['userIds' => $userIds, 'exerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX
         );
         $autoJoinRecordMap = [];
         foreach ($singleExerciseAutoJoinRecords as $record) {
