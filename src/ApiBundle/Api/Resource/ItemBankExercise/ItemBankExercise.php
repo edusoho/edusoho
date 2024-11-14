@@ -62,7 +62,7 @@ class ItemBankExercise extends AbstractResource
         $conditions['status'] = 'published';
 
         if (isset($conditions['categoryId'])) {
-            if ('0' != $conditions['categoryId']) {
+            if (!empty($conditions['categoryId'])) {
                 $conditions['categoryIds'] = $this->getCategoryService()->findAllChildrenIdsByParentId($conditions['categoryId']);
                 array_unshift($conditions['categoryIds'], $conditions['categoryId']);
             }
