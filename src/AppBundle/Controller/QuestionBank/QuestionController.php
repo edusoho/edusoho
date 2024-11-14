@@ -13,6 +13,7 @@ use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -437,21 +438,18 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        $fileName = $this->getExportFileName($id);
-        $path = $this->get('kernel')->getContainer()->getParameter(
-                'topxia.disk.local_directory'
-            ).DIRECTORY_SEPARATOR.$fileName;
-
         $conditions = $request->query->all();
         if (isset($conditions['ids']) && !empty($conditions['ids'])) {
             $conditions['ids'] = explode(',', $conditions['ids']);
         }
+        $biz = $this->getBiz();
+        $path = $biz['topxia.disk.local_directory'].DIRECTORY_SEPARATOR.Uuid::uuid4();
 
         $result = $this->getItemService()->exportItems(
             $bank['itemBankId'],
             $conditions,
             $path,
-            $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web'
+            $biz['kernel.root_dir'].'/../web'
         );
 
         if (empty($result)) {
@@ -466,7 +464,7 @@ class QuestionController extends BaseController
 
         $headers = [
             'Content-Type' => 'application/msword',
-            'Content-Disposition' => 'attachment; filename='.$fileName,
+            'Content-Disposition' => 'attachment; filename='.$this->getExportFileName($id),
         ];
 
         return new BinaryFileResponse($path, 200, $headers);
