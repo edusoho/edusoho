@@ -66,7 +66,7 @@ class ItemBankExerciseMember extends AbstractResource
         foreach ($members as &$member) {
             $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
             $member['joinedChannelText'] = $this->convertJoinedChannel($member);
-            $member['remark'] = 'site.join_by_free' == $member['remark'] ? '' : $member['remark'];
+            $member['remark'] = in_array($member['remark'], ['site.join_by_free', 'site.join_by_purchase']) ? '' : $member['remark'];
         }
 
         $total = $this->getItemBankExerciseMemberService()->count($conditions);
