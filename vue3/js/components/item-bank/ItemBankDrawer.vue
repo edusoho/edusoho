@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeMount, reactive, ref, watch} from 'vue';
+import {computed, onBeforeMount, reactive, ref, watch, watchEffect} from 'vue';
 import { useInfiniteScroll } from '@vueuse/core'
 import { message } from 'ant-design-vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
@@ -204,7 +204,7 @@ async function bindItemBankExercise() {
     await Api.itemBank.bindItemBankExercise(params);
   } finally {
     if (props.bindItemBankExerciseNum + checkedExerciseIdNum.value === 100) {
-      stopWatching();
+      isWatching.value = false;
     }
     loading.value = false;
   }
@@ -212,18 +212,27 @@ async function bindItemBankExercise() {
   itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
   closeItemBankDrawer();
   emit('needGetBindItemBank');
+  isWatching.value = true;
 }
 
 function checkboxIsDisabled(item) {
   return !item.checked && props.bindItemBankExerciseNum + checkedExerciseIdNum.value >= 100;
 }
 
-const stopWatching = watch(() => props.bindItemBankExerciseNum + checkedExerciseIdNum.value, (newValue) => {
-  if (newValue === 100) {
-    if (props.bindItemBankExerciseNum === 100) return;
-    message.error('最多可绑定100个题库练习');
+const isWatching = ref(false);
+watchEffect(() => {
+  if (isWatching.value) {
+    if (props.bindItemBankExerciseNum + checkedExerciseIdNum.value === 100) {
+      message.error('最多可绑定100个题库练习');
+    }
   }
-})
+});
+// const stopWatching = watch(() => props.bindItemBankExerciseNum + checkedExerciseIdNum.value, (newValue) => {
+//   if (newValue === 100) {
+//     if (props.bindItemBankExerciseNum === 100) return;
+//     message.error('最多可绑定100个题库练习');
+//   }
+// })
 
 watch(() => itemBankListVisible.value, (newValue) => {
   if (newValue === true) {
