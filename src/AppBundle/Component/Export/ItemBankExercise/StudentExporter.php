@@ -172,76 +172,7 @@ class StudentExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        if ($this->hasJoinedChannel($conditions)) {
-            $conditions = $this->processJoinedChannel($conditions);
-        }
-        if ($this->hasUserKeyword($conditions)) {
-            $conditions = $this->processUserKeyword($conditions);
-        }
-        $conditions['userIds'] = $this->ensureUserIds($conditions);
-        return $this->buildFinalConditions($conditions);
-    }
-
-    private function hasJoinedChannel($conditions)
-    {
-        return isset($conditions['joinedChannel']) && '' != $conditions['joinedChannel'];
-    }
-
-    private function processJoinedChannel($conditions)
-    {
-        $exerciseId = $conditions['exerciseId'];
-        $bindExercises = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($exerciseId);
-
-        $bindExercises = array_filter($bindExercises, function ($bindExercise) use ($conditions) {
-            if ('course_join' == $conditions['joinedChannel']) {
-                return 'course' == $bindExercise['bindType'];
-            } elseif ('classroom_join' == $conditions['joinedChannel']) {
-                return 'classroom' == $bindExercise['bindType'];
-            }
-
-            return false;
-        });
-
-        $bindExerciseIds = array_column($bindExercises, 'id');
-        $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($exerciseId, $bindExerciseIds);
-        $conditions['userIds'] = array_column($autoJoinRecords, 'userId');
-        if (in_array($conditions['joinedChannel'], ['course_join', 'classroom_join'])) {
-            $conditions['joinedChannel'] = 'bind_join';
-        }
-
-        return $conditions;
-    }
-
-    private function hasUserKeyword($conditions)
-    {
-        return isset($conditions['userKeyword']) && '' != $conditions['userKeyword'];
-    }
-
-    private function processUserKeyword($conditions)
-    {
-        $userIdsByKeyword = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
-        if (!empty($conditions['userIds'])) {
-            $conditions['userIds'] = array_intersect($userIdsByKeyword, $conditions['userIds']);
-        } else {
-            $conditions['userIds'] = $userIdsByKeyword;
-        }
-        unset($conditions['userKeyword']);
-
-        return $conditions;
-    }
-
-    private function ensureUserIds($conditions)
-    {
-        if (isset($conditions['userIds']) && empty($conditions['userIds'])) {
-            return [-1];
-        }
-
-        return $conditions['userIds'] ?? [];
-    }
-
-    private function buildFinalConditions($conditions)
-    {
-        $defaultConditions = [
+        $params = [
             'exerciseId' => $conditions['exerciseId'],
             'role' => 'student',
             'startTimeGreaterThan' => $conditions['startTimeGreaterThan'] ?? '',
@@ -249,10 +180,36 @@ class StudentExporter extends Exporter
             'joinedChannel' => $conditions['joinedChannel'] ?? '',
             'deadlineAfter' => $conditions['deadlineAfter'] ?? '',
             'deadlineBefore' => $conditions['deadlineBefore'] ?? '',
-            'userIds' => $conditions['userIds'] ?? [],
+            'locked' => 0,
         ];
+        if (isset($conditions['joinedChannel']) && in_array($conditions['joinedChannel'], ['course_join', 'classroom_join'])) {
+            $bindExercises = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($conditions['exerciseId']);
+            $bindExercises = array_filter($bindExercises, function ($bindExercise) use ($conditions) {
+                if ('course_join' == $conditions['joinedChannel']) {
+                    return 'course' == $bindExercise['bindType'];
+                } elseif ('classroom_join' == $conditions['joinedChannel']) {
+                    return 'classroom' == $bindExercise['bindType'];
+                }
+            });
+            $bindExerciseIds = array_column($bindExercises, 'id');
+            $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($conditions['exerciseId'], $bindExerciseIds);
+            $params['userIds'] = array_column($autoJoinRecords, 'userId');
+            $params['joinedChannel'] = 'bind_join';
+        }
+        if (isset($params['userKeyword']) && '' != $params['userKeyword']) {
+            $userIdsByKeyword = $this->getUserService()->getUserIdsByKeyword($params['userKeyword']);
+            if (!empty($params['userIds'])) {
+                $params['userIds'] = array_intersect($userIdsByKeyword, $params['userIds']);
+            } else {
+                $params['userIds'] = $userIdsByKeyword;
+            }
+            unset($params['userKeyword']);
+        }
+        if (isset($params['userIds']) && empty($params['userIds'])) {
+            $params['userIds'] = [-1];
+        }
 
-        return $defaultConditions;
+        return $params;
     }
 
     public function postExport()
