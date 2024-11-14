@@ -232,7 +232,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
      * 处理直播回放返回的错误数据 对直播的返回进行重新返回
      * 此处的匹配是根据教育云返回的字符串进行匹配 若教育云返回消息变了这个代码将失效
      */
-    public function handleReplayErrorException(int $liveId, string $message, int $code)
+    private function handleReplayErrorException(int $liveId, string $message, int $code)
     {
         if ('回放状态错误，当前状态：none' == $message) {
             $message = '该直播无回放（未上课或未录制）';
