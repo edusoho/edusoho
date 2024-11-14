@@ -49,7 +49,6 @@ async function getBindItemBankExercise() {
   } finally {
     loading.value = false;
   }
-  message.destroy();
 }
 
 async function sequenceItemBankExerciseBind() {
