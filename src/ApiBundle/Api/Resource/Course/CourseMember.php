@@ -24,7 +24,7 @@ class CourseMember extends AbstractResource
         $conditions = $request->query->all();
         $conditions['courseId'] = $courseId;
         $conditions['locked'] = 0;
-        if (isset($conditions['userKeyword']) && $conditions['userKeyword'] != '') {
+        if (isset($conditions['userKeyword']) && '' != $conditions['userKeyword']) {
             $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
         }
         unset($conditions['userKeyword']);
@@ -38,6 +38,9 @@ class CourseMember extends AbstractResource
         );
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
         $members = $this->convertJoinedChannel($members);
+        foreach ($members as &$member) {
+            $member['remark'] = in_array($member['remark'], ['site.join_by_free', 'site.join_by_purchase']) ? '' : $member['remark'];
+        }
 
         $total = $this->getMemberService()->countMembers($conditions);
 
