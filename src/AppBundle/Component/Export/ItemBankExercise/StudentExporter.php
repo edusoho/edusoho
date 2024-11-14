@@ -172,20 +172,13 @@ class StudentExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        // 处理 joinedChannel 的情况
         if ($this->hasJoinedChannel($conditions)) {
             $conditions = $this->processJoinedChannel($conditions);
         }
-
-        // 处理 userKeyword 的情况
         if ($this->hasUserKeyword($conditions)) {
             $conditions = $this->processUserKeyword($conditions);
         }
-
-        // 确保 userIds 不为空
         $conditions['userIds'] = $this->ensureUserIds($conditions);
-
-        // 返回最终条件
         return $this->buildFinalConditions($conditions);
     }
 
@@ -212,7 +205,9 @@ class StudentExporter extends Exporter
         $bindExerciseIds = array_column($bindExercises, 'id');
         $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($exerciseId, $bindExerciseIds);
         $conditions['userIds'] = array_column($autoJoinRecords, 'userId');
-        $conditions['joinedChannel'] = 'bind_join';
+        if (in_array($conditions['joinedChannel'], ['course_join', 'classroom_join')) {
+            $conditions['joinedChannel'] = 'bind_join';
+        }
 
         return $conditions;
     }
