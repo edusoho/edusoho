@@ -33,6 +33,7 @@ class InitItemBankExerciseBind extends Migration
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
               KEY `idx_itemBankExerciseId` (`itemBankExerciseId`),
+              KEY `idx_itemBankExerciseBindId` (`itemBankExerciseBindId`),
               UNIQUE KEY `uniq_userId_itemBankExerciseId_itemBankExerciseBindId` (`userId`, `itemBankExerciseId`, `itemBankExerciseBindId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -45,6 +46,8 @@ class InitItemBankExerciseBind extends Migration
             UPDATE `item_bank_exercise` SET `updated_user_id` = `creator`;
             UPDATE `item_bank_exercise_member` SET `joinedChannel` = 'free_join' where orderId = 0;
             UPDATE `item_bank_exercise_member` SET `joinedChannel` = 'buy_join' where orderId != 0;
+            UPDATE `item_bank_exercise_member` SET `joinedChannel` = 'free_join' where remark = 'site.join_by_free';
+            UPDATE `item_bank_exercise_member` SET `joinedChannel` = 'buy_join' where remark = 'site.join_by_purchase';
         ");
     }
 
