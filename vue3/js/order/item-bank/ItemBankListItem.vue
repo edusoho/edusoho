@@ -15,8 +15,8 @@ const props = defineProps({
     <div>
       <div v-if="item.itemBankExercise.price === '0.00'" class="text-16 text-[#FF7E56] font-semibold">免费</div>
       <div v-else class="flex items-center space-x-8">
-        <div class="text-12 text-[#FF7E56] font-semibold">¥<span class="text-16 ml-2">0.</span>00</div>
         <div class="text-12 text-[#FFA58A] font-normal line-through mt-4">{{ `¥${item.itemBankExercise.price}` }}</div>
+        <div class="text-16 text-[#FF7E56] font-semibold">免费</div>
       </div>
     </div>
   </div>
