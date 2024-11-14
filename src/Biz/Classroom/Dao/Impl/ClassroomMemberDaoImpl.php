@@ -281,6 +281,9 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'deadline <= :deadline_LE',
                 'deadline >= :deadline_GE',
                 'deadline > :deadline_GT',
+                'deadline = 0 or deadline > :deadlineAfter',
+                'deadline > 0 and deadline <= :deadlineBefore',
+                'joinedChannel = :joinedChannel',
             ],
         ];
     }

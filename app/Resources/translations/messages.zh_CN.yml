@@ -383,6 +383,7 @@ form.btn.view: 查看
 form.btn.bind: 绑定
 form.btn.bind_account: 绑定帐号
 form.btn.search: 搜索
+form.btn.export_search_result: 导出搜索结果
 form.btn.use: 使用
 form.btn.reply: 发表
 form.btn.bind_cancel: 取消绑定
@@ -4362,6 +4363,7 @@ my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
+my.teaching.course_set.select_type.live_open_course.no_permission: 没有创建公开课的权限
 
 #班课
 my.teaching.multi_class.my_students: 我的学员
@@ -9481,6 +9483,7 @@ task.learn_data_detail.unfinished_number: 未完成(人)
 task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
+join.channel: 加入方式
 
 register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 

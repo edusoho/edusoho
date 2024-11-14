@@ -12,7 +12,7 @@ export const formatDate = (datetime, format = 'YYYY-MM-DD HH:mm:ss') => {
 
   if (datetime.length < 10) return '-';
 
-  if (datetime.indexOf('-') > -1 || datetime.indexOf('/') > -1) return datetime;
+  if ((datetime.includes('-') || datetime.includes('/')) && !datetime.includes('T')) return datetime;
 
   if (datetime.length === 10) {
     datetime *= 1000;
@@ -25,26 +25,39 @@ export const formatDate = (datetime, format = 'YYYY-MM-DD HH:mm:ss') => {
   return dayjs(datetime).format(format);
 };
 
+export const getData = (elementId, key) => {
+  const element = document.getElementById(elementId);
+
+  return element?.getAttribute(`data-${key}`);
+};
+
+export const goto = url => {
+  window.location.href = url;
+};
+
+export const open = url => {
+  window.open(url);
+};
+
 export const stopFunc = (e) => {
   e.stopPropagation();
 };
 
 export const primaryColors = {
-  'default': '#006aff',
-  'blue-light': '#4bbbfa',
-  'blue': '#0081e6',
+  'default': '#46c37b',
   'green-light': '#81d867',
-  'green': '#46c37b',
-  'orange-light': '#f9b469',
-  'orange': '#ff7200',
-  'purple-light': '#9e9abd',
   'purple': '#773cec',
+  'purple-light': '#9e9abd',
+  'orange': '#ff7200',
+  'orange-light': '#f9b469',
+  'blue': '#0a2a6b',
+  'blue-light': '#4bbbfa',
+  'red': '#cf010e',
   'red-light': '#fd5f56',
-  'red': '#cf010e'
 };
 
 export const getCurrentPrimaryColor = () => {
-  return primaryColors[app.mainColor] || '#006aff';
+  return primaryColors[app.mainColor] || '#46c37b';
 };
 
 export const setCurrentPrimaryColor = (vueInstance) => {

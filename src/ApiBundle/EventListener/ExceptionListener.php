@@ -2,7 +2,6 @@
 
 namespace ApiBundle\EventListener;
 
-use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Util\ExceptionUtil;
 use ApiBundle\ApiBundle;
 use Monolog\Handler\StreamHandler;
@@ -30,32 +29,41 @@ class ExceptionListener
             $error['message'] = $this->container->get('translator')->trans($error['message']);
             $traceId = Uuid::uuid1()->getHex();
             $error['traceId'] = $traceId;
-            $this->getLogger()->error("traceId:".$traceId.">>>".$error['message'], [$exception->getMessage(),$exception->getTraceAsString()]);
-            if ($httpCode == Response::HTTP_INTERNAL_SERVER_ERROR) {
-                $error['message'] .= "#" . $error['traceId'];
+            $this->getLogger()->error("traceId:{$traceId}>>>".$error['message'], [$this->getRequestParameters($event->getRequest()), $exception->getMessage(), $exception->getTraceAsString()]);
+            if (Response::HTTP_INTERNAL_SERVER_ERROR == $httpCode) {
+                $error['message'] .= "#{$error['traceId']}";
             }
-            $response = $this->container->get('api_response_viewer')->view(array('error' => $error), $httpCode);
+            $response = $this->container->get('api_response_viewer')->view(['error' => $error], $httpCode);
             $event->setResponse($response);
             $event->stopPropagation();
         }
     }
 
+    private function getRequestParameters($request)
+    {
+        return [
+            'body' => $request->request->all(),
+            'query' => $request->query->all(),
+        ];
+    }
+
     private function isApiPath($request)
     {
-        return strpos($request->getPathInfo(), ApiBundle::API_PREFIX) !== false;
+        return false !== strpos($request->getPathInfo(), ApiBundle::API_PREFIX);
     }
 
     private function isDebug()
     {
         $env = $this->container->get('kernel')->getEnvironment();
 
-        return $env == 'dev' || $env == 'test';
+        return 'dev' == $env || 'test' == $env;
     }
 
     private function getLogger()
     {
         $logger = new Logger('APIError');
         $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/api-error.log', Logger::DEBUG));
+
         return $logger;
     }
 }

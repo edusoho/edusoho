@@ -305,6 +305,7 @@ form.btn.view: View
 form.btn.bind: Bind
 form.btn.bind_account: 'Bind account'
 form.btn.search: Search
+form.btn.export_search_result: 'Export search result'
 form.btn.use: Use
 form.btn.reply: Publish
 form.btn.bind_cancel: 'Unbind'
@@ -3757,6 +3758,7 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
+my.teaching.course_set.select_type.live_open_course.no_permission: 'You do not have permission to create open course'
 my.teaching.multi_class.my_students: My Students
 my.teaching.multi_class.status: Status
 my.teaching.multi_class.student_num: Student Number
@@ -8169,6 +8171,7 @@ task.learn_data_detail.completed_number: completed number
 task.learn_data_detail.unfinished_number: unfinished number
 task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
+join.channel: 'Join Channel'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 

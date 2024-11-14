@@ -29,7 +29,7 @@ interface LiveReplayService
     /**
      * @before getCourseLessonReplayByLessonId
      *
-     * @param int    $lessonId
+     * @param int $lessonId
      * @param string $lessonType
      *
      * @return array
@@ -51,7 +51,7 @@ interface LiveReplayService
      * @before deleteLessonReplayByLessonId
      * @before deleteCourseLessonReplayByLessonId
      *
-     * @param int    $lessonId
+     * @param int $lessonId
      * @param string $lessonType
      *
      * @return bool
@@ -63,7 +63,7 @@ interface LiveReplayService
     /**
      * @before updateCourseLessonReplay
      *
-     * @param int   $id
+     * @param int $id
      * @param array $fields
      *
      * @return replay
@@ -73,8 +73,8 @@ interface LiveReplayService
     /**
      * @before updateCourseLessonReplayByLessonId
      *
-     * @param int    $lessonId
-     * @param array  $fields
+     * @param int $lessonId
+     * @param array $fields
      * @param string $lessonType
      *
      * @return array
@@ -95,8 +95,8 @@ interface LiveReplayService
      *
      * @param array $conditions
      * @param array $orderBy
-     * @param int   $start
-     * @param int   $limit
+     * @param int $start
+     * @param int $limit
      *
      * @return array[]
      */
@@ -119,4 +119,10 @@ interface LiveReplayService
      * @Log(module="live",action="generate_live_replay",funcName="findReplaysByCourseIdAndLessonId",param="courseId,liveId,type")
      */
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type);
+
+    public function recordReplayVideo($replayId, $liveId);
+
+    public function handleReplayGenerateEvent($liveId, $replayDatas);
+
+    public function handleReplayGenerateEventForOpenCourse($liveId, $replayDatas);
 }
