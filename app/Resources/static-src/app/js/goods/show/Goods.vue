@@ -387,7 +387,7 @@ export default {
       axios.get('/api/itemBankExerciseBind', {
         params: {
           bindType: this.goods.type,
-          bindId: this.currentSku.targetId,
+          bindId: this.targetId,
         }
       }).then((res) => {
         this.bindItemBankExerciseList = res.data;
