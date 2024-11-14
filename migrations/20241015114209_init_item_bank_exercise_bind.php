@@ -37,7 +37,7 @@ class InitItemBankExerciseBind extends Migration
               UNIQUE KEY `uniq_userId_itemBankExerciseId_itemBankExerciseBindId` (`userId`, `itemBankExerciseId`, `itemBankExerciseBindId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-            ALTER TABLE `item_bank_exercise_member` ADD COLUMN `canLearn` tinyint(1) NOT NULL COMMENT '可以学习' AFTER `deadlineNotified`;
+            ALTER TABLE `item_bank_exercise_member` ADD COLUMN `canLearn` tinyint(1) NOT NULL DEFAULT '1' COMMENT '可以学习' AFTER `deadlineNotified`;
 
             ALTER TABLE `item_bank_exercise_member` ADD COLUMN `joinedChannel` varchar(255) NOT NULL DEFAULT '' COMMENT '加入来源' AFTER `canLearn`;
             
