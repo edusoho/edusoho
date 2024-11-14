@@ -53,7 +53,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 $this->updateMemberExpiredTime($exerciseAutoJoinRecords);
             }
             $exerciseAutoJoinRecords = $this->buildExerciseAutoJoinRecords($userIds, $exerciseBind);
-            $existingRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+            $existingRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseIdAll($userIds, $exerciseBind['itemBankExerciseId']);
             $exerciseAutoJoinRecords = $this->filterExistAutoJoinRecords($exerciseAutoJoinRecords, $existingRecords);
             $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
         }
