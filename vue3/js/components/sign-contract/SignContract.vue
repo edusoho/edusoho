@@ -399,8 +399,8 @@ const bgClass = computed(() => {
 }
 
 .contract-content {
-  /deep/ img {
-    max-width: 100%;
+  img {
+    max-width: 100% !important;
   }
 }
 </style>
