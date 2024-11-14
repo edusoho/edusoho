@@ -120,7 +120,7 @@ function remake() {
   allDataLoaded.value = false;
 }
 
-async function clear() {
+function clear() {
   remake();
   itemBankExerciseData.value = [];
   itemBankExerciseState.value = [];
@@ -207,7 +207,6 @@ async function bindItemBankExercise() {
   }
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
   itemBankExerciseState.value = transformItemBankExerciseState(itemBankExerciseData.value);
-  remake();
   closeItemBankDrawer();
   emit('needGetBindItemBank');
 }
