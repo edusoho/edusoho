@@ -1374,6 +1374,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => 0,
                     'note' => $params['remark'],
                 ];
+                if (!empty($params['reason'])) {
+                    $info['reason'] = $params['reason'];
+                }
+                if (!empty($params['reason_type'])) {
+                    $info['reason_type'] = $params['reason_type'];
+                }
                 $this->becomeStudent($classroom['id'], $user['id'], $info);
                 $order = ['id' => 0];
             }
@@ -2263,9 +2269,29 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
     {
-        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+        try {
+            $this->beginTransaction();
+            $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+            $this->getCourseMemberService()->changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
+            $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
 
-        return $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+    public function changeMembersDeadlineByDate($classroomId, $date)
+    {
+        try {
+            $this->beginTransaction();
+            $this->updateMember($classroomId, $date);
+            $this->getCourseMemberService()->updateMembersDeadlineByClassroomId($classroomId, $date['deadline']);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function updateMember($id, $member)

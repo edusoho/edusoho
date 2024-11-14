@@ -145,7 +145,11 @@ abstract class Filter
     */
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
+    protected function createService($name)
+    {
+        return ServiceKernel::instance()->createService($name);
+    }
 }

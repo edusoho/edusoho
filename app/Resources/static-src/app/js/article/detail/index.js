@@ -44,3 +44,15 @@ $(element).on('click', '.js-article-like', function() {
   }
 });
 
+document.addEventListener("DOMContentLoaded", function() {
+  let container = document.querySelector('.js-article-text');
+  let tables = container.querySelectorAll('table');
+  tables.forEach(function(table) {
+    let wrapperDiv = document.createElement('div');
+    wrapperDiv.style.width = '100%';
+    wrapperDiv.style.overflowX = 'auto';
+
+    table.parentNode.insertBefore(wrapperDiv, table);
+    wrapperDiv.appendChild(table);
+  });
+});

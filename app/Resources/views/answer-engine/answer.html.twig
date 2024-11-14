@@ -1,22 +1,11 @@
 {% extends 'layout.html.twig' %}
 
-{% set lang = app.request.getLocale() %}
-
-{% if lang == 'en' %}
-  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/answer-engine/answer/index.js']) %}
-{% else %}
-  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/answer-engine/answer/index.js']) %}
-{% endif %}
+{% do script(['libs/vue.js', 'app/js/answer-engine/answer/index.js', 'vue3/js/sign-contract/index.js']) %}
 
 {% block stylesheets %}
   {{ parent() }}
-  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
-  {% else %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
-  {% endif %}
+  {% include 'item-bank-css-loader.html.twig' %}
 {% endblock %}
-
 
 {% block body %}
   {% block header %}
@@ -33,8 +22,18 @@
   <input type="hidden" name="answer_record_id" value='{{ answerRecord.id }}'>
   <input type="hidden" name="submit_goto_url" value='{{ submitGotoUrl }}'>
   <input type="hidden" name="save_goto_url" value='{{ saveGotoUrl }}'>
+  <input type="hidden" name="return_url" value="{{ returnUrl }}">
   <input type="hidden" name="show_save_progress_btn" value="{{ showSaveProgressBtn|default(1) }}">
-
+  {% if contract.sign|default('') != 'no' %}
+    <input type="hidden" name="sign" value="{{ contract.sign }}">
+    <input type="hidden" name="contract-id" value="{{ contract.id}}">
+    <input type="hidden" name="goods-key" value="{{ contract.goodsKey}}">
+    <input type="hidden" name="target-title" value="{{ contract.targetTitle}}">
+    <input type="hidden" name="nickname" value="{{ contract.nickname}}">
+  {% endif %}
+  {% if contract.sign|default('') != 'no' %}
+    <div id="sign-contract-modal"></div>
+  {% endif %}
   {{ render(controller('AppBundle:FaceInspection/Capture:inspection', {request:app.request, answerSceneId: answerRecord.answer_scene_id, answerRecordId: answerRecord.id})) }}
   {% block footer %}
       {% if showHeader|default(0) %}{{ parent() }}{% endif %}

@@ -271,6 +271,9 @@ activity.ppt_manage.media_error_hint: 请上传或选择PPT
 activity.ppt_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
 
 activity.testpaper_manage.media_required: 请选择试卷
+activity.testpaper_manage.media_type_required: 请选择试卷类型
+activity.testpaper_random: 随机卷
+activity.testpaper_regular: 固定卷
 activity.testpaper_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.testpaper_manage.positive_integer_error_hint: 必须为正整数
 activity.testpaper_manage.media_error_hint: 请选择试卷
@@ -1131,6 +1134,7 @@ admin.cloud_file.re_transcode_fail_hint: 重新转码失败!
 admin.cloud_file.detail_loading_hints: 正在加载，请等待......
 admin.cloud_file.select_course_placeholder: 选择课程
 admin.cloud_file.select_user_placeholder: 选择用户
+admin.cloud_file.add_tag_ok: 添加标签成功
 admin.coin.edit_success_hint: 操作成功
 admin.coin.edit_fail_hint: 操作失败
 admin.coin.give_success_hint: 操作成功
@@ -2288,6 +2292,35 @@ question.bank.difficulty.normal: 一般
 question.bank.difficulty: 困难
 question.bank.reset.btn: 重置
 
+question.bank.paper.status: 试卷状态
+question.bank.paper.type: 类型
+question.bank.paper.paper.type: 试卷类型
+question.bank.paper.generating: 生成中
+question.bank.paper.draft: 草稿
+question.bank.paper.fail: 生成失败
+question.bank.paper.closed: 已关闭
+question.bank.paper.published: 已发布
+question.bank.paper.typeKeyword: 请输入关键词
+question.bank.paper.name: 名称
+question.bank.paper.creator: 创建人
+question.bank.paper.regular: 固定卷
+question.bank.paper.aiPersonality: AI 个性卷
+question.bank.paper.random: 随机卷
+question.bank.paper.operation: 操作
+question.bank.paper.num: 试卷数量
+question.bank.paper.numberOfItems/score: 题数/分数
+question.bank.paper.updatePerson/updatedAt: 更新人/更新时间
+question.bank.paper.selectAll: 全选
+question.bank.paper.selectedItems: 选择 %select% 项
+question.bank.paper.pageTotal: 共 %total% 项
+question.bank.paper.preview: 预览
+question.bank.paper.close: 关闭
+question.bank.paper.edit: 编辑
+question.bank.paper.publish: 发布
+question.bank.paper.publish.success: 发布成功
+question.bank.paper.close.success: 关闭成功
+question.bank.paper.batch.delete: 批量删除
+
 classroom.category.choose.text: 请选择班级分类
 course.category.choose.text: 请选择课程分类
 classroom.services.choose.train: 练
@@ -2302,3 +2335,23 @@ course.live: 直播课程
 course.appointment: 预约课程
 course.try.look: 试看
 certificate: 证
+
+item_bank_exercise.addTestpaper: 添加试卷
+item_bank_exercise.abandonOperation: 确定放弃此次操作吗？
+item_bank_exercise.unsaved: 当前操作尚未保存
+
+course.market_setting.contract: 电子合同
+course.market_setting.contract.btn.view: 预览
+course.market_setting.contract.btn.close: 关闭
+course.market_setting.contract.tip: 启用后，学员开始学习前需完成电子合同签署
+course.market_setting.contract.mandatory_signature: 强制签署
+course.market_setting.contract.mandatory_signature.tip: 开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。
+course.market_setting.contract.model.contractNumber: 合同编号
+course.market_setting.contract.model.contractSigning: '%name%-电子合同签署'
+course.market_setting.contract.model.partyA: 甲方
+course.market_setting.contract.model.signingDate: 签约日期
+course.market_setting.contract.model.partyB: 乙方
+course.market_setting.contract.model.handSignature: 手写签名
+course.market_setting.contract.model.partyBName: 乙方姓名
+course.market_setting.contract.model.iDNumber: 身份证号
+course.market_setting.contract.model.contactInformation: 联系方式

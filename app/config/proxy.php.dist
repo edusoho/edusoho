@@ -1,0 +1,7 @@
+<?php
+// @see https://symfony.com/doc/3.x/deployment/proxies.html
+return array (
+    // Docker 默认的 2 个网段
+    '172.16.0.0/12',
+    '192.168.0.0/16',
+);

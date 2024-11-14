@@ -14,16 +14,6 @@ class BalloonCloudVideoPlayer extends Emitter {
   }
 
   setup() {
-    const resultStatus = $('[name="task-result-status"]', window.parent.document).val();
-    const mode = $('[name="mode"]', window.parent.document).val();
-    const activityFinishType = $('#video-content').data('finishType');
-    const activityFinishData = $('#video-content').data('finishData');
-    const disableProgressBar = ((resultStatus === 'start' || resultStatus === 'none') && 'learn' === mode && activityFinishType === 'end' && activityFinishData);
-    const disableSeek = disableProgressBar ? 'forward' : 'none';
-
-    console.log(disableSeek);
-    let element = this.options.element;
-
     var self = this;
 
     let extConfig = {};
@@ -51,13 +41,18 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (self.options.fingerprint) {
-      extConfig = Object.assign(extConfig, {
-        fingerprint: {
-          html: self.options.fingerprint,
-          duration: self.options.fingerprintTime
-        }
-      });
+    if (this.options.fullWatermark) {
+      extConfig.fingerprint = {
+        isFull: true,
+        html: this.options.fingerprintTxt,
+        color: this.options.fingerprintColor,
+        alpha: this.options.fingerprintAlpha,
+      };
+    } else if (this.options.fingerprint) {
+      extConfig.fingerprint = {
+        html: this.options.fingerprint,
+        duration: this.options.fingerprintTime
+      };
     }
 
     if (self.options.timelimit) {
@@ -70,7 +65,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       });
     }
 
-    if (!disableProgressBar && self.options.enablePlaybackRates) {
+    if (!this.options.disableProgressBar && self.options.enablePlaybackRates) {
       extConfig = Object.assign(extConfig, {
         playbackRates: ['0.75', '1.0', '1.25', '1.5', '2.0', '3.0']
       });
@@ -118,7 +113,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableControlBar: self.options.disableControlBar,
       disableProgressBar: self.options.disableProgressBar,
       disableFullscreen: self.options.disableFullscreen,
-      disableSeek: disableSeek,
+      disableSeek: self.options.disableProgressBar ? 'forward' : 'none',
       playlist: self.options.url,
       rememberLastPos: rememberLastPos,
       initPos: self.options.customPos,
@@ -171,7 +166,7 @@ class BalloonCloudVideoPlayer extends Emitter {
 
     player.on('requestFullscreen', function(data) {
       self.emit('requestFullscreen', data);
-    })
+    });
 
     this.player = player;
     this._registerChannel();

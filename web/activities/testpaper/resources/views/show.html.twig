@@ -1,6 +1,6 @@
 {% set testpaper = activity.ext.testpaper %}
 {% if app.request.get('preview') %}
-  {{ render(controller('AppBundle:Activity/Testpaper:preview', {task: {courseId: activity.fromCourseId, activityId: activity.id}})) }}
+  {{ render(controller('AppBundle:Activity/Testpaper:preview', {task: {courseId: activity.fromCourseId, activityId: activity.id, assessmentId: app.request.get('assessmentId')}})) }}
 {% else %}
   {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
 

@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -34,6 +35,11 @@ class MeCourseMember extends AbstractResource
                 $courseMember['expire']['status'] = $classroomMember['expire']['status'];
                 $courseMember['expire']['deadline'] = empty($classroomMember['expire']['deadline']) ? 0 : strtotime($classroomMember['expire']['deadline']);
             }
+        }
+        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
+        if ($courseMember) {
+            $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
         }
 
         return $courseMember;
@@ -156,5 +162,13 @@ class MeCourseMember extends AbstractResource
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->service('Contract:ContractService');
     }
 }

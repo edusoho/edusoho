@@ -63,7 +63,7 @@ abstract class BaseStrategy
         $certificateContent = implode('', explode("\r\n", trim($template['certificateContent'])));
         $certificate->setCertificateParams([
             'certificateTitle' => $template['certificateName'],
-            'certificateQrCodeUrl' => empty($template['qrCodeSet']) ? '' : $this->generateUrl('certificate_record', ['recordId' => $record['id']], 0),
+            'certificateQrCodeUrl' => empty($template['qrCodeSet']) ? '' : $this->generateUrl('certificate_record', ['recordId' => $record['id'], 'code' => $record['certificateCode']], 0),
             'certificateRecipient' => $this->getRecipientContent($record['userId'], $template['recipientContent']),
             'certificateContent' => $this->getContent($record, $certificateContent),
             'certificateCode' => $record['certificateCode'],

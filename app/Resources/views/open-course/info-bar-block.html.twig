@@ -64,7 +64,7 @@
       {{ 'my.teaching.open_course.infobar.WeChat_QR_code'|trans }}
     </div>
    </div>
-  {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
+  {% if member.role|default('') == 'teacher' or has_permission('admin_v2_open_course_manage') %}
     <a href="{{ path('open_course_manage',{id:course.id}) }}" class="btn btn-default btn-setting hidden-xs hidden-sm" title="{{'my.teaching.open_course.infobar.course_manage_btn'|trans}}">
       <i class="es-icon es-icon-setting"></i>
     </a>

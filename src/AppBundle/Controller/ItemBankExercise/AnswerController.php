@@ -4,11 +4,13 @@ namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Controller\BaseController;
 use Biz\Accessor\AccessorInterface;
+use Biz\Contract\Service\ContractService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
+use Codeages\Biz\ItemBank\Assessment\Constant\AssessmentStatus;
 use Codeages\Biz\ItemBank\Assessment\Exception\AssessmentException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -24,12 +26,34 @@ class AnswerController extends BaseController
         if (AccessorInterface::SUCCESS != $access['code']) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_LEARN());
         }
+        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
+        $returnUrl = $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'tab' => 'assessment', 'moduleId' => $moduleId]);
+        if (empty($assessment)) {
+            return $this->forward('AppBundle:AnswerEngine/AnswerEngine:message', [
+                'message' => '试卷已删除',
+                'returnUrl' => $returnUrl,
+            ]);
+        }
 
         $latestAnswerRecord = $this->getItemBankAssessmentExerciseRecordService()->getLatestRecord($moduleId, $assessmentId, $user['id']);
         if (empty($latestAnswerRecord) || 'redo' == $request->get('action')) {
             if (!$this->checkStartAssessmentExercise($assessmentId)) {
                 return $this->redirectToRoute('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'assessment']);
             }
+            if (AssessmentStatus::CLOSED == $assessment['status']) {
+                return $this->forward('AppBundle:AnswerEngine/AnswerEngine:message', [
+                    'message' => '试卷已关闭',
+                    'returnUrl' => $returnUrl,
+                ]);
+            }
+            if (!empty($latestAnswerRecord) && 'doing' == $latestAnswerRecord['status']) {
+                return $this->redirectToRoute('item_bank_exercise_assessment_answer', [
+                    'exerciseId' => $exerciseId,
+                    'moduleId' => $moduleId,
+                    'assessmentId' => $assessmentId,
+                ]);
+            }
+
             $latestAnswerRecord = $this->getItemBankAssessmentExerciseService()->startAnswer($moduleId, $assessmentId, $user['id']);
         }
 
@@ -46,6 +70,8 @@ class AnswerController extends BaseController
                 [
                     'answerRecordId' => $latestAnswerRecord['answerRecordId'],
                     'restartUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId, 'action' => 'redo']),
+                    'returnUrl' => $returnUrl,
+                    'assessmentStatus' => $assessment['status'],
                 ]
             );
         }
@@ -55,7 +81,9 @@ class AnswerController extends BaseController
             'answerRecordId' => $latestAnswerRecord['answerRecordId'],
             'submitGotoUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId]),
             'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+            'returnUrl' => $returnUrl,
             'showHeader' => 1,
+            'contract' => $this->getContract($exerciseId),
         ]);
     }
 
@@ -107,6 +135,7 @@ class AnswerController extends BaseController
             'submitGotoUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId]),
             'saveGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
             'showHeader' => 1,
+            'contract' => $this->getContract($exerciseId),
         ]);
     }
 
@@ -162,6 +191,31 @@ class AnswerController extends BaseController
         }
 
         return true;
+    }
+
+    protected function getContract($exerciseId)
+    {
+        $goodsKey = 'itemBankExercise_'.$exerciseId;
+        $itemBankExercise = $this->getItemBankExerciseService()->get($exerciseId);
+        $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        $user = $this->getCurrentUser();
+        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($user['id'], $goodsKey);
+        if (empty($contract) || !empty($signRecord)) {
+            $contract = [
+                'sign' => 'no',
+            ];
+        } else {
+            $contract = [
+                'sign' => $contract['sign'] ? 'required' : 'optional',
+                'name' => $contract['contractName'],
+                'id' => $contract['contractId'],
+                'goodsKey' => $goodsKey,
+                'targetTitle' => $itemBankExercise['title'] ?? '',
+                'nickname' => $user['nickname']
+            ];
+        }
+
+        return $contract;
     }
 
     /**
@@ -234,5 +288,13 @@ class AnswerController extends BaseController
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }

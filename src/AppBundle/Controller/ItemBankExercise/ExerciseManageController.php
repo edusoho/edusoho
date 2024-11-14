@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Controller\BaseController;
+use Biz\Contract\Service\ContractService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\CategoryService;
@@ -63,13 +64,27 @@ class ExerciseManageController extends BaseController
                 $this->createNewException(ItemBankExerciseException::FORBIDDEN_TO_SAVE());
             }
             $data = $this->prepareExpiryMode($data);
+            $contractEnable = $data['contractEnable'] ?? null;
+            $contractId = $data['contractId'] ?? null;
+            $contractForceSign = $data['contractForceSign'] ?? null;
 
+            // 从 $data 中移除 contractEnable, contractId, contractForceSign
+            unset($data['contractEnable'], $data['contractId'], $data['contractForceSign']);
             $this->getExerciseService()->updateBaseInfo($exerciseId, $data);
+            if (empty($contractEnable)) {
+                $this->getContractService()->unRelateContract("itemBankExercise_{$exerciseId}");
+            } else {
+                $this->getContractService()->relateContract($contractId, "itemBankExercise_{$exerciseId}", $contractForceSign);
+            }
 
             return $this->createJsonResponse(true);
         }
 
         $exercise = $this->formatExerciseDate($exercise);
+        $relatedContract = $this->getContractService()->getRelatedContractByGoodsKey("itemBankExercise_{$exerciseId}");
+        $exercise['contractId'] = $relatedContract['contractId'] ?? 0;
+        $exercise['contractForceSign'] = empty($relatedContract['sign']) ? 0 : 1;
+        $exercise['contractName'] = $relatedContract['contractName'] ?? '';
 
         return $this->render(
             'item-bank-exercise-manage/exercise-set/base-info/marketing.html.twig',
@@ -156,5 +171,13 @@ class ExerciseManageController extends BaseController
     protected function getQuestionBankService()
     {
         return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }

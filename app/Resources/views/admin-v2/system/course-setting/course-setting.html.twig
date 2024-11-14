@@ -3,8 +3,9 @@
 {% set menu = 'admin_v2_setting_course' %}
 {% set script_controller = 'setting/course' %}
 
-{% block main %}
+{% do script(['vue3/js/admin-v2/system/course-setting/index.js']) %}
 
+{% block main %}
 
 {{ web_macro.flash_messages() }}
 
@@ -125,24 +126,9 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>{{'admin.setting_course.doc_task_water_mark'|trans}}</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('doc_water_mark_enabled', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.doc_water_mark_enabled) }}
-        <div class="help-block"></div>
-      </div>
-    </div>
-    <div class="form-group {% if courseSetting.doc_water_mark_enabled == '0' %}hidden{% endif %}" id="js-doc-water-mark-info">
-      <div class="col-md-3 control-label">
-        <label>{{'admin.setting_course.doc_task_water_mark_info'|trans}}</label>
-      </div>
-      <div class="controls col-md-8 checkboxs">
-          {{ checkboxs('doc_water_mark_info', {'domain': 'admin.edu_cloud.edu_video.finger_print_content_label.domain'|trans, 'nickname': 'user.fields.username_label'|trans, 'truename': 'user.fileds.realname'|trans, 'verifiedMobile': 'user.fields.mobile_simple_label'|trans}, courseSetting.doc_water_mark_info) }}
-        <div class="help-block">{{ 'admin.setting_course.doc_task_water_mark_info_tips'|trans }}</div>
-      </div>
-    </div>
+    <div id="watermark-setting-app"></div>
+    <input type="hidden" id="task_page_watermark_enable" name="task_page_watermark_enable">
+    <input type="hidden" id="task_page_watermark_setting" name="task_page_watermark_setting">
 
     <div class="form-group">
       <div class="col-md-3 control-label">
@@ -275,7 +261,7 @@
 
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
-      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      <button id="submit" type="submit" class="btn btn-primary">{{ 'form.btn.submit'|trans }}</button>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -82,21 +82,6 @@ module.exports = {
     {
       name: 'swagger-ui/dist/swagger-ui.css',
     },
-    // 纯拷贝item-bank/lib/itemBank.umd.min.js
-    {
-      name: 'item-bank/lib/itemBank.umd.min.js',
-    },
-    // 纯拷贝item-bank/lib/styles目录下的简墨主色调
-    {
-      name: 'item-bank/lib/styles',
-    },
-    // 纯拷贝item-bank/lib/local目录下的语言包
-    {
-      name: 'item-bank/lib/locale',
-    },
-    {
-      name: 'item-bank/lib/img',
-    },
     {
       name: 'es5-shim/es5-shim.js',
     },
@@ -128,7 +113,7 @@ module.exports = {
       ]
     }
   ],
-  extryCssName: '{main,header,bootstrap,mobile,admin}',
+  extryCssName: '{main,header,bootstrap,mobile,admin,item-bank}',
   isESlint: false,
   baseName: 'libs/base,libs/ltc-sdk',
   activitiesDir: 'web/activities',

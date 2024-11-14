@@ -383,6 +383,7 @@ form.btn.view: 查看
 form.btn.bind: 绑定
 form.btn.bind_account: 绑定帐号
 form.btn.search: 搜索
+form.btn.export_search_result: 导出搜索结果
 form.btn.use: 使用
 form.btn.reply: 发表
 form.btn.bind_cancel: 取消绑定
@@ -4362,6 +4363,7 @@ my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
+my.teaching.course_set.select_type.live_open_course.no_permission: 没有创建公开课的权限
 
 #班课
 my.teaching.multi_class.my_students: 我的学员
@@ -4646,6 +4648,7 @@ my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
 user.certificate_menu: 我的证书
 my.wrong_question_book: 我的错题本
+my.contract: 我的合同
 
 my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 my.course.cancle_refund_btn: 取消退款，继续学习！
@@ -9480,6 +9483,7 @@ task.learn_data_detail.unfinished_number: 未完成(人)
 task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
+join.channel: 加入方式
 
 register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 
@@ -9522,6 +9526,7 @@ log.module.multi_class_assistant: 班课助教
 log.module.multi_class: 班课
 log.module.wrong_question: 错题
 log.module.ai: AI
+log.module.contract: 合同
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -10675,6 +10680,11 @@ exception.common_not_allowed_method: 不允许的方法
 exception.common_expired_upload_token: 上传授权码已过期，请刷新页面后重试
 exception.common_not_found_api: API资源不存在
 
+exception.assessment_check_failed: 试卷创建检查失败
+exception.assessment_status_error: 试卷状态错误
+exception.assessment_status_closed: 试卷已关闭
+exception.assessment_status_deleted: 试卷已删除
+
 exception.article.notfound: 资讯不存在!
 exception.article.not_found_category: 文章分类不存在,操作失败！
 exception.article.error_property: 属性不存在，更新失败！
@@ -10875,6 +10885,7 @@ exception.courseset.unpublished: 课程未发布
 exception.courseset.no_course: 课程中没有可用的教学计划
 exception.courseset.unlock_failed: 解锁课程失败
 exception.courseset.forbidden_create: 没有权限创建课程
+exception.courseset.forbidden_publish: 抱歉你无权限发布课程，请联系管理员
 exception.classroom.not_found: 班级不存在
 exception.classroom.forbidden_manage_classroom: 没有管理班级的权限
 exception.classroom.forbidden_take_classroom: 不能在这个班级学习
@@ -11067,6 +11078,7 @@ exception.app.extract_failed: 无法解压缩安装包！
 exception.role.forbidden_modify: 该权限不能修改！
 exception.role.code_not_all_digital: code不能全为数字
 exception.content.not_found: 内容不存在
+exception.sign_record.is_existed: 合同已签署成功，无需再次签署
 exception.content.type_required: 内容类型不能为空
 exception.content.title_required: 内容标题不能为空
 exception.download_activity.not_download_activity: 不是下载资料活动
@@ -12511,3 +12523,7 @@ admin_v2.question.ai_analysis.experience: , 体验强大的
 admin_v2.question.ai_analysis.problem: 题目解析
 admin_v2.question.ai_analysis.tittle: 构筑智慧教育新高地，云能力全面升级，引领深度互动与精准解析的Al题库新时代，开启个性化学习无限可能
 admin_v2.question.ai_analysis.upgrade_now: 立即升级
+
+#电子合同
+admin_v2.contract.experience: ，体验安全的电子合同功能
+admin_v2.contract.tittle: 全新上线电子合同功能，带来高效、安全的签署体验，助力企业迈向数字化合规管理新阶段

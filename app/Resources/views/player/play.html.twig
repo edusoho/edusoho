@@ -30,7 +30,7 @@
           data-agentInWhiteList="{{ context.agentInWhiteList|default('') }}"
           data-strict="{{setting('storage.support_mobile', 0)}}"
           data-js-player="{{ context.jsPlayer|default('balloon-cloud-video-player') }}"
-          data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
+          data-autoplay="{{ context.autoplay is not none ? context.autoplay : setting('storage.video_auto_play', true) }}"
           data-allowed-browse="{{ is_allowed_browse() ? 1 : 0 }}"
           data-security-video-player="{{ setting('magic.security_video_player', 0) }}"
           data-is-hls-plus="{{ setting('storage.enable_hls_encryption_plus', 0) }}"
@@ -59,6 +59,7 @@
           data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
           data-lesson-id="{{ context.lessonId|default(0)}}"
+          data-full-watermark="1"
           style="height:100%"
         ></div>
       </div>
@@ -72,5 +73,3 @@
     <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.cloud.file.not_find_tips'|trans}}</div>
   {% endif %}
 {% endif %}
-
-

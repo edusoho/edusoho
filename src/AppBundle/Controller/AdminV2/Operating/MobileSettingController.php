@@ -24,7 +24,7 @@ class MobileSettingController extends BaseController
         $settingMobile = $this->getSettingService()->get('mobile', []);
 
         $default = [
-            'enabled' => 1, // 网校状态
+            'enabled' => 0,
             'ver' => 1, //是否是新版
             'about' => '', // 网校简介
             'logo' => '', // 网校Logo

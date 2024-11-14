@@ -9,4 +9,8 @@ final class AssessmentStatus
     const DRAFT = 'draft';
 
     const CLOSED = 'closed';
+
+    const FAILURE = 'failure';
+
+    const GENERATING = 'generating';
 }

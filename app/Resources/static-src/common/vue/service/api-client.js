@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Vue from 'common/vue'
+import Vue from 'common/vue';
 import { loginAgain } from 'common/ajaxError';
 
 const apiStore = {

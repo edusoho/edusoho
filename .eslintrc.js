@@ -29,7 +29,6 @@ module.exports = {
       "Vue": true,
       "itemBank": true,
       "local": true
-
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -38,7 +37,7 @@ module.exports = {
             "jsx": true
         },
         "sourceType": "module",
-        "ecmaVersion": 6,
+        "ecmaVersion": 2017,
     },
     "plugins": [
         "react"

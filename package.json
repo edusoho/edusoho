@@ -54,7 +54,7 @@
     "echarts": "3.1.10",
     "echo-js": "1.7.3",
     "element-ui": "file:app/Resources/static-src/libs/element-ui",
-    "es-ckeditor": "4.9.2",
+    "es-ckeditor": "4.9.5",
     "es-fullcalendar": "3.7.0-patch5",
     "es-jcrop": "latest",
     "es-jquery-sortable": "0.9.13-patch2",
@@ -65,12 +65,12 @@
     "es5-shim": "4.5.9",
     "es6-promise": "4.0.5",
     "font-awesome": "4.6.3",
+    "gwm": "^0.5.0",
     "handlebars": "4.0.11",
     "html2canvas": "^1.4.1",
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
     "intro.js": "2.4.0",
-    "item-bank": "^1.0.64",
     "jquery": "3.2.1",
     "jquery-base64": "^1.0.0",
     "jquery-blurr": "0.1.2",
@@ -111,22 +111,24 @@
     "vue-cropperjs": "4.2.0",
     "vue-lazyload": "^1.3.3",
     "vue-router": "^3.5.1",
+    "vue-slicksort": "1.2.0",
     "vuedraggable": "^2.24.3",
     "waypoints": "4.0.1",
     "websocket": "^1.0.25",
     "weixin-js-sdk": "1.6.0"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --trace-deprecation --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
-    "dev:debug": "npm run dev sourcemap:true",
-    "dev:custom": "npm run dev watch:CustomBundle",
-    "compile": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
-    "compile:debug": "npm run compile sourcemap:true",
-    "compile:custom": "npm run compile module:CustomBundle",
+    "dev": "node webpack-build/dev.js",
+    "compile": "npm run build && cd vue3 && npm run build",
+    "serve": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
+    "build": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
     "clean": "rm -rf node_modules",
     "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
     "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",
     "test:simple": "mocha --recursive --require babel-core/register --reporter dot",
     "commitmsg": "es-commit-msg-validator"
+  },
+  "volta": {
+    "node": "16.20.2"
   }
 }

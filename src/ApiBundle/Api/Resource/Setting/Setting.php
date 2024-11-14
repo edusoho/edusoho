@@ -22,7 +22,7 @@ class Setting extends AbstractResource
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
         'signSecurity', 'mail', 'openCourse', 'article', 'group', 'ugc', 'ugc_review', 'ugc_note', 'ugc_thread',
         'consult', 'wechat_message_subscribe', 'locale', 'task_learning_config', 'qualification', 'openStudentInfo', 'course_purchase_agreement', 'auth',
-        'question_bank_attachment_setting', 'cloud_attachment', 'storage', 'enable_anti_brush_captcha',
+        'question_bank_attachment_setting', 'cloud_attachment', 'storage', 'enable_anti_brush_captcha', 'electronicContract',
     ];
 
     public static function convertUnderline($str)
@@ -582,6 +582,10 @@ class Setting extends AbstractResource
             'only_learning_on_APP' => isset($courseSetting['only_learning_on_APP']) ? intval($courseSetting['only_learning_on_APP']) : 0,
             'android_APP_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
             'app_content_theft_prevention' => isset($courseSetting['app_content_theft_prevention']) ? intval($courseSetting['app_content_theft_prevention']) : 0,
+            'task_page_watermark' => [
+                'enable' => isset($courseSetting['task_page_watermark_enable']) ? intval($courseSetting['task_page_watermark_enable']) : 0,
+                'setting' => $courseSetting['task_page_watermark_setting'] ?? [],
+            ],
         ];
     }
 
@@ -703,6 +707,13 @@ class Setting extends AbstractResource
         return [
             'show_comment' => isset($openCourseSetting['show_comment']) ? intval($openCourseSetting['show_comment']) : 1,
         ];
+    }
+
+    public function getElectronicContract()
+    {
+        $electronicContractSetting = $this->getSettingService()->get('electronicContract', []);
+
+        return $electronicContractSetting;
     }
 
     public function getArticle()

@@ -116,6 +116,11 @@ class AssessmentSectionItemServiceImpl extends BaseService implements Assessment
         return $this->getAssessmentSectionItemDao()->deleteByAssessmentId($assessmentId);
     }
 
+    public function deleteAssessmentSectionItemsByAssessmentIds($assessmentIds)
+    {
+        return $this->getAssessmentSectionItemDao()->batchDelete(['assessmentIds' => $assessmentIds]);
+    }
+
     public function countAssessmentSectionItems($conditions)
     {
         return $this->getAssessmentSectionItemDao()->count($conditions);

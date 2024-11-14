@@ -218,10 +218,9 @@ class CertificateTemplateController extends BaseController
 
     protected function getAssetUrl($path)
     {
-        $request = $this->get('request');
-        $path = $this->get('templating.helper.assets')->getUrl($path);
+        $biz = $this->getBiz();
 
-        return $request->getSchemeAndHttpHost().$path;
+        return "{$biz['root_directory']}web/{$path}";
     }
 
     protected function getImgBuilder($type)

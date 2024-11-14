@@ -48,6 +48,10 @@ external_login:
   path:  '/login/external'
   defaults:
         _controller: 'AppBundle:Login:externalLogin'
+h5_login:
+    path:  '/login/h5'
+    defaults:
+      _controller: 'AppBundle:Login:h5Login'
 login_check:
     path: '/login_check'
 logout:
@@ -722,6 +726,10 @@ my_wrong_question_book:
     path: '/my/wrong_question_book'
     defaults:
         _controller: 'AppBundle:My/WrongQuestionBook:index'
+my_contract:
+    path: '/my/contract'
+    defaults:
+        _controller: 'AppBundle:My/Contract:index'
 my_wrong_question_book_target_detail:
     path: '/my/wrong_question_book/wrong_questions'
     defaults:
@@ -1824,6 +1832,10 @@ course_activity_download:
     path: '/course/{courseId}/activiy/{activityId}/download'
     defaults:
         _controller: 'AppBundle:Activity/Download:downloadFile'
+course_activity_download_file_preview:
+    path: '/course/{courseId}/activity/{activityId}/download_file/{materialId}/preview'
+    defaults:
+        _controller: 'AppBundle:Activity/Download:previewFile'
 course_manage_activity_manage_custom_route:
     path: '/course/{fromCourseId}/manage/activity_{mediaType}/{id}/{routeName}'
     defaults:
