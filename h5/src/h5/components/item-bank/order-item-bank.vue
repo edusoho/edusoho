@@ -18,8 +18,8 @@ export default {
     <div class="flex-none whitespace-nowrap ml-24">
       <div v-if="item.itemBankExercise.price === '0.00'" class="text-16 font-semibold" style="color: #FF7E56">免费</div>
       <div v-else class="flex items-center space-x-8">
-        <div class="text-12 font-semibold" style="color: #FF7E56">¥<span class="text-16 ml-2">0.</span>00</div>
         <div class="text-12 font-normal line-through mt-4" style="color: #FF7E56">{{ `¥${item.itemBankExercise.price}` }}</div>
+        <div class="text-16 font-semibold" style="color: #FF7E56">免费</div>
       </div>
     </div>
   </div>

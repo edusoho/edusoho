@@ -37,6 +37,8 @@ npm run dev:admin
 npm run build
 npm run build:h5
 npm run build:admin
+
+# 将打包好的文件复制到Edusoho
 cp -r dist/* /var/www/edusoho/web/h5/
 
 # analyze 分析项目依赖
