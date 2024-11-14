@@ -176,6 +176,9 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
         $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
+        if (empty($exerciseBinds) || empty($userIds)) {
+            return;
+        }
         foreach ($exerciseBinds as $exerciseBind) {
             $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
             list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($autoJoinRecords, $exerciseBind['id']);
