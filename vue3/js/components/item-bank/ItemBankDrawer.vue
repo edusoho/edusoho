@@ -179,9 +179,6 @@ function handleSelectAllChange(e) {
     checked: isChecked ? (totalItems >= 100 ? index < limit : true) : false
   }));
   needResetCheckbox.value = isChecked || itemBankExerciseState.value.every(item => item.checked);
-  if (props.bindItemBankExerciseNum + checkedExerciseIdNum.value === 100) {
-    message.error('最多可绑定100个题库练习');
-  }
 }
 
 function resetCheckboxes() {
@@ -204,9 +201,9 @@ async function bindItemBankExercise() {
   }
   loading.value = true;
   try {
-    stopWatching();
     await Api.itemBank.bindItemBankExercise(params);
   } finally {
+    stopWatching();
     loading.value = false;
   }
   itemBankExerciseData.value = itemBankExerciseData.value.filter(item => !exerciseIds.includes(item.id));
