@@ -86,7 +86,6 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
         list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($autoJoinRecords, $exerciseBind['id']);
         // 只有一条记录直接移除学员
-        file_put_contents('/tmp/jc123', json_encode($singleExerciseAutoJoinRecords), 8);
         if (!empty($singleExerciseAutoJoinRecords)) {
             $this->getExerciseMemberService()->batchRemoveStudent($exerciseBind['itemBankExerciseId'], array_column($singleExerciseAutoJoinRecords, 'userId'));
         }
@@ -164,13 +163,25 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject();
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
-        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
-
-        $exerciseAutoJoinRecordsGroup = ArrayToolkit::group($exerciseAutoJoinRecords, 'itemBankExerciseId');
-        foreach ($exerciseAutoJoinRecordsGroup as $exerciseId => $exerciseAutoJoinRecord) {
-            list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($exerciseAutoJoinRecord, $exerciseBindsIndex[$exerciseId]['id']);
-            $this->batchBanLearn(array_column($singleExerciseAutoJoinRecords, 'userId'));
+        $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
+        foreach ($exerciseBinds as $exerciseBind) {
+            $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+            list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($autoJoinRecords, $exerciseBind['id']);
+            if (!empty($singleExerciseAutoJoinRecords)) {
+                $this->batchBanLearn($singleExerciseAutoJoinRecords);
+            }
+            $waitUpdateAutoJoin = array_filter($autoJoinRecords, function ($autoJoinRecord) use ($exerciseBind) {
+                return $autoJoinRecord['itemBankExerciseBindId'] == $exerciseBind['id'];
+            });
+            foreach ($waitUpdateAutoJoin as &$autoJoinRecord) {
+                $autoJoinRecord['isValid'] = 0;
+            }
+            if (!empty($waitUpdateAutoJoin)) {
+                $this->getExerciseService()->batchUpdateExerciseAutoJoinRecord($waitUpdateAutoJoin);
+            }
+            $multipleExerciseAutoJoinRecords = array_filter($multipleExerciseAutoJoinRecords, function ($autoJoinRecord) use ($exerciseBind) {
+                return $autoJoinRecord['itemBankExerciseBindId'] != $exerciseBind['id'];
+            });
             $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
         }
     }
@@ -182,16 +193,22 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject();
         $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
-        if (empty($exerciseBinds)) {
-            return;
-        }
-        $exerciseBindsIndex = ArrayToolkit::index($exerciseBinds, 'itemBankExerciseId');
-        $exerciseAutoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseBindIds(array_column($exerciseBinds, 'id'));
+        $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
+        foreach ($exerciseBinds as $exerciseBind) {
+            $autoJoinRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseBind['itemBankExerciseId']);
+            $invalidAutoJoin = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseIdAndBindId($userIds, $exerciseBind['itemBankExerciseId'], $exerciseBind['id']);
+            $autoJoinRecords = array_merge($autoJoinRecords, $invalidAutoJoin);
+            list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($autoJoinRecords, $exerciseBind['id']);
+            if (!empty($singleExerciseAutoJoinRecords)) {
+                $this->batchCanLearn($singleExerciseAutoJoinRecords);
+            }
+            foreach ($invalidAutoJoin as &$autoJoinRecord) {
+                $autoJoinRecord['isValid'] = 1;
+            }
+            if (!empty($invalidAutoJoin)) {
+                $this->getExerciseService()->batchUpdateExerciseAutoJoinRecord($invalidAutoJoin);
+            }
 
-        $exerciseAutoJoinRecordsGroup = ArrayToolkit::group($exerciseAutoJoinRecords, 'itemBankExerciseId');
-        foreach ($exerciseAutoJoinRecordsGroup as $exerciseId => $exerciseAutoJoinRecord) {
-            list($singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords) = $this->categorizeUserRecordsByCount($exerciseAutoJoinRecord, $exerciseBindsIndex[$exerciseId]['id']);
-            $this->batchCanLearn(array_column($singleExerciseAutoJoinRecords, 'userId'));
             $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
         }
     }
@@ -251,14 +268,14 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         return [$singleExerciseAutoJoinRecords, $multipleExerciseAutoJoinRecords];
     }
 
-    public function batchBanLearn($usersWithSingleRecord)
+    public function batchBanLearn($singleExerciseAutoJoinRecords)
     {
-        $this->batchUpdateLearnStatus($usersWithSingleRecord, 0);
+        $this->batchUpdateLearnStatus($singleExerciseAutoJoinRecords, 0);
     }
 
-    public function batchCanLearn($usersWithSingleRecord)
+    public function batchCanLearn($singleExerciseAutoJoinRecords)
     {
-        $this->batchUpdateLearnStatus($usersWithSingleRecord, 1);
+        $this->batchUpdateLearnStatus($singleExerciseAutoJoinRecords, 1);
     }
 
     /** 批量更新题库成员学习状态
@@ -267,11 +284,23 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
      *
      * @return void
      */
-    protected function batchUpdateLearnStatus($usersWithSingleRecord, $canLearn)
+    protected function batchUpdateLearnStatus($singleExerciseAutoJoinRecords, $canLearn)
     {
-        $exerciseMembers = $this->getExerciseMemberService()->search(['userIds' => $usersWithSingleRecord], [], 0, PHP_INT_MAX);
+        $userIds = array_column($singleExerciseAutoJoinRecords, 'userId');
+        $exerciseIds = array_column($singleExerciseAutoJoinRecords, 'itemBankExerciseId');
+        $exerciseMembers = $this->getExerciseMemberService()->search(
+            ['userIds' => $userIds, 'exerciseId' => $exerciseIds], [], 0, PHP_INT_MAX
+        );
+        $autoJoinRecordMap = [];
+        foreach ($singleExerciseAutoJoinRecords as $record) {
+            $autoJoinRecordMap[$record['itemBankExerciseId']][$record['userId']] = true;
+        }
         foreach ($exerciseMembers as &$exerciseMember) {
-            $exerciseMember['canLearn'] = $canLearn;
+            $exerciseId = $exerciseMember['exerciseId'];
+            $userId = $exerciseMember['userId'];
+            if (isset($autoJoinRecordMap[$exerciseId][$userId])) {
+                $exerciseMember['canLearn'] = $canLearn;
+            }
         }
         $exerciseMembers = ArrayToolkit::index($exerciseMembers, 'id');
         $this->getExerciseMemberService()->batchUpdateMembers($exerciseMembers);
@@ -298,11 +327,13 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             return 'classroom' == $item['bindType'];
         }), 'bindId');
         if (!empty($courseIds)) {
-            $courseMembers = $this->getCourseMemberService()->searchMembers(['courseIds' => $courseIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
+            $courseIds = $this->getCourseService()->searchCourses(['excludeStatus' => 'closed', 'courseIds' => $courseIds], [], 0, PHP_INT_MAX, ['id']);
+            $courseMembers = $this->getCourseMemberService()->searchMembers(['courseIds' => array_column($courseIds, 'id'), 'userIds' => $userIds], [], 0, PHP_INT_MAX);
             $courseMembersGroups = ArrayToolkit::group($courseMembers, 'userId');
         }
         if (!empty($classroomIds)) {
-            $classroomMembers = $this->getClassroomService()->searchMembers(['classroomIds' => $classroomIds, 'userIds' => $userIds], [], 0, PHP_INT_MAX);
+            $classroomIds = $this->getClassroomService()->searchClassrooms(['excludeStatus' => 'closed', 'classroomIds' => $classroomIds], [], 0, PHP_INT_MAX, ['id']);
+            $classroomMembers = $this->getClassroomService()->searchMembers(['classroomIds' => array_column($classroomIds, 'id'), 'userIds' => $userIds], [], 0, PHP_INT_MAX);
             $classroomMembersGroups = ArrayToolkit::group($classroomMembers, 'userId');
         }
 
@@ -348,6 +379,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 'userId' => $userId,
                 'itemBankExerciseId' => $exerciseBind['itemBankExerciseId'],
                 'itemBankExerciseBindId' => $exerciseBind['id'],
+                'isValid' => 1,
             ];
         }
         $exerciseAutoJoinRecords = array_unique(

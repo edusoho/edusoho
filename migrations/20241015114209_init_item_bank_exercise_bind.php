@@ -29,6 +29,7 @@ class InitItemBankExerciseBind extends Migration
               `userId` int(10) NOT NULL,
               `itemBankExerciseId` int(11) NOT NULL,
               `itemBankExerciseBindId` int(11) NOT NULL,
+              `isValid` tinyint(1) DEFAULT '1' COMMENT '是否有效',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
               KEY `idx_itemBankExerciseId` (`itemBankExerciseId`),
