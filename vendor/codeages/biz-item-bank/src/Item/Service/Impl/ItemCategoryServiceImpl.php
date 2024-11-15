@@ -40,12 +40,15 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         if (empty($this->getItemBankService()->getItemBank($bankId))) {
             throw new ItemBankException('The item bank is not exist.', ErrorCode::ITEM_BANK_NOT_FOUND);
         }
+        $maxSeqCategory = $this->getItemCategoryDao()->search(['bank_id' => $bankId, 'parent_id' => $parentId], ['seq' => 'DESC'], 0, 1);
+        $seq = empty($maxSeqCategory) ? 0 : $maxSeqCategory[0]['seq'] + 1;
 
         $categories = [];
         foreach ($names as $name) {
             $categories[] = [
                 'bank_id' => $bankId,
                 'name' => $name,
+                'seq' => $seq++,
                 'parent_id' => $parentId,
                 'created_user_id' => empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'],
                 'updated_user_id' => empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'],
