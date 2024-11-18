@@ -13,6 +13,7 @@ use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Favorite\Service\FavoriteService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -228,6 +229,7 @@ class CourseController extends CourseBaseController
         if (!empty($assistantStudent)) {
             $assistant = $this->getUserService()->getUser($assistantStudent['assistantId']);
         }
+        $course['itemBankBindNum'] = $this->getExerciseService()->countExerciseBind(['bindType' => 'course', 'bindId' => $course['id']]);
 
         return $this->render(
             'course/course-show.html.twig',
@@ -488,5 +490,13 @@ class CourseController extends CourseBaseController
     protected function getCourseThreadService()
     {
         return $this->createService('Course:ThreadService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }

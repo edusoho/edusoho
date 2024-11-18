@@ -5,6 +5,7 @@
 {% block main_heading_class %}course-main-header{% endblock %}
 
 {% do script(['app/vue/views/course_manage/wrong_question/index.js']) %}
+{% do css(['app/css/main-ant.css']) %}
 
 {% block main_heading %}
   {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav,btnGroup:0} %}

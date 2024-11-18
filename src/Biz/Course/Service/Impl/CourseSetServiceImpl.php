@@ -659,6 +659,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->beginTransaction();
         try {
+            if ('closed' == $courseSet['status']) {
+                $this->dispatchEvent('exercise.canLearn', new Event(['bindType' => 'courseSet', 'bindId' => $courseSet['id']]));
+            }
             // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
             if (empty($publishedCourses) && 'live' === $courseSet['type']) {
                 //对于直播课程，有且仅有一个教学计划
@@ -739,6 +742,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed', 'canLearn' => '0']);
             $this->getCourseSetGoodsMediator()->onClose($courseSet);
             $this->getCourseService()->banLearningByCourseSetIds([$courseSet['id']]);
+            $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'courseSet', 'bindId' => $courseSet['id']]));
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();

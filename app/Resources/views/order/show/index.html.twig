@@ -8,7 +8,7 @@
   {% set currency = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default' %}
   {% set purchaseAgreement = setting('course_purchase_agreement')|default([]) %}
   <div class="order-center">
-    <form id="order-create-form" method="post" action="{{path('order_create')}}" 
+    <form id="order-create-form" method="post" action="{{path('order_create')}}"
     data-price-calculate="{{ path('order_calculate_price') }}"
     data-price-type="{{ currency }}"
     data-coin-rate="{{ setting('coin.cash_rate') }}"
@@ -18,7 +18,7 @@
       <input type="hidden" name="price" value="{{product.getPayablePrice()}}"/>
       <input type="hidden" name="informationCollectEventId" value="{{ informationCollectEvent.id|default('') }}"/>
       {% include product.showTemplate %}
-      
+
       {% if informationCollectEvent %}
       <input type="hidden" name="informationCollectIsSubmited" value="" />
       <div class="order-center-information-collect">
@@ -32,9 +32,9 @@
         <div class="order-center-line"></div>
       </div>
       {% endif %}
-      
+
       {% if setting('coupon.enabled', 0) and product.couponEnable|default(true) %}
-        {% include 'order/show/coupon-item.html.twig' %}
+        {% include 'order/show/coupon-item.html.twig' with { 'exerciseBind': exerciseBind }%}
       {% endif %}
 
       {{ slot('order.show.deducts', {'product': product}) }}

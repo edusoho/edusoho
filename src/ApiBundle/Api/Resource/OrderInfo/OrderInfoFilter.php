@@ -20,6 +20,7 @@ class OrderInfoFilter extends Filter
             'specsId' => $data['goodsSpecsId'],
             'goodsId' => $data['goodsId'],
             'cover' => $data['cover'],
+            'exerciseBind' => $data['exerciseBind'],
             'totalPrice' => strval($data['totalPrice']),
             'title' => $data['title'],
             'account' => empty($data['account']) ? new \stdClass() : $data['account'],

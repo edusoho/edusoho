@@ -43,6 +43,7 @@ class StudentAdd {
     $('#student-add-submit').click(function (event) {
       if (validator.form()) {
         $form.submit();
+        cd.message({type: 'success', message: Translator.trans('site.add_success_hint')});
       }
     });
   }

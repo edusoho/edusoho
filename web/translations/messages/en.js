@@ -4609,6 +4609,7 @@ t.add("course.plan_info", "<p class=\"cd-dark-minor cd-mb24\">Introduction to th
 t.add("course.tab.tasks", "Syllabus", "js", "en");
 t.add("course.tab.threads", "Discussions", "js", "en");
 t.add("course.tab.discussions", "Discussions", "js", "en");
+t.add("course.tab.itemBankBind", "ItemBankBind", "js", "en");
 t.add("course.tab.questions", "Questions", "js", "en");
 t.add("course.tab.notes", "Notes", "js", "en");
 t.add("course.tab.material", "Materials", "js", "en");

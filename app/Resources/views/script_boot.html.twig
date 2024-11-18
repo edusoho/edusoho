@@ -14,7 +14,7 @@
     {% endif %}
   {% endif %}
 
-  var CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}"; 
+  var CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}";
 
   app.config = {{
     {
@@ -35,7 +35,7 @@
   {% if script_arguments is defined %}
     app.arguments = {{ script_arguments|json_encode|raw }};
   {% endif %}
-  
+
   app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
 
   app.fileSingleSizeLimit = {{ setting("magic.file_single_size_limit", 10) }};

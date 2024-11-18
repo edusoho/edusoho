@@ -184,6 +184,8 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
                     "《{$exercise['title']}》(#{$exercise['id']})，移除学员{$user['nickname']}(#{$user['id']})}"
                 );
             }
+            $exerciseBinds = $this->getExerciseService()->findExerciseBindByExerciseId($exerciseId);
+            $this->getExerciseService()->deleteExerciseAutoJoinRecordByUserIdAndExerciseBindIds($userId, array_column($exerciseBinds, 'id'));
 
             $this->commit();
         } catch (\Exception $e) {
@@ -204,6 +206,53 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     public function batchUpdateMembers($updateFields)
     {
         return $this->getExerciseMemberDao()->batchUpdate(array_keys($updateFields), $updateFields);
+    }
+
+    public function batchBecomeStudent($exerciseIds, $userIds, $info, $exercise)
+    {
+        $this->beginTransaction();
+
+        $exercise['expiryMode'] = $info['expiryMode'] ?? $exercise['expiryMode'];
+        $exercise['expiryDays'] = $info['expiryDays'] ?? $exercise['expiryDays'];
+
+        $members = [];
+        foreach ($userIds as $userId) {
+            $members[] = [
+                'exerciseId' => $exercise['id'],
+                'questionBankId' => $exercise['questionBankId'],
+                'userId' => $userId,
+                'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
+                'role' => 'student',
+                'remark' => $info['remark'] ?? '',
+                'joinedChannel' => $info['joinedChannel'] ?? 'free_join',
+                'canLearn' => 1,
+                'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
+            ];
+        }
+        if (empty($members)) {
+            return;
+        }
+        $this->getExerciseMemberDao()->batchCreate($members);
+        foreach ($exerciseIds as $exerciseId) {
+            $exercise = $this->getExerciseService()->get($exerciseId);
+            $this->dispatchEvent('exercise.join', $exercise, ['member' => $members[0]]);
+        }
+
+        $this->commit();
+    }
+
+    public function batchRemoveStudent($exerciseId, $userIds)
+    {
+        try {
+            $this->beginTransaction();
+            $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userIds' => $userIds, 'joinedChannel' => 'bind_join']);
+            $exercise = $this->getExerciseService()->get($exerciseId);
+            $this->dispatchEvent('exercise.quit', $exercise, ['member' => ['role' => 'student']]);
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function getExerciseMember($exerciseId, $userId)
