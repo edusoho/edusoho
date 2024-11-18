@@ -1,16 +1,15 @@
 <script setup>
 import {computed, reactive, ref} from 'vue';
-import {QuestionCircleOutlined} from '@ant-design/icons-vue';
 import dayjs from 'dayjs';
 import {
   PlusOutlined,
   LoadingOutlined,
   DownOutlined,
   CloseOutlined,
+  QuestionCircleOutlined,
 } from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import Api from '../../../api';
-import {t} from '../../my-contract/vue-lang';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
@@ -57,7 +56,7 @@ const positivePrice = (rule, value) => {
 };
 
 const disabledDate = (current) => {
-  return current && current < dayjs().endOf('day');
+  return current && current < new Date().setHours(0, 0, 0, 0);
 };
 
 const serviceItem = ref(props.manage.serviceTags.map(item => ({
@@ -144,6 +143,19 @@ const expiryModeOptions = [
   {label: '固定周期', value: 'date'},
   {label: '长期有效', value: 'forever'},
 ];
+
+const validateForm = () => {
+  return formRef.value.validate()
+    .then(() => {
+      return formState;
+    })
+    .catch((error) => {
+    });
+};
+
+defineExpose({
+  validateForm,
+});
 </script>
 
 <template>

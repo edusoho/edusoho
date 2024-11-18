@@ -40,9 +40,11 @@ const marketSettingRef = ref(null);
 const submitForm = async () => {
   if (baseInfoRef.value && baseRuleRef.value ) {
     const baseInfo = await baseInfoRef.value.validateForm();
-    const baseRule = await baseRuleRef.value.validateForm()
+    const baseRule = await baseRuleRef.value.validateForm();
+    const marketSetting = await marketSettingRef.value.validateForm();
     console.log(baseInfo);
     console.log(baseRule);
+    console.log(marketSetting);
   }
 
 };

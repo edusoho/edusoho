@@ -35,13 +35,13 @@ const getCover = async () => {
 
 const getCategory = async () => {
   const category = await Api.category.getCategory();
-  categoryOptions.value = transformCategoryData(category.data);
+  categoryOptions.value = transformCategoryData(category);
   categoryOptions.value.unshift({ value: '0', label: '无' });
 };
 
 const getTabs = async () => {
   const tabs = await Api.tag.getTags('');
-  tabOptions.value = tabs.data.map(item => ({
+  tabOptions.value = tabs.map(item => ({
     label: item.name,
     value: item.name
   }));
