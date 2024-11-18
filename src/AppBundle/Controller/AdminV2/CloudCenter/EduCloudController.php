@@ -48,7 +48,7 @@ class EduCloudController extends BaseController
         if (!isset($info['accessCloud']) || $this->getWebExtension()->isTrial() || 0 == $info['accessCloud']) {
             $trialHtml = $this->getCloudCenterExperiencePage();
 
-            return $this->render('admin/edu-cloud/cloud.html.twig', [
+            return $this->render('admin-v2/cloud-center/edu-cloud/cloud.html.twig', [
                 'content' => $trialHtml['content'],
             ]);
         }

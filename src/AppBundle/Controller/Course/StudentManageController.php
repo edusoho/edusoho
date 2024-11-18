@@ -65,6 +65,10 @@ class StudentManageController extends BaseController
                 $isEnableAddAndRemove = 0;
             }
         }
+        $hasExportPermission = $this->getCurrentUser()->hasPermission('admin_v2_course_manage');
+        if (!$hasExportPermission) {
+            $hasExportPermission = $this->getSettingService()->node('course.teacher_export_student', false) && in_array('ROLE_TEACHER', $this->getCurrentUser()->getRoles());
+        }
 
         return $this->render('course-manage/student/index.html.twig', [
             'courseSet' => $this->getCourseSetService()->getCourseSet($courseSetId),
@@ -76,6 +80,7 @@ class StudentManageController extends BaseController
             'paginator' => $paginator,
             'offset' => $paginator->getOffsetCount(),
             'isEnableAddAndRemove' => $isEnableAddAndRemove,
+            'enableExport' => $hasExportPermission,
         ]);
     }
 
@@ -122,13 +127,9 @@ class StudentManageController extends BaseController
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
 
-            $this->setFlashMessage('success', 'site.add.success');
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'course_set_manage_course_students',
-                    ['courseSetId' => $courseSetId, 'courseId' => $courseId]
-                )
+            return $this->redirectToRoute(
+                'course_set_manage_course_students',
+                ['courseSetId' => $courseSetId, 'courseId' => $courseId]
             );
         }
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
@@ -156,6 +157,7 @@ class StudentManageController extends BaseController
         $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
         $studentIds = $request->request->get('studentIds', []);
+        $studentIds = is_array($studentIds) ? $studentIds : explode(',', $studentIds);
         if (empty($this->getUserService()->findUsersByIds($studentIds))) {
             return $this->createJsonResponse(['success' => false]);
         }
@@ -201,7 +203,7 @@ class StudentManageController extends BaseController
         $ids = is_array($ids) ? $ids : explode(',', $ids);
         if ('POST' === $request->getMethod()) {
             $fields = $request->request->all();
-            if ($fields['all']) {
+            if ($all) {
                 if ('day' == $fields['updateType']) {
                     $this->getCourseMemberService()->changeMembersDeadlineByCourseId($courseId, $fields['day'], $fields['waveType']);
 

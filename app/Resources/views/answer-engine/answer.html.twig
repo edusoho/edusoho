@@ -1,18 +1,11 @@
 {% extends 'layout.html.twig' %}
 
-{% do script(['libs/vue.js', 'app/js/answer-engine/answer/index.js', 'vue3/js/sign-contract/index.js']) %}
+{% do script(['libs/vue.js', 'app/js/answer-engine/answer/index.js', 'vue3/js/components/sign-contract/index.js']) %}
 
 {% block stylesheets %}
   {{ parent() }}
-  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
-    <link href="{{ asset('static-dist/app/css/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
-    <link href="{{ asset('static-dist/app/css/item-bank-antdv-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
-  {% else %}
-    <link href="{{ asset('static-dist/app/css/item-bank.css') }}" rel="stylesheet" />
-    <link href="{{ asset('static-dist/app/css/item-bank-antdv.css') }}" rel="stylesheet" />
-  {% endif %}
+  {% include 'item-bank-css-loader.html.twig' %}
 {% endblock %}
-
 
 {% block body %}
   {% block header %}
@@ -38,6 +31,15 @@
     <input type="hidden" name="target-title" value="{{ contract.targetTitle}}">
     <input type="hidden" name="nickname" value="{{ contract.nickname}}">
   {% endif %}
+  {% block sign_contract_modal_styles %}
+    {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+      <link href="{{ asset('static-dist/app/css/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+      <link href="{{ asset('static-dist/app/css/item-bank-antdv-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+    {% else %}
+      <link href="{{ asset('static-dist/app/css/item-bank.css') }}" rel="stylesheet" />
+      <link href="{{ asset('static-dist/app/css/item-bank-antdv.css') }}" rel="stylesheet" />
+    {% endif %}
+  {% endblock %}
   {% if contract.sign|default('') != 'no' %}
     <div id="sign-contract-modal"></div>
   {% endif %}

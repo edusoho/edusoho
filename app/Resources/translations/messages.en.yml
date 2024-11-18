@@ -305,6 +305,7 @@ form.btn.view: View
 form.btn.bind: Bind
 form.btn.bind_account: 'Bind account'
 form.btn.search: Search
+form.btn.export_search_result: 'Export search result'
 form.btn.use: Use
 form.btn.reply: Publish
 form.btn.bind_cancel: 'Unbind'
@@ -1396,6 +1397,7 @@ course.testpaper_export.btn: Exporting transcript
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
 course.tab.discussions: 'Discussions'
+course.tab.itemBankBind: 'ItemBankBind'
 course.tab.questions: 'Questions'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
@@ -1759,7 +1761,7 @@ course.plan_task.edit_tips: 'Create the live session'
 course.plan_task.live_finish_tips: 'The live session has ended'
 course.plan_task.converting: Transcoding
 course.plan_task.convert_failed: 'Transcode Failed'
-course.plan_task.which_chapter: '</i>No.<span class="number">%chapterNumber%</span>%chapter%<span class="colon">%colon%</span><span class="title">%title%</span>\n'
+course.plan_task.which_chapter: 'No.%chapterNumber% %chapter%%colon%%title%'
 course.plan_task.which_lesson: '</i>Lesson <span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>'
 course.plan_task.create_part: 'Add %partName%'
 course.plan_task.question_placeholder: 'Ask a question'
@@ -2317,6 +2319,7 @@ classroom.latest_join_member: 'New Students'
 classroom.description_empty_tips: 'No data'
 classroom.description: Intro
 classroom.teachers: Teachers
+classroom.itemBankBind: itemBankBind
 classroom.reviews: Reviews
 classroom.note: Notes
 classroom.certificates: Certificates
@@ -3757,6 +3760,7 @@ my.teaching.course_set.select_type.how_do_create: 'How to create a course?'
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 'Has not yet purchased cloud live service'
 my.teaching.course_set.select_type.live_open_course.available_after_open: 'Cloud Live Available after opening'
 my.teaching.course_set.select_type.live_open_course.valid_service: 'Cloud live service is not valid'
+my.teaching.course_set.select_type.live_open_course.no_permission: 'You do not have permission to create open course'
 my.teaching.multi_class.my_students: My Students
 my.teaching.multi_class.status: Status
 my.teaching.multi_class.student_num: Student Number
@@ -8169,6 +8173,7 @@ task.learn_data_detail.completed_number: completed number
 task.learn_data_detail.unfinished_number: unfinished number
 task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
+join.channel: 'Join Channel'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
 
@@ -11209,7 +11214,7 @@ mobile.middle_page.top: Put the school in your pocket
 mobile.middle_page.open: Click to open
 mobile.middle_page.browser: Click on the top right... In "Open in Browser" continue to jump
 task.app_modal.title: Only learning in App
-task.app_modal.intro: Please download / open 
+task.app_modal.intro: Please download / open
 task.app_modal.app: APP
 task.app_modal.learning: Continue learning
 task.app_modal.use: Use mobile phone
@@ -11220,7 +11225,7 @@ admin_v2.question.ai_analysis.teacher_ebable.tip: After it is opened, the teache
 admin_v2.question.ai_analysis.student_ebable: AI Question Analysis (Student Side)
 admin_v2.question.ai_analysis.student_ebable.tip: After it is opened, the student can generate AI analysis for the question without analysis.
 admin_v2.question.ai_analysis.Upgrade: Upgrade cloud capabilities
-admin_v2.question.ai_analysis.experience: , Experience powerful 
+admin_v2.question.ai_analysis.experience: , Experience powerful
 admin_v2.question.ai_analysis.problem: problem resolution
 admin_v2.question.ai_analysis.tittle: Build new heights of intelligent education, comprehensively upgrade cloud capabilities, lead a new era of deep interaction and accurate analysis of Al question bank, and open unlimited possibilities for personalized learning
 admin_v2.question.ai_analysis.upgrade_now: Upgrade now

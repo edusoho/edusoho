@@ -383,6 +383,7 @@ form.btn.view: 查看
 form.btn.bind: 绑定
 form.btn.bind_account: 绑定帐号
 form.btn.search: 搜索
+form.btn.export_search_result: 导出搜索结果
 form.btn.use: 使用
 form.btn.reply: 发表
 form.btn.bind_cancel: 取消绑定
@@ -1646,6 +1647,7 @@ course.testpaper_export.btn: 导出成绩单
 course.tab.tasks: '目录'
 course.tab.threads: '话题'
 course.tab.discussions: '话题'
+course.tab.itemBankBind: '题库'
 course.tab.questions: '问题'
 course.tab.notes: '笔记'
 course.tab.material: '资料区'
@@ -2034,8 +2036,7 @@ course.plan_task.edit_tips: 编辑以创建直播教室
 course.plan_task.live_finish_tips: 直播已经结束
 course.plan_task.converting: 转码中
 course.plan_task.convert_failed: 转码失败
-course.plan_task.which_chapter: >
-  </i>第%chapterNumber%%chapter%%colon%%title%
+course.plan_task.which_chapter: 第%chapterNumber%%chapter%%colon%%title%
 course.plan_task.which_lesson: >
   </i>课时<span class="number">%chapterNumber%</span>：<span class="js-lesson-title title">%title%</span>
 course.plan_task.create_btn: 添加
@@ -2640,6 +2641,7 @@ classroom.latest_join_member: 新加学员
 classroom.description_empty_tips: 暂无介绍！
 classroom.description: 介绍
 classroom.teachers: 师资
+classroom.itemBankBind: 题库
 classroom.reviews: 评价
 classroom.note: 笔记
 classroom.certificates: 班级证书
@@ -4210,7 +4212,7 @@ mobile.middle_page.top: 把学校装进口袋
 mobile.middle_page.open: 点击打开
 mobile.middle_page.browser: 点击右上角...在"浏览器中打开"继续跳转
 task.app_modal.title: 仅支持 APP 学习
-task.app_modal.intro: 请下载 / 打开 
+task.app_modal.intro: 请下载 / 打开
 task.app_modal.app: APP
 task.app_modal.learning: 后继续学习
 task.app_modal.use: 使用手机
@@ -4362,6 +4364,7 @@ my.teaching.course_set.select_type.how_do_create: 如何创建课程？
 my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
+my.teaching.course_set.select_type.live_open_course.no_permission: 没有创建公开课的权限
 
 #班课
 my.teaching.multi_class.my_students: 我的学员
@@ -9481,6 +9484,7 @@ task.learn_data_detail.unfinished_number: 未完成(人)
 task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
+join.channel: 加入方式
 
 register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 

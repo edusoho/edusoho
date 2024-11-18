@@ -88,7 +88,6 @@
                         :mode="mode"
                         :showScoreAndSeq="false"
                         :seq="`${itemIndex}-${questionIndex}`"
-                        @getAiAnalysis="getAiAnalysis"
                         @changeAnalysis="changeAnalysis"
                       >
                       </judge-type>
@@ -99,7 +98,6 @@
                         :mode="mode"
                         :showScoreAndSeq="false"
                         :seq="`${itemIndex}-${questionIndex}`"
-                        @getAiAnalysis="getAiAnalysis"
                         @changeAnalysis="changeAnalysis"
                       ></single-choice>
                       <choice
@@ -112,7 +110,6 @@
                         :mode="mode"
                         :showScoreAndSeq="false"
                         :seq="`${itemIndex}-${questionIndex}`"
-                        @getAiAnalysis="getAiAnalysis"
                         @changeAnalysis="changeAnalysis"
                       ></choice>
                       <essay
@@ -122,7 +119,6 @@
                         :mode="mode"
                         :showScoreAndSeq="false"
                         :seq="`${itemIndex}-${questionIndex}`"
-                        @getAiAnalysis="getAiAnalysis"
                         @changeAnalysis="changeAnalysis"
                       ></essay>
                       <fill
@@ -132,7 +128,6 @@
                         :mode="mode"
                         :showScoreAndSeq="false"
                         :seq="`${itemIndex}-${questionIndex}`"
-                        @getAiAnalysis="getAiAnalysis"
                         @changeAnalysis="changeAnalysis"
                       ></fill>
                     </a-col>
@@ -244,7 +239,6 @@
         @getData="getEditData"
         @changeEditor="changeEditor"
         @getInitRepeatQuestion="getInitRepeatQuestion"
-        @getAiAnalysis="getAiAnalysis"
       />
       <item-manage
         v-if="modelData.mode === 'create'"
@@ -266,7 +260,6 @@
         @getData="getCreateData"
         @changeEditor="changeEditor"
         @getInitRepeatQuestion="getInitRepeatQuestion"
-        @getAiAnalysis="getAiAnalysis"
       />
     </a-modal>
 
@@ -1338,9 +1331,6 @@ export default {
     },
     closeTip() {
       this.analysisTipClose = false;
-    },
-    getAiAnalysis(data, disable, enable, complete, finish) {
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     },
     changeAnalysis(seq, analysis) {
       const [itemIndex, questionIndex] = seq.split("-");

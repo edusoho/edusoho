@@ -76,6 +76,8 @@ class SyncLiveMemberDataJob extends AbstractJob
     private function syncThirdPartyLiveMemberStatistics($activity)
     {
         if (($activity['endTime'] > time() || DateToolkit::isToday($activity['endTime'])) && !$this->getLiveService()->isProviderStatisticInRealTime($activity['ext']['liveProvider'])) {
+            $this->finish = 1;
+
             return;
         }
         try {

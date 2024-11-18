@@ -786,7 +786,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $result = $this->getCourseDeleteService()->deleteCourse($id);
             $this->getCourseSpecsMediator()->onDelete($course);
-
+            $this->dispatchEvent('exercise.unBind', new Event(['bindId' => $id, 'bindType' => 'course']));
             $this->commit();
 
             return $result;
@@ -818,9 +818,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
                 }
             }
-            $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
+            $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'course', 'bindId' => $course['id']]));
             $this->unpublishGoodsSpecs($course);
+            $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -869,6 +870,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
         $this->dispatchEvent('course.publish', $course);
+        $this->dispatchEvent('exercise.canLearn', ['bindType' => 'course', 'bindId' => $id]);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
         $this->publishGoodsSpecs($course);
@@ -1408,7 +1410,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::CHAPTERTYPE_INVALID());
         }
 
-        $chapter['title'] = $this->purifyHtml($chapter['title'], true);
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
@@ -1419,7 +1420,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateChapter($courseId, $chapterId, $fields)
     {
         $this->tryManageCourse($courseId);
-        $fields['title'] = $this->purifyHtml($fields['title'], true);
         $chapter = $this->getChapterDao()->get($chapterId);
         $oldChapter = $chapter;
 

@@ -133,7 +133,7 @@ class CourseSetFileManageController extends BaseController
                 $thumbnails = [];
             }
 
-            return $this->render('admin/cloud-file/detail.html.twig', [
+            return $this->render('admin-v2/teach/cloud-file/detail.html.twig', [
                 'material' => $file,
                 'thumbnails' => empty($thumbnails) ? '' : $thumbnails,
                 'params' => $request->query->all(),

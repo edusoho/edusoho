@@ -19,15 +19,12 @@
       :courseSetStatus="courseSetStatus"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
-      :answerText="answerText"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
       @doAgainEvent="doAgainEvent"
       @cancelFavoriteEvent="cancelFavoriteEvent"
       @favoriteEvent="favoriteEvent"
       @submitReturn="returnUrlGoto"
-      @getAiAnalysis="getAiAnalysis"
-      @stopAiAnalysis="stopAiAnalysis"
     >
       <template slot="returnBtn" v-if="showReturnBtn">
         <div class="ibs-text-center ibs-mt16">
@@ -65,8 +62,6 @@ export default {
       isDownload: JSON.parse($('[name=question_bank_attachment_setting]').val()).enable === '1',
       assessmentResponses: {},
       exercise: {},
-      answerText: {},
-      stopAnswer: {},
     };
   },
   provide() {
@@ -270,67 +265,6 @@ export default {
         });
       });
     },
-    async getAiAnalysis(questionId,finished) {
-      const data = {
-        role: "student",
-        questionId,
-        answerRecordId: this.answerRecord.id,
-      };
-      let messageEnd = false;
-      let answers = [];
-      this.answerText[questionId] = '';
-      this.stopAnswer[questionId] = false;
-      const typingTimer = setInterval(() => {
-        if (answers.length === 0) {
-          return;
-        }
-        if (this.stopAnswer[questionId]) {
-          clearInterval(typingTimer);
-          return;
-        }
-        this.answerText[questionId] += answers.shift();
-        if (answers.length === 0 && messageEnd) {
-          clearInterval(typingTimer);
-          finished();
-        }
-      $(`.js-ai-analysis${questionId}`).text(this.answerText[questionId]);
-
-      }, 50);
-      const response = await fetch("/api/ai/question_analysis/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-          Accept: "application/vnd.edusoho.v2+json",
-        },
-        body: JSON.stringify(data),
-      });
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let lastMessgae = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        const messages = (lastMessgae + decoder.decode(value)).split("\n\n");
-        let key = 1;
-        for (let message of messages) {
-          if (key == messages.length) {
-            lastMessgae = message;
-          } else {
-            const parseMessage = JSON.parse(message.slice(5));
-            if (parseMessage.event === "message") {
-              answers.push(parseMessage.answer);
-            }
-            key++;
-          }
-        }
-        if (done) {
-          messageEnd = true;
-          break;
-        }
-      }
-    },
-    stopAiAnalysis(questionId) {
-      this.stopAnswer[questionId] = true;
-    }
   },
 };
 </script>

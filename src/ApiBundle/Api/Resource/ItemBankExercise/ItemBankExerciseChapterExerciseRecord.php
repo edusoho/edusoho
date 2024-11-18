@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use Biz\ItemBankExercise\Service\ChapterExerciseRecordService;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Testpaper\ExerciseException;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
@@ -16,7 +17,8 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
     {
         $user = $this->getCurrentUser();
         $exercise = $this->getExerciseService()->get($exerciseId);
-        if ('closed' == $exercise['status']) {
+        $member = $this->getExerciseMemberService()->getExerciseMember($exerciseId, $user['id']);
+        if ('closed' == $exercise['status'] || 0 == $member['canLearn']) {
             throw ExerciseException::CLOSED_EXERCISE();
         }
         $moduleId = $request->request->get('moduleId', '');
@@ -96,5 +98,13 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
     protected function getExerciseService()
     {
         return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->service('ItemBankExercise:ExerciseMemberService');
     }
 }

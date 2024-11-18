@@ -213,8 +213,7 @@
                     @changeTag="changeTag"
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
-                    @aiGenerates="aiGenerates"
-                    @stopAiAnalysis="stopAiAnalysis"
+                    @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
                     :isShowAiAnalysis="isShowAiAnalysis"
                   ></judge-type>
                   <single-choice
@@ -257,8 +256,7 @@
                     @changeTag="changeTag"
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
-                    @aiGenerates="aiGenerates"
-                    @stopAiAnalysis="stopAiAnalysis"
+                    @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
                     :isShowAiAnalysis="isShowAiAnalysis"
                   ></single-choice>
                   <choice
@@ -302,8 +300,7 @@
                     @changeTag="changeTag"
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
-                    @aiGenerates="aiGenerates"
-                    @stopAiAnalysis="stopAiAnalysis"
+                    @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
                     :isShowAiAnalysis="isShowAiAnalysis"
                   ></choice>
                   <essay
@@ -357,8 +354,7 @@
                     @getEssayAttachment="getEssayAttachment"
                     @deleteEssayAttachment="deleteEssayAttachment"
                     @setMaterialAnalysis="setMaterialAnalysis"
-                    @aiGenerates="aiGenerates"
-                    @stopAiAnalysis="stopAiAnalysis"
+                    @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
                     :isShowAiAnalysis="isShowAiAnalysis"
                   >
                     <template v-slot:review>
@@ -420,8 +416,7 @@
                     @changeCollect="changeCollect"
                     @setMaterialAnalysis="setMaterialAnalysis"
                     @error-correction="errorCorrection"
-                    @aiGenerates="aiGenerates"
-                    @stopAiAnalysis="stopAiAnalysis"
+                    @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
                     :isShowAiAnalysis="isShowAiAnalysis"
                   ></fill>
                   <answer-model
@@ -1340,12 +1335,10 @@ export default {
     handleViewHistoricalResult(params) {
       this.$emit("view-historical-result", params);
     },
-
-    aiGenerates(questionId, finished) {
-      this.$emit("getAiAnalysis", questionId, finished);
-    },
-    stopAiAnalysis(questionId) {
-      this.$emit("stopAiAnalysis", questionId);
+    prepareStudentAiAnalysis(gen) {
+      gen({
+        answerRecordId: this.answerRecord.id,
+      });
     },
     changeAssessment(value) {
       if (parent !== window) {

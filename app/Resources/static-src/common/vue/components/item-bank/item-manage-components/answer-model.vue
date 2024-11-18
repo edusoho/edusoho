@@ -87,55 +87,12 @@
                 { initialValue: questions.analysis }
               ]"
             />
-            <div
+            <ai-analysis
               v-if="aiAnalysisEnable && questions.aiAnalysisEnable !== false"
-              class="ibs-ai-explain ibs-mt16"
-            >
-              <div class="ibs-ai-left">
-                <p class="ai-left-tittle">
-                  {{ t("itemEngine.aiProblemAssistant") }}
-                </p>
-                <button
-                  class="ai-left-btn"
-                  v-show="isShowAiExplain"
-                  @click="aiGeneration()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-ai.png" class="ai-left-img" />
-                  <span class="ai-left-text" ref="text">{{
-                      t("itemEngine.analysis")
-                    }}</span>
-                </button>
-                <button
-                  class="ai-left-stopbtn"
-                  v-show="stopAiExplain"
-                  @click="stopAiGeneration()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-stop.png" class="ai-left-img" />
-                  <span class="ai-left-text">{{
-                      t("itemEngine.stopGeneration")
-                    }}</span>
-                </button>
-                <button
-                  class="ai-left-stopbtn"
-                  v-show="anewAiExplain"
-                  @click="aiGeneration()"
-                >
-                  <img src="/static-dist/app/img/question-bank/explain-anew.png" class="ai-left-img" />
-                  <span class="ai-left-text">{{
-                      t("itemEngine.reGenerate")
-                    }}</span>
-                </button>
-                <span class="ai-left-content">{{
-                    t("itemEngine.aiAnalysisRefer")
-                  }}</span>
-                <p class="ai-left-tips" v-show="unableGenerateTips">
-                  {{ t("itemEngine.aiUnableGenerate") }}
-                </p>
-              </div>
-              <div class="ibs-ai-right">
-                <img src="/static-dist/app/img/question-bank/explain-ai-img.png" class="ai-right-img" />
-              </div>
-            </div>
+              @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
+              @clearAnalysis="clearAnalysis"
+              @appendAnalysis="appendAnalysis"
+            ></ai-analysis>
           </a-form-item>
 
           <a-form-item
@@ -274,6 +231,7 @@
 <script>
 import baseType from "./base";
 import attachmentUpload from "../attachment-upload";
+import AiAnalysis from "../ai-analysis";
 import loadScript from "load-script";
 import Emitter from "common/vue/mixins/emitter";
 import Locale from "common/vue/mixins/locale";
@@ -288,7 +246,7 @@ const base = {
 };
 export default {
   name: "answer-model",
-  components: { baseType, attachmentUpload },
+  components: { baseType, attachmentUpload, AiAnalysis },
   mixins: [Emitter, Locale],
   data() {
     return {
@@ -304,13 +262,6 @@ export default {
       scoreTypeHelp: "",
       scoreTypeValidateStatus: "success",
       isWrong: false,
-      isShowAiExplain: true,
-      stopAiExplain: false,
-      anewAiExplain: false,
-      unableGenerateTips: false,
-      isStopComplete: false,
-      isMessageEnd: false,
-      answers: [],
     };
   },
   props: {
@@ -528,59 +479,20 @@ export default {
     renderFormula() {
       this.$emit("renderFormula");
     },
-    aiGeneration() {
+    prepareTeacherAiAnalysis(gen) {
       this.form.validateFields(err => {
         if (err) {
           this.getFromInfo();
         } else {
-          this.$emit(
-            "getAiAnalysis",
-            this.disable,
-            this.enable,
-            this.complete,
-            this.finish
-          );
+          this.$emit('prepareTeacherAiAnalysis', gen);
         }
       });
     },
-    disable() {
-      this.unableGenerateTips = true;
+    clearAnalysis() {
+      this.analysisEditor.setData('');
     },
-    enable() {
-      this.isShowAiExplain = false;
-      this.stopAiExplain = true;
-      this.anewAiExplain = false;
-      this.analysisEditor.setData("");
-      this.answers = [];
-      this.isStopComplete = false;
-      const typingTimer = setInterval(() => {
-        if (this.answers.length === 0) {
-          return;
-        }
-        if (this.isStopComplete) {
-          clearInterval(typingTimer);
-          return;
-        }
-        this.analysisEditor.insertHtml(this.answers.shift());
-        if (this.answers.length === 0 && this.isMessageEnd) {
-          this.finished();
-          clearInterval(typingTimer);
-        }
-      }, 50);
-    },
-    complete(answer) {
-      this.answers.push(answer);
-    },
-    finish() {
-      this.isMessageEnd = true;
-    },
-    finished() {
-      this.stopAiExplain = false;
-      this.anewAiExplain = true;
-    },
-    stopAiGeneration() {
-      this.finished();
-      this.isStopComplete = true;
+    appendAnalysis(analysis) {
+      this.analysisEditor.insertHtml(analysis);
     },
   }
 };

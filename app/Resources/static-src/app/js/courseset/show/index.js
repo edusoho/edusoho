@@ -1,6 +1,4 @@
-import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
-import { Browser } from 'common/utils';
 import { buyBtn } from 'app/common/widget/btn-util';
 
 initTaskLearnChart();

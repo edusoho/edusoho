@@ -108,7 +108,14 @@ class ItemBankExerciseController extends BaseController
         $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
 
         if (empty($member) || ('date' == $exercise['expiryMode'] && $exercise['expiryStartDate'] >= time())) {
-            return $this->redirectToRoute('item_bank_exercise_show', ['id' => $id]);
+            $bindType = $request->query->get('bindType');
+            $bindId = $request->query->get('bindId');
+            if (empty($bindType) || empty($bindId)) {
+                return $this->redirectToRoute('item_bank_exercise_show', ['id' => $id]);
+            } else {
+                $url = $this->generateUrl('item_bank_exercise_show', ['id' => $id]);
+                return $this->redirect($url.'?bindType='.$bindType.'&bindId='.$bindId);
+            }
         }
 
         $tabs = $this->getTabs($exercise);

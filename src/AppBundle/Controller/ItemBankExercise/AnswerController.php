@@ -200,7 +200,8 @@ class AnswerController extends BaseController
         $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
         $user = $this->getCurrentUser();
         $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($user['id'], $goodsKey);
-        if (empty($contract) || !empty($signRecord)) {
+        $member = $this->getItemBankExerciseMemberService()->getExerciseMember($exerciseId, $user['id']);
+        if (empty($contract) || !empty($signRecord) || (!empty($member) && 'bind_join' == $member['joinedChannel'])) {
             $contract = [
                 'sign' => 'no',
             ];
@@ -211,7 +212,7 @@ class AnswerController extends BaseController
                 'id' => $contract['contractId'],
                 'goodsKey' => $goodsKey,
                 'targetTitle' => $itemBankExercise['title'] ?? '',
-                'nickname' => $user['nickname']
+                'nickname' => $user['nickname'],
             ];
         }
 
@@ -296,5 +297,13 @@ class AnswerController extends BaseController
     private function getContractService()
     {
         return $this->createService('Contract:ContractService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseMemberService
+     */
+    protected function getItemBankExerciseMemberService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseMemberService');
     }
 }

@@ -14,7 +14,6 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
     ></judge-type>
     <single-choice
       v-if="type === 'single_choice'"
@@ -27,7 +26,6 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
     ></single-choice>
     <fill-type
       v-if="type === 'fill'"
@@ -40,7 +38,6 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
     ></fill-type>
     <essay-type
       v-if="type === 'essay'"
@@ -53,7 +50,6 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
     ></essay-type>
     <material-type
       v-if="type === 'material'"
@@ -69,7 +65,6 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
     ></material-type>
     <choice
       v-if="type === 'choice' || type === 'uncertain_choice'"
@@ -83,7 +78,6 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
     ></choice>
   </div>
 </template>
@@ -291,9 +285,6 @@ export default {
     },
     renderFormula() {
       this.$emit("renderFormula");
-    },
-    getAiAnalysis(data, disable, enable, complete, finish) {
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     },
   }
 };

@@ -11,7 +11,7 @@
     v-on="$listeners"
     @changeTag="changeTag"
     @changeCollect="changeCollect"
-    @genAiAnalysis="getAiAnalysis"
+    @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
       <div v-if="mode == 'do'">
@@ -375,8 +375,8 @@ export default {
         }
       }
     },
-    getAiAnalysis(disable, enable, complete, finish) {
-      let data = {};
+    prepareTeacherAiAnalysis(gen) {
+      const data = {};
       let question = JSON.parse(JSON.stringify(this.question));
       data.stem = question.stem;
       data.answers = this.getFillAnswer(question.stem);
@@ -386,7 +386,7 @@ export default {
       } else {
         data.type = "fill";
       }
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
+      gen(data);
     },
   }
 };

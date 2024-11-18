@@ -13,7 +13,7 @@
       @changeEditor="changeEditor"
       @renderFormula="renderFormula"
       @getInitRepeatQuestion="getInitRepeatQuestion"
-      @getAiAnalysis="getAiAnalysis"
+      @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
     >
       <template v-slot:response_points>
         <a-form-item
@@ -222,22 +222,23 @@ export default {
     renderFormula() {
       this.$emit("renderFormula");
     },
-    getAiAnalysis(disable, enable, complete, finish) {
-      let data = {};
+    prepareTeacherAiAnalysis(gen) {
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
+          const data = {};
           let question = JSON.parse(JSON.stringify(this.questions));
           question = Object.assign(question, values.questions);
           data.answer = [].concat(question.answer).join();
           data.stem = question.stem;
           if (this.isSubItem) {
             data.type = "material-essay";
+            this.$emit('prepareTeacherAiAnalysis', data, gen);
           } else {
             data.type = "essay";
+            gen(data);
           }
         }
       });
-      this.$emit("getAiAnalysis", data, disable, enable, complete, finish);
     },
   }
 };

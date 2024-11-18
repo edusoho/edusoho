@@ -14,6 +14,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Order\OrderException;
 use Biz\Order\Service\OrderService;
 use Biz\Product\Service\ProductService;
@@ -64,6 +65,7 @@ class ClassroomController extends BaseController
             'classroom' => $classroom,
             'nav' => $nav,
             'member' => $member,
+            'itemBankBindNum' => $this->getExerciseService()->countExerciseBind(['bindType' => 'classroom', 'bindId' => $classroom['id']]),
         ]);
     }
 
@@ -975,5 +977,13 @@ class ClassroomController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }

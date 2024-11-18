@@ -1,6 +1,5 @@
 import Axios from 'axios';
 import * as ElementUI from 'element-ui';
-import {Dropdown, Menu} from '@codeages/design-vue';
 import ManageInfo from './index.vue';
 
 import qs from 'qs';
@@ -18,8 +17,6 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$qs = qs;
 
 Vue.use(ElementUI);
-Vue.use(Dropdown);
-Vue.use(Menu);
 Vue.filter('trans', function (value, params) {
   if (!value) return '';
   return Translator.trans(value, params);
@@ -28,7 +25,6 @@ Vue.filter('trans', function (value, params) {
 let $app = $('#app');
 
 new Vue({
-  el: '#app',
   render: createElement => createElement(ManageInfo, {
     props: {
       classroom: $app.data('classroom'),
@@ -52,4 +48,4 @@ new Vue({
       infoSaveUrl: $app.data('infoSaveUrl'),
     }
   })
-});
+}).$mount('#app');

@@ -1832,6 +1832,10 @@ course_activity_download:
     path: '/course/{courseId}/activiy/{activityId}/download'
     defaults:
         _controller: 'AppBundle:Activity/Download:downloadFile'
+course_activity_download_file_preview:
+    path: '/course/{courseId}/activity/{activityId}/download_file/{materialId}/preview'
+    defaults:
+        _controller: 'AppBundle:Activity/Download:previewFile'
 course_manage_activity_manage_custom_route:
     path: '/course/{fromCourseId}/manage/activity_{mediaType}/{id}/{routeName}'
     defaults:
@@ -2204,6 +2208,10 @@ course_set_manage_course_tasks:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/tasks'
     defaults:
         _controller: 'AppBundle:Course/CourseManage:tasks'
+course_set_manage_course_item_bank:
+  path: '/course_set/{courseSetId}/manage/course/{courseId}/itemBank'
+  defaults:
+    _controller: 'AppBundle:Course/CourseManage:itemBank'
 course_set_manage_course_replay:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/replay'
     defaults:
@@ -2807,6 +2815,10 @@ classroom_manage_courses:
     path: '/classroom/{id}/manage/courses'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:courses'
+classroom_manage_item_bank:
+  path: '/classroom/{id}/manage/itemBank'
+  defaults:
+    _controller: 'AppBundle:Classroom/ClassroomManage:itemBank'
 classroom_manage_course_remove:
     path: '/classroom/{id}/manage/course/{courseId}/remove'
     defaults:
@@ -3075,6 +3087,10 @@ classroom_courses:
     path: '/classroom/{classroomId}/courses'
     defaults:
         _controller: 'AppBundle:Classroom/Course:list'
+classroom_itemBankBind:
+    path: '/classroom/{classroomId}/itemBankBind'
+    defaults:
+        _controller: 'AppBundle:Classroom/ClassroomItemBankBind:list'
 classroom_member_access:
     path: '/classroom/{classroomId}/member/{memberId}/access'
     defaults:

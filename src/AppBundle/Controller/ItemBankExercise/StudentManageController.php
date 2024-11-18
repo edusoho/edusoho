@@ -92,11 +92,11 @@ class StudentManageController extends BaseController
             $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
             $data['reason'] = OperateReason::JOIN_BY_IMPORT;
             $data['reasonType'] = OperateReason::JOIN_BY_IMPORT_TYPE;
+            $data['joinedChannel'] = OperateReason::JOIN_BY_IMPORT_TYPE;
             $data['source'] = 'outside';
 
             try {
                 $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
-                $this->setFlashMessage('success', 'site.add.success');
             } catch (\Exception $e) {
                 $this->setFlashMessage('danger', $e->getMessage());
             } finally {
@@ -255,7 +255,8 @@ class StudentManageController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
-        $userIds = $request->request->get('userIds', []);
+        $userIds = $request->request->get('studentIds', []);
+        $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
         if (empty($this->getUserService()->findUsersByIds($userIds))) {
             return $this->createJsonResponse(['success' => false]);
         }
