@@ -90,7 +90,7 @@ export default {
       }
     },
     startDo(item) {
-      if (this.ItemBankExercise?.status === 'closed' || this.ItemBankExercise?.canLearn === '0') {
+      if (this.ItemBankExercise?.status == 'closed' || this.ItemBankExercise?.canLearn == '0') {
         closedToast('exercise')
         return
       }
@@ -103,7 +103,7 @@ export default {
       this.$router.push({ path: '/brushIntro', query });
     },
     continueDo(item) {
-      if (this.ItemBankExercise?.status === 'closed' || this.ItemBankExercise?.canLearn === '0') {
+      if (this.ItemBankExercise?.status == 'closed' || this.ItemBankExercise?.canLearn == '0') {
         closedToast('exercise')
         return
       }

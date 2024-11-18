@@ -15,7 +15,7 @@
     <div class="join-after__content">
       <div>
         <!-- 目录 -->
-        <div style="position: relative;" v-if="active === 0">
+        <div style="position: relative;" v-if="active == 0">
           <div class="course-info py-12" @click="gotoGoodsPage">
             <div class="course-info__left">
               <div class="title" :class="{ 'title--full': !details.goodsId }">{{ details.courseSet && details.courseSet.title }}</div>
@@ -29,7 +29,7 @@
             <van-icon name="arrow" v-if="details.goodsId" />
           </div>
 
-          <div v-if="details.drainage && details.drainage.enabled === '1'" class="drainage-btn" @click="showDrainage = true">
+          <div v-if="details.drainage && details.drainage.enabled == '1'" class="drainage-btn" @click="showDrainage = true">
             <i class="iconfont icon-drainage" style="margin-right: 4px;"></i>
             {{ $t('courseLearning.teachingService') }}
           </div>
@@ -65,7 +65,7 @@
           <div class="white-space" v-if="isShowClosedFooter"></div>
         </div>
 
-        <div style="position: relative;" v-if="active === 1">
+        <div style="position: relative;" v-if="active == 1">
           <div v-if="bindItemBankList.length === 0">
             <van-empty description="暂无题库" />
           </div>
@@ -106,7 +106,7 @@
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
 
     <van-popup
-      v-if="details.drainage && details.drainage.enabled === '1'"
+      v-if="details.drainage && details.drainage.enabled == '1'"
       class="drainage-popup"
       v-model="showDrainage"
       round

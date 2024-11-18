@@ -13,7 +13,7 @@
       </van-tabs>
 
       <!-- 班级介绍 -->
-      <div v-show="active === 0">
+      <div v-show="active == 0">
         <detail-plan
           :details="planDetails"
           :join-status="details.joinStatus"
@@ -49,7 +49,7 @@
       </div>
 
       <!-- 班级课程 -->
-      <div v-show="active === 1">
+      <div v-show="active == 1">
         <course-set-list
           ref="course"
           :details="details"
@@ -94,7 +94,7 @@
     </van-action-sheet>
     <e-footer
       @click.native="gotoGoodsPage"
-      v-if="active === 0 && details.goodsId && details.status !== 'closed'"
+      v-if="active == 0 && details.goodsId && details.status !== 'closed'"
     >
       {{ $t('classLearning.viewDetails') }}
     </e-footer>
@@ -102,7 +102,7 @@
     <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
 
     <div class="footer">
-    <closedFixed v-if="details.status === 'closed'" :isJoin="true" :title="$t('closed.classroomTitle')" :content="$t('closed.classroomContent')" />
+    <closedFixed v-if="details.status == 'closed'" :isJoin="true" :title="$t('closed.classroomTitle')" :content="$t('closed.classroomContent')" />
   </div>
   </div>
 </template>
