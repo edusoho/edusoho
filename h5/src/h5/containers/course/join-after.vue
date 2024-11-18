@@ -13,7 +13,7 @@
     </van-tabs>
 
     <div class="join-after__content">
-      <keep-alive>
+      <div>
         <!-- 目录 -->
         <div style="position: relative;" v-if="active == 0">
           <div class="course-info py-12" @click="gotoGoodsPage">
@@ -65,6 +65,17 @@
           <div class="white-space" v-if="isShowClosedFooter"></div>
         </div>
 
+        <div style="position: relative;" v-if="active == 1">
+          <div v-if="bindItemBankList.length === 0">
+            <van-empty description="暂无题库" />
+          </div>
+          <div v-else class="flex flex-col p-16 gap-12">
+            <div v-for="item in bindItemBankList" :key="item.id">
+              <goods-item-bank :item="item"/>
+            </div>
+          </div>
+        </div>
+
         <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
         <component
           v-else
@@ -73,7 +84,7 @@
           :details="details"
           @chang-tabs-status="changTabsStatus"
         />
-      </keep-alive>
+      </div>
     </div>
 
     <!-- 个人信息表单填写 -->
@@ -132,6 +143,7 @@ import firstDiscussion from './discussion/index.vue'; // 问答
 import secondDiscussion from './discussion/index.vue?second'; // 话题
 import Notes from './notes/index.vue';
 import Reviews from './reviews/index.vue';
+import GoodsItemBank from '@/components/item-bank/goods-item-bank.vue';
 // 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
 const tabComponent = {
   catalogue: {
@@ -160,6 +172,7 @@ export default {
   inheritAttrs: true,
 
   components: {
+    GoodsItemBank,
     // eslint-disable-next-line vue/no-unused-components
     Directory,
     DetailHead,
@@ -184,7 +197,7 @@ export default {
       headBottom: 0,
       active: 0,
       scrollFlag: false,
-      tabs: ['catalogue'],
+      tabs: ['catalogue', 'courseItemBank'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度
@@ -200,7 +213,8 @@ export default {
       show_course_review: this.$store.state.goods.show_course_review,
       assistantShow: false,
       showTabs: true, // 是否显示 tabs
-      showDrainage: false
+      showDrainage: false,
+      bindItemBankList: [],
     };
   },
 
@@ -298,6 +312,7 @@ export default {
       this.offsetTop = IMGHEIGHT + NAVBARHEIGHT;
       this.offsetHeight = SELFHEIGHT;
     });
+    this.getBindItemBank();
   },
   async created() {
     this.showDialog();
@@ -569,6 +584,15 @@ export default {
 
     changTabsStatus(value) {
       this.showTabs = value;
+    },
+
+    async getBindItemBank() {
+      this.bindItemBankList = await Api.getBindItemBank({
+        params: {
+          bindType: 'course',
+          bindId: this.$route.params.id,
+        }
+      })
     }
   },
 };

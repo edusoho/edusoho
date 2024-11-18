@@ -34,7 +34,7 @@
         <div v-if="splitLine" class="p-16 pt-4" style="width: 100%;"><div style="height: 1px;background-color: #F2F3F5;"></div></div>
       </div>
     </template>
-    
+
   </van-list>
 </template>
 
@@ -92,7 +92,6 @@ export default {
         return !this.isRequestCompile;
       },
       set(v) {
-        console.log(v, 'value');
       },
     },
     listObj() {

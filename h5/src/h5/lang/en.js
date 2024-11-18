@@ -463,6 +463,7 @@ export default {
     closed_content: "Cannot continue viewing",
   },
   courseLearning: {
+    courseItemBank: 'course item bank',
     selfJudging: 'Self judging',
     haveMastered: 'Have mastered',
     notQuiteUnderstand: 'Not quite understand',
@@ -694,6 +695,7 @@ export default {
   classLearning: {
     intor: 'Intro',
     teacher: 'Teahcer',
+    classroomItemBank: 'Classroom item bank',
     classTeacher: 'Class teacher',
     headTeacherHasNotBeenSet: 'Head teacher has not been set',
     course: 'Course',

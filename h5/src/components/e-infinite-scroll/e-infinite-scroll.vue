@@ -98,7 +98,6 @@ export default {
         return !this.isRequestCompile;
       },
       set(v) {
-        console.log(v, 'value');
       },
     },
     listObj() {

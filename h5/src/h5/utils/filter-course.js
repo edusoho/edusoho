@@ -172,6 +172,7 @@ const getItemBankDisplay = (data, listObj, price) => {
 
 const getstudyItemBankDisplay = data => {
   return {
+    bindTitle: data.bindTitle,
     id: data.itemBankExercise.id,
     studentNum: null,
     imgSrc: {

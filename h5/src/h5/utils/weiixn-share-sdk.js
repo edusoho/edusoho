@@ -10,7 +10,6 @@ import Api from '@/api';
  *    link          (必填)   点击跳转的链接
  */
 const initShare = ({ title, desc, imgUrl, link }) => {
-  console.log({ title, desc, imgUrl, link });
 
   const shareLink =
     window.location.href.split('#')[0].replace(/index.html/, 'redirect.html') +
