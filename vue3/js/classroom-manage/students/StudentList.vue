@@ -88,7 +88,7 @@
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 'max-content', y: 300 }"
+            :scroll="{ x: 1200, y: 300 }"
           >
             <template #headerCell="{ column }">
               <template v-if="column.key === 'learnDeadline'">
@@ -105,10 +105,10 @@
                 <div class="flex items-center gap-12 shrink-0">
                   <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
                   <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
-                    <template #title>{{ record.user.nickname }}{{ record.joinedChannel === 'import_join' ? `(${record.remark})` : '' }}</template>
+                    <template #title>{{ record.user.nickname }}<span v-if="record.remark">{{ `(${record.remark})` }}</span></template>
                     <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer max-w-160 overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">
                       {{ record.user.nickname }}
-                      <span class="text-12 text-[#999999]">{{ record.joinedChannel === 'import_join' ? `(${record.remark})` : '' }}</span>
+                      <span v-if="record.remark" class="text-12 text-[#999999]">{{ `(${record.remark})` }}</span>
                     </span>
                   </a-tooltip>
                 </div>
@@ -125,11 +125,11 @@
               <template v-else-if="column.key === 'joinedChannel'">
                 <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
                   <template #title>{{ record.joinedChannelText }}</template>
-                  <span class="text-[#37393D] text-14 font-normal leading-22 max-w-320 overflow-hidden text-ellipsis whitespace-nowrap">{{ record.joinedChannelText }}</span>
+                  <span class="text-[#37393D] text-14 font-normal leading-22 max-w-250 w-fit truncate">{{ record.joinedChannelText }}</span>
                 </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">
-                {{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}
+                <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
               </template>
               <template v-else-if="column.key === 'learnProgress'">
                 <div class="flex gap-8 items-center">
@@ -145,7 +145,7 @@
                 </div>
               </template>
               <template v-else-if="column.key === 'operation'">
-                <div class="flex justify-start items-center gap-16 shrink-0">
+                <div class="flex justify-end items-center gap-16 shrink-0">
                   <span v-if="record.user.canSendMessage" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">发私信</span>
                   <span v-if="isAdmin" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/0/manage/course/0/students/${record.user.id}/show`">查看资料</span>
                   <a-dropdown placement="bottomRight" trigger="['click']">
@@ -170,7 +170,7 @@
               </template>
             </template>
           </a-table>
-          <div class="flex justify-between items-center self-stretch pb-28 pl-22 pr-16 w-full">
+          <div class="flex justify-between items-center self-stretch pb-28 px-8 w-full">
             <div class="">
               <a-checkbox
                 :indeterminate="table.rowSelection.selectedRowKeys.length > 0 && !table.isSelectAll"
@@ -303,31 +303,38 @@ const table = {
     {
       key: 'user',
       title: '学员',
+      width: 300,
     },
     {
       key: 'mobile',
       title: '手机号',
+      width: 150,
     },
     {
       key: 'joinedChannel',
       title: '加入方式',
+      width: 300,
     },
     {
       key: 'joinTime',
       title: '加入时间',
+      width: 200,
     },
     {
       key: 'learnProgress',
       title: '学习进度',
+      width: 200,
     },
     {
       key: 'learnDeadline',
       title: '学习有效期',
+      width: 150,
     },
     {
       key: 'operation',
       title: '操作',
       fixed: 'right',
+      width: 182,
     },
   ],
   loading: false,
@@ -380,7 +387,7 @@ const getFormParams = () => {
   return params;
 };
 
-const fetchStudents = async () => {
+async function fetchStudents() {
   table.loading = true;
   const params = getFormParams();
   params.role = 'student';
@@ -390,7 +397,7 @@ const fetchStudents = async () => {
   students.value = resp.data;
   pagination.total = resp.paging.total;
   table.loading = false;
-};
+}
 
 fetchStudents();
 
@@ -508,11 +515,6 @@ const removeStudent = async userId => {
 </script>
 
 <style lang="less">
-
-.ant-table-tbody>tr>td {
-  padding: 16px !important;
-}
-
 .student-header-operate-button {
   display: flex;
   height: 32px;

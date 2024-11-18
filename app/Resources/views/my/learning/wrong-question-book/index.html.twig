@@ -6,6 +6,11 @@
 
 {% do script(['app/vue/views/my/learning/wrong_question_book/index.js']) %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block main %}
   <div class="panel panel-default panel-col">
     <div class="panel-heading">

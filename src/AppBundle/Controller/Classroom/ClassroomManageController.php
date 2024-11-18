@@ -812,6 +812,17 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function itemBankAction($id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        return $this->render(
+            'classroom-manage/item-bank.html.twig',
+            [
+                'classroom' => $classroom,
+            ]
+        );
+    }
+
     public function statisticsAction(Request $request, $id)
     {
         $this->getClassroomService()->tryHandleClassroom($id);
@@ -1313,7 +1324,7 @@ class ClassroomManageController extends BaseController
     private function transJoinChannel($member)
     {
         if ('import_join' === $member['joinedChannel']) {
-            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'user_id' => $member['userId'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
             if (!empty($records)) {
                 $operator = $this->getUserService()->getUser($records[0]['operator_id']);
                 return "{$operator['nickname']}添加";

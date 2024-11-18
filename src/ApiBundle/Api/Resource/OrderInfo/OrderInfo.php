@@ -10,6 +10,7 @@ use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Service\GoodsService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
@@ -71,6 +72,7 @@ class OrderInfo extends AbstractResource
         $orderInfo = [
             'targetId' => $product->targetId,
             'targetType' => $product->targetType,
+            'exerciseBind' => $this->getExerciseBind($product->targetType, $product->targetId),
             'goodsSpecsId' => $product->goodsSpecsId,
             'goodsId' => $product->goodsId,
             'cover' => $product->cover,
@@ -196,6 +198,18 @@ class OrderInfo extends AbstractResource
         return $product;
     }
 
+    private function getExerciseBind($targetType, $targetId)
+    {
+        $bindExercises = $this->getItemBankExerciseService()->findBindExercise($targetType, $targetId);
+        $exerciseIds = array_values(array_unique(array_column($bindExercises, 'itemBankExerciseId')));
+        $itemBankExercises = $this->getItemBankExerciseService()->findByIds($exerciseIds);
+        foreach ($bindExercises as &$bindExercise) {
+            $bindExercise['itemBankExercise'] = $itemBankExercises[$bindExercise['itemBankExerciseId']] ?? null;
+        }
+
+        return $bindExercises;
+    }
+
     /**
      * @return CouponService
      */
@@ -244,5 +258,13 @@ class OrderInfo extends AbstractResource
         $biz = $this->getBiz();
 
         return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->service('ItemBankExercise:ExerciseService');
     }
 }

@@ -18,11 +18,12 @@ class MemberOperationRecordDaoImpl extends AdvancedDaoImpl implements MemberOper
     {
         return [
             'timestamps' => ['createdTime'],
-            'orderbys' => ['createdTime'],
+            'orderbys' => ['createdTime', 'id'],
             'conditions' => [
                 'id = :id',
                 'userId IN (:userIds)',
                 'exerciseId = :exerciseId',
+                'memberId = :memberId',
                 'memberType = :memberType',
                 'operateType = :operateType',
             ],
@@ -31,6 +32,6 @@ class MemberOperationRecordDaoImpl extends AdvancedDaoImpl implements MemberOper
 
     public function findRecordsByOrderIdAndType($orderId, $type)
     {
-        return $this->findByFields(array('orderId' => $orderId, 'operateType' => $type));
+        return $this->findByFields(['orderId' => $orderId, 'operateType' => $type]);
     }
 }

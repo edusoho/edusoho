@@ -49,11 +49,16 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
                 'exerciseId IN (:exerciseIds)',
                 'role = :role',
                 'locked = :locked',
+                'canLearn = :canLearn',
                 'doneQuestionNum > :doneQuestionNum',
-                'updatedTime >= :startTimeGreaterThan',
-                'updatedTime < :startTimeLessThan',
+                'createdTime >= :startTimeGreaterThan',
+                'createdTime < :startTimeLessThan',
                 'deadline <= :deadlineLessThen',
                 'deadline >= :deadlineGreaterThan',
+                'deadline = 0 or deadline > :deadlineAfter',
+                'deadline > 0 and deadline <= :deadlineBefore',
+                'joinedChannel = :joinedChannel',
+                'joinedChannel IN (:joinedChannels)',
             ],
         ];
     }

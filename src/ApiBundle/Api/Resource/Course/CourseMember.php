@@ -24,7 +24,7 @@ class CourseMember extends AbstractResource
         $conditions = $request->query->all();
         $conditions['courseId'] = $courseId;
         $conditions['locked'] = 0;
-        if (isset($conditions['userKeyword']) && $conditions['userKeyword'] != '') {
+        if (isset($conditions['userKeyword']) && '' != $conditions['userKeyword']) {
             $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
         }
         unset($conditions['userKeyword']);
@@ -38,6 +38,9 @@ class CourseMember extends AbstractResource
         );
         $members = $this->getLearningDataAnalysisService()->fillCourseProgress($members);
         $members = $this->convertJoinedChannel($members);
+        foreach ($members as &$member) {
+            $member['remark'] = in_array($member['remark'], ['site.join_by_free', 'site.join_by_purchase']) ? '' : $member['remark'];
+        }
 
         $total = $this->getMemberService()->countMembers($conditions);
 
@@ -100,7 +103,7 @@ class CourseMember extends AbstractResource
     {
         foreach ($members as &$member) {
             if ('import_join' === $member['joinedChannel']) {
-                $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'member_id' => $member['id'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+                $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'user_id' => $member['userId'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
                 if (!empty($records)) {
                     $operator = $this->getUserService()->getUser($records[0]['operator_id']);
                     $member['joinedChannelText'] = "{$operator['nickname']}添加";

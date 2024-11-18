@@ -2,6 +2,7 @@
 
 {% block title %}{{'item_bank_exercise.testpaper_practice'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/item-bank-exercise/assessment/index.js', 'app/js/item-bank-exercise/assessment/add/index.js']) %}
+{% do css(['app/css/main-ant.css']) %}
 {% set course_side_nav = 'assessment' %}
 {% block main_heading_class %}course-main-header{% endblock %}
 

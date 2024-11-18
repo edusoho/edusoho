@@ -1397,6 +1397,7 @@ course.testpaper_export.btn: Exporting transcript
 course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Discussions'
 course.tab.discussions: 'Discussions'
+course.tab.itemBankBind: 'ItemBankBind'
 course.tab.questions: 'Questions'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
@@ -2318,6 +2319,7 @@ classroom.latest_join_member: 'New Students'
 classroom.description_empty_tips: 'No data'
 classroom.description: Intro
 classroom.teachers: Teachers
+classroom.itemBankBind: itemBankBind
 classroom.reviews: Reviews
 classroom.note: Notes
 classroom.certificates: Certificates
@@ -11212,7 +11214,7 @@ mobile.middle_page.top: Put the school in your pocket
 mobile.middle_page.open: Click to open
 mobile.middle_page.browser: Click on the top right... In "Open in Browser" continue to jump
 task.app_modal.title: Only learning in App
-task.app_modal.intro: Please download / open 
+task.app_modal.intro: Please download / open
 task.app_modal.app: APP
 task.app_modal.learning: Continue learning
 task.app_modal.use: Use mobile phone
@@ -11223,7 +11225,7 @@ admin_v2.question.ai_analysis.teacher_ebable.tip: After it is opened, the teache
 admin_v2.question.ai_analysis.student_ebable: AI Question Analysis (Student Side)
 admin_v2.question.ai_analysis.student_ebable.tip: After it is opened, the student can generate AI analysis for the question without analysis.
 admin_v2.question.ai_analysis.Upgrade: Upgrade cloud capabilities
-admin_v2.question.ai_analysis.experience: , Experience powerful 
+admin_v2.question.ai_analysis.experience: , Experience powerful
 admin_v2.question.ai_analysis.problem: problem resolution
 admin_v2.question.ai_analysis.tittle: Build new heights of intelligent education, comprehensively upgrade cloud capabilities, lead a new era of deep interaction and accurate analysis of Al question bank, and open unlimited possibilities for personalized learning
 admin_v2.question.ai_analysis.upgrade_now: Upgrade now

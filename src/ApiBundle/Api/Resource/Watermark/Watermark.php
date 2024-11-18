@@ -28,7 +28,6 @@ class Watermark extends AbstractResource
         if ($this->getCurrentUser()->isLogin()) {
             $courseSetting = $this->getSettingService()->get('course');
         }
-        $courseSetting = $this->getSettingService()->get('course');
         if (empty($courseSetting['task_page_watermark_enable']) || empty($courseSetting['task_page_watermark_setting']['fields'])) {
             return [
                 'text' => '',

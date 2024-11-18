@@ -3,6 +3,7 @@
 {% block title %}{{'course.plan_base_info'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'business' %}
 {% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'app/js/course-manage/info/item-bank-exercise/index.js']) %}
+{% do css(['app/css/main-ant.css']) %}
 
 {% block page_title %}{{ 'course.marketing_setup'|trans }}{% endblock %}
 

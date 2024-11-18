@@ -5,6 +5,9 @@ namespace AppBundle\Controller\ItemBankExercise;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\AssessmentExerciseRecordService;
@@ -112,8 +115,41 @@ class ExerciseController extends BaseController
                 'isExerciseTeacher' => $isExerciseTeacher,
                 'member' => $member,
                 'previewAs' => $previewAs,
+                'displayBindPopUp' => $this->getDisplayBindPopUp($request),
             ]
         );
+    }
+
+    protected function getDisplayBindPopUp($request)
+    {
+        $bindType = $request->query->get('bindType');
+        $bindId = $request->query->get('bindId');
+        if (empty($bindType) || empty($bindId)) {
+            return;
+        }
+        $user = $this->getCurrentUser();
+
+        if (empty($user)) {
+            return;
+        }
+
+        $memberService = 'course' == $bindType ? $this->getCourseMemberService() : $this->getClassroomService();
+        $member = 'course' == $bindType
+            ? $memberService->getCourseMember($bindId, $user['id'])
+            : $memberService->getClassroomMember($bindId, $user['id']);
+
+        if (!empty($member)) {
+            return;
+        }
+
+        $entityService = 'course' == $bindType ? $this->getCourseService() : $this->getClassroomService();
+        $entity = 'course' == $bindType
+            ? $entityService->getCourse($bindId)
+            : $entityService->getClassroom($bindId);
+
+        $displayContent = 'course' == $bindType ? $entity['courseSetTitle'].'课程' : $entity['title'].'班级';
+
+        return ['display' => true, 'displayContent' => $displayContent];
     }
 
     public function exitAction(Request $request, $exerciseId)
@@ -584,5 +620,29 @@ class ExerciseController extends BaseController
     protected function getAnswerRecordService()
     {
         return $this->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

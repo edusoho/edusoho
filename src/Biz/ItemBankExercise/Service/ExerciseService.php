@@ -69,4 +69,46 @@ interface ExerciseService
     public function publishExerciseChapter($exerciseId, $ids);
 
     public function unpublishExerciseChapter($exerciseId, $ids);
+
+    public function bindExercise($bindType, $bindId, $exerciseIds);
+
+    public function findBindExercise($bindType, $bindId);
+
+    public function findBindExerciseByBindId($bindId);
+
+    public function findBindExerciseByIds($bindIds);
+
+    public function removeBindExercise($bindExerciseId);
+
+    public function updateBindExercise($bindExercise);
+
+    public function findExerciseAutoJoinRecordByUserIdAndExerciseIds($userId, $exerciseIds);
+
+    public function findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($itemBankExerciseId, $itemBankExerciseBindIds);
+
+    public function findExerciseAutoJoinRecordByUserIdsAndExerciseId($userIds, $exerciseId);
+
+    public function findExerciseAutoJoinRecordByUserIdsAndExerciseIdAll($userIds, $exerciseId);
+
+    public function findExerciseAutoJoinRecordByUserIdsAndExerciseIdAndBindId($userIds, $exerciseId, $bindId);
+
+    public function deleteExerciseAutoJoinRecordByUserIdsAndExerciseBindId($userIds, $exerciseBindId);
+
+    public function deleteExerciseAutoJoinRecordByUserIdAndExerciseBindIds($userId, $exerciseBindIds);
+
+    public function deleteExerciseAutoJoinRecordByExerciseBindId($autoJoinRecordIds);
+
+    public function findExerciseAutoJoinRecordByItemBankExerciseBindIds($itemBankExerciseBindIds);
+
+    public function findExerciseAutoJoinRecordByItemBankExerciseIds($itemBankExerciseIds);
+
+    public function batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
+
+    public function batchUpdateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
+
+    public function getExerciseBindById($id);
+
+    public function findExerciseBindByExerciseId($exerciseId);
+
+    public function countExerciseBind($conditions);
 }

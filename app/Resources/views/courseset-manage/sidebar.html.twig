@@ -48,6 +48,20 @@
               </a>
             {% endif %}
           </li>
+          <li class="cd-sidebar__item {% if course_side_nav == 'item-bank' %}active{% endif %}">
+            {% if courseSet.locked %}
+              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'item-bank'}) }}">
+                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>题库练习管理
+              </a>
+            {% else %}
+              <a href="{{ path('course_set_manage_course_item_bank', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+                题库练习管理
+                {% if hasLessonChanged|default(0) %}
+                  <i class="es-icon es-icon-tip color-danger"></i>
+                {% endif %}
+              </a>
+            {% endif %}
+          </li>
 
           <li class="cd-sidebar__item {% if course_side_nav == 'announcements' %}active{% endif %}">
             <a href="{{ path('announcement_list', { targetType: 'course', targetId: curCourse.id }) }}">
