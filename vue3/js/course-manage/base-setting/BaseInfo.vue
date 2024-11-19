@@ -134,6 +134,7 @@ function transformCategoryData(data) {
 
 const getOrgCodes = async () => {
   const OrgCodes = await Api.organization.getOrgCodes({withoutFormGroup: true, orgCode: formState.orgCode});
+  console.log(OrgCodes);
 };
 getOrgCodes();
 
