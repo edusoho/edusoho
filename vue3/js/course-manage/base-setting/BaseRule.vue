@@ -81,7 +81,7 @@ defineExpose({
           </div>
         </template>
         <div class="flex h-32 items-center">
-          <a-radio-group class="base-rule-radio" v-model:value="formState.learnMode" :options="learnModeOptions"
+          <a-radio-group v-model:value="formState.learnMode" :options="learnModeOptions"
                          :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !== 'self'"/>
         </div>
         <div class="text-[#adadad] text-12 mt-8">计划发布后学习模式无法修改</div>
@@ -114,7 +114,7 @@ defineExpose({
         label="任务完成规则"
         name="enableFinish"
       >
-        <a-radio-group v-model:value="formState.enableFinish" class="base-rule-radio"
+        <a-radio-group v-model:value="formState.enableFinish"
                        :disabled="props.manage.course.platform === 'supplier'">
           <a-radio value="1">无限制</a-radio>
           <a-radio value="0">由任务完成条件决定<span>
@@ -134,7 +134,7 @@ defineExpose({
           name="freeTaskIds"
         >
           <div class="flex flex-col">
-            <a-checkbox-group v-model:value="formState.freeTaskIds" class="base-rule-checkbox" style="width: 100%">
+            <a-checkbox-group v-model:value="formState.freeTaskIds" style="width: 100%">
               <a-list size="small" bordered style="width: 100%"
                       v-if="canFreeTasks.length"
                       class="max-h-196 overflow-y-auto mb-8"
@@ -227,16 +227,5 @@ defineExpose({
 </template>
 
 <style lang="less">
-.base-rule-radio {
-  .ant-radio-wrapper {
-    font-weight: 400 !important;
-  }
-}
-
-.base-rule-checkbox {
-  .ant-checkbox-wrapper {
-    font-weight: 400 !important;
-  }
-}
 
 </style>

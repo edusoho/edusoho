@@ -1,6 +1,5 @@
 <script setup>
 import {computed, reactive, ref} from 'vue';
-import dayjs from 'dayjs';
 import {
   PlusOutlined,
   LoadingOutlined,
@@ -10,6 +9,8 @@ import {
 } from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import Api from '../../../api';
+import { t } from './vue-lang';
+import dayjs from 'dayjs';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
@@ -22,13 +23,15 @@ const formState = reactive({
   buyable: props.manage.course.buyable,
   maxStudentNumL: props.manage.course.maxStudentNum,
   enableBuyExpiryTime: props.manage.course.buyExpiryTime > 0 ? '1' : '0',
-  buyExpiryTime: props.manage.course.buyExpiryTime === '0' ? null : props.manage.course.buyExpiryTime,
+  buyExpiryTime: props.manage.course.buyExpiryTime == '0' ? null : props.manage.course.buyExpiryTime,
   taskDisplay: props.manage.course.taskDisplay,
   drainageEnabled: props.manage.course.drainageEnabled,
-  deadline: props.manage.course.expiryEndDate === 0 ? '' : props.manage.course.expiryEndDate,
+  deadline: props.manage.course.expiryEndDate == 0 ? null : props.manage.course.expiryEndDate,
   deadlineType: props.manage.course.deadlineType ? props.manage.course.deadlineType : 'days',
   expiryDays: props.manage.course.expiryDays > 0 ? props.manage.course.expiryDays : null,
   expiryMode: props.manage.course.expiryMode,
+  expiryStartDate: props.manage.course.expiryStartDate == 0 ? null : props.manage.course.expiryStartDate,
+  expiryEndDate: props.manage.course.expiryEndDate == 0 ? null : props.manage.course.expiryEndDate,
   contractEnable: props.manage.course.contractId !== 0 ? 1 : 0,
   contractForceSign: props.manage.course.contractForceSign,
   contractId: props.manage.course.contractId,
@@ -55,9 +58,25 @@ const positivePrice = (rule, value) => {
   });
 };
 
-const disabledDate = (current) => {
+const disabledPastDate = (current) => {
   return current && current < new Date().setHours(0, 0, 0, 0);
 };
+
+const disabledStartDate = (current) => {
+  if (formState.expiryEndDate !== '' && formState.expiryEndDate != null) {
+    return current > formState.expiryEndDate || current <= Date.now() - 24 * 60 * 60 * 1000;
+  } else {
+    return current <= Date.now() - 24 * 60 * 60 * 1000;
+  }
+}
+
+const disabledEndDate = (current) => {
+  if (formState.expiryStartDate !== null) {
+    return current < formState.expiryStartDate;
+  } else {
+    return current <= Date.now() - 24 * 60 * 60 * 1000;
+  }
+}
 
 const serviceItem = ref(props.manage.serviceTags.map(item => ({
   ...item,
@@ -77,14 +96,14 @@ const drainageLoading = ref(false);
 const fileData = ref();
 const uploadDrainageImage = async (info) => {
   drainageLoading.value = true;
-  const isJpgOrGifOrPng = info.file.type === 'image/jpg' || info.file.type === 'image/gif' || info.file.type === 'image/png';
+  const isJpgOrGifOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/gif' || info.file.type === 'image/png';
   if (!isJpgOrGifOrPng) {
     message.error('请上传jpg，gif，png格式的图');
     drainageLoading.value = false;
   }
   if (isJpgOrGifOrPng) {
     const formData = new FormData();
-    formData.append('file', info.file.originFileObj, info.file.name);
+    formData.append('file', info.file.originFileObj);
     formData.append('group', 'system');
     fileData.value = await Api.file.upload(formData);
     drainageLoading.value = false;
@@ -214,7 +233,7 @@ defineExpose({
             </a-popover>
           </div>
         </template>
-        <a-radio-group v-model:value="formState.buyable" class="market-setting-radio">
+        <a-radio-group v-model:value="formState.buyable">
           <a-radio value="1">可加入</a-radio>
           <a-radio value="0">不可加入</a-radio>
         </a-radio-group>
@@ -303,11 +322,11 @@ defineExpose({
           { required: true, message: '' },
           ]"
       >
-        <a-radio-group v-model:value="formState.enableBuyExpiryTime" class="market-setting-radio">
+        <a-radio-group v-model:value="formState.enableBuyExpiryTime">
           <a-radio value="0">不限时间</a-radio>
           <a-radio value="1">自定义</a-radio>
         </a-radio-group>
-        <a-date-picker v-if="formState.enableBuyExpiryTime === '1'" :disabled-date="disabledDate"
+        <a-date-picker v-if="formState.enableBuyExpiryTime === '1'" :disabled-date="disabledPastDate"
                        v-model:value="formState.buyExpiryTime" style="width: 150px"/>
       </a-form-item>
 
@@ -330,7 +349,7 @@ defineExpose({
         </template>
         <div class="flex flex-col">
           <div class="h-32 flex items-center">
-            <a-radio-group v-model:value="formState.expiryMode" class="market-setting-radio">
+            <a-radio-group v-model:value="formState.expiryMode">
               <a-radio
                 v-for="option in expiryModeOptions"
                 :key="option.value"
@@ -346,21 +365,32 @@ defineExpose({
               v-if="formState.expiryMode === 'days'"
               :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !=='self'"
               v-model:value="formState.deadlineType"
-              class="market-setting-radio"
             >
               <a-radio value="end_date">按截止日期</a-radio>
               <a-radio value="days">按有效天数</a-radio>
             </a-radio-group>
             <div v-if="formState.expiryMode === 'days' && formState.deadlineType === 'end_date'">
-              <a-form-item>
+              <a-form-item
+                name="deadline"
+                :rules="[
+                  { required: true, message: '请输入截至日期', trigger: blur },
+                ]"
+              >
                 <div class="flex items-center mt-16">
-                  <a-date-picker :disabled="props.manage.course.platform !=='self'" style="width: 150px"/>
+                  <a-date-picker v-model:value="formState.deadline" :disabled="props.manage.course.platform !=='self'" style="width: 150px" :default-value="dayjs()" :disabled-date="disabledPastDate"/>
                   <div class="text-14 opacity-65 ml-10">在此日期前，学员可进行学习。</div>
                 </div>
               </a-form-item>
             </div>
             <div class="flex" v-if="formState.expiryMode === 'days' && formState.deadlineType === 'days'">
-              <a-form-item>
+              <a-form-item
+                name="expiryDays"
+                :validateTrigger="['blur']"
+                :rules="[
+                  { required: true, message: '请输入有效期天数' },
+                  { pattern: /^([1-9]|[1-9]\d{1,2}|[1-6]\d{3}|7[0-2]\d{2}|7300)$/,message: '请输入不大于 7300（20年）的正整数' },
+                ]"
+              >
                 <div class="flex items-center mt-16">
                   <a-input v-model:value="formState.expiryDays" :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" style="width: 150px"/>
                   <div class="text-14 opacity-65 ml-10">从加入当天起，在几天内可进行学习。</div>
@@ -369,12 +399,24 @@ defineExpose({
             </div>
             <div v-if="formState.expiryMode === 'date'" class="flex">
               <div class="text-14 mt-6 mr-4">开始日期</div>
-              <a-form-item>
-                <a-date-picker :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" style="width: 150px"/>
+              <a-form-item
+                name="expiryStartDate"
+                :validateTrigger="['blur']"
+                :rules="[
+                  { required: true, message: '请输入开始日期' },
+                ]"
+              >
+                <a-date-picker v-model:value="formState.expiryStartDate" :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" :disabled-date="disabledStartDate" style="width: 150px"/>
               </a-form-item>
               <div class="text-14 mt-6 mr-4 ml-8">结束日期</div>
-              <a-form-item>
-                <a-date-picker :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" style="width: 150px"/>
+              <a-form-item
+                name="expiryEndDate"
+                :validateTrigger="['blur']"
+                :rules="[
+                  { required: true, message: '请输入结束日期' },
+                ]"
+              >
+                <a-date-picker v-model:value="formState.expiryEndDate" :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" :disabled-date="disabledPastDate" style="width: 150px"/>
               </a-form-item>
             </div>
           </div>
@@ -427,7 +469,7 @@ defineExpose({
         label="商品页目录展示"
         name="taskDisplay"
       >
-        <a-radio-group v-model:value="formState.taskDisplay" class="market-setting-radio">
+        <a-radio-group v-model:value="formState.taskDisplay">
           <a-radio value="1">开启</a-radio>
           <a-radio value="0">关闭</a-radio>
         </a-radio-group>
@@ -447,7 +489,7 @@ defineExpose({
             </a-popover>
           </div>
         </template>
-        <a-radio-group v-model:value="formState.drainageEnabled" class="market-setting-radio">
+        <a-radio-group v-model:value="formState.drainageEnabled">
           <a-radio :value=1>开启</a-radio>
           <a-radio :value=0>关闭</a-radio>
         </a-radio-group>
@@ -460,13 +502,13 @@ defineExpose({
           <a-upload
             ref="upload"
             class="drainage-uploader"
-            accept="image/jpg, image/gif, image/png"
+            accept="image/jpeg, image/gif, image/png"
             :file-list="[]"
             :maxCount="1"
             list-type="picture-card"
             @change="uploadDrainageImage"
           >
-            <img v-if="formState.drainageImage" :src="formState.drainageImage" alt="" style="width: 100%"/>
+            <img v-if="formState.drainageImage" :src="formState.drainageImage" alt="" style="width: 100%" class="rounded-4"/>
             <div v-else>
               <loading-outlined v-if="drainageLoading"></loading-outlined>
               <plus-outlined v-else></plus-outlined>
@@ -508,7 +550,7 @@ defineExpose({
              wrapClassName="market-setting-contract-detail-modal"
     >
       <template #title>
-        <div class="flex justify-between items-center px-24 py-16 border-solid border-[#F0F0F0] border-t-0 border-x-0">
+        <div class="flex justify-between items-center px-24 py-16 border-solid border border-[#F0F0F0] border-t-0 border-x-0">
           <div class="text-16 text-[#1E2226] font-medium">
             {{ `${contractPreview.goodsName}-${t('modal.contractSigning')}` }}
           </div>
@@ -587,12 +629,6 @@ defineExpose({
 </template>
 
 <style lang="less">
-.market-setting-radio {
-  .ant-radio-wrapper {
-    font-weight: 400 !important;
-  }
-}
-
 .market-setting-contract-detail-modal {
   .ant-modal {
     padding: 0 !important;

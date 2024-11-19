@@ -304,7 +304,7 @@ defineExpose({
         <a-form-item
           label="连载状态"
         >
-          <a-radio-group class="base-info-radio" v-model:value="formState.serializeMode"
+          <a-radio-group v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
         </a-form-item>
 
@@ -330,9 +330,5 @@ defineExpose({
 </template>
 
 <style lang="less">
-.base-info-radio {
-  .ant-radio-wrapper {
-    font-weight: 400 !important;
-  }
-}
+
 </style>
