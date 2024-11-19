@@ -4057,10 +4057,10 @@
   "resolved" "https://registry.npmmirror.com/dateformat/-/dateformat-3.0.3.tgz"
   "version" "3.0.3"
 
-"dayjs@^1.10.4":
-  "integrity" "sha512-RI/Hh4kqRc1UKLOAf/T5zdMMX5DQIlDxwUe3wSyMMnEbGunnpENCdbUgM+dW7kXidZqCttBrmw7BhN4TMddkCw=="
-  "resolved" "https://registry.npmmirror.com/dayjs/-/dayjs-1.10.4.tgz"
-  "version" "1.10.4"
+"dayjs@^1.10.4", "dayjs@^1.11.13":
+  "integrity" "sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg=="
+  "resolved" "https://registry.npmmirror.com/dayjs/-/dayjs-1.11.13.tgz"
+  "version" "1.11.13"
 
 "de-indent@^1.0.2":
   "integrity" "sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg=="

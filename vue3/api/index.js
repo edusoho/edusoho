@@ -11,6 +11,7 @@ import itemBank from './modules/itemBank'
 import security from './modules/security';
 import me from './modules/me';
 import itemBankExerciseMember from './modules/itemBankExerciseMember';
+import liveCapacity from './modules/liveCapacity';
 
 const Api = {
   contract,
@@ -26,6 +27,7 @@ const Api = {
   category,
   organization,
   itemBank,
+  liveCapacity,
 };
 
 export default Api;

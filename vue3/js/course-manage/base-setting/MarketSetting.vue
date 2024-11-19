@@ -1,5 +1,5 @@
 <script setup>
-import {computed, reactive, ref} from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
 import {
   PlusOutlined,
   LoadingOutlined,
@@ -48,15 +48,6 @@ const courseSetPublished = ref(props.manage.courseSet.status ? props.manage.cour
 const courseClosed = ref(props.manage.course.status ? props.manage.course.status === 'closed' : false);
 const courseSetClosed = ref(props.manage.courseSet.status ? props.manage.courseSet.status === 'closed' : false);
 const expiryValueDisabled = ref((coursePublished.value && courseSetPublished.value) || courseClosed.value || courseSetClosed.value);
-
-const positivePrice = (rule, value) => {
-  return new Promise((resolve, reject) => {
-    if (!/^[0-9]{0,8}(\.\d{0,2})?$/.test(value)) {
-      reject(new Error(`请输入大于0的有效价格，最多两位小数，整数位不超过8位！`));
-    }
-    resolve();
-  });
-};
 
 const disabledPastDate = (current) => {
   return current && current < new Date().setHours(0, 0, 0, 0);
@@ -163,6 +154,16 @@ const expiryModeOptions = [
   {label: '长期有效', value: 'forever'},
 ];
 
+const liveCapacity = ref();
+async function getLiveCapacity(url) {
+  const res =  await Api.liveCapacity.get(url);
+  liveCapacity.value = res.capacity;
+}
+
+onMounted(async () => {
+  await getLiveCapacity(props.manage.liveCapacityUrl)
+});
+
 const validateForm = () => {
   return formRef.value.validate()
     .then(() => {
@@ -209,8 +210,8 @@ defineExpose({
         :validateTrigger="['blur']"
         :rules="[
           { required: true, message: '请输入价格' },
-          { validator: positivePrice },
-          ]"
+          { pattern: /^(?!0\.?$)([1-9]\d{0,7}|0)(\.\d{1,2})?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' },
+        ]"
       >
         <a-input v-model:value="formState.originPrice"
                  :disabled="props.manage.course.platform === 'supplier' && !props.manage.canModifyCoursePrice"
@@ -249,9 +250,9 @@ defineExpose({
           ]"
       >
         <a-input v-model:value="formState.maxStudentNumL" class="mb-8" style="width: 150px;"></a-input>
-        <div class="text-[#a1a1a1] text-14">加入直播课程人数限制，0为不限制人数</div>
-        <div>
-
+        <div class="text-[#a1a1a1] text-12">加入直播课程人数限制，0为不限制人数</div>
+        <div v-if="liveCapacity !== null && parseInt(formState.maxStudentNumL) > parseInt(liveCapacity)" class="text-[#F56C6C] text-12">
+          网校可支持最多{{ liveCapacity }}人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
         </div>
       </a-form-item>
 
@@ -416,7 +417,7 @@ defineExpose({
                   { required: true, message: '请输入结束日期' },
                 ]"
               >
-                <a-date-picker v-model:value="formState.expiryEndDate" :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" :disabled-date="disabledPastDate" style="width: 150px"/>
+                <a-date-picker v-model:value="formState.expiryEndDate" :disabled="expiryValueDisabled || props.manage.course.platform !=='self'" :disabled-date="disabledEndDate" style="width: 150px"/>
               </a-form-item>
             </div>
           </div>

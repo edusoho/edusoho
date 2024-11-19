@@ -49,6 +49,7 @@
     "component-emitter": "1.2.0",
     "console-polyfill": "0.2.3",
     "dataurl-to-blob": "^0.0.1",
+    "dayjs": "^1.11.13",
     "decache": "^4.4.0",
     "easy-pie-chart": "2.1.7",
     "echarts": "3.1.10",
