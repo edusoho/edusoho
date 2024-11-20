@@ -9,7 +9,6 @@ use Biz\Common\CommonException;
 use Biz\QuestionBank\Dao\CategoryDao;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
-use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\CategoryException;
@@ -298,14 +297,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    /**
-     * @return MemberService
-     */
-    protected function getMemberService()
-    {
-        return $this->createService('QuestionBank:MemberService');
     }
 
     /**

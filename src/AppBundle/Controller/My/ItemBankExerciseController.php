@@ -105,17 +105,10 @@ class ItemBankExerciseController extends BaseController
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']) : null;
 
         if (empty($member) || ('date' == $exercise['expiryMode'] && $exercise['expiryStartDate'] >= time())) {
-            $bindType = $request->query->get('bindType');
-            $bindId = $request->query->get('bindId');
-            if (empty($bindType) || empty($bindId)) {
-                return $this->redirectToRoute('item_bank_exercise_show', ['id' => $id]);
-            } else {
-                $url = $this->generateUrl('item_bank_exercise_show', ['id' => $id]);
-                return $this->redirect($url.'?bindType='.$bindType.'&bindId='.$bindId);
-            }
+            return $this->redirectToRoute('item_bank_exercise_show', ['id' => $id, 'bindType' => $request->query->get('bindType'), 'bindId' => $request->query->get('bindId')]);
         }
 
         $tabs = $this->getTabs($exercise);
@@ -131,7 +124,6 @@ class ItemBankExerciseController extends BaseController
                 'tabs' => $tabs,
                 'member' => $member,
                 'moduleId' => $moduleId,
-                'isExerciseTeacher' => 'teacher' == $member['role'],
                 'exercise' => $exercise,
                 'previewAs' => 'member',
             ]
@@ -160,7 +152,7 @@ class ItemBankExerciseController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $member = $user->isLogin() ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : [];
+        $member = $this->getExerciseMemberService()->getExerciseTeacher($exercise['id'], $user['id']) ?: $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']);
 
         return $this->render(
             'item-bank-exercise/header/header-for-member.html.twig',

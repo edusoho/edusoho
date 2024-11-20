@@ -88,7 +88,7 @@ class ExerciseController extends BaseController
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']) : null;
         $previewAs = $request->query->get('previewAs', '');
         if (empty($previewAs) && $user->isLogin() && $this->canExerciseShowRedirect($request)) {
             if (!empty($member)) {
@@ -125,12 +125,12 @@ class ExerciseController extends BaseController
         $bindType = $request->query->get('bindType');
         $bindId = $request->query->get('bindId');
         if (empty($bindType) || empty($bindId)) {
-            return;
+            return [];
         }
         $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            return;
+            return [];
         }
 
         $memberService = 'course' == $bindType ? $this->getCourseMemberService() : $this->getClassroomService();
@@ -139,7 +139,7 @@ class ExerciseController extends BaseController
             : $memberService->getClassroomMember($bindId, $user['id']);
 
         if (!empty($member)) {
-            return;
+            return [];
         }
 
         $entityService = 'course' == $bindType ? $this->getCourseService() : $this->getClassroomService();
@@ -156,7 +156,7 @@ class ExerciseController extends BaseController
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']) : null;
         if (empty($member)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_MEMBER());
         }
@@ -195,7 +195,8 @@ class ExerciseController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $member = $user->isLogin() ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : [];
+        $isExerciseStudent = $user->isLogin() ? $this->getExerciseMemberService()->isExerciseStudent($exercise['id'], $user['id']) : false;
+        $isExerciseTeacher = $user->isLogin() ? $this->getExerciseService()->isExerciseTeacher($exercise['id'], $user['id']) : false;
 
         $isUserFavorite = $user->isLogin() ? !empty($this->getFavoriteService()->getUserFavorite(
             $user['id'],
@@ -207,7 +208,8 @@ class ExerciseController extends BaseController
             'item-bank-exercise/header/header-for-guest.html.twig',
             [
                 'isUserFavorite' => $isUserFavorite,
-                'member' => $member,
+                'isExerciseStudent' => $isExerciseStudent,
+                'isExerciseTeacher' => $isExerciseTeacher,
                 'exercise' => $exercise,
                 'tab' => $tab,
                 'moduleId' => $moduleId,
@@ -285,7 +287,7 @@ class ExerciseController extends BaseController
         $userReview = [];
         $user = $this->getCurrentUser();
         if (empty($member) && $user->isLogin()) {
-            $member = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
+            $member = $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']);
         }
         if (!empty($member)) {
             $userReview = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($member['userId'], 'item_bank_exercise', $exercise['id']);
@@ -325,7 +327,7 @@ class ExerciseController extends BaseController
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']) : null;
         $chapterTree = [];
         if ($exercise['chapterEnable']) {
             $chapterTree = $this->getItemBankChapterExerciseService()->getPublishChapterTreeList($exercise['questionBankId']);
@@ -360,7 +362,7 @@ class ExerciseController extends BaseController
     {
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']) : null;
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -480,8 +482,7 @@ class ExerciseController extends BaseController
 
         $url = $this->generateUrl('item_bank_exercise_show', $params, UrlGeneratorInterface::ABSOLUTE_URL);
         if ($user->isLogin()) {
-            $exerciseMember = $this->getExerciseMemberService()->getExerciseMember($id, $user['id']);
-            if ($exerciseMember) {
+            if ($this->getExerciseMemberService()->isExerciseStudent($id, $user['id'])) {
                 $url = $this->generateUrl('my_item_bank_exercise_show', $params, UrlGeneratorInterface::ABSOLUTE_URL);
             }
         }

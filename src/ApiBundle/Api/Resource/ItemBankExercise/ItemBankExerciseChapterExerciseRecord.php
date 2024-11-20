@@ -17,7 +17,7 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
     {
         $user = $this->getCurrentUser();
         $exercise = $this->getExerciseService()->get($exerciseId);
-        $member = $this->getExerciseMemberService()->getExerciseMember($exerciseId, $user['id']);
+        $member = $this->getExerciseMemberService()->getExerciseStudent($exerciseId, $user['id']);
         if ('closed' == $exercise['status'] || 0 == $member['canLearn']) {
             throw ExerciseException::CLOSED_EXERCISE();
         }

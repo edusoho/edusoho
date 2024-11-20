@@ -42,7 +42,7 @@ class ItemBankExerciseMemberImporter extends Importer
                 }
             }
 
-            $isExerciseMember = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $user['id']);
+            $isExerciseMember = $this->getExerciseMemberService()->isExerciseStudent($exercise['id'], $user['id']);
 
             if ($isExerciseMember) {
                 ++$existsUserCount;

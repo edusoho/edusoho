@@ -86,16 +86,11 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $members;
     }
 
-    public function isExerciseMember($exerciseId, $userId)
+    public function isExerciseStudent($exerciseId, $userId)
     {
-        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+        $student = $this->getExerciseStudent($exerciseId, $userId);
 
-        return empty($member) ? false : true;
-    }
-
-    public function getByExerciseIdAndUserId($exerciseId, $userId)
-    {
-        return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+        return !empty($student);
     }
 
     public function lockStudent($exerciseId, $userId)
@@ -106,13 +101,9 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        $member = $this->getExerciseMember($exerciseId, $userId);
+        $member = $this->getExerciseStudent($exerciseId, $userId);
         if (empty($member)) {
             return;
-        }
-
-        if ('student' != $member['role']) {
-            $this->createNewException(ItemBankExerciseMemberException::MEMBER_NOT_STUDENT());
         }
 
         if ($member['locked']) {
@@ -130,13 +121,9 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        $member = $this->getExerciseMember($exerciseId, $userId);
+        $member = $this->getExerciseStudent($exerciseId, $userId);
         if (empty($member)) {
             return;
-        }
-
-        if ('student' != $member['role']) {
-            $this->createNewException(ItemBankExerciseMemberException::MEMBER_NOT_STUDENT());
         }
 
         if (empty($member['locked'])) {
@@ -154,9 +141,9 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        $member = $this->getByExerciseIdAndUserId($exerciseId, $userId);
+        $member = $this->getExerciseStudent($exerciseId, $userId);
 
-        if (empty($member) || ('student' != $member['role'])) {
+        if (empty($member)) {
             $this->createNewException(ItemBankExerciseException::NOTFOUND_MEMBER());
         }
 
@@ -245,7 +232,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         try {
             $this->beginTransaction();
-            $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userIds' => $userIds, 'joinedChannel' => 'bind_join']);
+            $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exerciseId, 'userIds' => $userIds, 'role' => 'student', 'joinedChannel' => 'bind_join']);
             $exercise = $this->getExerciseService()->get($exerciseId);
             $this->dispatchEvent('exercise.quit', $exercise, ['member' => ['role' => 'student']]);
             $this->commit();
@@ -255,14 +242,24 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         }
     }
 
-    public function getExerciseMember($exerciseId, $userId)
+    public function getExerciseStudent($exerciseId, $userId)
     {
-        return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+        return $this->getExerciseMemberDao()->getByExerciseIdAndUserIdAndRole($exerciseId, $userId, 'student');
+    }
+
+    public function getExerciseTeacher($exerciseId, $userId)
+    {
+        return $this->getExerciseMemberDao()->getByExerciseIdAndUserIdAndRole($exerciseId, $userId, 'teacher');
+    }
+
+    public function findMembers($exerciseId, $userId)
+    {
+        return $this->getExerciseMemberDao()->findByExerciseIdAndUserId($exerciseId, $userId);
     }
 
     public function remarkStudent($exerciseId, $userId, $remark)
     {
-        $member = $this->getExerciseMember($exerciseId, $userId);
+        $member = $this->getExerciseStudent($exerciseId, $userId);
 
         if (empty($member)) {
             $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
@@ -277,17 +274,24 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
-        foreach ($userIds as $userId) {
-            $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
+        $members = $this->search(
+            ['userIds' => $userIds, 'exerciseId' => $exerciseId, 'role' => 'student'],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+        $updateFields = [];
+        foreach ($members as $member) {
             $deadline = $expiryMode->getUpdateDeadline($member, $setting);
-            $this->getExerciseMemberDao()->update($member['id'], ['deadline' => $deadline]);
+            $updateFields[$member['id']] = ['deadline' => $deadline];
         }
+        $this->batchUpdateMembers($updateFields);
     }
 
     public function checkUpdateDeadline($exerciseId, $userIds, $setting)
     {
         $members = $this->search(
-            ['userIds' => $userIds, 'exerciseId' => $exerciseId],
+            ['userIds' => $userIds, 'exerciseId' => $exerciseId, 'role' => 'student'],
             ['deadline' => 'ASC'],
             0,
             PHP_INT_MAX
@@ -335,8 +339,8 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
         }
 
-        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-        if (empty($member) || ('student' != $member['role'])) {
+        $member = $this->getExerciseStudent($exerciseId, $userId);
+        if (empty($member)) {
             $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
         }
 
@@ -394,7 +398,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             return;
         }
 
-        $member = $this->getByExerciseIdAndUserId($exerciseId, $userId);
+        $member = $this->getExerciseStudent($exerciseId, $userId);
         if (empty($member)) {
             return;
         }

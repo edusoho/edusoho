@@ -45,7 +45,7 @@ class SignedContract extends AbstractResource
         $signSnapshot['sign']['signDate'] = $signedContract['createdTime'];
         $signSnapshot['contract']['content'] = $this->replaceContentVariable($signSnapshot['contract']['content'], $signedContract['goodsKey'], $signSnapshot['contractCode'], $signSnapshot['sign'], $this->getUserService()->getUser($signedContract['userId']));
         $conditions = $request->query->all();
-        if ($conditions['viewMode'] == 'html') {
+        if ('html' == $conditions['viewMode']) {
             $signSnapshot['contract']['content'] = $this->getHtmlByRecord($signSnapshot['contract']['content'], $signSnapshot, $signedContract['createdTime']);
         }
 
@@ -175,7 +175,7 @@ class SignedContract extends AbstractResource
             $member = $this->getClassroomService()->getClassroomMember($targetId, $userId);
         }
         if ('itemBankExercise' == $goodsType) {
-            $member = $this->getItemBankExerciseMemberService()->getExerciseMember($targetId, $userId);
+            $member = $this->getItemBankExerciseMemberService()->getExerciseStudent($targetId, $userId);
         }
         if (!empty($member['orderId'])) {
             $order = $this->getOrderService()->getOrder($member['orderId']);
