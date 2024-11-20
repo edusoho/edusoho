@@ -132,7 +132,7 @@ class StudentManageController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $user = $this->getUserService()->getUser($userId);
-        $member = $this->getExerciseMemberService()->getExerciseMember($exerciseId, $userId);
+        $member = $this->getExerciseMemberService()->getExerciseStudent($exerciseId, $userId);
 
         if (empty($member)) {
             $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
@@ -164,12 +164,8 @@ class StudentManageController extends BaseController
         if (!$user) {
             $response = $this->trans('item_bank_exercise.student_manage.student_not_exist');
         } else {
-            if ($this->getExerciseService()->isExerciseTeacher($exerciseId, $user['id'])) {
-                $response = $this->trans('item_bank_exercise.student_manage.can_not_add_teacher');
-            } else {
-                if ($this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id'])) {
-                    $response = $this->trans('item_bank_exercise.student_manage.student_exist');
-                }
+            if ($this->getExerciseMemberService()->isExerciseStudent($exerciseId, $user['id'])) {
+                $response = $this->trans('item_bank_exercise.student_manage.student_exist');
             }
         }
 
@@ -203,7 +199,7 @@ class StudentManageController extends BaseController
                     return $this->createJsonResponse(true);
                 }
                 $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
-                $this->getExerciseMemberService()->updateMembers(['exerciseId' => $exerciseId], ['deadline' => $date]);
+                $this->getExerciseMemberService()->updateMembers(['exerciseId' => $exerciseId, 'role' => 'student'], ['deadline' => $date]);
 
                 return $this->createJsonResponse(true);
             }

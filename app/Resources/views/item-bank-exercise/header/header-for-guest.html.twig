@@ -32,7 +32,7 @@
         </div>
 
         {#添加admin_v2#}
-        {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
+        {% set canManage = isExerciseTeacher or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
         {% if canManage %}
           <a class="btn btn-default btn-xs course-detail-info__manage" href="{{ path('item_bank_exercise_manage_base', {exerciseId: exercise.id, questionBankId: exercise.questionBankId}) }}">
             <i class="es-icon es-icon-setting"></i>&nbsp;{{ 'site.default.manage'|trans }}
@@ -92,7 +92,7 @@
           <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('item_bank_exercise_qrcode', { id: exercise.id }) }}">
             <a class="cd-link-assist 
             {% if exercise.status == 'closed' %}
-              {% if member | default(false) %}
+              {% if isExerciseStudent | default(false) %}
                 js-handleExerciseOnMessage
               {% else %}
                 js-handleExerciseClosed
@@ -109,7 +109,7 @@
           <li class="es-share es-share-item top mrl js-es-share">
             <a class="dropdown-toggle cd-link-assist 
             {% if exercise.status == 'closed' %}
-              {% if member | default(false) %}
+              {% if isExerciseStudent | default(false) %}
                 js-handleExerciseOnMessage
               {% else %}
                 js-handleExerciseClosed
@@ -122,7 +122,7 @@
           {% block course_member_exit %}{% endblock %}
         </ul>
         <div class="text-right buy-btn-group course-operation-btn course-classroom-tip">
-          {% if member | default(false) %}
+          {% if isExerciseStudent | default(false) %}
             {% if exercise.expiryMode == 'date' and exercise.expiryStartDate >= timestamp() %}
               {{ 'item_bank_exercise.expiry_date.expiryStartDate'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('date.format'|trans)})|raw }}
             {% else %}

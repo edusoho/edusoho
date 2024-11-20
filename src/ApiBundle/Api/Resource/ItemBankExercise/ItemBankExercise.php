@@ -23,7 +23,7 @@ class ItemBankExercise extends AbstractResource
 
         $user = $this->getCurrentUser();
         if ($user->isLogin()) {
-            $member = $this->getItemBankExerciseMemberService()->getExerciseMember($id, $user['id']);
+            $member = $this->getItemBankExerciseMemberService()->getExerciseStudent($id, $user['id']);
         }
 
         $itemBankExercise['isMember'] = !empty($member);
@@ -39,13 +39,13 @@ class ItemBankExercise extends AbstractResource
         $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
         $itemBankExercise['isContractSigned'] = empty($signRecord) ? 0 : 1;
         if (0 == $itemBankExercise['isContractSigned']) {
-            $member = $this->getItemBankExerciseMemberService()->getExerciseMember($id, $user['id']);
+            $member = $this->getItemBankExerciseMemberService()->getExerciseStudent($id, $user['id']);
             if ('bind_join' == $member['joinedChannel']) {
                 $itemBankExercise['isContractSigned'] = 1;
             }
         }
         $itemBankExercise['contract'] = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
-        $member = $this->getItemBankExerciseMemberService()->getExerciseMember($itemBankExercise['id'], $user['id']);
+        $member = $this->getItemBankExerciseMemberService()->getExerciseStudent($itemBankExercise['id'], $user['id']);
         if (empty($itemBankExercise['contract']) || (!empty($member) && 'bind_join' == $member['joinedChannel'])) {
             $itemBankExercise['contract'] = [
                 'sign' => 'no',

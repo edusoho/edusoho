@@ -15,7 +15,7 @@ class MeItemBankExerciseMember extends AbstractResource
      */
     public function get(ApiRequest $request, $exerciseId)
     {
-        $exerciseMember = $this->getExerciseMemberService()->getExerciseMember($exerciseId, $this->getCurrentUser()->getId());
+        $exerciseMember = $this->getExerciseMemberService()->getExerciseStudent($exerciseId, $this->getCurrentUser()->getId());
 
         if ($exerciseMember) {
             $exerciseMember['access'] = $this->getExerciseService()->canLearnExercise($exerciseId);
@@ -31,7 +31,7 @@ class MeItemBankExerciseMember extends AbstractResource
 
         $exercise = $this->getExerciseService()->get($exerciseId);
         $user = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']) : null;
+        $member = $user['id'] ? $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']) : null;
         if (empty($member)) {
             throw ItemBankExerciseMemberException::NOTFOUND_MEMBER();
         }

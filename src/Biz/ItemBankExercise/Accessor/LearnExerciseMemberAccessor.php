@@ -17,7 +17,7 @@ class LearnExerciseMemberAccessor extends AccessorAdapter
             return $this->buildResult('user.locked', ['userId' => $user['id']]);
         }
 
-        $member = $this->getItemBankExerciseMemberService()->getExerciseMember($itemBankExercise['id'], $user['id']);
+        $member = $this->getItemBankExerciseMemberService()->getExerciseStudent($itemBankExercise['id'], $user['id']);
         if (empty($member)) {
             return $this->buildResult('member.not_found');
         }
@@ -25,7 +25,7 @@ class LearnExerciseMemberAccessor extends AccessorAdapter
         if ($member['deadline'] > 0 && $member['deadline'] < time()) {
             return $this->buildResult('member.expired', ['userId' => $user['id']]);
         }
-        if ($member['canLearn'] == 0) {
+        if (0 == $member['canLearn']) {
             return $this->buildResult('item_bank_exercise.closed');
         }
 
