@@ -26,6 +26,8 @@ const getCover = async () => {
   cover.value = await Api.file.getCourseCover({
     saveUrl: props.manage.imageSaveUrl,
     targetImg: 'course-cover',
+    cropWidth: '480',
+    cropHeight: '270',
     uploadToken: 'tmp',
     imageText: '修改封面图片',
     imageSrc: props.manage.imageSrc,
@@ -194,6 +196,8 @@ const validateForm = () => {
 onMounted(() => {
   if (props.manage.isUnMultiCourseSet) {
     initEditor();
+    getOrgCodes();
+    getCover();
   }
   Object.assign(formState, {
     title: removeHtml(props.manage.courseSet.title),
@@ -204,10 +208,8 @@ onMounted(() => {
     serializeMode: props.manage.course.serializeMode,
     summary: props.manage.courseSet.summary,
   });
-  getCover();
   getCategory();
   getTabs();
-  getOrgCodes();
 });
 
 defineExpose({
@@ -341,7 +343,8 @@ defineExpose({
         <a-form-item
           label="封面图片"
         >
-
+          <div v-html="cover"></div>
+          <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
         </a-form-item>
 
         <a-form-item
