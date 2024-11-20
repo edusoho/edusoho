@@ -305,24 +305,3 @@ const onFinish = async () => {
   }
 }
 </style>
-
-<style lang="less">
-.cke_chrome {
-  border-color: #d9d9d9 !important;
-  border-radius: 4px;
-}
-.cke_inner {
-  border-color: #d9d9d9 !important;
-  border-radius: 4px !important;
-}
-.cke_top {
-  border-color: #d9d9d9 !important;
-  border-top-left-radius: 4px !important;
-  border-top-right-radius: 4px !important;
-}
-.cke_contents {
-  border-color: #d9d9d9 !important;
-  border-bottom-left-radius: 4px !important;
-  border-bottom-right-radius: 4px !important;
-}
-</style>
