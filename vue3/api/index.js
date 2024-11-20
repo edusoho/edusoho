@@ -6,7 +6,7 @@ import file from './modules/file';
 import setting from './modules/setting';
 import tag from './modules/tag'
 import category from './modules/category';
-import organization from './modules/organization';
+import org from './modules/org';
 import itemBank from './modules/itemBank'
 import security from './modules/security';
 import me from './modules/me';
@@ -25,7 +25,7 @@ const Api = {
   setting,
   tag,
   category,
-  organization,
+  org,
   itemBank,
   liveCapacity,
 };

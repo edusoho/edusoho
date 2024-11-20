@@ -19,7 +19,7 @@ const removeHtml = (input) => {
 };
 
 const cover = ref();
-const categoryOptions = ref();
+const categoryTree = ref();
 const tabOptions = ref();
 
 const getCover = async () => {
@@ -35,8 +35,8 @@ const getCover = async () => {
 
 const getCategory = async () => {
   const category = await Api.category.getCategory();
-  categoryOptions.value = transformCategoryData(category);
-  categoryOptions.value.unshift({ value: '0', label: '无' });
+  categoryTree.value = transformCategoryData(category);
+  categoryTree.value.unshift({ value: '0', label: '无' });
 };
 
 const getTabs = async () => {
@@ -132,11 +132,32 @@ function transformCategoryData(data) {
   });
 }
 
+const orgTree = ref();
 const getOrgCodes = async () => {
-  const OrgCodes = await Api.organization.getOrgCodes({withoutFormGroup: true, orgCode: formState.orgCode});
-  console.log(OrgCodes);
+  const orgCodes = await Api.org.search();
+  orgTree.value = buildOrgTree(orgCodes);
 };
-getOrgCodes();
+
+function buildOrgTree(data) {
+  const map = {};
+  const tree = [];
+  data.forEach((item) => {
+    map[item.id] = {
+      label: item.name,
+      value: item.orgCode,
+      children: []
+    };
+  });
+  data.forEach((item) => {
+    const node = map[item.id];
+    if (item.parentId === "0") {
+      tree.push(node);
+    } else if (map[item.parentId]) {
+      map[item.parentId].children.push(node);
+    }
+  });
+  return tree;
+}
 
 const serializeOption = [
   {label: '非连载课程', value: 'none'},
@@ -186,6 +207,7 @@ onMounted(() => {
   getCover();
   getCategory();
   getTabs();
+  getOrgCodes();
 });
 
 defineExpose({
@@ -276,7 +298,6 @@ defineExpose({
             placeholder="请选择"
             :options="tabOptions"
             allow-clear
-            style="width: 250px"
           ></a-select>
           <div class="text-[#adadad] text-12 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
         </a-form-item>
@@ -286,7 +307,7 @@ defineExpose({
         >
           <a-tree-select
             v-model:value="formState.categoryId"
-            :tree-data="categoryOptions"
+            :tree-data="categoryTree"
             allow-clear
             tree-default-expand-all
             :show-search="true"
@@ -299,7 +320,15 @@ defineExpose({
           v-if="props.manage.enableOrg"
           label="组织机构"
         >
-
+          <a-tree-select
+            v-model:value="formState.orgCode"
+            :tree-data="orgTree"
+            allow-clear
+            tree-default-expand-all
+            :show-search="true"
+            :treeNodeFilterProp="'label'"
+            style="width: 250px"
+          ></a-tree-select>
         </a-form-item>
 
         <a-form-item
