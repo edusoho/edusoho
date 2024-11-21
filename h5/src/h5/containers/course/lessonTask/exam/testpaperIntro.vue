@@ -291,7 +291,7 @@ export default {
         },
       })
         .then(res => {
-          if (res.testpaperResult.status === 'doing') {
+          if (res.testpaperResult?.status === 'doing') {
             this.goDoTestpaper(KeepDoing, reDo);
             return;
           }
