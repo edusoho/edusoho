@@ -33,11 +33,6 @@ const sealUrl = ref('');
 const imgUrl = ref('');
 const cropperModalVisible = ref(false);
 
-const CKEditorConfig = {
-  filebrowserImageUploadUrl: document.getElementById('ckeditor_image_upload_url').value,
-  filebrowserImageDownloadUrl: document.getElementById('ckeditor_image_download_url').value,
-};
-
 const initEditor = () => {
   const editor = CKEDITOR.replace('contract-content', {
     extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,shortUrl,colorbutton,colordialog,justify,find,pasteimage,katex',
@@ -260,7 +255,7 @@ const onFinish = async () => {
             v-model:open="cropperModalVisible"
             @cancel="cropperModalVisible = false; sealUrl = ''; formState.seal = ''">
 
-            <vue-cropper ref="cropperInstance" :src="imgUrl"></vue-cropper>
+            <vue-cropper ref="cropperInstance" :src="imgUrl" :aspectRatio="1/1"></vue-cropper>
             <template #title>{{ t('modal.title.cropPicture') }}</template>
             <template #footer>
               <div class="flex justify-between">

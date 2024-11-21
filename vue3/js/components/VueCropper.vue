@@ -13,6 +13,10 @@ const props = defineProps({
   src: {
     type: String,
     required: true
+  },
+  aspectRatio: {
+    type: Number,
+    required: true
   }
 })
 
@@ -21,7 +25,7 @@ onMounted(() => {
   const image = document.getElementById('cropper-image')
 
   cropper.value = new Cropper(image, {
-    aspectRatio: 1/1,
+    aspectRatio: props.aspectRatio,
     autoCropArea: 1,
     crop(event) {
     }
