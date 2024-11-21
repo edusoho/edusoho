@@ -36,7 +36,7 @@ class CertificateRecordExporter extends Exporter
         $dataSet = [];
         foreach ($records as $record) {
             $data = [];
-            $data[] = $userProfiles[$record['userId']]['truename'] ?? '--';
+            $data[] = empty($userProfiles[$record['userId']]['truename']) ? '--' : $userProfiles[$record['userId']]['truename'];
             $data[] = $users[$record['userId']]['nickname'] ?? '--';
             $data[] = $targets[$record['targetId']]['title'] ?? '--';
             $data[] = $record['certificateCode'];
