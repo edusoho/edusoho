@@ -15,7 +15,7 @@ interface FileImplementor
 
     public function getFullFile($file);
 
-    public function getDefaultHumbnails($globalId);
+    public function getDefaultHumbnails($globalId, $ssl = false);
 
     public function getThumbnail($globalId, $options);
 
@@ -23,7 +23,7 @@ interface FileImplementor
 
     public function player($globalId, $ssl = false);
 
-    public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null);
+    public function addFile($targetType, $targetId, array $fileInfo = [], UploadedFile $originalFile = null);
 
     public function reconvert($globalId, $options);
 
@@ -31,10 +31,10 @@ interface FileImplementor
 
     public function deleteFile($file);
 
-    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = array());
+    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = []);
 
     //FileImplementor2
-    public function getFileByGlobalId($globalId);
+    public function getFileByGlobalId($globalId, $ssl = false);
 
     public function prepareUpload($params);
 
