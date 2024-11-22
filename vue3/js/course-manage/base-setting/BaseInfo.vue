@@ -138,6 +138,7 @@ const orgTree = ref();
 const getOrgCodes = async () => {
   const orgCodes = await Api.org.search();
   orgTree.value = buildOrgTree(orgCodes);
+  formState.orgCode = props.manage.course.orgCode ? props.manage.course.orgCode : orgTree.value[0].value;
 };
 
 function buildOrgTree(data) {
