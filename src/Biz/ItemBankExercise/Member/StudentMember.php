@@ -23,7 +23,7 @@ class StudentMember extends Member
         if (!empty($info['price']) && $info['price'] > 0) {
             $this->createOrder($exercise['id'], $userId, $info);
 
-            return $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $userId);
+            return $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $userId);
         }
         $exercise['expiryMode'] = $info['expiryMode'] ?? $exercise['expiryMode'];
         $exercise['expiryDays'] = $info['expiryDays'] ?? $exercise['expiryDays'];
@@ -119,7 +119,7 @@ class StudentMember extends Member
             throw ItemBankExerciseException::UNPUBLISHED_EXERCISE();
         }
 
-        if ($this->getExerciseMemberService()->isExerciseMember($exerciseId, $userId)) {
+        if ($this->getExerciseMemberService()->isExerciseStudent($exerciseId, $userId)) {
             throw ItemBankExerciseMemberException::DUPLICATE_MEMBER();
         }
 

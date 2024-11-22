@@ -6,10 +6,10 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class ExerciseMemberDaoTest extends BaseDaoTestCase
 {
-    public function testGetByExerciseIdAndUserId()
+    public function testGetByExerciseIdAndUserIdAndRole()
     {
         $this->createMember();
-        $res = $this->getDao()->getByExerciseIdAndUserId(1, 1);
+        $res = $this->getDao()->getByExerciseIdAndUserIdAndRole(1, 1, 'student');
         $this->assertEquals(1, $res['exerciseId']);
         $this->assertEquals(1, $res['userId']);
     }
@@ -39,6 +39,7 @@ class ExerciseMemberDaoTest extends BaseDaoTestCase
                 'exerciseId' => 1,
                 'questionBankId' => 1,
                 'userId' => 1,
+                'role' => 'student',
                 'remark' => 'adg',
             ]
         );

@@ -29,7 +29,7 @@ class SaveAnswer extends AbstractResource
         }
         if (!empty($assessmentResponse['exerciseId'])) {
             $exercise = $this->getExerciseService()->get($assessmentResponse['exerciseId']);
-            $member = $this->getExerciseMemberService()->getExerciseMember($assessmentResponse['exerciseId'], $this->getCurrentUser()['id']);
+            $member = $this->getExerciseMemberService()->getExerciseStudent($assessmentResponse['exerciseId'], $this->getCurrentUser()['id']);
             if ('closed' == $exercise['status'] || 0 == $member['canLearn']) {
                 throw ExerciseException::CLOSED_EXERCISE();
             }
@@ -54,27 +54,6 @@ class SaveAnswer extends AbstractResource
         }
 
         return $this->getAnswerService()->saveAnswer($assessmentResponse);
-    }
-
-    /**
-     * @param $assessmentId
-     * @param $userId
-     *
-     * @return void
-     *
-     * @throws AnswerException
-     */
-    public function checkAssessmentMember($assessmentId, $userId)
-    {
-        $assessment = $this->getAssessmentService()->getAssessment($assessmentId);
-
-        //如果是题库练习，检查是否是题库练习成员
-        $exercise = $this->getExerciseService()->getByQuestionBankId($assessment['bank_id']);
-        if ($exercise) {
-            if (!$this->getExerciseMemberService()->isExerciseMember($exercise['id'], $userId)) {
-                throw new AnswerException('您已退出题库，无法继续学习', ErrorCode::NOT_ITEM_BANK_MEMBER);
-            }
-        }
     }
 
     /**

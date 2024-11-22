@@ -33,7 +33,7 @@ class ContinueAnswer extends AbstractResource
         }
         if (!empty($assessmentResponse['exerciseId'])) {
             $exercise = $this->getExerciseService()->get($assessmentResponse['exerciseId']);
-            $member = $this->getExerciseMemberService()->getExerciseMember($assessmentResponse['exerciseId'], $this->getCurrentUser()['id']);
+            $member = $this->getExerciseMemberService()->getExerciseStudent($assessmentResponse['exerciseId'], $this->getCurrentUser()['id']);
             if ('closed' == $exercise['status'] || 0 == $member['canLearn']) {
                 throw ExerciseException::CLOSED_EXERCISE();
             }

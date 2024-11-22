@@ -39,7 +39,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
         foreach ($params['exerciseBinds'] as $exerciseBind) {
             // 查询学员是不是当前题库练习的成员
-            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $userIds, 'exerciseId' => $exerciseBind['itemBankExerciseId']], [], 0, PHP_INT_MAX);
+            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $userIds, 'exerciseId' => $exerciseBind['itemBankExerciseId'], 'role' => 'student'], [], 0, PHP_INT_MAX);
             // 拆分是题库成员的部分，不是题库成员的部分
             $exerciseMemberUserIds = array_column($exerciseUsers, 'userId');
             $notMemberUserIds = array_diff($userIds, $exerciseMemberUserIds);
@@ -113,7 +113,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
         foreach ($exerciseBinds as $exerciseBind) {
             // 查询学员是不是当前题库练习的成员
-            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $params['userIds'], 'exerciseId' => $exerciseBind['itemBankExerciseId']], [], 0, PHP_INT_MAX);
+            $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $params['userIds'], 'exerciseId' => $exerciseBind['itemBankExerciseId'], 'role' => 'student'], [], 0, PHP_INT_MAX);
             // 拆分是题库成员的部分，不是题库成员的部分
             $exerciseMemberUserIds = array_column($exerciseUsers, 'userId');
             $notMemberUserIds = array_diff($params['userIds'], $exerciseMemberUserIds);
@@ -322,7 +322,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             return;
         }
         $exerciseMembers = $this->getExerciseMemberService()->search(
-            ['userIds' => $userIds, 'exerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX
+            ['userIds' => $userIds, 'exerciseIds' => $exerciseIds, 'role' => 'student'], [], 0, PHP_INT_MAX
         );
         $autoJoinRecordMap = [];
         foreach ($singleExerciseAutoJoinRecords as $record) {

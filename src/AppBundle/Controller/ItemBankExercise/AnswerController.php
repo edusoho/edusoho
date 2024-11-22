@@ -200,7 +200,7 @@ class AnswerController extends BaseController
         $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
         $user = $this->getCurrentUser();
         $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($user['id'], $goodsKey);
-        $member = $this->getItemBankExerciseMemberService()->getExerciseMember($exerciseId, $user['id']);
+        $member = $this->getItemBankExerciseMemberService()->getExerciseStudent($exerciseId, $user['id']);
         if (empty($contract) || !empty($signRecord) || (!empty($member) && 'bind_join' == $member['joinedChannel'])) {
             $contract = [
                 'sign' => 'no',

@@ -206,7 +206,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function countStudentsByExerciseId($exerciseId)
     {
-        return $this->getExerciseMemberDao()->count(
+        return $this->getExerciseMemberService()->count(
             [
                 'exerciseId' => $exerciseId,
                 'role' => 'student',
@@ -411,9 +411,9 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             return false;
         }
 
-        $member = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
+        $members = $this->getExerciseMemberService()->findMembers($exercise['id'], $user['id']);
 
-        if ($member && in_array($member['role'], ['teacher', 'student'])) {
+        if (!empty($members)) {
             return true;
         }
 
@@ -530,7 +530,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         if (!$this->canTakeItemBankExercise($exercise['id'])) {
             $this->createNewException(ItemBankExerciseException::FORBIDDEN_TAKE_EXERCISE());
         }
-        $member = $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exercise['id'], $user['id']);
+        $member = $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']);
 
         return [$exercise, $member];
     }
