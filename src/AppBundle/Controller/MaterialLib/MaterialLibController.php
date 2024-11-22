@@ -5,6 +5,7 @@ namespace AppBundle\Controller\MaterialLib;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use AppBundle\Util\PlayToken;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileShareHistoryService;
 use Biz\File\UploadFileException;
@@ -160,7 +161,12 @@ class MaterialLibController extends BaseController
 
     public function playerAction(Request $request, $fileId)
     {
-        $file = $this->getUploadFileService()->tryAccessFile($fileId);
+        $token = $request->query->get('token');
+        if (empty($token) || !$this->validatePlayToken($token, $fileId)) {
+            $file = $this->getUploadFileService()->tryAccessFile($fileId);
+        } else {
+            $file = $this->getUploadFileService()->getFullFile($fileId);
+        }
 
         if ('cloud' == $file['storage']) {
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
@@ -607,6 +613,16 @@ class MaterialLibController extends BaseController
         $second = $request->query->get('second');
 
         return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, ['seconds' => $second]));
+    }
+
+    private function validatePlayToken($token, $fileId)
+    {
+        $params = (new PlayToken())->parse($token);
+        if (empty($params)) {
+            return false;
+        }
+
+        return $this->getCurrentUser()->getId() == $params['userId'] && $fileId == $params['fileId'];
     }
 
     protected function getUserService()
