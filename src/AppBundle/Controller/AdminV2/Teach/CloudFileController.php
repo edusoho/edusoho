@@ -92,7 +92,8 @@ class CloudFileController extends BaseController
         return $this->render('admin-v2/teach/cloud-attachment/error.html.twig', []);
     }
 
-    public function  questionBankAttachmentSettingAction(Request $request) {
+    public function questionBankAttachmentSettingAction(Request $request)
+    {
         $questionBankAttachment = $this->getSettingService()->get('question_bank_attachment_setting', []);
         $questionBankAttachment = array_merge(['enable' => 1], $questionBankAttachment);
 
@@ -101,6 +102,7 @@ class CloudFileController extends BaseController
             $this->getSettingService()->set('question_bank_attachment_setting', $questionBankAttachment);
             $this->setFlashMessage('success', 'site.save.success');
         }
+
         return $this->render('admin-v2/teach/question-bank-attachment-setting/index.html.twig', [
             'questionBankAttachment' => $questionBankAttachment,
         ]);
@@ -155,21 +157,21 @@ class CloudFileController extends BaseController
         ]);
     }
 
-    public function detailAction(Request $reqeust, $globalId)
+    public function detailAction(Request $request, $globalId)
     {
         try {
             if (!$globalId) {
                 return $this->render('admin-v2/teach/cloud-file/detail-not-found.html.twig', []);
             }
 
-            $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
+            $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId, $request->isSecure());
         } catch (\RuntimeException $e) {
             return $this->render('admin-v2/teach/cloud-file/detail-not-found.html.twig', []);
         }
 
         try {
             if ('video' == $cloudFile['type']) {
-                $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($globalId);
+                $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($globalId, $request->isSecure());
             }
         } catch (\RuntimeException $e) {
             $thumbnails = [];
@@ -178,7 +180,7 @@ class CloudFileController extends BaseController
         return $this->render('admin-v2/teach/cloud-file/detail.html.twig', [
             'material' => $cloudFile,
             'thumbnails' => empty($thumbnails) ? '' : $thumbnails,
-            'params' => $reqeust->query->all(),
+            'params' => $request->query->all(),
             'editUrl' => $this->generateUrl('admin_v2_cloud_file_edit', ['globalId' => $globalId]),
         ]);
     }

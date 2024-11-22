@@ -217,7 +217,8 @@ class MaterialLibController extends BaseController
         } else {
             try {
                 if ('video' == $file['type']) {
-                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
+                    $file = $this->getCloudFileService()->getByGlobalId($file['globalId'], $request->isSecure());
+                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId'], $request->isSecure());
                 }
             } catch (\RuntimeException $e) {
                 $thumbnails = [];
