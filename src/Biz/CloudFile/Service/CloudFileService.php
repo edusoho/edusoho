@@ -8,7 +8,7 @@ interface CloudFileService extends FilePlayerInterface
 
     public function count($conditions);
 
-    public function getByGlobalId($globalId);
+    public function getByGlobalId($globalId, $ssl = false);
 
     public function getByGlobalIdFromItemAttachment($globalId);
 
@@ -24,7 +24,7 @@ interface CloudFileService extends FilePlayerInterface
 
     public function reconvert($globalId, $options);
 
-    public function getDefaultHumbnails($globalId);
+    public function getDefaultHumbnails($globalId, $ssl = false);
 
     public function getThumbnail($globalId, $options);
 

@@ -39,7 +39,7 @@ class CertificateRecordExporter extends Exporter
             $data[] = empty($userProfiles[$record['userId']]['truename']) ? '--' : $userProfiles[$record['userId']]['truename'];
             $data[] = $users[$record['userId']]['nickname'] ?? '--';
             $data[] = $targets[$record['targetId']]['title'] ?? '--';
-            $data[] = $record['certificateCode'];
+            $data[] = $record['certificateCode']."\t";
             $data[] = empty($record['expiryTime']) ? '长期有效' : date('Y-m-d', $record['expiryTime']);
             $data[] = $this->transStatus($record);
             $data[] = date('Y-m-d', $record['issueTime']);

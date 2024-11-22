@@ -197,9 +197,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return true;
     }
 
-    public function getByGlobalId($globalId)
+    public function getByGlobalId($globalId, $ssl = false)
     {
-        $file = $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
+        $file = $this->getCloudFileImplementor()->getFileByGlobalId($globalId, $ssl);
         $questionFile = empty($file['id']) ? $this->getByGlobalIdFromItemAttachment($globalId) : [];
         if (!empty($questionFile)) {
             $file['type'] = $questionFile['file_type'];
@@ -246,9 +246,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getFile($file);
     }
 
-    public function getDefaultHumbnails($globalId)
+    public function getDefaultHumbnails($globalId, $ssl = false)
     {
-        return $this->getCloudFileImplementor()->getDefaultHumbnails($globalId);
+        return $this->getCloudFileImplementor()->getDefaultHumbnails($globalId, $ssl);
     }
 
     public function getThumbnail($globalId, $options)
