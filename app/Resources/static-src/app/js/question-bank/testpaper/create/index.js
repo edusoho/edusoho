@@ -70,6 +70,10 @@ class TestpaperForm {
     this.questions = [];
     this.sections = [];
     let stats = this._calTestpaperStats();
+    if (stats.total.score == 0) {
+      notify('danger', '试卷总分需大于0');
+      return;
+    }
 
     let html = '';
     $.each(stats, function(index, statsItem){
@@ -163,7 +167,6 @@ class TestpaperForm {
     if(($(that).data('type') === 'choice' || $(that).data('type') ==='uncertain_choice') && $(that).find('.js-score-type').val() == 'question'){
       question.missScore = question.otherScore;
     }
-    console.log(question);
     return question;
   }
 
@@ -547,7 +550,7 @@ class TestpaperForm {
     }
 
     $target.addClass('disabled').text(Translator.trans('task.plugin_redmine_save_hint'))
-        
+
     let baseInfo = {
       name: this.$form.find('#name-field').val(),
       description: this.$form.find('#description-field').val(),
