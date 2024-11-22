@@ -13,8 +13,8 @@
   <div class="section-header"><h1>{{ content.title }}</h1></div>
 
   {% if content.body %}
-    <div class="editor-text" style="display: inline-block; height: auto;">
-  	  {{ content.body|cdn|raw }}
+    <div class="editor-text">
+      {{ content.body|cdn|replace({'<table': '<div style="width: 100%; overflow-x: auto;"><table'})|replace({'</table>': '</table></div>'})|raw }}
     </div>
   {% else %}
     <div class="empty">{{'custom_page.empty'|trans}}</div>
