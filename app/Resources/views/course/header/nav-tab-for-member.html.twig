@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs nav-tabs--course  {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
-  {% for key, tab in metas.tabs if (key not in ['reviews', 'summary'] or (key in ['reviews', 'summary'] and course.parentId > 0)) %}
+  {% for key, tab in metas.tabs if (key not in ['reviews', 'summary', 'itemBankBind'] or (key in ['reviews', 'summary'] and course.parentId > 0) or (key in ['itemBankBind'] and course.parentId == 0)) %}
     {% if  (mobile and loop.index <= 3) or (not mobile) %}
       {% if key == 'certificate' %}
         {% set isShow = can_obtain_certificates(course.id, 'course') %}
