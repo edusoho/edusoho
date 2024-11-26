@@ -24,7 +24,7 @@
               </p>
             </div>
             <div class="download-material-btn-group">
-              <a class="link-darker download-materials-btn" data-toggle="modal" data-target="#preview-modal"
+              <a class="link-darker download-materials-btn" data-toggle="modal" data-target="#modal"
                  data-url="{{ path('course_activity_download_file_preview', {courseId: activity.fromCourseId, activityId: activity.id, materialId: material.id}) }}"
               >{{ 'cloud_file.preview'|trans }}</a>
               <a
@@ -40,5 +40,5 @@
       {% endfor %}
     </div>
   </div>
-  <div id="preview-modal" class="modal"></div>
+  <div id="modal" class="modal"></div>
 {% endblock %}
