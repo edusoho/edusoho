@@ -1,0 +1,11 @@
+{% extends 'open-course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'my.teaching.open_course.Basic_Info.lessons'|trans }} - {{ parent() }}{% endblock %}
+{% block page_title%}{% endblock %}
+{% set side_nav = 'liveLessons' %}
+
+{% do script(['vue3/js/open-course-manage/lessons-manage/index.js']) %}
+
+{% block main %}
+  <div id="lessons-manage" data-course="{{ course }}" style="margin-left: 200px"></div>
+{% endblock %}

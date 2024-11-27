@@ -209,6 +209,15 @@ class LiveOpenCourseController extends BaseOpenCourseController
         ]);
     }
 
+    public function lessonsManageAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+
+        return $this->render('open-course-manage/lessons.html.twig', [
+            'course' => $course,
+        ]);
+    }
+
     public function entryReplayAction(Request $request, $courseId, $lessonId, $replayId)
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);

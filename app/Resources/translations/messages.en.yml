@@ -982,6 +982,7 @@ course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
 course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
+course.item_bank_manage: 'Item Bank Manage'
 course.members_manage: 'Students'
 course.members_manage.export.field_learn_time: The cumulative learning time
 course.members_manage.official_student: Students
@@ -3765,6 +3766,7 @@ my.teaching.multi_class.my_students: My Students
 my.teaching.multi_class.status: Status
 my.teaching.multi_class.student_num: Student Number
 my.teaching.open_course.Basic_Info: Course settings
+my.teaching.open_course.Basic_Info.lessons: Lessons
 my.teaching.open_course.Basic_Info.message: Basic infomation
 my.teaching.open_course.Basic_Info.title: Course title
 my.teaching.open_course.Basic_Info.subtitle: Subtitle
@@ -3888,6 +3890,7 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 'Recommend Settings'
 my.teaching.open_course.course_manage: 'Courses'
 my.teaching.open_course.course_info: 'Course Info'
 my.teaching.open_course.live_manage: 'Lives'
+my.teaching.open_course.live_lessons: 'Lessons'
 my.teaching.open_course.show.edusoho_school: 'EduSoho site'
 my.teaching.open_course.show.tips: "This QR code can only be scanned by wechat for preview, and not able to be shared to others"
 my.teaching.open_course.show.recommend_course: 'Recommend Course/Classroom'

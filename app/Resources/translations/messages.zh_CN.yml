@@ -1120,6 +1120,8 @@ course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
 course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
+course.item_bank_manage: 题库练习管理
+
 course.members_manage: 学员管理
 course.members_manage.export.field_learn_time: 累加学习时长
 course.members_manage.official_student: 正式学员
@@ -4373,6 +4375,7 @@ my.teaching.multi_class.student_num: 班课学员
 
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程设置
+my.teaching.open_course.Basic_Info.lessons: 课时管理
 my.teaching.open_course.Basic_Info.message: 基础信息
 my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: 副标题
@@ -4543,6 +4546,7 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
 my.teaching.open_course.course_manage: 课程管理
 my.teaching.open_course.course_info: 课程信息
 my.teaching.open_course.live_manage: 录播管理
+my.teaching.open_course.live_lessons: 课时管理
 my.teaching.open_course.show.edusoho_school: EduSoho网校
 my.teaching.open_course.show.tips: >
   二维码只用于微信扫一<br>扫预览，不可用于分享
