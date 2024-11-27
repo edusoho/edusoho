@@ -74,13 +74,13 @@
               v-if="
                 mediaType === 'homework' &&
                   finishType === 'submit' &&
-                  !metaActivity.isOnlyStudent
+                  role !== 'student'
               "
             >
               {{ t("itemReview.rightQuestionCount") }}
               {{ answerReport.right_question_count }}
             </span>
-            <template v-else-if="!metaActivity.isOnlyStudent">
+            <template v-else-if="role !== 'student'">
               <div class="ibs-mr24 ibs-left">
                 {{ t("itemReview.subjective_question") }}
                 {{ getSubjectiveScore }}
