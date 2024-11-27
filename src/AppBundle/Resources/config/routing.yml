@@ -1756,6 +1756,10 @@ live_open_course_manage_replay:
     path: '/open/course/{id}/manage/replay'
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:replayManage'
+live_open_course_manage_lessons:
+  path: '/open/course/{id}/manage/lessons'
+  defaults:
+    _controller: 'AppBundle:LiveOpenCourse:lessonsManage'
 live_open_course_lesson_replay_create:
     path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/create'
     defaults:

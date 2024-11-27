@@ -67,7 +67,7 @@
          data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"
          data-can-free-activity-types="{{ can_free_activity_types|join('word.seperator'|trans) }}"
          data-free-task-changelog="{{ freeTaskChangelog }}"
-         data-tags="{{ tags|json_encode }}" ,
+         data-tags="{{ tags|json_encode }}"
          data-image-save-url="{{ path('course_set_manage_cover_crop', {id: courseSet.id}) }}"
          data-image-src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
          data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
