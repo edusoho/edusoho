@@ -1150,27 +1150,6 @@ class SettingsController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function scrmAction(Request $request)
-    {
-        if (!$this->getSCRMService()->isSCRMBind()) {
-            throw new AccessDeniedException();
-        }
-
-        $currentUser = $this->getCurrentUser();
-        $user = $this->getUserService()->getUser($currentUser->getId());
-        if (1 == count($currentUser->getRoles())) {
-            throw new AccessDeniedException();
-        }
-
-        $user = $this->getSCRMService()->setStaffSCRMData($user);
-        $assistantQrCodeUrl = $this->generateAssistantQrCode($user);
-
-        return $this->render('settings/scrm.html.twig', [
-            'user' => $user,
-            'assistantQrCodeUrl' => $assistantQrCodeUrl,
-        ]);
-    }
-
     protected function generateAssistantQrCode($user)
     {
         $url = $this->getSCRMService()->getStaffBindUrl($user);
@@ -1196,20 +1175,6 @@ class SettingsController extends BaseController
         );
 
         return $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL);
-    }
-
-    public function scrmBindAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $user = $this->getUserService()->getUser($user['id']);
-
-        $user = $this->getSCRMService()->setStaffSCRMData($user);
-
-        if (empty($user['scrmStaffId'])) {
-            return $this->createJsonResponse(false);
-        }
-
-        return $this->createJsonResponse(true);
     }
 
     protected function checkBindsName($type)
