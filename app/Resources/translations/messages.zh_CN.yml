@@ -8161,7 +8161,6 @@ admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
 admin.developer_setting.market_address: 微营销地址(https://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
-admin_v2.developer_setting.scrm_url: 'SCRM地址(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.default_locale: 默认语言
 admin.developer_setting.default_locale.zh_CN: 中文
