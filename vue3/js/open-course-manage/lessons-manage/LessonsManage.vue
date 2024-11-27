@@ -66,7 +66,12 @@ function parser(value) {
 }
 
 function addLive() {
-
+  return formRef.value.validate()
+    .then(() => {
+      liveDrawerVisible.value = false;
+    })
+    .catch((error) => {
+    });
 }
 </script>
 <template>
