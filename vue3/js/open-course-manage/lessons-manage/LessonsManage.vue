@@ -55,7 +55,7 @@ const updateFormItem = (drawerType) => {
     Object.assign(rules, {
       ...baseRules,
       playbackDuration: [
-        { required: true, validator: validatePlaybackDuration, trigger: 'change' }
+        { required: true, validator: validatePlaybackDuration }
       ]
     });
   } else if (drawerType === 'live') {
@@ -80,13 +80,13 @@ const updateFormItem = (drawerType) => {
   }
 };
 
-watch(() => drawerType.value, (newType) => {
-  updateFormItem(newType);
-}, { immediate: true });
-
 const isDrawerOpen = computed(() => {
   return drawerType.value === 'live' || drawerType.value === 'playback';
 });
+
+const labelColConfig = computed(() => ({
+  span: drawerType.value === 'live' ? 4 : 3,
+}));
 
 const range = (start, end) => {
   const result = [];
@@ -186,6 +186,10 @@ function handleSave() {
 
     });
 }
+
+watch(() => drawerType.value, (newType) => {
+  updateFormItem(newType);
+}, { immediate: true });
 </script>
 <template>
   <AntConfigProvider>
@@ -220,7 +224,7 @@ function handleSave() {
         ref="formRef"
         :model="formState"
         :rules="rules"
-        :label-col="{ span: 4 }"
+        :label-col="labelColConfig"
         autocomplete="off"
       >
         <a-form-item
@@ -242,19 +246,19 @@ function handleSave() {
                   v-model:value="searchParams.tag"
                   show-search
                   :allow-clear="true"
-                  :style="{ minWidth: '160px'}"
+                  style="min-width: 160px; max-width: 160px"
                   placeholder="选择标签"
                   :options="tagOptions"
                   :filter-option="filterOption"
                 ></a-select>
                 <a-select
+                  style="min-width: 106px; max-width: 106px"
                   v-model:value="searchParams.keywordType"
                   :allow-clear="true"
-                  :style="{ minWidth: '106px'}"
                 >
                   <a-select-option value="1">直播名称</a-select-option>
                   <a-select-option value="2">主讲人</a-select-option>
-                  <a-select-option value="3" disabled>课程名称</a-select-option>
+                  <a-select-option value="3">课程名称</a-select-option>
                 </a-select>
                 <a-input v-model:value="searchParams.keyword" placeholder="请输入" :allow-clear="true"/>
                 <a-button type="primary" ghost>搜索</a-button>
