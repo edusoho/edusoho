@@ -1,5 +1,5 @@
 import {createApp} from 'vue';
-import {Button, Empty, Drawer, Form, Input, DatePicker, InputNumber, Switch} from 'ant-design-vue';
+import {Button, Empty, Drawer, Form, Input, DatePicker, InputNumber, Switch, Select} from 'ant-design-vue';
 import {createStyleTag, setCurrentPrimaryColor} from 'vue3/js/common';
 import 'vue3/main.less';
 import LessonsManage from './LessonsManage.vue';
@@ -16,6 +16,7 @@ app.use(Input);
 app.use(DatePicker);
 app.use(InputNumber);
 app.use(Switch);
+app.use(Select);
 
 setCurrentPrimaryColor(app);
 

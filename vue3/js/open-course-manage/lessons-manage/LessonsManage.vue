@@ -1,32 +1,91 @@
 <script setup>
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
-import {ref, h, reactive} from 'vue';
+import {ref, h, reactive, computed, watch} from 'vue';
 import { PlusCircleOutlined, CloseOutlined } from '@ant-design/icons-vue';
 import { Empty } from 'ant-design-vue';
 import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
+import draggable from 'vuedraggable';
 
 const lessons = ref([]);
-const playbackDrawerVisible = ref(false);
-const liveDrawerVisible = ref(false);
+const drawerType = ref();
 
 const formRef = ref();
-const formState = reactive({
+const baseFormState = reactive({
   title: null,
-  startTime: null,
-  duration: null,
-  allowPlayback: true,
 });
-const rules = ref({
+const baseRules = reactive({
   title: [
-    { required: true, message: '请输入试卷名称', trigger: 'blur' }
+    { required: true, message: '请输入标题名称', trigger: 'blur' }
   ],
-  startTime: [
-    { required: true, message: '请设置直播开始时间', trigger: 'blur' }
-  ],
-  duration: [
-    { required: true, message: '请设置直播时长', trigger: 'blur' }
-  ],
+});
+const formState = reactive({ ...baseFormState });
+const rules = reactive({ ...baseRules });
+const tagOptions = ref([]);
+const searchParams = reactive({
+  tag: null,
+  keywordType: '1',
+  keyword: null,
+})
+
+const validatePlaybackDuration = () => {
+  return new Promise((resolve, reject) => {
+    const { minutes, seconds } = formState;
+    const totalSeconds = (minutes || 0) * 60 + (seconds || 0);
+    if (totalSeconds > 0) {
+      resolve();
+    } else {
+      reject(new Error('直播回放时长需大于0'));
+    }
+  });
+};
+
+const reValidatePlaybackDuration = () => {
+  formRef.value.validateFields(['playbackDuration'])
+}
+
+const updateFormItem = (drawerType) => {
+  if (drawerType === 'playback') {
+    Object.assign(formState, {
+      ...baseFormState,
+      playbackId: null,
+      minutes: null,
+      seconds: null,
+    });
+    Object.assign(rules, {
+      ...baseRules,
+      playbackDuration: [
+        { required: true, validator: validatePlaybackDuration, trigger: 'change' }
+      ]
+    });
+  } else if (drawerType === 'live') {
+    Object.assign(formState, {
+      ...baseFormState,
+      startTime: null,
+      liveDuration: null,
+      allowPlayback: true,
+    });
+    Object.assign(rules, {
+      ...baseRules,
+      startTime: [
+        { required: true, message: '请设置直播开始时间', trigger: 'blur' }
+      ],
+      liveDuration: [
+        { required: true, message: '请设置直播时长', trigger: 'blur' }
+      ],
+    });
+  } else {
+    Object.assign(formState, { ...baseFormState });
+    Object.assign(rules, { ...baseRules });
+  }
+};
+
+watch(() => drawerType.value, (newType) => {
+  updateFormItem(newType);
+}, { immediate: true });
+
+const isDrawerOpen = computed(() => {
+  return drawerType.value === 'live' || drawerType.value === 'playback';
 });
 
 const range = (start, end) => {
@@ -65,12 +124,66 @@ function parser(value) {
   return Math.round(Number(value.replace(/[^\d.]/g, '')));
 }
 
-function addLive() {
+const filterOption = (input, option) => {
+  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+};
+
+const table = {
+  columns: [
+    {
+      key: 'user',
+      title: '直播课时名称',
+    },
+    {
+      key: 'joinedChannel',
+      title: '直播时长',
+    },
+    {
+      key: 'joinTime',
+      title: '主讲人',
+    },
+    {
+      key: 'joinTime',
+      title: '直播时间',
+    },
+    {
+      key: 'operation',
+      title: '操作',
+      fixed: 'right',
+    },
+  ],
+  loading: ref(false),
+  playback: ref([]),
+};
+
+const pagination = {
+  current: 1,
+  total: 0,
+  pageSize: 6,
+  onChange: (page, pageSize) => {
+    pagination.current = page;
+    pagination.pageSize = pageSize;
+  },
+};
+
+const handleReset = () => {
+  formRef.value.resetFields();
+  drawerType.value = null;
+};
+
+function handleSave() {
   return formRef.value.validate()
     .then(() => {
-      liveDrawerVisible.value = false;
+      if (drawerType.value === 'playback') {
+        console.log('保存回放')
+      }
+      if (drawerType.value === 'live') {
+        console.log('保存直播')
+      }
+      drawerType.value = null;
     })
     .catch((error) => {
+
     });
 }
 </script>
@@ -80,8 +193,8 @@ function addLive() {
       <div class="flex justify-between items-center">
         <div class="text-16 font-medium text-black text-opacity-88">课时管理</div>
         <div class="flex space-x-20">
-          <a-button type="primary" :icon="h(PlusCircleOutlined)">添加回放</a-button>
-          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="liveDrawerVisible = true">添加直播</a-button>
+          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="drawerType = 'playback'">添加回放</a-button>
+          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="drawerType = 'live'">添加直播</a-button>
         </div>
       </div>
       <div v-if="lessons.length === 0">
@@ -90,7 +203,7 @@ function addLive() {
       <div v-else>kjsbdkjasbdjksabdkjsabdaksjbdaskjbd,dsakbdsakhvdsakjhbdsakjndbsdbsamdvasjhdvas</div>
     </div>
     <a-drawer
-      v-model:open="liveDrawerVisible"
+      v-model:open="isDrawerOpen"
       placement="right"
       :closable="false"
       :maskClosable="false"
@@ -98,8 +211,9 @@ function addLive() {
       width="900px"
     >
       <div class="fixed top-0 right-0 w-900 flex justify-between items-center px-20 py-14 border border-x-0 border-t-0 border-[#EFF0F5] border-solid bg-white">
-        <div class="text-16 font-medium text-[#37393D]">添加直播</div>
-        <CloseOutlined class="text-16" @click="liveDrawerVisible = false"/>
+        <div class="text-16 font-medium text-[#37393D]" v-if="drawerType === 'playback'">添加回放</div>
+        <div class="text-16 font-medium text-[#37393D]" v-if="drawerType === 'live'">添加直播</div>
+        <CloseOutlined class="text-16" @click="handleReset"/>
       </div>
       <a-form
         class="mt-53 px-20 py-24"
@@ -113,22 +227,70 @@ function addLive() {
           label="标题名称"
           name="title"
         >
-          <a-input v-model:value="formState.title" placeholder="请输入" :allowClear="true" show-count :maxlength="15" class="w-360"/>
+          <a-input v-model:value="formState.title" placeholder="请输入" :allow-clear="true" show-count :maxlength="15" class="w-360"/>
           <div class="mt-4 text-12 font-normal text-[#87898F]">建议标题字数控制在15字以内，否则会影响手机端浏览</div>
         </a-form-item>
         <a-form-item
+          v-if="drawerType === 'playback'"
+          name="playbackId"
+          label="直播回放"
+        >
+          <a-form-item-rest>
+            <div class="flex flex-col gap-y-16 p-24 border border-solid border-[#d9d9d9] rounded-8">
+              <div class="flex gap-x-20">
+                <a-select
+                  v-model:value="searchParams.tag"
+                  show-search
+                  :allow-clear="true"
+                  :style="{ minWidth: '160px'}"
+                  placeholder="选择标签"
+                  :options="tagOptions"
+                  :filter-option="filterOption"
+                ></a-select>
+                <a-select
+                  v-model:value="searchParams.keywordType"
+                  :allow-clear="true"
+                  :style="{ minWidth: '106px'}"
+                >
+                  <a-select-option value="1">直播名称</a-select-option>
+                  <a-select-option value="2">主讲人</a-select-option>
+                  <a-select-option value="3" disabled>课程名称</a-select-option>
+                </a-select>
+                <a-input v-model:value="searchParams.keyword" placeholder="请输入" :allow-clear="true"/>
+                <a-button type="primary" ghost>搜索</a-button>
+                <a-button>重置</a-button>
+              </div>
+              <div>222222</div>
+              <div>333333</div>
+            </div>
+          </a-form-item-rest>
+        </a-form-item>
+        <a-form-item
+          v-if="drawerType === 'playback'"
+          name="playbackDuration"
+          label="直播回放时长"
+        >
+          <a-form-item-rest>
+            <a-input-number v-model:value="formState.minutes" :formatter="formatter" :parser="parser" addon-after="分" class="w-120 mr-16" @blur="reValidatePlaybackDuration"/>
+            <a-input-number v-model:value="formState.seconds" :formatter="formatter" :parser="parser" addon-after="秒" class="w-120" @blur="reValidatePlaybackDuration"/>
+          </a-form-item-rest>
+        </a-form-item>
+        <a-form-item
+          v-if="drawerType === 'live'"
           label="直播开始时间"
           name="startTime"
         >
-          <a-date-picker v-model:value="formState.startTime" :disabled-date="disabledDate" :disabled-time="disabledTime" :show-time="{ format: 'HH:mm' }" format="YYYY-MM-DD HH:mm" placeholder="开始时间" :allowClear="true" class="w-268"/>
+          <a-date-picker v-model:value="formState.startTime" :disabled-date="disabledDate" :disabled-time="disabledTime" :show-time="{ format: 'HH:mm' }" format="YYYY-MM-DD HH:mm" :allow-clear="true" placeholder="开始时间" class="w-268"/>
         </a-form-item>
         <a-form-item
+          v-if="drawerType === 'live'"
           label="直播时长"
-          name="duration"
+          name="liveDuration"
         >
-          <a-input-number v-model:value="formState.duration" :formatter="formatter" :parser="parser" addon-after="分" class="w-120"/>
+          <a-input-number v-model:value="formState.liveDuration" :formatter="formatter" :parser="parser" addon-after="分" class="w-120"/>
         </a-form-item>
         <a-form-item
+          v-if="drawerType === 'live'"
           label="是否允许观看回放"
           name="allowPlayback"
         >
@@ -137,14 +299,10 @@ function addLive() {
       </a-form>
       <div class="fixed bottom-0 right-0 w-900 flex flex-row-reverse justify-between items-center px-20 py-14 border border-x-0 border-b-0 border-[#EFF0F5] border-solid bg-white">
         <div class="space-x-16">
-          <a-button @click="liveDrawerVisible = false">取消</a-button>
-          <a-button type="primary" @click="addLive">保存</a-button>
+          <a-button @click="handleReset">取消</a-button>
+          <a-button type="primary" @click="handleSave">保存</a-button>
         </div>
       </div>
     </a-drawer>
   </AntConfigProvider>
 </template>
-
-<style scoped lang="less">
-
-</style>
