@@ -189,7 +189,7 @@ function handleSave() {
 
 watch(() => drawerType.value, (newType) => {
   updateFormItem(newType);
-}, { immediate: true });
+});
 </script>
 <template>
   <AntConfigProvider>
