@@ -37,39 +37,8 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $canUpdateStartTime = true;
-
-        $liveLesson = [];
-
-        if ('liveOpen' === $course['type']) {
-            $openLiveLesson = $this->getOpenCourseService()->searchLessons(
-                ['courseId' => $course['id']],
-                ['startTime' => 'DESC'],
-                0,
-                1
-            );
-
-            $liveLesson = $openLiveLesson ? $openLiveLesson[0] : [];
-            if (!empty($liveLesson['startTime']) && time() > $liveLesson['startTime']) {
-                $canUpdateStartTime = false;
-            }
-        }
-
         if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
-
-            if ('liveOpen' === $course['type'] && isset($data['startTime']) && !empty($data['startTime'])) {
-                $data['length'] = $data['timeLength'];
-                unset($data['timeLength']);
-                $data['startTime'] = strtotime($data['startTime']);
-
-                if ($data['startTime'] < time()) {
-                    return $this->createMessageResponse('error', '开始时间应晚于当前时间');
-                }
-
-                $data['authUrl'] = $this->generateUrl('live_auth', [], UrlGeneratorInterface::ABSOLUTE_URL);
-                $data['jumpUrl'] = $this->generateUrl('live_jump', ['id' => $course['id']], UrlGeneratorInterface::ABSOLUTE_URL);
-            }
             $this->getOpenCourseService()->updateCourse($id, $data);
 
             return $this->createJsonResponse(true);
@@ -81,10 +50,8 @@ class OpenCourseManageController extends BaseController
             'open-course-manage/base-info.html.twig',
             [
                 'course' => $course,
-                'openLiveLesson' => $liveLesson,
                 'tags' => ArrayToolkit::column($tags, 'name'),
                 'default' => $this->getSettingService()->get('default', []),
-                'canUpdateStartTime' => $canUpdateStartTime,
             ]
         );
     }
