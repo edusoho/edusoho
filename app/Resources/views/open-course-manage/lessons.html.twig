@@ -7,5 +7,5 @@
 {% do script(['vue3/js/open-course-manage/lessons-manage/index.js']) %}
 
 {% block main %}
-  <div id="lessons-manage" data-course="{{ course }}" style="margin-left: 200px"></div>
+  <div id="lessons-manage" data-course="{{ course | json_encode }}" style="margin-left: 200px"></div>
 {% endblock %}
