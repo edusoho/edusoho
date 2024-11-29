@@ -423,7 +423,7 @@ const removeStudent = async userId => {
             </div>
           </div>
           <div v-show="students.length > 0" class="flex items-start gap-20">
-            <button v-show="enableAddAndRemove" class="student-operate-button" @click="onBatchRemove">批量移除</button>
+            <button class="student-operate-button" @click="onBatchRemove">批量移除</button>
             <button class="student-operate-button" @click="onBatchUpdateExpiryDate">批量修改有效期</button>
             <button class="student-operate-button" @click="onUpdateAllExpiryDate">全员修改有效期</button>
           </div>
@@ -504,7 +504,7 @@ const removeStudent = async userId => {
                         <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/student/deadline?ids=${record.user.id}`" :disabled="!isAdmin && !isTeacher">
                           修改有效期
                         </a-menu-item>
-                        <a-menu-item @click="removeStudent(record.user.id)" :disabled="!enableAddAndRemove">
+                        <a-menu-item @click="removeStudent(record.user.id)" :disabled="!isAdmin && !isTeacher">
                           移除
                         </a-menu-item>
                       </a-menu>

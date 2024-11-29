@@ -52,13 +52,13 @@ trait ContractDisplayTrait
             $product = $this->getServiceByType($parts[0])->get($parts[1]);
         }
         $member = [];
-        $user = !empty($user)? $user: $this->getCurrentUser();
+        $user = !empty($user) ? $user : $this->getCurrentUser();
         if ('course' == $parts[0]) {
             $member = $this->getMemberService($parts[0])->getCourseMember($parts[1], $user['id']);
         } elseif ('classroom' == $parts[0]) {
             $member = $this->getMemberService($parts[0])->getClassroomMember($parts[1], $user['id']);
         } elseif ('itemBankExercise' == $parts[0]) {
-            $member = $this->getMemberService($parts[0])->getExerciseMember($parts[1], $user['id']);
+            $member = $this->getMemberService($parts[0])->getExerciseStudent($parts[1], $user['id']);
         }
         $order = $this->getOrderService()->getOrder($member['orderId']);
         $userProfile = $this->getUserService()->getUserProfile($user['id']);

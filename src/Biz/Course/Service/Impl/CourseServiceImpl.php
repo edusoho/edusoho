@@ -1410,7 +1410,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::CHAPTERTYPE_INVALID());
         }
 
-        $chapter['title'] = $this->purifyHtml($chapter['title'], true);
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
@@ -1421,7 +1420,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateChapter($courseId, $chapterId, $fields)
     {
         $this->tryManageCourse($courseId);
-        $fields['title'] = $this->purifyHtml($fields['title'], true);
         $chapter = $this->getChapterDao()->get($chapterId);
         $oldChapter = $chapter;
 

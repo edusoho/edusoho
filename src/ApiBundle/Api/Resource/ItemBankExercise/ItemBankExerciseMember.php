@@ -78,7 +78,7 @@ class ItemBankExerciseMember extends AbstractResource
 
     public function add(ApiRequest $request, $exerciseId)
     {
-        $member = $this->getItemBankExerciseMemberService()->getExerciseMember($exerciseId, $this->getCurrentUser()->getId());
+        $member = $this->getItemBankExerciseMemberService()->getExerciseStudent($exerciseId, $this->getCurrentUser()->getId());
 
         if (!$member) {
             $member = $this->getItemBankExerciseService()->freeJoinExercise($exerciseId);

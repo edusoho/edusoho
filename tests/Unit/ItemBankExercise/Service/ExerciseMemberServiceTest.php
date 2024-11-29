@@ -82,14 +82,6 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $this->assertEquals(0.1, $res['masteryRate']);
     }
 
-    public function testGetByExerciseIdAndUserId()
-    {
-        $member = $this->createExerciseMember();
-        $res = $this->getExerciseMemberService()->getByExerciseIdAndUserId(1, 1);
-        $this->assertEquals($member['exerciseId'], $res['exerciseId']);
-        $this->assertEquals($member['userId'], $res['userId']);
-    }
-
     public function testSearch()
     {
         $this->batchCreateExerciseMembers();
@@ -107,7 +99,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $this->assertEquals('student', $res[0]['role']);
     }
 
-    public function testIsExerciseMember()
+    public function testIsExerciseStudent()
     {
         $user = $this->createNormalUser();
         $exercise = $this->createExercise();
@@ -120,7 +112,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
                 'remark' => 'aaa',
             ]
         );
-        $result = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $user['id']);
+        $result = $this->getExerciseMemberService()->isExerciseStudent($exercise['id'], $user['id']);
         $this->assertEquals(true, $result);
     }
 
@@ -139,11 +131,11 @@ class ExerciseMemberServiceTest extends BaseTestCase
             ]
         );
 
-        $result = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $user['id']);
+        $result = $this->getExerciseMemberService()->isExerciseStudent($exercise['id'], $user['id']);
         $this->assertEquals(false, $result);
 
         $this->getExerciseMemberService()->becomeStudent($exercise['id'], $user['id'], ['remark' => '123', 'reason' => OperateReason::JOIN_BY_IMPORT, 'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE, 'source' => 'outside']);
-        $result = $this->getExerciseMemberService()->isExerciseMember($exercise['id'], $user['id']);
+        $result = $this->getExerciseMemberService()->isExerciseStudent($exercise['id'], $user['id']);
         $this->assertEquals(true, $result);
     }
 
@@ -200,7 +192,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $exercise = $this->createExercise();
         $member = $this->createExerciseMember(['exerciseId' => $exercise['id'], 'userId' => 10]);
         $this->getExerciseMemberService()->removeStudent($member['exerciseId'], $member['userId']);
-        $result = $this->getExerciseMemberService()->getByExerciseIdAndUserId($member['exerciseId'], $member['userId']);
+        $result = $this->getExerciseMemberService()->getExerciseStudent($member['exerciseId'], $member['userId']);
 
         $this->assertEmpty($result);
     }
@@ -210,15 +202,15 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $exercise = $this->createExercise();
         $member = $this->createExerciseMember(['exerciseId' => $exercise['id'], 'userId' => 10]);
         $this->getExerciseMemberService()->removeStudents($member['exerciseId'], [$member['userId']]);
-        $result = $this->getExerciseMemberService()->getByExerciseIdAndUserId($member['exerciseId'], $member['userId']);
+        $result = $this->getExerciseMemberService()->getExerciseStudent($member['exerciseId'], $member['userId']);
 
         $this->assertEmpty($result);
     }
 
-    public function testGetExerciseMember()
+    public function testGetExerciseStudent()
     {
         $member = $this->createExerciseMember();
-        $res = $this->getExerciseMemberService()->getExerciseMember($member['exerciseId'], $member['userId']);
+        $res = $this->getExerciseMemberService()->getExerciseStudent($member['exerciseId'], $member['userId']);
         $this->assertEquals($member['exerciseId'], $res['exerciseId']);
         $this->assertEquals($member['userId'], $res['userId']);
     }
@@ -245,7 +237,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
         );
         $deadline = time();
         $this->getExerciseMemberService()->batchUpdateMemberDeadlines($exercise['id'], [$user['id']], ['updateType' => 'deadline', 'deadline' => $deadline]);
-        $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
+        $result = $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']);
         $this->assertEquals($deadline, (int) $result['deadline']);
     }
 
@@ -282,7 +274,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
 
         $this->getExerciseMemberService()->quitExerciseByDeadlineReach(2, $exercise['id']);
         $res = $this->getExerciseService()->get($exercise['id']);
-        $result = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $member['userId']);
+        $result = $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $member['userId']);
 
         $this->assertEquals(0, $res['studentNum']);
         $this->assertEmpty($result);

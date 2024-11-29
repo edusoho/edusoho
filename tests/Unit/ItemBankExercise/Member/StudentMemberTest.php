@@ -50,9 +50,9 @@ class StudentMemberTest extends BaseTestCase
                 ],
             ],
             [
-                'functionName' => 'getByExerciseIdAndUserId',
+                'functionName' => 'getByExerciseIdAndUserIdAndRole',
                 'runTimes' => 1,
-                'withParams' => [1, 3],
+                'withParams' => [1, 3, 'student'],
                 'returnValue' => [],
             ],
         ]);

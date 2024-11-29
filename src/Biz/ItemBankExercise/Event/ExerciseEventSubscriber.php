@@ -2,7 +2,6 @@
 
 namespace Biz\ItemBankExercise\Event;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Member\MemberManage;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
@@ -41,7 +40,6 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
     {
         $questionBank = $event->getSubject();
         $members = $event->getArgument('members');
-        $userId = $event->getArgument('userId');
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
         if (empty($exercise)) {
             return true;
@@ -64,32 +62,22 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
             $questionBankTeacherIds = [$exercise['creator']];
         }
 
-        $this->synchronizationItemBankExercise($exercise, $questionBankTeacherIds, $userId);
+        $this->synchronizationItemBankExercise($exercise, $questionBankTeacherIds);
     }
 
-    private function synchronizationItemBankExercise($exercise, $questionBankTeacherIds, $userId)
+    private function synchronizationItemBankExercise($exercise, $questionBankTeacherIds)
     {
         $manage = new MemberManage($this->getBiz());
         $teacherMember = $manage->getMemberClass('teacher');
-        $exerciseMembers = ArrayToolkit::index(
-            $this->getExerciseMemberService()->search(['exerciseId' => $exercise['id']], [], 0, PHP_INT_MAX, ['id', 'userId', 'role']),
-            'userId'
-        );
-
-        foreach ($questionBankTeacherIds as $questionBankTeacherId) {
-            if (empty($exerciseMembers[$questionBankTeacherId])) {
-                $teacherMember->join($exercise['id'], $questionBankTeacherId, ['remark' => '']);
-            } else {
-                if ('student' == $exerciseMembers[$questionBankTeacherId]['role']) {
-                    $this->getExerciseMemberDao()->update($exerciseMembers[$questionBankTeacherId]['id'], ['role' => 'teacher']);
-                }
-            }
+        $exerciseTeachers = $this->getExerciseMemberService()->search(['exerciseId' => $exercise['id'], 'role' => 'teacher'], [], 0, PHP_INT_MAX, ['userId']);
+        $exerciseTeacherIds = array_column($exerciseTeachers, 'userId');
+        foreach (array_diff($questionBankTeacherIds, $exerciseTeacherIds) as $teacherId) {
+            $teacherMember->join($exercise['id'], $teacherId, ['remark' => '']);
         }
 
-        foreach ($exercise['teacherIds'] as $teacherId) {
-            if (!in_array($teacherId, $questionBankTeacherIds)) {
-                $this->getExerciseMemberDao()->update($exerciseMembers[$teacherId]['id'], ['role' => 'student']);
-            }
+        $toDeleteTeacherIds = array_diff($exerciseTeacherIds, $questionBankTeacherIds);
+        if (!empty($toDeleteTeacherIds)) {
+            $this->getExerciseMemberDao()->batchDelete(['exerciseId' => $exercise['id'], 'userIds' => $toDeleteTeacherIds, 'role' => 'teacher']);
         }
 
         $this->getExerciseService()->update($exercise['id'], ['teacherIds' => $questionBankTeacherIds]);

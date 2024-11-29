@@ -17,7 +17,7 @@ class JoinExerciseMemberAccessor extends AccessorAdapter
             return $this->buildResult('user.locked', ['userId' => $user['id']]);
         }
 
-        if ($this->getItemBankExerciseMemberService()->isExerciseMember($itemBankExercise['id'], $user->getId())) {
+        if ($this->getItemBankExerciseMemberService()->isExerciseStudent($itemBankExercise['id'], $user->getId())) {
             return $this->buildResult('member.member_exist', ['userId' => $user['id']]);
         }
 
