@@ -49,6 +49,9 @@ class OpenCourseLesson extends AbstractResource
         if (!empty($lesson) && $courseId != $lesson['courseId']) {
             throw CommonException::ERROR_PARAMETER();
         }
+        if ('published' == $lesson['status']) {
+            throw OpenCourseException::DELETE_PUBLISHED_LESSON();
+        }
         $this->getOpenCourseService()->deleteLesson($lessonId);
 
         return ['ok' => true];

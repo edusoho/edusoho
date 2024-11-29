@@ -1,0 +1,15 @@
+<?php
+
+namespace ApiBundle\Api\Resource\OpenCourse;
+
+use ApiBundle\Api\Resource\Filter;
+
+class OpenCourseLessonFilter extends Filter
+{
+    protected $publicFields = ['id', 'type', 'title', 'status', 'seq', 'length'];
+
+    protected function publicFields(&$data)
+    {
+        $data['editable'] = 'liveOpen' != $data['type'] || $data['startTime'] > time();
+    }
+}
