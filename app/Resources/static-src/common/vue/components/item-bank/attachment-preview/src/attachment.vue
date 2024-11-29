@@ -311,7 +311,7 @@ export default {
     isDelete() {
       //   预览删除按钮-学员上传附件删除按钮。
       //   return this.finalMode === "create" || this.module === "answer";
-      return ['answer', 'stem', 'analysis'].includes(this.module);
+      return ['answer', 'stem', 'analysis', 'material'].includes(this.module);
     },
     buttonNum() {
       const btnArray = [this.isDelete, this.isDownload, this.isPreview];
