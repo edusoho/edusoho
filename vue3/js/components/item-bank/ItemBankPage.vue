@@ -119,7 +119,7 @@ onBeforeMount(async () => {
               <div class="flex justify-between px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16 bg-white cursor-grab">
                 <div class="flex space-x-16">
                   <div class="flex items-center">
-                    <img src="../../../img/item-bank/list-icon.png" class="w-16" draggable="false" alt="">
+                    <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
                   </div>
                   <div class="relative">
                     <img :src="element.itemBankExercise.cover.middle" class="h-90 rounded-5" draggable="false" alt="">
