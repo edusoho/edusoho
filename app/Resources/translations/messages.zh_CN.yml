@@ -11057,6 +11057,7 @@ exception.opencourse.itemids_invalid: 课时数错误
 exception.opencourse.is_not_member: 您不是课程成员
 exception.opencourse.check_password_required: 未输入正确的校验密码
 exception.opencourse.replay_not_permitted: 直播回放被设置为不允许观看
+exception.opencourse.live_start_time_outdated: 直播开始时间应晚于当前时间
 exception.blacklist.forbidden_take: 没有权限
 exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
 exception.blacklist.not_found: 黑名单不存在

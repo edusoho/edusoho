@@ -164,55 +164,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $updatedCourse;
     }
 
-    protected function shouldUpdateLiveLesson($course, $fields)
-    {
-        return 'liveOpen' == $course['type'] && isset($fields['startTime']) && !empty($fields['startTime']);
-    }
-
-    protected function updateLiveLesson($course, $fields)
-    {
-        $openLiveLesson = $this->searchLessons(
-            ['courseId' => $course['id']],
-            ['startTime' => 'DESC'],
-            0,
-            1
-        );
-        $liveLesson = $openLiveLesson ? $openLiveLesson[0] : [];
-
-        $liveLessonFields = ArrayToolkit::parts($fields, [
-            'startTime',
-            'length',
-            'authUrl',
-            'jumpUrl',
-        ]);
-
-        $liveLessonFields = array_merge($liveLesson, $liveLessonFields);
-
-        $liveLessonFields['type'] = 'liveOpen';
-        $liveLessonFields['courseId'] = $course['id'];
-        $liveLessonFields['title'] = $course['title'];
-
-        $routes = [
-            'authUrl' => $fields['authUrl'],
-            'jumpUrl' => $fields['jumpUrl'],
-        ];
-        if ($openLiveLesson) {
-            $this->getLiveCourseService()->editLiveRoom($course, $liveLessonFields, $routes);
-            $this->updateLesson(
-                $liveLessonFields['courseId'],
-                $liveLessonFields['id'],
-                $liveLessonFields
-            );
-        } else {
-            $live = $this->getLiveCourseService()->createLiveRoom($course, $liveLessonFields, $routes);
-
-            $liveLessonFields['mediaId'] = $live['id'];
-            $liveLessonFields['liveProvider'] = $live['provider'];
-
-            $this->createLesson($liveLessonFields);
-        }
-    }
-
     public function updateCourse($id, $fields)
     {
         $fields = $this->filterOpenCourseFields($fields);
@@ -222,13 +173,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
-        $updatedCourse = $this->updateOpenCourse($course, $fields);
-
-        if ($this->shouldUpdateLiveLesson($course, $fields)) {
-            $this->updateLiveLesson($course, $fields);
-        }
-
-        return $updatedCourse;
+        return $this->updateOpenCourse($course, $fields);
     }
 
     public function deleteCourse($id)
@@ -447,7 +392,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $course = $this->getCourse($lesson['courseId'], true);
+        $course = $this->getCourse($lesson['courseId']);
 
         if (empty($course)) {
             $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
