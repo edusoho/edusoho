@@ -1313,13 +1313,6 @@ admin_v2:
                                     name: admin_v2.user.destroy_account.destroyed_tab
                                     router_name: admin_v2_destroyed_account
                                     disable: true
-                        admin_v2_scrm:
-                            name: admin_v2.user.scrm_menu
-                            class: js-new-corner-mark
-                            children:
-                                admin_v2_scrm_manage:
-                                    name: admin_v2.user.scrm_menu
-                                    router_name: admin_v2_scrm
         # 交易模块
         admin_v2_trade:
             quick_entrance_icon_class: 'icon-color-red'

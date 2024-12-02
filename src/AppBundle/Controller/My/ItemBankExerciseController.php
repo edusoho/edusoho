@@ -152,7 +152,7 @@ class ItemBankExerciseController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $member = $this->getExerciseMemberService()->getExerciseTeacher($exercise['id'], $user['id']) ?: $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']);
+        $member = $this->getExerciseMemberService()->getExerciseStudent($exercise['id'], $user['id']) ?: $this->getExerciseMemberService()->getExerciseTeacher($exercise['id'], $user['id']);
 
         return $this->render(
             'item-bank-exercise/header/header-for-member.html.twig',

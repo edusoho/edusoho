@@ -48,7 +48,7 @@
               </a>
             {% endif %}
           </li>
-          {% if not courseSet.locked %}
+          {% if courseSet.parentId == 0 %}
             <li class="cd-sidebar__item {% if course_side_nav == 'item-bank' %}active{% endif %}">
               <a href="{{ path('course_set_manage_course_item_bank', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
                 题库练习管理

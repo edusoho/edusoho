@@ -6824,7 +6824,6 @@ admin.developer_setting.cloud_sdk_cdn_address: 'EduSoho Education Cloud SDK CDN 
 admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
 admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.distributor_address: 'Distributor(http://fx.marketing.com)'
-admin_v2.developer_setting.scrm_url: 'SCRM(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.default_locale: language
 admin.developer_setting.default_locale.zh_CN: Chinese(简体中文)

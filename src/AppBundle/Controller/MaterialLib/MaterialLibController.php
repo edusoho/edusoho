@@ -9,6 +9,7 @@ use AppBundle\Util\PlayToken;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileShareHistoryService;
 use Biz\File\UploadFileException;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
@@ -611,9 +612,12 @@ class MaterialLibController extends BaseController
     {
         $this->getUploadFileService()->tryManageGlobalFile($globalId);
 
-        $second = $request->query->get('second');
+        $options = ['seconds' => $request->query->get('second')];
+        if ($request->isSecure()) {
+            $options['protocol'] = 'https';
+        }
 
-        return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, ['seconds' => $second]));
+        return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, $options));
     }
 
     private function validatePlayToken($token, $fileId)
@@ -631,6 +635,9 @@ class MaterialLibController extends BaseController
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
