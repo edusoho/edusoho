@@ -1,8 +1,8 @@
 <script setup>
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
-import {ref, h, reactive, computed, watch} from 'vue';
-import { PlusCircleOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Empty } from 'ant-design-vue';
+import {ref, h, reactive, computed, watch, createVNode} from 'vue';
+import { PlusCircleOutlined, CloseOutlined, EditOutlined, EyeOutlined, SendOutlined, CloseCircleOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons-vue';
+import {Empty, message, Modal} from 'ant-design-vue';
 import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import draggable from 'vuedraggable';
@@ -12,8 +12,12 @@ const props = defineProps({
   course: {required: true},
 })
 
-const lessons = ref([]);
+const lessons = {
+  loading: ref(false),
+  data: ref([]),
+};
 const drawerType = ref();
+const editId = ref();
 
 const formRef = ref();
 const baseFormState = reactive({
@@ -26,6 +30,7 @@ const baseRules = reactive({
 });
 const formState = reactive({ ...baseFormState });
 const rules = reactive({ ...baseRules });
+
 const tagOptions = ref([]);
 const searchParams = reactive({
   tag: null,
@@ -33,38 +38,46 @@ const searchParams = reactive({
   keyword: null,
 })
 
-const updateFormItem = (drawerType) => {
-  if (drawerType === 'replay') {
-    Object.assign(formState, {
-      ...baseFormState,
-      playbackId: null,
-      minutes: null,
-      seconds: null,
-    });
-    Object.assign(rules, {
-      ...baseRules,
-    });
-  } else if (drawerType === 'liveOpen') {
-    Object.assign(formState, {
-      ...baseFormState,
-      startTime: null,
-      length: null,
-      replayEnable: true,
-    });
-    Object.assign(rules, {
-      ...baseRules,
-      startTime: [
-        { required: true, message: '请设置直播开始时间', trigger: 'blur' }
-      ],
-      length: [
-        { required: true, message: '请设置直播时长', trigger: 'blur' }
-      ],
-    });
-  } else {
+async function updateFormItem(drawerType) {
+  Object.keys(formState).forEach((key) => delete formState[key]);
+  Object.keys(rules).forEach((key) => delete rules[key]);
+  if (!drawerType) {
     Object.assign(formState, { ...baseFormState });
     Object.assign(rules, { ...baseRules });
+    return;
   }
-};
+  const isEdit = !editId.value;
+  const typeConfig = {
+    replay: async () => {
+      Object.assign(formState, {
+        ...baseFormState,
+        ...(isEdit ? { playbackId: null, minutes: null, seconds: null } : {}),
+      });
+      Object.assign(rules, { ...baseRules });
+    },
+    liveOpen: async () => {
+      const extraFormState = isEdit
+        ? { startTime: null, length: null, replayEnable: true }
+        : await getLiveOpenData();
+      Object.assign(formState, { ...baseFormState, ...extraFormState });
+      Object.assign(rules, {
+        ...baseRules,
+        startTime: [{ required: true, message: '请设置直播开始时间', trigger: 'blur' }],
+        length: [{ required: true, message: '请设置直播时长', trigger: 'blur' }],
+      });
+    },
+  };
+  await typeConfig[drawerType]?.();
+  async function getLiveOpenData() {
+    const lesson = await Api.openCourse.getLesson(props.course.id, editId.value);
+    return {
+      title: lesson.title,
+      startTime: null,
+      length: null,
+      replayEnable: null,
+    };
+  }
+}
 
 const isDrawerOpen = computed(() => {
   return drawerType.value === 'liveOpen' || drawerType.value === 'replay';
@@ -115,7 +128,8 @@ const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 
-const table = {
+const openCourses = {
+  loading: ref(false),
   columns: [
     {
       key: 'user',
@@ -139,8 +153,7 @@ const table = {
       fixed: 'right',
     },
   ],
-  loading: ref(false),
-  openCourse: ref(),
+  data: ref([]),
 };
 
 const pagination = {
@@ -153,47 +166,100 @@ const pagination = {
   },
 };
 
-async function findLesson() {
-  lessons.value = await Api.openCourse.findLesson(props.course.id);
-  console.log(lessons.value)
+function resetDrawer() {
+  drawerType.value = null;
+  editId.value = null;
 }
 
-const handleReset = () => {
+function editLesson(lessonType, id = null) {
+  if (lessons.data.value.length >= 300 && !id) {
+    message.error('最多可添加300个课时');
+    return;
+  }
+  drawerType.value = lessonType;
+  editId.value = id;
+}
+
+function deleteLesson(id) {
+  Modal.confirm({
+    title: '确定要删除该课时吗？',
+    icon: createVNode(ExclamationCircleOutlined),
+    okText: '删除',
+    cancelText: '取消',
+    async onOk() {
+      await Api.openCourse.deleteLesson(props.course.id, id);
+      message.success('删除成功');
+      await findLessons();
+    }
+  });
+}
+
+async function publishLesson(id) {
+  await Api.openCourse.publishLesson(props.course.id, id);
+  message.success('发布成功');
+  await findLessons();
+}
+
+async function unpublishLesson(id) {
+  await Api.openCourse.unpublishLesson(props.course.id, id);
+  message.success('取消发布成功');
+  await findLessons();
+}
+
+function viewLesson(id) {
+
+}
+
+async function findLessons() {
+  lessons.loading.value = true;
+  lessons.data.value = await Api.openCourse.findLessons(props.course.id);
+  lessons.loading.value = false;
+}
+findLessons();
+
+function handleReset() {
   formRef.value.resetFields();
-  drawerType.value = null;
-};
+  resetDrawer();
+}
 
 const saveBtnLoading = ref(false);
 function handleSave() {
   return formRef.value.validate()
     .then( async () => {
+      saveBtnLoading.value = true;
       if (drawerType.value === 'replay') {
+        if (!editId.value) {
 
+        } else {
+
+        }
       }
       if (drawerType.value === 'liveOpen') {
-        const params = {
-          type: drawerType.value,
-          title: formState.title,
-          startTime: Date.parse(formState.startTime)/1000,
-          length: formState.length,
-          replayEnable: formState.replayEnable
+        if (!editId.value) {
+          const params = {
+            type: drawerType.value,
+            title: formState.title,
+            startTime: Date.parse(formState.startTime)/1000,
+            length: formState.length,
+            replayEnable: formState.replayEnable
+          }
+          await Api.openCourse.createLesson(props.course.id, params);
+        } else {
+
         }
-        saveBtnLoading.value = true;
-        await Api.openCourse.createLesson(props.course.id, params);
       }
       saveBtnLoading.value = false;
-      drawerType.value = null;
-      await findLesson();
-      console.log(table.openCourse.value)
+      resetDrawer();
+      message.success('保存成功');
+      await findLessons();
     })
     .catch((error) => {
 
     });
 }
 
-watch(() => drawerType.value,  async (newType) => {
-  await findLesson();
-  updateFormItem(newType);
+watch(() => drawerType.value,async (newType) => {
+  await updateFormItem(newType);
 }, { immediate: true });
 </script>
 <template>
@@ -202,36 +268,38 @@ watch(() => drawerType.value,  async (newType) => {
       <div class="flex justify-between items-center">
         <div class="text-16 font-medium text-black text-opacity-88">课时管理</div>
         <div class="flex space-x-20">
-          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="drawerType = 'replay'">添加回放</a-button>
-          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="drawerType = 'liveOpen'">添加直播</a-button>
+          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="editLesson('replay')">添加回放</a-button>
+          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="editLesson('liveOpen')">添加直播</a-button>
         </div>
       </div>
-      <div v-if="lessons.length === 0">
-        <a-empty :image="simpleImage" class="mt-140"/>
-      </div>
-      <div v-else class="mt-20">
-        <draggable
-          v-model="lessons"
-          item-key="id"
-        >
-          <template #item="{element, index}">
-            <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-14 py-20 cursor-grab">
-              <div class="flex items-center space-x-12">
-                <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
-                <div v-if="element.status === 'unpublished'" class="px-8 h-22 leading-22 text-12 text-white font-normal bg-[#87898F] rounded-6">未发布</div>
-                <div class="text-14 font-normal text-black">{{ `课时 ${index + 1} ：${element.title}（${element.length}）` }}</div>
+      <a-spin :spinning="lessons.loading.value" tip="加载中..." class="mt-140">
+        <div v-if="lessons.data.value.length === 0 && lessons.loading.value === false">
+          <a-empty :image="simpleImage" class="mt-140"/>
+        </div>
+        <div v-else-if="lessons.data.value.length > 0 && lessons.loading.value === false" class="mt-20">
+          <draggable
+            v-model="lessons.data.value"
+            item-key="id"
+          >
+            <template #item="{element, index}">
+              <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-14 py-20 cursor-grab">
+                <div class="flex items-center space-x-12">
+                  <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
+                  <div v-if="element.status === 'unpublished'" class="px-8 h-22 leading-22 text-12 text-white font-normal bg-[#87898F] rounded-6">未发布</div>
+                  <div class="text-14 font-normal text-black">{{ `课时 ${index + 1} ：${element.title}（${element.length}）` }}</div>
+                </div>
+                <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
+                  <div @click="editLesson(element.type, element.id)" class="flex items-center cursor-pointer"><EditOutlined class="mr-4"/>编辑</div>
+                  <div @click="viewLesson(element.id)" class="flex items-center cursor-pointer"><EyeOutlined class="mr-4"/>预览</div>
+                  <div v-if="element.status === 'unpublished'" @click="publishLesson(element.id)" class="flex items-center cursor-pointer"><SendOutlined class="mr-4"/>发布</div>
+                  <div v-if="element.status === 'published'" @click="unpublishLesson(element.id)" class="flex items-center cursor-pointer"><CloseCircleOutlined class="mr-4"/>取消发布</div>
+                  <div v-if="element.status === 'unpublished'" @click="deleteLesson(element.id)" class="flex items-center cursor-pointer"><DeleteOutlined class="mr-4"/>删除</div>
+                </div>
               </div>
-              <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
-                <div class="flex items-center"><EditOutlined class="mr-4"/>编辑</div>
-                <div class="flex items-center">预览</div>
-                <div class="flex items-center">发布</div>
-                <div class="flex items-center">取消发布</div>
-                <div class="flex items-center">删除</div>
-              </div>
-            </div>
-          </template>
-        </draggable>
-      </div>
+            </template>
+          </draggable>
+        </div>
+      </a-spin>
     </div>
     <a-drawer
       v-model:open="isDrawerOpen"
