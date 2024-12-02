@@ -9725,6 +9725,7 @@ exception.opencourse.check_password_required: Did not enter the correct verifica
 exception.opencourse.replay_not_permitted: Live replay is set to not allowed to watch
 exception.opencourse.live_start_time_outdated: Live start time outdated
 exception.opencourse.delete_published_lesson: Published lesson can not be deleted
+exception.opencourse.lesson_num_limit: The maximum 300 has been reached
 exception.blacklist.forbidden_take: Permission denied
 exception.blacklist.duplicate_add: Already in the blacklist, don't add it repeatedly
 exception.blacklist.not_found: Blacklist does not exist
