@@ -4677,6 +4677,8 @@ admin.open_manage.manage.number_th: Id
 admin.open_manage.manage.name_th: Name
 admin.open_manage.manage.status_th: Status
 admin.open_manage.manage.creator_th: Creator
+admin.open_manage.manage.live_num: Live Num
+admin.open_manage.manage.hit_num: 'Watch Person-time'
 admin.open_manage.manage.operater_th: Action
 admin.open_manage.manage.recommend: "Recommended：%recommendedTime% / SN：%recommendedSeq% "
 admin.open_manage.manage.manage_btn: Config

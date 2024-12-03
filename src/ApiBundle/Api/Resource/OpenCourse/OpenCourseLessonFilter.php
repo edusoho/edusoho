@@ -6,10 +6,12 @@ use ApiBundle\Api\Resource\Filter;
 
 class OpenCourseLessonFilter extends Filter
 {
-    protected $publicFields = ['id', 'type', 'title', 'status', 'seq', 'length'];
+    protected $publicFields = ['id', 'type', 'title', 'status', 'seq', 'length', 'startTime', 'replayEnable'];
 
     protected function publicFields(&$data)
     {
-        $data['editable'] = 'liveOpen' != $data['type'] || $data['startTime'] > time();
+        if (!empty($data)) {
+            $data['editable'] = 'liveOpen' != $data['type'] || $data['startTime'] > time();
+        }
     }
 }
