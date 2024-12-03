@@ -31,13 +31,6 @@ const baseRules = reactive({
 const formState = reactive({ ...baseFormState });
 const rules = reactive({ ...baseRules });
 
-const tagOptions = ref([]);
-const searchParams = reactive({
-  tag: null,
-  keywordType: '1',
-  keyword: null,
-})
-
 async function updateFormItem(drawerType) {
   Object.keys(formState).forEach((key) => delete formState[key]);
   Object.keys(rules).forEach((key) => delete rules[key]);
@@ -51,9 +44,13 @@ async function updateFormItem(drawerType) {
     replay: async () => {
       Object.assign(formState, {
         ...baseFormState,
-        ...(isEdit ? { playbackId: null, minutes: null, seconds: null } : {}),
+        ...(isEdit ? { replayId: null } : {}),
       });
-      Object.assign(rules, { ...baseRules });
+      Object.assign(rules, {
+        ...baseRules,
+        replayId: [{ required: true, message: '请选择直播回放', trigger: 'blur' }],
+      });
+      await searchReplay();
     },
     liveOpen: async () => {
       const extraFormState = isEdit
@@ -128,43 +125,71 @@ const filterOption = (input, option) => {
   return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 
-const openCourses = {
-  loading: ref(false),
+const replays = reactive({
+  loading: false,
   columns: [
     {
-      key: 'user',
+      key: 'title',
       title: '直播课时名称',
     },
     {
-      key: 'joinedChannel',
+      key: 'liveTime',
       title: '直播时长',
     },
     {
-      key: 'joinTime',
+      key: 'anchor',
       title: '主讲人',
     },
     {
-      key: 'joinTime',
+      key: 'liveStartTime',
       title: '直播时间',
     },
     {
       key: 'operation',
       title: '操作',
-      fixed: 'right',
     },
   ],
-  data: ref([]),
-};
+  data: [],
+});
+
+const tagOptions = ref([]);
+const searchParams = reactive({
+  replayTagId: null,
+  keywordType: 'activityTitle',
+  keyword: null,
+})
 
 const pagination = {
   current: 1,
-  total: 0,
   pageSize: 6,
-  onChange: (page, pageSize) => {
+  total: 0,
+  onChange: (page) => {
     pagination.current = page;
-    pagination.pageSize = pageSize;
+    searchReplay();
   },
 };
+
+async function searchReplay() {
+  const searchQuery = {replayTagId: searchParams.replayTagId, keywordType: searchParams.keywordType, keyword: searchParams.keyword, offset: (pagination.current - 1) * pagination.pageSize, limit: pagination.pageSize};
+  replays.loading = true;
+  const { data, paging } = await Api.liveReplay.searchLiveReplay(searchQuery);
+  pagination.total = paging.total;
+  replays.loading = false;
+  replays.data = data;
+}
+
+async function onSearch() {
+  pagination.current = 1;
+  await searchReplay();
+}
+
+async function onReset() {
+  pagination.current = 1;
+  searchParams.replayTagId = null;
+  searchParams.keywordType = 'activityTitle';
+  searchParams.keyword = null;
+  await searchReplay();
+}
 
 function resetDrawer() {
   drawerType.value = null;
@@ -219,42 +244,45 @@ findLessons();
 
 function handleReset() {
   formRef.value.resetFields();
+  replayIdValidateError.value = false;
+  searchParams.replayTagId = null;
+  searchParams.keywordType = 'activityTitle';
+  searchParams.keyword = null;
+  pagination.current = 1;
+  replays.data = [];
   resetDrawer();
 }
 
+const replayIdValidateError = ref(false);
 const saveBtnLoading = ref(false);
 function handleSave() {
   return formRef.value.validate()
     .then( async () => {
       saveBtnLoading.value = true;
+      replayIdValidateError.value = false;
+      let params = {};
       if (drawerType.value === 'replay') {
-        if (!editId.value) {
 
-        } else {
-
-        }
       }
       if (drawerType.value === 'liveOpen') {
-        if (!editId.value) {
-          const params = {
-            type: drawerType.value,
-            title: formState.title,
-            startTime: Date.parse(formState.startTime)/1000,
-            length: formState.length,
-            replayEnable: formState.replayEnable
-          }
-          await Api.openCourse.createLesson(props.course.id, params);
-        } else {
-
+        params = {
+          type: drawerType.value,
+          title: formState.title,
+          startTime: Date.parse(formState.startTime)/1000,
+          length: formState.length,
+          replayEnable: formState.replayEnable
         }
       }
+      await Api.openCourse.createLesson(props.course.id, params);
       saveBtnLoading.value = false;
       resetDrawer();
       message.success('保存成功');
       await findLessons();
     })
     .catch((error) => {
-
+      if (error.errorFields.some((field) => { return field.name.includes('replayId') })) {
+        replayIdValidateError.value = true;
+      }
     });
 }
 
@@ -309,13 +337,13 @@ watch(() => drawerType.value,async (newType) => {
       :bodyStyle="{padding: 0}"
       width="900px"
     >
-      <div class="fixed top-0 right-0 w-900 flex justify-between items-center px-20 py-14 border border-x-0 border-t-0 border-[#EFF0F5] border-solid bg-white">
+      <div class="fixed z-10 top-0 right-0 w-900 flex justify-between items-center px-20 py-14 border border-x-0 border-t-0 border-[#EFF0F5] border-solid bg-white">
         <div class="text-16 font-medium text-[#37393D]" v-if="drawerType === 'replay'">添加回放</div>
         <div class="text-16 font-medium text-[#37393D]" v-if="drawerType === 'liveOpen'">添加直播</div>
         <CloseOutlined class="text-16" @click="handleReset"/>
       </div>
       <a-form
-        class="mt-53 px-20 py-24"
+        class="mt-53 mb-61 px-20 py-24"
         ref="formRef"
         :model="formState"
         :rules="rules"
@@ -333,12 +361,14 @@ watch(() => drawerType.value,async (newType) => {
           v-if="drawerType === 'replay'"
           name="replayId"
           label="直播回放"
+          :validate-status="'success'"
+          class="open-course-lesson-replay-id-field"
         >
           <a-form-item-rest>
-            <div class="flex flex-col gap-y-16 p-24 border border-solid border-[#d9d9d9] rounded-8">
+            <div class="flex flex-col gap-y-16 p-24 border border-solid border-[#d9d9d9] rounded-8" :class="{ 'border-[#f53f3f]': replayIdValidateError }">
               <div class="flex gap-x-20">
                 <a-select
-                  v-model:value="searchParams.tag"
+                  v-model:value="searchParams.replayTagId"
                   show-search
                   :allow-clear="true"
                   style="min-width: 160px; max-width: 160px"
@@ -351,16 +381,49 @@ watch(() => drawerType.value,async (newType) => {
                   v-model:value="searchParams.keywordType"
                   :allow-clear="true"
                 >
-                  <a-select-option value="1">直播名称</a-select-option>
-                  <a-select-option value="2">主讲人</a-select-option>
-                  <a-select-option value="3">课程名称</a-select-option>
+                  <a-select-option value="activityTitle">直播名称</a-select-option>
+                  <a-select-option value="anchor">主讲人</a-select-option>
+                  <a-select-option value="courseTitle">课程名称</a-select-option>
                 </a-select>
                 <a-input v-model:value="searchParams.keyword" placeholder="请输入" :allow-clear="true"/>
-                <a-button type="primary" ghost>搜索</a-button>
-                <a-button>重置</a-button>
+                <a-button type="primary" ghost @click="onSearch">搜索</a-button>
+                <a-button @click="onReset">重置</a-button>
               </div>
-              <div>222222</div>
-              <div>333333</div>
+              <a-table
+                :columns="replays.columns"
+                :data-source="replays.data"
+                :row-key="replay => replay.replayId"
+                :loading="replays.loading"
+                :pagination="false"
+              >
+                <template #bodyCell="{ column, record }">
+                  <template v-if="column.key === 'title'">
+                    <div class="truncate">{{ record.title }}</div>
+                  </template>
+                  <template v-if="column.key === 'liveTime'">
+                    {{ `${record.liveTime.match(/\d+/)?.[0]} 分钟` }}
+                  </template>
+                  <template v-if="column.key === 'anchor'">
+                    <div class="truncate">{{ record.anchor }}</div>
+                  </template>
+                  <template v-if="column.key === 'liveStartTime'">
+                    {{ record.liveStartTime }}
+                  </template>
+                  <template v-if="column.key === 'operation'">
+                    <div class="text-[--primary-color] cursor-pointer">选择</div>
+                  </template>
+                </template>
+              </a-table>
+              <div class="flex flex-row-reverse">
+                <a-pagination
+                  size="small"
+                  :disabled="pagination.total === 0"
+                  v-model:current="pagination.current"
+                  :total="pagination.total"
+                  :page-size="pagination.pageSize"
+                  @change="pagination.onChange"
+                />
+              </div>
             </div>
           </a-form-item-rest>
         </a-form-item>
@@ -392,7 +455,7 @@ watch(() => drawerType.value,async (newType) => {
           <a-switch v-model:checked="formState.replayEnable" checked-children="允许" un-checked-children="不允许"/>
         </a-form-item>
       </a-form>
-      <div class="fixed bottom-0 right-0 w-900 flex flex-row-reverse justify-between items-center px-20 py-14 border border-x-0 border-b-0 border-[#EFF0F5] border-solid bg-white">
+      <div class="fixed z-10 bottom-0 right-0 w-900 flex flex-row-reverse justify-between items-center px-20 py-14 border border-x-0 border-b-0 border-[#EFF0F5] border-solid bg-white">
         <div class="space-x-16">
           <a-button @click="handleReset">取消</a-button>
           <a-button type="primary" @click="handleSave" :loading="saveBtnLoading">保存</a-button>
@@ -401,3 +464,11 @@ watch(() => drawerType.value,async (newType) => {
     </a-drawer>
   </AntConfigProvider>
 </template>
+
+<style lang="less">
+.open-course-lesson-replay-id-field {
+  .ant-form-item-explain-success {
+    color: #f53f3f
+  }
+}
+</style>

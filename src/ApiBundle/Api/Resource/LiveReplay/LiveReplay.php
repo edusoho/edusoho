@@ -101,6 +101,7 @@ class LiveReplay extends AbstractResource
             $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
             $activitiesList[] = [
                 'id' => $activity['id'],
+                'replayId' => $replay['id'],
                 'title' => $activity['title'],
                 'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
                 'liveTime' => empty($liveTime) ? '-' : $this->timeFormatterFilter($liveTime),
