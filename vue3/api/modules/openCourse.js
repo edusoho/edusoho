@@ -4,7 +4,7 @@ export default {
   async createLesson(courseId, params) {
     return apiClient.post(`/open_course/${courseId}/lesson`, params);
   },
-  async findLessons(courseId) {
+  async fetchLessons(courseId) {
     return apiClient.get(`/open_course/${courseId}/lesson`);
   },
   async deleteLesson(courseId, lessonId) {

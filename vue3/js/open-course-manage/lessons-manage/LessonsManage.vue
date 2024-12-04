@@ -1,7 +1,7 @@
 <script setup>
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import {ref, h, reactive, computed, watch, createVNode} from 'vue';
-import { PlusCircleOutlined, CloseOutlined, EditOutlined, EyeOutlined, SendOutlined, CloseCircleOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons-vue';
+import { PlusCircleOutlined, CloseOutlined, EditOutlined, EyeOutlined, SendOutlined, CloseCircleOutlined, DeleteOutlined, ExclamationCircleOutlined, VideoCameraOutlined } from '@ant-design/icons-vue';
 import {Empty, message, Modal} from 'ant-design-vue';
 import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
@@ -12,16 +12,23 @@ const props = defineProps({
   course: {required: true},
 })
 
-const lessons = {
-  loading: ref(false),
-  data: ref([]),
-};
-const drawerType = ref();
-const editId = ref();
+const lessons = reactive({
+  loading: false,
+  data: [],
+});
 
+async function fetchLessons() {
+  lessons.loading = true;
+  lessons.data = await Api.openCourse.fetchLessons(props.course.id);
+  lessons.loading = false;
+}
+fetchLessons();
+
+const drawerType = ref();
 const formRef = ref();
 const baseFormState = reactive({
   title: null,
+  editId: null,
 });
 const baseRules = reactive({
   title: [
@@ -32,47 +39,62 @@ const formState = reactive({ ...baseFormState });
 const rules = reactive({ ...baseRules });
 
 async function updateFormItem(drawerType) {
-  Object.keys(formState).forEach((key) => delete formState[key]);
+  Object.keys(formState).forEach((key) => key !== "editId" && delete formState[key]);
   Object.keys(rules).forEach((key) => delete rules[key]);
+
   if (!drawerType) {
-    Object.assign(formState, { ...baseFormState });
-    Object.assign(rules, { ...baseRules });
+    Object.assign(formState, baseFormState);
+    Object.assign(rules, baseRules);
     return;
   }
-  const isEdit = !editId.value;
-  const typeConfig = {
-    replay: async () => {
-      Object.assign(formState, {
-        ...baseFormState,
-        ...(isEdit ? { replayId: null } : {}),
-      });
-      Object.assign(rules, {
-        ...baseRules,
-        replayId: [{ required: true, message: '请选择直播回放', trigger: 'blur' }],
-      });
-      await searchReplay();
-    },
-    liveOpen: async () => {
-      const extraFormState = isEdit
-        ? { startTime: null, length: null, replayEnable: true }
-        : await getLiveOpenData();
-      Object.assign(formState, { ...baseFormState, ...extraFormState });
-      Object.assign(rules, {
-        ...baseRules,
-        startTime: [{ required: true, message: '请设置直播开始时间', trigger: 'blur' }],
-        length: [{ required: true, message: '请设置直播时长', trigger: 'blur' }],
-      });
-    },
-  };
-  await typeConfig[drawerType]?.();
+  if (drawerType === "replay") {
+    await fetchReplayTagOptions();
+    await searchReplay();
+  }
+
+  const isEdit = !!formState.editId;
+  const extraFormState = await getExtraFormState(drawerType, isEdit);
+  const validationRules = getValidationRules(drawerType);
+
+  Object.assign(formState, { ...baseFormState, ...extraFormState });
+  Object.assign(rules, { ...baseRules, ...validationRules });
+
+  async function getExtraFormState(type, isEdit) {
+    if (type === "replay") {
+      return isEdit
+        ? await getReplayData()
+        : { replayId: null, replayTitle: null, replayLength: null, replayIdValidateError: false };
+    } else if (type === "liveOpen") {
+      return isEdit
+        ? await getLiveOpenData()
+        : { startTime: null, length: null, replayEnable: true };
+    }
+    return {};
+  }
+  function getValidationRules(type) {
+    if (type === "replay") {
+      return {
+        replayId: [{ required: true, message: "请选择直播回放", trigger: "blur" }],
+      };
+    } else if (type === "liveOpen") {
+      return {
+        startTime: [{ required: true, message: "请设置直播开始时间", trigger: "blur" }],
+        length: [{ required: true, message: "请设置直播时长", trigger: "blur" }],
+      };
+    }
+    return {};
+  }
   async function getLiveOpenData() {
-    const lesson = await Api.openCourse.getLesson(props.course.id, editId.value);
+    const liveOpen = await Api.openCourse.getLesson(props.course.id, formState.editId);
     return {
-      title: lesson.title,
+      title: liveOpen.title,
       startTime: null,
       length: null,
       replayEnable: null,
     };
+  }
+  async function getReplayData() {
+    return {};
   }
 }
 
@@ -122,7 +144,7 @@ function parser(value) {
 }
 
 const filterOption = (input, option) => {
-  return option.value.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 
 const replays = reactive({
@@ -152,7 +174,6 @@ const replays = reactive({
   data: [],
 });
 
-const tagOptions = ref([]);
 const searchParams = reactive({
   replayTagId: null,
   keywordType: 'activityTitle',
@@ -168,6 +189,15 @@ const pagination = {
     searchReplay();
   },
 };
+
+const replayTagOptions = ref([]);
+async function fetchReplayTagOptions() {
+  const tags = await Api.tag.fetchReplayTag();
+  replayTagOptions.value = tags.map(item => ({
+    value: item.id,
+    label: item.name,
+  }));
+}
 
 async function searchReplay() {
   const searchQuery = {replayTagId: searchParams.replayTagId, keywordType: searchParams.keywordType, keyword: searchParams.keyword, offset: (pagination.current - 1) * pagination.pageSize, limit: pagination.pageSize};
@@ -191,18 +221,27 @@ async function onReset() {
   await searchReplay();
 }
 
-function resetDrawer() {
-  drawerType.value = null;
-  editId.value = null;
+function onSelect(replayId, replayLength, replayTitle) {
+  formState.replayId = replayId;
+  formState.replayLength = replayLength;
+  formState.replayTitle = replayTitle;
+  formRef.value.validateFields(["replayId"]);
+}
+
+function onEdit() {
+  formState.replayId = null;
+  formState.replayLength = null;
+  formState.replayTitle = null;
+  formState.replayIdValidateError = false;
 }
 
 function editLesson(lessonType, id = null) {
-  if (lessons.data.value.length >= 300 && !id) {
+  if (lessons.data.length >= 300 && !id) {
     message.error('最多可添加300个课时');
     return;
   }
   drawerType.value = lessonType;
-  editId.value = id;
+  formState.editId = id;
 }
 
 function deleteLesson(id) {
@@ -214,7 +253,7 @@ function deleteLesson(id) {
     async onOk() {
       await Api.openCourse.deleteLesson(props.course.id, id);
       message.success('删除成功');
-      await findLessons();
+      await fetchLessons();
     }
   });
 }
@@ -222,29 +261,27 @@ function deleteLesson(id) {
 async function publishLesson(id) {
   await Api.openCourse.publishLesson(props.course.id, id);
   message.success('发布成功');
-  await findLessons();
+  await fetchLessons();
 }
 
 async function unpublishLesson(id) {
   await Api.openCourse.unpublishLesson(props.course.id, id);
   message.success('取消发布成功');
-  await findLessons();
+  await fetchLessons();
 }
 
 function viewLesson(id) {
 
 }
 
-async function findLessons() {
-  lessons.loading.value = true;
-  lessons.data.value = await Api.openCourse.findLessons(props.course.id);
-  lessons.loading.value = false;
+function resetDrawer() {
+  drawerType.value = null;
+  formState.editId = null;
 }
-findLessons();
 
 function handleReset() {
   formRef.value.resetFields();
-  replayIdValidateError.value = false;
+  formState.replayIdValidateError = false;
   searchParams.replayTagId = null;
   searchParams.keywordType = 'activityTitle';
   searchParams.keyword = null;
@@ -253,13 +290,12 @@ function handleReset() {
   resetDrawer();
 }
 
-const replayIdValidateError = ref(false);
 const saveBtnLoading = ref(false);
 function handleSave() {
   return formRef.value.validate()
     .then( async () => {
       saveBtnLoading.value = true;
-      replayIdValidateError.value = false;
+      formState.replayIdValidateError = false;
       let params = {};
       if (drawerType.value === 'replay') {
 
@@ -277,11 +313,11 @@ function handleSave() {
       saveBtnLoading.value = false;
       resetDrawer();
       message.success('保存成功');
-      await findLessons();
+      await fetchLessons();
     })
     .catch((error) => {
       if (error.errorFields.some((field) => { return field.name.includes('replayId') })) {
-        replayIdValidateError.value = true;
+        formState.replayIdValidateError = true;
       }
     });
 }
@@ -300,13 +336,13 @@ watch(() => drawerType.value,async (newType) => {
           <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="editLesson('liveOpen')">添加直播</a-button>
         </div>
       </div>
-      <a-spin :spinning="lessons.loading.value" tip="加载中..." class="mt-140">
-        <div v-if="lessons.data.value.length === 0 && lessons.loading.value === false">
+      <a-spin :spinning="lessons.loading" tip="加载中..." class="mt-140">
+        <div v-if="lessons.data.length === 0 && lessons.loading === false">
           <a-empty :image="simpleImage" class="mt-140"/>
         </div>
-        <div v-else-if="lessons.data.value.length > 0 && lessons.loading.value === false" class="mt-20">
+        <div v-else-if="lessons.data.length > 0 && lessons.loading === false" class="mt-20">
           <draggable
-            v-model="lessons.data.value"
+            v-model="lessons.data"
             item-key="id"
           >
             <template #item="{element, index}">
@@ -365,7 +401,7 @@ watch(() => drawerType.value,async (newType) => {
           class="open-course-lesson-replay-id-field"
         >
           <a-form-item-rest>
-            <div class="flex flex-col gap-y-16 p-24 border border-solid border-[#d9d9d9] rounded-8" :class="{ 'border-[#f53f3f]': replayIdValidateError }">
+            <div v-if="!formState.replayId" class="flex flex-col gap-y-16 p-24 border border-solid border-[#d9d9d9] rounded-8" :class="{ 'border-[#f53f3f]': formState.replayIdValidateError }">
               <div class="flex gap-x-20">
                 <a-select
                   v-model:value="searchParams.replayTagId"
@@ -373,7 +409,7 @@ watch(() => drawerType.value,async (newType) => {
                   :allow-clear="true"
                   style="min-width: 160px; max-width: 160px"
                   placeholder="选择标签"
-                  :options="tagOptions"
+                  :options="replayTagOptions"
                   :filter-option="filterOption"
                 ></a-select>
                 <a-select
@@ -410,7 +446,7 @@ watch(() => drawerType.value,async (newType) => {
                     {{ record.liveStartTime }}
                   </template>
                   <template v-if="column.key === 'operation'">
-                    <div class="text-[--primary-color] cursor-pointer">选择</div>
+                    <div class="text-[--primary-color] cursor-pointer" @click="onSelect(record.id, record.liveTime.match(/\d+/)?.[0], record.title)">选择</div>
                   </template>
                 </template>
               </a-table>
@@ -425,13 +461,23 @@ watch(() => drawerType.value,async (newType) => {
                 />
               </div>
             </div>
+            <div v-else class="flex">
+              <div class="flex px-16 py-8 bg-[#F5F5F5] rounded-6 mr-16">
+                <VideoCameraOutlined class="w-16 mr-8"/>
+                <div class="text-14 font-medium text-[#37393D]">{{ formState.replayTitle }}</div>
+              </div>
+              <div class="flex items-center cursor-pointer" @click="onEdit">
+                <EditOutlined class="text-[#5E6166] w-16 mr-4"/>
+                <div class="text-14 font-normal text-[#5E6166]">编辑</div>
+              </div>
+            </div>
           </a-form-item-rest>
         </a-form-item>
         <a-form-item
-          v-if="drawerType === 'replay'"
+          v-if="formState.replayId"
           label="直播回放时长"
         >
-          <div>1111111111</div>
+          <div class="text-14 font-normal text-[#37393D]">{{ `${formState.replayLength} 分钟` }}</div>
         </a-form-item>
         <a-form-item
           v-if="drawerType === 'liveOpen'"
