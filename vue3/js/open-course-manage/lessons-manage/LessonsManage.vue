@@ -317,8 +317,13 @@ function handleSave() {
           replayEnable: formState.replayEnable
         }
       }
+      const isEdit = !!formState.editId;
       try {
-        await Api.openCourse.createLesson(props.course.id, params);
+        if (isEdit) {
+
+        } else {
+          await Api.openCourse.createLesson(props.course.id, params);
+        }
       } finally {
         saveBtnLoading.value = false;
       }
