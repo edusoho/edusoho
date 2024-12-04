@@ -6,12 +6,12 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\DeviceToolkit;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\LiveReplayException;
 use Biz\Course\Service\LiveReplayService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
 use Biz\OpenCourse\Service\OpenCourseService;
+use Biz\Util\EdusohoLiveClient;
 
 class OpenCourseReplay extends AbstractResource
 {
@@ -26,8 +26,7 @@ class OpenCourseReplay extends AbstractResource
             throw OpenCourseException::LESSON_TYPE_INVALID();
         }
 
-        $openCourse = $this->getOpenCourseService()->getCourse($courseId);
-        if (empty($openCourse['replayEnable'])) {
+        if (empty($lesson['replayEnable'])) {
             throw OpenCourseException::REPLAY_NOT_PERMITTED();
         }
 
@@ -51,10 +50,11 @@ class OpenCourseReplay extends AbstractResource
 
         $protocol = $request->getHttpRequest()->getScheme();
         $replays = [];
+        $client = new EdusohoLiveClient();
 
         foreach ($visibleReplays as $index => $visibleReplay) {
-            $replays[] = CloudAPIFactory::create('root')->get("/lives/{$lesson['mediaId']}/replay", [
-                'replayId' => $visibleReplays[$index]['replayId'],
+            $replays[] = $client->getLiveReplay($lesson['mediaId'], [
+                'replayId' => $visibleReplay['replayId'],
                 'userId' => $user['id'],
                 'nickname' => $user['nickname'],
                 'device' => $device,

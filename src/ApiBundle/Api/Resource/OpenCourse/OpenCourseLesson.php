@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\OpenCourse;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\LiveReplayException;
 use Biz\Course\Service\LiveReplayService;
@@ -41,6 +42,12 @@ class OpenCourseLesson extends AbstractResource
             if (empty($replay)) {
                 throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
             }
+            $activity = $this->getActivityService()->getActivity($lesson['copyId'], true);
+            $lesson['startTime'] = $activity['startTime'];
+            $lesson['length'] = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
+            $lesson['replayEnable'] = 1;
+            $lesson['mediaId'] = $activity['ext']['liveId'];
+            $lesson['liveProvider'] = $activity['ext']['liveProvider'];
         }
         $lesson['courseId'] = $courseId;
         $lesson = $this->getOpenCourseService()->createLesson($lesson);
@@ -69,7 +76,64 @@ class OpenCourseLesson extends AbstractResource
 
     public function get(ApiRequest $request, $courseId, $lessonId)
     {
-        return $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+        if ('replay' == $lesson['type']) {
+            $activity = $this->getActivityService()->getActivity($lesson['copyId']);
+            $lesson['liveTitle'] = $activity['title'];
+        }
+
+        return $lesson;
+    }
+
+    public function update(ApiRequest $request, $courseId, $lessonId)
+    {
+        $openCourse = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson)) {
+            throw OpenCourseException::NOTFOUND_LESSON();
+        }
+        $fields = $request->request->all();
+        if ('liveOpen' == $lesson['type']) {
+            $fields = ArrayToolkit::parts($fields, ['title', 'startTime', 'length', 'replayEnable']);
+            if (!empty($fields['startTime']) && $fields['startTime'] < time() && $fields['startTime'] != $lesson['startTime']) {
+                throw OpenCourseException::LIVE_START_TIME_OUTDATED();
+            }
+            $this->getLiveCourseService()->editLiveRoom($openCourse, [
+                'title' => $fields['title'] ?? $lesson['title'],
+                'type' => 'liveOpen',
+                'mediaId' => $lesson['mediaId'],
+                'liveProvider' => $lesson['liveProvider'],
+                'startTime' => $fields['startTime'] ?? $lesson['startTime'],
+                'length' => $fields['length'] ?? $lesson['length'],
+            ], ['authUrl' => '', 'jumpUrl' => '']);
+        }
+        if ('replay' == $lesson['type']) {
+            $fields = ArrayToolkit::parts($fields, ['title', 'copyId', 'replayId']);
+            $replay = $this->getLiveReplayService()->getReplayByLessonIdAndReplayIdAndType($lesson['id'], $fields['replayId'], 'liveOpen');
+            if (empty($replay)) {
+                $this->getLiveReplayService()->deleteReplayByLessonId($lesson['id'], 'liveOpen');
+                $replay = $this->getLiveReplayService()->getReplayByLessonIdAndReplayIdAndType($fields['copyId'], $fields['replayId'], 'live');
+                if (empty($replay)) {
+                    throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
+                }
+                $this->getLiveReplayService()->addReplay([
+                    'lessonId' => $lesson['id'],
+                    'courseId' => $courseId,
+                    'title' => $replay['title'],
+                    'replayId' => $replay['replayId'],
+                    'type' => 'liveOpen',
+                    'copyId' => $replay['id'],
+                ]);
+                $activity = $this->getActivityService()->getActivity($fields['copyId'], true);
+                $fields['startTime'] = $activity['startTime'];
+                $fields['length'] = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
+                $fields['mediaId'] = $activity['ext']['liveId'];
+                $fields['liveProvider'] = $activity['ext']['liveProvider'];
+            }
+        }
+        $this->getOpenCourseService()->updateLesson($courseId, $lessonId, $fields);
+
+        return ['ok' => true];
     }
 
     public function remove(ApiRequest $request, $courseId, $lessonId)
@@ -120,5 +184,13 @@ class OpenCourseLesson extends AbstractResource
     private function getLiveReplayService()
     {
         return $this->service('Course:LiveReplayService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    private function getActivityService()
+    {
+        return $this->service('Activity:ActivityService');
     }
 }

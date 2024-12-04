@@ -381,6 +381,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'testStartTime' => 0,
             'status' => 'unpublished',
             'mediaSource' => '',
+            'replayEnable' => 1,
         ]);
         $lesson['replayStatus'] = 'ungenerated';
 
@@ -415,7 +416,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $lesson = $this->getOpenCourseLessonDao()->create($lesson);
 
-        if (!empty($lesson['mediaId'])) {
+        if (!empty($lesson['mediaId']) && 'video' == $lesson['type']) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
@@ -462,6 +463,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'replayStatus' => 'ungenerated',
             'status' => 'unpublished',
             'materialNum' => 0,
+            'replayEnable' => 1,
         ]);
 
         if (isset($fields['title'])) {
