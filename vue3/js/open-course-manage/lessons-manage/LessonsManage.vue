@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import draggable from 'vuedraggable';
 import Api from '../../../api';
+import {formatDate} from '../../common';
 
 const props = defineProps({
   course: {required: true},
@@ -88,8 +89,8 @@ async function updateFormItem(drawerType) {
     const liveOpen = await Api.openCourse.getLesson(props.course.id, formState.editId);
     return {
       title: liveOpen.title,
-      startTime: null,
-      length: null,
+      startTime: dayjs(formatDate(liveOpen.startTime, 'YYYY-MM-DD HH:mm'), 'YYYY-MM-DD HH:mm'),
+      length: liveOpen.length,
       replayEnable: null,
     };
   }
@@ -363,7 +364,7 @@ watch(() => drawerType.value,async (newType) => {
                   <div class="text-14 font-normal text-black">{{ `课时 ${index + 1} ：${element.title}（${element.length}:00）` }}</div>
                 </div>
                 <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
-                  <div @click="editLesson(element.type, element.id)" class="flex items-center cursor-pointer"><EditOutlined class="mr-4"/>编辑</div>
+                  <div v-if="element.editable" @click="editLesson(element.type, element.id)" class="flex items-center cursor-pointer"><EditOutlined class="mr-4"/>编辑</div>
                   <div @click="viewLesson(element.id)" class="flex items-center cursor-pointer"><EyeOutlined class="mr-4"/>预览</div>
                   <div v-if="element.status === 'unpublished'" @click="publishLesson(element.id)" class="flex items-center cursor-pointer"><SendOutlined class="mr-4"/>发布</div>
                   <div v-if="element.status === 'published'" @click="unpublishLesson(element.id)" class="flex items-center cursor-pointer"><CloseCircleOutlined class="mr-4"/>取消发布</div>
