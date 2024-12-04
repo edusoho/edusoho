@@ -398,7 +398,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
-        if (!in_array($lesson['type'], ['video', 'liveOpen', 'open'])) {
+        if (!in_array($lesson['type'], ['video', 'liveOpen', 'open', 'replay'])) {
             $this->createNewException(OpenCourseException::LESSON_TYPE_INVALID());
         }
 

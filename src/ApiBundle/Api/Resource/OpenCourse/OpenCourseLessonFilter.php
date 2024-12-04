@@ -6,7 +6,7 @@ use ApiBundle\Api\Resource\Filter;
 
 class OpenCourseLessonFilter extends Filter
 {
-    protected $publicFields = ['id', 'type', 'title', 'status', 'seq', 'length', 'startTime', 'replayEnable'];
+    protected $publicFields = ['id', 'type', 'title', 'status', 'seq', 'length', 'startTime', 'replayEnable', 'progressStatus', 'replayStatus', 'copyId'];
 
     protected function publicFields(&$data)
     {

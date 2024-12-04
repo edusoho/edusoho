@@ -306,6 +306,11 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         $this->dispatchEvent('live.replay.generate', $replays);
     }
 
+    public function getReplayByLessonIdAndReplayIdAndType($lessonId, $replayId, $type)
+    {
+        return $this->getLessonReplayDao()->getByLessonIdAndReplayIdAndType($lessonId, $replayId, $type);
+    }
+
     /**
      * only for mock.
      *
