@@ -453,7 +453,7 @@ watch(() => drawerType.value,async (newType) => {
                     <div class="truncate">{{ record.title }}</div>
                   </template>
                   <template v-if="column.key === 'liveTime'">
-                    {{ `${record.liveTime.match(/\d+/)?.[0]} 分钟` }}
+                    {{ `${record.liveSecond/60} 分钟` }}
                   </template>
                   <template v-if="column.key === 'anchor'">
                     <div class="truncate">{{ record.anchor }}</div>
@@ -462,7 +462,7 @@ watch(() => drawerType.value,async (newType) => {
                     {{ record.liveStartTime }}
                   </template>
                   <template v-if="column.key === 'operation'">
-                    <div class="text-[--primary-color] cursor-pointer" @click="onSelect(record.id, record.replayId, record.liveTime.match(/\d+/)?.[0], record.title)">选择</div>
+                    <div class="text-[--primary-color] cursor-pointer" @click="onSelect(record.id, record.replayId, record.liveSecond/60, record.title)">选择</div>
                   </template>
                 </template>
               </a-table>
