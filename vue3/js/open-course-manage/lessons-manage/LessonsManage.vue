@@ -63,7 +63,7 @@ async function updateFormItem(drawerType) {
     if (type === "replay") {
       return isEdit
         ? await getReplayData()
-        : { replayId: null, replayTitle: null, replayLength: null, replayIdValidateError: false };
+        : { copyId: null, replayId: null, replayTitle: null, replayLength: null, replayIdValidateError: false };
     } else if (type === "liveOpen") {
       return isEdit
         ? await getLiveOpenData()
@@ -221,7 +221,8 @@ async function onReset() {
   await searchReplay();
 }
 
-function onSelect(replayId, replayLength, replayTitle) {
+function onSelect(copyId, replayId, replayLength, replayTitle) {
+  formState.copyId = copyId;
   formState.replayId = replayId;
   formState.replayLength = replayLength;
   formState.replayTitle = replayTitle;
@@ -229,6 +230,7 @@ function onSelect(replayId, replayLength, replayTitle) {
 }
 
 function onEdit() {
+  formState.copyId = null;
   formState.replayId = null;
   formState.replayLength = null;
   formState.replayTitle = null;
@@ -298,7 +300,12 @@ function handleSave() {
       formState.replayIdValidateError = false;
       let params = {};
       if (drawerType.value === 'replay') {
-
+        params = {
+          type: drawerType.value,
+          title: formState.title,
+          copyId: formState.copyId,
+          replayId: formState.replayId,
+        }
       }
       if (drawerType.value === 'liveOpen') {
         params = {
@@ -309,8 +316,11 @@ function handleSave() {
           replayEnable: formState.replayEnable
         }
       }
-      await Api.openCourse.createLesson(props.course.id, params);
-      saveBtnLoading.value = false;
+      try {
+        await Api.openCourse.createLesson(props.course.id, params);
+      } finally {
+        saveBtnLoading.value = false;
+      }
       resetDrawer();
       message.success('保存成功');
       await fetchLessons();
@@ -350,7 +360,7 @@ watch(() => drawerType.value,async (newType) => {
                 <div class="flex items-center space-x-12">
                   <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
                   <div v-if="element.status === 'unpublished'" class="px-8 h-22 leading-22 text-12 text-white font-normal bg-[#87898F] rounded-6">未发布</div>
-                  <div class="text-14 font-normal text-black">{{ `课时 ${index + 1} ：${element.title}（${element.length}）` }}</div>
+                  <div class="text-14 font-normal text-black">{{ `课时 ${index + 1} ：${element.title}（${element.length}:00）` }}</div>
                 </div>
                 <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
                   <div @click="editLesson(element.type, element.id)" class="flex items-center cursor-pointer"><EditOutlined class="mr-4"/>编辑</div>
@@ -446,7 +456,7 @@ watch(() => drawerType.value,async (newType) => {
                     {{ record.liveStartTime }}
                   </template>
                   <template v-if="column.key === 'operation'">
-                    <div class="text-[--primary-color] cursor-pointer" @click="onSelect(record.id, record.liveTime.match(/\d+/)?.[0], record.title)">选择</div>
+                    <div class="text-[--primary-color] cursor-pointer" @click="onSelect(record.id, record.replayId, record.liveTime.match(/\d+/)?.[0], record.title)">选择</div>
                   </template>
                 </template>
               </a-table>
