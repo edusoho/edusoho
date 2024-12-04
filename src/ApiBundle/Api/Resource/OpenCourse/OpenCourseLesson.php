@@ -6,6 +6,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
+use Biz\Course\LiveReplayException;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
@@ -31,11 +33,30 @@ class OpenCourseLesson extends AbstractResource
                 throw OpenCourseException::LIVE_START_TIME_OUTDATED();
             }
         }
+        if ('replay' == $lesson['type']) {
+            if (!ArrayToolkit::requireds($lesson, ['copyId', 'replayId'])) {
+                throw CommonException::ERROR_PARAMETER_MISSING();
+            }
+            $replay = $this->getLiveReplayService()->getReplayByLessonIdAndReplayIdAndType($lesson['copyId'], $lesson['replayId'], 'live');
+            if (empty($replay)) {
+                throw LiveReplayException::NOTFOUND_LIVE_REPLAY();
+            }
+        }
         $lesson['courseId'] = $courseId;
         $lesson = $this->getOpenCourseService()->createLesson($lesson);
         if ('liveOpen' == $lesson['type']) {
             $live = $this->getLiveCourseService()->createLiveRoom($openCourse, $lesson, ['authUrl' => '', 'jumpUrl' => '']);
             $this->getOpenCourseService()->updateLesson($courseId, $lesson['id'], ['mediaId' => $live['id'], 'liveProvider' => $live['provider']]);
+        }
+        if ('replay' == $lesson['type']) {
+            $this->getLiveReplayService()->addReplay([
+                'lessonId' => $lesson['id'],
+                'courseId' => $courseId,
+                'title' => $replay['title'],
+                'replayId' => $replay['replayId'],
+                'type' => 'liveOpen',
+                'copyId' => $replay['id'],
+            ]);
         }
 
         return ['ok' => true];
@@ -91,5 +112,13 @@ class OpenCourseLesson extends AbstractResource
     private function getLiveService()
     {
         return $this->service('Live:LiveService');
+    }
+
+    /**
+     * @return LiveReplayService
+     */
+    private function getLiveReplayService()
+    {
+        return $this->service('Course:LiveReplayService');
     }
 }

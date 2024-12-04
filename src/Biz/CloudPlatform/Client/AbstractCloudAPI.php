@@ -127,7 +127,9 @@ class AbstractCloudAPI
         }
 
         $headers[] = 'Content-type: application/json';
-        $headers[] = 'Referer:'.$_SERVER['HTTP_REFERER'];
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $headers[] = 'Referer:'.$_SERVER['HTTP_REFERER'];
+        }
         $curl = curl_init();
 
         curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
