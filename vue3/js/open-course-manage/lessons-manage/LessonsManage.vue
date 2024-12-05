@@ -370,7 +370,7 @@ watch(() => drawerType.value,async (newType) => {
                 <div class="flex items-center space-x-12">
                   <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
                   <div v-if="element.status === 'unpublished'" class="px-8 h-22 leading-22 text-12 text-white font-normal bg-[#87898F] rounded-6">未发布</div>
-                  <div class="text-14 font-normal text-black">{{ `课时 ${index + 1} ：${element.title}（${element.length}:00）` }}</div>
+                  <div class="text-14 font-normal text-black">{{`课时 ${index + 1} ：${element.title}（${Number(element.length)}` }}</div>
                 </div>
                 <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
                   <div v-if="element.editable" @click="editLesson(element.type, element.id)" class="flex items-center cursor-pointer"><EditOutlined class="mr-4"/>编辑</div>
