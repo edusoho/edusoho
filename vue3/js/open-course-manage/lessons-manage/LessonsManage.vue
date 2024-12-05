@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import draggable from 'vuedraggable';
 import Api from '../../../api';
-import {formatDate} from '../../common';
+import {formatDate, goto} from '../../common';
 
 const props = defineProps({
   course: {required: true},
@@ -48,59 +48,68 @@ async function updateFormItem(drawerType) {
     Object.assign(rules, baseRules);
     return;
   }
+
   if (drawerType === "replay") {
     await fetchReplayTagOptions();
     await searchReplay();
   }
 
   const isEdit = !!formState.editId;
-  const extraFormState = await getExtraFormState(drawerType, isEdit);
-  const validationRules = getValidationRules(drawerType);
+  const [extraFormState, validationRules] = await Promise.all([
+    getExtraFormState(drawerType, isEdit),
+    getValidationRules(drawerType),
+  ]);
 
-  Object.assign(formState, { ...baseFormState, ...extraFormState });
+  Object.assign(formState, { ...baseFormState, ...extraFormState, editId: formState.editId });
   Object.assign(rules, { ...baseRules, ...validationRules });
+}
 
-  async function getExtraFormState(type, isEdit) {
-    if (type === "replay") {
-      return isEdit
-        ? await getReplayData()
-        : { copyId: null, replayId: null, replayTitle: null, replayLength: null, replayIdValidateError: false };
-    } else if (type === "liveOpen") {
-      return isEdit
-        ? await getLiveOpenData()
-        : { startTime: null, length: null, replayEnable: true };
-    }
-    return {};
-  }
-  function getValidationRules(type) {
-    if (type === "replay") {
-      return {
-        replayId: [{ required: true, message: "请选择直播回放", trigger: "blur" }],
-      };
-    } else if (type === "liveOpen") {
-      return {
-        startTime: [{ required: true, message: "请设置直播开始时间", trigger: "blur" }],
-        length: [{ required: true, message: "请设置直播时长", trigger: "blur" }],
-      };
-    }
-    return {};
-  }
-  async function getLiveOpenData() {
-    const liveOpen = await Api.openCourse.getLesson(props.course.id, formState.editId);
-    return {
-      title: liveOpen.title,
-      startTime: dayjs(formatDate(liveOpen.startTime, 'YYYY-MM-DD HH:mm'), 'YYYY-MM-DD HH:mm'),
-      length: liveOpen.length,
-      replayEnable: null,
-    };
-  }
-  async function getReplayData() {
-    const replay = await Api.openCourse.getLesson(props.course.id, formState.editId);
-    console.log(replay);
-    return {
-      title: replay.title,
-    };
-  }
+async function getExtraFormState(type, isEdit) {
+  const stateMap = {
+    replay: isEdit
+      ? await getReplayData()
+      : { copyId: null, replayId: null, replayTitle: null, replayLength: null, replayIdValidateError: false },
+    liveOpen: isEdit
+      ? await getLiveOpenData()
+      : { startTime: null, length: null, replayEnable: true },
+  };
+  return stateMap[type] || {};
+}
+
+function getValidationRules(type) {
+  const rulesMap = {
+    replay: {
+      replayId: [{ required: true, message: "请选择直播回放", trigger: "blur" }],
+    },
+    liveOpen: {
+      startTime: [{ required: true, message: "请设置直播开始时间", trigger: "blur" }],
+      length: [{ required: true, message: "请设置直播时长", trigger: "blur" }],
+    },
+  };
+  return rulesMap[type] || {};
+}
+
+// 获取直播开放数据
+async function getLiveOpenData() {
+  const liveOpen = await Api.openCourse.getLesson(props.course.id, formState.editId);
+  return {
+    title: liveOpen.title,
+    startTime: dayjs(formatDate(liveOpen.startTime, "YYYY-MM-DD HH:mm"), "YYYY-MM-DD HH:mm"),
+    length: liveOpen.length / 60,
+    replayEnable: null,
+  };
+}
+
+// 获取回放数据
+async function getReplayData() {
+  const replay = await Api.openCourse.getLesson(props.course.id, formState.editId);
+  return {
+    title: replay.title,
+    copyId: replay.copyId,
+    replayId: replay.replayId,
+    replayLength: Number(replay.length),
+    replayTitle: replay.liveTitle,
+  };
 }
 
 const isDrawerOpen = computed(() => {
@@ -277,8 +286,8 @@ async function unpublishLesson(id) {
   await fetchLessons();
 }
 
-function viewLesson(id) {
-
+function viewLesson(courseId, id) {
+  goto(`/open/course/${courseId}/lesson/${id}/learn?as=preview`)
 }
 
 function resetDrawer() {
@@ -324,7 +333,7 @@ function handleSave() {
       const isEdit = !!formState.editId;
       try {
         if (isEdit) {
-
+          await Api.openCourse.updateLesson(props.course.id, formState.editId, params);
         } else {
           await Api.openCourse.createLesson(props.course.id, params);
         }
@@ -370,11 +379,11 @@ watch(() => drawerType.value,async (newType) => {
                 <div class="flex items-center space-x-12">
                   <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
                   <div v-if="element.status === 'unpublished'" class="px-8 h-22 leading-22 text-12 text-white font-normal bg-[#87898F] rounded-6">未发布</div>
-                  <div class="text-14 font-normal text-black">{{`课时 ${index + 1} ：${element.title}（${Number(element.length)}` }}</div>
+                  <div class="text-14 font-normal text-black">{{`课时 ${index + 1} ：${element.title}（${Math.floor(Number(element.length / 60))}:${(Number(element.length) % 60) < 10 ? `0${Number(element.length) % 60}` : Number(element.length) % 60 }）` }}</div>
                 </div>
                 <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
                   <div v-if="element.editable" @click="editLesson(element.type, element.id)" class="flex items-center cursor-pointer"><EditOutlined class="mr-4"/>编辑</div>
-                  <div @click="viewLesson(element.id)" class="flex items-center cursor-pointer"><EyeOutlined class="mr-4"/>预览</div>
+                  <div @click="viewLesson(props.course.id, element.id)" class="flex items-center cursor-pointer"><EyeOutlined class="mr-4"/>预览</div>
                   <div v-if="element.status === 'unpublished'" @click="publishLesson(element.id)" class="flex items-center cursor-pointer"><SendOutlined class="mr-4"/>发布</div>
                   <div v-if="element.status === 'published'" @click="unpublishLesson(element.id)" class="flex items-center cursor-pointer"><CloseCircleOutlined class="mr-4"/>取消发布</div>
                   <div v-if="element.status === 'unpublished'" @click="deleteLesson(element.id)" class="flex items-center cursor-pointer"><DeleteOutlined class="mr-4"/>删除</div>
