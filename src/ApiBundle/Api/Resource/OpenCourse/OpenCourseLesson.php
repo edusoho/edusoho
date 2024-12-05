@@ -77,9 +77,14 @@ class OpenCourseLesson extends AbstractResource
     public function get(ApiRequest $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+        if ('liveOpen' == $lesson['type']) {
+            $lesson['length'] = $lesson['length'] * 60;
+        }
         if ('replay' == $lesson['type']) {
             $activity = $this->getActivityService()->getActivity($lesson['copyId']);
             $lesson['liveTitle'] = $activity['title'];
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId, 'liveOpen');
+            $lesson['replayId'] = $replays[0]['replayId'];
         }
 
         return $lesson;
