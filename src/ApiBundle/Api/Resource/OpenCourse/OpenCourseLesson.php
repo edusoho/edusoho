@@ -10,6 +10,8 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\LiveReplayException;
 use Biz\Course\Service\LiveReplayService;
+use Biz\Live\Constant\LiveReplayStatus;
+use Biz\Live\Constant\LiveStatus;
 use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
@@ -65,6 +67,7 @@ class OpenCourseLesson extends AbstractResource
                 'type' => 'liveOpen',
                 'copyId' => $replay['id'],
             ]);
+            $this->getOpenCourseService()->updateLesson($courseId, $lesson['id'], ['progressStatus' => LiveStatus::CLOSED, 'replayStatus' => LiveReplayStatus::GENERATED]);
         }
 
         return ['ok' => true];
