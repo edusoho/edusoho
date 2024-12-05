@@ -12,6 +12,9 @@ class OpenCourseLessonFilter extends Filter
     {
         if (!empty($data)) {
             $data['editable'] = 'liveOpen' != $data['type'] || $data['startTime'] > time();
+            if ('liveOpen' == $data['type']) {
+                $data['length'] = $data['length'] * 60;
+            }
         }
     }
 }
