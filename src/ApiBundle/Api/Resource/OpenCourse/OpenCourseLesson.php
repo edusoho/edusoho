@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\OpenCourse;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -9,6 +10,8 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\LiveReplayException;
 use Biz\Course\Service\LiveReplayService;
+use Biz\Live\Constant\LiveReplayStatus;
+use Biz\Live\Constant\LiveStatus;
 use Biz\Live\Service\LiveService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\LiveCourseService;
@@ -64,16 +67,23 @@ class OpenCourseLesson extends AbstractResource
                 'type' => 'liveOpen',
                 'copyId' => $replay['id'],
             ]);
+            $this->getOpenCourseService()->updateLesson($courseId, $lesson['id'], ['progressStatus' => LiveStatus::CLOSED, 'replayStatus' => LiveReplayStatus::GENERATED]);
         }
 
         return ['ok' => true];
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request, $courseId)
     {
         return $this->getOpenCourseService()->findLessonsByCourseId($courseId);
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
