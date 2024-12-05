@@ -493,7 +493,7 @@ watch(() => drawerType.value,async (newType) => {
           v-if="formState.replayId"
           label="直播回放时长"
         >
-          <div class="text-14 font-normal text-[#37393D]">{{ `${formState.replayLength} 分钟` }}</div>
+          <div class="text-14 font-normal text-[#37393D]">{{ `${Math.floor(formState.replayLength / 60)} 分` }}<span v-if="formState.replayLength % 60 !== 0">{{ `${formState.replayLength % 60} 秒` }}</span></div>
         </a-form-item>
         <a-form-item
           v-if="drawerType === 'liveOpen'"
