@@ -19,4 +19,7 @@ export default {
   async getLesson(courseId, lessonId) {
     return apiClient.get(`/open_course/${courseId}/lesson/${lessonId}`);
   },
+  async updateLesson(courseId, lessonId, params) {
+    return apiClient.patch(`/open_course/${courseId}/lesson/${lessonId}`, params);
+  },
 }
