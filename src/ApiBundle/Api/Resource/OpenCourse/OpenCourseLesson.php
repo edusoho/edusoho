@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\OpenCourse;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -69,11 +70,17 @@ class OpenCourseLesson extends AbstractResource
         return ['ok' => true];
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request, $courseId)
     {
         return $this->getOpenCourseService()->findLessonsByCourseId($courseId);
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
