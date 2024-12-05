@@ -631,7 +631,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         foreach ($itemIds as $itemId) {
             ++$seq;
-            list($type) = explode('-', $itemId);
             ++$lessonNum;
 
             $item = $items[$itemId];

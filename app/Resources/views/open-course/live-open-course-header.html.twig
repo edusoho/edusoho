@@ -1,5 +1,3 @@
-{% set isLiveFinished = is_live_finished(lesson.id, 'openCourse') %}
-
 {% if lesson is empty or lesson.startTime is empty or lesson.endTime is empty %}
   <div class="mask">
     <div class="modal-dialog" style="width:200px;margin:22% auto;">
@@ -13,6 +11,7 @@
   </div>
 {% else %}
   {% set refererUrl = app.request.server.get('HTTP_REFERER') %}
+  {% set isLiveFinished = is_live_finished(lesson.id, 'openCourse') %}
   <div class="mask js-live-header-mask">
     {% if lesson.startTime > ("now"|date("U")) %}
       <div class="mask-content">
