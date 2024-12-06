@@ -6,6 +6,7 @@ import Api from '../../../../api';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import { ClockCircleOutlined } from '@ant-design/icons-vue';
 import {formatDate, goto} from '../../../common';
+import { AlignLeftOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps({
   course: {required: true},
@@ -55,7 +56,8 @@ function viewLesson(courseId, id) {
                 <div class="flex flex-col">
                   <div class="mb-12 text-16 text-[#37393D] font-normal">{{ lesson.title }}</div>
                   <div class="flex items-center mr-16">
-                    <div class="w-7 h-7 mr-4" :class="{ 'bg-[#87898F]': lesson.progressStatus !== 'live', 'bg-[--primary-color]': lesson.progressStatus === 'live' }" style="border-radius: 9999px;"></div>
+                    <AlignLeftOutlined v-if="lesson.progressStatus === 'live'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
+                    <div v-else class="w-7 h-7 mr-4" :class="{ 'bg-[#87898F]': lesson.replayStatus !== 'generated', 'bg-[--primary-color]': lesson.replayStatus === 'generated' }" style="border-radius: 9999px;"></div>
                     <div class="text-14 mr-16 font-normal" :class="{ 'text-[#87898F]': lesson.progressStatus !== 'live', 'text-[--primary-color]': lesson.progressStatus === 'live' || lesson.replayStatus === 'generated' }">{{ lesson.replayStatus === 'generated'? '回放' : lesson.progressStatus === 'live' ? '进行中' : lesson.progressStatus === 'created' ? '未开始' : '已结束' }}</div>
                     <ClockCircleOutlined class="text-[#87898F] mr-4 w-16"/>
                     <div class="text-14 font-normal text-[#87898F]">{{ formatDate(lesson.startTime, 'YYYY/MM/DD HH:mm') }}</div>
