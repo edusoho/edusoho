@@ -44,7 +44,7 @@ function viewLesson(courseId, id) {
       <a-tabs v-model:activeKey="activeKey" centered class="open-course-detail-tabs">
         <a-tab-pane key="intro" tab="简介">
           <div v-if="props.course.about" v-html="props.course.about" class="mt-24 mb-24"></div>
-          <div v-else class="mt-32 mb-190">
+          <div v-else class="mt-48 mb-190">
             <a-empty :image="simpleImage" description="暂无简介"/>
           </div>
         </a-tab-pane>

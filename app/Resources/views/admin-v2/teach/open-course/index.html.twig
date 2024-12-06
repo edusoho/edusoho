@@ -27,7 +27,13 @@
             {% include 'org/parts/table-thead-tr.html.twig' %}
             <th>{{ 'admin.open_manage.manage.creator_th'|trans }}</th>
             <th>{{ 'admin.open_manage.manage.live_num'|trans }}</th>
-            <th>{{ 'admin.open_manage.manage.hit_num'|trans }}</th>
+            <th>{{ 'admin.open_manage.manage.hit_num'|trans }}
+                <span class="es-icon es-icon-wenhaotishi"
+                      style="color: #919399;font-size: 14px;"
+                      data-toggle="tooltip"
+                      title="{{ 'admin.open_manage.manage.hit_num.tooltip'|trans }}">
+                </span>
+            </th>
             <th>{{ 'admin.open_manage.manage.operater_th'|trans }}</th>
         </tr>
         </thead>

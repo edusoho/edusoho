@@ -51,11 +51,6 @@ async function updateFormItem(drawerType) {
     return;
   }
 
-  if (drawerType === "replay") {
-    await fetchReplayTagOptions();
-    await searchReplay();
-  }
-
   const isEdit = !!formState.editId;
   const [extraFormState, validationRules] = await Promise.all([
     getExtraFormState(drawerType, isEdit),
@@ -64,6 +59,11 @@ async function updateFormItem(drawerType) {
 
   Object.assign(formState, { ...baseFormState, ...extraFormState, editId: formState.editId });
   Object.assign(rules, { ...baseRules, ...validationRules });
+
+  if (drawerType === "replay") {
+    await fetchReplayTagOptions();
+    await searchReplay();
+  }
 }
 
 async function getExtraFormState(type, isEdit) {
