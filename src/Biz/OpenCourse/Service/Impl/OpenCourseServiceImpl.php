@@ -312,7 +312,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getLessonItems($courseId)
     {
-        $lessons = $this->searchLessons(['courseId' => $courseId], ['seq' => 'ASC'], 0, 1);
+        $lessons = $this->searchLessons(['courseId' => $courseId], ['seq' => 'ASC'], 0, PHP_INT_MAX);
 
         $items = [];
 
