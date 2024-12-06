@@ -495,7 +495,7 @@ watch(() => drawerType.value,async (newType) => {
                   :disabled="pagination.total === 0"
                   v-model:current="pagination.current"
                   :total="pagination.total"
-                  :page-size="pagination.pageSize"
+                  page-size="6"
                   @change="pagination.onChange"
                 />
               </div>
