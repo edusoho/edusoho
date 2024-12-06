@@ -69,33 +69,28 @@ const table = {
     {
       key: 'user',
       title: '学员',
-      width: 300,
     },
     {
       key: 'mobile',
       title: '手机号',
-      width: 150,
     },
     {
       key: 'joinedChannel',
       title: '加入方式',
-      width: 300,
     },
     {
       key: 'joinTime',
       title: '加入时间',
-      width: 200,
     },
     {
       key: 'learnDeadline',
       title: '学习有效期',
-      width: 200,
     },
     {
       key: 'operation',
       title: '操作',
       fixed: 'right',
-      width: 182,
+      width: 138,
     },
   ],
   loading: false,
@@ -355,15 +350,7 @@ const removeStudent = async userId => {
       <div class="flex w-full justify-between items-center">
         <span class="text-16 font-medium leading-24 text-black/[.88]">学员管理</span>
         <div v-if="enableAddAndRemove && ['published'].includes(exerciseStatus)" class="flex items-center gap-20">
-          <button class="student-header-operate-button"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  :data-url="`/item_bank_exercise/${exerciseId}/manage/students/add`"
-          >
-            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
-            <span>添加学员</span>
-          </button>
-          <button class="student-header-operate-button"
+          <button class="bulk-import-btn"
                   data-toggle="modal"
                   data-target="#modal"
                   data-backdrop="static"
@@ -372,6 +359,14 @@ const removeStudent = async userId => {
           >
             <img class="w-16 h-16" src="../../../img/student-manage/import.png" alt="">
             <span>批量导入</span>
+          </button>
+          <button class="add-students-btn"
+                  data-toggle="modal"
+                  data-target="#modal"
+                  :data-url="`/item_bank_exercise/${exerciseId}/manage/students/add`"
+          >
+            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
+            <span>添加学员</span>
           </button>
         </div>
       </div>
@@ -437,7 +432,7 @@ const removeStudent = async userId => {
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 1000, y: 300 }"
+            :scroll="{ x: 'max-content' }"
           >
             <template #headerCell="{ column }">
               <template v-if="column.key === 'learnDeadline'">
@@ -487,22 +482,25 @@ const removeStudent = async userId => {
               </template>
               <template v-else-if="column.key === 'operation'">
                 <div class="flex justify-end items-center gap-16 shrink-0">
-                  <span v-if="record.user.canSendMessage" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">发私信</span>
-                  <span v-if="isAdmin" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/students/${record.user.id}/show`">查看资料</span>
+                  <div v-if="isAdmin || isTeacher" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/student/deadline?ids=${record.user.id}`">修改有效期</div>
+                  <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
                       <img class="w-20 h-20" src="../../../img/more.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
                     </span>
                     <template #overlay>
                       <a-menu>
+                        <a-menu-item v-if="record.user.canSendMessage" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">
+                          发私信
+                        </a-menu-item>
+                        <a-menu-item v-if="isAdmin" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/students/${record.user.id}/show`">
+                          查看资料
+                        </a-menu-item>
                         <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/student/${record.user.id}/remark`">
                           备注
                         </a-menu-item>
                         <a-menu-item @click="followOrUnfollow(record.user.id)">
                           {{ followUsers[record.user.id] ? '取消关注' : '关注' }}
-                        </a-menu-item>
-                        <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/student/deadline?ids=${record.user.id}`" :disabled="!isAdmin && !isTeacher">
-                          修改有效期
                         </a-menu-item>
                         <a-menu-item @click="removeStudent(record.user.id)" :disabled="!isAdmin && !isTeacher">
                           移除
@@ -541,7 +539,27 @@ const removeStudent = async userId => {
 </template>
 
 <style lang="less">
-.student-header-operate-button {
+.bulk-import-btn {
+  display: flex;
+  height: 32px;
+  padding: 0 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--primary-color);
+  background: #fff;
+
+  span {
+    color: var(--primary-color);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+  }
+}
+
+.add-students-btn {
   display: flex;
   height: 32px;
   padding: 0 15px;

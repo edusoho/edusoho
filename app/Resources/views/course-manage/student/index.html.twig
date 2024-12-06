@@ -1,6 +1,7 @@
 {% extends 'course-manage/layout.html.twig' %}
 
 {% block title %}{{ 'course.members_manage'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'students' %}
 
 {% do script(['vue3/js/course-manage/students/index.js']) %}
 
