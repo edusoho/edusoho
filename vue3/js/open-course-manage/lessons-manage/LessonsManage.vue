@@ -51,11 +51,6 @@ async function updateFormItem(drawerType) {
     return;
   }
 
-  if (drawerType === "replay") {
-    await fetchReplayTagOptions();
-    await searchReplay();
-  }
-
   const isEdit = !!formState.editId;
   const [extraFormState, validationRules] = await Promise.all([
     getExtraFormState(drawerType, isEdit),
@@ -64,6 +59,11 @@ async function updateFormItem(drawerType) {
 
   Object.assign(formState, { ...baseFormState, ...extraFormState, editId: formState.editId });
   Object.assign(rules, { ...baseRules, ...validationRules });
+
+  if (drawerType === "replay") {
+    await fetchReplayTagOptions();
+    await searchReplay();
+  }
 }
 
 async function getExtraFormState(type, isEdit) {
@@ -374,11 +374,11 @@ watch(() => drawerType.value,async (newType) => {
           <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="editLesson('liveOpen')">添加直播</a-button>
         </div>
       </div>
-      <a-spin :spinning="lessons.loading" tip="加载中..." class="mt-140">
-        <div v-if="lessons.data.length === 0 && lessons.loading === false">
+      <a-spin :spinning="lessons.loading" tip="加载中...">
+        <div v-if="lessons.data.length === 0">
           <a-empty :image="simpleImage" class="mt-140"/>
         </div>
-        <div v-else-if="lessons.data.length > 0 && lessons.loading === false" class="mt-20">
+        <div v-else-if="lessons.data.length > 0" class="mt-20">
           <draggable
             v-model="lessons.data"
             item-key="id"

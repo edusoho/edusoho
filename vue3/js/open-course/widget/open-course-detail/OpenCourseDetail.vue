@@ -5,7 +5,7 @@ import { Empty } from 'ant-design-vue';
 import Api from '../../../../api';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import { ClockCircleOutlined } from '@ant-design/icons-vue';
-import {formatDate} from '../../../common';
+import {formatDate, goto} from '../../../common';
 
 const props = defineProps({
   course: {required: true},
@@ -32,6 +32,10 @@ async function getCommentTemplate() {
 }
 getCommentTemplate();
 
+function viewLesson(courseId, id) {
+  goto(`/open/course/${courseId}/lesson/${id}/learn?as=preview`)
+}
+
 </script>
 
 <template>
@@ -40,7 +44,7 @@ getCommentTemplate();
       <a-tabs v-model:activeKey="activeKey" centered class="open-course-detail-tabs">
         <a-tab-pane key="intro" tab="简介">
           <div v-if="props.course.about" v-html="props.course.about" class="mt-24 mb-24"></div>
-          <div v-else class="mt-32 mb-190">
+          <div v-else class="mt-48 mb-190">
             <a-empty :image="simpleImage" description="暂无简介"/>
           </div>
         </a-tab-pane>
@@ -58,7 +62,7 @@ getCommentTemplate();
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <a-button type="primary" ghost :disabled="lesson.progressStatus === 'created' || lesson.generated !== 'generated'">{{ lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
+                  <a-button @click="viewLesson(props.course.id, lesson.id)" type="primary" ghost :disabled="lesson.progressStatus === 'created' || lesson.generated !== 'generated'">{{ lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
                 </div>
               </div>
               <a-divider v-if="index + 1 !== lessons.data.length"/>
