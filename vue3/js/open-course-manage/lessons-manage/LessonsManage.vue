@@ -302,6 +302,7 @@ function viewLesson(courseId, id) {
 function resetDrawer() {
   drawerType.value = null;
   formState.editId = null;
+  pagination.current = 1;
 }
 
 function handleReset() {
@@ -310,7 +311,6 @@ function handleReset() {
   searchParams.replayTagId = null;
   searchParams.keywordType = 'activityTitle';
   searchParams.keyword = null;
-  pagination.current = 1;
   replays.data = [];
   resetDrawer();
 }
