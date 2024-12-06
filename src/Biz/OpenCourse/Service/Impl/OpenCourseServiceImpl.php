@@ -460,6 +460,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'exerciseId' => 0,
             'testMode' => 'normal',
             'testStartTime' => 0,
+            'progressStatus' => '',
             'replayStatus' => 'ungenerated',
             'status' => 'unpublished',
             'materialNum' => 0,
