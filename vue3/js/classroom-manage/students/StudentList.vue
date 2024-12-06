@@ -4,17 +4,7 @@
       <div class="flex w-full justify-between items-center">
         <span class="text-16 font-medium leading-24 text-black/[.88]">学员管理</span>
         <div v-if="['published', 'unpublished'].includes(classroomStatus)" class="flex items-center gap-20">
-          <button class="student-header-operate-button"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  data-backdrop="static"
-                  data-keyboard="false"
-                  :data-url="`/classroom/${classroomId}/manage/student/create`"
-          >
-            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
-            <span>添加学员</span>
-          </button>
-          <button class="student-header-operate-button"
+          <button class="bulk-import-btn"
                   data-toggle="modal"
                   data-target="#modal"
                   data-backdrop="static"
@@ -23,6 +13,16 @@
           >
             <img class="w-16 h-16" src="../../../img/student-manage/import.png" alt="">
             <span>批量导入</span>
+          </button>
+          <button class="add-students-btn"
+                  data-toggle="modal"
+                  data-target="#modal"
+                  data-backdrop="static"
+                  data-keyboard="false"
+                  :data-url="`/classroom/${classroomId}/manage/student/create`"
+          >
+            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
+            <span>添加学员</span>
           </button>
         </div>
       </div>
@@ -88,12 +88,11 @@
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 1200, y: 300 }"
           >
             <template #headerCell="{ column }">
-              <template v-if="column.key === 'learnDeadline'">
-                <div class="flex items-center self-stretch gap-8">
-                  学习有效期
+              <template v-if="column.key === 'joinTime'">
+                <div class="flex items-center self-stretch gap-4 whitespace-nowrap">
+                  加入时间/学习有效期
                   <a-tooltip placement="top" title="取加入方式中学习有效期最长的生效和展示">
                     <img class="w-16 h-16" src="../../../img/tip.png" alt="">
                   </a-tooltip>
@@ -104,32 +103,34 @@
               <template v-if="column.key === 'user'">
                 <div class="flex items-center gap-12 shrink-0">
                   <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
-                  <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
-                    <template #title>{{ record.user.nickname }}<span v-if="record.remark">{{ `(${record.remark})` }}</span></template>
-                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer max-w-160 overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">
-                      {{ record.user.nickname }}
-                      <span v-if="record.remark" class="text-12 text-[#999999]">{{ `(${record.remark})` }}</span>
-                    </span>
-                  </a-tooltip>
+                  <div class="flex flex-col">
+                    <a-tooltip placement="top">
+                      <template #title>{{ record.user.nickname }}</template>
+                      <div class="w-fit max-w-100 truncate text-14 text-[#1D2129] cursor-pointer">{{ record.user.nickname }}</div>
+                    </a-tooltip>
+                    <div class="w-100 truncate text-12 text-[#87898F]" v-if="record.remark">{{ record.remark }}</div>
+                  </div>
                 </div>
               </template>
               <template v-else-if="column.key === 'mobile'">
-                <div class="flex gap-8 min-w-50">
+                <div class="flex flex-col">
+                  <div class="flex">
+                    <div class="flex gap-8 min-w-50">
                   <span class="text-[#37393D] text-14 font-normal leading-22">
                     {{ mobile(record.user.id, record.user.verifiedMobile) }}
                   </span>
-                  <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
-                  <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
+                      <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
+                      <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
+                    </div>
+                  </div>
                 </div>
-              </template>
-              <template v-else-if="column.key === 'joinedChannel'">
-                <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
-                  <template #title>{{ record.joinedChannelText }}</template>
-                  <span class="text-[#37393D] text-14 font-normal leading-22 max-w-250 w-fit truncate">{{ record.joinedChannelText }}</span>
-                </a-tooltip>
+                <div class="text-[#37393D] text-14 font-normal leading-22 w-fit truncate">{{ record.joinedChannelText }}</div>
               </template>
               <template v-else-if="column.key === 'joinTime'">
-                <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
+                <div class="flex flex-col">
+                  <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
+                  <div class="truncate">{{ record.deadline === 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
+                </div>
               </template>
               <template v-else-if="column.key === 'learnProgress'">
                 <div class="flex gap-8 items-center">
@@ -139,26 +140,24 @@
                   <span class="text-[#37393D] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
                 </div>
               </template>
-              <template v-else-if="column.key === 'learnDeadline'">
-                <div class="min-w-100">
-                  {{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}
-                </div>
-              </template>
               <template v-else-if="column.key === 'operation'">
-                <div class="flex justify-end items-center gap-16 shrink-0">
-                  <span v-if="record.user.canSendMessage" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">发私信</span>
-                  <span v-if="isAdmin" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/0/manage/course/0/students/${record.user.id}/show`">查看资料</span>
+                <div class="flex items-center gap-16">
+                  <div v-if="isAdmin || isTeacher" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/classroom/${classroomId}/manage/member/deadline?userIds=${record.user.id}`">修改有效期</div>
+                  <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
                       <img class="w-20 h-20" src="../../../img/more.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
                     </span>
                     <template #overlay>
                       <a-menu>
+                        <a-menu-item v-if="record.user.canSendMessage" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">
+                          发私信
+                        </a-menu-item>
+                        <a-menu-item v-if="isAdmin" data-toggle="modal" data-target="#modal" :data-url="`/course_set/0/manage/course/0/students/${record.user.id}/show`">
+                          查看资料
+                        </a-menu-item>
                         <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/classroom/${classroomId}/manage/student/${record.user.id}/remark`">
                           备注
-                        </a-menu-item>
-                        <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/classroom/${classroomId}/manage/member/deadline?userIds=${record.user.id}`" :disabled="!isAdmin && !isTeacher">
-                          修改有效期
                         </a-menu-item>
                         <a-menu-item @click="removeStudent(record.user.id)">
                           移除
@@ -303,38 +302,22 @@ const table = {
     {
       key: 'user',
       title: '学员',
-      width: 300,
     },
     {
       key: 'mobile',
-      title: '手机号',
-      width: 150,
-    },
-    {
-      key: 'joinedChannel',
-      title: '加入方式',
-      width: 300,
+      title: '手机号/加入方式',
     },
     {
       key: 'joinTime',
-      title: '加入时间',
-      width: 200,
+      title: '加入时间/有效期',
     },
     {
       key: 'learnProgress',
       title: '学习进度',
-      width: 200,
-    },
-    {
-      key: 'learnDeadline',
-      title: '学习有效期',
-      width: 150,
     },
     {
       key: 'operation',
       title: '操作',
-      fixed: 'right',
-      width: 182,
     },
   ],
   loading: false,
@@ -515,7 +498,27 @@ const removeStudent = async userId => {
 </script>
 
 <style lang="less">
-.student-header-operate-button {
+.bulk-import-btn {
+  display: flex;
+  height: 32px;
+  padding: 0 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--primary-color);
+  background: #fff;
+
+  span {
+    color: var(--primary-color);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+  }
+}
+
+.add-students-btn {
   display: flex;
   height: 32px;
   padding: 0 15px;
