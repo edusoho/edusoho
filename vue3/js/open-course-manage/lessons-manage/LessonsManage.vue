@@ -16,11 +16,13 @@ const props = defineProps({
 const lessons = reactive({
   loading: false,
   data: [],
+  ids: [],
 });
 
 async function fetchLessons() {
   lessons.loading = true;
   lessons.data = await Api.openCourse.fetchLessons(props.course.id);
+  lessons.ids = lessons.data.map(item => item.id);
   lessons.loading = false;
 }
 fetchLessons();
@@ -89,7 +91,6 @@ function getValidationRules(type) {
   return rulesMap[type] || {};
 }
 
-// 获取直播开放数据
 async function getLiveOpenData() {
   const liveOpen = await Api.openCourse.getLesson(props.course.id, formState.editId);
   return {
@@ -100,7 +101,6 @@ async function getLiveOpenData() {
   };
 }
 
-// 获取回放数据
 async function getReplayData() {
   const replay = await Api.openCourse.getLesson(props.course.id, formState.editId);
   return {
@@ -160,6 +160,15 @@ function parser(value) {
 const filterOption = (input, option) => {
   return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
+
+async function changeLessonSort() {
+  const newIds = lessons.data.map(item => item.id);
+  if (lessons.ids.every((value, index) => value === newIds[index])) {
+    return;
+  }
+  await Api.openCourse.changeLessonSort(props.course.id, { ids: newIds });
+  await fetchLessons();
+}
 
 const replays = reactive({
   loading: false,
@@ -373,6 +382,7 @@ watch(() => drawerType.value,async (newType) => {
           <draggable
             v-model="lessons.data"
             item-key="id"
+            @end="changeLessonSort"
           >
             <template #item="{element, index}">
               <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-14 py-20 cursor-grab">

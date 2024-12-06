@@ -25,5 +25,8 @@ export default {
   },
   async getCommentTemplate(courseId, params) {
     return ajaxClient.get(`/open/course/${courseId}/comment`, {params})
-  }
+  },
+  async changeLessonSort(courseId, params) {
+    return apiClient.post(`/api/open_course/${courseId}/lesson_sort`, params);
+  },
 }
