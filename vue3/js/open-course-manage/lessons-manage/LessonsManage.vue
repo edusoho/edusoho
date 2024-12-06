@@ -473,7 +473,7 @@ watch(() => drawerType.value,async (newType) => {
               >
                 <template #bodyCell="{ column, record }">
                   <template v-if="column.key === 'title'">
-                    <div class="truncate">{{ record.title }}</div>
+                    <div class="truncate max-w-208 w-fit">{{ record.title }}</div>
                   </template>
                   <template v-if="column.key === 'liveTime'">
                     {{ `${(record.liveSecond / 60) % 1 === 0 ? record.liveSecond / 60 : parseFloat((record.liveSecond / 60).toFixed(1))} 分钟` }}
