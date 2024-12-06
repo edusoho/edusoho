@@ -5,7 +5,7 @@ import { Empty } from 'ant-design-vue';
 import Api from '../../../../api';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import { ClockCircleOutlined } from '@ant-design/icons-vue';
-import {formatDate} from '../../../common';
+import {formatDate, goto} from '../../../common';
 
 const props = defineProps({
   course: {required: true},
@@ -31,6 +31,10 @@ async function getCommentTemplate() {
   commentTemplate.value = await Api.openCourse.getCommentTemplate(props.course.id, { as: props.as })
 }
 getCommentTemplate();
+
+function viewLesson(courseId, id) {
+  goto(`/open/course/${courseId}/lesson/${id}/learn?as=preview`)
+}
 
 </script>
 
@@ -58,7 +62,7 @@ getCommentTemplate();
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <a-button type="primary" ghost :disabled="lesson.progressStatus === 'created' || lesson.generated !== 'generated'">{{ lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
+                  <a-button @click="viewLesson(props.course.id, lesson.id)" type="primary" ghost :disabled="lesson.progressStatus === 'created' || lesson.generated !== 'generated'">{{ lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
                 </div>
               </div>
               <a-divider v-if="index + 1 !== lessons.data.length"/>
