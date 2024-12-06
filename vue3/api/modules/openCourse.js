@@ -1,4 +1,5 @@
 import {apiClient} from '../api-client';
+import {ajaxClient} from '../api-client';
 
 export default {
   async createLesson(courseId, params) {
@@ -22,4 +23,7 @@ export default {
   async updateLesson(courseId, lessonId, params) {
     return apiClient.patch(`/open_course/${courseId}/lesson/${lessonId}`, params);
   },
+  async getCommentTemplate(courseId, params) {
+    return ajaxClient.get(`/open/course/${courseId}/comment`, {params})
+  }
 }
