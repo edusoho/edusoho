@@ -1535,6 +1535,10 @@ open_course_explore:
     defaults:
         _controller: 'AppBundle:Explore:openCourse'
         category: ''
+open_course_comment:
+  path: '/open/course/{courseId}/comment'
+  defaults:
+    _controller: 'AppBundle:OpenCourse:comment'
 open_course_manage:
     path: '/open/course/{id}/manage'
     defaults:

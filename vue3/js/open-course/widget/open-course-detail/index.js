@@ -5,7 +5,8 @@ import 'vue3/main.less';
 import OpenCourseDetail from './OpenCourseDetail.vue';
 
 const app = createApp(OpenCourseDetail, {
-  course: $('#open-course-detail').data('course')
+  course: $('#open-course-detail').data('course'),
+  as: $('#open-course-detail').data('as'),
 });
 
 app.use(Button);
