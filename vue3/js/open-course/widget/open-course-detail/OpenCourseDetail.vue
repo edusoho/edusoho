@@ -5,7 +5,7 @@ import { Empty } from 'ant-design-vue';
 import Api from '../../../../api';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import { ClockCircleOutlined } from '@ant-design/icons-vue';
-import {formatDate, goto} from '../../../common';
+import {formatDate, open} from '../../../common';
 import { AlignLeftOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps({
@@ -34,7 +34,7 @@ async function getCommentTemplate() {
 getCommentTemplate();
 
 function viewLesson(courseId, id) {
-  goto(`/open/course/${courseId}/lesson/${id}/learn?as=preview`)
+  open(`/open/course/${courseId}/lesson/${id}/learn?as=preview`)
 }
 
 </script>
