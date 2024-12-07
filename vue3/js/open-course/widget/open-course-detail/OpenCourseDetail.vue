@@ -54,7 +54,7 @@ function viewLesson(courseId, id) {
             <div v-for="(lesson, index) in lessons.data" :key="lesson.id">
               <div class="flex justify-between my-24">
                 <div class="flex flex-col">
-                  <div class="mb-12 text-16 text-[#37393D] font-normal">{{ lesson.title }}</div>
+                  <div class="mb-12 text-16 text-[#37393D] font-normal max-w-320 truncate w-fit">{{ lesson.title }}</div>
                   <div class="flex items-center mr-16">
                     <AlignLeftOutlined v-if="lesson.progressStatus === 'live'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
                     <div v-else class="w-7 h-7 mr-4" :class="{ 'bg-[#87898F]': lesson.replayStatus !== 'generated', 'bg-[--primary-color]': lesson.replayStatus === 'generated' }" style="border-radius: 9999px;"></div>
