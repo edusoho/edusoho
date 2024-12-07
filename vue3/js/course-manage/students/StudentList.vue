@@ -106,7 +106,7 @@
                   <div class="flex flex-col">
                     <a-tooltip placement="top">
                       <template #title>{{ record.user.nickname }}</template>
-                      <div class="w-fit max-w-100 truncate text-14 text-[#1D2129] cursor-pointer">{{ record.user.nickname }}</div>
+                      <div @click="open(`/user/${record.user.uuid}`)" class="w-fit max-w-100 truncate text-14 text-[#1D2129] cursor-pointer hover:text-[--primary-color]">{{ record.user.nickname }}</div>
                     </a-tooltip>
                     <div class="w-100 truncate text-12 text-[#87898F]" v-if="record.remark">{{ record.remark }}</div>
                   </div>
