@@ -4,6 +4,14 @@ import {formatDate, getData, goto, open, trans} from '../../common';
 import {computed, reactive, ref} from 'vue';
 import Api from '../../../api';
 import {message} from 'ant-design-vue';
+import {
+  ImportOutlined,
+  InfoCircleOutlined,
+  UserAddOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
+  EllipsisOutlined
+} from '@ant-design/icons-vue';
 
 const exerciseId = getData('student-list-app', 'exercise-id');
 const enableAddAndRemove = getData('student-list-app', 'enable-add-and-remove');
@@ -357,7 +365,7 @@ const removeStudent = async userId => {
                   data-keyboard="false"
                   :data-url="`/importer/exercise-member/index?exerciseId=${exerciseId}`"
           >
-            <img class="w-16 h-16" src="../../../img/student-manage/import.png" alt="">
+            <ImportOutlined class="w-16 text-[--primary-color]"/>
             <span>批量导入</span>
           </button>
           <button class="add-students-btn"
@@ -365,7 +373,7 @@ const removeStudent = async userId => {
                   data-target="#modal"
                   :data-url="`/item_bank_exercise/${exerciseId}/manage/students/add`"
           >
-            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
+            <UserAddOutlined class="w-16 text-white"/>
             <span>添加学员</span>
           </button>
         </div>
@@ -439,7 +447,7 @@ const removeStudent = async userId => {
                 <div class="flex items-center self-stretch gap-8 whitespace-nowrap">
                   学习有效期
                   <a-tooltip placement="top" title="取加入方式中学习有效期最长的生效和展示">
-                    <img class="w-16 h-16" src="../../../img/tip.png" alt="">
+                    <InfoCircleOutlined class="w-16 text-[#919399]"/>
                   </a-tooltip>
                 </div>
               </template>
@@ -462,8 +470,8 @@ const removeStudent = async userId => {
                   <span class="text-[#37393D] text-14 font-normal leading-22">
                     {{ mobile(record.user.id, record.user.verifiedMobile) }}
                   </span>
-                  <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
-                  <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
+                  <EyeOutlined v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 text-[#919399]"/>
+                  <EyeInvisibleOutlined v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 cursor-pointer text-[#919399]"/>
                 </div>
               </template>
               <template v-else-if="column.key === 'joinedChannel'">
@@ -486,7 +494,7 @@ const removeStudent = async userId => {
                   <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
-                      <img class="w-20 h-20" src="../../../img/more.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                      <EllipsisOutlined class="w-20 text-[--primary-color]"/>
                     </span>
                     <template #overlay>
                       <a-menu>

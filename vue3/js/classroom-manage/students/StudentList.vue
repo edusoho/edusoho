@@ -94,7 +94,7 @@
                 <div class="flex items-center self-stretch gap-4 whitespace-nowrap">
                   加入时间/学习有效期
                   <a-tooltip placement="top" title="取加入方式中学习有效期最长的生效和展示">
-                    <img class="w-16 h-16" src="../../../img/tip.png" alt="">
+                    <InfoCircleOutlined class="w-16 text-[#919399]"/>
                   </a-tooltip>
                 </div>
               </template>
@@ -102,7 +102,7 @@
             <template #bodyCell="{ column, record }">
               <template v-if="column.key === 'user'">
                 <div class="flex items-center gap-12 shrink-0">
-                  <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
+                  <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="">
                   <div class="flex flex-col">
                     <a-tooltip placement="top">
                       <template #title>{{ record.user.nickname }}</template>
@@ -119,8 +119,8 @@
                   <span class="text-[#37393D] text-14 font-normal leading-22">
                     {{ mobile(record.user.id, record.user.verifiedMobile) }}
                   </span>
-                      <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
-                      <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
+                      <EyeOutlined v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 text-[#919399]"/>
+                      <EyeInvisibleOutlined v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 cursor-pointer text-[#919399]"/>
                     </div>
                   </div>
                 </div>
@@ -146,7 +146,7 @@
                   <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
-                      <img class="w-20 h-20" src="../../../img/more.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                      <EllipsisOutlined class="w-20 text-[--primary-color]"/>
                     </span>
                     <template #overlay>
                       <a-menu>
@@ -201,7 +201,13 @@ import {message} from 'ant-design-vue';
 import AntConfigProvider from '../../components/AntConfigProvider';
 import {formatDate, getData, goto, open, trans} from '../../common';
 import Api from 'vue3/api';
-import {ImportOutlined, UserAddOutlined} from '@ant-design/icons-vue';
+import {
+  ImportOutlined,
+  UserAddOutlined,
+  InfoCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined, EllipsisOutlined
+} from '@ant-design/icons-vue';
 
 const classroomId = getData('student-list-app', 'classroom-id');
 const classroomStatus = getData('student-list-app', 'classroom-status');

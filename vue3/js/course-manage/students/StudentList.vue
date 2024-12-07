@@ -94,7 +94,7 @@
                 <div class="flex items-center self-stretch gap-4 whitespace-nowrap">
                   加入时间/学习有效期
                   <a-tooltip placement="top" title="取加入方式中学习有效期最长的生效和展示">
-                    <img class="w-16 h-16" src="../../../img/tip.png" alt="">
+                    <InfoCircleOutlined class="w-16 text-[#919399]"/>
                   </a-tooltip>
                 </div>
               </template>
@@ -119,8 +119,8 @@
                     <span class="text-[#37393D] text-14 font-normal leading-22">
                       {{ mobile(record.user.id, record.user.verifiedMobile) }}
                     </span>
-                      <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
-                      <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
+                      <EyeOutlined v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 text-[#919399]"/>
+                      <EyeInvisibleOutlined v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 cursor-pointer text-[#919399]"/>
                     </div>
                   </div>
                   <div class="w-111 truncate text-12 text-[#87898F]">{{ record.joinedChannelText }}</div>
@@ -137,10 +137,10 @@
                   <div class="flex flex-col justify-center items-start h-16 w-100 p-2 rounded-99 bg-[#F5F5F5]">
                     <div class="h-12 rounded-99" :style="`width: ${record.learningProgressPercent}px;`" style="background-image: linear-gradient(90deg, rgba(0, 194, 97, 0.4), rgb(0, 194, 97));"></div>
                   </div>
-                  <span class="flex items-center gap-4">
+                  <div class="flex items-center gap-4">
                     <span class="text-[#37393D] hover:text-[--primary-color] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
-                    <img class="w-16 h-16" src="../../../img/goto.png" alt="">
-                  </span>
+                    <RightOutlined class="w-16 text-[#919399]"/>
+                  </div>
                 </div>
               </template>
               <template v-else-if="column.key === 'operation'">
@@ -149,7 +149,7 @@
                   <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown v-if="isNormalCourse" placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
-                      <img class="w-20 h-20" src="../../../img/more.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                      <EllipsisOutlined class="w-20 text-[--primary-color]"/>
                     </span>
                     <template #overlay>
                       <a-menu>
@@ -207,7 +207,15 @@ import {message} from 'ant-design-vue';
 import AntConfigProvider from '../../components/AntConfigProvider';
 import {trans, formatDate, getData, goto, open} from '../../common';
 import Api from 'vue3/api';
-import { ImportOutlined, UserAddOutlined } from '@ant-design/icons-vue';
+import {
+  ImportOutlined,
+  UserAddOutlined,
+  InfoCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  RightOutlined,
+  EllipsisOutlined,
+} from '@ant-design/icons-vue';
 
 const courseId = getData('student-list-app', 'course-id');
 const courseSetId = getData('student-list-app', 'course-set-id');
