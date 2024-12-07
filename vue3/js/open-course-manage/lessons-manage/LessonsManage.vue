@@ -504,7 +504,7 @@ watch(() => drawerType.value,async (newType) => {
             <div v-else class="flex">
               <div class="flex px-16 py-8 bg-[#F5F5F5] rounded-6 mr-16">
                 <VideoCameraOutlined class="w-16 mr-8"/>
-                <div class="text-14 font-medium text-[#37393D]">{{ formState.replayTitle }}</div>
+                <div class="text-14 font-medium text-[#37393D] truncate max-w-208 w-fit">{{ formState.replayTitle }}</div>
               </div>
               <div class="flex items-center cursor-pointer" @click="onEdit">
                 <EditOutlined class="text-[#5E6166] w-16 mr-4"/>
