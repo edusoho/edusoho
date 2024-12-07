@@ -11,7 +11,7 @@
                   data-keyboard="false"
                   :data-url="`/importer/classroom-member/index?classroomId=${classroomId}`"
           >
-            <img class="w-16 h-16" src="../../../img/student-manage/import.png" alt="">
+            <ImportOutlined class="w-16 text-[--primary-color]"/>
             <span>批量导入</span>
           </button>
           <button class="add-students-btn"
@@ -21,7 +21,7 @@
                   data-keyboard="false"
                   :data-url="`/classroom/${classroomId}/manage/student/create`"
           >
-            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
+            <UserAddOutlined class="w-16 text-white"/>
             <span>添加学员</span>
           </button>
         </div>
@@ -201,6 +201,7 @@ import {message} from 'ant-design-vue';
 import AntConfigProvider from '../../components/AntConfigProvider';
 import {formatDate, getData, goto, open, trans} from '../../common';
 import Api from 'vue3/api';
+import {ImportOutlined, UserAddOutlined} from '@ant-design/icons-vue';
 
 const classroomId = getData('student-list-app', 'classroom-id');
 const classroomStatus = getData('student-list-app', 'classroom-status');
