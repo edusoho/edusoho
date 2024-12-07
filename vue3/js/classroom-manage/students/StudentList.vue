@@ -124,12 +124,12 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-[#37393D] text-14 font-normal leading-22 w-fit truncate">{{ record.joinedChannelText }}</div>
+                <div class="w-111 truncate text-12 text-[#87898F]">{{ record.joinedChannelText }}</div>
               </template>
               <template v-else-if="column.key === 'joinTime'">
                 <div class="flex flex-col">
                   <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
-                  <div class="truncate">{{ record.deadline === 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
+                  <div class="w-100 truncate text-12 text-[#87898F]">{{ record.deadline === 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
                 </div>
               </template>
               <template v-else-if="column.key === 'learnProgress'">
