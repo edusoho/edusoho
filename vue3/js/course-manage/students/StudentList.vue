@@ -192,6 +192,7 @@
               :show-total="pagination.showTotal"
               :total="pagination.total"
               v-model="pagination.current"
+              :disabled="pagination.total === 0"
               @change="pagination.onChange"
             />
           </div>
