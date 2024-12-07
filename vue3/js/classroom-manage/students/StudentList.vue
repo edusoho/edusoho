@@ -68,7 +68,7 @@
                 <span class="text-[#37393D] text-14 font-normal leading-22">重置</span>
               </button>
               <div class="flex items-center gap-8 cursor-pointer" @click="onExport">
-                <img class="w-16 h-16" src="../../../img/student-manage/export.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                <ExportOutlined class="text-16 text-[--primary-color]"/>
                 <span class="text-[--primary-color] text-14 font-normal leading-22">导出搜索结果</span>
               </div>
             </div>
@@ -206,7 +206,7 @@ import {
   UserAddOutlined,
   InfoCircleOutlined,
   EyeInvisibleOutlined,
-  EyeOutlined, EllipsisOutlined
+  EyeOutlined, EllipsisOutlined, ExportOutlined
 } from '@ant-design/icons-vue';
 
 const classroomId = getData('student-list-app', 'classroom-id');
