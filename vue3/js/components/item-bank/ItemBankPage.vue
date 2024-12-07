@@ -2,7 +2,7 @@
 import {computed, createVNode, onBeforeMount, ref} from 'vue';
 import AntConfigProvider from '../AntConfigProvider.vue';
 import ItemBankDrawer from './ItemBankDrawer.vue';
-import {ExclamationCircleOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
+import {ExclamationCircleOutlined, HolderOutlined, InfoCircleOutlined} from '@ant-design/icons-vue';
 import {message, Modal} from 'ant-design-vue';
 import Api from '../../../api';
 import draggable from 'vuedraggable';
@@ -119,7 +119,7 @@ onBeforeMount(async () => {
               <div class="flex justify-between px-24 py-16 border border-[#DFE2E6] border-solid rounded-6 mb-16 bg-white cursor-grab">
                 <div class="flex space-x-16">
                   <div class="flex items-center">
-                    <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
+                    <HolderOutlined class="w-16 text-[#919399]"/>
                   </div>
                   <div class="relative">
                     <img :src="element.itemBankExercise.cover.middle" class="h-90 rounded-5" draggable="false" alt="">

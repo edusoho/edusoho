@@ -1,7 +1,7 @@
 <script setup>
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import {ref, h, reactive, computed, watch, createVNode} from 'vue';
-import { PlusCircleOutlined, CloseOutlined, EditOutlined, EyeOutlined, SendOutlined, CloseCircleOutlined, DeleteOutlined, ExclamationCircleOutlined, VideoCameraOutlined } from '@ant-design/icons-vue';
+import { PlusCircleOutlined, CloseOutlined, EditOutlined, EyeOutlined, SendOutlined, CloseCircleOutlined, DeleteOutlined, ExclamationCircleOutlined, VideoCameraOutlined, HolderOutlined } from '@ant-design/icons-vue';
 import {Empty, message, Modal} from 'ant-design-vue';
 import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
@@ -387,7 +387,7 @@ watch(() => drawerType.value,async (newType) => {
             <template #item="{element, index}">
               <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-14 py-20 cursor-grab">
                 <div class="flex items-center space-x-12">
-                  <img src="../../../img/move-icon.png" class="w-16" draggable="false" alt="">
+                  <HolderOutlined class="w-16 text-[#919399]"/>
                   <div v-if="element.status === 'unpublished'" class="px-8 h-22 leading-22 text-12 text-white font-normal bg-[#87898F] rounded-6">未发布</div>
                   <div class="text-14 font-normal text-black">{{`课时 ${index + 1} ：${element.title}（${Math.floor(Number(element.length / 60))}:${(Number(element.length) % 60) < 10 ? `0${Number(element.length) % 60}` : Number(element.length) % 60 }）` }}</div>
                 </div>
