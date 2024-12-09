@@ -129,7 +129,7 @@
               <template v-else-if="column.key === 'joinTime'">
                 <div class="flex flex-col">
                   <div>{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
-                  <div class="text-12 text-[#87898F]">{{ record.deadline === 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
+                  <div class="text-12 text-[#87898F]">{{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
                 </div>
               </template>
               <template v-else-if="column.key === 'learnProgress'">
