@@ -146,7 +146,7 @@ class ThreadShowWidget{
     if ($form.length == 0) {
       return;
     }
-    
+
     let editor = null;
     const $textarea = $form.find('textarea[name=content]');
     if ($textarea.data('imageUploadUrl')) {
@@ -159,7 +159,7 @@ class ThreadShowWidget{
         $textarea.val(editor.getData());
       });
     }
-    
+
     var captchaProp = null;
     if($("input[name=enable_anti_brush_captcha]").val() == 1){
       captchaProp = {
@@ -263,8 +263,8 @@ class ThreadShowWidget{
     $form.on("submitHandler", function(){
       captcha.setType("reply");
     })
-    
-    
+
+
     captcha.on('success', function(data){
       if(data.type == 'reply'){
         formValidateReply.settings.captcha.isShowCaptcha = 0;
