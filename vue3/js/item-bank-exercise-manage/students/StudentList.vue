@@ -91,10 +91,6 @@ const table = {
       title: '加入时间',
     },
     {
-      key: 'learnDeadline',
-      title: '学习有效期',
-    },
-    {
       key: 'operation',
       title: '操作',
       fixed: 'right',
@@ -443,9 +439,9 @@ const removeStudent = async userId => {
             :scroll="{ x: 'max-content' }"
           >
             <template #headerCell="{ column }">
-              <template v-if="column.key === 'learnDeadline'">
-                <div class="flex items-center self-stretch gap-8 whitespace-nowrap">
-                  学习有效期
+              <template v-if="column.key === 'joinTime'">
+                <div class="flex items-center self-stretch gap-4 whitespace-nowrap">
+                  加入时间/学习有效期
                   <a-tooltip placement="top" title="取加入方式中学习有效期最长的生效和展示">
                     <InfoCircleOutlined class="w-16 text-[#919399]"/>
                   </a-tooltip>
@@ -481,12 +477,8 @@ const removeStudent = async userId => {
                 </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">
-                <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
-              </template>
-              <template v-else-if="column.key === 'learnDeadline'">
-                <div class="min-w-100">
-                  {{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}
-                </div>
+                <div>{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
+                <div class="text-12 text-[#87898F]">{{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
               </template>
               <template v-else-if="column.key === 'operation'">
                 <div class="flex justify-end items-center gap-16 shrink-0">
