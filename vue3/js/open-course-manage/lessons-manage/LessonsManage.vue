@@ -531,7 +531,7 @@ watch(() => drawerType.value,async (newType) => {
           label="直播时长"
           name="length"
         >
-          <a-input-number v-model:value="formState.length" :formatter="formatter" :parser="parser" addon-after="分" class="w-120"/>
+          <a-input-number v-model:value="formState.length" min="1" :formatter="formatter" :parser="parser" addon-after="分" class="w-120"/>
         </a-form-item>
         <a-form-item
           v-if="drawerType === 'liveOpen'"
