@@ -69,7 +69,6 @@ class OpenCourseController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'default' => $default,
-            'classrooms' => [],
             'filter' => $filter,
         ]);
     }
