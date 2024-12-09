@@ -379,7 +379,7 @@ watch(() => drawerType.value,async (newType) => {
       <div class="flex justify-between items-center">
         <div class="text-16 font-medium text-black text-opacity-88">课时管理</div>
         <div class="flex space-x-20">
-          <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="editLesson('replay')">添加回放</a-button>
+          <a-button type="primary" ghost :icon="h(PlusCircleOutlined)" @click="editLesson('replay')">添加回放</a-button>
           <a-button type="primary" :icon="h(PlusCircleOutlined)" @click="editLesson('liveOpen')">添加直播</a-button>
         </div>
       </div>
