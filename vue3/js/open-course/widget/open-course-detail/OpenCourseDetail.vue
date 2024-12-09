@@ -1,12 +1,13 @@
 <script setup>
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
-import {reactive, ref} from 'vue';
+import {nextTick, reactive, ref} from 'vue';
 import { Empty } from 'ant-design-vue';
 import Api from '../../../../api';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import { ClockCircleOutlined } from '@ant-design/icons-vue';
 import {formatDate, goto} from '../../../common';
 import { AlignLeftOutlined } from '@ant-design/icons-vue';
+import ThreadShowWidget from 'app/js/thread/thread-show';
 
 const props = defineProps({
   course: {required: true},
@@ -30,6 +31,12 @@ fetchLessons();
 
 async function getCommentTemplate() {
   commentTemplate.value = await Api.openCourse.getCommentTemplate(props.course.id, { as: props.as })
+  nextTick(() => {
+    new ThreadShowWidget({
+      element: '#open-course-comment',
+    });
+  });
+
 }
 getCommentTemplate();
 
@@ -71,7 +78,7 @@ function viewLesson(courseId, id) {
             </div>
           </a-spin>
         </a-tab-pane>
-        <a-tab-pane key="comment" tab="评论">
+        <a-tab-pane key="comment" tab="评论" force-render>
           <div v-html="commentTemplate" class="mt-24"></div>
         </a-tab-pane>
       </a-tabs>
