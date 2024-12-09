@@ -244,11 +244,20 @@ async function onReset() {
   await searchReplay();
 }
 
+function getLimitedText(text) {
+  if (text.length <= 15) {
+    return text;
+  } else {
+    return text.slice(0, 15);
+  }
+}
+
 function onSelect(copyId, replayId, replayLength, replayTitle) {
   formState.copyId = copyId;
   formState.replayId = replayId;
   formState.replayLength = replayLength;
   formState.replayTitle = replayTitle;
+  formState.title = getLimitedText(replayTitle);
   formRef.value.validateFields(["replayId"]);
 }
 
@@ -385,10 +394,12 @@ watch(() => drawerType.value,async (newType) => {
             @end="changeLessonSort"
           >
             <template #item="{element, index}">
-              <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-14 py-20 cursor-grab">
-                <div class="flex items-center space-x-12">
+              <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-24 py-20 cursor-grab">
+                <div class="flex items-center space-x-12 relative">
                   <HolderOutlined class="w-16 text-[#919399]"/>
-                  <div v-if="element.status === 'unpublished'" class="px-8 h-22 leading-22 text-12 text-white font-normal bg-[#87898F] rounded-6">未发布</div>
+                  <div v-if="element.status === 'unpublished'" class="absolute h-fit -top-20 -left-36 px-8 py-3 leading-10 text-10 text-white font-normal bg-[#87898F] rounded-tl-8 rounded-br-8">未发布</div>
+                  <div v-if="element.type === 'liveOpen'" class="px-8 h-22 leading-20 text-12 text-[#46C37B] font-medium rounded-4 border border-solid border-[#46C37B] bg-[rgba(70,195,123,0.05)]">直播</div>
+                  <div v-if="element.type === 'replay'" class="px-8 h-22 leading-20 text-12 text-[#FF7D00] font-medium rounded-4 border border-solid border-[#FF7D00] bg-[rgba(255,125,0,0.05)]">回放</div>
                   <div class="text-14 font-normal text-black">{{`课时 ${index + 1} ：${element.title}（${Math.floor(Number(element.length / 60))}:${(Number(element.length) % 60) < 10 ? `0${Number(element.length) % 60}` : Number(element.length) % 60 }）` }}</div>
                 </div>
                 <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
