@@ -60,6 +60,7 @@ class OpenCourseController extends BaseOpenCourseController
             return $this->render($template, [
                 'tagIds' => $tagIds,
                 'course' => $course,
+                'lessonId' => $lessonId,
                 'wxPreviewUrl' => $this->getWxPreviewQrCodeUrl($course['id']),
             ]);
         }
@@ -128,7 +129,7 @@ class OpenCourseController extends BaseOpenCourseController
         if ($lessonId) {
             $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
 
-            if (!$lesson || ($lesson && 'published' != $lesson['status'])) {
+            if (!$lesson || ('preview' !== $request->query->get('as') && 'published' != $lesson['status'])) {
                 $lesson = [];
             }
         } else {
@@ -645,7 +646,7 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $replays = [];
 
-        if ('liveOpen' == $lesson['type']) {
+        if (in_array($lesson['type'], ['liveOpen', 'replay'])) {
             $replays = $this->getLiveReplayService()->searchReplays([
                 'courseId' => $lesson['courseId'],
                 'lessonId' => $lesson['id'],

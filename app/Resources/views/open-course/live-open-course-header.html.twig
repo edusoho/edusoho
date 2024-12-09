@@ -1,4 +1,4 @@
-{% if lesson is empty or lesson.startTime is empty or lesson.endTime is empty %}
+{% if lesson is empty %}
   <div class="mask">
     <div class="modal-dialog" style="width:200px;margin:22% auto;">
       <div class="modal-content">
@@ -58,7 +58,7 @@
     {% else %}
       <div class="mask-content">
         <h2>{{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}</h2>
-        {% if course.replayEnable|default(0) %}
+        {% if lesson.replayEnable|default(0) %}
           {% if lesson.replayStatus == 'videoGenerated' %}
             {% if setting('storage.enable_hls_encryption_plus', 0) == 1 and (is_uc_browse() or is_qq_browse()) %}
             <h2>{{ 'my.teaching.open_course.lesson.header.cannot_see.tips'|trans }}</h2>
