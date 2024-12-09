@@ -161,6 +161,9 @@ class OpenCourseLesson extends AbstractResource
         if ('liveOpen' == $lesson['type']) {
             $this->getLiveService()->deleteLiveRoom($lesson['mediaId']);
         }
+        if ('replay' == $lesson['type']) {
+            $this->getLiveReplayService()->deleteReplayByLessonId($lesson['id'], 'liveOpen');
+        }
         $this->getOpenCourseService()->deleteLesson($lessonId);
 
         return ['ok' => true];

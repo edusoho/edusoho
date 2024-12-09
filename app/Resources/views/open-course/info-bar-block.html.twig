@@ -56,7 +56,11 @@
         <a class="js-qrcode qrcode-popover top"> 
           <i class="es-icon es-icon-phone1"></i>
           <div class="qrcode-content">
-            <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
+            {% if lesson|default() %}
+              <img src="{{ qrcode_data_uri(url('open_course_lesson_learn', {courseId: course.id, lessonId: lesson.id})) }}" alt="">
+            {% else %}
+              <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
+            {% endif %}
             <span class="gray-darker text-center text-sm">{{ 'my.teaching.open_course.infobar.WeChat_QR_code_lerarn_course'|trans|raw }}</span>
           </div>
         </a>

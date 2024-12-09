@@ -176,19 +176,20 @@ class OpenCourseController extends BaseOpenCourseController
         ]);
     }
 
-    public function infoBarAction(Request $request, $courseId)
+    public function infoBarAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
+        $lesson = empty($lessonId) ? [] : $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         $member = $this->_getMember($course['id']);
 
-        $user = $this->getCurrentUser();
-        $memberFavorite = $this->getFavoriteService()->getUserFavorite($user['id'], 'openCourse', $courseId);
+        $memberFavorite = $this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), 'openCourse', $courseId);
 
         return $this->render('open-course/info-bar-block.html.twig', [
             'course' => $course,
             'member' => $member,
             'memberFavorite' => $memberFavorite,
+            'lesson' => $lesson,
         ]);
     }
 
