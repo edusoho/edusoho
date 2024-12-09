@@ -282,6 +282,7 @@ function deleteLesson(id) {
   Modal.confirm({
     title: '确定要删除该课时吗？',
     icon: createVNode(ExclamationCircleOutlined),
+    centered: true,
     okText: '删除',
     cancelText: '取消',
     async onOk() {
