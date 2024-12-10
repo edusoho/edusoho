@@ -265,6 +265,7 @@ function onSelect(copyId, replayId, replayLength, replayTitle) {
 }
 
 function onEdit() {
+  formState.title = null;
   formState.copyId = null;
   formState.replayId = null;
   formState.replayLength = null;
