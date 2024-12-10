@@ -465,6 +465,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'status' => 'unpublished',
             'materialNum' => 0,
             'replayEnable' => 1,
+            'copyId' => '',
         ]);
 
         if (isset($fields['title'])) {
