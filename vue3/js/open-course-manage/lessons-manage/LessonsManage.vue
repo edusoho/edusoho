@@ -262,6 +262,7 @@ function onSelect(copyId, replayId, replayLength, replayTitle) {
   formState.replayTitle = replayTitle;
   formState.title = getLimitedText(replayTitle);
   formRef.value.validateFields(["replayId"]);
+  formRef.value.validateFields(["title"]);
 }
 
 function onEdit() {
