@@ -260,13 +260,12 @@ function onSelect(copyId, replayId, replayLength, replayTitle) {
   formState.replayId = replayId;
   formState.replayLength = replayLength;
   formState.replayTitle = replayTitle;
-  formState.title = getLimitedText(replayTitle);
+  formState.title = formState.title ? formState.title : getLimitedText(replayTitle);
   formRef.value.validateFields(["replayId"]);
   formRef.value.validateFields(["title"]);
 }
 
 function onEdit() {
-  formState.title = null;
   formState.copyId = null;
   formState.replayId = null;
   formState.replayLength = null;
