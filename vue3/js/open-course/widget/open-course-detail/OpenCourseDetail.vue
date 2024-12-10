@@ -42,7 +42,6 @@ getCommentTemplate();
 
 function viewLesson(courseId, id) {
   goto(`/open/course/${courseId}/lesson/${id}/learn`);
-  activeKey.value = 'catalogue';
 }
 
 </script>
