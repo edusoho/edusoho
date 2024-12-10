@@ -71,7 +71,7 @@ function viewLesson(courseId, id) {
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <a-button @click="viewLesson(props.course.id, lesson.id)" type="primary" ghost :disabled="lesson.progressStatus === 'created' || lesson.replayStatus !== 'generated'">{{ lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
+                  <a-button @click="viewLesson(props.course.id, lesson.id)" type="primary" ghost :disabled="lesson.progressStatus === 'created' || (lesson.replayStatus !== 'generated' && lesson.progressStatus !== 'live')">{{ lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
                 </div>
               </div>
               <a-divider v-if="index + 1 !== lessons.data.length"/>
