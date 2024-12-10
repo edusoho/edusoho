@@ -398,7 +398,7 @@ watch(() => drawerType.value,async (newType) => {
             @end="changeLessonSort"
           >
             <template #item="{element, index}">
-              <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-24 py-20 cursor-grab">
+              <div class="flex items-center justify-between mb-12 bg-[#FAFAFA] rounded-8 px-24 py-20 cursor-all-scroll">
                 <div class="flex items-center space-x-12 relative">
                   <HolderOutlined class="w-16 text-[#919399]"/>
                   <div v-if="element.status === 'unpublished'" class="absolute h-fit -top-20 -left-36 px-8 py-3 leading-10 text-10 text-white font-normal bg-[#87898F] rounded-tl-8 rounded-br-8">未发布</div>
