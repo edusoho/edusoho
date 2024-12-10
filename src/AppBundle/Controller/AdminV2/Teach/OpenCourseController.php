@@ -69,7 +69,6 @@ class OpenCourseController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
             'default' => $default,
-            'classrooms' => [],
             'filter' => $filter,
         ]);
     }
@@ -125,7 +124,7 @@ class OpenCourseController extends BaseController
         $result = $this->getOpenCourseService()->publishCourse($id);
 
         if ('liveOpen' == $course['type'] && !$result['result']) {
-            return $this->createJsonResponse(['message' => '请先设置直播时间']);
+            return $this->createJsonResponse(['message' => '请先创建直播课时']);
         }
 
         if ('open' == $course['type'] && !$result['result']) {

@@ -1067,7 +1067,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $defaultConditions = ['categoryId' => '', 'isReplay' => 0, 'courseIds' => []];
         $conditions = ArrayToolkit::filter($conditions, $defaultConditions);
-        $conditions = array_merge(['type' => 'liveOpen', 'status' => 'published', 'parentId' => 0], $conditions);
+        $conditions = array_merge(['types' => ['liveOpen', 'replay'], 'status' => 'published', 'parentId' => 0], $conditions);
 
         if (!empty($conditions['isReplay'])) {
             $conditions['endTimeLessThan'] = time();

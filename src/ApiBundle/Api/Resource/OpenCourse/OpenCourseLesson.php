@@ -36,6 +36,9 @@ class OpenCourseLesson extends AbstractResource
             if ($lesson['startTime'] < time()) {
                 throw OpenCourseException::LIVE_START_TIME_OUTDATED();
             }
+            if (empty($lesson['length'])) {
+                throw CommonException::ERROR_PARAMETER();
+            }
         }
         if ('replay' == $lesson['type']) {
             if (!ArrayToolkit::requireds($lesson, ['copyId', 'replayId'])) {
@@ -47,6 +50,7 @@ class OpenCourseLesson extends AbstractResource
             }
             $activity = $this->getActivityService()->getActivity($lesson['copyId'], true);
             $lesson['startTime'] = $activity['startTime'];
+            $lesson['endTime'] = $activity['endTime'];
             $lesson['length'] = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
             $lesson['replayEnable'] = 1;
             $lesson['mediaId'] = $activity['ext']['liveId'];
@@ -138,6 +142,7 @@ class OpenCourseLesson extends AbstractResource
                 ]);
                 $activity = $this->getActivityService()->getActivity($fields['copyId'], true);
                 $fields['startTime'] = $activity['startTime'];
+                $fields['endTime'] = $activity['endTime'];
                 $fields['length'] = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
                 $fields['mediaId'] = $activity['ext']['liveId'];
                 $fields['liveProvider'] = $activity['ext']['liveProvider'];
@@ -160,6 +165,9 @@ class OpenCourseLesson extends AbstractResource
         }
         if ('liveOpen' == $lesson['type']) {
             $this->getLiveService()->deleteLiveRoom($lesson['mediaId']);
+        }
+        if ('replay' == $lesson['type']) {
+            $this->getLiveReplayService()->deleteReplayByLessonId($lesson['id'], 'liveOpen');
         }
         $this->getOpenCourseService()->deleteLesson($lessonId);
 

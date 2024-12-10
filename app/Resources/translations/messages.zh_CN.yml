@@ -5523,7 +5523,7 @@ admin.open_manage.manage.number_th: 编号
 admin.open_manage.manage.name_th: 名称
 admin.open_manage.manage.status_th: 状态
 admin.open_manage.manage.creator_th: 创建者
-admin.open_manage.manage.live_num: 直播数量
+admin.open_manage.manage.live_num: 课时数
 admin.open_manage.manage.hit_num: 观看人次
 admin.open_manage.manage.hit_num.tooltip: 统计每个公开课累计观看人次，每个用户（包括已登录和未登录）每观看一次计为一次，观看多次重复计算
 admin.open_manage.manage.operater_th: 操作
