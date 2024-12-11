@@ -82,6 +82,12 @@ class OpenCourseLesson extends AbstractResource
      */
     public function search(ApiRequest $request, $courseId)
     {
+        $includeUnpublished = $request->query->get('includeUnpublished');
+        if (empty($includeUnpublished)) {
+            return $this->getOpenCourseService()->searchLessons(['courseId' => $courseId, 'status' => 'published'], ['seq' => 'ASC'], 0, PHP_INT_MAX);
+        }
+        $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+
         return $this->getOpenCourseService()->findLessonsByCourseId($courseId);
     }
 

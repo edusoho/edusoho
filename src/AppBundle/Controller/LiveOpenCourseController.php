@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\Common\LiveWatermarkToolkit;
 use Biz\File\Service\UploadFileService;
 use Biz\Live\Service\LiveService;
-use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +28,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         if (!$result['result']) {
             return $this->createMessageResponse('info', $result['message']);
         }
+        $this->_memberOperate($request, $courseId);
 
         $user = $this->getCurrentUser();
         $params = [];
@@ -330,14 +330,6 @@ class LiveOpenCourseController extends BaseOpenCourseController
         }
 
         return null;
-    }
-
-    /**
-     * @return OpenCourseService
-     */
-    protected function getOpenCourseService()
-    {
-        return $this->getBiz()->service('OpenCourse:OpenCourseService');
     }
 
     protected function getLiveCourseService()
