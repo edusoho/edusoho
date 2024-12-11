@@ -14,7 +14,7 @@ const props = defineProps({
   as: {required: true}
 })
 
-const activeKey = ref('intro');
+const activeKey = ref('catalogue');
 
 const lessons = reactive({
   loading: false,
@@ -41,7 +41,7 @@ async function getCommentTemplate() {
 getCommentTemplate();
 
 function viewLesson(courseId, id) {
-  goto(`/open/course/${courseId}/lesson/${id}/learn`);
+  goto(`/open/course/${courseId}/lesson/${id}/learn?as=preview`);
 }
 
 </script>
@@ -57,15 +57,15 @@ function viewLesson(courseId, id) {
           </div>
         </a-tab-pane>
         <a-tab-pane key="catalogue" tab="目录">
-          <a-spin :spinning="lessons.loading" tip="加载中..." class="mt-140">
+          <a-spin :spinning="lessons.loading" tip="加载中..." class="my-100 w-full">
             <div v-for="(lesson, index) in lessons.data" :key="lesson.id">
               <div class="flex justify-between my-24">
                 <div class="flex flex-col">
                   <div class="mb-12 text-16 text-[#37393D] font-normal max-w-320 truncate w-fit">{{ lesson.title }}</div>
                   <div class="flex items-center mr-16">
-                    <AlignLeftOutlined v-if="lesson.progressStatus === 'live'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
-                    <div v-else class="w-7 h-7 mr-4" :class="{ 'bg-[#87898F]': lesson.replayStatus !== 'generated', 'bg-[--primary-color]': lesson.replayStatus === 'generated' }" style="border-radius: 9999px;"></div>
-                    <div class="text-14 mr-16 font-normal" :class="{ 'text-[#87898F]': lesson.progressStatus !== 'live', 'text-[--primary-color]': lesson.progressStatus === 'live' || lesson.replayStatus === 'generated' }">{{ lesson.replayStatus === 'generated'? '回放' : lesson.progressStatus === 'live' ? '进行中' : lesson.progressStatus === 'created' ? '未开始' : '已结束' }}</div>
+                    <AlignLeftOutlined v-if="lesson.progressStatus === 'live' && lesson.status === 'published'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
+                    <div v-else class="w-5 h-5 mr-4" :class="{ 'bg-[#87898F]': lesson.status === 'unpublished' || lesson.replayStatus !== 'generated', 'bg-[--primary-color]': lesson.replayStatus === 'generated' && lesson.status === 'published' }" style="border-radius: 9999px;"></div>
+                    <div class="text-14 mr-16 font-normal" :class="{ 'text-[#87898F]': lesson.progressStatus !== 'live' && lesson.status === 'unpublished', 'text-[--primary-color]': (lesson.progressStatus === 'live' || lesson.replayStatus === 'generated') && lesson.status === 'published' }">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.replayStatus === 'generated'? '回放' : lesson.progressStatus === 'live' ? '直播中' : lesson.progressStatus === 'created' ? '未开始' : '已结束' }}</div>
                     <ClockCircleOutlined class="text-[#87898F] mr-4 w-16"/>
                     <div class="text-14 font-normal text-[#87898F]">{{ formatDate(lesson.startTime, 'YYYY/MM/DD HH:mm') }}</div>
                   </div>

@@ -1,3 +1,5 @@
+{% do  script(['vue3/js/open-course/mobile/open-course/live-open-catalogue/index.js']) %}
+
 {% block content %}
   {{ render(controller('AppBundle:OpenCourse:header',{request:app.request, course:course, lessonId:lessonId|default(null)})) }}
   {% set recommends = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
@@ -23,6 +25,9 @@
       </div>
     </div>
   {% endif %}
-  {{ render(controller('AppBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
-
+  {% if course.type == 'open' %}
+    {{ render(controller('AppBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
+  {% elseif course.type == 'liveOpen' %}
+    <div id="live-open-catalogue" data-course="{{ course | json_encode }}"></div>
+  {% endif %}
 {% endblock %}

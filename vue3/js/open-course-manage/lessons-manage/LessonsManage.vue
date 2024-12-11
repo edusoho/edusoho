@@ -73,7 +73,7 @@ async function getExtraFormState(type, isEdit) {
       : { copyId: null, replayId: null, replayTitle: null, replayLength: null, replayIdValidateError: false },
     liveOpen: isEdit
       ? await getLiveOpenData()
-      : { startTime: null, length: null, replayEnable: true },
+      : { startTime: null, length: 60, replayEnable: true },
   };
   return stateMap[type] || {};
 }
@@ -120,8 +120,7 @@ const labelColConfig = computed(() => ({
   span: drawerType.value === 'liveOpen' ? 4 : 3,
 }));
 
-const currentPlusFiveMinutes = dayjs().add(5, 'minute');
-const defaultTime = ref(currentPlusFiveMinutes);
+const currentPlusFiveMinutes = ref(dayjs().add(5, 'minute'));
 
 const range = (start, end) => {
   const result = [];
@@ -540,14 +539,14 @@ watch(() => drawerType.value,async (newType) => {
           label="直播开始时间"
           name="startTime"
         >
-          <a-date-picker v-model:value="formState.startTime" :show-time="{ defaultValue: defaultTime, format: 'HH:mm' }" :disabled-date="disabledDate" :disabled-time="disabledTime" :show-now="false" format="YYYY-MM-DD HH:mm" :allow-clear="true" placeholder="开始时间" class="w-268"/>
+          <a-date-picker v-model:value="formState.startTime" :default-picker-value="currentPlusFiveMinutes" :show-time="{ defaultValue: currentPlusFiveMinutes, format: 'HH:mm' }" :disabled-date="disabledDate" :disabled-time="disabledTime" :show-now="false" format="YYYY-MM-DD HH:mm" :allow-clear="true" placeholder="开始时间" class="w-268"/>
         </a-form-item>
         <a-form-item
           v-if="drawerType === 'liveOpen'"
           label="直播时长"
           name="length"
         >
-          <a-input-number v-model:value="formState.length" min="1" :formatter="formatter" :parser="parser" addon-after="分" class="w-120"/>
+          <a-input-number v-model:value="formState.length" min="1" max="480" :formatter="formatter" :parser="parser" addon-after="分" class="w-120"/>
         </a-form-item>
         <a-form-item
           v-if="drawerType === 'liveOpen'"
