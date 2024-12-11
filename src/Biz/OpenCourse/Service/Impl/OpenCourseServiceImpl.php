@@ -203,9 +203,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function publishCourse($id)
     {
-        $course = $this->tryManageOpenCourse($id);
+        $this->tryManageOpenCourse($id);
 
-        $lessonCount = $this->countLessons(['courseId' => $id, 'status' => 'published']);
+        $lessonCount = $this->countLessons(['courseId' => $id]);
 
         if ($lessonCount < 1) {
             return ['result' => false, 'message' => '请先添加课时并发布！'];
