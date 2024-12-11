@@ -415,7 +415,7 @@ class OpenCourseManageController extends BaseController
         $result = $this->getOpenCourseService()->publishCourse($id);
 
         if ('liveOpen' === $course['type'] && !$result['result']) {
-            $result['message'] = '请先设置直播时间';
+            $result['message'] = '请先创建直播课时并发布';
         }
 
         if ('open' === $course['type'] && !$result['result']) {
