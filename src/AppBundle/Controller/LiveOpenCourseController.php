@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\LiveWatermarkToolkit;
+use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
 use Biz\Live\Service\LiveService;
 use Biz\System\Service\SettingService;
@@ -218,18 +219,22 @@ class LiveOpenCourseController extends BaseOpenCourseController
         ]);
     }
 
-    public function entryReplayAction(Request $request, $courseId, $lessonId, $replayId)
+    public function entryReplayAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getOpenCourseService()->getCourse($courseId);
-        if (empty($course['replayEnable'])) {
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+        if (empty($lesson['replayEnable'])) {
             return $this->createMessageResponse('error', '直播回放被设置为不允许观看！');
         }
 
-        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+        $course = $this->getOpenCourseService()->getCourse($courseId);
         $this->createRefererLog($request, $course);
 
         if ($this->getLiveService()->isESLive($lesson['liveProvider'])) {
-            $result = $this->getLiveReplayService()->entryReplay($replayId, $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
+            $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId, 'liveOpen');
+            if (empty($replays)) {
+                return $this->createMessageResponse('error', '直播回放不存在');
+            }
+            $result = $this->getLiveReplayService()->entryReplay($replays[0]['replayId'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
 
             return $this->render('live-course/eslive-entry.html.twig', [
                 'replayUrl' => $result['url'] ?? '',
@@ -242,23 +247,21 @@ class LiveOpenCourseController extends BaseOpenCourseController
             'url' => $this->generateUrl('live_open_course_live_replay_url', [
                 'courseId' => $courseId,
                 'lessonId' => $lessonId,
-                'replayId' => $replayId,
             ]),
         ]);
     }
 
-    public function getReplayUrlAction(Request $request, $courseId, $lessonId, $replayId)
+    public function getReplayUrlAction(Request $request, $courseId, $lessonId)
     {
-        $ssl = $request->isSecure() ? true : false;
-
         $course = $this->getOpenCourseService()->getCourse($courseId);
         $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
+        $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId, 'liveOpen');
 
-        $result = $this->getLiveReplayService()->entryReplay($replayId, $lesson['mediaId'], $lesson['liveProvider'], $ssl);
+        $result = $this->getLiveReplayService()->entryReplay($replays[0]['replayId'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', [
-                'replayId' => $replayId,
+                'replayId' => $replays[0]['replayId'],
                 'targetId' => $course['id'],
                 'targetType' => LiveroomController::LIVE_OPEN_COURSE_TYPE,
                 'lessonId' => $lesson['id'],
@@ -267,7 +270,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         return $this->createJsonResponse([
             'url' => $result['url'],
-            'param' => isset($result['param']) ? $result['param'] : null,
+            'param' => $result['param'] ?? null,
         ]);
     }
 
@@ -353,6 +356,9 @@ class LiveOpenCourseController extends BaseOpenCourseController
         return $this->getBiz()->service('File:UploadFileService');
     }
 
+    /**
+     * @return LiveReplayService
+     */
     protected function getLiveReplayService()
     {
         return $this->getBiz()->service('Course:LiveReplayService');
