@@ -79,10 +79,10 @@ class LiveReplay extends AbstractResource
         }
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $replays = $this->getLiveReplayService()->searchReplays(['lessonIds' => $activityIds, 'hidden' => 0], ['createdTime' => 'desc'], $offset, $limit);
+        $replays = $this->getLiveReplayService()->searchReplays(['lessonIds' => $activityIds, 'hidden' => 0, 'type' => 'live'], ['createdTime' => 'desc'], $offset, $limit);
         $replays = $this->handleActivityReplay($replays);
 
-        return $this->makePagingObject($replays, $this->getLiveReplayService()->searchCount(['lessonIds' => $activityIds, 'hidden' => 0]), $offset, $limit);
+        return $this->makePagingObject($replays, $this->getLiveReplayService()->searchCount(['lessonIds' => $activityIds, 'hidden' => 0, 'type' => 'live']), $offset, $limit);
     }
 
     protected function handleActivityReplay($replays)
