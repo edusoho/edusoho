@@ -41,7 +41,7 @@ async function getCommentTemplate() {
 getCommentTemplate();
 
 function viewLesson(courseId, id) {
-  goto(`/open/course/${courseId}/lesson/${id}/learn?as=preview`);
+  goto(`/open/course/${courseId}/lesson/${id}/learn`);
 }
 
 </script>
