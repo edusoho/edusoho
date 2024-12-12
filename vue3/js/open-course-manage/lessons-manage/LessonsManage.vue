@@ -120,7 +120,12 @@ const labelColConfig = computed(() => ({
   span: drawerType.value === 'liveOpen' ? 4 : 3,
 }));
 
-const currentPlusFiveMinutes = ref(dayjs().add(5, 'minute'));
+const getDefaultPickerValue = () => {
+  const now = new Date();
+  now.setMinutes(now.getMinutes() + 5);
+  return dayjs(now);
+};
+const defaultPickerValue = ref(getDefaultPickerValue());
 
 const range = (start, end) => {
   const result = [];
@@ -325,7 +330,7 @@ function shareLesson(lesson) {
     shareUrl.value = `${urlOrigin}/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`;
     return;
   }
-  if (lesson.progressStatus === 'live') {
+  if (lesson.progressStatus !== 'closed') {
     shareUrl.value = `${urlOrigin}/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`;
     return;
   }
@@ -602,7 +607,7 @@ watch(() => drawerType.value,async (newType) => {
           label="直播开始时间"
           name="startTime"
         >
-          <a-date-picker v-model:value="formState.startTime" :default-picker-value="currentPlusFiveMinutes" :show-time="{ defaultValue: currentPlusFiveMinutes, format: 'HH:mm' }" :disabled-date="disabledDate" :disabled-time="disabledTime" :show-now="false" format="YYYY-MM-DD HH:mm" :allow-clear="true" placeholder="开始时间" class="w-268"/>
+          <a-date-picker v-model:value="formState.startTime" :default-picker-value="defaultPickerValue" :show-time="{ defaultValue: defaultPickerValue, format: 'HH:mm' }" :disabled-date="disabledDate" :disabled-time="disabledTime" :show-now="false" format="YYYY-MM-DD HH:mm" :allow-clear="true" placeholder="开始时间" class="w-268"/>
         </a-form-item>
         <a-form-item
           v-if="drawerType === 'liveOpen'"

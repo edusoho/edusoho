@@ -246,6 +246,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             return $this->render('live-course/eslive-entry.html.twig', [
                 'replayUrl' => $result['url'] ?? '',
                 'watermark' => LiveWatermarkToolkit::build(),
+                'lesson' => $lesson,
             ]);
         }
 

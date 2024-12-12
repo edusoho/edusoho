@@ -67,7 +67,7 @@ function entryLesson(lesson) {
     goto(`/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`);
     return;
   }
-  if (lesson.progressStatus === 'live' || lesson.progressStatus === 'created') {
+  if (lesson.progressStatus !== 'closed') {
     goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`);
     return;
   }
@@ -92,8 +92,10 @@ function entryLesson(lesson) {
                 <AlignLeftOutlined v-if="lesson.progressStatus === 'live' && lesson.status === 'published'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
                 <div v-else class="w-5 h-5 mr-4" :class="{ 'bg-[#87898F]': !isReplayAvailable(lesson), 'bg-[--primary-color]': isReplayAvailable(lesson) }" style="border-radius: 9999px;"></div>
                 <div class="text-14 mr-12 font-normal" :class="{ 'text-[#87898F]': !isLessonAvailable(lesson), 'text-[--primary-color]': isLessonAvailable(lesson) }">{{ getLessonStatus(lesson) }}</div>
-                <ClockCircleOutlined class="text-[#87898F] mr-4 w-16"/>
-                <div class="text-14 font-normal text-[#87898F]">{{ formatDate(lesson.startTime, 'YYYY/MM/DD HH:mm') }}</div>
+                <div v-if="lesson.type === 'liveOpen'" class="flex items-center">
+                  <ClockCircleOutlined class="text-[#87898F] mr-4 w-16"/>
+                  <div class="text-14 font-normal text-[#87898F]">{{ formatDate(lesson.startTime, 'YYYY/MM/DD HH:mm') }}</div>
+                </div>
               </div>
             </div>
             <a-divider v-if="index + 1 !== lessons.data.length" style="margin: 8px 0"/>

@@ -93,13 +93,13 @@ function entryLesson(lesson) {
       <a-tabs v-model:activeKey="activeKey" centered class="open-course-detail-tabs">
         <a-tab-pane key="intro" tab="简介">
           <div v-if="props.course.about" v-html="props.course.about" class="mt-24 mb-24"></div>
-          <div v-else class="mt-48 mb-190">
+          <div v-else class="mt-48 mb-100">
             <a-empty :image="simpleImage" description="暂无简介"/>
           </div>
         </a-tab-pane>
         <a-tab-pane key="catalogue" tab="目录">
-          <a-spin :spinning="lessons.loading" tip="加载中..." class="my-100 w-full">
-            <div v-for="(lesson, index) in lessons.data" :key="lesson.id">
+          <a-spin :spinning="lessons.loading" tip="加载中..." class="w-full">
+            <div v-if="lessons.data.length" v-for="(lesson, index) in lessons.data" :key="lesson.id">
               <div class="flex justify-between my-24">
                 <div class="flex flex-col">
                   <div class="flex items-center mb-12">
@@ -109,8 +109,10 @@ function entryLesson(lesson) {
                     <AlignLeftOutlined v-if="lesson.progressStatus === 'live' && lesson.status === 'published'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
                     <div v-else class="w-5 h-5 mr-4" :class="{ 'bg-[#87898F]': !isReplayAvailable(lesson), 'bg-[--primary-color]': isReplayAvailable(lesson) }" style="border-radius: 9999px;"></div>
                     <div class="text-14 mr-16 font-normal" :class="{ 'text-[#87898F]': !isLessonAvailable(lesson), 'text-[--primary-color]': isLessonAvailable(lesson) }">{{ getLessonStatus(lesson) }}</div>
-                    <ClockCircleOutlined class="text-[#87898F] mr-4 w-16"/>
-                    <div class="text-14 font-normal text-[#87898F]">{{ formatDate(lesson.startTime, 'YYYY/MM/DD HH:mm') }}</div>
+                    <div v-if="lesson.type === 'liveOpen'" class="flex items-center">
+                      <ClockCircleOutlined class="text-[#87898F] mr-4 w-16"/>
+                      <div class="text-14 font-normal text-[#87898F]">{{ formatDate(lesson.startTime, 'YYYY/MM/DD HH:mm') }}</div>
+                    </div>
                   </div>
                 </div>
                 <div class="flex items-center">
@@ -118,6 +120,9 @@ function entryLesson(lesson) {
                 </div>
               </div>
               <a-divider v-if="index + 1 !== lessons.data.length"/>
+            </div>
+            <div v-else class="mt-48 mb-100">
+              <a-empty :image="simpleImage" description="暂无内容"/>
             </div>
           </a-spin>
         </a-tab-pane>
