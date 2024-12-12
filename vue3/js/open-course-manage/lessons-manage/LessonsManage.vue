@@ -631,7 +631,7 @@ watch(() => drawerType.value,async (newType) => {
         </div>
       </div>
     </a-drawer>
-    <a-modal v-model:open="shareModalVisible" title="分享链接" ok-text="复制链接" cancel-text="取消" @cancel="closeShareModal" @ok="copyShareUrl">
+    <a-modal v-model:open="shareModalVisible" :centered="true" title="分享链接" ok-text="复制链接" cancel-text="取消" @cancel="closeShareModal" @ok="copyShareUrl">
       <div class="px-16 py-20 rounded-6 bg-[#FAFAFA]" v-text="shareUrl"></div>
     </a-modal>
   </AntConfigProvider>
