@@ -676,7 +676,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function startLive($liveId, $startTime)
     {
-        $lesson = $this->getOpenCourseLessonDao()->getLiveOpenLessonByMediaId($liveId);
+        $lesson = $this->getLiveOpenLessonByLiveId($liveId);
         if (empty($lesson) || empty($startTime)) {
             return;
         }
@@ -689,7 +689,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function closeLive($liveId, $closeTime)
     {
-        $lesson = $this->getOpenCourseLessonDao()->getLiveOpenLessonByMediaId($liveId);
+        $lesson = $this->getLiveOpenLessonByLiveId($liveId);
         if (empty($lesson) || empty($closeTime)) {
             return;
         }
