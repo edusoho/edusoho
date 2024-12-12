@@ -690,13 +690,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     public function closeLive($liveId, $closeTime)
     {
         $lesson = $this->getLiveOpenLessonByLiveId($liveId);
-        if (empty($lesson) || empty($closeTime)) {
+        if (empty($lesson)) {
             return;
         }
         if (LiveStatus::CLOSED == $lesson['progressStatus']) {
             return;
         }
-        $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => LiveStatus::CLOSED, 'endTime' => $closeTime]);
+        $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => LiveStatus::CLOSED, 'endTime' => $closeTime ?: $lesson['endTime']]);
         $this->getLogService()->info(LogModule::OPEN_COURSE, 'update_live_status', '公开课结束直播', ['pre' => $lesson]);
     }
 
