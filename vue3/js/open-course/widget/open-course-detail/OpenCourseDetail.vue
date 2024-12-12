@@ -73,7 +73,6 @@ function isLessonDisabled(lesson) {
   );
 }
 
-const urlLessonId = location.pathname.match(/\/lesson\/(\d+)\//)[1];
 function entryLesson(lesson) {
   if (lesson.status === 'unpublished' || lesson.progressStatus === 'created') {
     return;
@@ -108,7 +107,6 @@ function entryLesson(lesson) {
               <div class="flex justify-between my-24">
                 <div class="flex flex-col">
                   <div class="flex items-center mb-12">
-                    <div v-if="urlLessonId === lesson.id" class="rounded-4 bg-[#FF7D00] px-8 py-3 text-white text-12 font-medium mr-12">当前公开课</div>
                     <div class="text-16 text-[#37393D] font-normal max-w-320 truncate w-fit">{{ lesson.title }}</div>
                   </div>
                   <div class="flex items-center mr-16">
