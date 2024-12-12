@@ -120,12 +120,12 @@ const labelColConfig = computed(() => ({
   span: drawerType.value === 'liveOpen' ? 4 : 3,
 }));
 
+const defaultPickerValue = ref();
 const getDefaultPickerValue = () => {
   const now = new Date();
   now.setMinutes(now.getMinutes() + 5);
-  return dayjs(now);
+  defaultPickerValue.value = dayjs(now);
 };
-const defaultPickerValue = ref(getDefaultPickerValue());
 
 const range = (start, end) => {
   const result = [];
@@ -442,6 +442,7 @@ function handleSave() {
 
 watch(() => drawerType.value,async (newType) => {
   await updateFormItem(newType);
+  getDefaultPickerValue();
 }, { immediate: true });
 </script>
 <template>
