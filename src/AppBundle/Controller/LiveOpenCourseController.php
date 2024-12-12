@@ -241,7 +241,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             if (empty($replays)) {
                 return $this->createMessageResponse('error', '直播回放不存在');
             }
-            $result = $this->getLiveReplayService()->entryReplay($replays[0]['replayId'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
+            $result = $this->getLiveReplayService()->entryReplay($replays[0]['id'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
 
             return $this->render('live-course/eslive-entry.html.twig', [
                 'replayUrl' => $result['url'] ?? '',
@@ -264,11 +264,11 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
         $replays = $this->getLiveReplayService()->findReplayByLessonId($lessonId, 'liveOpen');
 
-        $result = $this->getLiveReplayService()->entryReplay($replays[0]['replayId'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
+        $result = $this->getLiveReplayService()->entryReplay($replays[0]['id'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', [
-                'replayId' => $replays[0]['replayId'],
+                'replayId' => $replays[0]['id'],
                 'targetId' => $course['id'],
                 'targetType' => LiveroomController::LIVE_OPEN_COURSE_TYPE,
                 'lessonId' => $lesson['id'],
