@@ -66,10 +66,13 @@ function getLessonStatus(lesson) {
   }
 }
 function isLessonDisabled(lesson) {
-  return (
-    lesson.status === 'unpublished' ||
-    (lesson.replayStatus !== 'generated' && lesson.replayStatus !== 'videoGenerated' && lesson.progressStatus !== 'live')
-  );
+  if (lesson.status === 'unpublished') {
+    return true;
+  }
+  if (lesson.progressStatus === 'closed' && lesson.replayEnable === '0') {
+    return true;
+  }
+  return lesson.progressStatus === 'closed' && lesson.replayStatus === 'ungenerated';
 }
 
 function entryLesson(lesson) {
