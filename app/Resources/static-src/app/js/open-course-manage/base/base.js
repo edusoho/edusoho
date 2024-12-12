@@ -95,7 +95,10 @@ export default class Base {
     if ($('#course-about-field').length > 0) {
       self.editor = CKEDITOR.replace('course-about-field', {
         allowedContent: true,
-        toolbar: 'Detail',
+        toolbar: [
+          { items: [ 'FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+          { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList','Indent', 'Outdent', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize'] }
+        ],
         fileSingleSizeLimit: app.fileSingleSizeLimit,
         filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
       });
