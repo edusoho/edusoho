@@ -67,7 +67,7 @@ function entryLesson(lesson) {
     return;
   }
   if (lesson.progressStatus === 'closed' && lesson.replayEnable === '1' && lesson.replayStatus === 'generated') {
-    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live/replay/${lesson.replayId}/entry`);
+    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_replay_entry`);
   }
 }
 </script>
