@@ -1,18 +1,18 @@
-{% if lesson is empty %}
+{#{% if lesson is empty %}#}
   <div class="mask">
-    <div class="modal-dialog" style="width:200px;margin:22% auto;">
-      <div class="modal-content">
-        <div class="modal-body clearfix">
-          <i class="es-icon es-icon-info" style="font-size: 22px;"></i>
-          <span class="media-error">{{ 'my.teaching.open_course.lesson.empty'|trans }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-{% else %}
-  {% set refererUrl = app.request.server.get('HTTP_REFERER') %}
-  {% set isLiveFinished = is_live_finished(lesson.id, 'openCourse') %}
-  <div class="mask js-live-header-mask">
+{#    <div class="modal-dialog" style="width:200px;margin:22% auto;">#}
+{#      <div class="modal-content">#}
+{#        <div class="modal-body clearfix">#}
+{#          <i class="es-icon es-icon-info" style="font-size: 22px;"></i>#}
+{#          <span class="media-error">{{ 'my.teaching.open_course.lesson.empty'|trans }}</span>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#{% else %}#}
+{#  {% set refererUrl = app.request.server.get('HTTP_REFERER') %}#}
+{#  {% set isLiveFinished = is_live_finished(lesson.id, 'openCourse') %}#}
+{#  <div class="mask js-live-header-mask">#}
     <img src="{{ filepath(course.largePicture|default(''), 'course.png') }}" alt="{{ course.title }}" style="width: 100%; height: 100%; object-fit: cover;">
 {#    {% if lesson.startTime > ("now"|date("U")) %}#}
 {#      <div class="mask-content">#}
@@ -87,7 +87,7 @@
 {#      </div>#}
 {#    {% endif %}#}
   </div>
-  {% if isLiveFinished and lesson.replayStatus == 'videoGenerated' %}
-    {% include 'open-course/lesson-play.html.twig' %}
-  {% endif %}
-{% endif %}
+{#  {% if isLiveFinished and lesson.replayStatus == 'videoGenerated' %}#}
+{#    {% include 'open-course/lesson-play.html.twig' %}#}
+{#  {% endif %}#}
+{#{% endif %}#}

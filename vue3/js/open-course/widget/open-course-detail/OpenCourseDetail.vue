@@ -5,7 +5,7 @@ import { Empty } from 'ant-design-vue';
 import Api from '../../../../api';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import { ClockCircleOutlined } from '@ant-design/icons-vue';
-import {formatDate, goto} from '../../../common';
+import {formatDate, open} from '../../../common';
 import { AlignLeftOutlined } from '@ant-design/icons-vue';
 import ThreadShowWidget from 'app/js/thread/thread-show';
 
@@ -77,15 +77,15 @@ function entryLesson(lesson) {
     return;
   }
   if (lesson.replayStatus === 'videoGenerated') {
-    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`);
+    open(`/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`);
     return;
   }
   if (lesson.progressStatus === 'live') {
-    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`);
+    open(`/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`);
     return;
   }
   if (lesson.progressStatus === 'closed' && lesson.replayEnable === '1' && lesson.replayStatus === 'generated') {
-    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_replay_entry`);
+    open(`/open/course/${props.course.id}/lesson/${lesson.id}/live_replay_entry`);
   }
 }
 </script>
