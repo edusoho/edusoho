@@ -65,7 +65,7 @@ function viewLesson(courseId, id) {
                   <div class="flex items-center mr-16">
                     <AlignLeftOutlined v-if="lesson.progressStatus === 'live' && lesson.status === 'published'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
                     <div v-else class="w-5 h-5 mr-4" :class="{ 'bg-[#87898F]': lesson.status === 'unpublished' || lesson.replayStatus !== 'generated', 'bg-[--primary-color]': lesson.replayStatus === 'generated' && lesson.status === 'published' }" style="border-radius: 9999px;"></div>
-                    <div class="text-14 mr-16 font-normal" :class="{ 'text-[#87898F]': lesson.progressStatus !== 'live' && lesson.status === 'unpublished', 'text-[--primary-color]': (lesson.progressStatus === 'live' || lesson.replayStatus === 'generated') && lesson.status === 'published' }">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.replayStatus === 'generated'? '回放' : lesson.progressStatus === 'live' ? '直播中' : lesson.progressStatus === 'created' ? '未开始' : '已结束' }}</div>
+                    <div class="text-14 mr-16 font-normal" :class="{ 'text-[#87898F]': lesson.progressStatus !== 'live' || lesson.status === 'unpublished', 'text-[--primary-color]': (lesson.progressStatus === 'live' || lesson.replayStatus === 'generated') && lesson.status === 'published' }">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.replayStatus === 'generated'? '回放' : lesson.progressStatus === 'live' ? '直播中' : lesson.progressStatus === 'created' ? '未开始' : '已结束' }}</div>
                     <ClockCircleOutlined class="text-[#87898F] mr-4 w-16"/>
                     <div class="text-14 font-normal text-[#87898F]">{{ formatDate(lesson.startTime, 'YYYY/MM/DD HH:mm') }}</div>
                   </div>
