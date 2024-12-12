@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Common\LiveWatermarkToolkit;
 use Biz\Course\Service\LiveReplayService;
 use Biz\File\Service\UploadFileService;
+use Biz\Live\Constant\LiveReplayStatus;
 use Biz\Live\Service\LiveService;
 use Biz\System\Service\SettingService;
 use Biz\Util\EdusohoLiveClient;
@@ -222,6 +223,12 @@ class LiveOpenCourseController extends BaseOpenCourseController
     public function entryReplayAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+        if (LiveReplayStatus::VIDEO_GENERATED == $lesson['replayStatus']) {
+            return $this->forward('AppBundle:OpenCourse:player', [
+                'courseId' => $courseId,
+                'lessonId' => $lessonId,
+            ]);
+        }
         if (empty($lesson['replayEnable'])) {
             return $this->createMessageResponse('error', '直播回放被设置为不允许观看！');
         }
