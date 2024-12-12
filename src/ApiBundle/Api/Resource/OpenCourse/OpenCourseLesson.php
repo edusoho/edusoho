@@ -82,7 +82,25 @@ class OpenCourseLesson extends AbstractResource
      */
     public function search(ApiRequest $request, $courseId)
     {
-        return $this->getOpenCourseService()->findLessonsByCourseId($courseId);
+        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($courseId);
+        $replayGeneratedLessonIds = [];
+        foreach ($lessons as $lesson) {
+            if (LiveReplayStatus::GENERATED == $lesson['replayStatus']) {
+                $replayGeneratedLessonIds[] = $lesson['id'];
+            }
+        }
+        if (empty($replayGeneratedLessonIds)) {
+            return $lessons;
+        }
+        $replays = $this->getLiveReplayService()->findReplaysByLessonIds($replayGeneratedLessonIds, 'liveOpen');
+        $replays = ArrayToolkit::group($replays, 'lessonId');
+        foreach ($lessons as &$lesson) {
+            if (!empty($replays[$lesson['id']])) {
+                $lesson['replayId'] = $replays[$lesson['id']][0]['replayId'];
+            }
+        }
+
+        return $lessons;
     }
 
     /**
