@@ -1,13 +1,13 @@
 <script setup>
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import {ref, h, reactive, computed, watch, createVNode} from 'vue';
-import { PlusCircleOutlined, CloseOutlined, EditOutlined, EyeOutlined, SendOutlined, CloseCircleOutlined, DeleteOutlined, ExclamationCircleOutlined, VideoCameraOutlined, HolderOutlined } from '@ant-design/icons-vue';
+import { PlusCircleOutlined, CloseOutlined, EditOutlined, EyeOutlined, SendOutlined, CloseCircleOutlined, DeleteOutlined, ExclamationCircleOutlined, VideoCameraOutlined, HolderOutlined, ShareAltOutlined } from '@ant-design/icons-vue';
 import {Empty, message, Modal} from 'ant-design-vue';
 import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import draggable from 'vuedraggable';
 import Api from '../../../api';
-import {formatDate, open} from '../../common';
+import {formatDate, goto, open} from '../../common';
 
 const props = defineProps({
   course: {required: true},
@@ -308,9 +308,71 @@ async function unpublishLesson(id) {
   await fetchLessons();
 }
 
-function viewLesson(courseId, id) {
-  open(`/open/course/${courseId}/lesson/${id}/learn?as=preview`)
+function viewLesson(id) {
+  open(`/open/course/${props.course.id}/lesson/${id}/learn?as=preview`)
 }
+
+const shareModalVisible = ref(false);
+const shareUrl = ref();
+function resetShareModal() {
+  shareModalVisible.value = false;
+  shareUrl.value = null;
+}
+function shareLesson(lesson) {
+  shareModalVisible.value = true;
+  const urlOrigin = location.origin;
+  if (lesson.replayStatus === 'videoGenerated') {
+    shareUrl.value = `${urlOrigin}/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`;
+    return;
+  }
+  if (lesson.progressStatus === 'live') {
+    shareUrl.value = `${urlOrigin}/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`;
+    return;
+  }
+  if (lesson.progressStatus === 'closed' && lesson.replayEnable === '1' && lesson.replayStatus === 'generated') {
+    shareUrl.value = `${urlOrigin}/open/course/${props.course.id}/lesson/${lesson.id}/live_replay_entry`;
+    return;
+  }
+  shareUrl.value = `${urlOrigin}/open/course/${props.course.id}/lesson/${lesson.id}/learn`;
+}
+
+async function copyShareUrl() {
+  await copyToClipboard();
+  resetShareModal()
+}
+const fallbackCopyTextToClipboard = (text) => {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-9999px';
+  document.body.appendChild(textArea);
+  textArea.select();
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      message.success('复制成功');
+    } else {
+      message.success('复制失败');
+    }
+  } catch (err) {
+    console.error('execCommand 方法复制失败：', err);
+  }
+  document.body.removeChild(textArea);
+};
+
+const copyToClipboard = async () => {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(shareUrl.value);
+      message.success('复制成功');
+    } catch (err) {
+      console.error('Clipboard API 复制失败：', err);
+    }
+  } else {
+    console.warn('Clipboard API 不支持，使用回退方法');
+    fallbackCopyTextToClipboard(shareUrl.value);
+  }
+};
 
 function resetDrawer() {
   drawerType.value = null;
@@ -408,10 +470,11 @@ watch(() => drawerType.value,async (newType) => {
                 </div>
                 <div class="flex items-center space-x-20 text-[--primary-color] text-14 font-normal">
                   <div v-if="element.editable" @click="editLesson(element.type, element.id)" class="flex items-center cursor-pointer"><EditOutlined class="mr-4"/>编辑</div>
-                  <div @click="viewLesson(props.course.id, element.id)" class="flex items-center cursor-pointer"><EyeOutlined class="mr-4"/>预览</div>
+                  <div @click="viewLesson(element.id)" class="flex items-center cursor-pointer"><EyeOutlined class="mr-4"/>预览</div>
                   <div v-if="element.status === 'unpublished'" @click="publishLesson(element.id)" class="flex items-center cursor-pointer"><SendOutlined class="mr-4"/>发布</div>
                   <div v-if="element.status === 'published'" @click="unpublishLesson(element.id)" class="flex items-center cursor-pointer"><CloseCircleOutlined class="mr-4"/>取消发布</div>
                   <div v-if="element.status === 'unpublished'" @click="deleteLesson(element.id)" class="flex items-center cursor-pointer"><DeleteOutlined class="mr-4"/>删除</div>
+                  <div v-if="element.status === 'published'" @click="shareLesson(element)" class="flex items-center cursor-pointer"><ShareAltOutlined class="mr-4"/>分享</div>
                 </div>
               </div>
             </template>
@@ -563,6 +626,9 @@ watch(() => drawerType.value,async (newType) => {
         </div>
       </div>
     </a-drawer>
+    <a-modal v-model:open="shareModalVisible" title="分享链接" ok-text="复制链接" cancel-text="取消" @cancel="resetShareModal" @ok="copyShareUrl">
+      <div class="px-16 py-20 rounded-6 bg-[#FAFAFA]" v-text="shareUrl"></div>
+    </a-modal>
   </AntConfigProvider>
 </template>
 

@@ -29,4 +29,7 @@ export default {
   async changeLessonSort(courseId, params) {
     return apiClient.post(`/api/open_course/${courseId}/lesson_sort`, params);
   },
+  async getOpenCourse(courseId) {
+    return apiClient.get(`/open_course/${courseId}`);
+  },
 }

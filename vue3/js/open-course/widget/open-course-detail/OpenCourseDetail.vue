@@ -40,10 +40,23 @@ async function getCommentTemplate() {
 }
 getCommentTemplate();
 
-function viewLesson(courseId, id) {
-  goto(`/open/course/${courseId}/lesson/${id}/learn`);
+const urlLessonId = location.pathname.match(/\/lesson\/(\d+)\//)[1];
+function entryLesson(lesson) {
+  if (lesson.status === 'unpublished' || lesson.progressStatus === 'created') {
+    return;
+  }
+  if (lesson.replayStatus === 'videoGenerated') {
+    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`);
+    return;
+  }
+  if (lesson.progressStatus === 'live') {
+    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`);
+    return;
+  }
+  if (lesson.progressStatus === 'closed' && lesson.replayEnable === '1' && lesson.replayStatus === 'generated') {
+    goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_replay_entry`);
+  }
 }
-
 </script>
 
 <template>
@@ -61,7 +74,10 @@ function viewLesson(courseId, id) {
             <div v-for="(lesson, index) in lessons.data" :key="lesson.id">
               <div class="flex justify-between my-24">
                 <div class="flex flex-col">
-                  <div class="mb-12 text-16 text-[#37393D] font-normal max-w-320 truncate w-fit">{{ lesson.title }}</div>
+                  <div class="flex items-center mb-12">
+                    <div v-if="urlLessonId === lesson.id" class="rounded-4 bg-[#FF7D00] px-8 py-3 text-white text-12 font-medium mr-12">当前公开课</div>
+                    <div class="text-16 text-[#37393D] font-normal max-w-320 truncate w-fit">{{ lesson.title }}</div>
+                  </div>
                   <div class="flex items-center mr-16">
                     <AlignLeftOutlined v-if="lesson.progressStatus === 'live' && lesson.status === 'published'" rotate="270" class="text-[--primary-color] mr-4 w-16"/>
                     <div v-else class="w-5 h-5 mr-4" :class="{ 'bg-[#87898F]': lesson.status === 'unpublished' || lesson.replayStatus !== 'generated', 'bg-[--primary-color]': lesson.replayStatus === 'generated' && lesson.status === 'published' }" style="border-radius: 9999px;"></div>
@@ -71,7 +87,7 @@ function viewLesson(courseId, id) {
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <a-button @click="viewLesson(props.course.id, lesson.id)" type="primary" ghost :disabled="lesson.status === 'unpublished' || lesson.progressStatus === 'created' || (lesson.replayStatus !== 'generated' && lesson.progressStatus !== 'live')">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
+                  <a-button @click.stop="entryLesson(props.course.id, lesson.id)" type="primary" ghost :disabled="lesson.status === 'unpublished' || lesson.progressStatus === 'created' || (lesson.replayStatus !== 'generated' && lesson.progressStatus !== 'live')">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
                 </div>
               </div>
               <a-divider v-if="index + 1 !== lessons.data.length"/>
