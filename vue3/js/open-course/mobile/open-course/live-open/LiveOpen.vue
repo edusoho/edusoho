@@ -59,7 +59,7 @@ function entryLesson(lesson) {
     message.error('敬请期待');
     return;
   }
-  if (lesson.replayEnable === '0' || lesson.replayStatus === 'ungenerated') {
+  if (lesson.progressStatus === 'closed' && (lesson.replayEnable === '0' || lesson.replayStatus === 'ungenerated')) {
     message.error('直播已结束');
     return;
   }

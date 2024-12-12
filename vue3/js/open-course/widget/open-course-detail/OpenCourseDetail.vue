@@ -69,8 +69,7 @@ function isLessonDisabled(lesson) {
   if (lesson.status === 'unpublished') {
     return true;
   }
-  return lesson.replayEnable === '0' || lesson.replayStatus === 'ungenerated';
-
+  return lesson.progressStatus === 'closed' && (lesson.replayEnable === '0' || lesson.replayStatus === 'ungenerated');
 }
 
 function entryLesson(lesson) {

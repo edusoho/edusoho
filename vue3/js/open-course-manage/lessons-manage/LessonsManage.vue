@@ -254,12 +254,12 @@ function getLimitedText(text) {
   }
 }
 
-function onSelect(copyId, replayId, replayLength, replayTitle) {
-  formState.copyId = copyId;
-  formState.replayId = replayId;
-  formState.replayLength = replayLength;
-  formState.replayTitle = replayTitle;
-  formState.title = formState.title ? formState.title : getLimitedText(replayTitle);
+function onSelect(record) {
+  formState.copyId = record.id;
+  formState.replayId = record.replayId;
+  formState.replayLength = record.liveSecond;
+  formState.replayTitle = record.title;
+  formState.title = formState.title ? formState.title : getLimitedText(record.title);
   formRef.value.validateFields(["replayId"]);
   formRef.value.validateFields(["title"]);
 }
@@ -563,7 +563,7 @@ watch(() => drawerType.value,async (newType) => {
                     {{ record.liveStartTime }}
                   </template>
                   <template v-if="column.key === 'operation'">
-                    <div class="text-[--primary-color] cursor-pointer" @click="onSelect(record.id, record.replayId, record.liveSecond, record.title)">选择</div>
+                    <div class="text-[--primary-color] cursor-pointer" @click="onSelect(record)">选择</div>
                   </template>
                 </template>
               </a-table>
