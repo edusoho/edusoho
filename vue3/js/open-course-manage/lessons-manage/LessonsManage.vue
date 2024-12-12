@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 import draggable from 'vuedraggable';
 import Api from '../../../api';
-import {formatDate, goto, open} from '../../common';
+import {formatDate, open} from '../../common';
 
 const props = defineProps({
   course: {required: true},

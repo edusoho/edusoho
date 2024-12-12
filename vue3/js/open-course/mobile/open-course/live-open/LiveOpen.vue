@@ -1,10 +1,10 @@
 <script setup>
-
 import {reactive, ref} from 'vue';
 import Api from '../../../../../api';
 import AntConfigProvider from '../../../../components/AntConfigProvider.vue';
 import {AlignLeftOutlined, ClockCircleOutlined} from '@ant-design/icons-vue';
 import {formatDate, goto} from '../../../../common';
+import { message } from 'ant-design-vue';
 
 const props = defineProps({
   course: {required: true},
@@ -55,18 +55,23 @@ function getLessonStatus(lesson) {
 }
 
 function entryLesson(lesson) {
-  if (lesson.status === 'unpublished' || lesson.progressStatus === 'created') {
+  if (lesson.status === 'unpublished') {
+    message.error('敬请期待');
     return;
   }
-  if (lesson.replayStatus === 'videoGenerated') {
+  if (lesson.replayEnable === '0' || lesson.replayStatus === 'ungenerated') {
+    message.error('直播已结束');
+    return;
+  }
+  if (lesson.replayStatus === 'videoGenerated' && lesson.replayEnable === '1') {
     goto(`/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`);
     return;
   }
-  if (lesson.progressStatus === 'live') {
+  if (lesson.progressStatus === 'live' || lesson.progressStatus === 'created') {
     goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`);
     return;
   }
-  if (lesson.progressStatus === 'closed' && lesson.replayEnable === '1' && lesson.replayStatus === 'generated') {
+  if (lesson.replayStatus === 'generated' && lesson.replayEnable === '1') {
     goto(`/open/course/${props.course.id}/lesson/${lesson.id}/live_replay_entry`);
   }
 }
@@ -98,7 +103,3 @@ function entryLesson(lesson) {
     </div>
   </AntConfigProvider>
 </template>
-
-<style lang="less">
-
-</style>

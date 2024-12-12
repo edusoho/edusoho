@@ -69,25 +69,20 @@ function isLessonDisabled(lesson) {
   if (lesson.status === 'unpublished') {
     return true;
   }
-  if (lesson.progressStatus === 'closed' && lesson.replayEnable === '0') {
-    return true;
-  }
-  return lesson.progressStatus === 'closed' && lesson.replayStatus === 'ungenerated';
+  return lesson.replayEnable === '0' || lesson.replayStatus === 'ungenerated';
+
 }
 
 function entryLesson(lesson) {
-  if (lesson.status === 'unpublished' || lesson.progressStatus === 'created') {
-    return;
-  }
   if (lesson.replayStatus === 'videoGenerated') {
     open(`/open/course/${props.course.id}/lesson/${lesson.id}/player?referer=${location.pathname}`);
     return;
   }
-  if (lesson.progressStatus === 'live') {
+  if (lesson.progressStatus === 'live' || lesson.progressStatus === 'created') {
     open(`/open/course/${props.course.id}/lesson/${lesson.id}/live_entry`);
     return;
   }
-  if (lesson.progressStatus === 'closed' && lesson.replayEnable === '1' && lesson.replayStatus === 'generated') {
+  if (lesson.replayStatus === 'generated') {
     open(`/open/course/${props.course.id}/lesson/${lesson.id}/live_replay_entry`);
   }
 }
