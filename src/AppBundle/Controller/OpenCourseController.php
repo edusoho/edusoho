@@ -390,6 +390,9 @@ class OpenCourseController extends BaseOpenCourseController
         }
 
         if ('liveOpen' == $lesson['type'] && 'videoGenerated' == $lesson['replayStatus']) {
+            if (empty($lesson['replayEnable'])) {
+                return $this->createMessageResponse('error', '直播回放被设置为不允许观看！');
+            }
             $course = $this->getOpenCourseService()->getCourse($courseId);
             $this->createRefererLog($request, $course);
         }
