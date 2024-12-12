@@ -118,7 +118,7 @@ function entryLesson(lesson) {
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <a-button @click.stop="entryLesson(props.course.id, lesson.id)" type="primary" ghost :disabled="isLessonDisabled(lesson)">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
+                  <a-button @click.stop="entryLesson(lesson)" type="primary" ghost :disabled="isLessonDisabled(lesson)">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
                 </div>
               </div>
               <a-divider v-if="index + 1 !== lessons.data.length"/>
