@@ -55,7 +55,7 @@ class OpenCourseReplay extends AbstractResource
         foreach ($visibleReplays as $index => $visibleReplay) {
             $replays[] = $client->getLiveReplay($lesson['mediaId'], [
                 'replayId' => $visibleReplay['replayId'],
-                'userId' => $user['id'],
+                'userId' => $user['userId'],
                 'nickname' => $user['nickname'],
                 'device' => $device,
                 'protocol' => $protocol, ]);
