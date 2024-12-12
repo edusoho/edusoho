@@ -68,7 +68,6 @@ function getLessonStatus(lesson) {
 function isLessonDisabled(lesson) {
   return (
     lesson.status === 'unpublished' ||
-    lesson.progressStatus === 'created' ||
     (lesson.replayStatus !== 'generated' && lesson.replayStatus !== 'videoGenerated' && lesson.progressStatus !== 'live')
   );
 }
