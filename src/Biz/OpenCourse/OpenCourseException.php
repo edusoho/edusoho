@@ -32,6 +32,12 @@ class OpenCourseException extends AbstractException
 
     const REPLAY_NOT_PERMITTED = 4034009;
 
+    const LIVE_START_TIME_OUTDATED = 4004012;
+
+    const DELETE_PUBLISHED_LESSON = 4004013;
+
+    const LESSON_NUM_LIMIT = 4004014;
+
     public $messages = [
         4044001 => 'exception.opencourse.not_found',
         4044002 => 'exception.opencourse.not_found_lesson',
@@ -45,5 +51,8 @@ class OpenCourseException extends AbstractException
         5004010 => 'exception.opencourse.is_not_member',
         5004011 => 'exception.opencourse.check_password_required',
         4034009 => 'exception.opencourse.replay_not_permitted',
+        4004012 => 'exception.opencourse.live_start_time_outdated',
+        4004013 => 'exception.opencourse.delete_published_lesson',
+        4004014 => 'exception.opencourse.lesson_num_limit',
     ];
 }

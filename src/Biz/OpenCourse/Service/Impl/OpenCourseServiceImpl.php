@@ -164,55 +164,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $updatedCourse;
     }
 
-    protected function shouldUpdateLiveLesson($course, $fields)
-    {
-        return 'liveOpen' == $course['type'] && isset($fields['startTime']) && !empty($fields['startTime']);
-    }
-
-    protected function updateLiveLesson($course, $fields)
-    {
-        $openLiveLesson = $this->searchLessons(
-            ['courseId' => $course['id']],
-            ['startTime' => 'DESC'],
-            0,
-            1
-        );
-        $liveLesson = $openLiveLesson ? $openLiveLesson[0] : [];
-
-        $liveLessonFields = ArrayToolkit::parts($fields, [
-            'startTime',
-            'length',
-            'authUrl',
-            'jumpUrl',
-        ]);
-
-        $liveLessonFields = array_merge($liveLesson, $liveLessonFields);
-
-        $liveLessonFields['type'] = 'liveOpen';
-        $liveLessonFields['courseId'] = $course['id'];
-        $liveLessonFields['title'] = $course['title'];
-
-        $routes = [
-            'authUrl' => $fields['authUrl'],
-            'jumpUrl' => $fields['jumpUrl'],
-        ];
-        if ($openLiveLesson) {
-            $this->getLiveCourseService()->editLiveRoom($course, $liveLessonFields, $routes);
-            $this->updateLesson(
-                $liveLessonFields['courseId'],
-                $liveLessonFields['id'],
-                $liveLessonFields
-            );
-        } else {
-            $live = $this->getLiveCourseService()->createLiveRoom($course, $liveLessonFields, $routes);
-
-            $liveLessonFields['mediaId'] = $live['id'];
-            $liveLessonFields['liveProvider'] = $live['provider'];
-
-            $this->createLesson($liveLessonFields);
-        }
-    }
-
     public function updateCourse($id, $fields)
     {
         $fields = $this->filterOpenCourseFields($fields);
@@ -222,13 +173,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
-        $updatedCourse = $this->updateOpenCourse($course, $fields);
-
-        if ($this->shouldUpdateLiveLesson($course, $fields)) {
-            $this->updateLiveLesson($course, $fields);
-        }
-
-        return $updatedCourse;
+        return $this->updateOpenCourse($course, $fields);
     }
 
     public function deleteCourse($id)
@@ -258,9 +203,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function publishCourse($id)
     {
-        $course = $this->tryManageOpenCourse($id);
+        $this->tryManageOpenCourse($id);
 
-        $lessonCount = $this->countLessons(['courseId' => $id, 'status' => 'published']);
+        $lessonCount = $this->countLessons(['courseId' => $id]);
 
         if ($lessonCount < 1) {
             return ['result' => false, 'message' => '请先添加课时并发布！'];
@@ -367,7 +312,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function getLessonItems($courseId)
     {
-        $lessons = $this->searchLessons(['courseId' => $courseId], ['seq' => 'ASC'], 0, 1);
+        $lessons = $this->searchLessons(['courseId' => $courseId], ['seq' => 'ASC'], 0, PHP_INT_MAX);
 
         $items = [];
 
@@ -436,6 +381,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'testStartTime' => 0,
             'status' => 'unpublished',
             'mediaSource' => '',
+            'replayEnable' => 1,
         ]);
         $lesson['replayStatus'] = 'ungenerated';
 
@@ -447,13 +393,13 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $course = $this->getCourse($lesson['courseId'], true);
+        $course = $this->getCourse($lesson['courseId']);
 
         if (empty($course)) {
             $this->createNewException(OpenCourseException::NOTFOUND_OPENCOURSE());
         }
 
-        if (!in_array($lesson['type'], ['video', 'liveOpen', 'open'])) {
+        if (!in_array($lesson['type'], ['video', 'liveOpen', 'open', 'replay'])) {
             $this->createNewException(OpenCourseException::LESSON_TYPE_INVALID());
         }
 
@@ -470,7 +416,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $lesson = $this->getOpenCourseLessonDao()->create($lesson);
 
-        if (!empty($lesson['mediaId'])) {
+        if (!empty($lesson['mediaId']) && 'video' == $lesson['type']) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
         }
 
@@ -514,9 +460,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'exerciseId' => 0,
             'testMode' => 'normal',
             'testStartTime' => 0,
+            'progressStatus' => '',
             'replayStatus' => 'ungenerated',
             'status' => 'unpublished',
             'materialNum' => 0,
+            'replayEnable' => 1,
+            'copyId' => '',
         ]);
 
         if (isset($fields['title'])) {
@@ -684,7 +633,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         foreach ($itemIds as $itemId) {
             ++$seq;
-            list($type) = explode('-', $itemId);
             ++$lessonNum;
 
             $item = $items[$itemId];
@@ -728,7 +676,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function startLive($liveId, $startTime)
     {
-        $lesson = $this->getOpenCourseLessonDao()->getLiveOpenLessonByMediaId($liveId);
+        $lesson = $this->getLiveOpenLessonByLiveId($liveId);
         if (empty($lesson) || empty($startTime)) {
             return;
         }
@@ -741,14 +689,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function closeLive($liveId, $closeTime)
     {
-        $lesson = $this->getOpenCourseLessonDao()->getLiveOpenLessonByMediaId($liveId);
-        if (empty($lesson) || empty($closeTime)) {
+        $lesson = $this->getLiveOpenLessonByLiveId($liveId);
+        if (empty($lesson)) {
             return;
         }
         if (LiveStatus::CLOSED == $lesson['progressStatus']) {
             return;
         }
-        $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => LiveStatus::CLOSED, 'endTime' => $closeTime]);
+        $this->getOpenCourseLessonDao()->update($lesson['id'], ['progressStatus' => LiveStatus::CLOSED, 'endTime' => $closeTime ?: $lesson['endTime']]);
         $this->getLogService()->info(LogModule::OPEN_COURSE, 'update_live_status', '公开课结束直播', ['pre' => $lesson]);
     }
 
@@ -1120,7 +1068,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         $defaultConditions = ['categoryId' => '', 'isReplay' => 0, 'courseIds' => []];
         $conditions = ArrayToolkit::filter($conditions, $defaultConditions);
-        $conditions = array_merge(['type' => 'liveOpen', 'status' => 'published', 'parentId' => 0], $conditions);
+        $conditions = array_merge(['types' => ['liveOpen', 'replay'], 'status' => 'published', 'parentId' => 0], $conditions);
 
         if (!empty($conditions['isReplay'])) {
             $conditions['endTimeLessThan'] = time();

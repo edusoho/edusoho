@@ -589,9 +589,8 @@ t.add("order.information_collect_error_hint", "\u8bf7\u5148\u63d0\u4ea4\u4fe1\u6
 t.add("settings.setup.set_success.hint", "\u8bbe\u7f6e\u5e10\u53f7\u6210\u529f\uff0c\u6b63\u5728\u8df3\u8f6c", "js", "zh_CN");
 t.add("settings.setup.set_failed.hint", "\u8bbe\u7f6e\u5e10\u53f7\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5", "js", "zh_CN");
 t.add("settings.user_profile.save_success_hint", "\u4fdd\u5b58\u6210\u529f", "js", "zh_CN");
-t.add("share.share_to_wechat_circle_of_friends_hint", "\u5206\u4eab\u5230\u5fae\u4fe1\u670b\u53cb\u5708", "js", "zh_CN");
+t.add("share.share_to_wechat_circle_of_friends_hint", "\u626b\u7801\u5206\u4eab", "js", "zh_CN");
 t.add("share.qr_code_load_hint", "\u6b63\u5728\u52a0\u8f7d\u4e8c\u7ef4\u7801...", "js", "zh_CN");
-t.add("share.wechat_share_usage_hint", "\u6253\u5f00\u5fae\u4fe1\uff0c\u70b9\u51fb\u5e95\u90e8\u7684\u201c\u53d1\u73b0\u201d\uff0c<br>\u4f7f\u7528 \u201c\u626b\u4e00\u626b\u201d \u5373\u53ef\u5c06\u7f51\u9875\u5206\u4eab\u5230\u6211\u7684\u670b\u53cb\u5708\u3002\n", "js", "zh_CN");
 t.add("task.plugin_question_post_success_hint", "\u63d0\u95ee\u6210\u529f", "js", "zh_CN");
 t.add("task.plugin_question_add.title_required_error_hint", "\u8bf7\u8f93\u5165\u95ee\u9898\u6807\u9898", "js", "zh_CN");
 t.add("task.plugin_question_add.content_required_error_hint", "\u8bf7\u8f93\u5165\u63d0\u95ee\u5185\u5bb9", "js", "zh_CN");

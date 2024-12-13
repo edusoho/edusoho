@@ -982,6 +982,7 @@ course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
 course.teacher_setup.exist_teacher.add_tips_v2: 'Can only add users with teacher privileges, sorted under the first teacher of the other teachers are live teaching assistant status'
+course.item_bank_manage: 'Item Bank Manage'
 course.members_manage: 'Students'
 course.members_manage.export.field_learn_time: The cumulative learning time
 course.members_manage.official_student: Students
@@ -3765,6 +3766,7 @@ my.teaching.multi_class.my_students: My Students
 my.teaching.multi_class.status: Status
 my.teaching.multi_class.student_num: Student Number
 my.teaching.open_course.Basic_Info: Course settings
+my.teaching.open_course.Basic_Info.lessons: Lessons
 my.teaching.open_course.Basic_Info.message: Basic infomation
 my.teaching.open_course.Basic_Info.title: Course title
 my.teaching.open_course.Basic_Info.subtitle: Subtitle
@@ -3888,6 +3890,7 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 'Recommend Settings'
 my.teaching.open_course.course_manage: 'Courses'
 my.teaching.open_course.course_info: 'Course Info'
 my.teaching.open_course.live_manage: 'Lives'
+my.teaching.open_course.live_lessons: 'Lessons'
 my.teaching.open_course.show.edusoho_school: 'EduSoho site'
 my.teaching.open_course.show.tips: "This QR code can only be scanned by wechat for preview, and not able to be shared to others"
 my.teaching.open_course.show.recommend_course: 'Recommend Course/Classroom'
@@ -4674,6 +4677,9 @@ admin.open_manage.manage.number_th: Id
 admin.open_manage.manage.name_th: Name
 admin.open_manage.manage.status_th: Status
 admin.open_manage.manage.creator_th: Creator
+admin.open_manage.manage.live_num: Lesson Num
+admin.open_manage.manage.hit_num: 'Watch Person-time'
+admin.open_manage.manage.hit_num.tooltip: Statistics of the cumulative viewing time of each open course. Each viewing time of each user (including logged in and not logged in) is counted as one, and multiple viewing times are counted
 admin.open_manage.manage.operater_th: Action
 admin.open_manage.manage.recommend: "Recommended：%recommendedTime% / SN：%recommendedSeq% "
 admin.open_manage.manage.manage_btn: Config
@@ -9719,6 +9725,9 @@ exception.opencourse.itemids_invalid: Lesson number error
 exception.opencourse.is_not_member: You are not member of course
 exception.opencourse.check_password_required: Did not enter the correct verification password
 exception.opencourse.replay_not_permitted: Live replay is set to not allowed to watch
+exception.opencourse.live_start_time_outdated: Live start time outdated
+exception.opencourse.delete_published_lesson: Published lesson can not be deleted
+exception.opencourse.lesson_num_limit: The maximum 300 has been reached
 exception.blacklist.forbidden_take: Permission denied
 exception.blacklist.duplicate_add: Already in the blacklist, don't add it repeatedly
 exception.blacklist.not_found: Blacklist does not exist

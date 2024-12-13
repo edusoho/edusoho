@@ -763,10 +763,8 @@ settings.setup.set_failed.hint: Set account failed, please try again
 
 settings.user_profile.save_success_hint: Saved successfully
 
-share.share_to_wechat_circle_of_friends_hint: Share to weibo moment
+share.share_to_wechat_circle_of_friends_hint: Scanning code sharing
 share.qr_code_load_hint: Loading qrcode ...
-share.wechat_share_usage_hint: >
-  Open the WeChat, click "discovery" on the bottom, <br> "scan" to share the page to the moment.
 
 task.plugin_question_post_success_hint: Ask question successfully
 task.plugin_question_add.title_required_error_hint: Please enter the question title
