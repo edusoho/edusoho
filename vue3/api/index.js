@@ -8,6 +8,9 @@ import itemBank from './modules/itemBank'
 import security from './modules/security';
 import me from './modules/me';
 import itemBankExerciseMember from './modules/itemBankExerciseMember';
+import openCourse from './modules/openCourse';
+import liveReplay from './modules/liveReplay';
+import tag from './modules/tag'
 
 const Api = {
   contract,
@@ -20,6 +23,9 @@ const Api = {
   security,
   setting,
   itemBank,
+  openCourse,
+  liveReplay,
+  tag,
 };
 
 export default Api;

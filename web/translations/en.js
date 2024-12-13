@@ -647,9 +647,8 @@ t.add("order.information_collect_error_hint", "Please submit the information bef
 t.add("settings.setup.set_success.hint", "Set account successfully, redirecting", "js", "en");
 t.add("settings.setup.set_failed.hint", "Set account failed, please try again", "js", "en");
 t.add("settings.user_profile.save_success_hint", "Saved successfully", "js", "en");
-t.add("share.share_to_wechat_circle_of_friends_hint", "Share to weibo moment", "js", "en");
+t.add("share.share_to_wechat_circle_of_friends_hint", "Scanning code sharing", "js", "en");
 t.add("share.qr_code_load_hint", "Loading qrcode ...", "js", "en");
-t.add("share.wechat_share_usage_hint", "Open the WeChat, click \"discovery\" on the bottom, <br> \"scan\" to share the page to the moment.\n", "js", "en");
 t.add("task.plugin_question_post_success_hint", "Ask question successfully", "js", "en");
 t.add("task.plugin_question_add.title_required_error_hint", "Please enter the question title", "js", "en");
 t.add("task.plugin_question_add.content_required_error_hint", "Please enter the question content", "js", "en");

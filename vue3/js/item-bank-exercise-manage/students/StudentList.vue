@@ -4,6 +4,14 @@ import {formatDate, getData, goto, open, trans} from '../../common';
 import {computed, reactive, ref} from 'vue';
 import Api from '../../../api';
 import {message} from 'ant-design-vue';
+import {
+  ImportOutlined,
+  InfoCircleOutlined,
+  UserAddOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
+  EllipsisOutlined, ExportOutlined
+} from '@ant-design/icons-vue';
 
 const exerciseId = getData('student-list-app', 'exercise-id');
 const enableAddAndRemove = getData('student-list-app', 'enable-add-and-remove');
@@ -69,33 +77,24 @@ const table = {
     {
       key: 'user',
       title: '学员',
-      width: 300,
     },
     {
       key: 'mobile',
       title: '手机号',
-      width: 150,
     },
     {
       key: 'joinedChannel',
       title: '加入方式',
-      width: 300,
     },
     {
       key: 'joinTime',
       title: '加入时间',
-      width: 200,
-    },
-    {
-      key: 'learnDeadline',
-      title: '学习有效期',
-      width: 200,
     },
     {
       key: 'operation',
       title: '操作',
       fixed: 'right',
-      width: 182,
+      width: 138,
     },
   ],
   loading: false,
@@ -355,23 +354,23 @@ const removeStudent = async userId => {
       <div class="flex w-full justify-between items-center">
         <span class="text-16 font-medium leading-24 text-black/[.88]">学员管理</span>
         <div v-if="enableAddAndRemove && ['published'].includes(exerciseStatus)" class="flex items-center gap-20">
-          <button class="student-header-operate-button"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  :data-url="`/item_bank_exercise/${exerciseId}/manage/students/add`"
-          >
-            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
-            <span>添加学员</span>
-          </button>
-          <button class="student-header-operate-button"
+          <button class="bulk-import-btn"
                   data-toggle="modal"
                   data-target="#modal"
                   data-backdrop="static"
                   data-keyboard="false"
                   :data-url="`/importer/exercise-member/index?exerciseId=${exerciseId}`"
           >
-            <img class="w-16 h-16" src="../../../img/student-manage/import.png" alt="">
+            <ImportOutlined class="w-16 text-[--primary-color]"/>
             <span>批量导入</span>
+          </button>
+          <button class="add-students-btn"
+                  data-toggle="modal"
+                  data-target="#modal"
+                  :data-url="`/item_bank_exercise/${exerciseId}/manage/students/add`"
+          >
+            <UserAddOutlined class="w-16 text-white"/>
+            <span>添加学员</span>
           </button>
         </div>
       </div>
@@ -417,7 +416,7 @@ const removeStudent = async userId => {
                 <span class="text-[#37393D] text-14 font-normal leading-22">重置</span>
               </button>
               <div v-if="enableExport" class="flex items-center gap-8 cursor-pointer" @click="onExport">
-                <img class="w-16 h-16" src="../../../img/student-manage/export.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                <ExportOutlined class="text-16 text-[--primary-color]"/>
                 <span class="text-[--primary-color] text-14 font-normal leading-22">导出搜索结果</span>
               </div>
             </div>
@@ -437,14 +436,14 @@ const removeStudent = async userId => {
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 1000, y: 300 }"
+            :scroll="{ x: 'max-content' }"
           >
             <template #headerCell="{ column }">
-              <template v-if="column.key === 'learnDeadline'">
-                <div class="flex items-center self-stretch gap-8 whitespace-nowrap">
-                  学习有效期
+              <template v-if="column.key === 'joinTime'">
+                <div class="flex items-center self-stretch gap-4 whitespace-nowrap">
+                  加入时间/学习有效期
                   <a-tooltip placement="top" title="取加入方式中学习有效期最长的生效和展示">
-                    <img class="w-16 h-16" src="../../../img/tip.png" alt="">
+                    <InfoCircleOutlined class="w-16 text-[#919399]"/>
                   </a-tooltip>
                 </div>
               </template>
@@ -467,8 +466,8 @@ const removeStudent = async userId => {
                   <span class="text-[#37393D] text-14 font-normal leading-22">
                     {{ mobile(record.user.id, record.user.verifiedMobile) }}
                   </span>
-                  <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
-                  <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
+                  <EyeOutlined v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 text-[#919399]"/>
+                  <EyeInvisibleOutlined v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 cursor-pointer text-[#919399]"/>
                 </div>
               </template>
               <template v-else-if="column.key === 'joinedChannel'">
@@ -478,31 +477,30 @@ const removeStudent = async userId => {
                 </a-tooltip>
               </template>
               <template v-else-if="column.key === 'joinTime'">
-                <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
-              </template>
-              <template v-else-if="column.key === 'learnDeadline'">
-                <div class="min-w-100">
-                  {{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}
-                </div>
+                <div>{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
+                <div class="text-12 text-[#87898F]">{{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
               </template>
               <template v-else-if="column.key === 'operation'">
                 <div class="flex justify-end items-center gap-16 shrink-0">
-                  <span v-if="record.user.canSendMessage" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">发私信</span>
-                  <span v-if="isAdmin" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/students/${record.user.id}/show`">查看资料</span>
+                  <div v-if="isAdmin || isTeacher" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/student/deadline?ids=${record.user.id}`">修改有效期</div>
+                  <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
-                      <img class="w-20 h-20" src="../../../img/more.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                      <EllipsisOutlined class="w-20 text-[--primary-color]"/>
                     </span>
                     <template #overlay>
                       <a-menu>
+                        <a-menu-item v-if="record.user.canSendMessage" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">
+                          发私信
+                        </a-menu-item>
+                        <a-menu-item v-if="isAdmin" data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/students/${record.user.id}/show`">
+                          查看资料
+                        </a-menu-item>
                         <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/student/${record.user.id}/remark`">
                           备注
                         </a-menu-item>
                         <a-menu-item @click="followOrUnfollow(record.user.id)">
                           {{ followUsers[record.user.id] ? '取消关注' : '关注' }}
-                        </a-menu-item>
-                        <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/item_bank_exercise/${exerciseId}/manage/student/deadline?ids=${record.user.id}`" :disabled="!isAdmin && !isTeacher">
-                          修改有效期
                         </a-menu-item>
                         <a-menu-item @click="removeStudent(record.user.id)" :disabled="!isAdmin && !isTeacher">
                           移除
@@ -531,6 +529,7 @@ const removeStudent = async userId => {
               :show-total="pagination.showTotal"
               :total="pagination.total"
               v-model="pagination.current"
+              :disabled="pagination.total === 0"
               @change="pagination.onChange"
             />
           </div>
@@ -541,7 +540,27 @@ const removeStudent = async userId => {
 </template>
 
 <style lang="less">
-.student-header-operate-button {
+.bulk-import-btn {
+  display: flex;
+  height: 32px;
+  padding: 0 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--primary-color);
+  background: #fff;
+
+  span {
+    color: var(--primary-color);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+  }
+}
+
+.add-students-btn {
   display: flex;
   height: 32px;
   padding: 0 15px;

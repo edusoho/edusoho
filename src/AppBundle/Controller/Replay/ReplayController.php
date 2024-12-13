@@ -26,11 +26,11 @@ class ReplayController extends BaseController
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
         $paginator = new Paginator(
             $request,
-            $this->getLiveReplayService()->searchCount(['lessonIds' => $activityIds, 'hidden' => 0]),
+            $this->getLiveReplayService()->searchCount(['lessonIds' => $activityIds, 'hidden' => 0, 'type' => 'live']),
             20
         );
         $replays = $this->getLiveReplayService()->searchReplays(
-            ['lessonIds' => $activityIds, 'hidden' => 0],
+            ['lessonIds' => $activityIds, 'hidden' => 0, 'type' => 'live'],
             ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
