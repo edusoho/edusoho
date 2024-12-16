@@ -10,6 +10,10 @@
         </li>
 
         {% if course.type == 'liveOpen' %}
+            <li class="cd-sidebar__item {% if side_nav == 'liveLessons' %}active{% endif %}" >
+                <a href="{{ path('live_open_course_manage_lessons', {id:course.id}) }}">
+                  <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.live_lessons'|trans}}</a>
+            </li>
             <li class="cd-sidebar__item {% if side_nav == 'replay' %}active{% endif %}" >
                 <a href="{{ path('live_open_course_manage_replay', {id:course.id}) }}">
                     <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.live_manage'|trans}}</a>

@@ -56,7 +56,6 @@ function makeWeixinModal(params) {
   html += '      <div class="modal-body">';
   html += '        <p class="weixin-share-loading" style="text-align:center;">' + Translator.trans('share.qr_code_load_hint') + '</p>';
   html += '        <p class="weixin-share-qrcode text-center"></p>';
-  html += '        <p class="text-muted text-center"><small>' + Translator.trans('share.wechat_share_usage_hint') + '</small></p>';
   html += '      </div>';
   html += '    </div>';
   html += '  </div>';

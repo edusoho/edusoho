@@ -25,6 +25,8 @@
     <br>
     <span class="text-muted text-sm">{{ course.createdTime|date('Y-m-d H:i') }}</span>
   </td>
+  <td>{{ course.lessonNum }}</td>
+  <td>{{ course.hitNum }}</td>
   <td>
     <div class="btn-group">
       <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id,filter:filter}) }}" target="_blank">{{ 'admin.open_manage.manage.manage_btn'|trans }}</a>

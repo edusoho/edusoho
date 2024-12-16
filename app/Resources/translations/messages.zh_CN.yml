@@ -1120,6 +1120,8 @@ course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
 course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
 
+course.item_bank_manage: 题库练习管理
+
 course.members_manage: 学员管理
 course.members_manage.export.field_learn_time: 累加学习时长
 course.members_manage.official_student: 正式学员
@@ -4373,6 +4375,7 @@ my.teaching.multi_class.student_num: 班课学员
 
 # 录播公开课
 my.teaching.open_course.Basic_Info: 课程设置
+my.teaching.open_course.Basic_Info.lessons: 课时管理
 my.teaching.open_course.Basic_Info.message: 基础信息
 my.teaching.open_course.Basic_Info.title: 课程标题
 my.teaching.open_course.Basic_Info.subtitle: 副标题
@@ -4543,6 +4546,7 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
 my.teaching.open_course.course_manage: 课程管理
 my.teaching.open_course.course_info: 课程信息
 my.teaching.open_course.live_manage: 录播管理
+my.teaching.open_course.live_lessons: 课时管理
 my.teaching.open_course.show.edusoho_school: EduSoho网校
 my.teaching.open_course.show.tips: >
   二维码只用于微信扫一<br>扫预览，不可用于分享
@@ -4565,7 +4569,7 @@ my.teaching.open_course.lesson.header.content.end.tips: 结束
 my.teaching.open_course.lesson.header.live_course_end: 直播已经结束
 my.teaching.open_course.lesson.header.view_replay_btn: 查看回放
 my.teaching.open_course.lesson.header.cannot_see.tips: 暂不支持查看回放，请使用其他浏览器查看
-my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来：
+my.teaching.open_course.lesson.header.view_replay.tips: 回放生成中，请稍后再来...
 my.teaching.open_course.lesson.header.view_replay_not_permitted.tips: 直播回放被设置为不允许观看
 my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
@@ -5519,6 +5523,9 @@ admin.open_manage.manage.number_th: 编号
 admin.open_manage.manage.name_th: 名称
 admin.open_manage.manage.status_th: 状态
 admin.open_manage.manage.creator_th: 创建者
+admin.open_manage.manage.live_num: 课时数
+admin.open_manage.manage.hit_num: 观看人次
+admin.open_manage.manage.hit_num.tooltip: 统计每个公开课累计观看人次，每个用户（包括已登录和未登录）每观看一次计为一次，观看多次重复计算
 admin.open_manage.manage.operater_th: 操作
 admin.open_manage.manage.recommend: >
   荐：%recommendedTime% / 序号：%recommendedSeq%
@@ -8161,7 +8168,6 @@ admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
 admin.developer_setting.market_address: 微营销地址(https://wyx.marketing.com)
 admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
-admin_v2.developer_setting.scrm_url: 'SCRM地址(https://scrm.edusoho.com)'
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.default_locale: 默认语言
 admin.developer_setting.default_locale.zh_CN: 中文
@@ -11053,6 +11059,9 @@ exception.opencourse.itemids_invalid: 课时数错误
 exception.opencourse.is_not_member: 您不是课程成员
 exception.opencourse.check_password_required: 未输入正确的校验密码
 exception.opencourse.replay_not_permitted: 直播回放被设置为不允许观看
+exception.opencourse.live_start_time_outdated: 直播开始时间应晚于当前时间
+exception.opencourse.delete_published_lesson: 不能删除已发布的课时
+exception.opencourse.lesson_num_limit: 最多可添加300个课时
 exception.blacklist.forbidden_take: 没有权限
 exception.blacklist.duplicate_add: 已在黑名单中，不要重复添加
 exception.blacklist.not_found: 黑名单不存在

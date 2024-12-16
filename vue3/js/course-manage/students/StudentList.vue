@@ -4,25 +4,25 @@
       <div class="flex w-full justify-between items-center">
         <span class="text-16 font-medium leading-24 text-black/[.88]">学员管理</span>
         <div v-if="isNormalCourse && isEnableAddAndRemove && ['published', 'unpublished'].includes(courseStatus)" class="flex items-center gap-20">
-          <button class="student-header-operate-button"
-                  data-toggle="modal"
-                  data-target="#modal"
-                  data-backdrop="static"
-                  data-keyboard="false"
-                  :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/add`"
-          >
-            <img class="w-16 h-16" src="../../../img/student-manage/add.png" alt="">
-            <span>添加学员</span>
-          </button>
-          <button class="student-header-operate-button"
+          <button class="bulk-import-btn"
                   data-toggle="modal"
                   data-target="#modal"
                   data-backdrop="static"
                   data-keyboard="false"
                   :data-url="`/importer/course-member/index?courseId=${courseId}`"
           >
-            <img class="w-16 h-16" src="../../../img/student-manage/import.png" alt="">
+            <ImportOutlined class="w-16 text-[--primary-color]"/>
             <span>批量导入</span>
+          </button>
+          <button class="add-students-btn"
+                  data-toggle="modal"
+                  data-target="#modal"
+                  data-backdrop="static"
+                  data-keyboard="false"
+                  :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/add`"
+          >
+            <UserAddOutlined class="w-16 text-white"/>
+            <span>添加学员</span>
           </button>
         </div>
       </div>
@@ -68,7 +68,7 @@
                 <span class="text-[#37393D] text-14 font-normal leading-22">重置</span>
               </button>
               <div v-if="exportBtnVisible" class="flex items-center gap-8 cursor-pointer" @click="onExport">
-                <img class="w-16 h-16" src="../../../img/student-manage/export.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                <ExportOutlined class="text-16 text-[--primary-color]"/>
                 <span class="text-[--primary-color] text-14 font-normal leading-22">导出搜索结果</span>
               </div>
             </div>
@@ -88,14 +88,13 @@
             :pagination="false"
             :loading="table.loading"
             :row-selection="{selectedRowKeys: table.rowSelection.selectedRowKeys, onChange: table.rowSelection.onChange}"
-            :scroll="{ x: 1200, y: 300 }"
           >
             <template #headerCell="{ column }">
-              <template v-if="column.key === 'learnDeadline'">
-                <div class="flex items-center self-stretch gap-8">
-                  学习有效期
+              <template v-if="column.key === 'joinTime'">
+                <div class="flex items-center self-stretch gap-4 whitespace-nowrap">
+                  加入时间/学习有效期
                   <a-tooltip placement="top" title="取加入方式中学习有效期最长的生效和展示">
-                    <img class="w-16 h-16" src="../../../img/tip.png" alt="">
+                    <InfoCircleOutlined class="w-16 text-[#919399]"/>
                   </a-tooltip>
                 </div>
               </template>
@@ -104,67 +103,67 @@
               <template v-if="column.key === 'user'">
                 <div class="flex items-center gap-12 shrink-0">
                   <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
-                  <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
-                    <template #title>{{ record.user.nickname }}<span v-if="record.remark">{{ `(${record.remark})` }}</span></template>
-                    <span class="text-[#1D2129] hover:text-[--primary-color] text-14 font-normal leading-22 cursor-pointer max-w-160 overflow-hidden text-ellipsis whitespace-nowrap" @click="open(`/user/${record.user.uuid}`)">
-                      {{ record.user.nickname }}
-                      <span v-if="record.remark" class="text-12 text-[#999999]">{{ `(${record.remark})` }}</span>
-                    </span>
-                  </a-tooltip>
+                  <div class="flex flex-col">
+                    <a-tooltip placement="top">
+                      <template #title>{{ record.user.nickname }}</template>
+                      <div @click="open(`/user/${record.user.uuid}`)" class="w-fit max-w-100 truncate text-14 text-[#1D2129] cursor-pointer hover:text-[--primary-color]">{{ record.user.nickname }}</div>
+                    </a-tooltip>
+                    <div class="w-100 truncate text-12 text-[#87898F]" v-if="record.remark">{{ record.remark }}</div>
+                  </div>
                 </div>
               </template>
               <template v-else-if="column.key === 'mobile'">
-                <div class="flex gap-8 min-w-50">
-                  <span class="text-[#37393D] text-14 font-normal leading-22">
-                    {{ mobile(record.user.id, record.user.verifiedMobile) }}
-                  </span>
-                  <img v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 h-24" src="../../../img/open-eye.png" alt="">
-                  <img v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 h-24 cursor-pointer" src="../../../img/close-eye.png" alt="">
+                <div class="flex flex-col">
+                  <div class="flex">
+                    <div class="flex gap-8 min-w-50">
+                    <span class="text-[#37393D] text-14 font-normal leading-22">
+                      {{ mobile(record.user.id, record.user.verifiedMobile) }}
+                    </span>
+                      <EyeOutlined v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 text-[#919399]"/>
+                      <EyeInvisibleOutlined v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 cursor-pointer text-[#919399]"/>
+                    </div>
+                  </div>
+                  <div class="w-111 truncate text-12 text-[#87898F]">{{ record.joinedChannelText }}</div>
                 </div>
               </template>
-              <template v-else-if="column.key === 'joinedChannel'">
-                <a-tooltip placement="top" :overlayStyle="{ whiteSpace: 'normal' }">
-                  <template #title>{{ record.joinedChannelText }}</template>
-                  <div class="text-[#37393D] text-14 font-normal leading-22 max-w-250 w-fit truncate">{{ record.joinedChannelText }}</div>
-                </a-tooltip>
-              </template>
               <template v-else-if="column.key === 'joinTime'">
-                <div class="truncate">{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
+                <div class="flex flex-col">
+                  <div>{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
+                  <div class="text-12 text-[#87898F]">{{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
+                </div>
               </template>
               <template v-else-if="column.key === 'learnProgress'">
                 <div class="flex gap-8 items-center cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/process`">
                   <div class="flex flex-col justify-center items-start h-16 w-100 p-2 rounded-99 bg-[#F5F5F5]">
                     <div class="h-12 rounded-99" :style="`width: ${record.learningProgressPercent}px;`" style="background-image: linear-gradient(90deg, rgba(0, 194, 97, 0.4), rgb(0, 194, 97));"></div>
                   </div>
-                  <span class="flex items-center gap-4">
+                  <div class="flex items-center gap-4">
                     <span class="text-[#37393D] hover:text-[--primary-color] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
-                    <img class="w-16 h-16" src="../../../img/goto.png" alt="">
-                  </span>
-                </div>
-              </template>
-              <template v-else-if="column.key === 'learnDeadline'">
-                <div class="min-w-100">
-                  {{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}
+                    <RightOutlined class="w-16 text-[#919399]"/>
+                  </div>
                 </div>
               </template>
               <template v-else-if="column.key === 'operation'">
-                <div class="flex justify-end items-center gap-16 shrink-0">
-                  <span v-if="isNormalCourse && record.user.canSendMessage" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">发私信</span>
-                  <span v-if="isAdmin" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/show`">查看资料</span>
+                <div class="flex items-center gap-16">
+                  <div v-if="isAdmin || isTeacher" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/student/deadline?ids=${record.user.id}`">修改有效期</div>
+                  <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown v-if="isNormalCourse" placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
-                      <img class="w-20 h-20" src="../../../img/more.png" alt="" style="filter: drop-shadow(1000px 0 0 var(--primary-color)); transform: translate(-1000px);">
+                      <EllipsisOutlined class="w-20 text-[--primary-color]"/>
                     </span>
                     <template #overlay>
                       <a-menu>
+                        <a-menu-item v-if="isNormalCourse && record.user.canSendMessage" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">
+                          发私信
+                        </a-menu-item>
+                        <a-menu-item v-if="isAdmin" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/show`">
+                          查看资料
+                        </a-menu-item>
                         <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/student/${record.user.id}/remark`">
                           备注
                         </a-menu-item>
                         <a-menu-item @click="followOrUnfollow(record.user.id)">
                           {{ followUsers[record.user.id] ? '取消关注' : '关注' }}
-                        </a-menu-item>
-                        <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/student/deadline?ids=${record.user.id}`" :disabled="!isAdmin && !isTeacher">
-                          修改有效期
                         </a-menu-item>
                         <a-menu-item @click="removeStudent(record.user.id)" :disabled="!isEnableAddAndRemove">
                           移除
@@ -193,6 +192,7 @@
               :show-total="pagination.showTotal"
               :total="pagination.total"
               v-model="pagination.current"
+              :disabled="pagination.total === 0"
               @change="pagination.onChange"
             />
           </div>
@@ -208,6 +208,16 @@ import {message} from 'ant-design-vue';
 import AntConfigProvider from '../../components/AntConfigProvider';
 import {trans, formatDate, getData, goto, open} from '../../common';
 import Api from 'vue3/api';
+import {
+  ImportOutlined,
+  UserAddOutlined,
+  InfoCircleOutlined,
+  EyeInvisibleOutlined,
+  EyeOutlined,
+  RightOutlined,
+  EllipsisOutlined,
+  ExportOutlined,
+} from '@ant-design/icons-vue';
 
 const courseId = getData('student-list-app', 'course-id');
 const courseSetId = getData('student-list-app', 'course-set-id');
@@ -308,38 +318,22 @@ const table = {
     {
       key: 'user',
       title: '学员',
-      width: 300,
     },
     {
       key: 'mobile',
-      title: '手机号',
-      width: 150,
-    },
-    {
-      key: 'joinedChannel',
-      title: '加入方式',
-      width: 300,
+      title: '手机号/加入方式',
     },
     {
       key: 'joinTime',
-      title: '加入时间',
-      width: 200,
+      title: '加入时间/有效期',
     },
     {
       key: 'learnProgress',
       title: '学习进度',
-      width: 200,
-    },
-    {
-      key: 'learnDeadline',
-      title: '学习有效期',
-      width: 150,
     },
     {
       key: 'operation',
       title: '操作',
-      fixed: 'right',
-      width: 182,
     },
   ],
   loading: false,
@@ -571,7 +565,27 @@ const removeStudent = async userId => {
 </script>
 
 <style lang="less">
-.student-header-operate-button {
+.bulk-import-btn {
+  display: flex;
+  height: 32px;
+  padding: 0 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--primary-color);
+  background: #fff;
+
+  span {
+    color: var(--primary-color);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+  }
+}
+
+.add-students-btn {
   display: flex;
   height: 32px;
   padding: 0 15px;

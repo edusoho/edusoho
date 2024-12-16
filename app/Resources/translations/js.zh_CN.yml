@@ -706,10 +706,8 @@ settings.setup.set_failed.hint: 设置帐号失败，请重试
 
 settings.user_profile.save_success_hint: 保存成功
 
-share.share_to_wechat_circle_of_friends_hint: 分享到微信朋友圈
+share.share_to_wechat_circle_of_friends_hint: 扫码分享
 share.qr_code_load_hint: 正在加载二维码...
-share.wechat_share_usage_hint: >
-  打开微信，点击底部的“发现”，<br>使用 “扫一扫” 即可将网页分享到我的朋友圈。
 
 task.plugin_question_post_success_hint: 提问成功
 task.plugin_question_add.title_required_error_hint: 请输入问题标题

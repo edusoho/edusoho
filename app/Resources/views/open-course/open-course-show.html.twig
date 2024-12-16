@@ -17,7 +17,7 @@
   {% endif %}
 {% endblock %}
 
-{% do  script(['libs/jquery-validation.js', 'app/js/open-course/index.js']) %}
+{% do  script(['libs/jquery-validation.js', 'app/js/open-course/index.js', 'vue3/js/open-course/widget/open-course-detail/index.js']) %}
 
 {% block content %}
   <ol class="breadcrumb open-course-breadcrumb">
@@ -28,7 +28,7 @@
   <div class="open-course-header">
     <div class="row">
 
-      {{ render(controller('AppBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+      {{ render(controller('AppBundle:OpenCourse:header', {request: app.request, course: course, lessonId: lessonId|default(null)})) }}
 
       <div class="col-md-3 open-course-tab js-open-course-tab">
         <ul class="clearfix">
@@ -44,18 +44,13 @@
   </div>
   {# {% endcache %} #}
 
-  {{ render(controller('AppBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
+  {{ render(controller('AppBundle:OpenCourse:infoBar', {courseId: course.id, lessonId: lessonId|default(null), as: app.request.get('as')|default('')})) }}
 
   <div class="open-course-detail row">
     <div class="col-md-9">
-      <div class="es-section gray-darker editor-text">
-        {% if course.about %}
-          {{ course.about|cdn|raw }}
-        {% else %}
-          <div class="empty">{{ 'my.teaching.open_course.show.about_empty'|trans }}</div>
-        {% endif %}
+      <div style="border-radius: 4px; border: 1px solid #e4ecf3; background: #fff; margin-bottom: 20px">
+        <div id="open-course-detail" data-course="{{ course | json_encode }}" data-as="{{ app.request.get('as')|default('') }}"></div>
       </div>
-      {{ render(controller('AppBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
     </div>
 
     <div class="col-md-3 hidden-sm hidden-xs">
@@ -72,7 +67,6 @@
     'link': app.request.uri,
     'imgUrl': fileurl(course.largePicture,'course.png'),
   } %}
-  
+
   {% include 'common/anti-brush-captcha.html.twig' %}
 {% endblock %}
-    

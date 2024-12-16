@@ -125,4 +125,6 @@ interface LiveReplayService
     public function handleReplayGenerateEvent($liveId, $replayDatas);
 
     public function handleReplayGenerateEventForOpenCourse($liveId, $replayDatas);
+
+    public function getReplayByLessonIdAndReplayIdAndType($lessonId, $replayId, $type);
 }

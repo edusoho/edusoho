@@ -40,9 +40,13 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $this->mergeCloudFile($file, $cloudFile);
     }
 
-    public function getFileByGlobalId($globalId)
+    public function getFileByGlobalId($globalId, $ssl = false)
     {
-        $cloudFile = $this->createApi('root', 'v1')->get('/resources/'.$globalId);
+        $params = [];
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
+        $cloudFile = $this->createApi('root', 'v1')->get('/resources/'.$globalId, $params);
         $localFile = $this->getUploadFileDao()->getByGlobalId($globalId);
 
         return $this->mergeCloudFile($localFile, $cloudFile);
@@ -291,33 +295,36 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function download($globalId, $ssl = false)
     {
         $user = $this->getCurrentUser();
-        $url =  $this->biz['ESCloudSdk.play']->makeDownloadUrl($globalId, 300, array(
+        $url = $this->biz['ESCloudSdk.play']->makeDownloadUrl($globalId, 300, [
             'uid' => (string) $user['id'] ?? '',
-            'uname' =>$user['nickname'] ?? '',
-        ), array('ssl' => $ssl));
-        return array('url' => $url);
+            'uname' => $user['nickname'] ?? '',
+        ], ['ssl' => $ssl]);
+
+        return ['url' => $url];
     }
 
     public function getDownloadFile($file, $ssl = false)
     {
         $user = $this->getCurrentUser();
-        $url =  $this->biz['ESCloudSdk.play']->makeDownloadUrl($file['globalId'], 300, array(
+        $url = $this->biz['ESCloudSdk.play']->makeDownloadUrl($file['globalId'], 300, [
             'uid' => (string) $user['id'] ?? '',
-            'uname' =>$user['nickname'] ?? '',
-        ), array('ssl' => $ssl));
+            'uname' => $user['nickname'] ?? '',
+        ], ['ssl' => $ssl]);
 
-        return array('url' => $url, 'type' => 'url');
+        return ['url' => $url, 'type' => 'url'];
     }
 
-    public function getDefaultHumbnails($globalId)
+    public function getDefaultHumbnails($globalId, $ssl = false)
     {
         if (empty($globalId)) {
             return [];
         }
+        $params = [];
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
 
-        $result = $this->createApi('root')->get("/resources/{$globalId}/default_thumbnails");
-
-        return $result;
+        return $this->createApi('root')->get("/resources/{$globalId}/default_thumbnails", $params);
     }
 
     public function getThumbnail($globalId, $options)

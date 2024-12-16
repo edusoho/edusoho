@@ -560,14 +560,6 @@ settings_binds_bind_callback:
     path: '/settings/bind/{type}/callback'
     defaults:
         _controller: 'AppBundle:Settings:bindCallback'
-settings_scrm:
-    path: '/settings/scrm'
-    defaults:
-        _controller: 'AppBundle:Settings:scrm'
-settings_scrm_bind:
-    path: '/settings/scrm/bind'
-    defaults:
-        _controller: 'AppBundle:Settings:scrmBind'
 settings_setup_password:
     path: '/settings/setup_password'
     defaults:
@@ -1543,6 +1535,10 @@ open_course_explore:
     defaults:
         _controller: 'AppBundle:Explore:openCourse'
         category: ''
+open_course_comment:
+  path: '/open/course/{courseId}/comment'
+  defaults:
+    _controller: 'AppBundle:OpenCourse:comment'
 open_course_manage:
     path: '/open/course/{id}/manage'
     defaults:
@@ -1756,6 +1752,10 @@ live_open_course_manage_replay:
     path: '/open/course/{id}/manage/replay'
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:replayManage'
+live_open_course_manage_lessons:
+  path: '/open/course/{id}/manage/lessons'
+  defaults:
+    _controller: 'AppBundle:LiveOpenCourse:lessonsManage'
 live_open_course_lesson_replay_create:
     path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/create'
     defaults:
@@ -1765,11 +1765,11 @@ live_open_course_lesson_replay_upload:
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:uploadModal'
 live_open_course_live_replay_entry:
-    path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry'
+    path: '/open/course/{courseId}/lesson/{lessonId}/live_replay_entry'
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:entryReplay'
 live_open_course_live_replay_url:
-    path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/url'
+    path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/url'
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:getReplayUrl'
 live_open_lesson_time_check:

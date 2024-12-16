@@ -162,7 +162,7 @@ class LiveReplayController extends BaseController
         $conditions = ArrayToolkit::parts($conditions, ['startTime', 'endTime', 'replayTagId', 'keywordType', 'keyword', 'categoryId', 'anchorId', 'replayPublic']);
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
 
-        return ['lessonIds' => $activityIds, 'hidden' => 0];
+        return ['lessonIds' => $activityIds, 'hidden' => 0, 'type' => 'live'];
     }
 
     protected function buildTagSelectData()
