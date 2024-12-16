@@ -110,7 +110,7 @@ class LocalImageCrop {
         }).always(function() {
           $input.val('');
           $modal.modal('hide');
-        });;
+        });
       });
     };
 

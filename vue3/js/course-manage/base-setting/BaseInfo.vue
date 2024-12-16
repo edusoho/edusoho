@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, reactive, ref} from 'vue';
+import {nextTick, onMounted, reactive, ref} from 'vue';
 import Api from '../../../api';
 
 const props = defineProps({
@@ -18,20 +18,20 @@ const removeHtml = (input) => {
     .replace(/<[\w\s"':=\/]*/, '');
 };
 
-const cover = ref();
+const coverTemplate = ref();
 const categoryTree = ref();
 const tabOptions = ref();
 
-const getCover = async () => {
-  cover.value = await Api.file.getCourseCover({
+const getCoverTemplate = async () => {
+  coverTemplate.value = await Api.file.getCourseCoverTemplate({
     saveUrl: props.manage.imageSaveUrl,
     targetImg: 'course-cover',
     cropWidth: '480',
     cropHeight: '270',
     uploadToken: 'tmp',
+    imageClass: 'course-manage-cover',
     imageText: '修改封面图片',
     imageSrc: props.manage.imageSrc,
-    imageClass: 'course-manage-cover',
   });
 };
 
@@ -198,7 +198,7 @@ onMounted(() => {
   if (props.manage.isUnMultiCourseSet) {
     initEditor();
     getOrgCodes();
-    getCover();
+    getCoverTemplate();
   }
   Object.assign(formState, {
     title: removeHtml(props.manage.courseSet.title),
@@ -344,7 +344,7 @@ defineExpose({
         <a-form-item
           label="封面图片"
         >
-          <div v-html="cover"></div>
+          <div v-html="coverTemplate"></div>
           <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
         </a-form-item>
 
