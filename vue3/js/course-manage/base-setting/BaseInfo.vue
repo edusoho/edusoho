@@ -78,18 +78,15 @@ const interByteValidator = (rule, value) => {
     if (!value || (!rule.maxSize && !rule.minSize)) {
       return resolve();
     }
-
     let byteLength = 0;
     for (let i = 0; i < value.length; i++) {
       let c = value.charAt(i);
-
       if (/^[\u0000-\u00ff]$/.test(c)) {
         byteLength++;
       } else {
         byteLength += 2;
       }
     }
-
     if (rule.maxSize && isPositiveInteger(rule.maxSize) && byteLength > rule.maxSize) {
       reject(new Error(`输入内容的长度不能超过 ${rule.maxSize} 字节`));
     } else if (rule.minSize && isPositiveInteger(rule.minSize) && byteLength < rule.minSize) {
@@ -208,8 +205,8 @@ const hideCropperModal = () => {
 };
 const saveCropperCover = async () => {
   const cropper = cropperInstance.value.cropper;
+  console.log(cropper.getData())
   const canvas = cropper.getCroppedCanvas();
-
   canvas.toBlob(async (blob) => {
     coverUrl.value = canvas.toDataURL('image/png');
     cropperModalVisible.value = false;
@@ -232,9 +229,7 @@ const initEditor = () => {
     extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
     filebrowserImageUploadUrl: props.manage.imageUploadUrl,
   });
-
   editor.setData(formState.summary);
-
   editor.on('change', () => {
     formState.summary = editor.getData();
   });

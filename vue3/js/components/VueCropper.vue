@@ -23,11 +23,11 @@ const props = defineProps({
 const cropper = ref()
 onMounted(() => {
   const image = document.getElementById('cropper-image')
-
   cropper.value = new Cropper(image, {
     aspectRatio: props.aspectRatio,
     autoCropArea: 1,
     crop(event) {
+
     }
   })
 })
@@ -40,6 +40,3 @@ defineExpose({
   cropper
 })
 </script>
-<style lang="less">
-
-</style>
