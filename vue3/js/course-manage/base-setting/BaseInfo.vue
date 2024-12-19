@@ -1,6 +1,11 @@
 <script setup>
-import {nextTick, onMounted, reactive, ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import Api from '../../../api';
+import {
+  PlusOutlined,
+} from '@ant-design/icons-vue';
+import {message} from 'ant-design-vue';
+import VueCropper from '../../components/VueCropper.vue';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
@@ -162,6 +167,56 @@ function buildOrgTree(data) {
   return tree;
 }
 
+const cropperModalVisible = ref(false);
+const upload = ref();
+const cropperInstance = ref();
+const coverUrl = ref('');
+function uploadCover(info) {
+  const isPngOrGifOrJpg = info.file.type === 'image/png' || info.file.type === 'image/gif' || info.file.type === 'image/jpg' || info.file.type === 'image/jpeg';
+  if (!isPngOrGifOrJpg) {
+    message.error('请上传jpg,gif,png格式的图片');
+  }
+  const isLt2M = info.file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error('图片大小不能超过2MB');
+  }
+  if (isPngOrGifOrJpg && isLt2M) {
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      coverUrl.value = event.target.result;
+      cropperModalVisible.value = true;
+      const response = await fetch(event.target.result);
+      const blob = await response.blob();
+      const formData = new FormData();
+      formData.append('file', blob, info.file.originFileObj.name);
+      formData.append('group', 'course');
+      const fileData = await Api.file.upload(formData);
+      console.log(fileData);
+    };
+    reader.readAsDataURL(info.file.originFileObj);
+  }
+}
+const reSelectCover = () => {
+  const inputElement = upload.value.$el.querySelector('input[type="file"]');
+  if (inputElement) {
+    inputElement.click();
+  }
+  cropperModalVisible.value = false;
+};
+const hideCropperModal = () => {
+  cropperModalVisible.value = false;
+};
+const saveCropperCover = async () => {
+  const cropper = cropperInstance.value.cropper;
+  const canvas = cropper.getCroppedCanvas();
+
+  canvas.toBlob(async (blob) => {
+    coverUrl.value = canvas.toDataURL('image/png');
+    cropperModalVisible.value = false;
+    // formRef.value.validateFields(['cover'], (errors) => {});
+  });
+};
+
 const serializeOption = [
   {label: '非连载课程', value: 'none'},
   {label: '更新中', value: 'serialized'},
@@ -207,6 +262,7 @@ onMounted(() => {
     categoryId: props.manage.course.categoryId,
     orgCode: props.manage.course.orgCode,
     serializeMode: props.manage.course.serializeMode,
+    cover: null,
     summary: props.manage.courseSet.summary,
   });
   getCategory();
@@ -343,9 +399,47 @@ defineExpose({
 
         <a-form-item
           label="封面图片"
+          name="cover"
         >
-          <div v-html="coverTemplate"></div>
+          <a-upload
+            ref="upload"
+            accept="image/png, image/gif, image/jpg, image/jpeg"
+            :file-list="[]"
+            :maxCount="1"
+            :customRequest="() => {}"
+            list-type="picture-card"
+            @change="uploadCover"
+          >
+            <img v-if="coverUrl" :src="coverUrl" style="width: 100%;" alt=""/>
+            <div v-else class="flex flex-col items-center relative">
+              <div class="flex flex-col items-center">
+                <PlusOutlined/>
+                <div class="mt-8">上传图片</div>
+              </div>
+            </div>
+          </a-upload>
+<!--          <div v-html="coverTemplate"></div>-->
           <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
+          <a-modal
+            :mask-closable="false"
+            :width="'auto'"
+            :zIndex="1050"
+            :centered="true"
+            v-model:open="cropperModalVisible"
+            @cancel="cropperModalVisible = false; coverUrl = ''"
+          >
+            <vue-cropper ref="cropperInstance" :src="coverUrl" :aspectRatio="16/9"></vue-cropper>
+            <template #title>裁剪图片</template>
+            <template #footer>
+              <div class="flex justify-between">
+                <a-button @click="reSelectCover">重新选择</a-button>
+                <div>
+                  <a-button @click="hideCropperModal">取消</a-button>
+                  <a-button type="primary" @click="saveCropperCover">保存图片</a-button>
+                </div>
+              </div>
+            </template>
+          </a-modal>
         </a-form-item>
 
         <a-form-item
