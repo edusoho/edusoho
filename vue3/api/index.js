@@ -14,6 +14,7 @@ import liveCapacity from './modules/liveCapacity';
 import openCourse from './modules/openCourse';
 import liveReplay from './modules/liveReplay';
 import tag from './modules/tag'
+import crop from './modules/crop';
 
 const Api = {
   contract,
@@ -32,6 +33,7 @@ const Api = {
   openCourse,
   liveReplay,
   tag,
+  crop,
 };
 
 export default Api;

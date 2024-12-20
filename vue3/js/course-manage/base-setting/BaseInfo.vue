@@ -165,9 +165,9 @@ function buildOrgTree(data) {
 }
 
 const cropperModalVisible = ref(false);
-const upload = ref();
 const cropperInstance = ref();
 const coverUrl = ref('');
+const fileData = ref();
 function uploadCover(info) {
   const isPngOrGifOrJpg = info.file.type === 'image/png' || info.file.type === 'image/gif' || info.file.type === 'image/jpg' || info.file.type === 'image/jpeg';
   if (!isPngOrGifOrJpg) {
@@ -183,16 +183,15 @@ function uploadCover(info) {
       coverUrl.value = event.target.result;
       cropperModalVisible.value = true;
       const response = await fetch(event.target.result);
-      const blob = await response.blob();
-      const formData = new FormData();
-      formData.append('file', blob, info.file.originFileObj.name);
-      formData.append('group', 'course');
-      const fileData = await Api.file.upload(formData);
-      console.log(fileData);
+      fileData.value = {
+        blob: await response.blob(),
+        name: info.file.originFileObj.name,
+      }
     };
     reader.readAsDataURL(info.file.originFileObj);
   }
 }
+const upload = ref();
 const reSelectCover = () => {
   const inputElement = upload.value.$el.querySelector('input[type="file"]');
   if (inputElement) {
@@ -200,18 +199,46 @@ const reSelectCover = () => {
   }
   cropperModalVisible.value = false;
 };
+
 const hideCropperModal = () => {
   cropperModalVisible.value = false;
 };
+
+const cropUrl = ref();
 const saveCropperCover = async () => {
+  const formData = new FormData();
+  formData.append('file', fileData.value.blob, fileData.value.name);
+  formData.append('group', 'course');
+  const file = await Api.file.upload(formData);
+
   const cropper = cropperInstance.value.cropper;
-  console.log(cropper.getData())
+  const imageData = cropper.getImageData();
+  const cropperData = cropper.getData();
   const canvas = cropper.getCroppedCanvas();
-  canvas.toBlob(async (blob) => {
-    coverUrl.value = canvas.toDataURL('image/png');
-    cropperModalVisible.value = false;
-    // formRef.value.validateFields(['cover'], (errors) => {});
-  });
+  cropUrl.value = canvas.toDataURL('image/png');
+  cropperModalVisible.value = false;
+
+  const params = new URLSearchParams();
+  params.append('imgs[large][]', 480);
+  params.append('imgs[large][]', 270);
+  params.append('imgs[middle][]', 304);
+  params.append('imgs[middle][]', 171);
+  params.append('imgs[small][]', 96);
+  params.append('imgs[small][]', 54);
+  params.append('x', Math.round(cropperData.x));
+  params.append('y', Math.round(cropperData.y));
+  params.append('x2', Math.round(cropperData.x) + Math.round(cropperData.width));
+  params.append('y2', Math.round(cropperData.y) + Math.round(cropperData.height));
+  params.append('w', Math.round(cropperData.width));
+  params.append('h', Math.round(cropperData.height));
+  params.append('width', Math.round(imageData.naturalWidth));
+  params.append('height', Math.round(imageData.naturalHeight));
+  params.append('group', 'course');
+  params.append('post', false);
+  params.append('fileId', file.id);
+  const cropRes = await Api.crop.crop(params);
+  console.log(cropRes);
+  // formRef.value.validateFields(['cover'], (errors) => {});
 };
 
 const serializeOption = [
@@ -405,7 +432,7 @@ defineExpose({
             list-type="picture-card"
             @change="uploadCover"
           >
-            <img v-if="coverUrl" :src="coverUrl" style="width: 100%;" alt=""/>
+            <img v-if="cropUrl" :src="cropUrl" style="width: 100%;" alt=""/>
             <div v-else class="flex flex-col items-center relative">
               <div class="flex flex-col items-center">
                 <PlusOutlined/>
@@ -413,28 +440,7 @@ defineExpose({
               </div>
             </div>
           </a-upload>
-<!--          <div v-html="coverTemplate"></div>-->
           <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
-          <a-modal
-            :mask-closable="false"
-            :width="'auto'"
-            :zIndex="1050"
-            :centered="true"
-            v-model:open="cropperModalVisible"
-            @cancel="cropperModalVisible = false; coverUrl = ''"
-          >
-            <vue-cropper ref="cropperInstance" :src="coverUrl" :aspectRatio="16/9"></vue-cropper>
-            <template #title>裁剪图片</template>
-            <template #footer>
-              <div class="flex justify-between">
-                <a-button @click="reSelectCover">重新选择</a-button>
-                <div>
-                  <a-button @click="hideCropperModal">取消</a-button>
-                  <a-button type="primary" @click="saveCropperCover">保存图片</a-button>
-                </div>
-              </div>
-            </template>
-          </a-modal>
         </a-form-item>
 
         <a-form-item
@@ -446,9 +452,28 @@ defineExpose({
             为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
           </div>
         </a-form-item>
-
       </a-form>
     </div>
+    <a-modal
+      :mask-closable="false"
+      :width="'auto'"
+      :zIndex="1050"
+      :centered="true"
+      v-model:open="cropperModalVisible"
+      @cancel="cropperModalVisible = false"
+    >
+      <vue-cropper ref="cropperInstance" :src="coverUrl" :aspectRatio="16/9"></vue-cropper>
+      <template #title>裁剪图片</template>
+      <template #footer>
+        <div class="flex justify-between">
+          <a-button @click="reSelectCover">重新选择</a-button>
+          <div>
+            <a-button @click="hideCropperModal">取消</a-button>
+            <a-button type="primary" @click="saveCropperCover">保存图片</a-button>
+          </div>
+        </div>
+      </template>
+    </a-modal>
   </div>
 </template>
 

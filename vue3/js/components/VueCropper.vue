@@ -26,9 +26,13 @@ onMounted(() => {
   cropper.value = new Cropper(image, {
     aspectRatio: props.aspectRatio,
     autoCropArea: 1,
+    viewMode: 2,
     crop(event) {
 
-    }
+    },
+    zoom(event) {
+      event.preventDefault();
+    },
   })
 })
 
