@@ -16,7 +16,6 @@ const props = defineProps({
   manage: {type: Object, default: {}}
 });
 
-
 const formRef = ref(null);
 const formState = reactive({
   originPrice: props.manage.course.originPrice,

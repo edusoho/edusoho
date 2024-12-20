@@ -15,6 +15,7 @@ import openCourse from './modules/openCourse';
 import liveReplay from './modules/liveReplay';
 import tag from './modules/tag'
 import crop from './modules/crop';
+import courseSets from './modules/courseSets';
 
 const Api = {
   contract,
@@ -34,6 +35,7 @@ const Api = {
   liveReplay,
   tag,
   crop,
+  courseSets,
 };
 
 export default Api;

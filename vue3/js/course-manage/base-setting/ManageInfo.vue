@@ -4,10 +4,12 @@ import {ref} from 'vue';
 import BaseRule from './BaseRule.vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import MarketSetting from './MarketSetting.vue';
+import Api from '../../../api';
 
 const manageProps = defineProps({
   isUnMultiCourseSet: {type: [String, Number]},
   course: Object,
+  courseManageUrl: String,
   tags: Object,
   imageSrc: String,
   imageSaveUrl: String,
@@ -38,18 +40,32 @@ const baseRuleRef = ref(null);
 const marketSettingRef = ref(null);
 
 const submitForm = async () => {
-  if (baseInfoRef.value && baseRuleRef.value ) {
-    const baseInfo = await baseInfoRef.value.validateForm();
-    const baseRule = await baseRuleRef.value.validateForm();
-    const marketSetting = await marketSettingRef.value.validateForm();
-    console.log(baseInfo);
-    console.log(baseRule);
-    console.log(marketSetting);
+  const baseInfo = await baseInfoRef.value.validateForm();
+  const baseRule = await baseRuleRef.value.validateForm();
+  const marketSetting = await marketSettingRef.value.validateForm();
+  if (!baseInfo && baseRule && marketSetting) {
+    return;
   }
-
+  const result = {};
+  baseInfo.cover.forEach((item, index) => {
+    result[`covers[${index}][type]`] = item.type;
+    result[`covers[${index}][id]`] = item.id;
+    result[`covers[${index}][url]`] = item.url;
+    result[`covers[${index}][uri]`] = item.uri;
+  });
+  let params = {
+    _csrf_token: $('meta[name=csrf-token]').attr('content'),
+    ...result,
+  }
+  delete baseInfo.cover;
+  Object.assign(
+    params,
+    baseInfo,
+    baseRule,
+    marketSetting,
+  );
+  await Api.courseSets.updateMultiCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
 };
-
-
 </script>
 
 <template>
@@ -66,7 +82,7 @@ const submitForm = async () => {
       ref="marketSettingRef"
       :manage="manageProps"
     />
-    <a-button @click="submitForm">获取表单值</a-button>
+    <a-button type="primary" @click="submitForm" class="ml-200">保存</a-button>
   </ant-config-provider>
 </template>
 

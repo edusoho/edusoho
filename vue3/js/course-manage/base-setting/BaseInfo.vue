@@ -1,9 +1,7 @@
 <script setup>
 import {onMounted, reactive, ref} from 'vue';
 import Api from '../../../api';
-import {
-  PlusOutlined,
-} from '@ant-design/icons-vue';
+import {PlusOutlined,} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import VueCropper from '../../components/VueCropper.vue';
 
@@ -236,8 +234,7 @@ const saveCropperCover = async () => {
   params.append('group', 'course');
   params.append('post', false);
   params.append('fileId', file.id);
-  const cropRes = await Api.crop.crop(params);
-  console.log(cropRes);
+  formState.cover = await Api.crop.crop(params);
   // formRef.value.validateFields(['cover'], (errors) => {});
 };
 
