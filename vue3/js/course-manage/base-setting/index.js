@@ -1,14 +1,13 @@
 import ManageInfo from './ManageInfo.vue';
 import { createStyleTag, setCurrentPrimaryColor } from '../../common';
 import {createApp} from 'vue';
-import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag, DatePicker, Upload, Switch, Dropdown, Menu, Modal, Grid} from 'ant-design-vue';
+import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag, DatePicker, Upload, Switch, Dropdown, Menu, Modal} from 'ant-design-vue';
 import 'vue3/main.less';
 
 const app = createApp(ManageInfo,
   {
     course: $('#manage-info').data('course'),
     courseSet: $('#manage-info').data('courseSet'),
-    // 是否是班级中的课程
     isUnMultiCourseSet: $('#manage-info').data('isUnMultiCourseSet'),
     lessonWatchLimit: $('#manage-info').data('lessonWatchLimit'),
     hasRoleAdmin: $('#manage-info').data('hasRoleAdmin'),
@@ -63,7 +62,6 @@ app.use(Switch);
 app.use(Dropdown);
 app.use(Menu);
 app.use(Modal);
-app.use(Grid);
 
 
 setCurrentPrimaryColor(app);

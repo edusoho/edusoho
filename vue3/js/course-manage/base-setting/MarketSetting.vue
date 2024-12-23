@@ -189,19 +189,19 @@ defineExpose({
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 16 }"
     >
-      <div v-if="props.manage.course.platform === 'supplier'">
-        <a-form-item
-          label="合作面额"
-        >
+<!--      <div v-if="props.manage.course.platform === 'supplier'">-->
+<!--        <a-form-item-->
+<!--          label="合作面额"-->
+<!--        >-->
 
-        </a-form-item>
+<!--        </a-form-item>-->
 
-        <a-form-item
-          label="建议售价"
-        >
+<!--        <a-form-item-->
+<!--          label="建议售价"-->
+<!--        >-->
 
-        </a-form-item>
-      </div>
+<!--        </a-form-item>-->
+<!--      </div>-->
 
       <a-form-item
         label="价格"
@@ -498,6 +498,7 @@ defineExpose({
       <div v-if="formState.drainageEnabled === 1">
         <a-form-item
           label="二维码设置"
+          name="drainageImage"
         >
           <a-upload
             ref="upload"

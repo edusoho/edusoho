@@ -5,6 +5,7 @@ import BaseRule from './BaseRule.vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import MarketSetting from './MarketSetting.vue';
 import Api from '../../../api';
+import { message } from 'ant-design-vue';
 
 const manageProps = defineProps({
   isUnMultiCourseSet: {type: [String, Number]},
@@ -46,27 +47,48 @@ const submitForm = async () => {
   if (!baseInfo && baseRule && marketSetting) {
     return;
   }
-  const result = {};
+  const coversResult = {};
   if (baseInfo.covers) {
     baseInfo.covers.forEach((item, index) => {
-      result[`covers[${index}][type]`] = item.type;
-      result[`covers[${index}][id]`] = item.id;
-      result[`covers[${index}][url]`] = item.url;
-      result[`covers[${index}][uri]`] = item.uri;
+      coversResult[`covers[${index}][type]`] = item.type;
+      coversResult[`covers[${index}][id]`] = item.id;
+      coversResult[`covers[${index}][url]`] = item.url;
+      coversResult[`covers[${index}][uri]`] = item.uri;
     });
-    delete baseInfo.covers;
+  }
+  const servicesResult = {};
+  if (marketSetting.services) {
+    marketSetting.services.forEach((item, index) => {
+      servicesResult[`services[${index}]`] = item;
+    });
+  }
+  const freeTaskIdsResult = {};
+  if (baseRule.freeTaskIds) {
+    baseRule.freeTaskIds.forEach((item, index) => {
+      freeTaskIdsResult[`freeTaskIds[${index}]`] = item;
+    });
   }
   let params = {
     _csrf_token: $('meta[name=csrf-token]').attr('content'),
-    ...result,
+    ...coversResult,
+    ...freeTaskIdsResult,
+    ...servicesResult,
   }
+  delete baseInfo.covers;
+  delete baseRule.freeTaskIds;
+  delete marketSetting.services;
   Object.assign(
     params,
     baseInfo,
     baseRule,
     marketSetting,
   );
-  await Api.courseSets.updateMultiCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
+  await Api.courseSets.updateCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
+  message.success('保存成功')
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 };
 </script>
 

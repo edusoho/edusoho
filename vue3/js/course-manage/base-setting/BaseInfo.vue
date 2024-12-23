@@ -220,7 +220,6 @@ const saveCropperCover = async () => {
   params.append('post', false);
   params.append('fileId', file.id);
   formState.covers = await Api.crop.crop(params);
-  // formRef.value.validateFields(['covers'], (errors) => {});
 };
 
 const serializeOption = [
@@ -253,22 +252,24 @@ const validateForm = () => {
     });
 };
 
+console.log($('.js-org-tree-select').children('option:selected').val())
+
 onMounted(() => {
   if (props.manage.isUnMultiCourseSet) {
+    Object.assign(formState, {
+      title: removeHtml(props.manage.courseSet.title),
+      subtitle: removeHtml(props.manage.courseSet.subtitle),
+      tags: props.manage.tags,
+      categoryId: props.manage.course.categoryId,
+      orgCode: props.manage.course.orgCode,
+      serializeMode: props.manage.course.serializeMode,
+      covers: '',
+      summary: props.manage.courseSet.summary,
+    });
     cropUrl.value = props.manage.imageSrc;
     initEditor();
     getOrgCodes();
   }
-  Object.assign(formState, {
-    title: removeHtml(props.manage.courseSet.title),
-    subtitle: removeHtml(props.manage.courseSet.subtitle),
-    tags: props.manage.tags,
-    categoryId: props.manage.course.categoryId,
-    orgCode: props.manage.course.orgCode,
-    serializeMode: props.manage.course.serializeMode,
-    covers: null,
-    summary: props.manage.courseSet.summary,
-  });
   getCategory();
   getTabs();
 });
@@ -354,6 +355,7 @@ defineExpose({
 
         <a-form-item
           label="标签"
+          name="tags"
         >
           <a-select
             v-model:value="formState.tags"
@@ -367,6 +369,7 @@ defineExpose({
 
         <a-form-item
           label="分类"
+          name="categoryId"
         >
           <a-tree-select
             v-model:value="formState.categoryId"
@@ -382,6 +385,7 @@ defineExpose({
         <a-form-item
           v-if="props.manage.enableOrg"
           label="组织机构"
+          name="orgCode"
         >
           <a-tree-select
             v-model:value="formState.orgCode"
@@ -396,6 +400,7 @@ defineExpose({
 
         <a-form-item
           label="连载状态"
+          name="serializeMode"
         >
           <a-radio-group v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
