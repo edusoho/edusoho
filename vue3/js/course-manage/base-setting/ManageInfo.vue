@@ -47,17 +47,19 @@ const submitForm = async () => {
     return;
   }
   const result = {};
-  baseInfo.cover.forEach((item, index) => {
-    result[`covers[${index}][type]`] = item.type;
-    result[`covers[${index}][id]`] = item.id;
-    result[`covers[${index}][url]`] = item.url;
-    result[`covers[${index}][uri]`] = item.uri;
-  });
+  if (baseInfo.covers) {
+    baseInfo.covers.forEach((item, index) => {
+      result[`covers[${index}][type]`] = item.type;
+      result[`covers[${index}][id]`] = item.id;
+      result[`covers[${index}][url]`] = item.url;
+      result[`covers[${index}][uri]`] = item.uri;
+    });
+    delete baseInfo.covers;
+  }
   let params = {
     _csrf_token: $('meta[name=csrf-token]').attr('content'),
     ...result,
   }
-  delete baseInfo.cover;
   Object.assign(
     params,
     baseInfo,

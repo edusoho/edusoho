@@ -21,23 +21,8 @@ const removeHtml = (input) => {
     .replace(/<[\w\s"':=\/]*/, '');
 };
 
-const coverTemplate = ref();
 const categoryTree = ref();
 const tabOptions = ref();
-
-const getCoverTemplate = async () => {
-  coverTemplate.value = await Api.file.getCourseCoverTemplate({
-    saveUrl: props.manage.imageSaveUrl,
-    targetImg: 'course-cover',
-    cropWidth: '480',
-    cropHeight: '270',
-    uploadToken: 'tmp',
-    imageClass: 'course-manage-cover',
-    imageText: '修改封面图片',
-    imageSrc: props.manage.imageSrc,
-  });
-};
-
 const getCategory = async () => {
   const category = await Api.category.getCategory();
   categoryTree.value = transformCategoryData(category);
@@ -234,8 +219,8 @@ const saveCropperCover = async () => {
   params.append('group', 'course');
   params.append('post', false);
   params.append('fileId', file.id);
-  formState.cover = await Api.crop.crop(params);
-  // formRef.value.validateFields(['cover'], (errors) => {});
+  formState.covers = await Api.crop.crop(params);
+  // formRef.value.validateFields(['covers'], (errors) => {});
 };
 
 const serializeOption = [
@@ -270,9 +255,9 @@ const validateForm = () => {
 
 onMounted(() => {
   if (props.manage.isUnMultiCourseSet) {
+    cropUrl.value = props.manage.imageSrc;
     initEditor();
     getOrgCodes();
-    getCoverTemplate();
   }
   Object.assign(formState, {
     title: removeHtml(props.manage.courseSet.title),
@@ -281,7 +266,7 @@ onMounted(() => {
     categoryId: props.manage.course.categoryId,
     orgCode: props.manage.course.orgCode,
     serializeMode: props.manage.course.serializeMode,
-    cover: null,
+    covers: null,
     summary: props.manage.courseSet.summary,
   });
   getCategory();
@@ -418,7 +403,7 @@ defineExpose({
 
         <a-form-item
           label="封面图片"
-          name="cover"
+          name="covers"
         >
           <a-upload
             ref="upload"
