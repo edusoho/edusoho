@@ -73,16 +73,13 @@ const submitForm = async () => {
     ...coversResult,
     ...freeTaskIdsResult,
     ...servicesResult,
+    ...baseInfo,
+    ...baseRule,
+    ...marketSetting,
   }
-  delete baseInfo.covers;
-  delete baseRule.freeTaskIds;
-  delete marketSetting.services;
-  Object.assign(
-    params,
-    baseInfo,
-    baseRule,
-    marketSetting,
-  );
+  delete params.covers;
+  delete params.freeTaskIds;
+  delete params.services;
   await Api.courseSets.updateCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
   message.success('保存成功')
   window.scrollTo({
