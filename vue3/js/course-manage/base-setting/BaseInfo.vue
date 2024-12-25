@@ -252,7 +252,6 @@ const validateForm = () => {
 };
 
 onMounted(() => {
-  cropUrl.value = props.manage.imageSrc;
   if (props.manage.isUnMultiCourseSet) {
     Object.assign(formState, {
       title: removeHtml(props.manage.courseSet.title),
@@ -264,11 +263,12 @@ onMounted(() => {
       covers: '',
       summary: props.manage.courseSet.summary,
     });
+    cropUrl.value = props.manage.imageSrc;
+    getCategory();
+    getOrgCodes();
+    initEditor();
+    getTabs();
   }
-  getCategory();
-  getTabs();
-  getOrgCodes();
-  initEditor();
 });
 
 defineExpose({
@@ -452,7 +452,3 @@ defineExpose({
     </a-modal>
   </div>
 </template>
-
-<style lang="less">
-
-</style>
