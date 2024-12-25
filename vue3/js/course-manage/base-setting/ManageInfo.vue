@@ -5,7 +5,7 @@ import BaseRule from './BaseRule.vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import MarketSetting from './MarketSetting.vue';
 import Api from '../../../api';
-import { message } from 'ant-design-vue';
+import {message} from 'ant-design-vue';
 
 const manageProps = defineProps({
   isUnMultiCourseSet: {type: [String, Number]},
@@ -44,48 +44,47 @@ const submitForm = async () => {
   const baseInfo = await baseInfoRef.value.validateForm();
   const baseRule = await baseRuleRef.value.validateForm();
   const marketSetting = await marketSettingRef.value.validateForm();
-  if (!baseInfo && baseRule && marketSetting) {
-    return;
+  if (baseInfo && baseRule && marketSetting) {
+    const coversResult = {};
+    if (baseInfo.covers) {
+      baseInfo.covers.forEach((item, index) => {
+        coversResult[`covers[${index}][type]`] = item.type;
+        coversResult[`covers[${index}][id]`] = item.id;
+        coversResult[`covers[${index}][url]`] = item.url;
+        coversResult[`covers[${index}][uri]`] = item.uri;
+      });
+    }
+    const servicesResult = {};
+    if (marketSetting.services.length > 0) {
+      marketSetting.services.forEach((item, index) => {
+        servicesResult[`services[${index}]`] = item;
+      });
+    }
+    const freeTaskIdsResult = {};
+    if (baseRule.freeTaskIds) {
+      baseRule.freeTaskIds.forEach((item, index) => {
+        freeTaskIdsResult[`freeTaskIds[${index}]`] = item;
+      });
+    }
+    let params = {
+      _csrf_token: $('meta[name=csrf-token]').attr('content'),
+      ...coversResult,
+      ...freeTaskIdsResult,
+      ...servicesResult,
+      ...baseInfo,
+      ...baseRule,
+      ...marketSetting,
+      buyExpiryTime: new Date(marketSetting.buyExpiryTime).getTime(),
+    };
+    delete params.covers;
+    delete params.freeTaskIds;
+    delete params.services;
+    await Api.courseSets.updateCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
+    message.success('保存成功');
+    location.reload();
+  } else {
+    return 0;
   }
-  const coversResult = {};
-  if (baseInfo.covers) {
-    baseInfo.covers.forEach((item, index) => {
-      coversResult[`covers[${index}][type]`] = item.type;
-      coversResult[`covers[${index}][id]`] = item.id;
-      coversResult[`covers[${index}][url]`] = item.url;
-      coversResult[`covers[${index}][uri]`] = item.uri;
-    });
-  }
-  const servicesResult = {};
-  if (marketSetting.services) {
-    marketSetting.services.forEach((item, index) => {
-      servicesResult[`services[${index}]`] = item;
-    });
-  }
-  const freeTaskIdsResult = {};
-  if (baseRule.freeTaskIds) {
-    baseRule.freeTaskIds.forEach((item, index) => {
-      freeTaskIdsResult[`freeTaskIds[${index}]`] = item;
-    });
-  }
-  let params = {
-    _csrf_token: $('meta[name=csrf-token]').attr('content'),
-    ...coversResult,
-    ...freeTaskIdsResult,
-    ...servicesResult,
-    ...baseInfo,
-    ...baseRule,
-    ...marketSetting,
-  }
-  delete params.covers;
-  delete params.freeTaskIds;
-  delete params.services;
-  await Api.courseSets.updateCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
-  message.success('保存成功')
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
 };
 </script>
 

@@ -50,7 +50,6 @@ const validateForm = () => {
 defineExpose({
   validateForm,
 });
-
 </script>
 
 <template>
@@ -65,7 +64,6 @@ defineExpose({
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 16 }"
     >
-
       <a-form-item
       >
         <template #label>
@@ -86,7 +84,6 @@ defineExpose({
         </div>
         <div class="text-[#adadad] text-12 mt-8">计划发布后学习模式无法修改</div>
       </a-form-item>
-
       <a-form-item
         v-if="props.manage.lessonWatchLimit"
         label="视频观看时长限制"
@@ -109,7 +106,6 @@ defineExpose({
           </a-popover>
         </div>
       </a-form-item>
-
       <a-form-item
         label="任务完成规则"
         name="enableFinish"
@@ -127,7 +123,6 @@ defineExpose({
             </span></a-radio>
         </a-radio-group>
       </a-form-item>
-
       <div v-if="props.manage.courseSet !== 'live'">
         <a-form-item
           label="设置免费学习任务"
@@ -174,7 +169,6 @@ defineExpose({
             </div>
           </div>
         </a-form-item>
-
         <a-form-item
           v-if="props.manage.uploadMode !== 'local'"
           name="tryLookLength"
@@ -203,9 +197,7 @@ defineExpose({
             </a-select-option>
           </a-select>
         </a-form-item>
-
       </div>
-
       <a-form-item
         v-if="props.manage.audioServiceStatus !== 'needOpen' && props.manage.course.type === 'normal'"
         label="音频听课（试用）"
@@ -219,9 +211,7 @@ defineExpose({
           class="text-[#46c37b] text-14 ml-8 hover:text-[#34a263]" :href="props.manage.courseSetManageFilesUrl"
           target="__blank">查看详情</a></div>
         <div class="text-12 text-[#adadad] mt-8">3.视频含弹题时，在APP端不支持转音频播放</div>
-
       </a-form-item>
-
     </a-form>
   </div>
 </template>

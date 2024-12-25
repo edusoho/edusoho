@@ -252,8 +252,6 @@ const validateForm = () => {
 };
 
 onMounted(() => {
-  getOrgCodes();
-  initEditor();
   cropUrl.value = props.manage.imageSrc;
   if (props.manage.isUnMultiCourseSet) {
     Object.assign(formState, {
@@ -269,6 +267,8 @@ onMounted(() => {
   }
   getCategory();
   getTabs();
+  getOrgCodes();
+  initEditor();
 });
 
 defineExpose({
@@ -301,7 +301,6 @@ defineExpose({
         >
           <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
-
         <a-form-item
           label="计划副标题"
           name="subtitle"
@@ -338,7 +337,6 @@ defineExpose({
         >
           <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
-
         <a-form-item
           label="课程副标题"
           name="subtitle"
@@ -349,7 +347,6 @@ defineExpose({
         >
           <a-textarea v-model:value="formState.subtitle" :rows="3"/>
         </a-form-item>
-
         <a-form-item
           label="标签"
           name="tags"
@@ -363,7 +360,6 @@ defineExpose({
           ></a-select>
           <div class="text-[#adadad] text-12 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
         </a-form-item>
-
         <a-form-item
           label="分类"
           name="categoryId"
@@ -378,7 +374,6 @@ defineExpose({
             style="width: 250px"
           ></a-tree-select>
         </a-form-item>
-
         <a-form-item
           v-if="props.manage.enableOrg"
           label="组织机构"
@@ -394,7 +389,6 @@ defineExpose({
             style="width: 250px"
           ></a-tree-select>
         </a-form-item>
-
         <a-form-item
           label="连载状态"
           name="serializeMode"
@@ -402,7 +396,6 @@ defineExpose({
           <a-radio-group v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
         </a-form-item>
-
         <a-form-item
           label="封面图片"
           name="covers"
@@ -426,7 +419,6 @@ defineExpose({
           </a-upload>
           <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
         </a-form-item>
-
         <a-form-item
           label="课程简介"
           name="categoryId"

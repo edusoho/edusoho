@@ -22,7 +22,7 @@ const formState = reactive({
   buyable: props.manage.course.buyable,
   maxStudentNumL: props.manage.course.maxStudentNum,
   enableBuyExpiryTime: props.manage.course.buyExpiryTime > 0 ? '1' : '0',
-  buyExpiryTime: props.manage.course.buyExpiryTime == '0' ? null : props.manage.course.buyExpiryTime,
+  buyExpiryTime: props.manage.course.buyExpiryTime == '0' ? null : dayjs(Number(props.manage.course.buyExpiryTime)*1000),
   taskDisplay: props.manage.course.taskDisplay,
   drainageEnabled: props.manage.course.drainageEnabled,
   deadline: props.manage.course.expiryEndDate == 0 ? null : props.manage.course.expiryEndDate,
@@ -189,34 +189,19 @@ defineExpose({
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 16 }"
     >
-<!--      <div v-if="props.manage.course.platform === 'supplier'">-->
-<!--        <a-form-item-->
-<!--          label="合作面额"-->
-<!--        >-->
-
-<!--        </a-form-item>-->
-
-<!--        <a-form-item-->
-<!--          label="建议售价"-->
-<!--        >-->
-
-<!--        </a-form-item>-->
-<!--      </div>-->
-
       <a-form-item
         label="价格"
         name="originPrice"
         :validateTrigger="['blur']"
         :rules="[
           { required: true, message: '请输入价格' },
-          { pattern: /^(?!0\.?$)([1-9]\d{0,7}|0)(\.\d{1,2})?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' },
+          { pattern: /^(\d{1,8}(\.\d{1,2})?)?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' },
         ]"
       >
         <a-input v-model:value="formState.originPrice"
                  :disabled="props.manage.course.platform === 'supplier' && !props.manage.canModifyCoursePrice"
                  suffix="元" style="width: 150px"></a-input>
       </a-form-item>
-
       <a-form-item
         name="buyable"
       >
@@ -238,7 +223,6 @@ defineExpose({
           <a-radio value="0">不可加入</a-radio>
         </a-radio-group>
       </a-form-item>
-
       <a-form-item
         v-if="props.manage.courseSet.type === 'live'"
         label="限制加入人数"
@@ -254,7 +238,6 @@ defineExpose({
           网校可支持最多{{ liveCapacity }}人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
         </div>
       </a-form-item>
-
       <a-form-item>
         <template #label>
           <div class="flex items-center">
@@ -296,7 +279,6 @@ defineExpose({
           </a-dropdown>
         </div>
       </a-form-item>
-
       <div v-if="contractEnableSwitch">
         <a-form-item>
           <template #label>
@@ -315,7 +297,6 @@ defineExpose({
           <a-switch v-model:checked="contractForceSignSwitch"/>
         </a-form-item>
       </div>
-
       <a-form-item
         label="加入截止日期"
         :rules="[
@@ -329,7 +310,6 @@ defineExpose({
         <a-date-picker v-if="formState.enableBuyExpiryTime === '1'" :disabled-date="disabledPastDate"
                        v-model:value="formState.buyExpiryTime" style="width: 150px"/>
       </a-form-item>
-
       <a-form-item>
         <template #label>
           <div class="flex items-center">
@@ -425,7 +405,6 @@ defineExpose({
           </div>
         </div>
       </a-form-item>
-
       <a-form-item
         v-if="props.manage.vipInstalled && props.manage.vipEnabled"
         label="会员免费兑换"
@@ -446,7 +425,6 @@ defineExpose({
           </a-select-option>
         </a-select>
       </a-form-item>
-
       <a-form-item
         label="承诺提供服务"
       >
@@ -464,7 +442,6 @@ defineExpose({
           </a-popover>
         </a-checkable-tag>
       </a-form-item>
-
       <a-form-item
         label="商品页目录展示"
         name="taskDisplay"
@@ -474,7 +451,6 @@ defineExpose({
           <a-radio value="0">关闭</a-radio>
         </a-radio-group>
       </a-form-item>
-
       <a-form-item>
         <template #label>
           <div class="flex items-center">
@@ -494,7 +470,6 @@ defineExpose({
           <a-radio :value=0>关闭</a-radio>
         </a-radio-group>
       </a-form-item>
-
       <div v-if="formState.drainageEnabled === 1">
         <a-form-item
           label="二维码设置"
@@ -518,13 +493,11 @@ defineExpose({
           </a-upload>
           <div class="text-[#606266] text-12 ">请上传jpg，gif，png格式的图</div>
         </a-form-item>
-
         <a-form-item
           label="引流文案"
         >
           <a-input v-model:value="formState.drainageText" placeholder="请输入内容" show-count :maxlength="20"/>
         </a-form-item>
-
         <a-form-item
           label="引流页样式"
         >
@@ -541,7 +514,6 @@ defineExpose({
         </a-form-item>
       </div>
     </a-form>
-
     <a-modal :width="900"
              v-model:open="contractPreviewModalVisible"
              :closable=false
@@ -625,7 +597,6 @@ defineExpose({
         </div>
       </template>
     </a-modal>
-
   </div>
 </template>
 
@@ -633,22 +604,22 @@ defineExpose({
 .market-setting-contract-detail-modal {
   .ant-modal {
     padding: 0 !important;
-
     .ant-modal-content {
       padding: 0 !important;
-
       .ant-modal-footer {
         border-top: 1px solid #ebebeb;
         padding: 10px 16px;
         margin-top: 0;
       }
-
       .ant-modal-header {
         padding: 0;
         margin-bottom: 0;
         border: none;
       }
     }
+  }
+  img {
+    max-width: 100%;
   }
 }
 </style>
