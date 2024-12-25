@@ -123,7 +123,6 @@ const orgTree = ref();
 const getOrgCodes = async () => {
   const orgCodes = await Api.org.search();
   orgTree.value = buildOrgTree(orgCodes);
-  formState.orgCode = props.manage.course.orgCode ? props.manage.course.orgCode : orgTree.value[0].value;
 };
 
 function buildOrgTree(data) {
@@ -252,23 +251,21 @@ const validateForm = () => {
     });
 };
 
-console.log($('.js-org-tree-select').children('option:selected').val())
-
 onMounted(() => {
+  getOrgCodes();
+  initEditor();
+  cropUrl.value = props.manage.imageSrc;
   if (props.manage.isUnMultiCourseSet) {
     Object.assign(formState, {
       title: removeHtml(props.manage.courseSet.title),
       subtitle: removeHtml(props.manage.courseSet.subtitle),
       tags: props.manage.tags,
       categoryId: props.manage.course.categoryId,
-      orgCode: props.manage.course.orgCode,
+      orgCode: props.manage.courseSet.orgCode,
       serializeMode: props.manage.course.serializeMode,
       covers: '',
       summary: props.manage.courseSet.summary,
     });
-    cropUrl.value = props.manage.imageSrc;
-    initEditor();
-    getOrgCodes();
   }
   getCategory();
   getTabs();
