@@ -1,4 +1,4 @@
-import {ajaxClient} from '../api-client';
+import {ajaxClient, apiClient} from '../api-client';
 
 export default {
   async getTags(params) {
