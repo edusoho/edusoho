@@ -8,8 +8,14 @@ const manageProps = defineProps({
 </script>
 
 <template>
-  <base-info :manage="manageProps"></base-info>
-  <market-setting :manage="manageProps"></market-setting>
+  <base-info
+    :manage="manageProps"
+  >
+  </base-info>
+  <market-setting
+    :manage="manageProps"
+  >
+  </market-setting>
 </template>
 
 <style lang="less">
