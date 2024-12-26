@@ -6,6 +6,7 @@ import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import MarketSetting from './MarketSetting.vue';
 import Api from '../../../api';
 import {message} from 'ant-design-vue';
+import dayjs from 'dayjs';
 
 const manageProps = defineProps({
   isUnMultiCourseSet: {type: [String, Number]},
@@ -54,16 +55,16 @@ const submitForm = async () => {
         coversResult[`covers[${index}][uri]`] = item.uri;
       });
     }
-    const servicesResult = {};
-    if (marketSetting.services.length > 0) {
-      marketSetting.services.forEach((item, index) => {
-        servicesResult[`services[${index}]`] = item;
-      });
-    }
     const freeTaskIdsResult = {};
     if (baseRule.freeTaskIds) {
       baseRule.freeTaskIds.forEach((item, index) => {
         freeTaskIdsResult[`freeTaskIds[${index}]`] = item;
+      });
+    }
+    const servicesResult = {};
+    if (marketSetting.services.length > 0) {
+      marketSetting.services.forEach((item, index) => {
+        servicesResult[`services[${index}]`] = item;
       });
     }
     let params = {
@@ -75,15 +76,18 @@ const submitForm = async () => {
       ...baseRule,
       ...marketSetting,
       buyExpiryTime: new Date(marketSetting.buyExpiryTime).getTime(),
+      deadline: marketSetting.deadline.format('YYYY-MM-DD'),
+      expiryStartDate: dayjs(marketSetting.expiryStartDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+      expiryEndDate: dayjs(marketSetting.expiryEndDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
     };
     delete params.covers;
     delete params.freeTaskIds;
     delete params.services;
     await Api.courseSets.updateCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
     message.success('保存成功');
-    location.reload();
+    setTimeout(() => location.reload(), 2000);
   } else {
-    return;
+    return 0;
   }
 };
 </script>

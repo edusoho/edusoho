@@ -25,12 +25,12 @@ const formState = reactive({
   buyExpiryTime: props.manage.course.buyExpiryTime == '0' ? null : dayjs(Number(props.manage.course.buyExpiryTime) * 1000),
   taskDisplay: props.manage.course.taskDisplay,
   drainageEnabled: props.manage.course.drainageEnabled,
-  deadline: props.manage.course.expiryEndDate == 0 ? null : props.manage.course.expiryEndDate,
+  deadline: props.manage.course.expiryEndDate == 0 ? null : dayjs(props.manage.course.expiryEndDate),
   deadlineType: props.manage.course.deadlineType ? props.manage.course.deadlineType : 'days',
   expiryDays: props.manage.course.expiryDays > 0 ? props.manage.course.expiryDays : null,
   expiryMode: props.manage.course.expiryMode,
-  expiryStartDate: props.manage.course.expiryStartDate == 0 ? null : props.manage.course.expiryStartDate,
-  expiryEndDate: props.manage.course.expiryEndDate == 0 ? null : props.manage.course.expiryEndDate,
+  expiryStartDate: props.manage.course.expiryStartDate == 0 ? null : dayjs(props.manage.course.expiryStartDate),
+  expiryEndDate: props.manage.course.expiryEndDate == 0 ? null : dayjs(props.manage.course.expiryEndDate),
   contractEnable: props.manage.course.contractId !== 0 ? 1 : 0,
   contractForceSign: props.manage.course.contractForceSign,
   contractId: props.manage.course.contractId,
@@ -98,6 +98,7 @@ const uploadDrainageImage = async (info) => {
     fileData.value = await Api.file.upload(formData);
     drainageLoading.value = false;
     formState.drainageImage = fileData.value.uri;
+    formRef.value.validateFields(["drainageImage"]);
   }
 };
 
@@ -495,6 +496,10 @@ defineExpose({
         <a-form-item
           label="二维码设置"
           name="drainageImage"
+          :validateTrigger="['blur']"
+          :rules="[
+            { required: true, message: '二维码不能为空' },
+          ]"
         >
           <a-upload
             ref="upload"
@@ -530,7 +535,7 @@ defineExpose({
                 <img src="../../../img/course-manage/base-setting/drainage-style.png" alt="drainage"
                      style="height: 500px">
               </template>
-              <div class="text-[#409EFF] font-medium text-14 ml-4">查看详情</div>
+              <div class="text-[#409EFF] font-medium text-14 ml-4 cursor-pointer">查看详情</div>
             </a-popover>
           </div>
         </a-form-item>
