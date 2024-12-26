@@ -292,10 +292,11 @@ defineExpose({
         <a-form-item
           label="计划名字"
           name="title"
+          :validateTrigger="['blur']"
           :rules="[
-          { required: true, message: '请输入计划名称', trigger: blur },
-          { validator: interByteValidator, maxSize: 100, minSize: 2, trigger: blur },
-          { validator: courseTitleValidator, trigger: blur },
+          { required: true, message: '请输入计划名称' },
+          { validator: interByteValidator, maxSize: 100, minSize: 2 },
+          { validator: courseTitleValidator },
           ]"
         >
           <a-input v-model:value.trim="formState.title"/>
@@ -303,8 +304,9 @@ defineExpose({
         <a-form-item
           label="计划副标题"
           name="subtitle"
+          :validateTrigger="['blur']"
           :rules="[
-          { validator: interByteValidator, maxSize: 100, trigger: blur }
+          { validator: interByteValidator, maxSize: 100 }
           ]"
         >
           <a-textarea v-model:value.trim="formState.subtitle" :rows="3"/>
@@ -326,10 +328,11 @@ defineExpose({
         <a-form-item
           label="课程标题"
           name="title"
+          :validateTrigger="['blur']"
           :rules="[
-          { required: true, message: '请输入课程标题', trigger: blur },
-          { validator: courseTitleLengthValidator, trigger: blur },
-          { validator: courseTitleValidator, trigger: blur },
+          { required: true, message: '请输入课程标题' },
+          { validator: courseTitleLengthValidator },
+          { validator: courseTitleValidator },
           ]"
         >
           <a-input v-model:value.trim="formState.title"/>
@@ -337,8 +340,9 @@ defineExpose({
         <a-form-item
           label="课程副标题"
           name="subtitle"
+          :validateTrigger="['blur']"
           :rules="[
-          { max: 50, message: '最多支持50个字符', trigger: blur },
+          { max: 50, message: '最多支持50个字符' },
           ]"
         >
           <a-textarea v-model:value="formState.subtitle" :rows="3"/>
