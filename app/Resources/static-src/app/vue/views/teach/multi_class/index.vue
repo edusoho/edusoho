@@ -112,7 +112,7 @@
         <assistant slot="assistant" slot-scope="assistant" :assistant="assistant" />
         <a slot="studentNum" slot-scope="text, record"
           href="javascript:;"
-          @click="$router.push({ name: 'MultiClassStudentManage', manage: { id: record.id } })">
+          @click="$router.push({ name: 'MultiClassStudentManage', params: { id: record.id } })">
           {{ text }}
         </a>
         <template slot="createdTime" slot-scope="createdTime">
@@ -139,7 +139,7 @@
           </a-dropdown>
           <a-button
             type="link"
-            @click="$router.push({ name: 'MultiClassDataPreview', manage: { id: record.id}})">数据概览</a-button>
+            @click="$router.push({ name: 'MultiClassDataPreview', params: { id: record.id}})">数据概览</a-button>
         </template>
       </a-table>
     </a-spin>
@@ -372,7 +372,7 @@ export default {
     goToMultiClassManage(id) {
       this.$router.push({
         name: 'MultiClassCourseManage',
-        manage: { id }
+        params: { id }
       })
     },
 
@@ -420,7 +420,7 @@ export default {
         query: {
           id
         },
-        manage: {
+        params: {
           paging: this.paging
         }
       });

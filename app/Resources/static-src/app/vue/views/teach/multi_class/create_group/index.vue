@@ -715,7 +715,7 @@ export default {
     cancelCreate() {
       this.$router.push({
         name: 'MultiClass',
-        manage: this.$route.params.paging || {}
+        params: this.$route.params.paging || {}
       });
     },
 

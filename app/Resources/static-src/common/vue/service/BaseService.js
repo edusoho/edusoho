@@ -18,7 +18,7 @@ export default class BaseService {
   }
 
   async search(params) {
-    return apiClient.get(this.baseUrl, { manage: manage })
+    return apiClient.get(this.baseUrl, { params })
   }
 
   async delete({ id }) {

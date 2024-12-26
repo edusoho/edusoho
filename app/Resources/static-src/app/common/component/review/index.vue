@@ -227,7 +227,7 @@ export default {
       }
 
       axios.get('/api/reviews', {
-        manage: {
+        params: {
           targetType: this.targetType,
           targetId: this.targetId,
           offset: parseInt(offset),

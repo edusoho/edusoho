@@ -82,7 +82,7 @@ export default {
           </div>
         </div>
         <div class="test-preview-content-basic-operation">
-          <a :href="$router.resolve({name: 'update', manage: {id}}).href" target="_blank">
+          <a :href="$router.resolve({name: 'update', params: {id}}).href" target="_blank">
             <a-button type="primary">进入编辑</a-button>
           </a>
         </div>

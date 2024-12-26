@@ -23,13 +23,13 @@ export default {
   methods: {
     requestCertificateData() {
       axios.get('/api/certificates', {
-          manage: {
-            targetId: this.sku.targetId,
-            limit: 4
-          },
-          headers: {
-            Accept: "application/vnd.edusoho.v2+json",
-          }
+        params: {
+          targetId: this.sku.targetId,
+          limit: 4
+        },
+        headers: {
+          Accept: "application/vnd.edusoho.v2+json",
+        }
         })
         .then(res => {
           this.certificates = res.data.data;
