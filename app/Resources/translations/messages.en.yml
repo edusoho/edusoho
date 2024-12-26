@@ -9907,6 +9907,8 @@ material.common_table.file.local: local
 material.common_table.quality.sd: SD
 material.common_table.quality.hd: HD
 material.common_table.quality.shd: Ultra-clear
+material.common_table.quality.2k: 2K
+material.common_table.quality.4k: 4K
 material.common_table.transcode_waiting: Waiting for transcoding
 material.common_table.transcode_file_not_support: File not supported
 material.common_table.transcode_success: Transcoding success
