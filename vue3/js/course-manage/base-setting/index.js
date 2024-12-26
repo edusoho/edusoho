@@ -1,10 +1,10 @@
-import ManageInfo from './ManageInfo.vue';
+import Index from './Index.vue';
 import { createStyleTag, setCurrentPrimaryColor } from '../../common';
 import {createApp} from 'vue';
 import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag, DatePicker, Upload, Switch, Dropdown, Menu, Modal} from 'ant-design-vue';
 import 'vue3/main.less';
 
-const app = createApp(ManageInfo,
+const app = createApp(Index,
   {
     course: $('#manage-info').data('course'),
     courseSet: $('#manage-info').data('courseSet'),
