@@ -202,9 +202,7 @@ defineExpose({
                  :disabled="props.manage.course.platform === 'supplier' && !props.manage.canModifyCoursePrice"
                  suffix="元" style="width: 150px"></a-input>
       </a-form-item>
-      <a-form-item
-        name="buyable"
-      >
+      <a-form-item>
         <template #label>
           <div class="flex items-center">
             <div>可加入</div>
@@ -225,6 +223,7 @@ defineExpose({
       </a-form-item>
       <a-form-item
         v-if="props.manage.courseSet.type === 'live'"
+        name="maxStudentNumL"
         label="限制加入人数"
         :rules="[
           { required: true, message: '请输入限制加入人数', trigger: 'blur' },
@@ -302,16 +301,18 @@ defineExpose({
         :required="true"
       >
         <div class="flex">
-            <a-radio-group v-model:value="formState.enableBuyExpiryTime" :class="{'mb-24': formState.enableBuyExpiryTime === '1'}" class="flex items-center">
-              <a-radio value="0">不限时间</a-radio>
-              <a-radio value="1">自定义</a-radio>
-            </a-radio-group>
+          <a-radio-group v-model:value="formState.enableBuyExpiryTime"
+                         :class="{'mb-24': formState.enableBuyExpiryTime === '1'}" class="flex items-center">
+            <a-radio value="0">不限时间</a-radio>
+            <a-radio value="1">自定义</a-radio>
+          </a-radio-group>
           <a-form-item
             v-if="formState.enableBuyExpiryTime === '1'"
             name="buyExpiryTime"
             :rules="[{ required: true, message: '请输入截至日期', trigger: 'blur' }]"
           >
-            <a-date-picker v-model:value="formState.buyExpiryTime" :disabled-date="disabledPastDate" style="width: 150px"/>
+            <a-date-picker v-model:value="formState.buyExpiryTime" :disabled-date="disabledPastDate"
+                           style="width: 150px"/>
           </a-form-item>
         </div>
       </a-form-item>
@@ -334,20 +335,22 @@ defineExpose({
         </template>
         <div class="flex flex-col">
           <div class="h-32 flex items-center">
-            <a-radio-group v-model:value="formState.expiryMode">
-              <a-radio
-                v-for="option in expiryModeOptions"
-                :key="option.value"
-                :value="option.value"
-                :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !=='self'"
-              >
-                {{ option.label }}
-              </a-radio>
-            </a-radio-group>
+            <a-form-item-rest>
+              <a-radio-group v-model:value="formState.expiryMode">
+                <a-radio
+                  v-for="option in expiryModeOptions"
+                  :key="option.value"
+                  :value="option.value"
+                  :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !=='self'"
+                >
+                  {{ option.label }}
+                </a-radio>
+              </a-radio-group>
+            </a-form-item-rest>
           </div>
-          <a-form-item-rest>
-            <div class="mt-16 max-w-600 bg-[#f5f5f5] px-24 pt-24 flex flex-col"
-                 v-if="formState.expiryMode !== 'forever'">
+          <div class="mt-16 max-w-600 bg-[#f5f5f5] px-24 pt-24 flex flex-col"
+               v-if="formState.expiryMode !== 'forever'">
+            <a-form-item-rest>
               <a-radio-group
                 v-if="formState.expiryMode === 'days'"
                 :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !=='self'"
@@ -356,63 +359,63 @@ defineExpose({
                 <a-radio value="end_date">按截止日期</a-radio>
                 <a-radio value="days">按有效天数</a-radio>
               </a-radio-group>
-              <div v-if="formState.expiryMode === 'days' && formState.deadlineType === 'end_date'">
-                <a-form-item
-                  name="deadline"
-                  :rules="[
+            </a-form-item-rest>
+            <div v-if="formState.expiryMode === 'days' && formState.deadlineType === 'end_date'">
+              <a-form-item
+                name="deadline"
+                :rules="[
                   { required: true, message: '请输入截至日期', trigger: blur },
                 ]"
-                >
-                  <div class="flex items-center mt-16">
-                    <a-date-picker v-model:value="formState.deadline"
-                                   :disabled="props.manage.course.platform !=='self'"
-                                   style="width: 150px" :default-value="dayjs()" :disabled-date="disabledPastDate"/>
-                    <div class="text-14 opacity-65 ml-10">在此日期前，学员可进行学习。</div>
-                  </div>
-                </a-form-item>
-              </div>
-              <div class="flex" v-if="formState.expiryMode === 'days' && formState.deadlineType === 'days'">
-                <a-form-item
-                  name="expiryDays"
-                  :rules="[
+              >
+                <div class="flex items-center mt-16">
+                  <a-date-picker v-model:value="formState.deadline"
+                                 :disabled="props.manage.course.platform !=='self'"
+                                 style="width: 150px" :default-value="dayjs()" :disabled-date="disabledPastDate"/>
+                  <div class="text-14 opacity-65 ml-10">在此日期前，学员可进行学习。</div>
+                </div>
+              </a-form-item>
+            </div>
+            <div class="flex" v-if="formState.expiryMode === 'days' && formState.deadlineType === 'days'">
+              <a-form-item
+                name="expiryDays"
+                :rules="[
                   { required: true, message: '请输入有效期天数', trigger: blur },
                   { pattern: /^([1-9]|[1-9]\d{1,2}|[1-6]\d{3}|7[0-2]\d{2}|7300)$/,message: '请输入不大于 7300（20年）的正整数', trigger: blur },
                 ]"
-                >
-                  <div class="flex items-center mt-16">
-                    <a-input v-model:value="formState.expiryDays"
-                             :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
-                             style="width: 150px"/>
-                    <div class="text-14 opacity-65 ml-10">从加入当天起，在几天内可进行学习。</div>
-                  </div>
-                </a-form-item>
-              </div>
-              <div v-if="formState.expiryMode === 'date'" class="flex">
-                <div class="text-14 mt-6 mr-4">开始日期</div>
-                <a-form-item
-                  name="expiryStartDate"
-                  :rules="[
+              >
+                <div class="flex items-center mt-16">
+                  <a-input v-model:value="formState.expiryDays"
+                           :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
+                           style="width: 150px"/>
+                  <div class="text-14 opacity-65 ml-10">从加入当天起，在几天内可进行学习。</div>
+                </div>
+              </a-form-item>
+            </div>
+            <div v-if="formState.expiryMode === 'date'" class="flex">
+              <div class="text-14 mt-6 mr-4">开始日期</div>
+              <a-form-item
+                name="expiryStartDate"
+                :rules="[
                   { required: true, message: '请输入开始日期', trigger: blur },
                 ]"
-                >
-                  <a-date-picker v-model:value="formState.expiryStartDate"
-                                 :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
-                                 :disabled-date="disabledStartDate" style="width: 150px"/>
-                </a-form-item>
-                <div class="text-14 mt-6 mr-4 ml-8">结束日期</div>
-                <a-form-item
-                  name="expiryEndDate"
-                  :rules="[
+              >
+                <a-date-picker v-model:value="formState.expiryStartDate"
+                               :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
+                               :disabled-date="disabledStartDate" style="width: 150px"/>
+              </a-form-item>
+              <div class="text-14 mt-6 mr-4 ml-8">结束日期</div>
+              <a-form-item
+                name="expiryEndDate"
+                :rules="[
                   { required: true, message: '请输入结束日期', trigger: blur },
                 ]"
-                >
-                  <a-date-picker v-model:value="formState.expiryEndDate"
-                                 :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
-                                 :disabled-date="disabledEndDate" style="width: 150px"/>
-                </a-form-item>
-              </div>
+              >
+                <a-date-picker v-model:value="formState.expiryEndDate"
+                               :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
+                               :disabled-date="disabledEndDate" style="width: 150px"/>
+              </a-form-item>
             </div>
-          </a-form-item-rest>
+          </div>
           <div class="text-[#adadad] text-12 mt-8">
             教学计划一旦发布，有效期类型不能修改；课程或教学计划下架后，可以修改日期，新的学习有效期仅对修改后加入的学员生效
           </div>
@@ -421,7 +424,6 @@ defineExpose({
       <a-form-item
         v-if="props.manage.vipInstalled && props.manage.vipEnabled"
         label="会员免费兑换"
-        name="vipLevelId"
       >
         <a-select
           v-model:value="formState.vipLevelId"
@@ -457,7 +459,6 @@ defineExpose({
       </a-form-item>
       <a-form-item
         label="商品页目录展示"
-        name="taskDisplay"
       >
         <a-radio-group v-model:value="formState.taskDisplay">
           <a-radio value="1">开启</a-radio>

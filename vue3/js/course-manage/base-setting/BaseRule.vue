@@ -64,8 +64,7 @@ defineExpose({
       :label-col="{ span: 4 }"
       :wrapper-col="{ span: 16 }"
     >
-      <a-form-item
-      >
+      <a-form-item>
         <template #label>
           <div class="flex items-center">
             <div>学习模式</div>
@@ -107,7 +106,6 @@ defineExpose({
       </a-form-item>
       <a-form-item
         label="任务完成规则"
-        name="enableFinish"
       >
         <a-radio-group v-model:value="formState.enableFinish"
                        :disabled="props.manage.course.platform === 'supplier'">
@@ -125,7 +123,6 @@ defineExpose({
       <div v-if="props.manage.courseSet !== 'live'">
         <a-form-item
           label="设置免费学习任务"
-          name="freeTaskIds"
         >
           <div class="flex flex-col">
             <a-checkbox-group v-model:value="formState.freeTaskIds" style="width: 100%">
@@ -170,7 +167,6 @@ defineExpose({
         </a-form-item>
         <a-form-item
           v-if="props.manage.uploadMode !== 'local'"
-          name="tryLookLength"
         >
           <template #label>
             <div class="flex items-center">
@@ -200,7 +196,6 @@ defineExpose({
       <a-form-item
         v-if="props.manage.audioServiceStatus !== 'needOpen' && props.manage.course.type === 'normal'"
         label="音频听课（试用）"
-        name="enableAudio"
       >
         <a-radio-group class="base-rule-radio mt-6" v-model:value="formState.enableAudio"
                        :options="enableAudioOptions"

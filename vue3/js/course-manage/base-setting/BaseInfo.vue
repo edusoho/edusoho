@@ -345,7 +345,6 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="标签"
-          name="tags"
         >
           <a-select
             v-model:value="formState.tags"
@@ -358,7 +357,6 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="分类"
-          name="categoryId"
         >
           <a-tree-select
             v-model:value="formState.categoryId"
@@ -373,7 +371,6 @@ defineExpose({
         <a-form-item
           v-if="props.manage.enableOrg"
           label="组织机构"
-          name="orgCode"
         >
           <a-tree-select
             v-model:value="formState.orgCode"
@@ -387,14 +384,12 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="连载状态"
-          name="serializeMode"
         >
           <a-radio-group v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
         </a-form-item>
         <a-form-item
           label="封面图片"
-          name="covers"
         >
           <a-upload
             ref="upload"
@@ -417,7 +412,6 @@ defineExpose({
         </a-form-item>
         <a-form-item
           label="课程简介"
-          name="categoryId"
         >
           <textarea id="course-introduction"></textarea>
           <div class="text-[#a1a1a1] font-normal text-14 leading-28">
