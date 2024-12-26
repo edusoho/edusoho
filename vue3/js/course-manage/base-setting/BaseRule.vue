@@ -88,9 +88,8 @@ defineExpose({
         v-if="props.manage.lessonWatchLimit"
         label="视频观看时长限制"
         name="watchLimit"
-        :validateTrigger="['blur']"
         :rules="[
-          { pattern: /^[0-9]\d*$/, message: '请输入非负整数' },
+          { pattern: /^[0-9]\d*$/, message: '请输入非负整数', trigger: blur },
           ]"
       >
         <div class="flex items-center space-x-8">

@@ -193,10 +193,9 @@ defineExpose({
       <a-form-item
         label="价格"
         name="originPrice"
-        :validateTrigger="['blur']"
         :rules="[
-          { required: true, message: '请输入价格' },
-          { pattern: /^(\d{1,8}(\.\d{1,2})?)?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' },
+          { required: true, message: '请输入价格', trigger: 'blur' },
+          { pattern: /^(\d{1,8}(\.\d{1,2})?)?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！', trigger: 'blur' },
         ]"
       >
         <a-input v-model:value="formState.originPrice"
@@ -227,10 +226,9 @@ defineExpose({
       <a-form-item
         v-if="props.manage.courseSet.type === 'live'"
         label="限制加入人数"
-        :validateTrigger="['blur']"
         :rules="[
-          { required: true, message: '请输入限制加入人数' },
-          { pattern: /^[0-9]\d*$/, message: '请输入非负整数' },
+          { required: true, message: '请输入限制加入人数', trigger: 'blur' },
+          { pattern: /^[0-9]\d*$/, message: '请输入非负整数', trigger: 'blur' },
           ]"
       >
         <a-input v-model:value="formState.maxStudentNumL" class="mb-8" style="width: 150px;"></a-input>
@@ -301,16 +299,21 @@ defineExpose({
       </div>
       <a-form-item
         label="加入截止日期"
-        :rules="[
-          { required: true, message: '' },
-          ]"
+        :required="true"
       >
-        <a-radio-group v-model:value="formState.enableBuyExpiryTime">
-          <a-radio value="0">不限时间</a-radio>
-          <a-radio value="1">自定义</a-radio>
-        </a-radio-group>
-        <a-date-picker v-if="formState.enableBuyExpiryTime === '1'" :disabled-date="disabledPastDate"
-                       v-model:value="formState.buyExpiryTime" style="width: 150px"/>
+        <div class="flex">
+            <a-radio-group v-model:value="formState.enableBuyExpiryTime" :class="{'mb-24': formState.enableBuyExpiryTime === '1'}" class="flex items-center">
+              <a-radio value="0">不限时间</a-radio>
+              <a-radio value="1">自定义</a-radio>
+            </a-radio-group>
+          <a-form-item
+            v-if="formState.enableBuyExpiryTime === '1'"
+            name="buyExpiryTime"
+            :rules="[{ required: true, message: '请输入截至日期', trigger: 'blur' }]"
+          >
+            <a-date-picker v-model:value="formState.buyExpiryTime" :disabled-date="disabledPastDate" style="width: 150px"/>
+          </a-form-item>
+        </div>
       </a-form-item>
       <a-form-item>
         <template #label>
@@ -371,10 +374,9 @@ defineExpose({
               <div class="flex" v-if="formState.expiryMode === 'days' && formState.deadlineType === 'days'">
                 <a-form-item
                   name="expiryDays"
-                  :validateTrigger="['blur']"
                   :rules="[
-                  { required: true, message: '请输入有效期天数' },
-                  { pattern: /^([1-9]|[1-9]\d{1,2}|[1-6]\d{3}|7[0-2]\d{2}|7300)$/,message: '请输入不大于 7300（20年）的正整数' },
+                  { required: true, message: '请输入有效期天数', trigger: blur },
+                  { pattern: /^([1-9]|[1-9]\d{1,2}|[1-6]\d{3}|7[0-2]\d{2}|7300)$/,message: '请输入不大于 7300（20年）的正整数', trigger: blur },
                 ]"
                 >
                   <div class="flex items-center mt-16">
@@ -389,9 +391,8 @@ defineExpose({
                 <div class="text-14 mt-6 mr-4">开始日期</div>
                 <a-form-item
                   name="expiryStartDate"
-                  :validateTrigger="['blur']"
                   :rules="[
-                  { required: true, message: '请输入开始日期' },
+                  { required: true, message: '请输入开始日期', trigger: blur },
                 ]"
                 >
                   <a-date-picker v-model:value="formState.expiryStartDate"
@@ -401,9 +402,8 @@ defineExpose({
                 <div class="text-14 mt-6 mr-4 ml-8">结束日期</div>
                 <a-form-item
                   name="expiryEndDate"
-                  :validateTrigger="['blur']"
                   :rules="[
-                  { required: true, message: '请输入结束日期' },
+                  { required: true, message: '请输入结束日期', trigger: blur },
                 ]"
                 >
                   <a-date-picker v-model:value="formState.expiryEndDate"
