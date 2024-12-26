@@ -2,7 +2,7 @@
 
 {% do css(['app/css/main-ant.css']) %}
 {% block title %}{{ setting('classroom.name')|default("site.default.classroom"|trans) }}{{ 'classroom.manage'|trans }} - {{ parent() }}{% endblock %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'app/js/classroom-manage/base-setting/index.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'vue3/js/classroom-manage/base-setting/index.js']) %}
 
 {% set side_nav = 'main' %}
 
@@ -11,7 +11,7 @@
   <div class="cd-main__heading">
     <div class="cd-main__title">{{ 'classroom.basic_setting'|trans }}</div>
   </div>
-  <div id="app"
+  <div id="manage-info"
        data-classroom="{{ classroom|json_encode }}"
        data-tags="{{ tags|default(null)|json_encode }}"
        data-cover="{{ filepath(classroom.largePicture, 'classroom.png') }}"
