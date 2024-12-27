@@ -1,7 +1,7 @@
 import Index from './Index.vue';
 import { createStyleTag, setCurrentPrimaryColor } from '../../common';
 import {createApp} from 'vue';
-import {Button, Form, Input, Select, TreeSelect ,Upload, Modal, Radio, Switch, Popover, Dropdown, Menu} from 'ant-design-vue';
+import {Button, Form, Input, Select, TreeSelect ,Upload, Modal, Radio, Switch, Popover, Dropdown, Menu, DatePicker, Tag} from 'ant-design-vue';
 import 'vue3/main.less';
 
 const app = createApp(Index,
@@ -15,6 +15,11 @@ const app = createApp(Index,
     coursePrice: $('#manage-info').data('coursePrice'),
     coinSetting: $('#manage-info').data('coinSetting'),
     classroomExpiryRuleUrl: $('#manage-info').data('classroomExpiryRuleUrl'),
+    vipInstalled: $('#manage-info').data('vipInstalled'),
+    vipEnabled: $('#manage-info').data('vipEnabled'),
+    vipLevels: $('#manage-info').data('vipLevels'),
+    serviceTags: $('#manage-info').data('serviceTags'),
+    infoSaveUrl: $('#manage-info').data('infoSaveUrl'),
   }
 );
 
@@ -30,6 +35,8 @@ app.use(Switch);
 app.use(Popover);
 app.use(Dropdown);
 app.use(Menu);
+app.use(DatePicker);
+app.use(Tag);
 
 setCurrentPrimaryColor(app);
 

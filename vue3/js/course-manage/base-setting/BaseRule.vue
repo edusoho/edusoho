@@ -81,7 +81,7 @@ defineExpose({
           <a-radio-group v-model:value="formState.learnMode" :options="learnModeOptions"
                          :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !== 'self'"/>
         </div>
-        <div class="text-[#adadad] text-12 mt-8">计划发布后学习模式无法修改</div>
+        <div class="text-[#a1a1a1] text-14 mt-8">计划发布后学习模式无法修改</div>
       </a-form-item>
       <a-form-item
         v-if="props.manage.lessonWatchLimit"
@@ -202,11 +202,11 @@ defineExpose({
         <a-radio-group class="base-rule-radio mt-6" v-model:value="formState.enableAudio"
                        :options="enableAudioOptions"
                        :disabled="props.manage.course.platform === 'supplier'"/>
-        <div class="text-12 text-[#adadad] mt-8">1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</div>
-        <div class="text-12 text-[#adadad] mt-8">2.当前转音频完成情况 ：{{ props.manage.videoConvertCompletion }}<a
-          class="text-[#46c37b] text-14 ml-8 hover:text-[#34a263]" :href="props.manage.courseSetManageFilesUrl"
+        <div class="text-14 text-[#a1a1a1] mt-8">1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</div>
+        <div class="text-14 text-[#a1a1a1] mt-8">2.当前转音频完成情况 ：{{ props.manage.videoConvertCompletion }}<a
+          class="text-[--primary-color] text-14 ml-8 font-medium" :href="props.manage.courseSetManageFilesUrl"
           target="__blank">查看详情</a></div>
-        <div class="text-12 text-[#adadad] mt-8">3.视频含弹题时，在APP端不支持转音频播放</div>
+        <div class="text-14 text-[#a1a1a1] mt-8">3.视频含弹题时，在APP端不支持转音频播放</div>
       </a-form-item>
     </a-form>
   </div>

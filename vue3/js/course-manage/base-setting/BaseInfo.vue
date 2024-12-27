@@ -215,22 +215,23 @@ const serializeOption = [
   {label: '已完结', value: 'finished'},
 ];
 
+let editor = null;
 const initEditor = () => {
-  const editor = CKEDITOR.replace('course-introduction', {
+  editor = CKEDITOR.replace('course-introduction', {
     toolbar: [
       {items: ['FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-      {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList','Indent', 'Outdent', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
+      {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', 'Indent', 'Outdent', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
     ],
     extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
     filebrowserImageUploadUrl: props.manage.imageUploadUrl,
   });
   editor.setData(formState.summary);
-  editor.on('change', () => {
-    formState.summary = editor.getData();
-  });
 };
 
 const validateForm = () => {
+  if (props.manage.isUnMultiCourseSet) {
+    formState.summary = editor.getData();
+  }
   return formRef.value.validate()
     .then(() => {
       return formState;
@@ -246,7 +247,7 @@ onMounted(() => {
   if (props.manage.isUnMultiCourseSet) {
     Object.assign(formState, {
       title: removeHtml(props.manage.courseSet.title),
-      subtitle: removeHtml(props.manage.courseSet.subtitle),
+      subtitle: props.manage.courseSet.subtitle ? removeHtml(props.manage.courseSet.subtitle) : '',
       tags: props.manage.tags,
       categoryId: props.manage.course.categoryId,
       orgCode: props.manage.courseSet.orgCode,
@@ -255,9 +256,9 @@ onMounted(() => {
       summary: props.manage.courseSet.summary,
     });
     cropUrl.value = props.manage.imageSrc;
+    initEditor();
     getCategory();
     getOrgCodes();
-    initEditor();
     getTabs();
   }
 });
@@ -344,7 +345,7 @@ onMounted(() => {
             :options="tabOptions"
             allow-clear
           ></a-select>
-          <div class="text-[#adadad] text-12 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
+          <div class="text-[#adadad] text-14 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
         </a-form-item>
         <a-form-item
           label="分类"

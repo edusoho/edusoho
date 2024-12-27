@@ -3,6 +3,7 @@ import {computed, reactive, ref, h} from 'vue';
 import Api from '../../../api';
 import {DownOutlined, QuestionCircleOutlined, CloseOutlined} from '@ant-design/icons-vue';
 import {t} from '../../course-manage/base-setting/vue-lang';
+import dayjs from 'dayjs';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
@@ -16,7 +17,12 @@ const formState = reactive({
   contractForceSign: props.manage.classroom.contractForceSign,
   contractId: props.manage.classroom.contractId,
   expiryMode: props.manage.classroom.expiryMode,
+  expiryValue: props.manage.classroom.expiryMode === 'date' ? dayjs(Number(props.manage.classroom.expiryValue) * 1000) : props.manage.classroom.expiryValue,
+  service: props.manage.classroom.service,
 });
+if (props.manage.vipInstalled && props.manage.vipEnabled === 1) {
+  Object.assign(formState, {vipLevelId: props.manage.classroom.vipLevelId});
+}
 
 const statusRadios = [
   {label: '开启', value: '1'},
@@ -73,6 +79,34 @@ const expiryModeRadios = [
   {label: '有效期天数', value: 'days'},
   {label: '长期有效', value: 'forever'},
 ];
+const disabledPastDate = (current) => {
+  return current && current < new Date().setHours(0, 0, 0, 0);
+};
+
+const serviceItem = ref(props.manage.serviceTags.map(item => ({
+  ...item,
+  active: item.active === 1 || formState.service.indexOf(item.code) >= 0,
+})));
+const selectServiceItem = (tag, index, checked) => {
+  if (checked === true) {
+    serviceItem.value[index].active = true;
+    formState.service.push(tag.code);
+  } else {
+    serviceItem.value[index].active = false;
+    formState.service.splice(formState.service.indexOf(tag.code), 1);
+  }
+};
+const validateForm = () => {
+  return formRef.value.validate()
+    .then(() => {
+      return formState;
+    })
+    .catch((error) => {
+    });
+};
+defineExpose({
+  validateForm,
+});
 </script>
 
 <template>
@@ -182,21 +216,83 @@ const expiryModeRadios = [
       <a-form-item
         label="班级有效期"
       >
-        <div class="flex h-32 items-center">
-          <a-form-item-rest>
-            <a-radio-group v-model:value="formState.expiryMode">
-              <a-radio
-                v-for="item in expiryModeRadios"
-                :key="item.value"
-                :value="item.value"
-              >
-                {{ item.label }}
-              </a-radio>
-            </a-radio-group>
-          </a-form-item-rest>
-          <a class="text-14 font-normal text-[#46c37b] hover:text-[#34a263]" :href="props.manage.classroomExpiryRuleUrl" target="_blank">查看有效期规则</a>
+        <div class="flex h-32 items-center mb-5">
+          <a-radio-group v-model:value="formState.expiryMode" @change="formState.expiryValue = null" :disabled="props.manage.classroom.status !== 'draft'">
+            <a-radio
+              v-for="item in expiryModeRadios"
+              :key="item.value"
+              :value="item.value"
+            >
+              {{ item.label }}
+            </a-radio>
+          </a-radio-group>
+          <a class="text-14 font-medium text-[--primary-color]" :href="props.manage.classroomExpiryRuleUrl"
+             target="_blank">查看有效期规则</a>
         </div>
-        <div class="mt-5 text-[#ffa51f] text-14 font-normal">班级首次发布后，有效期类型不能再更改，只允许修改有效日期。</div>
+        <div v-if="formState.expiryMode === 'date'" class="flex">
+          <a-form-item
+            name="expiryValue"
+            :validateTrigger="['blur']"
+            :rules="[
+            { required: true, message: '请输入截至日期' },
+          ]"
+          >
+            <a-date-picker v-model:value="formState.expiryValue"
+                           style="width: 150px" :default-value="dayjs()" :disabled-date="disabledPastDate"/>
+          </a-form-item>
+          <div class="h-32 ml-5 text-14 text-[#a1a1a1] leading-32">在此日期前，学员可进行学习。</div>
+        </div>
+        <div v-if="formState.expiryMode === 'days'" class="flex">
+          <a-form-item
+            name="expiryValue"
+            :validateTrigger="['blur']"
+            :rules="[
+            { required: true, message: '请输入有效期天数' },
+            { pattern: /^([1-9]|[1-9]\d{1,2}|[1-6]\d{3}|7[0-2]\d{2}|7300)$/,message: '请输入不大于 7300（20年）的正整数' },
+          ]"
+          >
+            <a-input v-model:value="formState.expiryValue"
+                     suffix="天" style="width: 150px"></a-input>
+          </a-form-item>
+          <div class="h-32 ml-5 text-14 text-[#a1a1a1] leading-32">从加入当天起，在几天内可进行学习。</div>
+        </div>
+        <div class="text-[#ffa51f] text-14 font-normal">班级首次发布后，有效期类型不能再更改，只允许修改有效日期。</div>
+      </a-form-item>
+      <a-form-item
+        v-if="props.manage.vipInstalled && props.manage.vipEnabled === 1"
+        label="会员免费兑换"
+      >
+        <a-select
+          v-model:value="formState.vipLevelId"
+          style="width: 200px"
+        >
+          <a-select-option value="0">无</a-select-option>
+          <a-select-option
+            v-if="props.manage.vipLevels.length > 0"
+            v-for="level in props.manage.vipLevels"
+            :key="level.id"
+            :value="level.id"
+          >
+            {{ level.name }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item
+        label="承诺提供服务"
+      >
+        <a-checkable-tag
+          v-for="(tag, index) in serviceItem"
+          :key="tag"
+          v-model:checked="tag.active"
+          @change="checked => selectServiceItem(tag, index, checked)"
+        >
+          <a-popover>
+            <template #content>
+              <div>{{ tag.summary }}</div>
+            </template>
+            <div class="text-14">{{ tag.fullName }}</div>
+          </a-popover>
+        </a-checkable-tag>
       </a-form-item>
     </a-form>
     <a-modal :width="900"
@@ -284,13 +380,16 @@ const expiryModeRadios = [
 .market-setting-contract-detail-modal {
   .ant-modal {
     padding: 0 !important;
+
     .ant-modal-content {
       padding: 0 !important;
+
       .ant-modal-footer {
         border-top: 1px solid #ebebeb;
         padding: 10px 16px;
         margin-top: 0;
       }
+
       .ant-modal-header {
         padding: 0;
         margin-bottom: 0;
@@ -298,6 +397,7 @@ const expiryModeRadios = [
       }
     }
   }
+
   img {
     max-width: 100%;
   }

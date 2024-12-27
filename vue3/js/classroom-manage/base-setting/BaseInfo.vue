@@ -13,7 +13,7 @@ const props = defineProps({
 const formRef = ref(null);
 const formState = reactive({
   title: removeHtml(props.manage.classroom.title),
-  subtitle: props.manage.classroom.subtitle ? props.manage.classroom.subtitle : null,
+  subtitle: props.manage.classroom.subtitle ? props.manage.classroom.subtitle : '',
   tags: props.manage.tags ? props.manage.tags : [],
   categoryId: props.manage.classroom.categoryId,
   orgCode: props.manage.classroom.orgCode,
@@ -42,6 +42,9 @@ const interByteValidator = (rule, value) => {
       resolve();
     }
   });
+};
+const isPositiveInteger = (value) => {
+  return Number.isInteger(value) && value > 0;
 };
 
 const classroomTitleValidator = (rule, value) => {
@@ -185,8 +188,9 @@ const saveCropperCover = async () => {
   formState.covers = await Api.crop.crop(params);
 };
 
+let editor = null;
 const initEditor = () => {
-  const editor = CKEDITOR.replace('classroom-introduction', {
+  editor = CKEDITOR.replace('classroom-introduction', {
     toolbar: [
       {items: ['FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
       {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', 'Indent', 'Outdent', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
@@ -195,12 +199,10 @@ const initEditor = () => {
     filebrowserImageUploadUrl: props.manage.imageUploadUrl,
   });
   editor.setData(formState.about);
-  editor.on('change', () => {
-    formState.about = editor.getData();
-  });
 };
 
 const validateForm = () => {
+  formState.about = editor.getData();
   return formRef.value.validate()
     .then(() => {
       return formState;
@@ -241,7 +243,7 @@ onMounted(() => {
           { validator: classroomTitleValidator },
           ]"
       >
-        <a-input v-model:value.trim="formState.title"/>
+        <a-input v-model:value="formState.title"/>
       </a-form-item>
       <a-form-item
         label="班级副标题"
@@ -263,7 +265,7 @@ onMounted(() => {
           :options="tabOptions"
           allow-clear
         ></a-select>
-        <div class="text-[#adadad] text-12 mt-8 ">用于按标签检索班级等，由网校管理员后台统一管理</div>
+        <div class="text-[#adadad] text-14 mt-8 ">用于按标签检索班级等，由网校管理员后台统一管理</div>
       </a-form-item>
       <a-form-item
         label="分类"

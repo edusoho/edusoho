@@ -34,7 +34,7 @@ const formState = reactive({
   contractEnable: props.manage.course.contractId !== 0 ? 1 : 0,
   contractForceSign: props.manage.course.contractForceSign,
   contractId: props.manage.course.contractId,
-  services: props.manage.course.services ? props.manage.course.services : [],
+  services: props.manage.course.services,
   drainageImage: props.manage.course.drainageImage,
   drainageText: props.manage.course.drainageText,
 });
@@ -70,7 +70,7 @@ const disabledEndDate = (current) => {
 
 const serviceItem = ref(props.manage.serviceTags.map(item => ({
   ...item,
-  active: item.active === 1
+  active: item.active === 1 || formState.services.indexOf(item.code) >= 0
 })));
 const selectServiceItem = (tag, index, checked) => {
   if (checked === true) {
@@ -234,9 +234,9 @@ defineExpose({
           ]"
       >
         <a-input v-model:value="formState.maxStudentNumL" class="mb-8" style="width: 150px;"></a-input>
-        <div class="text-[#a1a1a1] text-12">加入直播课程人数限制，0为不限制人数</div>
+        <div class="text-[#a1a1a1] text-14">加入直播课程人数限制，0为不限制人数</div>
         <div v-if="liveCapacity !== null && parseInt(formState.maxStudentNumL) > parseInt(liveCapacity)"
-             class="text-[#F56C6C] text-12">
+             class="text-[#F56C6C] text-14">
           网校可支持最多{{ liveCapacity }}人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
         </div>
       </a-form-item>
@@ -424,7 +424,7 @@ defineExpose({
               </a-form-item>
             </div>
           </div>
-          <div class="text-[#adadad] text-12 mt-8">
+          <div class="text-[#adadad] text-14 mt-8">
             教学计划一旦发布，有效期类型不能修改；课程或教学计划下架后，可以修改日期，新的学习有效期仅对修改后加入的学员生效
           </div>
         </div>
@@ -439,7 +439,7 @@ defineExpose({
         >
           <a-select-option value="0">无</a-select-option>
           <a-select-option
-            v-if="props.manage.vipLevels"
+            v-if="props.manage.vipLevels.length > 0"
             v-for="level in props.manage.vipLevels"
             :key="level.id"
             :value="level.id"
@@ -518,7 +518,7 @@ defineExpose({
               <div class="ant-upload-text">上传</div>
             </div>
           </a-upload>
-          <div class="text-[#606266] text-12 ">请上传jpg，gif，png格式的图</div>
+          <div class="text-[#a1a1a1] text-14">请上传jpg，gif，png格式的图</div>
         </a-form-item>
         <a-form-item
           label="引流文案"
@@ -535,7 +535,7 @@ defineExpose({
                 <img src="../../../img/course-manage/base-setting/drainage-style.png" alt="drainage"
                      style="height: 500px">
               </template>
-              <div class="text-[#409EFF] font-medium text-14 ml-4 cursor-pointer">查看详情</div>
+              <div class="text-[--primary-color] font-medium text-14 ml-4 cursor-pointer">查看详情</div>
             </a-popover>
           </div>
         </a-form-item>
