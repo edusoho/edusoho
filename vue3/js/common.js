@@ -1,6 +1,18 @@
 import dayjs from 'dayjs';
 import {floor} from 'lodash-es';
 
+export const removeHtml = (input) => {
+  return input && input.replace(/<(?:.|\n)*?>/gm, '')
+    .replace(/(&rdquo;)/g, '\"')
+    .replace(/&ldquo;/g, '\"')
+    .replace(/&mdash;/g, '-')
+    .replace(/&nbsp;/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&gt;/g, '>')
+    .replace(/&lt;/g, '<')
+    .replace(/<[\w\s"':=\/]*/, '');
+};
+
 export const trans = (value, options) => {
   return Translator.trans(value, options);
 };

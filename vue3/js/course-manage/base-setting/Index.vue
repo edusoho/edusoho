@@ -12,7 +12,7 @@ const manageProps = defineProps({
   isUnMultiCourseSet: {type: [String, Number]},
   course: Object,
   courseManageUrl: String,
-  tags: Object,
+  tags: Array,
   imageSrc: String,
   imageSaveUrl: String,
   imageUploadUrl: String,
@@ -85,7 +85,7 @@ const submitForm = async () => {
     delete params.services;
     await Api.courseSets.updateCourseSet(manageProps.courseSet.id, manageProps.course.id, params);
     message.success('保存成功');
-    setTimeout(() => location.reload(), 2000);
+    setTimeout(() => location.reload(), 1000);
   } else {
     return 0;
   }

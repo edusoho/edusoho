@@ -4,27 +4,16 @@ import Api from '../../../api';
 import {PlusOutlined,} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import VueCropper from '../../components/VueCropper.vue';
+import {removeHtml} from '../../common';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
 });
 
-const removeHtml = (input) => {
-  return input && input.replace(/<(?:.|\n)*?>/gm, '')
-    .replace(/(&rdquo;)/g, '\"')
-    .replace(/&ldquo;/g, '\"')
-    .replace(/&mdash;/g, '-')
-    .replace(/&nbsp;/g, '')
-    .replace(/&amp;/g, '&')
-    .replace(/&gt;/g, '>')
-    .replace(/&lt;/g, '<')
-    .replace(/<[\w\s"':=\/]*/, '');
-};
-
 const categoryTree = ref();
 const tabOptions = ref();
 const getCategory = async () => {
-  const category = await Api.category.getCategory();
+  const category = await Api.category.getCategory('course');
   categoryTree.value = transformCategoryData(category);
   categoryTree.value.unshift({ value: '0', label: '无' });
 };
@@ -181,7 +170,6 @@ const reSelectCover = () => {
   }
   cropperModalVisible.value = false;
 };
-
 const hideCropperModal = () => {
   cropperModalVisible.value = false;
 };
@@ -231,7 +219,7 @@ const initEditor = () => {
   const editor = CKEDITOR.replace('course-introduction', {
     toolbar: [
       {items: ['FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-      {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
+      {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList','Indent', 'Outdent', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
     ],
     extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
     filebrowserImageUploadUrl: props.manage.imageUploadUrl,
@@ -250,6 +238,9 @@ const validateForm = () => {
     .catch((error) => {
     });
 };
+defineExpose({
+  validateForm,
+});
 
 onMounted(() => {
   if (props.manage.isUnMultiCourseSet) {
@@ -269,10 +260,6 @@ onMounted(() => {
     initEditor();
     getTabs();
   }
-});
-
-defineExpose({
-  validateForm,
 });
 </script>
 
@@ -373,7 +360,7 @@ defineExpose({
           ></a-tree-select>
         </a-form-item>
         <a-form-item
-          v-if="props.manage.enableOrg"
+          v-if="props.manage.enableOrg === 1"
           label="组织机构"
         >
           <a-tree-select
