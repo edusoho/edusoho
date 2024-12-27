@@ -238,7 +238,7 @@ defineExpose({
           ]"
           >
             <a-date-picker v-model:value="formState.expiryValue"
-                           style="width: 150px" :default-value="dayjs()" :disabled-date="disabledPastDate"/>
+                           style="width: 150px" :disabled-date="disabledPastDate"/>
           </a-form-item>
           <div class="h-32 ml-5 text-14 text-[#a1a1a1] leading-32">在此日期前，学员可进行学习。</div>
         </div>

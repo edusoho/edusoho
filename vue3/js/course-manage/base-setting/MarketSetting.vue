@@ -375,7 +375,7 @@ defineExpose({
                 <div class="flex items-center mt-16">
                   <a-date-picker v-model:value="formState.deadline"
                                  :disabled="props.manage.course.platform !=='self'"
-                                 style="width: 150px" :default-value="dayjs()" :disabled-date="disabledPastDate"/>
+                                 style="width: 150px" :disabled-date="disabledPastDate"/>
                   <div class="text-14 opacity-65 ml-10">在此日期前，学员可进行学习。</div>
                 </div>
               </a-form-item>
