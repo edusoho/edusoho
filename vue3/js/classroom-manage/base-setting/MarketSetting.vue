@@ -183,15 +183,17 @@ const expiryModeRadios = [
         label="班级有效期"
       >
         <div class="flex h-32 items-center">
-          <a-radio-group v-model:value="formState.expiryMode">
-            <a-radio
-              v-for="item in expiryModeRadios"
-              :key="item.value"
-              :value="item.value"
-            >
-              {{ item.label }}
-            </a-radio>
-          </a-radio-group>
+          <a-form-item-rest>
+            <a-radio-group v-model:value="formState.expiryMode">
+              <a-radio
+                v-for="item in expiryModeRadios"
+                :key="item.value"
+                :value="item.value"
+              >
+                {{ item.label }}
+              </a-radio>
+            </a-radio-group>
+          </a-form-item-rest>
           <a class="text-14 font-normal text-[#46c37b] hover:text-[#34a263]" :href="props.manage.classroomExpiryRuleUrl" target="_blank">查看有效期规则</a>
         </div>
         <div class="mt-5 text-[#ffa51f] text-14 font-normal">班级首次发布后，有效期类型不能再更改，只允许修改有效日期。</div>
