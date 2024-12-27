@@ -66,8 +66,9 @@ const categoryTree = ref();
 const getCategory = async () => {
   const category = await Api.category.getCategory('classroom');
   categoryTree.value = transformCategoryData(category);
-  categoryTree.value.unshift({ value: '0', label: '分类' });
+  categoryTree.value.unshift({value: '0', label: '分类'});
 };
+
 function transformCategoryData(data) {
   return data.map(item => {
     const transformedItem = {
@@ -86,6 +87,7 @@ const getOrgCodes = async () => {
   const orgCodes = await Api.org.search();
   orgTree.value = buildOrgTree(orgCodes);
 };
+
 function buildOrgTree(data) {
   const map = {};
   const tree = [];
@@ -98,7 +100,7 @@ function buildOrgTree(data) {
   });
   data.forEach((item) => {
     const node = map[item.id];
-    if (item.parentId === "0") {
+    if (item.parentId === '0') {
       tree.push(node);
     } else if (map[item.parentId]) {
       map[item.parentId].children.push(node);
@@ -111,6 +113,7 @@ const cropperModalVisible = ref(false);
 const cropperInstance = ref();
 const coverUrl = ref('');
 const fileData = ref();
+
 function uploadCover(info) {
   const isPngOrGifOrJpg = info.file.type === 'image/png' || info.file.type === 'image/gif' || info.file.type === 'image/jpg' || info.file.type === 'image/jpeg';
   if (!isPngOrGifOrJpg) {
@@ -129,11 +132,12 @@ function uploadCover(info) {
       fileData.value = {
         blob: await response.blob(),
         name: info.file.originFileObj.name,
-      }
+      };
     };
     reader.readAsDataURL(info.file.originFileObj);
   }
 }
+
 const upload = ref();
 const reSelectCover = () => {
   const inputElement = upload.value.$el.querySelector('input[type="file"]');
@@ -185,7 +189,7 @@ const initEditor = () => {
   const editor = CKEDITOR.replace('classroom-introduction', {
     toolbar: [
       {items: ['FontSize', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
-      {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList','Indent', 'Outdent', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
+      {items: ['Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', 'Indent', 'Outdent', '-', 'Link', 'Unlink', 'uploadpictures', 'CodeSnippet', 'Iframe', '-', 'Source', 'kityformula', '-', 'Maximize']}
     ],
     extraPlugins: 'questionblank,smiley,table,font,kityformula,codesnippet,uploadpictures,shortUrl,image2,colorbutton,colordialog,justify,find,filebrowser,pasteimage,katex,iframe',
     filebrowserImageUploadUrl: props.manage.imageUploadUrl,
@@ -214,113 +218,111 @@ onMounted(() => {
   getOrgCodes();
   cropUrl.value = props.manage.cover;
   initEditor();
-})
+});
 </script>
 
 <template>
-  <div class="flex flex-col w-full">
-    <div class="flex flex-col relative">
-      <div class="absolute w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]">基础信息</div>
-      <a-form
-        ref="formRef"
-        class="mt-66"
-        :model="formState"
-        :label-col="{ span: 4 }"
-        :wrapper-col="{ span: 16 }"
-      >
-        <a-form-item
-          label="班级标题"
-          name="title"
-          :validateTrigger="['blur']"
-          :rules="[
+  <div class="flex flex-col w-full relative">
+    <div class="absolute w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]">基础信息</div>
+    <a-form
+      ref="formRef"
+      class="mt-66"
+      :model="formState"
+      :label-col="{ span: 4 }"
+      :wrapper-col="{ span: 16 }"
+    >
+      <a-form-item
+        label="班级标题"
+        name="title"
+        :validateTrigger="['blur']"
+        :rules="[
           { required: true, message: '请输入班级标题' },
           { validator: interByteValidator, maxSize: 100, minSize: 2 },
           { validator: classroomTitleValidator },
           ]"
-        >
-          <a-input v-model:value.trim="formState.title"/>
-        </a-form-item>
-        <a-form-item
-          label="班级副标题"
-          name="subtitle"
-          :validateTrigger="['blur']"
-          :rules="[
+      >
+        <a-input v-model:value.trim="formState.title"/>
+      </a-form-item>
+      <a-form-item
+        label="班级副标题"
+        name="subtitle"
+        :validateTrigger="['blur']"
+        :rules="[
           { validator: interByteValidator, maxSize: 100 }
           ]"
+      >
+        <a-textarea v-model:value.trim="formState.subtitle" :rows="3"/>
+      </a-form-item>
+      <a-form-item
+        label="标签"
+      >
+        <a-select
+          v-model:value="formState.tags"
+          mode="multiple"
+          placeholder="请选择"
+          :options="tabOptions"
+          allow-clear
+        ></a-select>
+        <div class="text-[#adadad] text-12 mt-8 ">用于按标签检索班级等，由网校管理员后台统一管理</div>
+      </a-form-item>
+      <a-form-item
+        label="分类"
+      >
+        <a-tree-select
+          v-model:value="formState.categoryId"
+          :tree-data="categoryTree"
+          allow-clear
+          tree-default-expand-all
+          :show-search="true"
+          :treeNodeFilterProp="'label'"
+          style="width: 250px"
+        ></a-tree-select>
+      </a-form-item>
+      <a-form-item
+        v-if="props.manage.enableOrg === 1"
+        label="组织机构"
+      >
+        <a-tree-select
+          v-model:value="formState.orgCode"
+          :tree-data="orgTree"
+          allow-clear
+          tree-default-expand-all
+          :show-search="true"
+          :treeNodeFilterProp="'label'"
+          style="width: 250px"
+        ></a-tree-select>
+      </a-form-item>
+      <a-form-item
+        label="封面图片"
+      >
+        <a-upload
+          ref="upload"
+          accept="image/png, image/gif, image/jpg, image/jpeg"
+          :file-list="[]"
+          :maxCount="1"
+          :customRequest="() => {}"
+          list-type="picture-card"
+          @change="uploadCover"
         >
-          <a-textarea v-model:value.trim="formState.subtitle" :rows="3"/>
-        </a-form-item>
-        <a-form-item
-          label="标签"
-        >
-          <a-select
-            v-model:value="formState.tags"
-            mode="multiple"
-            placeholder="请选择"
-            :options="tabOptions"
-            allow-clear
-          ></a-select>
-          <div class="text-[#adadad] text-12 mt-8 ">用于按标签检索班级等，由网校管理员后台统一管理</div>
-        </a-form-item>
-        <a-form-item
-          label="分类"
-        >
-          <a-tree-select
-            v-model:value="formState.categoryId"
-            :tree-data="categoryTree"
-            allow-clear
-            tree-default-expand-all
-            :show-search="true"
-            :treeNodeFilterProp="'label'"
-            style="width: 250px"
-          ></a-tree-select>
-        </a-form-item>
-        <a-form-item
-          v-if="props.manage.enableOrg === 1"
-          label="组织机构"
-        >
-          <a-tree-select
-            v-model:value="formState.orgCode"
-            :tree-data="orgTree"
-            allow-clear
-            tree-default-expand-all
-            :show-search="true"
-            :treeNodeFilterProp="'label'"
-            style="width: 250px"
-          ></a-tree-select>
-        </a-form-item>
-        <a-form-item
-          label="封面图片"
-        >
-          <a-upload
-            ref="upload"
-            accept="image/png, image/gif, image/jpg, image/jpeg"
-            :file-list="[]"
-            :maxCount="1"
-            :customRequest="() => {}"
-            list-type="picture-card"
-            @change="uploadCover"
-          >
-            <img v-if="cropUrl" :src="cropUrl" style="width: 100%;" alt=""/>
-            <div v-else class="flex flex-col items-center relative">
-              <div class="flex flex-col items-center">
-                <PlusOutlined/>
-                <div class="mt-8">上传图片</div>
-              </div>
+          <img v-if="cropUrl" :src="cropUrl" style="width: 100%;" alt=""/>
+          <div v-else class="flex flex-col items-center relative">
+            <div class="flex flex-col items-center">
+              <PlusOutlined/>
+              <div class="mt-8">上传图片</div>
             </div>
-          </a-upload>
-          <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
-        </a-form-item>
-        <a-form-item
-          label="班级简介"
-        >
-          <textarea id="classroom-introduction"></textarea>
-          <div class="text-[#a1a1a1] font-normal text-14 leading-28">
-            为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
           </div>
-        </a-form-item>
-      </a-form>
-    </div>
+        </a-upload>
+        <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
+      </a-form-item>
+      <a-form-item
+        label="班级简介"
+      >
+        <textarea id="classroom-introduction"></textarea>
+        <div class="text-[#a1a1a1] font-normal text-14 leading-28">
+          为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+        </div>
+      </a-form-item>
+    </a-form>
     <a-modal
       :mask-closable="false"
       :width="'auto'"

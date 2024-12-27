@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, reactive, ref} from 'vue';
+import {computed, h, onMounted, reactive, ref} from 'vue';
 import {
   PlusOutlined,
   LoadingOutlined,
@@ -98,7 +98,7 @@ const uploadDrainageImage = async (info) => {
     fileData.value = await Api.file.upload(formData);
     drainageLoading.value = false;
     formState.drainageImage = fileData.value.uri;
-    formRef.value.validateFields(["drainageImage"]);
+    formRef.value.validateFields(['drainageImage']);
   }
 };
 
@@ -555,7 +555,7 @@ defineExpose({
           <div class="text-16 text-[#1E2226] font-medium">
             {{ `${contractPreview.goodsName}-${t('modal.contractSigning')}` }}
           </div>
-          <CloseOutlined class="h-16 w-16" @click="contractPreviewModalVisible = false"/>
+          <a-button :icon="h(CloseOutlined)" type="text" size="small" @click="contractPreviewModalVisible = false"/>
         </div>
       </template>
       <div class="w-full flex flex-col space-y-32 p-32">
@@ -585,12 +585,6 @@ defineExpose({
           <div class="flex-1 flex flex-col items-start justify-between">
             <span class="text-18 font-medium">{{ `${t('modal.partyB')}：` }}</span>
             <div class="w-full flex flex-col space-y-22">
-              <div v-if="contractPreview.sign && contractPreview.sign.handSignature" class="flex items-center">
-                <span class="text-gray-500">{{ `${t('modal.handSignature')}：` }}</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                  <img :src="contractPreview.sign.handSignature" class="h-35" alt=""/>
-                </div>
-              </div>
               <div v-if="contractPreview.sign && contractPreview.sign.truename" class="flex items-center">
                 <span class="text-gray-500">{{ `${t('modal.partyBName')}：` }}</span>
                 <div class="grow border-solid border-0 border-b border-gray-300 font-medium">

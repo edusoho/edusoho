@@ -10,6 +10,10 @@ const manageProps = defineProps({
   enableOrg: Number,
   cover: String,
   imageUploadUrl: String,
+  courseNum: {type: Number, default: 0},
+  coursePrice: {type: Number, default: 0},
+  coinSetting: {type: Object, default: {}},
+  classroomExpiryRuleUrl: String,
 });
 
 const baseInfoRef = ref(null);

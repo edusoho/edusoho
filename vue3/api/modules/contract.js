@@ -41,6 +41,6 @@ export default {
     return apiClient.get(`/simple_contract`);
   },
   async previewContract(contractId, courseId) {
-    return apiClient.get(`/api/contract/${contractId}/preview/course_${courseId}`);
+    return apiClient.get(`/contract/${contractId}/preview/course_${courseId}`);
   },
 };
