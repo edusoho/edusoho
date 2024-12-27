@@ -170,7 +170,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
         $biz['ESCloudSdk.resource'] = function ($biz) use ($that) {
             $service = null;
-            $sdk = $that->generateEsCloudSdk($biz, []);
+            $sdk = $that->generateEsCloudSdk($biz, $this->getResourceConfig($biz), $biz['logger']);
             if (!empty($sdk)) {
                 $service = $sdk->getResourceService();
             }
@@ -278,6 +278,25 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return $sdk;
+    }
+
+    protected function getResourceConfig(Biz $biz)
+    {
+        $developerSetting = $biz->service('System:SettingService')->get('developer', []);
+        if (!empty($developerSetting['resource_api_server'])) {
+            $urlSegments = explode('://', $developerSetting['resource_api_server']);
+            if (1 === count($urlSegments)) {
+                $hostUrl = $urlSegments[0];
+            }
+            if (2 === count($urlSegments)) {
+                $hostUrl = $urlSegments[1];
+            }
+        }
+        if (empty($hostUrl)) {
+            $hostUrl = '';
+        }
+
+        return ['resource' => ['host' => $hostUrl]];
     }
 
     protected function getAIConfig(Biz $biz)
