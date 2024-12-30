@@ -13,6 +13,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Util\EdusohoLiveClient;
@@ -73,6 +74,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_obtain_certificates', [$this, 'canObtainCertificates']),
             new \Twig_SimpleFunction('can_buy_course', [$this, 'canBuyCourse']),
             new \Twig_SimpleFunction('display_task_title', [$this, 'displayTaskTitle']),
+            new \Twig_SimpleFunction('get_video_max_level', [$this, 'getVideoMaxLevel']),
         ];
     }
 
@@ -426,6 +428,26 @@ class CourseExtension extends \Twig_Extension
         ]);
     }
 
+    public function getVideoMaxLevel($course)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'video', true);
+        $fileIds = [];
+        foreach ($activities as $activity) {
+            if ('self' == $activity['ext']['mediaSource']) {
+                $fileIds[] = $activity['ext']['mediaId'];
+            }
+        }
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $levels = array_unique(array_column($files, 'convertMaxLevel'));
+        foreach (['4k', '2k'] as $level) {
+            if (in_array($level, $levels)) {
+                return $level;
+            }
+        }
+
+        return '';
+    }
+
     protected function isUserAvatarEmpty()
     {
         $user = $this->biz['user'];
@@ -557,7 +579,7 @@ class CourseExtension extends \Twig_Extension
     }
 
     /**
-     * @return
+     * @return UploadFileService
      */
     protected function getUploadFileService()
     {
