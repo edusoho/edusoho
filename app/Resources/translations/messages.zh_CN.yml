@@ -301,6 +301,7 @@ user.fields.pay_password: 支付密码
 user.fileds.microblog: 微博
 user.fields.username_label: 用户名
 user.fields.username_student_label: 学员名
+user.fields.id: 学员编号
 user.fields.username_staff_label: 员工名
 user.fields.email_label: 邮箱
 user.fields.truename_label: 姓名
