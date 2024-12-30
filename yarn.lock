@@ -4427,9 +4427,6 @@
   "resolved" "https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.5.13.tgz"
   "version" "1.5.13"
 
-"element-ui@file:app/Resources/static-src/libs/element-ui":
-  "resolved" "file:app/Resources/static-src/libs/element-ui"
-
 "elliptic@^6.5.3":
   "integrity" "sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ=="
   "resolved" "https://registry.npmmirror.com/elliptic/-/elliptic-6.5.4.tgz"
