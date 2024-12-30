@@ -17,27 +17,40 @@ class MeLive extends AbstractResource
     {
         $courseMembers = $this->getCourseMemberService()->findStudentMemberByUserId($this->getCurrentUser()->getId());
 
-        if (empty($courseMembers)) {
-            return array();
+        $courseIds = $this->getCanLearnCourseIds($courseMembers);
+
+        if (empty($courseIds)) {
+            return [];
         }
 
-        $conditions = array(
+        $conditions = [
             'type' => 'live',
-            'courseIds' => ArrayToolkit::column($courseMembers, 'courseId'),
+            'courseIds' => $courseIds,
             'status' => 'published',
             'startTime_GE' => $request->query->get('startTime'),
             'startTime_LE' => $request->query->get('endTime'),
-        );
+        ];
 
         $total = $this->getTaskService()->countTasks($conditions);
 
         if (empty($total)) {
-            return array();
+            return [];
         }
 
-        $liveTasks = $this->getTaskService()->searchTasks($conditions, array('startTime' => 'ASC'), 0, $total);
+        $liveTasks = $this->getTaskService()->searchTasks($conditions, ['startTime' => 'ASC'], 0, $total);
 
         return $this->sortAndFilterLiveTasks($liveTasks, $courseMembers);
+    }
+
+    protected function getCanLearnCourseIds($courseMembers)
+    {
+        if (empty($courseMembers)) {
+            return [];
+        }
+        $courseIds = array_column($courseMembers, 'courseId');
+        $courseIds = $this->getCourseService()->searchCourses(['canLearn' => 1, 'courseIds' => $courseIds], [], 0, count($courseIds), 'id');
+
+        return array_column($courseIds, 'id');
     }
 
     protected function sortAndFilterLiveTasks($liveTasks, $courseMembers)
@@ -50,15 +63,15 @@ class MeLive extends AbstractResource
         $courseIds = ArrayToolkit::column($courseMembers, 'courseId');
         $classroomIds = ArrayToolkit::column($courseMembers, 'classroomId');
 
-        $courses = $this->getCourseService()->searchCourses(array('ids' => $courseIds), array(), 0, count($courseIds), array('id', 'title', 'courseSetTitle'));
+        $courses = $this->getCourseService()->searchCourses(['ids' => $courseIds], [], 0, count($courseIds), ['id', 'title', 'courseSetTitle']);
         $courses = ArrayToolkit::index($courses, 'id');
 
-        $classrooms = $this->getClassroomService()->searchClassrooms(array('classroomIds' => $classroomIds), array(), 0, count($classroomIds), array('id', 'title'));
+        $classrooms = $this->getClassroomService()->searchClassrooms(['classroomIds' => $classroomIds], [], 0, count($classroomIds), ['id', 'title']);
         $classrooms = ArrayToolkit::index($classrooms, 'id');
 
-        $doingLives = array();
-        $finishedLives = array();
-        $notStartLives = array();
+        $doingLives = [];
+        $finishedLives = [];
+        $notStartLives = [];
         foreach ($liveTasks as $live) {
             $live['activity'] = empty($activities[$live['activityId']]) ? null : $activities[$live['activityId']];
 
