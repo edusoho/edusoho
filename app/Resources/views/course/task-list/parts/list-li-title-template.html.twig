@@ -7,6 +7,8 @@
   {% endif %}
 {% endif %}
 <span display-if="{isOptional}" class="label label-info mr10">{{ 'course.catalogue.task_status.is_optional'|trans }}</span>
-<img display-if="{is2kVideoMaxLevel}" src="/static-dist/app/img/task/video-transcode-2k.png" alt="2k" style="height: 20px; margin-right: 8px">
-<img display-if="{is4kVideoMaxLevel}" src="/static-dist/app/img/task/video-transcode-4k.png" alt="4k" style="height: 20px; margin-right: 8px">
-{getTaskName}
+<div style="display: flex; align-items: center;">
+  <img display-if="{is2kVideoLevel}" src="/static-dist/app/img/task/video-transcode-2k.png" alt="2k" style="height: 20px; margin-right: 8px">
+  <img display-if="{is4kVideoLevel}" src="/static-dist/app/img/task/video-transcode-4k.png" alt="4k" style="height: 20px; margin-right: 8px">
+  {getTaskName}
+</div>
