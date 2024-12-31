@@ -40,10 +40,10 @@
         </div>
       {% endif %}
       {% if videoMaxLevel == '2k' %}
-        <img src="/static-dist/app/img/video-transcode-2k.png" alt="2k" style="height: 20px; margin-right: 8px; position: absolute; right: 0; top: 0;">
+        <img src="/static-dist/app/img/video-transcode-2k.png" alt="2k" style="height: 20px; position: absolute; right: 0; top: 0;">
       {% endif %}
       {% if videoMaxLevel == '4k' %}
-        <img src="/static-dist/app/img/video-transcode-4k.png" alt="4k" style="height: 20px; margin-right: 8px; position: absolute; right: 0; top: 0;">
+        <img src="/static-dist/app/img/video-transcode-4k.png" alt="4k" style="height: 20px; position: absolute; right: 0; top: 0;">
       {% endif %}
       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title|raw) }}
     </a>
