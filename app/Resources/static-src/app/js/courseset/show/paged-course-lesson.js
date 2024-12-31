@@ -139,11 +139,11 @@ class PagedCourseLesson {
           }
         },
 
-        'is2kVideoMaxLevel' :  function(data, context) {
+        'is2kVideoLevel' :  function(data, context) {
             return data.videoMaxLevel === '2k';
         },
 
-        'is4kVideoMaxLevel' :  function(data, context) {
+        'is4kVideoLevel' :  function(data, context) {
           return data.videoMaxLevel === '4k';
         },
 
