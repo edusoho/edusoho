@@ -9,7 +9,7 @@
     <span class="tag-vip-free"></span>
   {% endif %}
   <div class="course-img">
-    <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
+    <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank" style="position: relative;">
       {% if courseSet.discountId > 0 %}
         {% if courseSet.discount == 0 %}
           <!-- 限免 -->
@@ -28,18 +28,23 @@
             <span class="cd-mr8">{% if courseSet.type|default() == 'reservation' %}
               {{ 'my.teaching.course_set.reservation'|trans }}<span class="course-tag__dot"></span>
             {% elseif courseSet.type|default() == 'live' %}
-              {{ 'search.live_courses'|trans }}<span class="course-tag__dot"></span>
+                {{ 'search.live_courses'|trans }}<span class="course-tag__dot"></span>
             {% else %}
-              {% if courseSet.serializeMode == 'serialized' %}
-                {{ 'course.status.serialized'|trans }}<span class="course-tag__dot"></span>
+                {% if courseSet.serializeMode == 'serialized' %}
+                  {{ 'course.status.serialized'|trans }}<span class="course-tag__dot"></span>
               {% elseif courseSet.serializeMode == 'finished' %}
-                {{ 'course.status.finished'|trans }}<span class="course-tag__dot"></span>
-              {% endif %}
+                  {{ 'course.status.finished'|trans }}<span class="course-tag__dot"></span>
+                {% endif %}
             {% endif %}</span>
           </span>
         </div>
       {% endif %}
-
+      {% if videoMaxLevel === '2k' %}
+        <img src="/static-dist/app/img/video-transcode-2k.png" alt="2k" style="height: 20px; margin-right: 8px; position: absolute; right: 0; top: 0;">
+      {% endif %}
+      {% if videoMaxLevel === '4k' %}
+        <img src="/static-dist/app/img/video-transcode-4k.png" alt="4k" style="height: 20px; margin-right: 8px; position: absolute; right: 0; top: 0;">
+      {% endif %}
       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title|raw) }}
     </a>
   </div>
