@@ -3137,6 +3137,26 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->canLearningByCourseSetId($courseSetIds);
     }
 
+    public function getVideoMaxLevel($courseId)
+    {
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
+        $fileIds = [];
+        foreach ($activities as $activity) {
+            if ('self' == $activity['ext']['mediaSource']) {
+                $fileIds[] = $activity['ext']['mediaId'];
+            }
+        }
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $levels = array_unique(array_column($files, 'convertMaxLevel'));
+        foreach (['4k', '2k'] as $level) {
+            if (in_array($level, $levels)) {
+                return $level;
+            }
+        }
+
+        return '';
+    }
+
     /**
      * @return CourseSpecsMediator
      */

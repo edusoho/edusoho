@@ -428,24 +428,9 @@ class CourseExtension extends \Twig_Extension
         ]);
     }
 
-    public function getVideoMaxLevel($course)
+    public function getVideoMaxLevel($courseId)
     {
-        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($course['id'], 'video', true);
-        $fileIds = [];
-        foreach ($activities as $activity) {
-            if ('self' == $activity['ext']['mediaSource']) {
-                $fileIds[] = $activity['ext']['mediaId'];
-            }
-        }
-        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
-        $levels = array_unique(array_column($files, 'convertMaxLevel'));
-        foreach (['4k', '2k'] as $level) {
-            if (in_array($level, $levels)) {
-                return $level;
-            }
-        }
-
-        return '';
+        return $this->getCourseService()->getVideoMaxLevel($courseId);
     }
 
     protected function isUserAvatarEmpty()
