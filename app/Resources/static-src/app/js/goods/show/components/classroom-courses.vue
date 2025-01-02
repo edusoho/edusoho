@@ -1,10 +1,12 @@
 <template>
   <div class="classroom-task">
     <div class="classroom-task__item" v-for="course in courses" :key="course.id" @click="clickCourse(course)">
-      <div class="task-banner" style="position: relative;">
-        <img :src="course.courseSet.cover.middle" alt="">
-        <img v-if="course.videoMaxLevel === '2k'" src="/static-dist/app/img/classroom/course/video-transcode-2k.png" alt="2k" style="height: 20px; position: absolute; left: 0; top: 0;">
-        <img v-if="course.videoMaxLevel === '4k'" src="/static-dist/app/img/classroom/course/video-transcode-4k.png" alt="4k" style="height: 20px; position: absolute; left: 0; top: 0;">
+      <div class="task-banner">
+        <div style="position: relative;">
+          <img :src="course.courseSet.cover.middle" alt="">
+          <img v-if="course.videoMaxLevel === '2k'" src="/static-dist/app/img/classroom/course/video-transcode-2k.png" alt="2k" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0;">
+          <img v-if="course.videoMaxLevel === '4k'" src="/static-dist/app/img/classroom/course/video-transcode-4k.png" alt="4k" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0;">
+        </div>
       </div>
       <div class="task-content">
         <p class="task-content__title text-overflow">{{ course.courseSet.title | removeHtml }}</p>
