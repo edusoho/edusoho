@@ -10,7 +10,11 @@
         class="absolute z-1"
         src="static/images/classroom/classroom-icon2.png"
         srcset="static/images/classroom/classroom-icon2@2x.png" />
-      <img class="relative z-1 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
+      <div class="relative z-1">
+        <img class="relative cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" style="border-radius: 6px 6px 0 0;"/>
+        <img v-if="course.videoMaxLevel === '2k'" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0; border-radius: 0;" src="static/images/video-transcode-2k.png" alt="2k">
+        <img v-if="course.videoMaxLevel === '4k'" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0; border-radius: 0;" src="static/images/video-transcode-4k.png" alt="4k">
+      </div>
       <div v-if="Number(isVip)" class="column-class-left__member">{{ $t('e.freeForMembers') }}</div>
       <div v-show="courseType === 'live'" class="column-class-left__live">{{ $t('e.live') }}</div>
     </div>
