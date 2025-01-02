@@ -9,6 +9,7 @@ use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
@@ -69,7 +70,6 @@ class GoodComponent extends AbstractResource
 
             if ('classroomCourses' === $type) {
                 $components['classroomCourses'] = $this->getClassroomCourses($product);
-                continue;
             }
         }
 
@@ -155,7 +155,12 @@ class GoodComponent extends AbstractResource
 
         $apiRequest = new ApiRequest("/api/classrooms/{$product['targetId']}/courses", 'GET');
 
-        return $this->invokeResource($apiRequest);
+        $courses = $this->invokeResource($apiRequest);
+        foreach ($courses as &$course) {
+            $course['videoMaxLevel'] = $this->getCourseService()->getVideoMaxLevel($course['id']);
+        }
+
+        return $courses;
     }
 
     /**
@@ -204,5 +209,13 @@ class GoodComponent extends AbstractResource
     private function getCourseSetService()
     {
         return $this->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
