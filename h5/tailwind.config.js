@@ -4,29 +4,18 @@ module.exports = {
     './src/**/*.{vue,js,ts,jsx,tsx}'
   ],
   theme: {
-    spacing: () => {
-      const obj = {};
-      const baseSpacing = 4;
-      for (let i = 0; i <= 50; i++) {
-        const key = i * baseSpacing;
-        const value = key + 'px';
-        obj[key] = value;
-      }
-      return obj;
-    },
-    fontSize: {
-      12: ['12px', { lineHeight: '16px' }],
-      14: ['14px', { lineHeight: '20px' }],
-      16: ['16px', { lineHeight: '24px' }],
-      18: ['18px', { lineHeight: '28px' }],
-      20: ['20px', { lineHeight: '30px' }],
-      24: ['24px', { lineHeight: '32px' }],
-      28: ['28px', { lineHeight: '36px' }],
-      32: ['32px', { lineHeight: '40px' }],
-      36: ['32px', { lineHeight: '44px' }],
-      40: ['40px', { lineHeight: '48px' }],
-      48: ['48px', { lineHeight: '60px' }]
-    },
+    padding: Array.from({ length: 1000 }).reduce((map, _, index) => {
+      map[index] = `${index}px`;
+      return map;
+    }, {}),
+    spacing: Array.from({ length: 1000 }).reduce((map, _, index) => {
+      map[index] = `${index}px`;
+      return map;
+    }, {}),
+    borderRadius: Array.from({ length: 100 }).reduce((map, _, index) => {
+      map[index] = `${index}px`;
+      return map;
+    }, {}),
     extend: {
       zIndex: Object.fromEntries(Array.from({length: 100}, (_, index) => [(index + 1).toString(), (index + 1).toString()])),
       colors: {
@@ -49,8 +38,31 @@ module.exports = {
         'line-1': '#f2f3f5',
         'line-2': '#e5e6eb',
         'line-3': '#c9cdd4',
-        'line-4': '#86909c'
-      }
+        'line-4': '#86909c',
+        '[#492F0B]': '#492F0B',
+        '[#F7D27B]': '#F7D27B',
+        '[#FCEABE]': '#FCEABE',
+      },
+      lineHeight: Array.from({ length: 100 }).reduce((map, _, index) => {
+        map[index] = `${index}px`;
+        return map;
+      }, {}),
+      gap: Array.from({ length: 100 }).reduce((map, _, index) => {
+        map[index] = `${index}px`;
+        return map;
+      }, {}),
+      width: Array.from({ length: 1600 }).reduce((map, _, index) => {
+        map[index] = `${index}px`;
+        return map;
+      }, {}),
+      height: Array.from({ length: 1600 }).reduce((map, _, index) => {
+        map[index] = `${index}px`;
+        return map;
+      }, {}),
+      fontSize: Array.from({ length: 100 }).reduce((map, _, index) => {
+        map[index] = `${index}px`;
+        return map;
+      }, {}),
     }
   },
   plugins: [

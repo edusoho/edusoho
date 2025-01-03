@@ -12,8 +12,8 @@
         srcset="static/images/classroom/classroom-icon2@2x.png" />
       <div class="relative z-1">
         <img class="relative cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className"/>
-        <img v-if="course.videoMaxLevel === '2k'" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0; border-radius: 0;" src="static/images/video-transcode-2k.png" alt="2k">
-        <img v-if="course.videoMaxLevel === '4k'" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0; border-radius: 0;" src="static/images/video-transcode-4k.png" alt="4k">
+        <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 top-0 px-8 py-2 text-white text-12 font-medium bg-black bg-opacity-80 rounded-tl-6 rounded-br-8">2K 优享</div>
+        <div v-if="course.videoMaxLevel === '4k'" class="absolute left-0 top-0 px-8 py-2 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-tl-6 rounded-br-8">4K 臻享</div>
       </div>
       <div v-if="Number(isVip)" class="column-class-left__member">{{ $t('e.freeForMembers') }}</div>
       <div v-show="courseType === 'live'" class="column-class-left__live">{{ $t('e.live') }}</div>

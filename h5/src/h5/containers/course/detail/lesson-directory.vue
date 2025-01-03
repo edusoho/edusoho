@@ -4,8 +4,8 @@
       <div v-if="hasLesson" :key="lessonIndex" class="lesson-directory">
         <div
           :id="lessonItem.tasks[lessonItem.index].id"
-          :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
-          class="lesson-title flex justify-between items-center"
+          :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]), 'py-16': showPaddingY(lessonItem.tasks[lessonItem.index].videoMaxLevel) }"
+          class="lesson-title flex justify-between items-center relative px-12"
           @click="
             lessonCellClick(
               lessonItem.tasks[lessonItem.index],
@@ -14,6 +14,8 @@
             )
           "
         >
+          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="absolute -right-5 -top-3 px-8 py-3 text-white text-10 font-medium bg-black bg-opacity-80 rounded-bl-8">2K 优享</div>
+          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="absolute -right-5 -top-3 px-6 py-3 text-[#492F0B] text-10 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-bl-8">4K 臻享</div>
           <div class="lesson-title-r">
             <div class="lesson-title-des">
               <!-- 非直播考试-->
@@ -33,7 +35,7 @@
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
                     class="iconfont"
                   />
-                  <div>
+                  <div class="">
                     {{
                       Number(lessonItem.tasks[lessonItem.index].isOptional)
                         ? ''
@@ -42,10 +44,11 @@
                       Number(lessonItem.tasks[lessonItem.index].isOptional)
                         ? lessonItem.title
                         : `${lessonItem.tasks[lessonItem.index].number}:${
-                            lessonItem.title
-                          }`
+                          lessonItem.title
+                        }`
                     }}
                   </div>
+
                 </span>
               </div>
 
@@ -77,15 +80,15 @@
                         Number(lessonItem.tasks[lessonItem.index].isOptional)
                           ? lessonItem.title
                           : `${lessonItem.tasks[lessonItem.index].number}:${
-                              lessonItem.title
-                            }`
+                            lessonItem.title
+                          }`
                       }}
                     </div>
                   </span>
                   <span class="bl zbtime">
                     <span
                       :class="[liveClass(lessonItem.tasks[lessonItem.index])]"
-                      >{{
+                    >{{
                         lessonItem.tasks[lessonItem.index] | filterTaskTime
                       }}</span
                     >
@@ -104,8 +107,8 @@
               {{ $t('courseLearning.optional') }}
             </span>
             <span v-if="lessonItem.tasks[lessonItem.index].type != 'live'">{{
-              lessonItem.tasks[lessonItem.index] | filterTaskTime
-            }}</span>
+                lessonItem.tasks[lessonItem.index] | filterTaskTime
+              }}</span>
             <i
               :class="studyStatus(lessonItem.tasks[lessonItem.index])"
               class="iconfont"
@@ -128,7 +131,7 @@
                 class="litem-r"
               >
                 <!-- <span class="tryLes">试听</span> -->
-                <i :class="iconfont(taskItem)" class="iconfont" />
+                <i :class="iconfont(taskItem)" class="iconfont"/>
                 <div>
                   {{
                     Number(taskItem.isOptional)
@@ -143,9 +146,9 @@
               </div>
               <div class="litem-l clearfix">
                 <span :class="[liveClass(taskItem)]">{{
-                  taskItem | filterTaskTime
-                }}</span>
-                <i :class="studyStatus(taskItem)" class="iconfont" />
+                    taskItem | filterTaskTime
+                  }}</span>
+                <i :class="studyStatus(taskItem)" class="iconfont"/>
               </div>
             </div>
           </template>
@@ -153,7 +156,7 @@
       </div>
     </template>
     <div v-if="isNoData" class="noneItem">
-      <img src="static/images/none.png" class="notask" />
+      <img src="static/images/none.png" class="notask"/>
       <p>{{ $t('courseLearning.thereIsNoClassYet') }}</p>
     </div>
   </div>
@@ -161,11 +164,11 @@
 <script>
 import redirectMixin from '@/mixins/saveRedirect';
 import copyUrl from '@/mixins/copyUrl';
-import { mapState, mapMutations } from 'vuex';
+import {mapState, mapMutations} from 'vuex';
 import * as types from '@/store/mutation-types';
-import { Toast, Dialog } from 'vant';
+import {Toast, Dialog} from 'vant';
 import Api from '@/api';
-import { closedToast } from '@/utils/on-status.js';
+import {closedToast} from '@/utils/on-status.js';
 
 
 export default {
@@ -194,7 +197,8 @@ export default {
     },
     courseSet: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     }
   },
   data() {
@@ -233,7 +237,7 @@ export default {
   },
   mounted() {
     if (Object.keys(this.$route.query).length) {
-      const { sourceType, taskId } = this.$route.query;
+      const {sourceType, taskId} = this.$route.query;
       this.setSourceType({
         sourceType: sourceType,
         taskId: taskId,
@@ -266,6 +270,9 @@ export default {
       }
       return isDouble;
     },
+    showPaddingY(videoMaxLevel) {
+      return videoMaxLevel === '2k' || videoMaxLevel === '4k';
+    },
     showTask(taskItem, taskIndex) {
       let result = true;
       if (taskItem.mode == null) {
@@ -284,122 +291,122 @@ export default {
       const isTaskTypeAllowed = allowedTaskTypes.includes(task.type);
       const isTaskResultIncomplete = !task.result || task.result.status != 'finish';
 
-      if(this.getAgainCourse?.courseSet?.status !== 'closed') {
-        return true
+      if (this.getAgainCourse?.courseSet?.status !== 'closed') {
+        return true;
       }
 
-      if(!isTaskTypeAllowed) {
-        return false
+      if (!isTaskTypeAllowed) {
+        return false;
       }
 
-      if(isTaskTypeAllowed && isTaskResultIncomplete) {
-        return false
+      if (isTaskTypeAllowed && isTaskResultIncomplete) {
+        return false;
       }
 
-      return true
+      return true;
     },
     async getCourse() {
-      const query = { courseId: this.selectedPlanId };
-      await Api.getCourseDetail({ query }).then((res) => {
+      const query = {courseId: this.selectedPlanId};
+      await Api.getCourseDetail({query}).then((res) => {
         this.getAgainCourse = res;
-      })
+      });
     },
     // 判断手机类型
     judgePhoneType() {
-        let isAndroid = false, isIOS = false, isIOS9 = false, version,
-            u = navigator.userAgent,
-            ua = u.toLowerCase();
-        //Android系统
-        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {   //android终端或者uc浏览器
-            isAndroid = true
+      let isAndroid = false, isIOS = false, isIOS9 = false, version,
+        u = navigator.userAgent,
+        ua = u.toLowerCase();
+      //Android系统
+      if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {   //android终端或者uc浏览器
+        isAndroid = true;
+      }
+      //ios
+      if (ua.indexOf('like mac os x') > 0) {
+        let regStr_saf = /os [\d._]*/gi;
+        let verinfo = ua.match(regStr_saf);
+        version = (verinfo + '').replace(/[^0-9|_.]/ig, '').replace(/_/ig, '.');
+      }
+      let version_str = version + '';
+      // ios9以上
+      if (version_str !== 'undefined' && version_str.length > 0) {
+        version = parseInt(version);
+        if (version >= 8) {
+          isIOS9 = true;
+        } else {
+          isIOS = true;
         }
-        //ios
-        if (ua.indexOf("like mac os x") > 0) {
-            let regStr_saf = /os [\d._]*/gi;
-            let verinfo = ua.match(regStr_saf);
-            version = (verinfo + "").replace(/[^0-9|_.]/ig, "").replace(/_/ig, ".");
-        }
-        let version_str = version + "";
-        // ios9以上
-        if (version_str !== "undefined" && version_str.length > 0) {
-            version = parseInt(version);
-            if (version >= 8) {
-                isIOS9 = true
-            } else {
-                isIOS = true
-            }
-        }
-        return {isAndroid, isIOS, isIOS9};
+      }
+      return {isAndroid, isIOS, isIOS9};
     },
     // 判断是否在微信中
     isWeiXin() {
-        return /micromessenger/i.test(navigator.userAgent.toLowerCase()) || typeof navigator.wxuserAgent !== 'undefined'
+      return /micromessenger/i.test(navigator.userAgent.toLowerCase()) || typeof navigator.wxuserAgent !== 'undefined';
     },
     goConfirmAddr() {
-        let { isAndroid } = this.judgePhoneType();
-        window.location.href =  !isAndroid  ? this.CONFIG.ios : this.CONFIG.android ;
+      let {isAndroid} = this.judgePhoneType();
+      window.location.href = !isAndroid ? this.CONFIG.ios : this.CONFIG.android;
     },
-    openApp(url, callback={}) {
-        let {isAndroid, isIOS, isIOS9} = this.judgePhoneType();
-        console.log(isAndroid, isIOS, isIOS9);
-        if(this.isWeiXin()){
-            alert("请您在浏览器中打开,即可下载") ;
-            return ;
-        }
-
-        if (isAndroid || isIOS) {
-            let hasApp = true, t = 1000,
-                t1 = Date.now(),
-                ifr = document.createElement("iframe");
-            setTimeout(function () {
-                if (!hasApp) {
-                    callback && callback()
-                }
-                document.body.removeChild(ifr);
-            }, 2000);
-
-            ifr.setAttribute('src', url);
-            ifr.setAttribute('style', 'display:none');
-            document.body.appendChild(ifr);
-
-            setTimeout(function () { //启动app时间较长处理
-                let t2 = Date.now();
-                if (t2 - t1 < t + 100) {
-                    hasApp = false;
-                }
-            }, t);
-        }
-        if (isIOS9) {
-            //  window.location.href = url;
-            setTimeout(function () {
-                callback && callback()
-            }, 250);
-            setTimeout(function () {
-            //  window.location.reload();
-            }, 1000);
-        }
-    },
-    async getData(id) {
-      let data = {}
-      try {
-        await Api.getMedia({
-            query: {
-              courseId: this.selectedPlanId,
-              taskId: id,
-            },
-            params: {
-              version: 'escloud',
-            },
-          }).then((res) => {
-            if(res.media) {
-              data = res.media
-            }
-        })
-      } catch (error) {
-        console.log(error)
+    openApp(url, callback = {}) {
+      let {isAndroid, isIOS, isIOS9} = this.judgePhoneType();
+      console.log(isAndroid, isIOS, isIOS9);
+      if (this.isWeiXin()) {
+        alert('请您在浏览器中打开,即可下载');
+        return;
       }
 
-      return data
+      if (isAndroid || isIOS) {
+        let hasApp = true, t = 1000,
+          t1 = Date.now(),
+          ifr = document.createElement('iframe');
+        setTimeout(function () {
+          if (!hasApp) {
+            callback && callback();
+          }
+          document.body.removeChild(ifr);
+        }, 2000);
+
+        ifr.setAttribute('src', url);
+        ifr.setAttribute('style', 'display:none');
+        document.body.appendChild(ifr);
+
+        setTimeout(function () { //启动app时间较长处理
+          let t2 = Date.now();
+          if (t2 - t1 < t + 100) {
+            hasApp = false;
+          }
+        }, t);
+      }
+      if (isIOS9) {
+        //  window.location.href = url;
+        setTimeout(function () {
+          callback && callback();
+        }, 250);
+        setTimeout(function () {
+          //  window.location.reload();
+        }, 1000);
+      }
+    },
+    async getData(id) {
+      let data = {};
+      try {
+        await Api.getMedia({
+          query: {
+            courseId: this.selectedPlanId,
+            taskId: id,
+          },
+          params: {
+            version: 'escloud',
+          },
+        }).then((res) => {
+          if (res.media) {
+            data = res.media;
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      return data;
     },
     detectBrowserInfo() {
       const userAgent = navigator.userAgent.toLowerCase();
@@ -415,20 +422,20 @@ export default {
       // 飞书内置浏览器可能包含 "lark" 关键字，但请核实最新版本 UA 以确保准确性
       const isFeishu = /lark/i.test(userAgent);
 
-      if(isWechat || isWechatWork || isDingTalk || isFeishu) {
+      if (isWechat || isWechatWork || isDingTalk || isFeishu) {
         return true;
       }
 
       return false;
     },
     async lessonCellClick(task, lessonIndex, taskIndex) {
-      await this.getCourse()
-      if(!this.isCanLearn(task)) {
+      await this.getCourse();
+      if (!this.isCanLearn(task)) {
         return closedToast('course');
       }
 
-      if(task.type === 'live' || task.type === 'video') {
-        const media = await this.getData(task.id)
+      if (task.type === 'live' || task.type === 'video') {
+        const media = await this.getData(task.id);
 
         if (media.isEncryptionPlus && media.securityVideoPlayer) {
           Toast('请在APP学习');
@@ -475,16 +482,16 @@ export default {
       };
 
       // 更改store中的当前学习
-      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
+      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, {nextTask});
 
       const details = this.details;
       !details.allowAnonymousPreview &&
-        this.$router.push({
-          name: 'login',
-          query: {
-            redirect: this.redirect,
-          },
-        });
+      this.$router.push({
+        name: 'login',
+        query: {
+          redirect: this.redirect,
+        },
+      });
 
       if (this.joinStatus) {
         this.showTypeDetail(task);
@@ -498,180 +505,180 @@ export default {
       }
 
       switch (task.type) {
-        case 'video':
-          if (task.mediaSource === 'self') {
+      case 'video':
+        if (task.mediaSource === 'self') {
+          this.setSourceType({
+            sourceType: 'video',
+            taskId: task.id,
+          });
+        } else {
+          Toast(this.$t('courseLearning.doesNotSupportThisType'));
+        }
+        break;
+      case 'audio':
+        this.setSourceType({
+          sourceType: 'audio',
+          taskId: task.id,
+        });
+        break;
+      case 'ppt':
+        this.setSourceType({
+          sourceType: 'ppt',
+          taskId: task.id,
+        });
+        break;
+      case 'text':
+      case 'doc':
+        this.$router.push({
+          name: 'course_web',
+          query: {
+            courseId: this.selectedPlanId,
+            taskId: task.id,
+            type: task.type,
+          },
+        });
+        break;
+      case 'live': {
+        const nowDate = new Date();
+        const endDate = new Date(task.endTime * 1000);
+        let replay = false;
+        if (nowDate > endDate && task.liveStatus === 'closed') {
+          if (task.activity.replayStatus == 'videoGenerated') {
+            // 本站文件
             this.setSourceType({
               sourceType: 'video',
               taskId: task.id,
             });
+            return;
+          } else if (task.activity.replayStatus == 'ungenerated') {
+            Toast(this.$t('courseLearning.noReplay'));
+            return;
           } else {
-            Toast(this.$t('courseLearning.doesNotSupportThisType'));
+            replay = true;
           }
-          break;
-        case 'audio':
-          this.setSourceType({
-            sourceType: 'audio',
+        }
+
+        this.$router.push({
+          name: 'live',
+          query: {
+            courseId: this.selectedPlanId,
             taskId: task.id,
-          });
-          break;
-        case 'ppt':
-          this.setSourceType({
-            sourceType: 'ppt',
-            taskId: task.id,
-          });
-          break;
-        case 'text':
-        case 'doc':
-          this.$router.push({
-            name: 'course_web',
-            query: {
-              courseId: this.selectedPlanId,
-              taskId: task.id,
-              type: task.type,
-            },
-          });
-          break;
-        case 'live': {
-          const nowDate = new Date();
-          const endDate = new Date(task.endTime * 1000);
-          let replay = false;
-          if (nowDate > endDate && task.liveStatus === 'closed') {
-            if (task.activity.replayStatus == 'videoGenerated') {
-              // 本站文件
-              this.setSourceType({
-                sourceType: 'video',
-                taskId: task.id,
+            type: task.type,
+            title: task.title,
+            replay,
+          },
+        });
+        break;
+      }
+      case 'testpaper': {
+        const {testpaperId: testId, answerRecordId: resultId} = task.activity.testpaperInfo;
+        Api.testpaperIntro({
+          params: {
+            targetId: task.id,
+            targetType: 'task',
+          },
+          query: {
+            testId: testId,
+          },
+        })
+          .then(res => {
+            const {endTime} = res.task.activity.testpaperInfo;
+            const result = res.testpaperResult;
+            if ((result?.status == 'finished' || result?.status == 'reviewing') && (endTime * 1000 > Date.now() || endTime == 0 || endTime == null)) {
+              this.$router.push({
+                name: 'testpaperResult',
+                query: {
+                  testId,
+                  targetId: task.id,
+                  resultId,
+                  courseId: this.$route.params.id
+                },
               });
-              return;
-            } else if (task.activity.replayStatus == 'ungenerated') {
-              Toast(this.$t('courseLearning.noReplay'));
-              return;
             } else {
-              replay = true;
+              this.$router.push({
+                name: 'testpaperIntro',
+                query: {
+                  testId,
+                  targetId: task.id,
+                  courseId: this.$route.params.id
+                },
+              });
             }
-          }
-
-          this.$router.push({
-            name: 'live',
-            query: {
-              courseId: this.selectedPlanId,
-              taskId: task.id,
-              type: task.type,
-              title: task.title,
-              replay,
-            },
-          });
-          break;
-        }
-        case 'testpaper': {
-					const { testpaperId: testId, answerRecordId: resultId } = task.activity.testpaperInfo;
-          Api.testpaperIntro({
-            params: {
-              targetId: task.id,
-              targetType: 'task',
-            },
-            query: {
-              testId: testId,
-            },
           })
-            .then(res => {
-              const { endTime } = res.task.activity.testpaperInfo
-							const result = res.testpaperResult
-              if ((result?.status == 'finished' || result?.status == 'reviewing') && (endTime * 1000 > Date.now() || endTime == 0 || endTime == null) ) {
-                this.$router.push({
-                  name: 'testpaperResult',
-                  query: {
-                    testId,
-                    targetId: task.id,
-                    resultId,
-                    courseId: this.$route.params.id
-                  },
-                });
-              } else {
-                this.$router.push({
-                  name: 'testpaperIntro',
-                  query: {
-                    testId,
-                    targetId: task.id,
-                    courseId: this.$route.params.id
-                  },
-                });
-              }
-            })
-            .catch(err => {
-              if (err.code === 4032203) {
-                Dialog.alert({
-                  title: '试卷已关闭',
-                  confirmButtonText: '确定',
-                  confirmButtonColor: '#00BE63',
-                });
-              } else {
-                Toast.fail(err.message);
-              }
-            });
+          .catch(err => {
+            if (err.code === 4032203) {
+              Dialog.alert({
+                title: '试卷已关闭',
+                confirmButtonText: '确定',
+                confirmButtonColor: '#00BE63',
+              });
+            } else {
+              Toast.fail(err.message);
+            }
+          });
 
-          break;
-        }
-        case 'homework':
-          this.$router.push({
-            name: 'homeworkIntro',
-            query: {
-              courseId: this.$route.params.id,
-              taskId: task.id,
-            },
-          });
-          break;
-        case 'exercise':
-          this.$router.push({
-            name: 'exerciseIntro',
-            query: {
-              courseId: this.$route.params.id,
-              taskId: task.id,
-            },
-          });
-          break;
-        default:
-          // 防止视频遮挡了弹出框
-          this.setSourceType({
-            sourceType: 'img',
+        break;
+      }
+      case 'homework':
+        this.$router.push({
+          name: 'homeworkIntro',
+          query: {
+            courseId: this.$route.params.id,
             taskId: task.id,
-          });
-          this.copyPcUrl(task.courseUrl);
+          },
+        });
+        break;
+      case 'exercise':
+        this.$router.push({
+          name: 'exerciseIntro',
+          query: {
+            courseId: this.$route.params.id,
+            taskId: task.id,
+          },
+        });
+        break;
+      default:
+        // 防止视频遮挡了弹出框
+        this.setSourceType({
+          sourceType: 'img',
+          taskId: task.id,
+        });
+        this.copyPcUrl(task.courseUrl);
       }
     },
     // 任务图标(缺少下载)
     iconfont(task) {
-      const { type, isReplay } = task;
+      const {type, isReplay} = task;
 
       if (isReplay) return 'icon-replay';
 
       switch (type) {
-        case 'audio':
-          return 'icon-yinpin';
-        case 'doc':
-          return 'icon-wendang';
-        case 'exercise':
-          return 'icon-lianxi';
-        case 'flash':
-          return 'icon-flash';
-        case 'homework':
-          return 'icon-zuoye';
-        case 'live':
-          return 'icon-zhibo';
-        case 'ppt':
-          return 'icon-ppt';
-        case 'discuss':
-          return 'icon-taolun';
-        case 'testpaper':
-          return 'icon-kaoshi';
-        case 'text':
-          return 'icon-tuwen';
-        case 'video':
-          return 'icon-shipin';
-        case 'download':
-          return 'icon-xiazai';
-        default:
-          return '';
+      case 'audio':
+        return 'icon-yinpin';
+      case 'doc':
+        return 'icon-wendang';
+      case 'exercise':
+        return 'icon-lianxi';
+      case 'flash':
+        return 'icon-flash';
+      case 'homework':
+        return 'icon-zuoye';
+      case 'live':
+        return 'icon-zhibo';
+      case 'ppt':
+        return 'icon-ppt';
+      case 'discuss':
+        return 'icon-taolun';
+      case 'testpaper':
+        return 'icon-kaoshi';
+      case 'text':
+        return 'icon-tuwen';
+      case 'video':
+        return 'icon-shipin';
+      case 'download':
+        return 'icon-xiazai';
+      default:
+        return '';
       }
     },
     // 学习状态
@@ -681,12 +688,12 @@ export default {
       }
       if (task.result != null) {
         switch (task.result.status) {
-          case 'finish':
-            return 'icon-yiwanchengliang';
-          case 'start':
-            return 'icon-weiwancheng';
-          default:
-            return '';
+        case 'finish':
+          return 'icon-yiwanchengliang';
+        case 'start':
+          return 'icon-weiwancheng';
+        default:
+          return '';
         }
       } else {
         return 'icon-weixuexi';
