@@ -9,13 +9,11 @@ use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Goods\Service\RecommendGoodsService;
 use Biz\Product\Service\ProductService;
-use Biz\System\Service\SettingService;
 
 class GoodComponent extends AbstractResource
 {
@@ -155,12 +153,7 @@ class GoodComponent extends AbstractResource
 
         $apiRequest = new ApiRequest("/api/classrooms/{$product['targetId']}/courses", 'GET');
 
-        $courses = $this->invokeResource($apiRequest);
-        foreach ($courses as &$course) {
-            $course['videoMaxLevel'] = $this->getCourseService()->getVideoMaxLevel($course['id']);
-        }
-
-        return $courses;
+        return $this->invokeResource($apiRequest);
     }
 
     /**
@@ -209,13 +202,5 @@ class GoodComponent extends AbstractResource
     private function getCourseSetService()
     {
         return $this->service('Course:CourseSetService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    private function getCourseService()
-    {
-        return $this->service('Course:CourseService');
     }
 }
