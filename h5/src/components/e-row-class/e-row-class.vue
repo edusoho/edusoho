@@ -11,7 +11,7 @@
         srcset="static/images/classroom/classroom-icon@2x.png" />
 
       <div class="relative z-1">
-        <img class="relative cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" style="border-radius: 6px 6px 0 0;"/>
+        <img class="relative cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className"/>
         <img v-if="course.videoMaxLevel === '2k'" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0; border-radius: 0;" src="static/images/video-transcode-2k.png" alt="2k">
         <img v-if="course.videoMaxLevel === '4k'" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0; border-radius: 0;" src="static/images/video-transcode-4k.png" alt="4k">
       </div>
