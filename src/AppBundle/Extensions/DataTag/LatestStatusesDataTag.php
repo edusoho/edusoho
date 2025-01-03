@@ -67,7 +67,7 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
             $courses = ArrayToolkit::index($courses, 'id');
         }
         foreach ($statuses as &$status) {
-            $status['user'] = $users[$status['userId']];
+            $status['user'] = $this->getUserService()->encryptNickname($users[$status['userId']]);
             $status['message'] = $manager->renderStatus($status, $arguments['mode']);
             if (!empty($courses) && 0 == $courses[$status['courseId']]['canLearn']) {
                 $status['message'] = str_replace('link-dark', 'link-dark js-handleLearnContentOnMessage', $status['message']);
