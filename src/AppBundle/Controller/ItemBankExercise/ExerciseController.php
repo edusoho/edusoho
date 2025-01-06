@@ -422,6 +422,9 @@ class ExerciseController extends BaseController
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'userId'));
+        foreach ($users as $userId => &$user) {
+            $user = $this->getUserService()->encryptNickname($user);
+        }
 
         return $this->render(
             'item-bank-exercise/tabs/advanced.html.twig',
