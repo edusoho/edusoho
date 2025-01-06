@@ -52,8 +52,12 @@ export default {
   },
 
   methods: {
-    showModal() {
+    showModal(link) {
+      this.setFormData(link);
       this.visible = true;
+    },
+    setFormData(link){
+      this.form.link = link || '';
     },
 
     handleOk() {

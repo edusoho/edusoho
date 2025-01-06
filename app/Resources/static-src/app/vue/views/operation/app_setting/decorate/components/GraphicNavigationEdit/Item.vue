@@ -25,7 +25,7 @@
           :placeholder="'decorate.please_choose' | trans"
           @change="handleCategory"
         >
-          <a-select-option v-for="category in categorys" :key="category.key">
+          <a-select-option  v-for="category in categorys" :key="category.key" @click="openCustomLink(category.key)">
             {{ category.text | trans }}
           </a-select-option>
         </a-select>
@@ -51,6 +51,7 @@
       theme="filled"
       @click="handleClickRemove"
     />
+    <custom-link-modal ref="customLink" @update-link="handleUpdateLink" />
   </div>
 </template>
 
@@ -60,14 +61,20 @@ const categorys = [
   { text: 'decorate.open_class_classification', key: 'openCourse' },
   { text: 'decorate.course_sorts', key: 'course' },
   { text: 'decorate.members_only', key: 'vip' },
+  { text: 'decorate.custom_link',key: 'customLink' }
 ];
 
 import _ from 'lodash';
 import { Category } from 'common/vue/service/index.js';
 import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
+import CustomLinkModal from "../CustomLinkModal.vue";
 
 export default {
   name: 'GraphicNavigationEditItem',
+
+  components: {
+    CustomLinkModal
+  },
 
   props: {
     item: {
@@ -84,7 +91,7 @@ export default {
   data() {
     return {
       categorys,
-      categoryInfo: {}
+      categoryInfo: {},
     }
   },
 
@@ -113,8 +120,27 @@ export default {
       });
     },
 
+    handleUpdateLink({url}) {
+      this.$emit('modity',{
+        type: 'customLink',
+        index: this.index,
+        value: url
+      })
+    },
+
+    openCustomLink(value){
+      if(value!=='customLink') return;
+      this.$refs.customLink.showModal(this.item.customLink);
+    },
+
     handleCategory(value) {
       this.getSecondCategory(value);
+
+      if(this.item.hasOwnProperty('customLink') && value!=='customLink'){
+        this.$refs.customLink.setFormData('');
+        this.handleUpdateLink('');
+      }
+
       this.$emit('modity', {
         type: 'type',
         index: this.index,
@@ -123,7 +149,7 @@ export default {
     },
 
     async getSecondCategory(type) {
-      if (type === 'vip') {
+      if (type === 'vip'||type === 'customLink') {
         this.categoryInfo = {};
         return;
       }
@@ -165,6 +191,7 @@ export default {
     },
 
     handleSecondCategory(value) {
+
       this.$emit('modity', {
         type: 'conditions',
         index: this.index,
