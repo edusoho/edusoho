@@ -64,7 +64,7 @@ class ItemBankExerciseMember extends AbstractResource
         );
 
         foreach ($members as &$member) {
-            $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
+            $member['user'] = empty($users[$member['userId']]) ? null : $this->getUserService()->encryptNickname($users[$member['userId']]);
             $member['joinedChannelText'] = $this->convertJoinedChannel($member);
             $member['remark'] = in_array($member['remark'], ['site.join_by_free', 'site.join_by_purchase']) ? '' : $member['remark'];
         }
