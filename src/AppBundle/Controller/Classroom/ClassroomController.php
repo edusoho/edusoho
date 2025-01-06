@@ -389,7 +389,7 @@ class ClassroomController extends BaseController
             $manager = ExtensionManager::instance();
 
             foreach ($learns as $key => $learn) {
-                $learns[$key]['user'] = $owners[$learn['userId']];
+                $learns[$key]['user'] = $this->getUserService()->encryptNickname($owners[$learn['userId']]);
                 $learns[$key]['message'] = $manager->renderStatus($learn, 'simple');
                 if ('closed' == $classroom['status']) {
                     $learns[$key]['message'] = str_replace('link-dark', 'link-dark js-handleLearnContentOnMessage', $learns[$key]['message']);
