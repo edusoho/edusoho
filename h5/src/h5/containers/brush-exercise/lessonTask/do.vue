@@ -178,7 +178,7 @@ export default {
           this.canLeave = true;
           const exerciseId = this.$route.query.exerciseId;
           this.$router.replace({
-            path: `/item_bank_exercise/${exerciseId}`,
+            path: `/item_bank_exercise/${exerciseId}?categoryId=${this.$route.query.categoryId}`,
           });
         })
         .catch(err => {

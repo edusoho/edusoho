@@ -112,7 +112,8 @@ export default {
         moduleId: this.moduleId,
         categoryId: item.id,
         exerciseId: this.exerciseId,
-        answer_record_id: item.latestAnswerRecord.answerRecordId
+        answer_record_id: item.latestAnswerRecord.answerRecordId,
+        backUrl: `/item_bank_exercise/${this.exerciseId}?categoryId=${item.id}`
       };
       this.$router.push({ path: '/brushIntro', query });
     },
@@ -123,6 +124,7 @@ export default {
         exerciseId: this.exerciseId,
         categoryId: item.id,
         moduleId: this.moduleId,
+        backUrl: `/item_bank_exercise/${this.exerciseId}?categoryId=${item.id}`
       };
       const answerRecordId = item.latestAnswerRecord.answerRecordId;
       this.$router.push({

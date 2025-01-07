@@ -104,11 +104,11 @@ export default {
       default: () => {}
     },
     reviewedCount: {
-      type: Number,	
+      type: Number,
       default: 0
     },
     all: {
-      //题目总数
+      // 题目总数
       type: Number,
       default: 0
     },
@@ -172,7 +172,7 @@ export default {
           return this.getReviewStatus(s, i, q);
       }
     },
-    //做题模式下状态
+    // 做题模式下状态
     getDoStatus(s, i, q) {
       const userAnwer = this.section_responses[s].item_responses[i]
         .question_responses[q].response;
@@ -184,7 +184,7 @@ export default {
       }
       return "";
     },
-    //答题报告模式下状态
+    // 答题报告模式下状态
     getReportStatus(s, i, q) {
       const status = this.answer_report.section_reports[s].item_reports[i]
         .question_reports[q].status;

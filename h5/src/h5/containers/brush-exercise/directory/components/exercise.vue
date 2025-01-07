@@ -50,7 +50,7 @@ export default {
     exercise(newVal) {
       if (newVal.length > 0) {
         const categoryId = this.$route.query.categoryId;
-        if (categoryId) {
+        if (categoryId && this.exercise.length > 0 && this.exercise[0].id !== categoryId) {
           this.$nextTick(() => {
             this.scrollToCategory(categoryId);
           });

@@ -684,6 +684,7 @@ export default {
         categoryId: this.$route.query.categoryId,
         moduleId: this.$route.query.moduleId,
         isLeave: this.isLeave,
+        backUrl: `/item_bank_exercise/${this.$route.query.exerciseId}?categoryId=${this.$route.query.categoryId}`,
       };
       const answerRecordId = this.brushDo.recordId;
       this.$router.replace({
