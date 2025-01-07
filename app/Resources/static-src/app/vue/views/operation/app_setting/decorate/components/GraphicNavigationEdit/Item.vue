@@ -25,7 +25,7 @@
           :placeholder="'decorate.please_choose' | trans"
           @change="handleCategory"
         >
-          <a-select-option v-for="category in categorys" :key="category.key">
+          <a-select-option  v-for="category in categorys" :key="category.key" @click="openCustomLink(category.key)">
             {{ category.text | trans }}
           </a-select-option>
         </a-select>
@@ -44,13 +44,35 @@
           </a-select-option>
         </a-select>
       </div>
+      <div class="gn-form__item" v-if="selectdLink"  style="display: flex;align-items: center;">
+        <div class="gn-form__label">{{ 'decorate.select_link' | trans }}：</div>
+        <div style="flex: 1;display: flex;justify-content: space-between;" >
+          <div
+            v-show="selectdLink"
+            @mouseenter="isSelectdLinkHover = true"
+            @mouseleave="isSelectdLinkHover = false"
+            style="display: flex;align-items: center;"
+          >
+            <div class="text-overflow" style="max-width:90px;">
+              {{ selectdLink }}
+            </div>
+            <a-icon v-show="isSelectdLinkHover"  @click="removeSelectedLink" type="close-circle" style="color: #31A1FF;" />
+          </div>
+          <a class="ant-dropdown-link"  @click="openCustomLink(item.link.type)">
+            {{ 'decorate.revise' |trans }}
+          </a>
+        </div>
+      </div>
+
     </div>
+
     <a-icon
       class="remove-btn"
       type="close-circle"
       theme="filled"
       @click="handleClickRemove"
     />
+    <custom-link-modal ref="customLink" @update-link="handleUpdateLink" />
   </div>
 </template>
 
@@ -60,14 +82,20 @@ const categorys = [
   { text: 'decorate.open_class_classification', key: 'openCourse' },
   { text: 'decorate.course_sorts', key: 'course' },
   { text: 'decorate.members_only', key: 'vip' },
+  { text: 'decorate.custom_link',key: 'customLink' }
 ];
 
 import _ from 'lodash';
 import { Category } from 'common/vue/service/index.js';
 import { state, mutations } from 'app/vue/views/operation/app_setting/decorate/store.js';
+import CustomLinkModal from "../CustomLinkModal.vue";
 
 export default {
   name: 'GraphicNavigationEditItem',
+
+  components: {
+    CustomLinkModal
+  },
 
   props: {
     item: {
@@ -84,7 +112,8 @@ export default {
   data() {
     return {
       categorys,
-      categoryInfo: {}
+      categoryInfo: {},
+      isSelectdLinkHover:false,
     }
   },
 
@@ -92,7 +121,20 @@ export default {
     const { type } = this.item.link;
     this.getSecondCategory(type);
   },
-
+  computed:{
+    selectdLink: {
+      get() {
+        return this.item.customLink;
+      },
+      set(newValue) {
+        this.$emit('modity', {
+          type: 'customLink',
+          index: this.index,
+          value: newValue,
+        });
+      },
+    },
+  },
   methods: {
     setCourseCategory: mutations.setCourseCategory,
     setClassroomCategory: mutations.setClassroomCategory,
@@ -113,8 +155,25 @@ export default {
       });
     },
 
+    handleUpdateLink({url}) {
+      this.selectdLink = url;
+    },
+
+    openCustomLink(value){
+      if(value!=='customLink') return;
+      this.$refs.customLink.showModal(this.item.customLink);
+    },
+
+    removeSelectedLink(){
+      this.$refs.customLink.setFormData('');
+      this.selectdLink ='';
+    },
+
     handleCategory(value) {
       this.getSecondCategory(value);
+
+      this.removeSelectedLink();
+
       this.$emit('modity', {
         type: 'type',
         index: this.index,
@@ -123,7 +182,7 @@ export default {
     },
 
     async getSecondCategory(type) {
-      if (type === 'vip') {
+      if (type === 'vip'||type === 'customLink') {
         this.categoryInfo = {};
         return;
       }
@@ -165,6 +224,7 @@ export default {
     },
 
     handleSecondCategory(value) {
+
       this.$emit('modity', {
         type: 'conditions',
         index: this.index,
@@ -181,6 +241,7 @@ export default {
       });
     }
   }
+
 }
 </script>
 
