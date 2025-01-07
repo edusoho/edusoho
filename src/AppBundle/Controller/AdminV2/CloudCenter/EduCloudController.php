@@ -525,11 +525,15 @@ class EduCloudController extends BaseController
         $rawImage = $imagine->open($filePath);
 
         $pathinfo = pathinfo($filePath);
-        $specification['240'] = 20;
-        $specification['360'] = 30;
-        $specification['480'] = 40;
-        $specification['720'] = 60;
-        $specification['1080'] = 90;
+        $specification = [
+            '240' => 20,
+            '360' => 30,
+            '480' => 40,
+            '720' => 60,
+            '1080' => 90,
+            '1440' => 120,
+            '2160' => 180,
+        ];
 
         foreach ($specification as $key => $value) {
             $width = ($originFileInfo[0] * $value / $originFileInfo[1]);
