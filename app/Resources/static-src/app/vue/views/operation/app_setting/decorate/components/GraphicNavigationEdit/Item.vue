@@ -44,7 +44,28 @@
           </a-select-option>
         </a-select>
       </div>
+      <div class="gn-form__item" v-if="selectdLink"  style="display: flex;align-items: center;">
+        <div class="gn-form__label">{{ 'decorate.select_link' | trans }}：</div>
+        <div style="flex: 1;display: flex;justify-content: space-between;" >
+          <div
+            v-show="selectdLink"
+            @mouseenter="isSelectdLinkHover = true"
+            @mouseleave="isSelectdLinkHover = false"
+            style="display: flex;align-items: center;"
+          >
+            <div class="text-overflow" style="max-width:90px;">
+              {{ selectdLink }}
+            </div>
+            <a-icon v-show="isSelectdLinkHover"  @click="removeSelectedLink" type="close-circle" style="color: #31A1FF;" />
+          </div>
+          <a class="ant-dropdown-link"  @click="openCustomLink(item.link.type)">
+            {{ 'decorate.revise' |trans }}
+          </a>
+        </div>
+      </div>
+
     </div>
+
     <a-icon
       class="remove-btn"
       type="close-circle"
@@ -92,6 +113,7 @@ export default {
     return {
       categorys,
       categoryInfo: {},
+      isSelectdLinkHover:false,
     }
   },
 
@@ -99,7 +121,20 @@ export default {
     const { type } = this.item.link;
     this.getSecondCategory(type);
   },
-
+  computed:{
+    selectdLink: {
+      get() {
+        return this.item.customLink;
+      },
+      set(newValue) {
+        this.$emit('modity', {
+          type: 'customLink',
+          index: this.index,
+          value: newValue,
+        });
+      },
+    },
+  },
   methods: {
     setCourseCategory: mutations.setCourseCategory,
     setClassroomCategory: mutations.setClassroomCategory,
@@ -121,11 +156,7 @@ export default {
     },
 
     handleUpdateLink({url}) {
-      this.$emit('modity',{
-        type: 'customLink',
-        index: this.index,
-        value: url
-      })
+      this.selectdLink = url;
     },
 
     openCustomLink(value){
@@ -133,13 +164,15 @@ export default {
       this.$refs.customLink.showModal(this.item.customLink);
     },
 
+    removeSelectedLink(){
+      this.$refs.customLink.setFormData('');
+      this.selectdLink ='';
+    },
+
     handleCategory(value) {
       this.getSecondCategory(value);
 
-      if(this.item.hasOwnProperty('customLink') && value!=='customLink'){
-        this.$refs.customLink.setFormData('');
-        this.handleUpdateLink('');
-      }
+      this.removeSelectedLink();
 
       this.$emit('modity', {
         type: 'type',
@@ -208,6 +241,7 @@ export default {
       });
     }
   }
+
 }
 </script>
 
