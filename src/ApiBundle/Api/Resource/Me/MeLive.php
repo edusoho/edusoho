@@ -48,7 +48,7 @@ class MeLive extends AbstractResource
             return [];
         }
         $courseIds = array_column($courseMembers, 'courseId');
-        $courseIds = $this->getCourseService()->searchCourses(['canLearn' => 1, 'courseIds' => $courseIds], [], 0, count($courseIds), 'id');
+        $courseIds = $this->getCourseService()->searchCourses(['canLearn' => 1, 'courseIds' => $courseIds], [], 0, count($courseIds), ['id']);
 
         return array_column($courseIds, 'id');
     }
