@@ -29,11 +29,11 @@
       <a display-if="{isPublishedTaskUnlocked}" class="{taskItemClass}"
           href="{{ path('course_task_show', {id: '{taskId}',courseId: course.id}) }}">
         <tmp display-if="{isItemDisplayedAsOptional}">
-          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+          <span class="label label-info">{{'course.plan_task.is_optional_task'|trans}}</span>
         </tmp>
 
-        <img display-if="{is2kVideoLevel}" src="/static-dist/app/img/task/video-transcode-2k.png" alt="2k" style="height: 20px; margin-right: 8px">
-        <img display-if="{is4kVideoLevel}" src="/static-dist/app/img/task/video-transcode-4k.png" alt="4k" style="height: 20px; margin-right: 8px">
+        <img display-if="{is2kVideoLevel}" src="/static-dist/app/img/task/video-transcode-2k.png" alt="2k" style="height: 20px;">
+        <img display-if="{is4kVideoLevel}" src="/static-dist/app/img/task/video-transcode-4k.png" alt="4k" style="height: 20px;">
 
         <tmp hide-if="{isItemDisplayedAsOptional}">
           {getTaskName}
