@@ -81,7 +81,8 @@ const categorys = [
   { text: 'decorate.open_class_classification', key: 'openCourse' },
   { text: 'decorate.course_sorts', key: 'course' },
   { text: 'decorate.members_only', key: 'vip' },
-  { text: 'decorate.custom_link',key: 'customLink' }
+  { text: 'decorate.custom_link',key: 'customLink' },
+  { text: 'decorate.question_bank',key:'questionBank' }
 ];
 
 import _ from 'lodash';
@@ -133,6 +134,7 @@ export default {
     setCourseCategory: mutations.setCourseCategory,
     setClassroomCategory: mutations.setClassroomCategory,
     setOpenCourseCategory: mutations.setOpenCourseCategory,
+    setQuestionBankCategory:mutations.setQuestionBankCategory,
 
     handleModityImage() {
       this.$emit('modity', {
@@ -209,6 +211,12 @@ export default {
           stateKey: 'classroomCategory',
           mutationsKey: 'setClassroomCategory',
           query: { type: 'classroom' }
+        },
+        questionBank:{
+          text: Translator.trans('decorate.question_bank'),
+          stateKey: 'questionBankCategory',
+          mutationsKey: 'setQuestionBankCategory',
+          query: { type: 'itemBankExercise' }
         }
       }
 
