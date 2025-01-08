@@ -44,7 +44,7 @@
           </a-select-option>
         </a-select>
       </div>
-      <div class="gn-form__item" v-if="selectdLink"  style="display: flex;align-items: center;">
+      <div class="gn-form__item" v-if="selectdLink" style="display: flex;align-items: center;">
         <div class="gn-form__label">{{ 'decorate.select_link' | trans }}：</div>
         <div style="flex: 1;display: flex;justify-content: space-between;" >
           <div
@@ -63,7 +63,6 @@
           </a>
         </div>
       </div>
-
     </div>
 
     <a-icon
@@ -114,6 +113,7 @@ export default {
       categorys,
       categoryInfo: {},
       isSelectdLinkHover:false,
+      selectdLink:this.item.customLink
     }
   },
 
@@ -121,19 +121,13 @@ export default {
     const { type } = this.item.link;
     this.getSecondCategory(type);
   },
-  computed:{
-    selectdLink: {
-      get() {
-        return this.item.customLink;
+  watch:{
+    item:{
+      handler(newVal){
+        this.selectdLink = newVal.customLink;
       },
-      set(newValue) {
-        this.$emit('modity', {
-          type: 'customLink',
-          index: this.index,
-          value: newValue,
-        });
-      },
-    },
+      deep:true
+    }
   },
   methods: {
     setCourseCategory: mutations.setCourseCategory,
@@ -155,8 +149,17 @@ export default {
       });
     },
 
+    handleCustomLink(value){
+      this.$emit('modity', {
+        type: 'customLink',
+        index: this.index,
+        value: value,
+      });
+    },
+
     handleUpdateLink({url}) {
       this.selectdLink = url;
+      this.handleCustomLink(url);
     },
 
     openCustomLink(value){
@@ -165,8 +168,9 @@ export default {
     },
 
     removeSelectedLink(){
+      this.selectdLink = '';
       this.$refs.customLink.setFormData('');
-      this.selectdLink ='';
+      this.handleCustomLink('');
     },
 
     handleCategory(value) {
