@@ -231,6 +231,9 @@ class Course extends AbstractResource
 
         $courses = $this->getCourseService()->appendHasCertificate($courses);
         $courses = $this->getCourseService()->appendSpecsInfo($courses);
+        foreach ($courses as &$course) {
+            $course['videoMaxLevel'] = $this->getCourseService()->getVideoMaxLevel($course['id']);
+        }
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
     }
