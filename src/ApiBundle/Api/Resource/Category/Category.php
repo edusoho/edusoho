@@ -11,9 +11,9 @@ use Biz\Taxonomy\Service\CategoryService;
 
 class Category extends AbstractResource
 {
-    private $allowedGroupCodes = array(
-        'course', 'classroom',
-    );
+    private $allowedGroupCodes = [
+        'course', 'classroom', 'itemBankExercise',
+    ];
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -23,7 +23,9 @@ class Category extends AbstractResource
         if (!in_array($groupCode, $this->allowedGroupCodes)) {
             throw CommonException::ERROR_PARAMETER();
         }
-
+        if ('itemBankExercise' == $groupCode) {
+            return $this->getQuestionBankCategoryService()->getCategoryStructureTree();
+        }
         $group = $this->getCategoryService()->getGroupByCode($groupCode);
         if (!$group) {
             throw CategoryException::NOTFOUND_GROUP();
@@ -38,5 +40,13 @@ class Category extends AbstractResource
     private function getCategoryService()
     {
         return $this->service('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return \Biz\QuestionBank\Service\CategoryService
+     */
+    protected function getQuestionBankCategoryService()
+    {
+        return $this->service('QuestionBank:CategoryService');
     }
 }
