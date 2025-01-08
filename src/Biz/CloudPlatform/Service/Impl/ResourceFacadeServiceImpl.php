@@ -184,6 +184,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         if ('video' == $file['type']) {
+            $params['directives']['support2k4k'] = true;
             $watermarks = $this->getVideoWatermarkImages();
 
             if (!empty($watermarks)) {
