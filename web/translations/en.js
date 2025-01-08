@@ -1997,6 +1997,7 @@ t.add("decorate.replay", "Live Playback", "js", "en");
 t.add("decorate.islearning", "Persons in learning", "js", "en");
 t.add("decorate.itemBankMax", "Display up to 3 question banks", "js", "en");
 t.add("decorate.persons", "Persons", "js", "en");
+t.add("decorate.question_bank", "Question Bank", "js", "en");
 t.add("scrm.title", "Scrm", "js", "en");
 t.add("scrm.edusoho_title", "EduSoho Scrm", "js", "en");
 t.add("scrm.desc", "EduSoho Scrm is a private domain traffic operation tool for education and training institutions, providing functions such as attracting customers, customer operations, community operations, and corporate risk control. EduSoho Scrm and EduSoho Online School provide institutions with a total solution for enrollment, educational administration, teaching and service.", "js", "en");
