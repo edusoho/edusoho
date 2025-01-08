@@ -2194,6 +2194,7 @@ decorate.replay: 回放
 decorate.islearning: 人在学
 decorate.itemBankMax: 最多显示3个题库
 decorate.persons: 人
+decorate.question_bank: 题库
 
 scrm.title: 销客助手
 scrm.edusoho_title: EduSoho销客助手

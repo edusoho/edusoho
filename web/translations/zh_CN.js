@@ -1957,6 +1957,7 @@ t.add("decorate.replay", "\u56de\u653e", "js", "zh_CN");
 t.add("decorate.islearning", "\u4eba\u5728\u5b66", "js", "zh_CN");
 t.add("decorate.itemBankMax", "\u6700\u591a\u663e\u793a3\u4e2a\u9898\u5e93", "js", "zh_CN");
 t.add("decorate.persons", "\u4eba", "js", "zh_CN");
+t.add("decorate.question_bank", "\u9898\u5e93", "js", "zh_CN");
 t.add("scrm.title", "\u9500\u5ba2\u52a9\u624b", "js", "zh_CN");
 t.add("scrm.edusoho_title", "EduSoho\u9500\u5ba2\u52a9\u624b", "js", "zh_CN");
 t.add("scrm.desc", "EduSoho\u9500\u5ba2\u52a9\u624b\u662f\u4e00\u4e2a\u9762\u5411\u6559\u57f9\u673a\u6784\u7684\u79c1\u57df\u6d41\u91cf\u8fd0\u8425\u5de5\u5177\uff0c\u63d0\u4f9b\u4e86\u5f15\u6d41\u83b7\u5ba2\u3001\u5ba2\u6237\u8fd0\u8425\u3001\u793e\u7fa4\u8fd0\u8425\u3001\u4f01\u4e1a\u98ce\u63a7\u7b49\u529f\u80fd\u3002EduSoho\u9500\u5ba2\u52a9\u624b\u4e0eEduSoho\u7f51\u6821\u4e00\u8d77\u4e3a\u673a\u6784\u63d0\u4f9b\u4e86\u62db\u751f\u3001\u6559\u52a1\u3001\u6559\u5b66\u548c\u670d\u52a1\u7684\u6574\u4f53\u89e3\u51b3\u65b9\u6848\u3002", "js", "zh_CN");
