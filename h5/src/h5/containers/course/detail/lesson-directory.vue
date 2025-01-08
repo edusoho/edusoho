@@ -14,8 +14,8 @@
             )
           "
         >
-          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="absolute -right-5 -top-3 px-8 py-3 text-white text-10 font-medium bg-black bg-opacity-80 rounded-bl-8">2K 优享</div>
-          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="absolute -right-5 -top-3 px-8 py-3 text-[#492F0B] text-10 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-bl-8">4K 臻享</div>
+          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="absolute -right-5 -top-3 px-8 py-3 text-white text-12 font-medium bg-black bg-opacity-80 rounded-bl-8">2K 优享</div>
+          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="absolute -right-5 -top-3 px-8 py-3 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-bl-8">4K 臻享</div>
           <div class="lesson-title-r">
             <div class="lesson-title-des">
               <!-- 非直播考试-->
