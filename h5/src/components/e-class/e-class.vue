@@ -5,6 +5,8 @@
       <img class="h-full course-img" v-lazy="course.imgSrc.url" style="border-radius: 6px 0 0 6px;" />
       <span v-if="normalTagShow && courseType === 'live'" class="tag-live">{{ $t('e.live') }}</span>
       <span v-if="vipTagShow && vipSwitch && Number(isVip)" class="tag-vip">{{ $t('e.freeForMembers') }}</span>
+      <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 top-0 px-8 py-2 text-white text-12 font-medium bg-black bg-opacity-80 rounded-tl-6 rounded-br-8">2K 优享</div>
+      <div v-if="course.videoMaxLevel === '4k'" class="absolute left-0 top-0 px-8 py-2 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-tl-6 rounded-br-8">4K 臻享</div>
     </div>
     <div class="flex flex-col justify-between flex-1 p-12 relative" style="width: calc(100% - 170px);border-radius: 0 6px 6px 0;">
       <img v-if="isShowErrImg" class="err-img" :src="errImgUrl" />
