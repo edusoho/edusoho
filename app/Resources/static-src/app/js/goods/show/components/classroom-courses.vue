@@ -4,8 +4,8 @@
       <div class="task-banner">
         <div style="position: relative;">
           <img :src="course.courseSet.cover.middle" alt="">
-          <img v-if="course.videoMaxLevel === '2k'" src="/static-dist/app/img/classroom/course/video-transcode-2k.png" alt="2k" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0;">
-          <img v-if="course.videoMaxLevel === '4k'" src="/static-dist/app/img/classroom/course/video-transcode-4k.png" alt="4k" style="height: 20px; width: 58px; position: absolute; left: 0; top: 0;">
+          <div v-if="course.videoMaxLevel === '2k'" style="position: absolute; left: 0; bottom: 0; color: #FFF; font-size: 12px; font-weight: 500; line-height: 20px; padding: 0 8px; background: rgba(0, 0, 0, 0.80);">2K 优享</div>
+          <div v-if="course.videoMaxLevel === '4k'" style="position: absolute; left: 0; bottom: 0; color: #492F0B; font-size: 12px; font-weight: 500; line-height: 20px; padding: 0 8px; background: linear-gradient(270deg, #F7D27B -33.33%, #FCEABE 100%);">4K 臻享</div>
         </div>
       </div>
       <div class="task-content">
