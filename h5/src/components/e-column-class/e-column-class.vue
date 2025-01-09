@@ -12,10 +12,10 @@
         srcset="static/images/classroom/classroom-icon2@2x.png" />
       <div class="relative z-1 h-full">
         <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className"/>
-        <div v-if="Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-tr-12">会员免费</div>
-        <div v-if="course.videoMaxLevel === '2k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-tr-12">2K 优享</div>
+        <div v-if="Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-tr-12 z-10">会员免费</div>
+        <div v-if="course.videoMaxLevel === '2k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-tr-12 z-10">2K 优享</div>
         <div v-if="course.videoMaxLevel === '4k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-[#492F0B] text-12 leading-20 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-tr-12">4K 臻享</div>
-        <div v-if="courseType === 'live'" class="absolute bottom-0 w-full px-6 py-4 text-white font-medium text-12 leading-12 bg-black bg-opacity-40 text-right">直播</div>
+        <div v-if="courseType === 'live'" class="absolute bottom-0 w-full px-6 py-4 text-white font-medium text-12 leading-12 bg-black bg-opacity-40 text-right flex items-center flex-row-reverse">直播<span class="inline-block w-4 h-4 bg-[#60F1A3] mr-4 text-right" style="border-radius: 9999px;"></span></div>
       </div>
     </div>
     <div class="column-class-right">

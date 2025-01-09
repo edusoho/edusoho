@@ -42,6 +42,7 @@ module.exports = {
         '[#492F0B]': '#492F0B',
         '[#F7D27B]': '#F7D27B',
         '[#FCEABE]': '#FCEABE',
+        '[#60F1A3]': '#60F1A3',
       },
       lineHeight: Array.from({ length: 100 }).reduce((map, _, index) => {
         map[index] = `${index}px`;
