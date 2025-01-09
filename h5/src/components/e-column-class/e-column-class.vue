@@ -10,13 +10,13 @@
         class="absolute z-1"
         src="static/images/classroom/classroom-icon2.png"
         srcset="static/images/classroom/classroom-icon2@2x.png" />
-      <div class="relative z-1">
-        <img class="relative cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className"/>
-        <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 top-0 px-8 py-2 text-white text-12 font-medium bg-black bg-opacity-80 rounded-tl-6 rounded-br-8">2K 优享</div>
-        <div v-if="course.videoMaxLevel === '4k'" class="absolute left-0 top-0 px-8 py-2 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-tl-6 rounded-br-8">4K 臻享</div>
+      <div class="relative z-1 h-full">
+        <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className"/>
+        <div v-if="Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-tr-12">会员免费</div>
+        <div v-if="course.videoMaxLevel === '2k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-tr-12">2K 优享</div>
+        <div v-if="course.videoMaxLevel === '4k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-[#492F0B] text-12 leading-20 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-tr-12">4K 臻享</div>
+        <div v-if="courseType === 'live'" class="absolute bottom-0 w-full px-6 py-4 text-white font-medium text-12 leading-12 bg-black bg-opacity-40 text-right">直播</div>
       </div>
-      <div v-if="Number(isVip)" class="column-class-left__member">{{ $t('e.freeForMembers') }}</div>
-      <div v-show="courseType === 'live'" class="column-class-left__live">{{ $t('e.live') }}</div>
     </div>
     <div class="column-class-right">
       <div class="column-class-right__top">

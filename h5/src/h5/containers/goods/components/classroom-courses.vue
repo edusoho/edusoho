@@ -8,8 +8,8 @@
     >
       <div class="item-img pull-left relative">
         <img :src="course.courseSet.cover.small" alt="" />
-        <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 top-0 px-6 py-2 text-white text-8 font-medium bg-black bg-opacity-80">2K 优享</div>
-        <div v-if="course.videoMaxLevel === '4k'" class="absolute left-0 top-0 px-6 py-2 text-[#492F0B] text-8 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]">4K 臻享</div>
+        <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80">2K 优享</div>
+        <div v-if="course.videoMaxLevel === '4k'" class="absolute left-0 bottom-0 px-8 py-2 text-[#492F0B] text-12 leading-20 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]">4K 臻享</div>
       </div>
       <div class="item-info pull-left">
         <p class="item-info__title text-overflow">
