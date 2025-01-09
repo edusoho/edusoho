@@ -2,7 +2,7 @@
   <div class="flex mx-16 mb-12 bg-text-1 text-12 relative" style="height: 94px;border-radius: 6px;" @click="onClick(course.hasCertificate, $event)">
     <div :class="errImgUrl ? 'afterBack' : ''"></div>
     <div class="relative" style="width: 170px;height: 100%;border-radius: 6px 0 0 6px;">
-      <img class="h-full course-img" v-lazy="course.imgSrc.url" style="border-radius: 6px 0 0 6px;" />
+      <img class="w-full course-img" v-lazy="course.imgSrc.url" style="border-radius: 6px 0 0 6px;" />
       <div v-if="Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-bl-6 rounded-tr-12 z-10">会员免费</div>
       <div v-if="course.videoMaxLevel === '2k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-white text-12 leading-20 font-medium bg-black bg-opacity-80 rounded-bl-6 rounded-tr-12 z-10">2K 优享</div>
       <div v-if="course.videoMaxLevel === '4k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 py-2 text-[#492F0B] text-12 leading-20 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] rounded-bl-6 rounded-tr-12">4K 臻享</div>
