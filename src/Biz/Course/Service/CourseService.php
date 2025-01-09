@@ -397,4 +397,6 @@ interface CourseService
     public function canLearningByCourseSetIds($courseSetIds);
 
     public function getVideoMaxLevel($courseId);
+
+    public function getCourseSetVideoMaxLevel($courseSetId);
 }

@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\CourseService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Service\GoodsService;
@@ -37,6 +37,9 @@ class MeFavoriteCourseSet extends AbstractResource
             $good['courseSet']['goodsId'] = $good['id'];
             $courseSets[] = $good['courseSet'];
         }
+        foreach ($courseSets as &$courseSet) {
+            $courseSet['videoMaxLevel'] = $this->getCourseService()->getCourseSetVideoMaxLevel($courseSet['id']);
+        }
 
         return $this->makePagingObject(array_values($courseSets), $total, $offset, $limit);
     }
@@ -67,11 +70,11 @@ class MeFavoriteCourseSet extends AbstractResource
     }
 
     /**
-     * @return CourseSetService
+     * @return CourseService
      */
-    private function getCourseSetService()
+    private function getCourseService()
     {
-        return $this->service('Course:CourseSetService');
+        return $this->service('Course:CourseService');
     }
 
     /**
