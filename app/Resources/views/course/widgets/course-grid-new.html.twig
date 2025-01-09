@@ -5,9 +5,6 @@
     {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
   {% endif %}
   {% set videoMaxLevel = get_video_max_level(course.id) %}
-  {% if is_plugin_installed('Vip') and setting('vip.enabled') and course.vipLevelId|default(0) > 0 %}
-    <span class="tag-vip-free"></span>
-  {% endif %}
   <div class="course-img">
     <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank" style="position: relative;">
       {% if courseSet.discountId > 0 %}
@@ -25,25 +22,29 @@
             <span><i class="es-icon es-icon-video color-white"></i>{{'site.badge.try_watch'|trans}}</span>
           {% endif %}
           <span class="pull-right">
-            <span class="cd-mr8">{% if courseSet.type|default() == 'reservation' %}
-              {{ 'my.teaching.course_set.reservation'|trans }}<span class="course-tag__dot"></span>
+            <span>{% if courseSet.type|default() == 'reservation' %}
+              <span class="course-tag__dot"></span>{{ 'my.teaching.course_set.reservation'|trans }}
             {% elseif courseSet.type|default() == 'live' %}
-                {{ 'search.live_courses'|trans }}<span class="course-tag__dot"></span>
+                <span class="course-tag__dot"></span>{{ 'search.live_courses'|trans }}
             {% else %}
                 {% if courseSet.serializeMode == 'serialized' %}
-                  {{ 'course.status.serialized'|trans }}<span class="course-tag__dot"></span>
+                  <span class="course-tag__dot"></span>{{ 'course.status.serialized'|trans }}
               {% elseif courseSet.serializeMode == 'finished' %}
-                  {{ 'course.status.finished'|trans }}<span class="course-tag__dot"></span>
+                  <span class="course-tag__dot"></span>{{ 'course.status.finished'|trans }}
                 {% endif %}
             {% endif %}</span>
           </span>
         </div>
       {% endif %}
-      {% if videoMaxLevel == '2k' %}
-        <img src="/static-dist/app/img/video-transcode-2k.png" alt="2k" style="height: 20px; position: absolute; right: 0; top: 0;">
-      {% endif %}
-      {% if videoMaxLevel == '4k' %}
-        <img src="/static-dist/app/img/video-transcode-4k.png" alt="4k" style="height: 20px; position: absolute; right: 0; top: 0;">
+      {% if is_plugin_installed('Vip') and setting('vip.enabled') and course.vipLevelId|default(0) > 0 %}
+        <div style="position: absolute; z-index: 10; left: 0; bottom: 0; color: #FFF; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; border-radius: 0 12px 0 0; background: rgba(0, 0, 0, 0.80);">会员免费</div>
+      {% else %}
+        {% if videoMaxLevel == '2k' %}
+          <div style="position: absolute; z-index: 10; left: 0; bottom: 0; color: #FFF; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; border-radius: 0 12px 0 0; background: rgba(0, 0, 0, 0.80);">2k 优享</div>
+        {% endif %}
+        {% if videoMaxLevel == '4k' %}
+          <div style="position: absolute; z-index: 10; left: 0; bottom: 0; color: #492F0B; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; border-radius: 0 12px 0 0; background: linear-gradient(270deg, #F7D27B -33.33%, #FCEABE 100%);">4k 臻享</div>
+        {% endif %}
       {% endif %}
       {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title|raw) }}
     </a>
