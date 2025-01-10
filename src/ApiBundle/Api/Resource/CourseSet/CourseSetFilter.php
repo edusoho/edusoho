@@ -11,6 +11,7 @@ class CourseSetFilter extends Filter
 {
     protected $simpleFields = [
         'id', 'title', 'subtitle', 'summary', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount', 'discountType', 'maxOriginPrice', 'minOriginPrice', 'status', 'defaultCourseId', 'goodsId', 'productId', 'course', 'canLearn', 'discountId', 'categoryId',
+        'videoMaxLevel',
     ];
 
     protected $publicFields = [

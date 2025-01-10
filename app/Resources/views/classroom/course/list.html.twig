@@ -22,7 +22,16 @@
           <div class="course-item">
             <div class="media">
               <a class="media-left {% if classroom.status == 'closed' %}js-handleLearnContentOnMessage{% endif %}" href="{{ path(courseShowPath, {id:course.id}) }}">
-                {{ lazy_img(filepath(course_cover(course, 'middle'), 'course.png'), '', '') }}
+                <div style="position: relative;">
+                  {% set videoMaxLevel = get_video_max_level(course.id) %}
+                  {% if videoMaxLevel == '2k' %}
+                    <div style="position: absolute; left: 0; bottom: 0; color: #FFF; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; background: rgba(0, 0, 0, 0.80); border-radius: 0 12px 0 0;">2K 优享</div>
+                  {% endif %}
+                  {% if videoMaxLevel == '4k' %}
+                    <div style="position: absolute; left: 0; bottom: 0; color: #492F0B; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; background: linear-gradient(270deg, #F7D27B -33.33%, #FCEABE 100%); border-radius: 0 12px 0 0;">4K 臻享</div>
+                  {% endif %}
+                  {{ lazy_img(filepath(course_cover(course, 'middle'), 'course.png'), '', '') }}
+                </div>
               </a>
               <div class="media-body">
                 <div class="title">
