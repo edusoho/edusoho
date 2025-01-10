@@ -13,6 +13,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Util\EdusohoLiveClient;
@@ -73,6 +74,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_obtain_certificates', [$this, 'canObtainCertificates']),
             new \Twig_SimpleFunction('can_buy_course', [$this, 'canBuyCourse']),
             new \Twig_SimpleFunction('display_task_title', [$this, 'displayTaskTitle']),
+            new \Twig_SimpleFunction('get_video_max_level', [$this, 'getVideoMaxLevel']),
         ];
     }
 
@@ -207,6 +209,7 @@ class CourseExtension extends \Twig_Extension
                     'isTaskTryLookable' => $item['tryLookable'],
                     'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
+                    'videoMaxLevel' => $item['videoMaxLevel'] ?? '',
                 ];
                 if ('live' === $item['type']) {
                     $currentTime = time();
@@ -425,6 +428,11 @@ class CourseExtension extends \Twig_Extension
         ]);
     }
 
+    public function getVideoMaxLevel($courseId)
+    {
+        return $this->getCourseService()->getVideoMaxLevel($courseId);
+    }
+
     protected function isUserAvatarEmpty()
     {
         $user = $this->biz['user'];
@@ -556,7 +564,7 @@ class CourseExtension extends \Twig_Extension
     }
 
     /**
-     * @return
+     * @return UploadFileService
      */
     protected function getUploadFileService()
     {

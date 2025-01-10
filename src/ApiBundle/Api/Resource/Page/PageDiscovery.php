@@ -51,6 +51,9 @@ class PageDiscovery extends AbstractResource
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['creator', 'teacherIds']);
                 $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['courseSetId'], 'courseSet');
                 $discoverySetting['data']['items'] = $this->getCourseService()->appendSpecsInfo($discoverySetting['data']['items']);
+                foreach ($discoverySetting['data']['items'] as &$item) {
+                    $item['videoMaxLevel'] = $this->getCourseService()->getVideoMaxLevel($item['id']);
+                }
                 $discoverySetting['data']['source'] = [
                     'category' => $discoverySetting['data']['categoryId'],
                     'courseType' => 'all',
@@ -82,8 +85,8 @@ class PageDiscovery extends AbstractResource
                 continue;
             }
 
-            if('information' == $discoverySetting['type']){
-                $information = $this ->getArticleService() -> searchArticles(['status' => 'published'], ['sticky' => 'DESC' ,'publishedTime' => 'DESC'], 0, 3);
+            if ('information' == $discoverySetting['type']) {
+                $information = $this->getArticleService()->searchArticles(['status' => 'published'], ['sticky' => 'DESC', 'publishedTime' => 'DESC'], 0, 3);
                 foreach ($information as &$info) {
                     $info['createdTime'] = date('c', $info['createdTime']);
                     $info['updatedTime'] = date('c', $info['updatedTime']);

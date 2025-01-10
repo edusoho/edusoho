@@ -2,6 +2,7 @@
 
 namespace Biz\File\Job;
 
+use Biz\File\Service\UploadFileService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class VideoMediaStatusUpdateJob extends AbstractJob
@@ -47,11 +48,9 @@ class VideoMediaStatusUpdateJob extends AbstractJob
         return $jobArgs;
     }
 
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
-    }
-
+    /**
+     * @return UploadFileService
+     */
     protected function getUploadFileService()
     {
         return $this->biz->service('File:UploadFileService');
