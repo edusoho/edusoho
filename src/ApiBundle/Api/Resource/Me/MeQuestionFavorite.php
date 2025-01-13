@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\Item\Service\QuestionFavoriteService;
 
@@ -40,6 +41,15 @@ class MeQuestionFavorite extends AbstractResource
         }
 
         $total = $this->getQuestionFavoriteService()->count($conditions);
+        foreach ($favoriteQuestions as $key => &$favoriteQuestion) {
+            $item = $this->getItemService()->getItemWithQuestions($favoriteQuestion['item_id'], true);
+            if ($item['category_id']) {
+                $category = $this->getItemCategoryService()->getItemCategory($item['category_id']);
+                $item['category_name'] = $category['name'];
+            }
+
+            $favoriteQuestion['item'] = $item;
+        }
 
         return $this->makePagingObject(array_values($favoriteQuestions), $total, $offset, $limit);
     }
@@ -86,5 +96,13 @@ class MeQuestionFavorite extends AbstractResource
     protected function getAssessmentService()
     {
         return $this->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return ItemCategoryService
+     */
+    private function getItemCategoryService()
+    {
+        return $this->service('ItemBank:Item:ItemCategoryService');
     }
 }
