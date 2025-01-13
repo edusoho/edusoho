@@ -5,6 +5,7 @@ namespace Biz\Task\Visitor;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Dao\CourseChapterDao;
+use Biz\File\Service\UploadFileService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Util\TaskItemNumUtils;
 use Biz\Task\Service\TaskService;
@@ -231,9 +232,21 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
         $activities = $this->getActivityService()->findActivities($activityIds, true, 0);
         $activities = ArrayToolkit::index($activities, 'id');
+        $fileIds = [];
+        foreach ($activities as $activity) {
+            if ('video' == $activity['mediaType'] && 'self' == $activity['ext']['mediaSource']) {
+                $fileIds[] = $activity['ext']['mediaId'];
+            }
+        }
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $files = array_column($files, null, 'id');
 
         foreach ($tasks as &$task) {
             $task['activity'] = $activities[$task['activityId']];
+            $task['videoMaxLevel'] = '';
+            if ('video' == $task['activity']['mediaType'] && 'self' == $task['activity']['ext']['mediaSource']) {
+                $task['videoMaxLevel'] = empty($files[$task['activity']['ext']['mediaId']]) ? '' : $files[$task['activity']['ext']['mediaId']]['convertMaxLevel'];
+            }
         }
 
         $tasks = $this->getTaskService()->wrapTaskResultToTasks($this->courseId, $tasks);
@@ -288,6 +301,14 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    private function getUploadFileService()
+    {
+        return $this->biz->service('File:UploadFileService');
     }
 
     /**

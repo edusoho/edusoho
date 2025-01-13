@@ -2,7 +2,11 @@
   <div class="classroom-task">
     <div class="classroom-task__item" v-for="course in courses" :key="course.id" @click="clickCourse(course)">
       <div class="task-banner">
-        <img :src="course.courseSet.cover.middle" alt="">
+        <div style="position: relative;">
+          <img :src="course.courseSet.cover.middle" alt="">
+          <div v-if="course.videoMaxLevel === '2k'" style="position: absolute; left: 0; bottom: 0; color: #FFF; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; background: rgba(0, 0, 0, 0.80); border-radius: 0 12px 0 0;">2K 优享</div>
+          <div v-if="course.videoMaxLevel === '4k'" style="position: absolute; left: 0; bottom: 0; color: #492F0B; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; background: linear-gradient(270deg, #F7D27B -33.33%, #FCEABE 100%); border-radius: 0 12px 0 0;">4K 臻享</div>
+        </div>
       </div>
       <div class="task-content">
         <p class="task-content__title text-overflow">{{ course.courseSet.title | removeHtml }}</p>
@@ -55,7 +59,7 @@
               if(course.canLearn == '0') {
                 return this.$message.error(Translator.trans('goods.show_page.tab.classroom.closed_tip'));
               }
-                
+
               return window.open('/course/'+course.id);
             }
         },

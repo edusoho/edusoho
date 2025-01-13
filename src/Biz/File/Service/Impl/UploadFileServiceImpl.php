@@ -1067,6 +1067,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $fields = [
             'convertStatus' => $convertStatus,
+            'convertMaxLevel' => $result['maxLevel'],
             'audioConvertStatus' => 'none',
             'mp4ConvertStatus' => 'none',
             'updatedTime' => time(),

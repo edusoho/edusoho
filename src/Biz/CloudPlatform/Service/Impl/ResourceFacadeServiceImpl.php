@@ -184,6 +184,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         if ('video' == $file['type']) {
+            $params['directives']['support2k4k'] = true;
             $watermarks = $this->getVideoWatermarkImages();
 
             if (!empty($watermarks)) {
@@ -255,9 +256,9 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         $pathinfo = pathinfo($videoWatermarkImage);
 
         $images = [];
-        $heighs = ['240', '360', '480', '720', '1080'];
+        $heights = ['240', '360', '480', '720', '1080', '1440', '2160'];
 
-        foreach ($heighs as $height) {
+        foreach ($heights as $height) {
             $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
         }
 

@@ -7,6 +7,7 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 
 class ClassroomCourse extends AbstractResource
 {
@@ -25,6 +26,9 @@ class ClassroomCourse extends AbstractResource
 
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
         $this->getOCUtil()->multiple($courses, ['creator', 'teacherIds']);
+        foreach ($courses as &$course) {
+            $course['videoMaxLevel'] = $this->getCourseService()->getVideoMaxLevel($course['id']);
+        }
 
         return $courses;
     }
@@ -35,5 +39,13 @@ class ClassroomCourse extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }

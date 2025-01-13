@@ -464,9 +464,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $pathinfo = pathinfo($videoWatermarkImage);
 
         $images = [];
-        $heighs = ['240', '360', '480', '720', '1080'];
+        $heights = ['240', '360', '480', '720', '1080', '1440', '2160'];
 
-        foreach ($heighs as $height) {
+        foreach ($heights as $height) {
             $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
         }
 
