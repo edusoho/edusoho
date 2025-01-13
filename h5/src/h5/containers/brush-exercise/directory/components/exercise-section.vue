@@ -99,6 +99,7 @@ export default {
         moduleId: this.moduleId,
         categoryId: item.id,
         exerciseId: this.exerciseId,
+        backUrl: `/item_bank_exercise/${this.exerciseId}?categoryId=${item.id}`,
       };
       this.$router.push({ path: '/brushIntro', query });
     },
