@@ -6819,6 +6819,7 @@ admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_setting.es_live_api_server: ES Live API
 admin.developer_setting.question_parse_api_server: Question Parse API
 admin.developer_setting.ai_api_server: AI API address
+admin.developer_setting.resource_api_server: 'Resource API address'
 admin.developer_face_address: AI Face API address
 admin.developer_push_address: Push API address
 admin.developer_setting.cloud_api_server_address: 'Cloud services API address'
@@ -9909,6 +9910,8 @@ material.common_table.file.local: local
 material.common_table.quality.sd: SD
 material.common_table.quality.hd: HD
 material.common_table.quality.shd: Ultra-clear
+material.common_table.quality.2k: 2K
+material.common_table.quality.4k: 4K
 material.common_table.transcode_waiting: Waiting for transcoding
 material.common_table.transcode_file_not_support: File not supported
 material.common_table.transcode_success: Transcoding success

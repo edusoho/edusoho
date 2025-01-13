@@ -3,7 +3,7 @@
 {% set side_nav = 'teachers' %}
 {% do script(['app/js/classroom-manage/set-teachers/index.js']) %}
 {% block main %}
-<div class="panel panel-default panel-col">
+<div class="panel panel-default panel-col" style="border: 0">
   <div class="panel-heading">{{'classroom.set_teachers'|trans}}</div>
   <div class="panel-body">
     <form id="teachers-form" class="form-horizontal" method="post">

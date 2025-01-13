@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -40,6 +41,9 @@ class PageClassroom extends AbstractResource
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
         $classroom['courses'] = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        foreach ($classroom['courses'] as &$course) {
+            $course['videoMaxLevel'] = $this->getCourseService()->getVideoMaxLevel($course['id']);
+        }
         $classroom = $this->getClassroomService()->appendSpecInfo($classroom);
 
         $this->getOCUtil()->multiple($classroom['courses'], ['courseSetId'], 'courseSet');
@@ -144,5 +148,13 @@ class PageClassroom extends AbstractResource
     private function getVipRightService()
     {
         return $this->service('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }

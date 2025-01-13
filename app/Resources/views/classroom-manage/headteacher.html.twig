@@ -4,7 +4,7 @@
 {% do script(['app/js/classroom-manage/set-head-teacher/index.js']) %}
 
 {% block main %}
-<div class="panel panel-default" role="classroom-manage-head-teacher">
+<div class="panel panel-default" role="classroom-manage-head-teacher" style="border: 0">
   <div class="panel-heading">{{'classroom.set_head_teacher'|trans}}</div>
   <div class="panel-body">
 
@@ -17,12 +17,12 @@
           {% set url = path('classroom_headteacher_match', {classroomId:classroom.id})%}
           <div id="classroom-head-teacher" data-url="{{ url }}" data-teacher="{{ headTeacher|json_encode }}"></div>
           <p class="help-block">{{'classroom.set_head_teacher_tips'|trans}}</p>
-        </div>  
+        </div>
       </div>
       <div class="form-group">
         <div class="col-md-offset-2 col-md-8 controls">
           <button type="submit" class="btn btn-fat btn-primary">{{'form.btn.save'|trans}}</button>
-        </div>  
+        </div>
       </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>

@@ -2,8 +2,7 @@
 
 {% block title %}{{ 'course.plan_base_info'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do css(['app/css/main-ant.css']) %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/base-setting/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'vue3/js/course-manage/base-setting/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -37,8 +36,7 @@
       {% endif %}
     {% endfor %}
 
-    {# 计划基础信息 #}
-    <div id="app"
+    <div id="manage-info"
          data-course-manage-url="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"
          data-is-un-multi-course-set="{{ is_un_multi_courseset(courseSet.id) }}"
          data-course="{{ course|json_encode }}"
@@ -88,9 +86,4 @@
   {% else %}
     <div class="cd-alert cd-alert-danger">{{ 'course.marketing_setup.no_permission_tips'|trans }}</div>
   {% endif %}
-{% endblock %}
-
-{% block stylesheets %}
-  {{ parent() }}
-  <link href="{{ asset('static-dist/vue3/js/contract/index.css') }}" rel="stylesheet"/>
 {% endblock %}
