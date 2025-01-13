@@ -6,8 +6,10 @@
       :key="course.id"
       @click="gotoCourse(course)"
     >
-      <div class="item-img pull-left">
+      <div class="item-img pull-left relative">
         <img :src="course.courseSet.cover.small" alt="" />
+        <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px;">2K 优享</div>
+        <div v-if="course.videoMaxLevel === '4k'" class="absolute left-0 bottom-0 px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px;">4K 臻享</div>
       </div>
       <div class="item-info pull-left">
         <p class="item-info__title text-overflow">

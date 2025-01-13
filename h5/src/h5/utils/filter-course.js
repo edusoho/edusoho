@@ -61,6 +61,7 @@ const getDisplayStyle = (data, listObj) => {
       value: data.price || data.studentNum,
       html: `<span class="text-12">${price}</span>${showStudentStr}`,
     },
+    videoMaxLevel: data.videoMaxLevel,
   };
 };
 
@@ -146,6 +147,7 @@ const getCourseDisplay = (data, listObj, price) => {
       value: data.price,
       html: `<div style="display: flex">${price}</div>`,
     },
+    videoMaxLevel: data.videoMaxLevel,
   };
 };
 

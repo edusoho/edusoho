@@ -8,8 +8,8 @@
     >
       <div
         :id="lessonItem.tasks[lessonItem.index].id"
-        :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
-        class="lesson-title flex justify-between items-center"
+        :class="{ 'py-16': showPaddingY(lessonItem.tasks[lessonItem.index].videoMaxLevel), 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
+        class="lesson-title flex justify-between items-center relative px-12"
         @click="
           lessonCellClick(
             lessonItem.tasks[lessonItem.index],
@@ -18,6 +18,8 @@
           )
         "
       >
+        <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="absolute -right-1 -top-1 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px;">2K 优享</div>
+        <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="absolute -right-1 -top-1 px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px;">4K 臻享</div>
         <div class="lesson-title-r">
           <div class="lesson-title-des">
             <!-- 非直播考试-->
@@ -66,8 +68,9 @@
             <div
               v-if="doubleLine(lessonItem.tasks[lessonItem.index])"
               class="bl"
+
             >
-              <div class="block-inline">
+              <div class="block-inline" style="display: flex; flex-direction: column;">
                 <span
                   :class="{
                     lessonactive:
@@ -275,6 +278,9 @@ export default {
     // 获取lesson位置
     getTaskId() {
       this.currentTask = this.taskId;
+    },
+    showPaddingY(videoMaxLevel) {
+      return videoMaxLevel === '2k' || videoMaxLevel === '4k';
     },
     // 直播双行显示判断
     doubleLine(task) {

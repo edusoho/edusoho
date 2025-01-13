@@ -1,8 +1,10 @@
 <template>
   <div class="e-course">
     <div class="clearfix" @click="onClick">
-      <div class="e-course__left pull-left">
+      <div class="e-course__left pull-left relative">
         <img v-lazy="imgSrc" :class="imgClass" />
+        <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-top-right-radius: 12px;">2K 优享</div>
+        <div v-if="course.videoMaxLevel === '4k'" class="absolute left-0 bottom-0 px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-top-right-radius: 12px;">4K 臻享</div>
       </div>
       <div class="e-course__right pull-left">
         <div
