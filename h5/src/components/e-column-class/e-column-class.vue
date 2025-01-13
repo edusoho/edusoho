@@ -10,9 +10,13 @@
         class="absolute z-1"
         src="static/images/classroom/classroom-icon2.png"
         srcset="static/images/classroom/classroom-icon2@2x.png" />
-      <img class="relative z-1 cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
-      <div v-if="Number(isVip)" class="column-class-left__member">{{ $t('e.freeForMembers') }}</div>
-      <div v-show="courseType === 'live'" class="column-class-left__live">{{ $t('e.live') }}</div>
+      <div class="relative z-1 h-full">
+        <img class="cover" v-lazy="course.imgSrc.url" :class="course.imgSrc.className"/>
+        <div v-if="Number(isVip)" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-top-right-radius: 12px; z-index: 10;">会员免费</div>
+        <div v-if="course.videoMaxLevel === '2k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-top-right-radius: 12px; z-index: 10;">2K 优享</div>
+        <div v-if="course.videoMaxLevel === '4k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-top-right-radius: 12px; z-index: 10;">4K 臻享</div>
+        <div v-if="courseType === 'live'" class="absolute bottom-0 w-full text-white font-medium text-12 bg-black bg-opacity-40 text-right flex items-center flex-row-reverse" style="padding: 4px 6px;line-height: 12px;">直播<span class="inline-block w-4 h-4 bg-[#60F1A3] mr-4 text-right" style="border-radius: 9999px;"></span></div>
+      </div>
     </div>
     <div class="column-class-right">
       <div class="column-class-right__top">

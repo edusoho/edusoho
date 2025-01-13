@@ -49,8 +49,12 @@ module.exports = {
         'line-1': '#f2f3f5',
         'line-2': '#e5e6eb',
         'line-3': '#c9cdd4',
-        'line-4': '#86909c'
-      }
+        'line-4': '#86909c',
+        '[#492F0B]': '#492F0B',
+        '[#F7D27B]': '#F7D27B',
+        '[#FCEABE]': '#FCEABE',
+        '[#60F1A3]': '#60F1A3',
+      },
     }
   },
   plugins: [
