@@ -32,8 +32,8 @@
                 }"
                 class="ks py-8" style="display: flex; align-items: center;"
               >
-                <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="px-4 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; height: fit-content;">2K 优享</span>
-                <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="px-4 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] mr-8 h-fit" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; height: fit-content;">4K 臻享</span>
+                <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; height: fit-content;">2K 优享</span>
+                <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] mr-8 h-fit" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; height: fit-content;">4K 臻享</span>
                 <span
                   v-if="isTry(lessonItem.tasks[lessonItem.index])"
                   class="tryLes"
