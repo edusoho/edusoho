@@ -76,7 +76,7 @@ const submitForm = async () => {
       ...baseRule,
       ...marketSetting,
       buyExpiryTime: new Date(marketSetting.buyExpiryTime).getTime(),
-      deadline: marketSetting.deadline.format('YYYY-MM-DD'),
+      deadline: marketSetting.deadline ? marketSetting.deadline.format('YYYY-MM-DD') : null,
       expiryStartDate: dayjs(marketSetting.expiryStartDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
       expiryEndDate: dayjs(marketSetting.expiryEndDate).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
     };
