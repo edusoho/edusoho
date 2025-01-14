@@ -20,33 +20,39 @@
       :mode="mode"
       :exerciseInfo="result"
     />
+
     <!-- 底部 -->
-    <div class="paper-footer">
-      <div>
-        <span @click="cardShow = true">
-          <i class="iconfont icon-Questioncard" />
-          {{ $t('courseLearning.questionCard') }}
-        </span>
-      </div>
-      <div>
-        <span
-          :class="{ 'footer__div__span--active': isWrongMode }"
-          @click="showWrongList"
-        >
-          <i class="cuoti">
-            <img
-              :src="
-                isWrongMode
-                  ? 'static/images/cuoti-active.png'
-                  : 'static/images/cuoti.png'
-              "
-              alt
-            />
-          </i>
-          {{ $t('courseLearning.wrongQuestion') }}
-        </span>
-      </div>
-    </div>
+    <ibs-footer
+      :mode="'report'"
+      @showcard="showCard"
+      @lookWrong="showWrongList"
+    />
+<!--    <div class="paper-footer">-->
+<!--      <div>-->
+<!--        <span @click="cardShow = true">-->
+<!--          <i class="iconfont icon-Questioncard" />-->
+<!--          {{ $t('courseLearning.questionCard') }}-->
+<!--        </span>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <span-->
+<!--          :class="{ 'footer__div__span&#45;&#45;active': isWrongMode }"-->
+<!--          @click="showWrongList"-->
+<!--        >-->
+<!--          <i class="cuoti">-->
+<!--            <img-->
+<!--              :src="-->
+<!--                isWrongMode-->
+<!--                  ? 'static/images/cuoti-active.png'-->
+<!--                  : 'static/images/cuoti.png'-->
+<!--              "-->
+<!--              alt-->
+<!--            />-->
+<!--          </i>-->
+<!--          {{ $t('courseLearning.wrongQuestion') }}-->
+<!--        </span>-->
+<!--      </div>-->
+<!--    </div>-->
     <!-- 答题卡 -->
     <van-popup v-model="cardShow" position="bottom" :style="{ height: '100%' }">
       <div v-if="info.length > 0" class="card">
@@ -88,6 +94,8 @@ import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
 import i18n from '@/lang';
+import ibsFooter from "@/src/components/common/footer.vue";
+import IbsFooter from '@/src/components/common/footer.vue';
 
 export default {
   name: 'ExerciseAnalysis',
@@ -112,6 +120,7 @@ export default {
     },
   },
   components: {
+    IbsFooter,
     itemBank,
     OutFocusMask,
   },
@@ -156,6 +165,9 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
+    showCard() {
+      this.cardShow = true;
+    },
     // 初始化上报数据
     initReport() {
       this.initReportData(

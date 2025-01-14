@@ -21,20 +21,25 @@
     <guide-page />
 
     <!-- 底部 -->
-    <div class="paper-footer">
-      <div>
-        <span @click="cardShow = true">
-          <i class="mb-8 iconfont icon-Questioncard" />
-         {{ $t('courseLearning.questionCard') }}
-        </span>
-      </div>
-      <div>
-        <span @click="submitPaper()">
-          <i class="mb-8 iconfont icon-submit" />
-          {{ $t('courseLearning.handInThePaper') }}
-        </span>
-      </div>
-    </div>
+    <ibs-footer
+      :mode="'review'"
+      @showcard="showCard"
+      @submitPaper="submitPaper"
+    />
+<!--    <div class="paper-footer">-->
+<!--      <div>-->
+<!--        <span @click="cardShow = true">-->
+<!--          <i class="mb-8 iconfont icon-Questioncard" />-->
+<!--         {{ $t('courseLearning.questionCard') }}-->
+<!--        </span>-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <span @click="submitPaper()">-->
+<!--          <i class="mb-8 iconfont icon-submit" />-->
+<!--          {{ $t('courseLearning.handInThePaper') }}-->
+<!--        </span>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <!-- 答题卡 -->
     <van-popup v-model="cardShow" position="bottom">
@@ -106,12 +111,14 @@ import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
 import i18n from '@/lang';
+import IbsFooter from '@/src/components/common/footer.vue';
 
 let backUrl = '';
 
 export default {
   name: 'TestpaperDo',
   components: {
+    IbsFooter,
     itemBank,
     guidePage,
     OutFocusMask,
@@ -220,6 +227,9 @@ export default {
   methods: {
     ...mapActions(['setCloudAddress']),
     ...mapActions('course', ['handExamdo', 'saveAnswerdo']),
+    showCard() {
+      this.cardShow = true;
+    },
     // 初始化上报数据
     initReport() {
       this.initReportData(

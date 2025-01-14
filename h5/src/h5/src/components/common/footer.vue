@@ -1,9 +1,10 @@
 <template>
-  <div class="ibs-footer">
+  <div class="sticky bottom-0 left-0 text-[#333] leading-32 drop-shadow-lg flex" style="box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.1);">
     <div
       v-for="(item, index) in footerItem"
       :key="index"
       @click="check(item.type)"
+      class="flex-1 flex flex-col items-center"
       :class="[getActive(item.type)]"
     >
       <div class="h-fit mt-8 mb-4" v-html="item.iconName"></div>
@@ -107,6 +108,8 @@ export default {
         return this.showSaveProcessBtn ? doFooter : noProcessDoFooter;
       } else if (this.mode === "review") {
         return review;
+      }  else if (this.mode === "report") {
+        return report;
       }
       return report;
     }
@@ -121,11 +124,10 @@ export default {
       type: Boolean,
       default: false
     },
-
     showSaveProcessBtn: {
       type: Boolean,
       default: true
-    }
+    },
   },
   methods: {
     check(type) {
