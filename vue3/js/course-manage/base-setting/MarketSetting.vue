@@ -510,7 +510,7 @@ defineExpose({
             list-type="picture-card"
             @change="uploadDrainageImage"
           >
-            <img v-if="formState.drainageImage" :src="formState.drainageImage" alt="" style="width: 100%"
+            <img v-if="formState.drainageImage" :src="formState.drainageImage" alt="" style="max-width: 100%; max-height: 100%;"
                  class="rounded-4"/>
             <div v-else>
               <loading-outlined v-if="drainageLoading"></loading-outlined>
