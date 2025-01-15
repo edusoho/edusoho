@@ -175,6 +175,7 @@ class ItemDraw
 
         // 从 filteredItems 中随机抽取 neededItemCount 个元素
         $randomKeys = array_rand($filteredItems, $neededItemCount);
+        $randomKeys = is_array($randomKeys) ? $randomKeys : array($randomKeys);
         $additionalItems = array_map(function($key) use ($filteredItems) {
             return $filteredItems[$key];
         }, $randomKeys);
