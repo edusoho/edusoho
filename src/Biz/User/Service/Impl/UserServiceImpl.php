@@ -165,6 +165,9 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function hideUserNickname($user)
     {
+        if (empty($user)) {
+            return ;
+        }
         // 判断用户名长度并进行处理
         if (2 == mb_strlen($user['nickname'], 'UTF-8')) {
             // 如果用户名是两个字，显示第一个字并用 '*' 代替第二个字
