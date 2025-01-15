@@ -5,7 +5,6 @@
       :key="index"
       @click="check(item.type)"
       class="flex-1 flex flex-col items-center"
-      :class="[getActive(item.type)]"
     >
       <div class="h-fit mt-8 mb-4" v-html="item.iconName"></div>
       <span class="text-12 font-normal mb-8" style="color: #5E6166">{{ item.name }}</span>
@@ -152,11 +151,6 @@ export default {
           break;
       }
     },
-    getActive(type) {
-      if (this.wrongMode && type === "wrong") {
-        return "wap-icon-cuoti1-active";
-      }
-    }
   }
 };
 </script>

@@ -28,20 +28,6 @@
       @showcard="showCard"
       @submitPaper="submitpaper"
     />
-<!--    <div class="paper-footer">-->
-<!--      <div>-->
-<!--        <span @click="cardShow = true">-->
-<!--          <i class="mb-8 iconfont icon-Questioncard" />-->
-<!--          {{ $t('courseLearning.questionCard') }}-->
-<!--        </span>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <span @click="submitpaper">-->
-<!--          <i class="mb-8 iconfont icon-submit" />-->
-<!--          {{ $t('courseLearning.handInThePaper') }}-->
-<!--        </span>-->
-<!--      </div>-->
-<!--    </div>-->
 
     <!-- 答题卡 -->
     <van-popup v-model="cardShow" position="bottom">

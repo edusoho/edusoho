@@ -27,32 +27,7 @@
       @showcard="showCard"
       @lookWrong="showWrongList"
     />
-<!--    <div class="paper-footer">-->
-<!--      <div>-->
-<!--        <span @click="cardShow = true">-->
-<!--          <i class="iconfont icon-Questioncard" />-->
-<!--          {{ $t('courseLearning.questionCard') }}-->
-<!--        </span>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <span-->
-<!--          :class="{ 'footer__div__span&#45;&#45;active': isWrongMode }"-->
-<!--          @click="showWrongList"-->
-<!--        >-->
-<!--          <i class="cuoti">-->
-<!--            <img-->
-<!--              :src="-->
-<!--                isWrongMode-->
-<!--                  ? 'static/images/cuoti-active.png'-->
-<!--                  : 'static/images/cuoti.png'-->
-<!--              "-->
-<!--              alt-->
-<!--            />-->
-<!--          </i>-->
-<!--          {{ $t('courseLearning.wrongQuestion') }}-->
-<!--        </span>-->
-<!--      </div>-->
-<!--    </div>-->
+
     <!-- 答题卡 -->
     <van-popup v-model="cardShow" position="bottom" :style="{ height: '100%' }">
       <div v-if="info.length > 0" class="card">
