@@ -115,7 +115,7 @@
     >
       <div class="drainage-popup__title">{{ details.drainage.text }}</div>
       <div class="drainage-popup__img">
-        <img :src="details.drainage.image" alt="">
+        <img :src="details.drainage.image" alt="" style="width: 200px; height: 200px; object-fit: fill;">
       </div>
       <van-button class="drainage-popup__btn" type="primary" block>
         {{ isWeixin ? $t('courseLearning.longPressThePicture') : $t('courseLearning.longPressThePicture2') }}
