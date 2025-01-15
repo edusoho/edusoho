@@ -339,23 +339,21 @@ defineExpose({
           <div class="flex-1 flex flex-col items-start justify-between">
             <span class="text-18 font-medium">{{ `${t('modal.partyB')}：` }}</span>
             <div class="w-full flex flex-col space-y-22">
-              <div v-if="contractPreview.sign && contractPreview.sign.truename" class="flex items-center">
+              <div v-if="contractPreview.sign?.handSignature" class="flex items-center">
+                <span class="text-gray-500">{{ `${t('modal.handSignature')}：` }}</span>
+                <div class="grow border-solid border-0 border-b border-gray-300 font-medium h-23"></div>
+              </div>
+              <div class="flex items-center">
                 <span class="text-gray-500">{{ `${t('modal.partyBName')}：` }}</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                  {{ contractPreview.sign.truename }}
-                </div>
+                <div class="grow border-solid border-0 border-b border-gray-300 font-medium h-23"></div>
               </div>
-              <div v-if="contractPreview.sign && contractPreview.sign.IDNumber" class="flex items-center">
+              <div v-if="contractPreview.sign?.IDNumber" class="flex items-center">
                 <span class="text-gray-500">{{ `${t('modal.iDNumber')}：` }}</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                  {{ contractPreview.sign.IDNumber }}
-                </div>
+                <div class="grow border-solid border-0 border-b border-gray-300 font-medium h-23"></div>
               </div>
-              <div v-if="contractPreview.sign && contractPreview.sign.phoneNumber" class="flex items-center">
+              <div v-if="contractPreview.sign?.phoneNumber" class="flex items-center">
                 <span class="text-gray-500">{{ `${t('modal.contactInformation')}：` }}</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium">
-                  {{ contractPreview.sign.phoneNumber }}
-                </div>
+                <div class="grow border-solid border-0 border-b border-gray-300 font-medium h-23"></div>
               </div>
               <div class="flex items-center">
                 <span class="text-gray-500">{{ `${t('modal.signingDate')}：` }}</span>
