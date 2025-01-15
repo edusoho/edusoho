@@ -223,6 +223,7 @@ paginator.nextPage: 'Next'
 paginator.lastPage: 'Last'
 paginator.jump: Jump
 paginator.page: Page
+staff.fields.id: 'Staff ID'
 user: User
 user.not_exist: 'User is not exist'
 user.fields.id: 'User ID'

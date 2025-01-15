@@ -293,6 +293,7 @@ paginator.jump: 跳至
 paginator.page: 页
 
 
+staff.fields.id: 员工编号
 # 用户通用
 user: 用户
 user.not_exist: 用户不存在
