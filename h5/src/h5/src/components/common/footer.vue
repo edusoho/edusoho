@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-0 left-0 text-[#333] leading-32 drop-shadow-lg flex w-full" style="box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.1);">
+  <div class="fixed bottom-0 left-0 text-[#333] leading-32 drop-shadow-lg flex w-full bg-white" style="box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.1);">
     <div
       v-for="(item, index) in footerItem"
       :key="index"
@@ -66,7 +66,7 @@ const noProcessDoFooter = [
     type: "card"
   },
   {
-    name: "；立即提交",
+    name: "立即提交",
     iconName: icon.Submit,
     type: "submit"
   }
@@ -130,6 +130,7 @@ export default {
   },
   methods: {
     check(type) {
+      console.log(type)
       switch (type) {
         case "card":
           this.$emit("showcard");

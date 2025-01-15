@@ -23,7 +23,8 @@
 
     <!-- 底部 -->
     <ibs-footer
-      :mode="'report'"
+      :mode="'do'"
+      :show-save-process-btn="false"
       @showcard="showCard"
       @lookWrong="showWrongList"
     />

@@ -24,7 +24,8 @@
 
     <!-- 底部 -->
     <ibs-footer
-      :mode="'review'"
+      :mode="'do'"
+      :show-save-process-btn="false"
       @showcard="showCard"
       @submitPaper="submitpaper"
     />

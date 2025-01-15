@@ -34,7 +34,8 @@
     <!-- 底部 -->
     <ibs-footer
       v-if="this.exerciseMode === '0'"
-      :mode="'review'"
+      :mode="'do'"
+      :show-save-process-btn="false"
       @showcard="showCard"
       @submitPaper="submitpaper"
     />
