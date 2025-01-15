@@ -423,7 +423,7 @@ class ExerciseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'userId'));
         foreach ($users as $userId => &$user) {
-            $user = $this->getUserService()->encryptNickname($user);
+            $user = $this->getUserService()->hideUserNickname($user);
         }
 
         return $this->render(
