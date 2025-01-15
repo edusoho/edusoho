@@ -443,8 +443,8 @@ export default {
       default: 0
     },
     exerciseInfo: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     },
     items: {
       type: Array,

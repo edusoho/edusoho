@@ -135,7 +135,6 @@ export default {
       type: Object,
       default: () => {}
     },
-
     showSaveProcessBtn: {
       type: Boolean,
       default: true
