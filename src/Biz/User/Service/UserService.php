@@ -453,5 +453,5 @@ interface UserService
 
     public function findUserLikeNickname($nickname);
 
-    public function encryptNickname($user);
+    public function hideUserNickname($user);
 }

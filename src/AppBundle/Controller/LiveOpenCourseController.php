@@ -19,6 +19,12 @@ class LiveOpenCourseController extends BaseOpenCourseController
         if (empty($lesson)) {
             return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found_lesson'));
         }
+        if ($lesson['replayStatus'] == 'generated') {
+            return $this->redirect($this->generateUrl('live_open_course_live_replay_entry', [
+                'courseId' => $courseId,
+                'lessonId' => $lessonId,
+            ]));
+        }
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
         if (empty($course)) {
