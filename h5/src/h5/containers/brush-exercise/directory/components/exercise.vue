@@ -74,7 +74,7 @@ export default {
       if (targetElement) {
         const offsetTop = targetElement[0].offsetTop || targetElement.offsetTop;
         window.scrollTo({
-          top: offsetTop + 222,
+          top: offsetTop + 26,
           behavior: 'smooth',
         });
       }
