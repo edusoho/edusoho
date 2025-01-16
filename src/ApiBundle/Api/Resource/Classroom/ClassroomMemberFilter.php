@@ -54,7 +54,7 @@ class ClassroomMemberFilter extends Filter
         // 判断用户名长度并进行处理
         if (2 == mb_strlen($nickname, 'UTF-8')) {
             // 如果用户名是两个字，显示第一个字并用 '*' 代替第二个字
-            $user['nickname'] = mb_substr($nickname, 0, 1).'*';
+            $nickname = mb_substr($nickname, 0, 1).'*';
         } elseif (mb_strlen($nickname, 'UTF-8') > 2) {
             // 如果用户名超过两个字，显示第一个字和最后一个字，中间字用 '*' 替代
             $firstChar = mb_substr($nickname, 0, 1);
