@@ -119,10 +119,6 @@ export default {
       type: String,
       default: "do"
     },
-    wrongMode: {
-      type: Boolean,
-      default: false
-    },
     showSaveProcessBtn: {
       type: Boolean,
       default: true

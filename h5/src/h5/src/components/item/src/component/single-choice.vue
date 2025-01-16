@@ -180,7 +180,7 @@ export default {
   },
   props: {
     exerciseInfo: {
-      type: Array,
+      type: [Array, Object],
       default: () => []
     },
   },

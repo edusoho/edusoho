@@ -108,7 +108,7 @@ export default {
   },
   props: {
     exerciseId: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
     mode: {

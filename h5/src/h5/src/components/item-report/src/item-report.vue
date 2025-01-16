@@ -53,7 +53,6 @@
         :mode="mode"
         @showcard="showcard"
         @lookWrong="lookWrong"
-        :wrongMode="wrongMode"
       />
     </template>
   </div>
