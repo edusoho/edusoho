@@ -15,7 +15,7 @@ class ClassroomMemberFilter extends Filter
      */
     protected $publicFields = [
         'id', 'classroomId', 'userId', 'noteNum', 'threadNum', 'locked', 'role', 'deadline', 'access', 'user', 'isOldUser', 'expire', 'joinedChannel',
-        'joinedChannelText', 'createdTime', 'learningProgressPercent', 'remark',
+        'joinedChannelText', 'createdTime', 'learningProgressPercent', 'remark', 'needHideNickname',
     ];
 
     protected function publicFields(&$data)
@@ -41,7 +41,9 @@ class ClassroomMemberFilter extends Filter
             $data['user']['verifiedMobile'] = empty($user['verifiedMobile']) ? '' : $this->getMobileMaskService()->maskMobile($user['verifiedMobile']);
             global $kernel;
             $data['user']['canSendMessage'] = $kernel->getContainer()->get('web.twig.extension')->canSendMessage($user['id']);
-            $data['user']['nickname'] = $this->hideUserNickname($data['user']['nickname']);
+            if ($data['needHideNickname']) {
+                $data['user']['nickname'] = $this->hideUserNickname($data['user']['nickname']);
+            }
             if (!empty($data['isOldUser']) && is_array($data['user']['avatar'])) {
                 $data['user']['avatar'] = $data['user']['avatar']['small'];
                 unset($data['isOldUser']);
