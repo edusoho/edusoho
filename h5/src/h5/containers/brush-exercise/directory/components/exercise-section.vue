@@ -1,33 +1,58 @@
 <template>
-  <div class="directory-exercise">
-    <div class="directory-exercise-left">{{ section.name }}</div>
-    <template v-if="hasQuestion">
-      <div
-        :class="[
-          isMember ? 'directory-exercise-center' : 'directory-exercise-end',
-        ]"
-      >
-        {{ learnNum }}{{ allNum }}题
+<!--  <div class="directory-exercise">-->
+<!--    <div class="directory-exercise-left">{{ section.name }}</div>-->
+<!--    <template v-if="hasQuestion">-->
+<!--      <div-->
+<!--        :class="[-->
+<!--          isMember ? 'directory-exercise-center' : 'directory-exercise-end',-->
+<!--        ]"-->
+<!--      >-->
+<!--        {{ learnNum }}{{ allNum }}题-->
+<!--      </div>-->
+<!--      <div class="directory-exercise-right" v-if="isMember">-->
+<!--        <div :class="[btnText.class]" @click="clickBtn()">-->
+<!--          {{ btnText.text }}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </template>-->
+<!--  </div>-->
+  <div class="flex flex-col">
+    <div class="flex justify-between items-center" :class="{ 'bg-[#FAFAFA]': section.children.length > 0 && level === 0 }" style="padding: 8px 12px; border-radius: 6px;">
+      <div class="flex items-center w-full">
+        <van-icon v-if="!isUnfold" name="arrow-down" color="#5E6166" class="mr-12" :class="{ 'opacity-0': section.children.length === 0 }"/>
+        <van-icon v-if="isUnfold" name="arrow-up" color="#5E6166" class="mr-12" :class="{ 'opacity-0': section.children.length === 0 }"/>
+        <div class="w-full mr-12 text-14 text-[#37393D] font-normal" :class="{ 'font-medium': level === 0, 'ml-16': level === 2 }" style="line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ section.name }}</div>
       </div>
-      <div class="directory-exercise-right" v-if="isMember">
-        <div :class="[btnText.class]" @click="clickBtn()">
-          {{ btnText.text }}
-        </div>
+      <div class="flex items-center">
+        <div class="mr-12 text-14 font-normal text-[#87898F] h-fit" style="line-height: 22px; white-space: nowrap;">{{ learnNum }}{{ allNum }}题</div>
+        <button class="text-12 text-[#408ffb] font-normal border border-[#408ffb] bg-white" :class="[btnText.class]" style="white-space: nowrap; line-height: 20px; padding: 4px 8px; border-radius: 6px;" @click="clickBtn()">{{ btnText.text }}</button>
       </div>
-    </template>
+    </div>
+    <div v-if="level === 2 && !isLast" class="border-b border-[#F2F3F5] my-8 ml-44"></div>
+    <div v-else class="mb-8"></div>
+    <div v-for="(item, index) in section.children" :key="item.id" :ref="item.id">
+      <exercise-section
+        :is-last="index + 1 === section.children.length"
+        :level="level + 1"
+        :section="item"
+      ></exercise-section>
+    </div>
   </div>
+
 </template>
 
 <script>
 import { getBtnText } from '@/utils/itemBank-status.js';
 import { mapState } from 'vuex';
 import { closedToast } from '@/utils/on-status.js';
+import exerciseSection from './exercise-section.vue';
 
 export default {
-  nama: 'exercise-section',
-  components: {},
+  name: 'exercise-section',
+  components: {exerciseSection},
   data() {
     return {
+      isUnfold: true,
     };
   },
   props: {
@@ -39,6 +64,14 @@ export default {
     exerciseId: {
       type: Number,
       default: -1,
+    },
+    level: {
+      type: Number,
+      default: 0,
+    },
+    isLast: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

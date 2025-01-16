@@ -4,10 +4,15 @@
       >加载中...</van-loading
     >
     <template v-if="exercise.length">
-      <div v-for="(item, index) in exercise" :key="item.id" :ref="item.id">
+      <div v-for="(item, index) in newExercise" :key="item.id" :ref="item.id">
+<!--        <exercise-section-->
+<!--          v-bind="$attrs"-->
+<!--          :class="getClass(item.depth)"-->
+<!--          :section="item"-->
+<!--        ></exercise-section>-->
         <exercise-section
-          v-bind="$attrs"
-          :class="getClass(item.depth)"
+          :is-last="index + 1 === newExercise.length"
+          :level="0"
           :section="item"
         ></exercise-section>
       </div>
@@ -26,7 +31,9 @@ export default {
     empty,
   },
   data() {
-    return {};
+    return {
+      newExercise: [],
+    };
   },
   props: {
     exercise: {
@@ -48,14 +55,16 @@ export default {
   created() {},
   watch: {
     exercise(newVal) {
-      if (newVal.length > 0) {
-        const categoryId = this.$route.query.categoryId;
-        if (categoryId && this.exercise.length > 0 && this.exercise[0].id !== categoryId) {
-          this.$nextTick(() => {
-            this.scrollToCategory(categoryId);
-          });
-        }
-      }
+      this.newExercise = this.nestItems(newVal);
+      console.log('exercise', this.newExercise);
+      // if (newVal.length > 0) {
+      //   const categoryId = this.$route.query.categoryId;
+      //   if (categoryId && this.exercise.length > 0 && this.exercise[0].id !== categoryId) {
+      //     this.$nextTick(() => {
+      //       this.scrollToCategory(categoryId);
+      //     });
+      //   }
+      // }
     }
   },
   methods: {
@@ -68,6 +77,25 @@ export default {
         case 3:
           return 'exercise-task';
       }
+    },
+    nestItems(data) {
+      const idMap = {};
+      data.forEach(item => {
+        idMap[item.id] = { ...item, children: [] };
+      });
+      const result = [];
+      data.forEach(item => {
+        const parentId = item.parent_id;
+        if (parentId === "0") {
+          result.push(idMap[item.id]);
+        } else {
+          const parent = idMap[parentId];
+          if (parent) {
+            parent.children.push(idMap[item.id]);
+          }
+        }
+      });
+      return result;
     },
     scrollToCategory() {
       const targetElement = this.$refs[this.$route.query.categoryId];
