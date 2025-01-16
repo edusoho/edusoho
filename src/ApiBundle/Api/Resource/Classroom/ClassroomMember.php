@@ -80,7 +80,7 @@ class ClassroomMember extends AbstractResource
         foreach ($members as &$member) {
             $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
             // 是学员就不显示
-            $member['needHideNickname'] = is_array($roles) && count($roles) > 1 ? false : true;;
+            $member['needHideNickname'] = is_array($roles) && count($roles) > 1 ? false : true;
             $member['joinedChannelText'] = $this->convertJoinedChannel($member);
             $member['remark'] = in_array($member['remark'], ['site.join_by_free', 'site.join_by_purchase']) ? '' : $member['remark'];
         }
