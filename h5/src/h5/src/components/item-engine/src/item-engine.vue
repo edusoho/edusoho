@@ -18,7 +18,7 @@
 						style="overflow-x: hidden; z-index: 1 !important;"
             class="ibs-paper-item"
           >
-            <ibs-item 
+            <ibs-item
               :ref="`item${item.id}`"
               :item="item"
               :mode="mode"
@@ -108,7 +108,7 @@ export default {
   },
   props: {
     exerciseId: {
-      type: String,
+      type: [String, Number],
       default: ""
     },
     mode: {
@@ -135,7 +135,6 @@ export default {
       type: Object,
       default: () => {}
     },
-
     showSaveProcessBtn: {
       type: Boolean,
       default: true
@@ -158,11 +157,11 @@ export default {
   data() {
     return {
       section_responses: [],
-      height: 0, //swiper高低
+      height: 0, // swiper高低
       cardShow: false,
-      count: 0, //计时累加数
-      intervalId: null, //计时器
-      currentItemIndex: 0, //当前题目索引
+      count: 0, // 计时累加数
+      intervalId: null, // 计时器
+      currentItemIndex: 0, // 当前题目索引
       sourceMap: {},
       current: 0,
       items: [],
@@ -234,7 +233,7 @@ export default {
 		changeChoiceCando(index, flag) {
 			this.choiceIsCando[index] = flag
 		},
-    //题卡定位
+    // 题卡定位
     slideTo(keys) {
       const itemKey = `item${keys.itemId}`;
       this.current = keys.itemIndex - 1;
@@ -245,8 +244,8 @@ export default {
         const childSwiper = this.$refs[itemKey][0].$refs[
           `childSwiper${keys.itemId}`
         ];
-        let childSwiperSlide = Math.max(keys.questionIndex, 0);
-        childSwiper.$swiper.slideTo(childSwiperSlide, 0, false); //子级 questions的swiper滑动
+        const childSwiperSlide = Math.max(keys.questionIndex, 0);
+        childSwiper.$swiper.slideTo(childSwiperSlide, 0, false); // 子级 questions的swiper滑动
       });
     },
     judgelNoAnswer(section_responses) {
@@ -285,7 +284,7 @@ export default {
 
       this.formateSections();
     },
-    //遍历获取答案体结构
+    // 遍历获取答案体结构
     formateSections() {
       this.assessment.sections.forEach((item, sectionIndex) => {
         if (this.hasResponses) {
@@ -301,7 +300,7 @@ export default {
       this.slideToContinue();
     },
     formateItems(items, sectionIndex) {
-      let item_responses = [];
+      const item_responses = [];
 
       items.forEach((item, ItemIndex) => {
         item.sectionIndex = sectionIndex;
@@ -325,7 +324,7 @@ export default {
       return item_responses;
     },
     formateQuestions(item, questions, s, i) {
-      let question_responses = [];
+      const question_responses = [];
       questions.forEach((question, q) => {
         if (this.hasResponses) {
           this.getContinueDo(s, i, q, item);
@@ -382,7 +381,7 @@ export default {
     showcard() {
       this.cardShow = true;
     },
-    //初始化答案数据
+    // 初始化答案数据
     initResponse(mode, lengths) {
       let response = [];
       if (mode === "text") {
@@ -402,9 +401,9 @@ export default {
     changeAnswer(value, keys) {
       this.section_responses[keys[0]].item_responses[keys[1]] = value;
     },
-    //开始计时
+    // 开始计时
     countTime() {
-      const saveProgressInterval = 180; //单位秒
+      const saveProgressInterval = 180; // 单位秒
 
       if (this.intervalId != null) {
         return;
@@ -417,7 +416,7 @@ export default {
         }
       }, 1000);
     },
-    //提交前提示
+    // 提交前提示
     submitPaper(flge = false) {
       const noAnswerNum = this.judgelNoAnswer(this.section_responses);
       const title = flge ? "提交" : "保存进度";
@@ -440,7 +439,7 @@ export default {
         })
           .then(() => {
             // 显示答题卡
-            //this.cardShow = true;
+            // this.cardShow = true;
             // const isLeave = true;
             if (this.isAnswerFinished == 1) {
               this.goResult()
@@ -454,10 +453,10 @@ export default {
               //   },
               // })
               document.getElementsByClassName('backDialog')[0].remove();
-              reject();
+              resolve();
             } else {
               document.getElementsByClassName('backDialog')[0].remove();
-              reject();
+              resolve();
             }
           })
           .catch(() => {
@@ -476,7 +475,7 @@ export default {
           });
       });
     },
-    //三分钟保存进度
+    // 三分钟保存进度
     trigger() {
       const data = this.getResponse();
       data.used_time = this.count;
@@ -488,21 +487,21 @@ export default {
         }
       });
     },
-    //自动提交
+    // 自动提交
     reachTimeSubmitAnswerData() {
       const finalData = this.getResponse();
       finalData.used_time = this.count + Number(this.answerRecord.used_time);
       this.$emit("reachTimeSubmitAnswerData", finalData);
       this.clearTime();
     },
-    //手动保存进度
+    // 手动保存进度
     saveAnswerData() {
       const finalData = this.getResponse();
       finalData.used_time = this.count + Number(this.answerRecord.used_time);
       this.$emit("saveAnswerData", finalData);
       this.clearTime();
     },
-    //手动提交
+    // 手动提交
     answerData() {
       const finalData = this.getResponse();
       finalData.used_time = this.count + Number(this.answerRecord.used_time);
@@ -511,8 +510,8 @@ export default {
     },
     clearTime() {
       // 立即提交的时候清空计时器;
-      clearInterval(this.intervalId); //清除计时器
-      this.intervalId = null; //设置为null
+      clearInterval(this.intervalId); // 清除计时器
+      this.intervalId = null; // 设置为null
     },
     getResponse() {
       const finalData = {};
@@ -547,6 +546,7 @@ export default {
         categoryId: this.$route.query.categoryId,
         moduleId: this.$route.query.moduleId,
         isLeave,
+        backUrl: `/item_bank_exercise/${this.$route.query.exerciseId}?categoryId=${this.$route.query.categoryId}`,
       };
       const answerRecordId = this.assessmentResponse.answer_record_id;
       this.$router.replace({
@@ -563,7 +563,7 @@ export default {
 		updataIsAnswerFinished(val, flag, data, questionId) {
 			if (!this.reviewedQuestion.includes(questionId)) {
 				this.reviewedQuestion.push(data)
-			} 
+			}
 			this.isAnswerFinished = val
 			if (flag) {
 				this.reviewedCount = this.reviewedCount + 1

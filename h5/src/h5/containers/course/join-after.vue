@@ -115,7 +115,7 @@
     >
       <div class="drainage-popup__title">{{ details.drainage.text }}</div>
       <div class="drainage-popup__img">
-        <img :src="details.drainage.image" alt="">
+        <img :src="details.drainage.image" alt="" style="width: 200px; height: 200px; object-fit: fill; max-width: 200px">
       </div>
       <van-button class="drainage-popup__btn" type="primary" block>
         {{ isWeixin ? $t('courseLearning.longPressThePicture') : $t('courseLearning.longPressThePicture2') }}
@@ -752,14 +752,7 @@ export default {
   }
 
   &__img {
-    margin: vw(16) auto 0;
-    width: vw(140);
-    min-height: vw(140);
-
-    img {
-      width: 100%;
-      height: auto;
-    }
+    margin-top: 16px;
   }
 
   &__btn {

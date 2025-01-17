@@ -180,8 +180,8 @@ export default {
   },
   props: {
     exerciseInfo: {
-      type: Object,
-      default: () => {}
+      type: [Array, Object],
+      default: () => []
     },
   },
   inject: ['brushDo'],

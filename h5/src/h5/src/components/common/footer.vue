@@ -1,10 +1,10 @@
 <template>
-  <div class="ibs-footer">
+  <div class="fixed z-10 bottom-0 left-0 text-[#333] leading-32 flex w-full bg-white" style="box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.1);">
     <div
       v-for="(item, index) in footerItem"
       :key="index"
       @click="check(item.type)"
-      :class="[getActive(item.type)]"
+      class="flex-1 flex flex-col items-center"
     >
       <div class="h-fit mt-8 mb-4" v-html="item.iconName"></div>
       <span class="text-12 font-normal mb-8" style="color: #5E6166">{{ item.name }}</span>
@@ -66,7 +66,7 @@ const noProcessDoFooter = [
     type: "card"
   },
   {
-    name: "；立即提交",
+    name: "立即提交",
     iconName: icon.Submit,
     type: "submit"
   }
@@ -107,6 +107,8 @@ export default {
         return this.showSaveProcessBtn ? doFooter : noProcessDoFooter;
       } else if (this.mode === "review") {
         return review;
+      }  else if (this.mode === "report") {
+        return report;
       }
       return report;
     }
@@ -117,18 +119,14 @@ export default {
       type: String,
       default: "do"
     },
-    wrongMode: {
-      type: Boolean,
-      default: false
-    },
-
     showSaveProcessBtn: {
       type: Boolean,
       default: true
-    }
+    },
   },
   methods: {
     check(type) {
+      console.log(type);
       switch (type) {
         case "card":
           this.$emit("showcard");
@@ -150,11 +148,6 @@ export default {
           break;
       }
     },
-    getActive(type) {
-      if (this.wrongMode && type === "wrong") {
-        return "wap-icon-cuoti1-active";
-      }
-    }
-  }
+  },
 };
 </script>

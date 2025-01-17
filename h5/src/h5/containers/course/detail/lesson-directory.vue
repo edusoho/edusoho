@@ -14,8 +14,6 @@
             )
           "
         >
-          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="absolute -right-1 -top-1 px-8 text-white text-12 font-medium bg-black bg-opacity-80 rounded-bl-8" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px;">2K 优享</div>
-          <div v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="absolute -right-1 -top-1 px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px;">4K 臻享</div>
           <div class="lesson-title-r">
             <div class="lesson-title-des">
               <!-- 非直播考试-->
@@ -30,7 +28,10 @@
                       currentTask == lessonItem.tasks[lessonItem.index].id,
                   }"
                   class="ks"
+                  style="align-items: center;"
                 >
+                  <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="px-8 text-white text-12 font-medium bg-black bg-opacity-80 rounded-bl-8 mr-8" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px;">2K 优享</span>
+                  <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] mr-8" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px;">4K 臻享</span>
                   <i
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
                     class="iconfont"

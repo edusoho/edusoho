@@ -4,7 +4,7 @@
       >加载中...</van-loading
     >
     <template v-if="exercise.length">
-      <div v-for="(item, index) in exercise" :key="'exercise' + index">
+      <div v-for="(item, index) in exercise" :key="item.id" :ref="item.id">
         <exercise-section
           v-bind="$attrs"
           :class="getClass(item.depth)"
@@ -45,8 +45,19 @@ export default {
       return !this.isLoading && !this.exercise.length;
     },
   },
-  watch: {},
   created() {},
+  watch: {
+    exercise(newVal) {
+      if (newVal.length > 0) {
+        const categoryId = this.$route.query.categoryId;
+        if (categoryId && this.exercise.length > 0 && this.exercise[0].id !== categoryId) {
+          this.$nextTick(() => {
+            this.scrollToCategory(categoryId);
+          });
+        }
+      }
+    }
+  },
   methods: {
     getClass(depth) {
       switch (depth) {
@@ -58,6 +69,16 @@ export default {
           return 'exercise-task';
       }
     },
+    scrollToCategory() {
+      const targetElement = this.$refs[this.$route.query.categoryId];
+      if (targetElement) {
+        const offsetTop = targetElement[0].offsetTop || targetElement.offsetTop;
+        window.scrollTo({
+          top: offsetTop + 222,
+          behavior: 'smooth',
+        });
+      }
+    }
   },
 };
 </script>
