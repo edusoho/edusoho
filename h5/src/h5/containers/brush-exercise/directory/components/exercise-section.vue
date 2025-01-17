@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <div class="flex justify-between items-center" :class="{ 'bg-[#FAFAFA]': section.children.length > 0 && level === 0 }" style="padding: 8px 12px; border-radius: 6px;">
+    <div class="flex justify-between items-center" :class="{ 'bg-[#FAFAFA]': level === 0 }" style="padding: 8px 12px; border-radius: 6px;">
       <div class="flex items-center w-full" @click="isUnfold = !isUnfold">
         <van-icon v-if="!isUnfold" name="arrow-down" color="#5E6166" class="mr-12" :class="{ 'opacity-0': section.children.length === 0 }"/>
         <van-icon v-if="isUnfold" name="arrow-up" color="#5E6166" class="mr-12" :class="{ 'opacity-0': section.children.length === 0 }"/>
