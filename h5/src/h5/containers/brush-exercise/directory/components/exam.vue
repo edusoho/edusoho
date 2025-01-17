@@ -8,14 +8,14 @@
           :key="index"
         >
           <div class="exam-left">
-            <div class="exam-title">{{ item.assessment.name }}</div>
-            <div class="exam-score">
+            <div class="exam-title" v-if="item.assessment">{{ item.assessment.name }}</div>
+            <div class="exam-score" v-if="item.assessment">
               {{ item.assessment.question_count }}题/
               {{ item.assessment.total_score }}分
             </div>
           </div>
           <div class="exam-right" v-if="isMember">
-            <div :class="[getBtnText(item).class]" @click="clickBtn(item)">
+            <div class="text-12" :class="[getBtnText(item).class]" @click="clickBtn(item)" style="white-space: nowrap; line-height: 20px; padding: 4px 8px; border-radius: 6px;">
               {{ getBtnText(item).text }}
             </div>
           </div>
@@ -88,7 +88,7 @@ export default {
     startDo(item) {
       if (this.ItemBankExercise?.status == 'closed') {
         closedToast('exercise')
-        return 
+        return
       }
 
       const query = {
@@ -104,7 +104,7 @@ export default {
     continueDo(item) {
       if (this.ItemBankExercise?.status == 'closed') {
         closedToast('exercise')
-        return 
+        return
       }
 
       const query = {

@@ -1,24 +1,7 @@
 <template>
-<!--  <div class="directory-exercise">-->
-<!--    <div class="directory-exercise-left">{{ section.name }}</div>-->
-<!--    <template v-if="hasQuestion">-->
-<!--      <div-->
-<!--        :class="[-->
-<!--          isMember ? 'directory-exercise-center' : 'directory-exercise-end',-->
-<!--        ]"-->
-<!--      >-->
-<!--        {{ learnNum }}{{ allNum }}题-->
-<!--      </div>-->
-<!--      <div class="directory-exercise-right" v-if="isMember">-->
-<!--        <div :class="[btnText.class]" @click="clickBtn()">-->
-<!--          {{ btnText.text }}-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </template>-->
-<!--  </div>-->
   <div class="flex flex-col">
     <div class="flex justify-between items-center" :class="{ 'bg-[#FAFAFA]': section.children.length > 0 && level === 0 }" style="padding: 8px 12px; border-radius: 6px;">
-      <div class="flex items-center w-full">
+      <div class="flex items-center w-full" @click="isUnfold = !isUnfold">
         <van-icon v-if="!isUnfold" name="arrow-down" color="#5E6166" class="mr-12" :class="{ 'opacity-0': section.children.length === 0 }"/>
         <van-icon v-if="isUnfold" name="arrow-up" color="#5E6166" class="mr-12" :class="{ 'opacity-0': section.children.length === 0 }"/>
         <div class="w-full mr-12 text-14 text-[#37393D] font-normal" :class="{ 'font-medium': level === 0, 'ml-16': level === 2 }" style="line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ section.name }}</div>
@@ -30,15 +13,18 @@
     </div>
     <div v-if="level === 2 && !isLast" class="border-b border-[#F2F3F5] my-8 ml-44"></div>
     <div v-else class="mb-8"></div>
-    <div v-for="(item, index) in section.children" :key="item.id" :ref="item.id">
-      <exercise-section
-        :is-last="index + 1 === section.children.length"
-        :level="level + 1"
-        :section="item"
-      ></exercise-section>
+    <div v-show="isUnfold">
+      <div v-for="(item, index) in section.children" :key="item.id" :ref="item.id">
+        <exercise-section
+          :exercise-id="exerciseId"
+          :module-id="moduleId"
+          :is-last="index + 1 === section.children.length"
+          :level="level + 1"
+          :section="item"
+        ></exercise-section>
+      </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -102,12 +88,16 @@ export default {
     },
   },
   watch: {},
-  created() {
+  mounted() {
+    if (this.$route.query.categoryId && this.section.children.length > 0) {
+      this.$nextTick(() => {
+        this.scrollToCategory(this.$route.query.categoryId);
+      });
+    }
   },
   methods: {
     clickBtn() {
       const status = this.section.latestAnswerRecord?.status;
-      console.log(status)
       switch (status) {
         case 'doing':
         case 'paused':
@@ -166,6 +156,16 @@ export default {
         query,
       });
     },
+    scrollToCategory() {
+      const targetElement = this.$refs[this.$route.query.categoryId];
+      if (targetElement) {
+        const offsetTop = targetElement[0].offsetTop || targetElement.offsetTop;
+        window.scrollTo({
+          top: offsetTop + 222,
+          behavior: 'smooth',
+        });
+      }
+    }
   },
 };
 </script>

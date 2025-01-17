@@ -6,18 +6,18 @@ const getBtnText = status => {
     case 'paused':
       return {
         text: i18n.t('questionBank.continue'),
-        class: 'bg-[#408ffb] border-[#408ffb] font-medium text-1 text-[#FFFFFF]',
+        class: 'bg-[#408ffb] border border-[#408ffb] font-medium text-1 text-[#FFFFFF]',
       };
     case 'reviewing':
     case 'finished':
       return {
         text: i18n.t('questionBank.viewReport'),
-        class: 'bg-white border-[#FF7D00] text-[#FF7D00]',
+        class: 'bg-white border border-[#FF7D00] text-[#FF7D00]',
       };
     default:
       return {
         text: i18n.t('questionBank.start'),
-        class: 'bg-white border-[#408ffb]',
+        class: 'bg-white border border-[#408ffb]',
       };
   }
 };
