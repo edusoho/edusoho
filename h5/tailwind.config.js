@@ -54,6 +54,13 @@ module.exports = {
         '[#F7D27B]': '#F7D27B',
         '[#FCEABE]': '#FCEABE',
         '[#60F1A3]': '#60F1A3',
+        '[#37393D]': '#37393D',
+        '[#87898F]': '#87898F',
+        '[#408ffb]': '#408ffb',
+        '[#FF7D00]': '#FF7D00',
+        '[#FAFAFA]': '#FAFAFA',
+        '[#FFFFFF]': '#FFFFFF',
+        '[#F2F3F5]': '#F2F3F5',
       },
     }
   },

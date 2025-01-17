@@ -2,7 +2,7 @@
   <div class="brush-exercise-directory" style="background:#F5F5F5">
     <swiperTab @changModule="changModule" />
     <exam
-      v-if="currentType === 'assessment'"
+      v-show="currentType === 'assessment'"
       :exercise="list[moduleId].data"
       :isLoading="isLoading"
       @loadMore="loadMore"
@@ -11,7 +11,7 @@
     </exam>
 
     <exercise
-      v-if="currentType === 'chapter'"
+      v-show="currentType === 'chapter'"
       :exercise="list[moduleId].data"
       :isLoading="isLoading"
       :moduleId="moduleId"
