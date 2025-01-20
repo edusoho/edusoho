@@ -19,3 +19,9 @@
       {{'item_bank_exercise.chapter_exercise.category_empty'|trans}}
   </div>
 </div>
+
+{% do script(['vue3/js/item-bank-exercise/tabs/list/index.js']) %}
+
+<div id="chapter-list"
+     data-category-tree="{{ categoryTree|json_encode }}"
+></div>
