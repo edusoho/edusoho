@@ -4,13 +4,19 @@ import courseMember from './modules/courseMember';
 import exportData from './modules/export';
 import file from './modules/file';
 import setting from './modules/setting';
+import category from './modules/category';
+import org from './modules/org';
 import itemBank from './modules/itemBank'
 import security from './modules/security';
 import me from './modules/me';
 import itemBankExerciseMember from './modules/itemBankExerciseMember';
+import liveCapacity from './modules/liveCapacity';
 import openCourse from './modules/openCourse';
 import liveReplay from './modules/liveReplay';
 import tag from './modules/tag'
+import crop from './modules/crop';
+import courseSets from './modules/courseSets';
+import classroom from './modules/classroom';
 
 const Api = {
   contract,
@@ -22,10 +28,16 @@ const Api = {
   me,
   security,
   setting,
+  category,
+  org,
   itemBank,
+  liveCapacity,
   openCourse,
   liveReplay,
   tag,
+  crop,
+  courseSets,
+  classroom,
 };
 
 export default Api;

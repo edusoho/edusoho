@@ -452,4 +452,6 @@ interface UserService
     public function getStudentOpenInfo($userId);
 
     public function findUserLikeNickname($nickname);
+
+    public function hideUserNickname($user);
 }

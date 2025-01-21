@@ -35,10 +35,8 @@ class EsImageCrop {
   }
 
   crop(postData = {}) {
-    console.log('crop');
     let self = this;
     let cropImgUrl = app.imgCropUrl;
-    console.log(cropImgUrl);
     let newPostData = $.extend(self.element.data('Jcrop').ui.selection.last, postData, {
       width: this.element.width(),
       height: this.element.height(),

@@ -37,4 +37,10 @@ export default {
   async downloadContract(id, responseType) {
     return apiClient.get(`/downloadContract/${id}`, { responseType: responseType });
   },
+  async getSimpleContracts() {
+    return apiClient.get(`/simple_contract`);
+  },
+  async previewContract(contractId, courseId) {
+    return apiClient.get(`/contract/${contractId}/preview/course_${courseId}`);
+  },
 };

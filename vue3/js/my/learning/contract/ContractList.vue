@@ -211,11 +211,19 @@ const downloadContract = async (id, fileName) => {
 </template>
 
 <style lang="less">
+.contract-content {
+  img {
+    max-width: 100%;
+  }
+}
+
 .my-contract-detail-modal {
   .ant-modal {
     .ant-modal-content {
       padding: 0;
       .ant-modal-footer {
+        border-top: 1px solid #ebebeb;
+        padding: 10px 16px;
         margin-top: 0;
       }
       .ant-modal-header {

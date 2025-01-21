@@ -73,7 +73,8 @@ class FileController extends BaseController
             return $this->createMessageResponse('error', '参数不正确');
         }
 
-        $fileId = $request->getSession()->get('fileId');
+        $fileId = $options['fileId'] ?? $request->getSession()->get('fileId');
+
         if (empty($fileId)) {
             return $this->createMessageResponse('error', '参数不正确');
         }

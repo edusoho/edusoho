@@ -134,7 +134,7 @@ class AnswerRecord extends AbstractResource
 
         if ('submitted' === $answerShowMode) {
             $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
-            if (0 == $answerScene['do_times'] && Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
+            if (Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
                 if ('finished' === $answerRecord['status'] && $answerReport['score'] >= $answerScene['pass_score']) {
                     $resultShow = true;
                 } else {

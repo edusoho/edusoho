@@ -76,63 +76,67 @@
 
 
     <a-modal :width="900"
+             :centered="true"
              v-model:open="contractPreviewModalVisible"
              :title="'course.market_setting.contract.model.contractSigning'|trans({name: contractPreview.goodsName})"
-             :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}"
-    >
-      <div class="w-full flex flex-col space-y-32 p-32">
-        <div class="flex items-center justify-between">
-          <span style="opacity: 0">{{
-              'course.market_setting.contract.model.contractNumber' | trans
-            }}{{ `: ${contractPreview.code}` }}</span>
-          <span class="text-22 font-medium">{{ contractPreview.name }}</span>
-          <span class="text-gray-500">{{
+             :bodyStyle="{'height': 'fit-content', 'max-height': '500px', 'overflow': 'auto'}">
+
+      <div style="width: 100%; display: flex; flex-direction: column; gap: 32px; padding: 32px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+      <span style="opacity: 0;">{{
+          'course.market_setting.contract.model.contractNumber' | trans
+        }}{{ `: ${contractPreview.code}` }}</span>
+          <span style="font-size: 22px; font-weight: 500;">{{ contractPreview.name }}</span>
+          <span style="color: #6b7280;">{{
               'course.market_setting.contract.model.contractNumber' | trans
             }}{{ `: ${contractPreview.code}` }}</span>
         </div>
-        <div class="text-gray-500" v-html="contractPreview.content"></div>
-        <div class="flex space-x-64">
-          <div class="flex-1 flex flex-col items-start justify-between space-y-22">
-            <span class="text-18 font-medium">{{ 'course.market_setting.contract.model.partyA' | trans }}：</span>
-            <div class="w-full flex flex-col space-y-22">
-              <img :src="contractPreview.seal" alt="" class="w-150 h-150"/>
-              <div class="flex items-center">
-                <span class="text-gray-500">{{ 'course.market_setting.contract.model.signingDate' | trans }}：</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{
+
+        <div style="color: #6b7280; max-width: 100%" v-html="contractPreview.content"></div>
+
+        <div style="display: flex; gap: 64px;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 22px;">
+            <span style="font-size: 18px; font-weight: 500;">{{ 'course.market_setting.contract.model.partyA' | trans }}：</span>
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 22px;">
+              <img :src="contractPreview.seal" alt="" style="width: 150px; height: 150px;" />
+              <div style="display: flex; align-items: center;">
+                <span style="color: #6b7280;">{{ 'course.market_setting.contract.model.signingDate' | trans }}：</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #d1d5db; font-weight: 500;">{{
                     contractPreview.signDate
                   }}
                 </div>
               </div>
             </div>
           </div>
-          <div class="flex-1 flex flex-col items-start justify-between">
-            <span class="text-18 font-medium">{{ 'course.market_setting.contract.model.partyB' | trans }}：</span>
-            <div class="w-full flex flex-col space-y-22">
-              <div v-if="contractPreview.sign && contractPreview.sign.handSignature" class="flex items-center">
-                <span class="text-gray-500">{{ 'course.market_setting.contract.model.handSignature' | trans }}：</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span
-                  class="opacity-0">x</span></div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;">
+            <span style="font-size: 18px; font-weight: 500;">{{ 'course.market_setting.contract.model.partyB' | trans }}：</span>
+            <div style="width: 100%; display: flex; flex-direction: column; gap: 22px;">
+              <div v-if="contractPreview.sign && contractPreview.sign.handSignature" style="display: flex; align-items: center;">
+                <span style="color: #6b7280;">{{ 'course.market_setting.contract.model.handSignature' | trans }}：</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #d1d5db; font-weight: 500;"><span style="opacity: 0;">x</span></div>
               </div>
-              <div class="flex items-center">
-                <span class="text-gray-500">{{ 'course.market_setting.contract.model.partyBName' | trans }}：</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span
-                  class="opacity-0">x</span></div>
+
+              <div style="display: flex; align-items: center;">
+                <span style="color: #6b7280;">{{ 'course.market_setting.contract.model.partyBName' | trans }}：</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #d1d5db; font-weight: 500;"><span style="opacity: 0;">x</span></div>
               </div>
-              <div v-if="contractPreview.sign && contractPreview.sign.IDNumber" class="flex items-center">
-                <span class="text-gray-500">{{ 'course.market_setting.contract.model.iDNumber' | trans }}：</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span
-                  class="opacity-0">x</span></div>
+
+              <div v-if="contractPreview.sign && contractPreview.sign.IDNumber" style="display: flex; align-items: center;">
+                <span style="color: #6b7280;">{{ 'course.market_setting.contract.model.iDNumber' | trans }}：</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #d1d5db; font-weight: 500;"><span style="opacity: 0;">x</span></div>
               </div>
-              <div v-if="contractPreview.sign && contractPreview.sign.phoneNumber" class="flex items-center">
-                <span class="text-gray-500">{{
-                    'course.market_setting.contract.model.contactInformation' | trans
-                  }}：</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium"><span
-                  class="opacity-0">x</span></div>
+
+              <div v-if="contractPreview.sign && contractPreview.sign.phoneNumber" style="display: flex; align-items: center;">
+            <span style="color: #6b7280;">{{
+                'course.market_setting.contract.model.contactInformation' | trans
+              }}：</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #d1d5db; font-weight: 500;"><span style="opacity: 0;">x</span></div>
               </div>
-              <div class="flex items-center">
-                <span class="text-gray-500">{{ 'course.market_setting.contract.model.signingDate' | trans }}：</span>
-                <div class="grow border-solid border-0 border-b border-gray-300 font-medium">{{
+
+              <div style="display: flex; align-items: center;">
+                <span style="color: #6b7280;">{{ 'course.market_setting.contract.model.signingDate' | trans }}：</span>
+                <div style="flex-grow: 1; border-bottom: 1px solid #d1d5db; font-weight: 500;">{{
                     contractPreview.signDate
                   }}
                 </div>
@@ -141,8 +145,9 @@
           </div>
         </div>
       </div>
+
       <template #footer>
-        <div class="flex justify-center">
+        <div style="display: flex; justify-content: center;">
           <a-button @click="contractPreviewModalVisible = false">{{
               'course.market_setting.contract.btn.close' | trans
             }}
@@ -239,7 +244,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>

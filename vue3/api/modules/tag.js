@@ -1,7 +1,10 @@
-import {apiClient} from '../api-client';
+import {ajaxClient, apiClient} from '../api-client';
 
 export default {
-  async fetchReplayTag() {
-    return apiClient.get(`/tag`);
+  async getTags(params) {
+    return ajaxClient.get('/tag/match_jsonp', {params});
   },
+  async fetchReplayTag() {
+      return apiClient.get(`/tag`);
+  }
 }

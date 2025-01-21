@@ -2229,6 +2229,7 @@ decorate.replay: Live Playback
 decorate.islearning: Persons in learning
 decorate.itemBankMax: Display up to 3 question banks
 decorate.persons: Persons
+decorate.question_bank: Question Bank
 
 scrm.title: Scrm
 scrm.edusoho_title: EduSoho Scrm

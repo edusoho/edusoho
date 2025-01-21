@@ -163,6 +163,25 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->findUserLikeNickname($nickname);
     }
 
+    public function hideUserNickname($user)
+    {
+        if (empty($user)) {
+            return ;
+        }
+        // 判断用户名长度并进行处理
+        if (2 == mb_strlen($user['nickname'], 'UTF-8')) {
+            // 如果用户名是两个字，显示第一个字并用 '*' 代替第二个字
+            $user['nickname'] = mb_substr($user['nickname'], 0, 1).'*';
+        } elseif (mb_strlen($user['nickname'], 'UTF-8') > 2) {
+            // 如果用户名超过两个字，显示第一个字和最后一个字，中间字用 '*' 替代
+            $firstChar = mb_substr($user['nickname'], 0, 1);
+            $lastChar = mb_substr($user['nickname'], -1, 1);
+            $user['nickname'] = $firstChar.str_repeat('*', mb_strlen($user['nickname'], 'UTF-8') - 2).$lastChar;
+        }
+
+        return $user;
+    }
+
     public function findUserFollowing($userId, $start, $limit)
     {
         $friends = $this->getFriendDao()->searchByFromId($userId, $start, $limit);
