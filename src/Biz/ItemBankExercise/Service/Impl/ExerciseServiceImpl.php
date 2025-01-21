@@ -625,7 +625,10 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function updateBindExercise($bindExercise)
     {
-        $bindExercise = is_array($bindExercise)? $bindExercise : [$bindExercise];
+        $bindExercise = (array) $bindExercise;
+        if (empty($bindExercise)) {
+            return;
+        }
         $this->getExerciseBindDao()->batchUpdate(array_column($bindExercise, 'id'), $bindExercise);
     }
 
