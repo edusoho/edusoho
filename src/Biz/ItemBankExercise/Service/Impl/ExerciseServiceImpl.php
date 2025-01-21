@@ -593,7 +593,8 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             ];
             }, $exerciseIds);
             $this->getExerciseBindDao()->batchCreate($data);
-            $exerciseBinds = $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId, 'itemBankExerciseIds' => $exerciseIds, 'status' => 'create'], [], 0, PHP_INT_MAX);
+            $exerciseIds = is_array($exerciseIds) ? $exerciseIds : [$exerciseIds];
+            $exerciseBinds = $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
             $this->dispatchEvent('exercise.bind', new Event(['bindType' => $bindType, 'bindId' => $bindId, 'exerciseBinds' => $exerciseBinds]));
             $this->commit();
         } catch (\Exception $e) {
@@ -624,6 +625,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function updateBindExercise($bindExercise)
     {
+        $bindExercise = is_array($bindExercise)? $bindExercise : [$bindExercise];
         $this->getExerciseBindDao()->batchUpdate(array_column($bindExercise, 'id'), $bindExercise);
     }
 
