@@ -39,6 +39,7 @@ class ExerciseBindDaoImpl extends AdvancedDaoImpl implements ExerciseBindDao
                 'bindType = :bindType',
                 'itemBankExerciseId = :itemBankExerciseId',
                 'itemBankExerciseId IN (itemBankExerciseIds)',
+                'status != statusNotEqual',
             ],
         ];
     }
