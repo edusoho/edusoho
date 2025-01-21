@@ -5,11 +5,6 @@
 {% do script(['app/vue/views/classroom_manage/wrong_question/index.js']) %}
 {% do css(['app/css/main-ant.css']) %}
 
-{% block stylesheets %}
-  {{ parent() }}
-  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
-{% endblock %}
-
 {% block main %}
   <div class="panel panel-default panel-col" style="border: 0">
     <div class="panel-heading">{{'学员错题'|trans}}</div>

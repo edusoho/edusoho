@@ -9,7 +9,7 @@ use ApiBundle\Api\Resource\Item\QuestionFilter;
 class MeQuestionFavoriteFilter extends Filter
 {
     protected $publicFields = [
-        'id', 'target_type', 'target_id', 'item_id', 'user_id', 'created_time', 'question', 'assessment',
+        'id', 'target_type', 'target_id', 'item_id', 'user_id', 'created_time', 'question', 'assessment','item'
     ];
 
     protected function publicFields(&$data)

@@ -47,7 +47,6 @@ class LocalImageCrop {
   saveEvent(event, imageCrop) {
     event.stopPropagation();
     const $this = $(event.currentTarget);
-    console.log('start crop');
     imageCrop.crop({
       imgs: this.imgs,
       post: false
@@ -111,7 +110,7 @@ class LocalImageCrop {
         }).always(function() {
           $input.val('');
           $modal.modal('hide');
-        });;
+        });
       });
     };
 
@@ -138,7 +137,7 @@ class LocalImageCrop {
             if($('input[name="crop_image_attr"]')) {
               $('input[name="crop_image_attr"]').val(data.image);
             }
-            
+
             addInputVal(data.image,'cropImageAttr')
             cd.message({ type: 'success', message: Translator.trans('site.upload_success_hint') });
           }
@@ -158,7 +157,7 @@ class LocalImageCrop {
     }).catch(function(res) {
       console.log(res);
     });
-   
+
   }
 }
 

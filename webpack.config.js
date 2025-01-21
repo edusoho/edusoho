@@ -35,7 +35,6 @@ module.exports = {
     'ltc-sdk-server': ['libs/ltc-sdk-server/index.js'],
     'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
     'province-city-area': ['libs/province-city-area.js'],
-    'element-ui': ['element-ui'],
     'vue': ['libs/vue.js'],
   },
   noParseDeps: { // 不解析依赖，加快编译速度
@@ -60,7 +59,6 @@ module.exports = {
     'moment': 'moment/moment.js',
     'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js',
     'codeages-design': 'codeages-design/dist/codeages-design.js',
-    'element-ui': 'element-ui/dist/index.js',
   },
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
@@ -69,15 +67,6 @@ module.exports = {
         '**/samples/**',
         '**/kityformula/libs/**',
       ]
-    },
-    {
-      name: 'element-ui',
-      ignore: [
-        'lib/**',
-        'packages/**',
-        'src/**',
-        'types/**'
-      ],
     },
     {
       name: 'swagger-ui/dist/swagger-ui.css',

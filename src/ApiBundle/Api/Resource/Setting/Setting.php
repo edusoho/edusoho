@@ -538,6 +538,7 @@ class Setting extends AbstractResource
             'iosVipClose' => $iosVipClose,
             'iosExchangeCouponClose' => isset($magicSetting['ios_exchange_coupon_close']) ? $magicSetting['ios_exchange_coupon_close'] : 0,
             'securityVideoPlayer' => isset($magicSetting['security_video_player']) ? $magicSetting['security_video_player'] : 0,
+            'enableCacheVideoOnPlaying' => isset($magicSetting['enable_cache_video_on_playing']) ? $magicSetting['enable_cache_video_on_playing'] : 0,
         ];
     }
 

@@ -3,11 +3,7 @@
 {% block title %}{{ 'classroom.manage.live_statictics'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'live-statistics' %}
 {% do script(['app/vue/views/classroom_manage/live_statistics/index.js']) %}
-
-{% block stylesheets %}
-  {{ parent() }}
-  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
-{% endblock %}
+{% do css(['app/css/main-ant.css']) %}
 
 {% block main %}
   <input type="hidden" class="js-classroom-id" value="{{ classroom.id }}" />
