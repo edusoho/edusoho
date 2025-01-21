@@ -51,6 +51,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 ],
             ];
             $this->createJob($startJob);
+            return;
         }
         foreach ($params['exerciseBinds'] as $exerciseBind) {
             // 查询学员是不是当前题库练习的成员

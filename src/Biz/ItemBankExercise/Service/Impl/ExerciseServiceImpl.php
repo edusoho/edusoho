@@ -593,8 +593,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             ];
             }, $exerciseIds);
             $this->getExerciseBindDao()->batchCreate($data);
-            $exerciseBinds = $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId, 'itemBankExerciseIds' => $exerciseIds, 'statusNotEqual' => 'delete'], [], 0, PHP_INT_MAX);
-
+            $exerciseBinds = $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId, 'itemBankExerciseIds' => $exerciseIds, 'status' => 'create'], [], 0, PHP_INT_MAX);
             $this->dispatchEvent('exercise.bind', new Event(['bindType' => $bindType, 'bindId' => $bindId, 'exerciseBinds' => $exerciseBinds]));
             $this->commit();
         } catch (\Exception $e) {
