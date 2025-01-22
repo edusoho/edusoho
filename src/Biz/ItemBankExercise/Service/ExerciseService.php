@@ -111,4 +111,6 @@ interface ExerciseService
     public function findExerciseBindByExerciseId($exerciseId);
 
     public function countExerciseBind($conditions);
+
+    public function deleteExerciseBind($id);
 }

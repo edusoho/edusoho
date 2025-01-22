@@ -588,10 +588,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
                 'itemBankExerciseId' => $exerciseId,
                 'bindType' => $bindType,
                 'bindId' => $bindId,
+                'status' => 'create',
                 'seq' => '0',
             ];
             }, $exerciseIds);
             $this->getExerciseBindDao()->batchCreate($data);
+            $exerciseIds = is_array($exerciseIds) ? $exerciseIds : [$exerciseIds];
             $exerciseBinds = $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId, 'itemBankExerciseIds' => $exerciseIds], [], 0, PHP_INT_MAX);
             $this->dispatchEvent('exercise.bind', new Event(['bindType' => $bindType, 'bindId' => $bindId, 'exerciseBinds' => $exerciseBinds]));
             $this->commit();
@@ -603,12 +605,12 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function findBindExercise($bindType, $bindId)
     {
-        return $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId], ['seq' => 'ASC'], 0, PHP_INT_MAX);
+        return $this->getExerciseBindDao()->search(['bindType' => $bindType, 'bindId' => $bindId, 'statusNotEqual' => 'delete'], ['seq' => 'ASC'], 0, PHP_INT_MAX);
     }
 
     public function findBindExerciseByBindId($bindId)
     {
-        return $this->getExerciseBindDao()->search(['bindId' => $bindId], ['seq' => 'DESC'], 0, PHP_INT_MAX);
+        return $this->getExerciseBindDao()->search(['bindId' => $bindId, 'statusNotEqual' => 'delete'], ['seq' => 'DESC'], 0, PHP_INT_MAX);
     }
 
     public function findBindExerciseByIds($bindIds)
@@ -618,19 +620,13 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function removeBindExercise($bindExerciseId)
     {
-        try {
-            $this->beginTransaction();
-            $this->dispatchEvent('exercise.unBind', new Event(['id' => $bindExerciseId]));
-            $this->getExerciseBindDao()->delete($bindExerciseId);
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
+        $this->dispatchEvent('exercise.unBind', new Event(['id' => $bindExerciseId]));
     }
 
     public function updateBindExercise($bindExercise)
     {
+        $bindExercise = is_array($bindExercise)? $bindExercise : [$bindExercise];
+        $bindExercise = isset($bindExercise[0]) ? $bindExercise : [$bindExercise];
         $this->getExerciseBindDao()->batchUpdate(array_column($bindExercise, 'id'), $bindExercise);
     }
 
@@ -701,12 +697,17 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function findExerciseBindByExerciseId($exerciseId)
     {
-        return $this->getExerciseBindDao()->search(['itemBankExerciseId' => $exerciseId], [], 0, PHP_INT_MAX);
+        return $this->getExerciseBindDao()->search(['itemBankExerciseId' => $exerciseId, 'statusNotEqual' => 'delete'], [], 0, PHP_INT_MAX);
     }
 
     public function countExerciseBind($conditions)
     {
         return $this->getExerciseBindDao()->count($conditions);
+    }
+
+    public function deleteExerciseBind($id)
+    {
+        return $this->getExerciseBindDao()->delete($id);
     }
 
     /**

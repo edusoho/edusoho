@@ -9,6 +9,7 @@ use Biz\Course\Service\MemberService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -37,6 +38,21 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         if (empty($userIds)) {
             return;
         }
+        if (count($userIds) > 2000) {
+            $startJob = [
+                'name' => 'ExerciseBindJob_'.$params['bindType'].'_'.$params['bindId'],
+                'expression' => time() + 60,
+                'class' => 'Biz\ItemBankExercise\Job\ExerciseBindJob',
+                'misfire_threshold' => 60 * 60,
+                'args' => [
+                    'bindType' => $params['bindType'],
+                    'bindId' => $params['bindId'],
+                    'exerciseBinds' => $params['exerciseBinds'],
+                ],
+            ];
+            $this->createJob($startJob);
+            return;
+        }
         foreach ($params['exerciseBinds'] as $exerciseBind) {
             // 查询学员是不是当前题库练习的成员
             $exerciseUsers = $this->getExerciseMemberService()->search(['userIds' => $userIds, 'exerciseId' => $exerciseBind['itemBankExerciseId'], 'role' => 'student'], [], 0, PHP_INT_MAX);
@@ -56,6 +72,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             $existingRecords = $this->getExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseIdAll($userIds, $exerciseBind['itemBankExerciseId']);
             $exerciseAutoJoinRecords = $this->filterExistAutoJoinRecords($exerciseAutoJoinRecords, $existingRecords);
             $this->getItemBankExerciseService()->batchCreateExerciseAutoJoinRecord($exerciseAutoJoinRecords);
+            $exerciseBind['status'] = 'finished';
+            $this->getExerciseService()->updateBindExercise($exerciseBind);
         }
     }
 
@@ -65,7 +83,26 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseUnBind(Event $event)
     {
         $params = $event->getSubject();
+        $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
         $exerciseBind = $this->getExerciseService()->getExerciseBindById($params['id']);
+        $this->setDeleteStatus($exerciseBind);
+        if (count($userIds) > 2000) {
+            $startJob = [
+                'name' => 'ExerciseUnBindJob_'.$params['bindType'].'_'.$params['bindId'],
+                'expression' => time() + 60,
+                'class' => 'Biz\ItemBankExercise\Job\ExerciseUnBindJob',
+                'misfire_threshold' => 60 * 60,
+                'args' => [
+                    'bindType' => $params['bindType'],
+                    'bindId' => $params['bindId'],
+                    'exerciseBind' => $exerciseBind,
+                ],
+            ];
+            $this->createJob($startJob);
+
+            return;
+        }
+
         if (empty($exerciseBind)) {
             $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
             foreach ($exerciseBinds as $exerciseBind) {
@@ -73,6 +110,21 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
             }
         } else {
             $this->unBindByExerciseBind($exerciseBind);
+        }
+    }
+
+    protected function setDeleteStatus($params)
+    {
+        $exerciseBind = $this->getExerciseService()->getExerciseBindById($params['id']);
+        if (empty($exerciseBind)) {
+            $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+            foreach ($exerciseBinds as $exerciseBind) {
+                $exerciseBind['status'] = 'delete';
+                $this->getExerciseService()->updateBindExercise($exerciseBind);
+            }
+        } else {
+            $exerciseBind['status'] = 'delete';
+            $this->getExerciseService()->updateBindExercise($exerciseBind);
         }
     }
 
@@ -96,6 +148,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         $this->updateMemberExpiredTime($multipleExerciseAutoJoinRecords);
         // 移除自动加入记录
         $this->getExerciseService()->deleteExerciseAutoJoinRecordByExerciseBindId($exerciseBind['id']);
+        $this->getExerciseService()->deleteExerciseBind($exerciseBind['id']);
     }
 
     /** 课程/班级添加学员
@@ -470,6 +523,14 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         return array_values($exerciseAutoJoinRecords);
     }
 
+    private function createJob($startJob)
+    {
+        $job = $this->getSchedulerService()->getJobByName($startJob['name']);
+        if (!isset($job)) {
+            $this->getSchedulerService()->register($startJob);
+        }
+    }
+
     /**
      * @return ExerciseMemberService
      */
@@ -516,5 +577,13 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }
