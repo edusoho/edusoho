@@ -11181,6 +11181,8 @@ exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿�
 exception.item_bank_exercise.exercise.not_arrive: 题库练习未到学习时间，添加失败
 exception.item_bank_exercise.parent_chapter_unpublish: 请先发布上一级章节
 exception.item_bank_exercise.answer_unpublish_chapter: 当前章节已取消发布，无法继续答题~
+exception.item_bank_exercise.bind_status_create: 题库正在绑定，等待绑定完成再操作
+exception.item_bank_exercise.bind_status_delete: 题库正在解除绑定，等待解除绑定完成后再操作
 exception.item_bank.assessment.not.open: 试卷被关闭，请联系老师
 exception.item_bank.assessment.not.exist: 试卷不存在
 exception.item_bank.assessment.is_empty: 试卷全部题目已被删除，请联系教师或管理员
