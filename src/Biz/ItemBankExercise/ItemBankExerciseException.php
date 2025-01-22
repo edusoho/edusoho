@@ -86,6 +86,6 @@ class ItemBankExerciseException extends AbstractException
         4007523 => 'exception.item_bank_exercise.parent_chapter_unpublish',
         4007524 => 'exception.item_bank_exercise.answer_unpublish_chapter',
         4007525 => 'exception.item_bank_exercise.bind_status_create',
-        4007525 => 'exception.item_bank_exercise.bind_status_delete',
+        4007526 => 'exception.item_bank_exercise.bind_status_delete',
     ];
 }
