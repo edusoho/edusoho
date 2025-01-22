@@ -623,10 +623,10 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $exerciseBind = $this->getExerciseBindById($bindExerciseId);
         if ('create' != $exerciseBind['status']) {
             // 题库正在绑定，等待绑定完成再删除
-            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+            $this->createNewException(ItemBankExerciseException::BIND_STATUS_CREATE());
         } elseif ('delete' != $exerciseBind['status']) {
             // 题库正在解除绑定，等待解除绑定完成后再操作
-            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
+            $this->createNewException(ItemBankExerciseException::BIND_STATUS_DELETE());
         }
         try {
             $this->beginTransaction();
