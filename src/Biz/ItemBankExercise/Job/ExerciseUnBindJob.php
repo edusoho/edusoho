@@ -17,10 +17,6 @@ class ExerciseUnBindJob extends AbstractJob
         $bindType = $this->args['bindType'];
         $bindId = $this->args['bindId'];
         $exerciseBind = $this->args['exerciseBind'];
-        $userIds = $this->getStudentIds($bindType, $bindId);
-        if (empty($userIds)) {
-            return;
-        }
         if (empty($exerciseBind)) {
             $exerciseBinds = $this->getExerciseService()->findBindExercise($bindType, $bindId);
             foreach ($exerciseBinds as $exerciseBind) {
