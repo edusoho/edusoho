@@ -5,10 +5,11 @@ import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 
 const props = defineProps({
   categoryTree: {type: Array, default: []},
-  records: {type: Array, default: []},
+  records: {type: Object, default: {}},
   previewAs: {type: String, default: null},
   member: {type: Object, default: {}},
   exercise: {type: Object, default: {}},
+  moduleId: {type: Number, default: null},
 });
 
 const newCategoryTree = ref([]);
@@ -34,9 +35,7 @@ function nestItems(data) {
 }
 
 onMounted(() => {
-  console.log(props.categoryTree);
   newCategoryTree.value = nestItems(props.categoryTree);
-  console.log(newCategoryTree.value);
 });
 </script>
 
@@ -51,6 +50,7 @@ onMounted(() => {
           :preview-as="props.previewAs"
           :is-last="index + 1 === newCategoryTree.length"
           :exercise="props.exercise"
+          :module-id="props.moduleId"
         >
         </chapter-list-section>
       </div>

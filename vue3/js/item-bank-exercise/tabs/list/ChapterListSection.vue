@@ -5,11 +5,12 @@ import ChapterListButton from './ChapterListButton.vue';
 
 const props = defineProps({
   chapter: {type: Object, default: {}},
-  records: {type: Array, default: []},
+  records: {type: Object, default: {}},
   isLast: {type: Boolean, default: false},
   previewAs: {type: String, default: null},
   member: {type: Object, default: {}},
   exercise: {type: Object, default: {}},
+  moduleId: {type: Number, default: null},
 });
 
 const isUnfold = ref(true);
@@ -24,11 +25,12 @@ const isUnfold = ref(true);
         <div class="w-320 truncate text-ellipsis overflow-hidden whitespace-nowrap text-14 leading-22 text-[#37393D]" :class="{'font-medium': props.chapter.depth == 1, 'ml-16': props.chapter.depth == 3, 'text-[#5E6166]': props.chapter.depth == 3}">{{ props.chapter.name }}</div>
       </div>
       <chapter-list-button
-        :question-num="props.chapter.question_num"
+        :chapter="props.chapter"
         :preview-as="props.previewAs"
         :member="props.member"
         :record="props.records[props.chapter.id]"
         :exercise="props.exercise"
+        :module-id="props.moduleId"
       >
       </chapter-list-button>
     </div>
@@ -43,6 +45,7 @@ const isUnfold = ref(true);
           :preview-as="props.previewAs"
           :member="props.member"
           :exercise="props.exercise"
+          :module-id="props.moduleId"
         >
         </chapter-list-section>
       </div>

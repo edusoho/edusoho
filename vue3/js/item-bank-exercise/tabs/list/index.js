@@ -11,6 +11,7 @@ const app = createApp(ChapterList,
     previewAs: $('#chapter-list').data('previewAs'),
     member: $('#chapter-list').data('member'),
     exercise: $('#chapter-list').data('exercise'),
+    moduleId: $('#chapter-list').data('moduleId'),
   }
 );
 
