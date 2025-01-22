@@ -51,6 +51,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
                 ],
             ];
             $this->createJob($startJob);
+
             return;
         }
         foreach ($params['exerciseBinds'] as $exerciseBind) {
@@ -83,9 +84,12 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     public function onExerciseUnBind(Event $event)
     {
         $params = $event->getSubject();
-        $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
         $exerciseBind = $this->getExerciseService()->getExerciseBindById($params['id']);
         $this->setDeleteStatus($exerciseBind);
+        $userIds = $this->getStudentIds(
+            $exerciseBind ? $exerciseBind['bindType'] : $params['bindType'],
+            $exerciseBind ? $exerciseBind['bindId'] : $params['bindId']
+        );
         if (count($userIds) > 2000) {
             $startJob = [
                 'name' => 'ExerciseUnBindJob_'.$params['bindType'].'_'.$params['bindId'],
