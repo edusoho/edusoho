@@ -620,12 +620,27 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function removeBindExercise($bindExerciseId)
     {
-        $this->dispatchEvent('exercise.unBind', new Event(['id' => $bindExerciseId]));
+        $exerciseBind = $this->getExerciseBindById($bindExerciseId);
+        if ('create' != $exerciseBind['status']) {
+            // 题库正在绑定，等待绑定完成再删除
+            $this->createNewException(ItemBankExerciseException::BIND_STATUS_CREATE());
+        } elseif ('delete' != $exerciseBind['status']) {
+            // 题库正在解除绑定，等待解除绑定完成后再操作
+            $this->createNewException(ItemBankExerciseException::BIND_STATUS_DELETE());
+        }
+        try {
+            $this->beginTransaction();
+            $this->dispatchEvent('exercise.unBind', new Event(['id' => $bindExerciseId]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function updateBindExercise($bindExercise)
     {
-        $bindExercise = is_array($bindExercise)? $bindExercise : [$bindExercise];
+        $bindExercise = is_array($bindExercise) ? $bindExercise : [$bindExercise];
         $bindExercise = isset($bindExercise[0]) ? $bindExercise : [$bindExercise];
         $this->getExerciseBindDao()->batchUpdate(array_column($bindExercise, 'id'), $bindExercise);
     }

@@ -9850,6 +9850,8 @@ exception.item_bank_exercise.exercise.is_exists: The item bank exercise already 
 exception.item_bank_exercise.exercise.not_arrive: The item bank exercise has not reached learning time，add failed
 exception.item_bank_exercise.parent_chapter_unpublish: 'Please publish the previous chapter first'
 exception.item_bank_exercise.answer_unpublish_chapter: The current chapter has been cancelled and cannot continue to answer ~
+exception.item_bank_exercise.bind_status_create: 'The question bank is currently being bound, waiting for the binding to complete before proceeding'
+exception.item_bank_exercise.bind_status_delete: 'The question bank is currently unbinding, waiting for unbinding to complete before proceeding'
 exception.item_bank.assessment.not.open: The test paper is closed, please contact the teacher
 exception.item_bank.assessment.not.exist: Test paper does not exist
 exception.item_bank.assessment.is_empty: All questions have been removed from the paper. Please contact the teacher or administrator
