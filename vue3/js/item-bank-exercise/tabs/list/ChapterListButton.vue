@@ -89,6 +89,6 @@ function showButtonStatus(status) {
         </div>
       </div>
     </div>
-    <div v-else class="text-14 leading-22 text-[#87898F]">{{ props.chapter.question_num }}题</div>
+    <div v-else class="text-14 leading-22 text-[#87898F] w-full text-right">{{ props.chapter.question_num }}题</div>
   </div>
 </template>
