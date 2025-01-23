@@ -13,6 +13,7 @@ const props = defineProps({
 });
 
 const newCategoryTree = ref([]);
+const selectedChapterId = ref(null);
 
 function nestItems(data) {
   const idMap = {};
@@ -34,6 +35,10 @@ function nestItems(data) {
   return result;
 }
 
+function selectChapter(chapterId) {
+  selectedChapterId.value = chapterId;
+}
+
 onMounted(() => {
   newCategoryTree.value = nestItems(props.categoryTree);
 });
@@ -51,6 +56,8 @@ onMounted(() => {
           :is-last="index + 1 === newCategoryTree.length"
           :exercise="props.exercise"
           :module-id="props.moduleId"
+          :selected-chapter-id="selectedChapterId"
+          @select-chapter="selectChapter"
         >
         </chapter-list-section>
       </div>

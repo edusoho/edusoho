@@ -11,9 +11,17 @@ const props = defineProps({
   member: {type: Object, default: {}},
   exercise: {type: Object, default: {}},
   moduleId: {type: Number, default: null},
+  selectedChapterId: {type: String, default: null},
 });
 
 const isUnfold = ref(true);
+
+const emit = defineEmits(['selectChapter']);
+const selectedChapterId = ref(null);
+function selectChapter(chapterId) {
+  selectedChapterId.value = chapterId;
+  emit('selectChapter', chapterId);
+}
 </script>
 
 <template>
@@ -22,7 +30,7 @@ const isUnfold = ref(true);
       <div class="flex items-center">
         <DownOutlined v-if="isUnfold" class="mr-12 text-12 text-[#5E6166]" :class="{'opacity-0': props.chapter.children.length === 0}"/>
         <UpOutlined v-if="!isUnfold" class="mr-12 text-12 text-[#5E6166]" :class="{'opacity-0': props.chapter.children.length === 0}"/>
-        <div class="w-320 truncate text-ellipsis overflow-hidden whitespace-nowrap text-14 leading-22 text-[#37393D]" :class="{'font-medium': props.chapter.depth == 1, 'ml-16': props.chapter.depth == 3, 'text-[#5E6166]': props.chapter.depth == 3}">{{ props.chapter.name }}</div>
+        <div class="w-320 truncate text-ellipsis overflow-hidden whitespace-nowrap text-14 leading-22 text-[#37393D]" :class="{'font-medium': props.chapter.depth == 1, 'pl-16': props.chapter.depth == 3, 'text-[#5E6166]': props.chapter.depth == 3, 'text-[--primary-color]': props.chapter.id === props.selectedChapterId}">{{ props.chapter.name }}</div>
       </div>
       <chapter-list-button
         :chapter="props.chapter"
@@ -31,6 +39,7 @@ const isUnfold = ref(true);
         :record="props.records[props.chapter.id]"
         :exercise="props.exercise"
         :module-id="props.moduleId"
+        @select-chapter="selectChapter"
       >
       </chapter-list-button>
     </div>
@@ -46,6 +55,8 @@ const isUnfold = ref(true);
           :member="props.member"
           :exercise="props.exercise"
           :module-id="props.moduleId"
+          :selected-chapter-id="props.selectedChapterId"
+          @select-chapter="selectChapter"
         >
         </chapter-list-section>
       </div>

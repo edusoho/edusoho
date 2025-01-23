@@ -12,7 +12,9 @@ const props = defineProps({
 });
 
 const $modal = $('#modal');
+const emit = defineEmits(['selectChapter']);
 async function exerciseChapter() {
+  emit('selectChapter', props.chapter.id);
   //不是该题库练习成员
   if (Object.keys(props.member).length === 0) {
     return;
@@ -67,20 +69,24 @@ function showButtonStatus(status) {
 </script>
 
 <template>
-  <div class="flex items-center">
-    <div v-if="props.member && props.previewAs === 'member'" class="flex items-center">
-      <div class="flex items-center text-14 leading-22 text-[#87898F]">
+  <div class="flex items-center w-full">
+    <div v-if="props.member && props.previewAs === 'member'" class="flex items-center w-full">
+      <div class="flex items-center justify-between text-14 leading-22 text-[#87898F] w-full">
+        <div class="flex">
+          <div class="w-100 text-right">
+            <span v-if="Object.keys(props.record).length === 0">{{ `0/${props.chapter.question_num}题` }}</span>
+            <span v-else>{{ `${props.record.doneQuestionNum}/${props.chapter.question_num}题` }}</span>
+          </div>
+          <div class="ml-12">
+            <span v-if="Object.keys(props.record).length === 0">正确率：0.0%</span>
+            <span v-else>{{ `正确率：${props.record.rightRate}%` }}</span>
+          </div>
+        </div>
         <div>
-          <span v-if="Object.keys(props.record).length === 0">{{ `0/${props.chapter.question_num}题` }}</span>
-          <span v-else>{{ `${props.record.doneQuestionNum}/${props.chapter.question_num}题` }}</span>
+          <a-button v-if="['doing', 'paused'].includes(props.record.status)" :disabled="props.member.locked === '1'" type="primary" @click.stop="exerciseChapter()">{{ showButtonStatus(props.record.status).text }}</a-button>
+          <a-button v-else-if="['reviewing', 'finished'].includes(props.record.status)" style="color: #FF7D00; border-color: #FF7D00; background-color: #FFFFFF" :disabled="props.member.locked === '1'" type="primary" ghost @click.stop="exerciseChapter()">{{ showButtonStatus(props.record.status).text }}</a-button>
+          <a-button v-else style="background-color: #FFFFFF" type="primary" :disabled="props.member.locked === '1'" ghost @click.stop="exerciseChapter()">{{ showButtonStatus(props.record.status).text }}</a-button>
         </div>
-        <div class="ml-12">
-          <span v-if="Object.keys(props.record).length === 0">正确率：0.0%</span>
-          <span v-else>{{ `正确率：${props.record.rightRate}%` }}</span>
-        </div>
-        <a-button v-if="['doing', 'paused'].includes(props.record.status)" :disabled="props.member.locked === '1'" class="ml-100" type="primary" @click.stop="exerciseChapter()">{{ showButtonStatus(props.record.status).text }}</a-button>
-        <a-button v-else-if="['reviewing', 'finished'].includes(props.record.status)" style="color: #FF7D00; border-color: #FF7D00; background-color: #FFFFFF" :disabled="props.member.locked === '1'" class="ml-100" type="primary" ghost @click.stop="exerciseChapter()">{{ showButtonStatus(props.record.status).text }}</a-button>
-        <a-button v-else  class="ml-100" style="background-color: #FFFFFF" type="primary" :disabled="props.member.locked === '1'" ghost @click.stop="exerciseChapter()">{{ showButtonStatus(props.record.status).text }}</a-button>
       </div>
     </div>
     <div v-else class="text-14 leading-22 text-[#87898F]">{{ props.chapter.question_num }}题</div>
