@@ -43,7 +43,7 @@ function selectChapter(chapterId) {
       >
       </chapter-list-button>
     </div>
-    <div v-if="props.chapter.depth == 3 && !isLast" class="border border-solid border-t-0 border-[#F2F3F5] my-8 ml-44"></div>
+    <div v-if="props.chapter.depth == 3 && !isLast" class="border border-solid border-t-0 border-[#F2F3F5] my-8 ml-44 mr-12"></div>
     <div v-else class="mb-8"></div>
     <div v-show="isUnfold">
       <div v-for="(item, index) in props.chapter.children" :key="item.id" :ref="item.id">
