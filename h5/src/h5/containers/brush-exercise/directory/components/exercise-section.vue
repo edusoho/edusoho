@@ -7,7 +7,7 @@
         <div class="w-full mr-12 text-14 text-[#37393D] font-normal" :class="{ 'font-medium': level === 0, 'ml-16': level === 2 }" style="line-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ section.name }}</div>
       </div>
       <div class="flex items-center">
-        <div class="mr-12 text-14 font-normal text-[#87898F] h-fit" :class="{ 'mr-78': allNum === '0' }" style="line-height: 22px; white-space: nowrap;">{{ learnNum }}{{ allNum }}题</div>
+        <div v-if="allNum !== '0'" class="mr-12 text-14 font-normal text-[#87898F] h-fit" style="line-height: 22px; white-space: nowrap;">{{ learnNum }}{{ allNum }}题</div>
         <button v-if="allNum !== '0'" class="text-12 text-[#408ffb] font-normal border border-[#408ffb] bg-white" :class="[btnText.class]" style="white-space: nowrap; line-height: 20px; padding: 4px 8px; border-radius: 6px;" @click="clickBtn()">{{ btnText.text }}</button>
       </div>
     </div>
