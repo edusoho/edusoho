@@ -4,7 +4,7 @@ namespace AppBundle;
 
 class System
 {
-    const VERSION = '25.1.2';
+    const VERSION = '25.1.3';
 
     const RELEASE_NOTES = 'http://www.edusoho.com/intro/13';
 
