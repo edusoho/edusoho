@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     spacing: () => {
       const obj = {};
-      const baseSpacing = 4;
-      for (let i = 0; i <= 50; i++) {
+      const baseSpacing = 1;
+      for (let i = 0; i <= 100; i++) {
         const key = i * baseSpacing;
         const value = key + 'px';
         obj[key] = value;
