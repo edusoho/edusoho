@@ -71,9 +71,9 @@ function showButtonStatus(status) {
 <template>
   <div class="flex items-center w-full">
     <div v-if="props.member && props.previewAs === 'member'" class="flex items-center w-full">
-      <div class="flex items-center justify-between text-14 leading-22 text-[#87898F] w-full">
+      <div v-if="props.chapter.question_num !== '0'" class="flex items-center justify-between text-14 leading-22 text-[#87898F] w-full">
         <div class="flex">
-          <div class="w-100 text-right">
+          <div class="w-180 text-right">
             <span v-if="Object.keys(props.record).length === 0">{{ `0/${props.chapter.question_num}题` }}</span>
             <span v-else>{{ `${props.record.doneQuestionNum}/${props.chapter.question_num}题` }}</span>
           </div>
