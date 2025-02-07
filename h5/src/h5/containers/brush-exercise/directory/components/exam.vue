@@ -7,15 +7,15 @@
           v-for="(item, index) in exercise"
           :key="index"
         >
-          <div class="exam-left">
-            <div class="exam-title" v-if="item.assessment">{{ item.assessment.name }}</div>
-            <div class="exam-score" v-if="item.assessment">
+          <div class="exam-left" v-if="item.assessment">
+            <div class="exam-title">{{ item.assessment.name }}</div>
+            <div class="exam-score">
               {{ item.assessment.question_count }}题/
               {{ item.assessment.total_score }}分
             </div>
           </div>
           <div class="exam-right" v-if="isMember">
-            <div class="text-12" :class="[getBtnText(item).class]" @click="clickBtn(item)" style="white-space: nowrap; line-height: 20px; padding: 4px 8px; border-radius: 6px;">
+            <div class="text-12 whitespace-nowrap p-4 px-8" :class="[getBtnText(item).class]" @click="clickBtn(item)" style="line-height: 20px; border-radius: 6px;">
               {{ getBtnText(item).text }}
             </div>
           </div>
