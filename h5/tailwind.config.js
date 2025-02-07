@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     spacing: () => {
       const obj = {};
-      const baseSpacing = 4;
-      for (let i = 0; i <= 50; i++) {
+      const baseSpacing = 1;
+      for (let i = 0; i <= 100; i++) {
         const key = i * baseSpacing;
         const value = key + 'px';
         obj[key] = value;
@@ -54,6 +54,13 @@ module.exports = {
         '[#F7D27B]': '#F7D27B',
         '[#FCEABE]': '#FCEABE',
         '[#60F1A3]': '#60F1A3',
+        '[#37393D]': '#37393D',
+        '[#87898F]': '#87898F',
+        '[#408ffb]': '#408ffb',
+        '[#FF7D00]': '#FF7D00',
+        '[#FAFAFA]': '#FAFAFA',
+        '[#FFFFFF]': '#FFFFFF',
+        '[#F2F3F5]': '#F2F3F5',
       },
     }
   },

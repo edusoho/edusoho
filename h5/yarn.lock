@@ -6938,6 +6938,11 @@ gulplog@^1.0.0:
   dependencies:
     glogg "^1.0.0"
 
+gwm@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmmirror.com/gwm/-/gwm-0.5.0.tgz#6c189a3f8feb900373d09d9dc6bedf805d08ec81"
+  integrity sha512-oLVpiizmlYyz4V0sji3PxGZ4osk4SOHEfOY3qVdVNmzDicAg9dmj1CQ06A+uzBvEHR7Kl4mPQlw9t0Qb8VA8Ig==
+
 gzip-size@^5.0.0:
   version "5.1.1"
   resolved "https://registry.npmmirror.com/gzip-size/download/gzip-size-5.1.1.tgz#cb9bee692f87c0612b232840a873904e4c135274"

@@ -126,7 +126,6 @@ export default {
   },
   methods: {
     check(type) {
-      console.log(type);
       switch (type) {
         case "card":
           this.$emit("showcard");
