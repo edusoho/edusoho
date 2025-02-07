@@ -2,11 +2,12 @@
 
 namespace AppBundle\Component\Export\Order;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Component\Export\Exporter;
-use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Pay\Service\PayService;
 
 class OrderExporter extends Exporter
 {
@@ -44,7 +45,7 @@ class OrderExporter extends Exporter
 
     public function getTitles()
     {
-        return array('order.id', 'order.product_name', 'order.status', 'order.product_price', 'order.deduct_amount', 'order.price', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.source', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time');
+        return ['order.id', 'order.platform_sn', 'order.product_name', 'order.status', 'order.product_price', 'order.deduct_amount', 'order.price', 'order.coin_amount', 'order.cash_amount', 'order.payment_pattern', 'order.source', 'order.buyer.username', 'order.buyer.true_name', 'order.buyer.email', 'order.buyer.contact', 'order.created_time', 'order.paid_time'];
     }
 
     public function buildCondition($conditions)
@@ -79,25 +80,29 @@ class OrderExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $orders = $this->getOrderService()->searchOrders($this->conditions, array('created_time' => 'DESC'), $start, $limit);
+        $orders = $this->getOrderService()->searchOrders($this->conditions, ['created_time' => 'DESC'], $start, $limit);
         $userIds = array_column($orders, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-
-        $ordersContent = $this->handlerOrder($orders, $users, $profiles);
+        $orderSns = array_column($orders, 'sn');
+        $paymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
+        $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
+        $ordersContent = $this->handlerOrder($orders, $users, $profiles, $paymentTrades);
 
         return $ordersContent;
     }
 
-    protected function handlerOrder($orders, $users, $profiles)
+    protected function handlerOrder($orders, $users, $profiles, $paymentTrades)
     {
-        $ordersContent = array();
+        $ordersContent = [];
         $source = $this->container->get('codeages_plugin.dict_twig_extension')->getDict('source');
         foreach ($orders as $key => $order) {
-            $member = array();
+            $member = [];
             // 订单号
             $member[] = $order['sn']."\t";
+            // 支付流水号
+            $member[] = $paymentTrades[$order['sn']]['platform_sn']."\t";
             // 订单名称
             $member[] = $order['title'];
             // 订单状态
@@ -203,5 +208,13 @@ class OrderExporter extends Exporter
     protected function getUserService()
     {
         return parent::getUserService();
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->getBiz()->service('Pay:PayService');
     }
 }
