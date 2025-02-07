@@ -66,7 +66,8 @@ class CourseLiveStatisticExporter extends BaseSheetAddStyleExporter
             ['title', 'startTime', 'endTime', 'length']
         );
         foreach ($liveTasks as &$liveTask) {
-            $liveTask['startTime'] = date('Y-m-d H:i', $course['startTime']);
+            $liveTask['length'] = round(($liveTask['endTime'] - $liveTask['startTime']) / 60, 1);
+            $liveTask['startTime'] = date('Y-m-d H:i', $liveTask['startTime']);
             $liveTask['maxStudentNum'] = empty($course['maxStudentNum']) ? '无限制' : $course['maxStudentNum'];
             $liveTask['status'] = $liveTask['startTime'] > time() ? $this->trans('course.live_statistics.live_coming') : ($liveTask['endTime'] < time() ? $this->trans('course.live_statistics.live_finished') : $this->trans('course.live_statistics.live_playing'));
         }
