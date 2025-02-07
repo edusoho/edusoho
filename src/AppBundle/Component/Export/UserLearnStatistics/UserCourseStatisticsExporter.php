@@ -135,6 +135,7 @@ class UserCourseStatisticsExporter extends Exporter
         if (!empty($conditions['keyword'])) {
             $userConditions = ['nickname' => $conditions['keyword']];
             if ('mobile' == $conditions['keywordType']) {
+                unset($userConditions['nickname']);
                 $userConditions['verifiedMobile'] = $conditions['keyword'];
             }
             $users = $this->getUserService()->searchUsers(
