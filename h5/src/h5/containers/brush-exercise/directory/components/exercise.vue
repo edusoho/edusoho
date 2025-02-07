@@ -4,7 +4,7 @@
       >加载中...</van-loading
     >
     <template v-if="exercise.length">
-      <div v-for="(item, index) in newExercise" :key="item.id" :ref="item.id">
+      <div v-for="(item, index) in newExercise" :key="item.id" :ref="'exercise_' + item.id">
         <exercise-section
           :exercise-id="exerciseId"
           :module-id="moduleId"
@@ -99,7 +99,7 @@ export default {
       return result;
     },
     scrollToCategory() {
-      const targetElement = this.$refs[this.$route.query.categoryId];
+      const targetElement = this.$refs['exercise_' + this.$route.query.categoryId];
       if (targetElement) {
         const offsetTop = targetElement[0].offsetTop || targetElement.offsetTop;
         window.scrollTo({
