@@ -21,7 +21,7 @@
     </div>
     <div class="course-modal__body">
       <div class="search__container">
-        <span class="search__label">选择{{ typeText }}：</span>
+        <span class="search__label">{{ typeText }}名称：</span>
 
         <!-- 接口字段 courseSetTitle -->
         <el-autocomplete
@@ -38,7 +38,7 @@
           @select="selectHandler"
         ></el-autocomplete>
       </div>
-      <div class="help-text mbs">拖动{{ typeText }}名称可调整排序</div>
+      <div v-if="limit > 1" class="help-text mbs">拖动{{ typeText }}名称可调整排序</div>
     </div>
     <course-table
       :key="tableKey"
