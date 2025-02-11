@@ -243,6 +243,7 @@ export default {
         }
       }
       this.setSourceMap(item, question, s, i, q);
+      this.resetDefaultData();
     },
     setSourceMap(item, question, s, i, q) {
       item.sectionIndex = s;
