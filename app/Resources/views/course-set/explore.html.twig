@@ -22,7 +22,7 @@
   <div id="app"></div>
   <input type="hidden" name="isWeixin" id="isWeixin" value="{{ isWxClient }}">
   <input type="hidden" name="isMobile" id="isMobile" value="{{ isMobileClient }}">
-  <input type="hidden" name="categoryId" id="categoryId" value="{{ app.request.query.get('categoryId') }}">
+  <input type="hidden" name="categoryId" id="categoryId" value="{{ app.request.query.get('categoryId', categoryId) }}">
   <input type="hidden" name="type" id="type" value="{{ app.request.query.get('type', 'all') }}">
   <input type="hidden" name="sort" id="sort" value="{{ app.request.query.get('sort', 'recommendedSeq') }}">
   <input type="hidden" name="vipLevelId" id="vipLevelId" value="{{ app.request.query.get('vipLevelId') }}">

@@ -140,10 +140,6 @@ export default {
     this.initDropdownData();
 
   },
-  watch: {
-  },
-  computed: {
-  },
   methods: {
     async getVipSetting() {
       const data = await More.getVip()
