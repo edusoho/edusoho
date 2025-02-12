@@ -18,6 +18,9 @@ class GoodsController extends BaseController
         $targetId = $request->query->get('targetId', 0);
         $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET', ['preview' => $preview, 'targetId' => $targetId]);
         $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
+        if (1 != $preview && 'unpublished' === $goods['status']) {
+            return $this->redirectToRoute('goods_show', ['id' => $id, 'preview' => 1, 'targetId' => $targetId]);
+        }
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
         $goods['showPlan'] = 1 == count($goods['specs']) || empty($goods['specs'][0]['title']) ? 0 : 1;
