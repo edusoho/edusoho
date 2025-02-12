@@ -117,12 +117,14 @@ class ExploreController extends BaseController
                 $courseSet['course'] = $courses[$courseSet['id']];
             }
         });
+        $courseCategory = $this->getCategoryService()->getCategoryByCode($category);
 
         return $this->render(
             'course-set/explore.html.twig',
             [
                 'courseSets' => $this->getWebExtension()->filterCourseSetsVipRight($courseSets),
                 'category' => $category,
+                'categoryId' => $courseCategory['id'],
                 'filter' => $filter,
                 'paginator' => $paginator,
                 'consultDisplay' => true,
