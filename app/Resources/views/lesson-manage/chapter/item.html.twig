@@ -16,7 +16,7 @@
       <i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i>
     </a>
     <div style="display: inline-block; width: 610px;">
-      {{ 'course.plan_task.which_chapter'|trans({'%chapterNumber%': chapter.number, '%chapter%': course_chapter_alias(chapter.type)|trans}) }}<span class="colon">{{ colon|default() }}</span><span class="title">{{ chapter.title }}</span>
+      {{ 'course.plan_task.which_chapter'|trans }}<span class="number">{{ chapter.number }}</span>{{ course_chapter_alias(chapter.type)|trans }}<span class="colon">{{ colon|default() }}</span><span class="title">{{ chapter.title }}</span>
     </div>
   </div>
   {# 章可以创建课时，节

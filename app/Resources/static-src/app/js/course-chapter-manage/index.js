@@ -25,7 +25,6 @@ $('#course-chapter-btn').on('click', function () {
         $('#chapter-'+chapterId).find('.colon').text(colon);
       } else {
         $sortableList.trigger('addItem', html);
-        window.location.reload();
       }
     },
   });
