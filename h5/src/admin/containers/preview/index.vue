@@ -92,7 +92,7 @@ export default {
       route: 'homepage',
     })
       .then(res => {
-        this.qrcode = res.img;
+        this.qrcode = res.data.img;
       })
       .catch(err => {
         this.$message({

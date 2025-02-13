@@ -4,7 +4,7 @@
     :is-incomplete="isIncomplete"
     container-class="setting-course"
   >
-    
+
     <div slot="preview" class="find-page__part">
       <e-item-bank
         :itembank="copyModuleData.data"
@@ -354,7 +354,7 @@ export default {
     },
     fetchItemBankList() {
       if (this.sourceType === 'custom') return;
-      
+
       this.getItemBankList({
         limit: 3,
         sort: this.sort,

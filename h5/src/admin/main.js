@@ -18,6 +18,8 @@ import {
   Cascader,
   Dialog,
   Tag,
+  Table,
+  TableColumn,
   Autocomplete,
   Tooltip,
   Loading,
@@ -58,6 +60,8 @@ Vue.use(Option);
 Vue.use(Cascader);
 Vue.use(Dialog);
 Vue.use(Tag);
+Vue.use(Table);
+Vue.use(TableColumn);
 Vue.use(Autocomplete);
 Vue.use(Tooltip);
 Vue.use(utils);

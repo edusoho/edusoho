@@ -19,7 +19,7 @@
         <span v-show="!item.image.uri"><i class="text-18">+</i>{{ $t('carousel.addPictures') }}</span>
       </el-upload>
     </div>
-    
+
 
     <el-dialog
       :visible.sync="dialogVisible"
@@ -54,7 +54,7 @@
       src="static/images/delete.png"
       @click="handleRemove($event, index, itemNum)"
     />
-    
+
     <!-- <div v-if="pathName !== 'appSetting'" class="add-title">
       {{ $t('carousel.title') }}：<el-input
         v-model="item.title"
@@ -72,7 +72,7 @@
         <!-- <el-radio v-model="radio" label="url">{{ $t('carousel.customLink') }}</el-radio> -->
       </div>
     </div>
-    
+
     <div v-if="radio === 'insideLink'" class="add-inner">
       <el-dropdown v-show="!linkTextShow">
         <el-button size="mini" class="el-dropdown-link">

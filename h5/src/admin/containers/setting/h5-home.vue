@@ -82,7 +82,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
       <el-button
@@ -386,7 +386,6 @@ export default {
         mode,
       })
         .then(res => {
-          console.log(1);
           // 默认排列方式
           this.formateRes(res);
         })

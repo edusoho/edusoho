@@ -1,7 +1,6 @@
 import Vue from 'vue';
 
 export default (module, startValidate = false) => {
-  console.log(module.type);
   // 轮播图
   if (module.type === 'slide_show') {
     for (let i = 0; i < module.data.length; i += 1) {
