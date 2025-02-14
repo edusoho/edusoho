@@ -27,6 +27,7 @@ import {
   DropdownItem,
   DropdownMenu,
   MessageBox,
+  Pagination,
   Col,
   Row,
   Menu,
@@ -66,6 +67,7 @@ Vue.use(Autocomplete);
 Vue.use(Tooltip);
 Vue.use(utils);
 Vue.use(Dropdown);
+Vue.use(Pagination);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
 Vue.use(Lazyload);

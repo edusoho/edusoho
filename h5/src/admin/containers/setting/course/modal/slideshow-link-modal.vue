@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    width="90%"
+    width="60%"
     :visible.sync="modalVisible"
     :before-close="beforeCloseHandler"
     :close-on-click-modal="false"
@@ -22,35 +22,54 @@
     <div class="course-modal__body">
       <div class="search__container flex items-center">
         <span class="search__label whitespace-nowrap">{{ typeText }}名称：</span>
-        <el-input v-model="keyWord" :placeholder="`请输入${typeText}名称`" style="width: 360px"></el-input>
+        <el-input v-model="keyWord" :placeholder="`请输入${typeText}名称`" style="width: 250px"></el-input>
         <el-button class="ml-12" type="primary" @click="searchHandler">搜索</el-button>
       </div>
-      <div v-if="limit > 1" class="help-text mbs">拖动{{ typeText }}名称可调整排序</div>
     </div>
-    <el-table
-      :data="courseSets"
-      stripe
-      style="width: 100%">
-      <el-table-column
-        prop="courseSetTitle"
-        label="课程名称"
+    <div class="relative">
+      <el-table
+        :data="courseSets"
+        v-loading="loading"
+        element-loading-spinner="el-icon-loading"
+        element-loading-text="拼命加载中"
+        style="width: 100%"
+        class="mb-20"
       >
-      </el-table-column>
-      <el-table-column
-        prop="price"
-        label="商品价格"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="updatedTime"
-        label="创建时间"
-      >
-      </el-table-column>
-      <el-table-column
-        label="操作"
-      >
-      </el-table-column>
-    </el-table>
+        <el-table-column
+          prop="courseSetTitle"
+          label="课程名称"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="price"
+          label="商品价格"
+        >
+        </el-table-column>
+        <el-table-column
+          label="创建时间"
+        >
+          <template slot-scope="scope">
+            <div>{{ formatTime(new Date(scope.row.createdTime)) }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" @click="selectLink(scope.row)">选择</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="w-full flex flex-row-reverse">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :page-size="pagination.pageSize"
+        layout="total, prev, pager, next, jumper"
+        :total="pagination.total">
+      </el-pagination>
+    </div>
+    <div class="text-14 text-[#313131]">已选{{ typeText }}：{{ selectedName }}</div>
     <div slot="footer" class="course-modal__footer dialog-footer flex justify-center">
       <el-button
         class="text-14 btn-border-primary"
@@ -76,6 +95,7 @@ import {
   VALUE_DEFAULT,
   TYPE_TEXT_DEFAULT,
 } from 'admin/config/module-default-config';
+import { formatTime } from '@/utils/date-toolkit';
 
 function apiConfig(type, queryString, offset, limit) {
   return {
@@ -130,12 +150,13 @@ export default {
       courseListIds: [],
       valueDefault: VALUE_DEFAULT,
       typeTextDefault: TYPE_TEXT_DEFAULT,
-      hideLoading: false,
+      loading: false,
       pagination: {
         current: 1,
-        pageSize: 10,
+        pageSize: 5,
         total: 0,
       },
+      selectedName: '',
     };
   },
   computed: {
@@ -172,6 +193,7 @@ export default {
     this.searchHandler();
   },
   methods: {
+    formatTime,
     ...mapActions([
       'getCourseList',
       'getClassList',
@@ -192,19 +214,29 @@ export default {
     },
     searchHandler() {
       const apiConfigObj = apiConfig(this.type, this.keyWord, (this.pagination.current - 1) * this.pagination.pageSize, this.pagination.pageSize);
-      this.hideLoading = false;
+      this.loading = true;
       this[apiConfigObj[this.type].apiName](apiConfigObj[this.type].params)
         .then(res => {
-          this.courseSets = res;
+          this.courseSets = res.data;
+          this.pagination.total = res.paging.total;
         })
         .catch(err => {
-          this.hideLoading = true;
           this.$message({
             message: err.message,
             type: 'error',
           });
-        });
+        }).finally(() => {
+          this.loading = false;
+      });
+    },
+    handleCurrentChange(val) {
+      this.pagination.current = val;
+      this.searchHandler();
+    },
+    selectLink(row) {
+      this.selectedName = row.courseSetTitle;
     },
   },
+
 };
 </script>

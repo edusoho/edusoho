@@ -61,6 +61,7 @@ module.exports = {
         '[#FAFAFA]': '#FAFAFA',
         '[#FFFFFF]': '#FFFFFF',
         '[#F2F3F5]': '#F2F3F5',
+        '[#313131]': '#313131',
       },
     }
   },
