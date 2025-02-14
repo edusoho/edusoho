@@ -432,7 +432,7 @@ export default {
       if (this.type === 'course_list') {
         this.getCourseList(params)
           .then(res => {
-            this.moduleData.data.items = res || [];
+            this.moduleData.data.items = res.data || [];
           })
           .catch(err => {
             this.$message({
@@ -445,7 +445,7 @@ export default {
 
       this.getClassList(params)
         .then(res => {
-          this.moduleData.data.items = res || [];
+          this.moduleData.data.items = res.data || [];
         })
         .catch(err => {
           this.$message({

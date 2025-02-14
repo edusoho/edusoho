@@ -362,7 +362,7 @@ export default {
         categoryId: this.categoryTempId.at(-1)
       })
         .then(res => {
-          this.moduleData.data.items = res || [];
+          this.moduleData.data.items = res.data || [];
         })
         .catch(err => {
           this.$message({
