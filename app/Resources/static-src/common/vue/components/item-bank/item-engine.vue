@@ -978,7 +978,7 @@ export default {
     },
     answerData() {
       const finalData = this.getResponse();
-      finalData.used_time = localStorage.getItem(this.localUsedTime);
+      finalData.used_time = localStorage.getItem(this.localUsedTime) || 0;
       this.$emit("getAnswerData", finalData);
       // 立即提交的时候清空计时器;
       clearInterval(this.saveDataIntervalId);
@@ -988,12 +988,12 @@ export default {
     },
     reachTimeSubmitAnswerData() {
       const finalData = this.getResponse();
-      finalData.used_time = localStorage.getItem(this.localUsedTime);
+      finalData.used_time = localStorage.getItem(this.localUsedTime) || 0;
       this.$emit("reachTimeSubmitAnswerData", finalData);
     },
     saveAnswerData(okCallback) {
       const finalData = this.getResponse();
-      finalData.used_time = localStorage.getItem(this.localUsedTime);
+      finalData.used_time = localStorage.getItem(this.localUsedTime) || 0;
       this.$emit("saveAnswerData", finalData, okCallback);
     },
     countTime() {
@@ -1054,7 +1054,7 @@ export default {
       const data = this.getResponse();
       const self = this;
       this.saveDataIntervalId = setInterval(() => {
-        data.used_time = localStorage.getItem(this.localUsedTime);
+        data.used_time = localStorage.getItem(this.localUsedTime) || 0;
         self.$emit("timeSaveAnswerData", data);
       }, 30 * 1000);
     },
