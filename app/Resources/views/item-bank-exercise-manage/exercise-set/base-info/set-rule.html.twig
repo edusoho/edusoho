@@ -12,10 +12,10 @@
   </label>
   <div class="col-sm-10 cd-radio-group mbm">
     {% set exercisePublished = exercise.status|default('draft') == 'published' %}
-    {% set exerciseClosed = exercise.status|default('draft') == 'closed' %}
+    {% set exerciseDraft = exercise.status|default('draft') == 'draft' %}
     {{ cd_radios('expiryMode',
       { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
-      exercise.expiryMode|default('forever'), exercisePublished or exerciseClosed ? 'disabled' : '') }}
+      exercise.expiryMode|default('forever'), exerciseDraft ? '' : 'disabled') }}
 
     {% if exercise.status|default('draft') != 'draft' %}
       <input type="hidden" name="expiryMode" value="{{ exercise.expiryMode|default('forever') }}">
@@ -26,9 +26,9 @@
       <span class="caret"></span>
       {{ cd_radios('deadlineType',
         { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans},
-        exercise.deadlineType|default('days'),  exercisePublished or exerciseClosed ? 'disabled' : '') }}
+        exercise.deadlineType|default('days'), exerciseDraft ? '' : 'disabled') }}
 
-      {% if exercisePublished or exerciseClosed %}
+      {% if not exerciseDraft %}
         <input type="hidden" name="deadlineType" value="{{ exercise.deadlineType|default('days') }}">
       {% endif %}
 
