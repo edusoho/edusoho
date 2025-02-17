@@ -88,7 +88,6 @@ router.beforeEach((to, from, next) => {
       store.dispatch('getLanguage')
     ])
       .then(([vipPlugin, vipRes]) => {
-        console.log(vipPlugin, 8888);
         return vipRes;
       })
       .then(vipRes => {

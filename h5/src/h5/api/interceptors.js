@@ -3,13 +3,15 @@ import store from '@/store';
 import router from '@/router';
 import * as types from '@/store/mutation-types';
 
+const axiosH5Instance = axios.create({});
+
 // 状态码
 const statusCode = {
   EXPIRED_CREDENTIAL: 5,
   TOKEN_NOT_EXIST: 4040117,
 };
 
-axios.interceptors.request.use(
+axiosH5Instance.interceptors.request.use(
   config => {
     if (config.interceptor === 'end') {
       return config;
@@ -40,7 +42,7 @@ axios.interceptors.request.use(
   error => Promise.reject(error),
 );
 
-axios.interceptors.response.use(
+axiosH5Instance.interceptors.response.use(
   res => {
     store.commit('UPDATE_LOADING_STATUS', false);
 
@@ -86,3 +88,5 @@ axios.interceptors.response.use(
     return Promise.reject(error.response.data.error);
   },
 );
+
+export default axiosH5Instance;

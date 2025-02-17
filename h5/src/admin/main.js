@@ -18,6 +18,8 @@ import {
   Cascader,
   Dialog,
   Tag,
+  Table,
+  TableColumn,
   Autocomplete,
   Tooltip,
   Loading,
@@ -25,6 +27,7 @@ import {
   DropdownItem,
   DropdownMenu,
   MessageBox,
+  Pagination,
   Col,
   Row,
   Menu,
@@ -58,10 +61,13 @@ Vue.use(Option);
 Vue.use(Cascader);
 Vue.use(Dialog);
 Vue.use(Tag);
+Vue.use(Table);
+Vue.use(TableColumn);
 Vue.use(Autocomplete);
 Vue.use(Tooltip);
 Vue.use(utils);
 Vue.use(Dropdown);
+Vue.use(Pagination);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
 Vue.use(Lazyload);

@@ -23,7 +23,7 @@ export const getGlobalSettings = ({ commit }, { type, key }) =>
 // 全局vip元素显示开关
 export const setVipLevels = ({ commit }) =>
   Api.getVipLevels().then(levels => {
-    const levelsExist = levels;
+    const levelsExist = levels.data;
     commit(types.GET_SETTINGS, { key: 'vipLevels', setting: levelsExist });
     return levelsExist;
   });

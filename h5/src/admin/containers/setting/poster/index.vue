@@ -109,10 +109,10 @@
           customClass="poster-item-setting__section"
           v-show="radio === 'url'"
         >
-          <el-input 
+          <el-input
             size="mini"
-            v-model="copyModuleData.link.url" 
-            placeholder="例如 http://www.eduosho.com" 
+            v-model="copyModuleData.link.url"
+            placeholder="例如 http://www.eduosho.com"
             clearable>
         </el-input>
         </setting-cell>

@@ -58,14 +58,13 @@
       >
     </div>
 
-    <course-modal
+    <slideshow-link-modal
       slot="modal"
       :type="
         ['course_list', 'classroom_list'].includes(type) ? type : 'course_list'
       "
       :visible="modalVisible"
       :course-list="courseSets[activeItemIndex] || []"
-      limit="1"
       @visibleChange="modalVisibleHandler"
       @updateCourses="getUpdatedCourses"
     />
@@ -76,14 +75,14 @@
 import { MODULE_DEFAULT } from 'admin/config/module-default-config';
 import item from './item';
 import moduleFrame from '../module-frame';
-import courseModal from '../course/modal/course-modal';
+import slideshowLinkModal from '../course/modal/slideshow-link-modal.vue';
 import suggest from '&/components/e-suggest/e-suggest.vue';
 
 export default {
   components: {
     item,
     moduleFrame,
-    courseModal,
+    slideshowLinkModal,
     'e-suggest': suggest,
   },
   props: {
