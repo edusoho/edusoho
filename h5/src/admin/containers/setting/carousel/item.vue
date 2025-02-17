@@ -74,7 +74,7 @@
     </div>
 
     <div v-if="radio === 'insideLink'" class="add-inner">
-      <el-dropdown v-show="!linkTextShow">
+      <el-dropdown v-if="!linkTextShow">
         <el-button size="mini" class="el-dropdown-link">
           {{ $t('carousel.addLink') }}
         </el-button>
@@ -88,12 +88,11 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-tag
-        v-show="linkTextShow"
+        v-if="linkTextShow"
         :disable-transitions="true"
         closable
         @close="handleClose"
-        class="flex items-center"
-        style="max-width: 150px; width: fit-content;"
+        style="max-width: 150px; width: fit-content; display: flex; align-items: center;"
       >
         <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
           <span slot="content">{{ linkTextShow }}</span>

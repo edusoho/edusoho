@@ -3,7 +3,11 @@
     width="60%"
     :visible.sync="modalVisible"
     :before-close="beforeCloseHandler"
+    custom-class="slideshow-link-modal"
+    :modal-append-to-body="false"
     :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    top="5vh"
   >
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择{{ typeText }}</span>
@@ -19,11 +23,26 @@
         >创建活动</a
       >
     </div>
+    <div slot="footer" class="flex justify-center">
+      <el-button
+        class="text-14 btn-border-primary"
+        size="small"
+        @click="modalVisible = false"
+      >取 消</el-button
+      >
+      <el-button
+        class="text-14"
+        type="primary"
+        size="small"
+        @click="saveHandler"
+      >保 存</el-button
+      >
+    </div>
     <div class="course-modal__body">
       <div class="search__container flex items-center">
         <span class="search__label whitespace-nowrap">{{ typeText }}名称：</span>
-        <el-input v-model="keyWord" :placeholder="`请输入${typeText}名称`" style="width: 250px"></el-input>
-        <el-button class="ml-12" type="primary" @click="searchHandler">搜索</el-button>
+        <el-input v-model="keyWord" :placeholder="`请输入${typeText}名称`" style="width: 250px; margin-right: 12px" size="small"></el-input>
+        <el-button type="primary" @click="searchHandler" size="small">搜索</el-button>
       </div>
     </div>
     <div class="relative">
@@ -62,7 +81,7 @@
           label="操作"
         >
           <template slot-scope="scope">
-            <el-button type="text" @click="selectLink(scope.row)">选择</el-button>
+            <el-button type="text" size="small" @click="selectLink(scope.row)">选择</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -76,26 +95,11 @@
       </el-pagination>
     </div>
     <div class="flex items-center">
-      <div class="text-14 text-[#313131] h-40" style="line-height: 40px">已选{{ typeText }}：
+      <div class="text-14 text-[#313131] h-40 mr-12" style="line-height: 40px">已选{{ typeText }}：
         <span v-if="selectedCourseSet && type === 'course_list'">{{ selectedCourseSet.courseSetTitle }}</span>
         <span v-if="selectedCourseSet && type === 'classroom_list'">{{ selectedCourseSet.title }}</span>
       </div>
-      <el-button v-if="selectedCourseSet" type="text" class="ml-8" @click="clearLink">清除</el-button>
-    </div>
-    <div slot="footer" class="course-modal__footer dialog-footer flex justify-center">
-      <el-button
-        class="text-14 btn-border-primary"
-        size="small"
-        @click="modalVisible = false"
-        >取 消</el-button
-      >
-      <el-button
-        class="text-14"
-        type="primary"
-        size="small"
-        @click="saveHandler"
-        >保 存</el-button
-      >
+      <el-button v-if="selectedCourseSet" type="text" @click="clearLink">清除</el-button>
     </div>
   </el-dialog>
 </template>
@@ -145,9 +149,6 @@ export default {
     visible: {
       type: Boolean,
       default: false,
-    },
-    limit: {
-      default: '',
     },
     type: {
       type: String,
@@ -199,7 +200,6 @@ export default {
       this.keyWord = '';
       this.searchHandler();
       this.selectedCourseSet = this.courseList[0];
-
     },
   },
   methods: {
@@ -246,7 +246,29 @@ export default {
     },
     clearLink() {
       this.selectedCourseSet = null;
-    }
+    },
   },
 };
 </script>
+
+<style>
+  .slideshow-link-modal {
+    .el-dialog__header {
+      padding-bottom: 0;
+    }
+    .el-dialog__body {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .el-dialog__footer {
+      padding: 0 0 10px 0;
+    }
+  }
+  .el-overlay {
+    pointer-events: all !important;
+  }
+  .el-overlay + div {
+    pointer-events: none !important;
+  }
+
+</style>

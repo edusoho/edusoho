@@ -65,7 +65,6 @@
       "
       :visible="modalVisible"
       :course-list="courseSets[activeItemIndex] || []"
-      limit="1"
       @visibleChange="modalVisibleHandler"
       @updateCourses="getUpdatedCourses"
     />
