@@ -28,7 +28,7 @@
     </div>
     <div class="relative">
       <el-table
-        :data="courseSets"
+        :data="courseSetList"
         v-loading="loading"
         element-loading-spinner="el-icon-loading"
         element-loading-text="拼命加载中"
@@ -36,13 +36,19 @@
         class="mb-20"
       >
         <el-table-column
-          prop="courseSetTitle"
-          label="课程名称"
+          :prop="nameColumn.prop"
+          :label="nameColumn.label"
         >
         </el-table-column>
         <el-table-column
           prop="price"
           label="商品价格"
+        >
+        </el-table-column>
+        <el-table-column
+          v-if="type === 'classroom_list'"
+          prop="courseNum"
+          label="课程数量"
         >
         </el-table-column>
         <el-table-column
@@ -69,7 +75,13 @@
         :total="pagination.total">
       </el-pagination>
     </div>
-    <div class="text-14 text-[#313131]">已选{{ typeText }}：{{ selectedName }}</div>
+    <div class="flex items-center">
+      <div class="text-14 text-[#313131] h-40" style="line-height: 40px">已选{{ typeText }}：
+        <span v-if="selectedCourseSet && type === 'course_list'">{{ selectedCourseSet.courseSetTitle }}</span>
+        <span v-if="selectedCourseSet && type === 'classroom_list'">{{ selectedCourseSet.title }}</span>
+      </div>
+      <el-button v-if="selectedCourseSet" type="text" class="ml-8" @click="clearLink">清除</el-button>
+    </div>
     <div slot="footer" class="course-modal__footer dialog-footer flex justify-center">
       <el-button
         class="text-14 btn-border-primary"
@@ -97,7 +109,7 @@ import {
 } from 'admin/config/module-default-config';
 import { formatTime } from '@/utils/date-toolkit';
 
-function apiConfig(type, queryString, offset, limit) {
+function apiConfig(queryString, offset, limit) {
   return {
     classroom_list: {
       apiName: 'getClassList',
@@ -146,8 +158,8 @@ export default {
     return {
       tableKey: 0,
       keyWord: '',
-      courseSets: [],
-      courseListIds: [],
+      courseSetList: [],
+      selectedCourseSet: null,
       valueDefault: VALUE_DEFAULT,
       typeTextDefault: TYPE_TEXT_DEFAULT,
       loading: false,
@@ -156,7 +168,6 @@ export default {
         pageSize: 5,
         total: 0,
       },
-      selectedName: '',
     };
   },
   computed: {
@@ -174,32 +185,28 @@ export default {
     typeText() {
       return this.typeTextDefault[this.type].text;
     },
+    nameColumn() {
+      return this.type === 'course_list'
+        ? { prop: 'courseSetTitle', label: '课程名称' }
+        : { prop: 'title', label: '班级名称' };
+    }
   },
   watch: {
     visible(val) {
       if (!val) {
         return;
       }
-      // 重置 table 数据，重置 table 生命周期
-      // this.tableKey++;
-      // this.courseSets = this.courseList;
       this.keyWord = '';
-    },
-  },
-  created() {
+      this.searchHandler();
+      this.selectedCourseSet = this.courseList[0];
 
-  },
-  mounted() {
-    this.searchHandler();
+    },
   },
   methods: {
     formatTime,
     ...mapActions([
       'getCourseList',
       'getClassList',
-      'getMarketingList',
-      'getCouponList',
-      'getOpenCourseList',
     ]),
     beforeCloseHandler() {
       // todo
@@ -207,17 +214,18 @@ export default {
     },
     saveHandler() {
       this.modalVisible = false;
-      if (!this.courseSets.length) {
+      if (!this.selectedCourseSet) {
         return;
       }
-      this.$emit('updateCourses', this.courseSets);
+      const courseSets = [this.selectedCourseSet];
+      this.$emit('updateCourses', courseSets);
     },
     searchHandler() {
-      const apiConfigObj = apiConfig(this.type, this.keyWord, (this.pagination.current - 1) * this.pagination.pageSize, this.pagination.pageSize);
+      const apiConfigObj = apiConfig(this.keyWord, (this.pagination.current - 1) * this.pagination.pageSize, this.pagination.pageSize);
       this.loading = true;
       this[apiConfigObj[this.type].apiName](apiConfigObj[this.type].params)
         .then(res => {
-          this.courseSets = res.data;
+          this.courseSetList = res.data;
           this.pagination.total = res.paging.total;
         })
         .catch(err => {
@@ -234,9 +242,11 @@ export default {
       this.searchHandler();
     },
     selectLink(row) {
-      this.selectedName = row.courseSetTitle;
+      this.selectedCourseSet = row;
     },
+    clearLink() {
+      this.selectedCourseSet = null;
+    }
   },
-
 };
 </script>

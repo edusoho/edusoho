@@ -90,9 +90,10 @@
       <el-tag
         v-show="linkTextShow"
         :disable-transitions="true"
-        class="courseLink"
         closable
         @close="handleClose"
+        class="flex items-center"
+        style="max-width: 150px; width: fit-content;"
       >
         <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
           <span slot="content">{{ linkTextShow }}</span>
