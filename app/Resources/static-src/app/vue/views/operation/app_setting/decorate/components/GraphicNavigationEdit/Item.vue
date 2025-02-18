@@ -227,11 +227,15 @@ export default {
         const data = await Category.get({ query });
         this[mutationsKey](data);
       }
+      const defaultCategory = {
+        id: 0,
+        name: '全部',
+      };
 
       this.categoryInfo = {
         text,
         stateKey,
-        list: state[stateKey]
+        list: [defaultCategory, ...state[stateKey]]
       };
     },
 
