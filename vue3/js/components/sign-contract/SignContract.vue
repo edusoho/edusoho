@@ -346,6 +346,13 @@ const bgClass = computed(() => {
 .to-sign-contract-modal {
   .ant-modal-content {
     padding: 32px 32px 24px 32px;
+    .ant-modal-body {
+      padding: 0;
+    }
+    .ant-modal-footer {
+      padding: 0;
+      border: none;
+    }
   }
 }
 
