@@ -11,7 +11,7 @@ export const More = {
     return apiClient.get('/api/categories/course')
   },
   async searchCourse(params) {
-    return apiClient.get('/api/courses', { params })
+    return apiClient.get('/api/course_set', { params })
   },
   async searchClassroom(params) {
     return apiClient.get('/api/classrooms', { params })
