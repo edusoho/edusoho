@@ -5,6 +5,7 @@
 {% set siteNav = 'course/explore' %}
 
 {% do script(['libs/vue.js','app/js/course/explore/index.js']) %}
+{% do css(['app/css/main-vant.css']) %}
 
 {% block keywords %}
   {{ categoryArray.name|default('category.all_category'|trans) }}
