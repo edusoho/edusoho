@@ -188,4 +188,11 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
     {
         return $this->getByFields(['mediaId' => $mediaId, 'mediaType' => $mediaType]);
     }
+
+    public function findVideoActivityLevelsByCourseId($courseId)
+    {
+        $sql = "SELECT uf.convertMaxLevel FROM {$this->table} a, `activity_video` av, `upload_files` uf WHERE a.fromCourseId = ? AND a.mediaType = 'video' AND a.mediaId = av.id AND av.mediaId = uf.id;";
+
+        return $this->db()->fetchAll($sql, [$courseId]);
+    }
 }
