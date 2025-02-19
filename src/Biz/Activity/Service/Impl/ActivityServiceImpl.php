@@ -802,6 +802,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $orderedRecords;
     }
 
+    public function findVideoActivityLevelsByCourseId($courseId)
+    {
+        return $this->getActivityDao()->findVideoActivityLevelsByCourseId($courseId);
+    }
+
     /**
      * @return AnswerRecordService
      */
