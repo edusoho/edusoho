@@ -22,15 +22,15 @@
             <span v-if="Number(item.vipLevelId)" class="tag-vip-free"></span>
             <div class="course-img">
               <a :href="'/course/'+item.id" target="_blank">
-                <span v-if="item.courseSet.discountId > 0 && item.courseSet.discount == 0" class="tag-discount free"></span>
-                <span v-if="item.courseSet.discountId > 0 && item.courseSet.discount != 0" class="tag-discount"></span>
+                <span v-if="item.discountId > 0 && item.discount == 0" class="tag-discount free"></span>
+                <span v-if="item.discountId > 0 && item.discount != 0" class="tag-discount"></span>
                 <div v-if="isShowTag(item)" class="course-tag clearfix">
-                  <span v-if="item.courseSet.type == 'live'" class="pull-right">
+                  <span v-if="item.type == 'live'" class="pull-right">
                     <span class="cd-mr8">
                       {{ 'course.live'|trans }}<span class="course-tag__dot"></span>
                     </span>
                   </span>
-                  <span v-if="item.courseSet.type == 'reservation'" class="pull-right">
+                  <span v-if="item.type == 'reservation'" class="pull-right">
                     <span class="cd-mr8">
                       {{ 'course.appointment'|trans }}<span class="course-tag__dot"></span>
                     </span>
@@ -40,8 +40,8 @@
                 </div>
 
                 <img
-                  :src="item.courseSet.cover.large"
-                  :alt="item.courseSetTitle"
+                  :src="item.cover.large"
+                  :alt="item.title"
                   class="img-responsive"
                 />
               </a>
@@ -56,9 +56,9 @@
                   class="link-darker"
                   :href="'/course/'+item.id"
                   target="_blank"
-                  :title="item.courseSetTitle"
+                  :title="item.title"
                 >
-                  {{ item.courseSetTitle }}
+                  {{ item.title }}
                 </a>
               </div>
               <div class="metas clearfix">
@@ -71,8 +71,8 @@
                 </span>
 
                 <span class="course-price-widget">
-                  <span v-if="Number(item.price)" class="price"> {{ item.price }}{{ 'cny'|trans }} </span>
-                  <span v-else class="free">{{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
+                  <span v-if="Number(item.maxCoursePrice) === 0" class="free">{{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
+                  <span v-else class="price"> {{ item.maxCoursePrice }}{{ 'cny'|trans }} </span>
                 </span>
               </div>
             </div>
@@ -146,11 +146,11 @@ export default {
       this.vipSetting = data
     },
     isShowTag(item) {
-      if (item.courseSet.type == 'live') {
+      if (item.type == 'live') {
         return true
       }
 
-      if (item.courseSet.type == 'reservation') {
+      if (item.type == 'reservation') {
         return true
       }
 

@@ -68,6 +68,23 @@ class CourseSet extends AbstractResource
 
         $total = $this->getCourseSetService()->countCourseSets($conditions);
 
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        $courses = $this->getCourseService()->fillCourseTryLookVideo($courses);
+
+        $tryLookVideoCourses = array_filter($courses, function ($course) {
+            return !empty($course['tryLookVideo']);
+        });
+        $courses = ArrayToolkit::index($courses, 'courseSetId');
+        $tryLookVideoCourses = ArrayToolkit::index($tryLookVideoCourses, 'courseSetId');
+
+        array_walk($courseSets, function (&$courseSet) use ($courses, $tryLookVideoCourses) {
+            if (isset($tryLookVideoCourses[$courseSet['id']])) {
+                $courseSet['vipLevelId'] = $tryLookVideoCourses[$courseSet['id']]['vipLevelId'];
+            } else {
+                $courseSet['vipLevelId'] = $courses[$courseSet['id']]['vipLevelId'];
+            }
+        });
+
         return $this->makePagingObject($courseSets, $total, $offset, $limit);
     }
 
