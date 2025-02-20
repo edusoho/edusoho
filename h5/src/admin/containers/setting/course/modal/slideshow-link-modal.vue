@@ -123,7 +123,7 @@ function apiConfig(queryString, offset, limit) {
         title: queryString,
         offset: offset,
         limit: limit,
-        sort: 'createdTime',
+        sort: '-createdTime',
       },
     },
     course_list: {
@@ -132,7 +132,7 @@ function apiConfig(queryString, offset, limit) {
         courseSetTitle: queryString,
         offset: offset,
         limit: limit,
-        sort: 'createdTime',
+        sort: '-createdTime',
       },
     },
   };
