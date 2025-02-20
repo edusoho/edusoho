@@ -1,13 +1,13 @@
 <template>
   <el-dialog
-    width="60%"
+    width="80%"
     :visible.sync="modalVisible"
     :before-close="beforeCloseHandler"
     custom-class="slideshow-link-modal"
     :modal-append-to-body="false"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    top="5vh"
+    top="2vh"
   >
     <div class="course-modal__header" slot="title">
       <span class="header__title">选择{{ typeText }}</span>
@@ -42,7 +42,7 @@
       <div class="search__container flex items-center">
         <span class="search__label whitespace-nowrap">{{ typeText }}名称：</span>
         <el-input v-model="keyWord" :placeholder="`请输入${typeText}名称`" style="width: 250px; margin-right: 12px" size="small"></el-input>
-        <el-button type="primary" @click="searchHandler" size="small">搜索</el-button>
+        <el-button type="primary" @click="searchLink" size="small">搜索</el-button>
       </div>
     </div>
     <div class="relative">
@@ -55,9 +55,11 @@
         class="mb-20"
       >
         <el-table-column
-          :prop="nameColumn.prop"
           :label="nameColumn.label"
         >
+          <template slot-scope="scope">
+            <div class="text-nowrap truncate">{{ type === 'course_list' ? scope.row.courseSetTitle : scope.row.title }}</div>
+          </template>
         </el-table-column>
         <el-table-column
           prop="price"
@@ -74,7 +76,7 @@
           label="创建时间"
         >
           <template slot-scope="scope">
-            <div>{{ formatTime(new Date(scope.row.createdTime)) }}</div>
+            <div class="text-nowrap">{{ formatTime(new Date(scope.row.createdTime)) }}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -94,7 +96,7 @@
         :total="pagination.total">
       </el-pagination>
     </div>
-    <div class="flex items-center">
+    <div class="flex items-center mt-20">
       <div class="text-14 text-[#313131] h-40 mr-12" style="line-height: 40px">已选{{ typeText }}：
         <span v-if="selectedCourseSet && type === 'course_list'">{{ selectedCourseSet.courseSetTitle }}</span>
         <span v-if="selectedCourseSet && type === 'classroom_list'">{{ selectedCourseSet.title }}</span>
@@ -121,6 +123,7 @@ function apiConfig(queryString, offset, limit) {
         title: queryString,
         offset: offset,
         limit: limit,
+        sort: 'createdTime',
       },
     },
     course_list: {
@@ -129,6 +132,7 @@ function apiConfig(queryString, offset, limit) {
         courseSetTitle: queryString,
         offset: offset,
         limit: limit,
+        sort: 'createdTime',
       },
     },
   };
@@ -187,9 +191,7 @@ export default {
       return this.typeTextDefault[this.type].text;
     },
     nameColumn() {
-      return this.type === 'course_list'
-        ? { prop: 'courseSetTitle', label: '课程名称' }
-        : { prop: 'title', label: '班级名称' };
+      return this.type === 'course_list' ? { label: '课程名称' } : { label: '班级名称' };
     }
   },
   watch: {
@@ -236,6 +238,10 @@ export default {
         }).finally(() => {
           this.loading = false;
       });
+    },
+    searchLink() {
+      this.pagination.current = 1;
+      this.searchHandler();
     },
     handleCurrentChange(val) {
       this.pagination.current = val;
