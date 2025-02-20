@@ -10,7 +10,7 @@ export const More = {
   async getCourseCategories() {
     return apiClient.get('/api/categories/course')
   },
-  async searchCourse(params) {
+  async searchCourseSet(params) {
     return apiClient.get('/api/course_set', { params })
   },
   async searchClassroom(params) {
