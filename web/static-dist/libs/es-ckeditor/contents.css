@@ -131,6 +131,10 @@ figure > figcaption
 	display: block; /* For IE8 */
 }
 
+.cke_image_nocaption {
+	max-width: 100%;
+}
+
 a > img {
 	padding: 1px;
 	margin: 1px;

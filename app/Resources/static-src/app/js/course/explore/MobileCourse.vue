@@ -26,13 +26,13 @@
                 <span v-if="item.discountId > 0 && item.discount != 0" class="tag-discount"></span>
                 <div v-if="isShowTag(item)" class="course-tag clearfix">
                   <span v-if="item.type == 'live'" class="pull-right">
-                    <span class="cd-mr8">
-                      {{ 'course.live'|trans }}<span class="course-tag__dot"></span>
+                    <span>
+                      <span class="course-tag__dot"></span>{{ 'course.live'|trans }}
                     </span>
                   </span>
                   <span v-if="item.type == 'reservation'" class="pull-right">
-                    <span class="cd-mr8">
-                      {{ 'course.appointment'|trans }}<span class="course-tag__dot"></span>
+                    <span>
+                      <span class="course-tag__dot"></span>{{ 'course.appointment'|trans }}
                     </span>
                   </span>
                   <span v-if="item.tryLookable == '1'"><i class="es-icon es-icon-video color-white"></i>{{ 'course.try.look'|trans }}</span>
@@ -128,9 +128,7 @@ export default {
     }
   },
   async created() {
-
     await this.getVipSetting();
-
     await this.getLevelInfo();
 
     // 初始化课程分类
@@ -138,7 +136,6 @@ export default {
 
     // 初始化下拉筛选数据
     this.initDropdownData();
-
   },
   methods: {
     async getVipSetting() {
@@ -203,12 +200,11 @@ export default {
         query.vipLevelId = $('[name="vipLevelId"]').val()
       }
 
-      const { data, paging } = await More.searchCourse(query)
+      const { data, paging } = await More.searchCourseSet(query)
       this.courseList = data
       this.total = paging.total
 
       this.pageNum = Number($('[name="page"]').val())
-      console.log(data);
     },
     async getLevelInfo() {
       if (!this.vipSetting.enabled) {
@@ -225,6 +221,7 @@ export default {
         value: "0",
         data: res,
       });
+
       const categoryId = $('[name="categoryId"]').val();
 
       if (categoryId && categoryId !== '0') {
