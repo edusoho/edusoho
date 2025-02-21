@@ -25,7 +25,7 @@ class CdnSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $cdn = $request->request->all();
             $this->getSettingService()->set('cdn', $cdn);
-            $this->getLogService()->info('system', 'update_settings', 'CDN设置', $cdn);
+            $this->getLogService()->info('system', 'update_settings', '后台设置CDN', $cdn);
             $this->addCdnUrlsToSecurity($cdn);
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -49,15 +49,10 @@ class CdnSettingController extends BaseController
         }, array_values($cdn));
 
         $security = $this->getSettingService()->get('security', []);
-        if (is_null($security['safe_iframe_domains'])) {
-            $security['safe_iframe_domains'] = [];
-        }
+        $safeIframeDomains = empty($security['safe_iframe_domains']) ? [] : $security['safe_iframe_domains'];
+        $safeIframeDomains = array_filter(array_unique(array_merge($safeIframeDomains, $cdn)));
 
-        $security['safe_iframe_domains'] = array_merge($security['safe_iframe_domains'], $cdn);
-        $security['safe_iframe_domains'] = array_filter(array_unique($security['safe_iframe_domains']));
-
-        $this->getSettingService()->set('security', $security);
-        $this->getCacheService()->set('safe_iframe_domains', $security['safe_iframe_domains']);
+        $this->getCacheService()->set('safe_iframe_domains', $safeIframeDomains);
         $this->getLogService()->info('system', 'update_settings', '域名白名单添加cdn域名', $cdn);
     }
 
