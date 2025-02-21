@@ -1,6 +1,6 @@
 <template>
   <answer-model
-    :question="formateQuestion"
+    :question="formatQuestion"
     :questionFavoritesItem="questionFavoritesItem"
     :needScore="needScore"
     :mode="mode"
@@ -153,7 +153,8 @@ export default {
       isErrorCorrection: false,
       isErrorCorrectionBtn: false,
       correctionAnwer: [],
-      correctionRequired: []
+      correctionRequired: [],
+      formatQuestion: this.question,
     };
   },
   components: { answerModel },
@@ -229,12 +230,6 @@ export default {
     },
   },
   computed: {
-    formateQuestion() {
-      let questions = JSON.parse(JSON.stringify(this.question));
-      questions.stem = this.filterFillHtml(questions.stem);
-      questions.answer = this.filterFillAnswer(questions.answer);
-      return questions;
-    },
     countNumList() {
       if (this.analysisQuestionInfo.response_points_report) {
         return this.analysisQuestionInfo.response_points_report || [];
@@ -254,6 +249,8 @@ export default {
       this.getFinalAnswer();
       this.initCorrectionAnwer();
     }
+    this.formatQuestion.stem = this.filterFillHtml(this.formatQuestion.stem);
+    this.formatQuestion.answer = this.filterFillAnswer(this.formatQuestion.answer);
   },
   methods: {
     filterFillHtml(text) {

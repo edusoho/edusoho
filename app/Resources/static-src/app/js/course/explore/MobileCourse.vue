@@ -22,17 +22,17 @@
             <span v-if="Number(item.vipLevelId)" class="tag-vip-free"></span>
             <div class="course-img">
               <a :href="'/course/'+item.id" target="_blank">
-                <span v-if="item.courseSet.discountId > 0 && item.courseSet.discount == 0" class="tag-discount free"></span>
-                <span v-if="item.courseSet.discountId > 0 && item.courseSet.discount != 0" class="tag-discount"></span>
+                <span v-if="item.discountId > 0 && item.discount == 0" class="tag-discount free"></span>
+                <span v-if="item.discountId > 0 && item.discount != 0" class="tag-discount"></span>
                 <div v-if="isShowTag(item)" class="course-tag clearfix">
-                  <span v-if="item.courseSet.type == 'live'" class="pull-right">
-                    <span class="cd-mr8">
-                      {{ 'course.live'|trans }}<span class="course-tag__dot"></span>
+                  <span v-if="item.type == 'live'" class="pull-right">
+                    <span>
+                      <span class="course-tag__dot"></span>{{ 'course.live'|trans }}
                     </span>
                   </span>
-                  <span v-if="item.courseSet.type == 'reservation'" class="pull-right">
-                    <span class="cd-mr8">
-                      {{ 'course.appointment'|trans }}<span class="course-tag__dot"></span>
+                  <span v-if="item.type == 'reservation'" class="pull-right">
+                    <span>
+                      <span class="course-tag__dot"></span>{{ 'course.appointment'|trans }}
                     </span>
                   </span>
                   <span v-if="item.tryLookable == '1'"><i class="es-icon es-icon-video color-white"></i>{{ 'course.try.look'|trans }}</span>
@@ -40,8 +40,8 @@
                 </div>
 
                 <img
-                  :src="item.courseSet.cover.large"
-                  :alt="item.courseSetTitle"
+                  :src="item.cover.large"
+                  :alt="item.title"
                   class="img-responsive"
                 />
               </a>
@@ -56,9 +56,9 @@
                   class="link-darker"
                   :href="'/course/'+item.id"
                   target="_blank"
-                  :title="item.courseSetTitle"
+                  :title="item.title"
                 >
-                  {{ item.courseSetTitle }}
+                  {{ item.title }}
                 </a>
               </div>
               <div class="metas clearfix">
@@ -71,8 +71,8 @@
                 </span>
 
                 <span class="course-price-widget">
-                  <span v-if="Number(item.price)" class="price"> {{ item.price }}{{ 'cny'|trans }} </span>
-                  <span v-else class="free">{{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
+                  <span v-if="Number(item.maxCoursePrice) === 0" class="free">{{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
+                  <span v-else class="price"> {{ item.maxCoursePrice }}{{ 'cny'|trans }} </span>
                 </span>
               </div>
             </div>
@@ -128,9 +128,7 @@ export default {
     }
   },
   async created() {
-
     await this.getVipSetting();
-
     await this.getLevelInfo();
 
     // 初始化课程分类
@@ -138,11 +136,6 @@ export default {
 
     // 初始化下拉筛选数据
     this.initDropdownData();
-
-  },
-  watch: {
-  },
-  computed: {
   },
   methods: {
     async getVipSetting() {
@@ -150,11 +143,11 @@ export default {
       this.vipSetting = data
     },
     isShowTag(item) {
-      if (item.courseSet.type == 'live') {
+      if (item.type == 'live') {
         return true
       }
 
-      if (item.courseSet.type == 'reservation') {
+      if (item.type == 'reservation') {
         return true
       }
 
@@ -207,12 +200,11 @@ export default {
         query.vipLevelId = $('[name="vipLevelId"]').val()
       }
 
-      const { data, paging } = await More.searchCourse(query)
+      const { data, paging } = await More.searchCourseSet(query)
       this.courseList = data
       this.total = paging.total
 
       this.pageNum = Number($('[name="page"]').val())
-      console.log(data);
     },
     async getLevelInfo() {
       if (!this.vipSetting.enabled) {
@@ -229,6 +221,7 @@ export default {
         value: "0",
         data: res,
       });
+
       const categoryId = $('[name="categoryId"]').val();
 
       if (categoryId && categoryId !== '0') {

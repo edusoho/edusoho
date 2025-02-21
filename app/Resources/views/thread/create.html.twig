@@ -4,7 +4,7 @@
 {% set isUpdate = thread ? 1 : 0 %}
 
 {% include 'thread/part/thread-crumbs.html.twig' with {target:target, thread:thread,type:type, isUpdate:isUpdate} %}
-
+{% include 'common/anti-brush-captcha.html.twig' %}
 <form id="thread-form" class="form-vertical {% if type == 'event' %}form-horizontal{% endif %}" method="post"
   {% if thread %}
     action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
@@ -99,10 +99,10 @@
   
   <div class="clearfix">
     {% if thread %}
-      <button type="submit" class="btn btn-primary pull-right" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+      <button type="submit" class="btn btn-primary pull-right js-btn-thread-save" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
       <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link pull-right color-gray">{{'form.btn.cancel'|trans}}</a>
     {% else %}
-      <button type="submit" class="btn btn-primary pull-right" data-loading-text="{{'form.btn.submit.submiting'|trans}}">
+      <button type="submit" class="btn btn-primary pull-right js-btn-thread-save" data-loading-text="{{'form.btn.submit.submiting'|trans}}">
         {{'classroom.thread.create.publish_btn'|trans}}
       </button>
       <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link pull-right color-gray">{{'form.btn.cancel'|trans}}</a>

@@ -346,6 +346,13 @@ const bgClass = computed(() => {
 .to-sign-contract-modal {
   .ant-modal-content {
     padding: 32px 32px 24px 32px;
+    .ant-modal-body {
+      padding: 0;
+    }
+    .ant-modal-footer {
+      padding: 0;
+      border: none;
+    }
   }
 }
 
@@ -355,11 +362,16 @@ const bgClass = computed(() => {
   }
   .ant-modal-header {
     margin-bottom: 0;
+    padding: 0;
+    border: none;
   }
   .ant-modal-footer {
     margin-top: 0;
+    padding: 0;
+    border: none;
   }
   .ant-modal-body {
+    padding: 0;
     .ant-form-item-label {
       .ant-form-item-required {
         color: #626973;
@@ -393,6 +405,8 @@ const bgClass = computed(() => {
       }
       .ant-modal-header {
         margin-bottom: 0;
+        padding: 0;
+        border: none;
       }
     }
   }
@@ -402,5 +416,10 @@ const bgClass = computed(() => {
   img {
     max-width: 100% !important;
   }
+}
+
+.ant-message {
+  left: 50%;
+  transform: translateX(-50%)
 }
 </style>
