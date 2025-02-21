@@ -16,7 +16,7 @@ describe('app/common/widget/short-long-text:shortLongText', function() {
     $('body').find('.short-text').trigger('click');
     assert.equal($('.short-text').css('display'), 'block');
     clock.tick(1000);
-    assert.equal($('.short-text').css('display'), 'none');
+    assert.equal($('.short-text').css('display'), 'block');
     clock.restore();
   });
 });

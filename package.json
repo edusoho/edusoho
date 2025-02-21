@@ -123,9 +123,9 @@
     "serve": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
     "build": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
     "clean": "rm -rf node_modules",
-    "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
+    "test": "mocha --recursive --reporter mochawesome --require @babel/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
     "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",
-    "test:simple": "mocha --recursive --require babel-core/register --reporter dot",
+    "test:simple": "mocha --recursive --require @babel/register --reporter dot",
     "commitmsg": "es-commit-msg-validator"
   },
   "volta": {
