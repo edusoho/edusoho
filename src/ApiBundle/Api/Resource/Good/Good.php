@@ -68,7 +68,7 @@ class Good extends AbstractResource
             $target = $this->getClassroomService()->getClassroom($product['targetId']);
         }
 
-        return !empty($target) && 'unpublished' == $target['status'] ? $target : '';
+        return !empty($target) && in_array($target['status'], ['unpublished', 'closed']) ? $target : '';
     }
 
     private function collectGoodsExtensions($product)
