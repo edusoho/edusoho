@@ -50,7 +50,7 @@ class DumpInitDataCommand extends BaseCommand
         $time = time();
 
         $command = "ssh -l root {$host} -p {$port} \
-        'mysqldump -u{$user} -p {$database} \
+        'mysqldump -u{$user} -p{$password} {$database} \
         --no-create-info --complete-insert \
         --skip-comments --extended-insert \
         --skip-add-locks --ignore-table={$database}.cache \
@@ -77,7 +77,7 @@ class DumpInitDataCommand extends BaseCommand
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $command = "ssh -l root {$host} -p {$port} \"mysqldump -u{$user} -p -d {$database} --compact --add-drop-table | sed 's/ AUTO_INCREMENT=[0-9]*//g' > edusoho_structure.{$time}.sql\"";
+        $command = "ssh -l root {$host} -p {$port} \"mysqldump -u{$user} -p{$password} -d {$database} --compact --add-drop-table | sed 's/ AUTO_INCREMENT=[0-9]*//g' > edusoho_structure.{$time}.sql\"";
 
         $output->writeln("<info>{$command}</info>");
         exec($command);

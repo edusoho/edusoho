@@ -63,7 +63,6 @@ class BuildCommand extends BaseCommand
         $this->buildBootstrapDirectory();
         $this->buildSrcDirectory();
         $this->buildVendorDirectory();
-        $this->buildVendorUserDirectory();
         $this->buildWebDirectory();
         $this->buildPluginsDirectory();
         $this->buildDefaultBlocks();
@@ -284,12 +283,6 @@ class BuildCommand extends BaseCommand
         $command->run($input, $this->output);
     }
 
-    public function buildVendorUserDirectory()
-    {
-        $this->output->writeln('build vendor_user/ .');
-        $this->filesystem->mirror("{$this->rootDirectory}/vendor_user", "{$this->distDirectory}/vendor_user");
-    }
-
     public function buildWebDirectory()
     {
         $this->output->writeln('build web/ .');
@@ -316,6 +309,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");
         $this->filesystem->copy("{$this->rootDirectory}/web/app_dev.php", "{$this->distDirectory}/web/app_dev.php");
         $this->filesystem->copy("{$this->rootDirectory}/web/favicon.ico", "{$this->distDirectory}/web/favicon.ico");
+        $this->filesystem->copy("{$this->rootDirectory}/web/favicon-default.ico", "{$this->distDirectory}/web/favicon-default.ico");
         $this->filesystem->copy("{$this->rootDirectory}/web/robots.txt", "{$this->distDirectory}/web/robots.txt");
         $this->filesystem->copy("{$this->rootDirectory}/web/crossdomain.xml", "{$this->distDirectory}/web/crossdomain.xml");
 
