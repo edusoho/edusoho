@@ -154,7 +154,7 @@ export default {
       isErrorCorrectionBtn: false,
       correctionAnwer: [],
       correctionRequired: [],
-      formatQuestion: this.question,
+      formatQuestion: JSON.parse(JSON.stringify(this.question)),
     };
   },
   components: { answerModel },
