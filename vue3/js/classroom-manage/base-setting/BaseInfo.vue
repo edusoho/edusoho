@@ -172,8 +172,8 @@ const saveCropperCover = async () => {
   params.append('imgs[large][]', 270);
   params.append('imgs[middle][]', 304);
   params.append('imgs[middle][]', 171);
-  params.append('imgs[small][]', 96);
-  params.append('imgs[small][]', 54);
+  params.append('imgs[small][]', 219);
+  params.append('imgs[small][]', 124);
   params.append('x', Math.round(cropperData.x));
   params.append('y', Math.round(cropperData.y));
   params.append('x2', Math.round(cropperData.x) + Math.round(cropperData.width));
