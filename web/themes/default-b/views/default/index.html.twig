@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% set bodyClass = 'homepage' %}
-{% do script(['libs/echo-js.js','libs/jquery-cycle2.js','defaulttheme/js/default/index.js']) %}
+{% do script(['libs/echo-js.js','libs/jquery-cycle2.js','defaultbtheme/js/default/index.js']) %}
 
 {% set consultDisplay = true %}
 
@@ -9,7 +9,7 @@
 
   <div class="es-row-wrap">
 
-    <div class="homepage-feature homepage-feature-slides ">
+    <div class="homepage-feature homepage-feature-slides mbl">
       <div class="cycle-pager"></div>
       {{ block_show('default-b:home_top_banner') }}
     </div>
