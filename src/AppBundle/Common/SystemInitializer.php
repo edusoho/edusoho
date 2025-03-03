@@ -630,6 +630,7 @@ EOD;
         $metaFiles = [
             'system' => "{$themeDir}/block.json",
             'default' => "{$themeDir}/default/block.json",
+            'default-b' => "{$themeDir}/default-b/block.json",
             'autumn' => "{$themeDir}/autumn/block.json",
             'jianmo' => "{$themeDir}/jianmo/block.json",
         ];
