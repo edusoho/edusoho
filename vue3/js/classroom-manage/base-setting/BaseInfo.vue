@@ -168,10 +168,10 @@ const saveCropperCover = async () => {
   cropperModalVisible.value = false;
 
   const params = new URLSearchParams();
-  params.append('imgs[large][]', 480);
-  params.append('imgs[large][]', 270);
-  params.append('imgs[middle][]', 304);
-  params.append('imgs[middle][]', 171);
+  params.append('imgs[large][]', 540);
+  params.append('imgs[large][]', 304);
+  params.append('imgs[middle][]', 354);
+  params.append('imgs[middle][]', 200);
   params.append('imgs[small][]', 219);
   params.append('imgs[small][]', 124);
   params.append('x', Math.round(cropperData.x));
