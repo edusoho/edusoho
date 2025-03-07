@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
-use Biz\StudyPlan\Factory\ActivityHandlerFactory;
+use Biz\StudyPlan\Factory\CalculationStrategyFactory;
 use Biz\StudyPlan\Service\StudyPlanService;
 use Biz\Task\Service\TaskResultService;
 
@@ -28,14 +28,17 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             $conditions,
             [],
             0,
-            PHP_INT_MAX
+            PHP_INT_MAX['id']
         );
+        $activities = $this->getActivityService()->findActivities(array_column($activities, 'id'), true);
         $activitiesGroups = ArrayToolkit::group($activities, 'mediaType');
         $totalTime = 0;
         foreach ($activitiesGroups as $mediaType => $group) {
             try {
-                $handler = ActivityHandlerFactory::createHandler($mediaType);
-                $totalTime += $handler->handle($group);
+                foreach ($group as $activity) {
+                    $calculationFactory = CalculationStrategyFactory::create($activity);
+                    $totalTime += $calculationFactory->calculateTime($activity);
+                }
             } catch (\InvalidArgumentException $e) {
                 // 处理未知类型或记录日志
             }
