@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -121,7 +120,7 @@ class BuildCommand extends BaseCommand
             'projectPath' => $this->input->getArgument('projectPath'),
         ]);
 
-        $returnCode = $dumpCommand->run($input, $this->output);
+        $dumpCommand->run($input, $this->output);
 
         $this->output->writeln('cut database file');
         $cutCommand = $this->getApplication()->find('topxia:cutfile');
@@ -131,18 +130,7 @@ class BuildCommand extends BaseCommand
             'line' => 15,
         ]);
 
-        $returnCode = $cutCommand->run($input, $this->output);
-
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion(
-            '请确认已经将演示数据sql中的cloud_access_key和cloud_secret_key修改为12345（值前面表示字符串长度的数字s:5也要改) Y/N:',
-            false
-        );
-
-        if (!$helper->ask($this->input, $this->output, $question)) {
-            $this->output->writeln('<error>制作安装包终止!</error>');
-            exit();
-        }
+        $cutCommand->run($input, $this->output);
     }
 
     private function _zipPackage()
