@@ -4,5 +4,5 @@ namespace Biz\StudyPlan\Service;
 
 interface StudyPlanService
 {
-    public function generate($startTime, $endTime);
+    public function generate($startTime, $endTime, $courseId);
 }

@@ -12,9 +12,10 @@ use Biz\Task\Service\TaskResultService;
 
 class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 {
-    public function generate($startTime, $endTime)
+    public function generate($startTime, $endTime, $courseId)
     {
-        // TODO: Implement generate() method.
+        $totalTime = $this->getActivityNotLearnTotalTime($courseId);
+
     }
 
     protected function getActivityNotLearnTotalTime($courseId)
@@ -36,8 +37,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         foreach ($activitiesGroups as $mediaType => $group) {
             try {
                 foreach ($group as $activity) {
-                    $calculationFactory = CalculationStrategyFactory::create($activity);
-                    $totalTime += $calculationFactory->calculateTime($activity);
+                    $totalTime += CalculationStrategyFactory::create($activity)->calculateTime($activity);
                 }
             } catch (\InvalidArgumentException $e) {
                 // 处理未知类型或记录日志
