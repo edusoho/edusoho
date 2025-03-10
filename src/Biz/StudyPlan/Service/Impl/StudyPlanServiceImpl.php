@@ -2,31 +2,44 @@
 
 namespace Biz\StudyPlan\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
 use Biz\StudyPlan\Factory\CalculationStrategyFactory;
 use Biz\StudyPlan\Service\StudyPlanService;
 use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 
 class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 {
     public function generate($startTime, $endTime, $studyDays, $courseId)
     {
-        list($notLearnTaskCount, $notLearnTotalTime) = $this->getActivityNotLearnTotalTime($courseId);
-//        $timePerTask = ceil($notLearnTotalTime / $notLearnTaskCount);
-        $totalStudyDay = $this->getTotalStudyDay($startTime, $endTime, $studyDays);
-        $learnPerDay = ceil($notLearnTaskCount / $totalStudyDay);
+        $activities = $this->getActivityLearnTime($courseId);
+        // 获取学习全部任务时间
+        $totalStudyTime = array_sum(array_column($activities, 'learnTime'));
+        // 计算全部可学习天数
         $learnTotalDay = $this->getLearnTotalDay($startTime, $endTime, $studyDays);
-        // 获取每天学多长时间
-        $notLearnTotalTime / $learnTotalDay;
+        // 计算每天学多长时间
+        $learnTimePerDay = ceil($totalStudyTime / $learnTotalDay);
         // 每天学习时长 / 每天每个任务学习时长 = 每天学习几个任务
+        $waitLearnTasks = $this->getTaskService()->searchTasks(['' => ''], [], 0, PHP_INT_MAX);
+        // 构建 activityId => learnTime 的映射
+        $activityMap = [];
+        foreach ($activities as $activity) {
+            $activityMap[$activity['id']] = $activity['learnTime'];
+        }
 
+        // 填充 learnTime 到任务中
+        foreach ($waitLearnTasks as &$task) {
+            $activityId = $task['activityId'];
+            $task['learnTime'] = $activityMap[$activityId] ?? 0; // 处理未找到的情况
+        }
+        unset($task); // 重要：清除引用
         //获取所有没学的任务，创建学习记录，
+        $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
     }
 
-    protected function getActivityNotLearnTotalTime($courseId)
+    protected function getActivityLearnTime($courseId)
     {
         $taskResults = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
         $conditions = ['fromCourseId' => $courseId];
@@ -40,22 +53,14 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             PHP_INT_MAX['id']
         );
         $activities = $this->getActivityService()->findActivities(array_column($activities, 'id'), true);
-        $activitiesGroups = ArrayToolkit::group($activities, 'mediaType');
-        $totalTime = 0;
-        foreach ($activitiesGroups as $mediaType => $group) {
-            try {
-                foreach ($group as $activity) {
-                    $totalTime += CalculationStrategyFactory::create($activity)->calculateTime($activity);
-                }
-            } catch (\InvalidArgumentException $e) {
-                // 处理未知类型或记录日志
-            }
+        foreach ($activities as &$activity) {
+            $activity['learnTime'] = CalculationStrategyFactory::create($activity)->calculateTime($activity);
         }
 
-        return [count($activities), $totalTime];
+        return $activities;
     }
 
-    public function getLearnTotalDay($startTime, $endTime, $studyDays, $courseId)
+    public function getLearnTotalDay($startTime, $endTime, $studyDays)
     {
         $utcTimezone = new \DateTimeZone('UTC');
 
@@ -92,6 +97,54 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         return $totalDays;
     }
 
+    protected function generateStudyPlan(int $dailyTime, array $tasks): array
+    {
+        // 检查任务时间是否合法
+        foreach ($tasks as $task) {
+            if ($task['time'] > $dailyTime) {
+                throw new InvalidArgumentException("任务 {$task['id']} 时间超过每日上限");
+            }
+        }
+
+        // 按任务时间降序排序（关键优化）
+        usort($tasks, function ($a, $b) {
+            return $b['time'] <=> $a['time'];
+        });
+
+        $days = [];
+        foreach ($tasks as $task) {
+            $allocated = false;
+
+            // 尝试将任务放入已有的天数
+            foreach ($days as &$day) {
+                if ($day['remaining'] >= $task['time']) {
+                    $day['tasks'][] = [
+                        'id' => $task['id'],
+                        'time' => $task['time'],
+                    ];
+                    $day['remaining'] -= $task['time'];
+                    $allocated = true;
+                    break;
+                }
+            }
+
+            // 无法放入则创建新天数
+            if (!$allocated) {
+                $days[] = [
+                    'tasks' => [
+                        [
+                            'id' => $task['id'],
+                            'time' => $task['time'],
+                        ],
+                    ],
+                    'remaining' => $dailyTime - $task['time'],
+                ];
+            }
+        }
+
+        return $days;
+    }
+
     /**
      * @return CourseService
      */
@@ -114,5 +167,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Biz\StudyPlan\Factory;
 
+use Biz\StudyPlan\Strategy\Impl\DefaultStrategy;
 use Biz\StudyPlan\Strategy\Impl\FinishTimeTypeStrategy;
 use Biz\StudyPlan\Strategy\Impl\MediaTypeStrategy;
 use Biz\StudyPlan\Strategy\Impl\PptTypeStrategy;
@@ -32,7 +33,7 @@ class CalculationStrategyFactory
             case 'testpaper':
                 return new TestpaperStrategy();
             default:
-                throw new \InvalidArgumentException('Unsupported activity type: '.($mediaType ?? 'undefined'));
+                return new DefaultStrategy();
         }
     }
 }
