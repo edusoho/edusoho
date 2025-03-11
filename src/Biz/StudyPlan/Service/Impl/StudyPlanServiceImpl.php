@@ -35,8 +35,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             $task['learnTime'] = $activityMap[$activityId] ?? 0; // 处理未找到的情况
         }
         unset($task); // 重要：清除引用
-        //获取所有没学的任务，创建学习记录，
-        $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
+        $studyPlan = $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
     }
 
     protected function getActivityLearnTime($courseId)

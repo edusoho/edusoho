@@ -38,6 +38,15 @@ class InitStudyPlan extends Migration
               KEY `idx_plan_id` (`plan_id`),
               KEY `idx_study_date` (`study_date`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习计划每日任务详情表';
+            CREATE TABLE `ai_study_config` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                `is_active` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AI伴学服务开启状态 0-关闭 1-开启',
+                `major_id` varchar(32) NOT NULL COMMENT '用户选择的专业类型',
+                `plan_deadline` INT(10) unsigned NOT NULL COMMENT '学习计划截止时间',
+                `is_diagnosis_active` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AI知识点诊断开关 0-关闭 1-开启',
+                `created_time` INT(10) unsigned NOT NULL DEFAULT '0',
+                `updated_time` INT(10) unsigned NOT NULL DEFAULT '0',
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI伴学服务配置表';
         ");
     }
 
@@ -50,6 +59,7 @@ class InitStudyPlan extends Migration
         $biz['db']->exec('
             DROP TABLE IF EXISTS `study_plan`;
             DROP TABLE IF EXISTS `study_plan_detail`;
+            DROP TABLE IF EXISTS `ai_study_config`;
         ');
     }
 }
