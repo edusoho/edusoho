@@ -14,9 +14,9 @@ use Biz\Course\Service\MemberService;
 
 class StudyPlan extends AbstractResource
 {
-    public function add(ApiRequest $request) {
+    public function add(ApiRequest $request)
+    {
         $params = $request->request->all();
-        file_put_contents("/tmp/jc123", '1111111', 8);
         $errors = [];
 
         if (!ArrayToolkit::requireds($params, ['startDate', 'endDate', 'weekDays', 'courseId'])) {
@@ -24,10 +24,10 @@ class StudyPlan extends AbstractResource
         }
         foreach ($params['weekDays'] as $index => $day) {
             $dayInt = filter_var($day, FILTER_VALIDATE_INT);
-            if ($dayInt === false) {
-                $errors['weekDays'][$index] = "Must be an integer.";
+            if (false === $dayInt) {
+                $errors['weekDays'][$index] = 'Must be an integer.';
             } elseif ($dayInt < 1 || $dayInt > 7) {
-                $errors['weekDays'][$index] = "Must be between 1 and 7.";
+                $errors['weekDays'][$index] = 'Must be between 1 and 7.';
             }
         }
 
@@ -36,7 +36,7 @@ class StudyPlan extends AbstractResource
             $errors['courseId'] = 'Course ID is required.';
         }
         $course = $this->getCourseService()->getCourse($params['courseId']);
-        if (empty($course) || $course['status'] !== 'published' || $course['canLearn'] != 1) {
+        if (empty($course) || 'published' !== $course['status'] || 1 != $course['canLearn']) {
             throw CourseException::FORBIDDEN_LEARN_COURSE();
         }
         $courseMember = $this->getCourseMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
@@ -60,7 +60,7 @@ class StudyPlan extends AbstractResource
      */
     private function getStudyPlanService()
     {
-        return $this->service('StudyPlan:StudyPlanService');
+        return $this->service('AgentBundle:StudyPlan:StudyPlanService');
     }
 
     /**

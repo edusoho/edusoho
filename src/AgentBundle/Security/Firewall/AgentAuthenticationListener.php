@@ -10,16 +10,15 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AgentAuthenticationListener extends BaseAuthenticationListener
 {
-    const MALL_TOKEN_HEADER = 'Mall-Auth-Token';
+    const AGENT_HEADER = 'Authentication';
 
     public function handle(Request $request)
     {
-        file_put_contents("/tmp/jc123", '22222222', 8);
-        if (null === $tokenInHeader = $request->headers->get(self::MALL_TOKEN_HEADER)) {
+        if (null === $tokenInHeader = $request->headers->get(self::AGENT_HEADER)) {
             return;
         }
         $mallSettings = $this->getSettingService()->get('marketing_mall', []);
-        $storages = $this->getSettingService()->get('storages', []);
+        $storages = $this->getSettingService()->get('storage', []);
         try {
             if (empty($mallSettings['secret_key'])) {
                 $result = JWT::decode($tokenInHeader, $storages['cloud_secret_key'], ['HS256']);
