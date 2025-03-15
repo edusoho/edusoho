@@ -6,7 +6,7 @@ interface StudyPlanService
 {
     public function enable($aiStudyConfig);
 
-    public function disable($aiStudyConfig);
+    public function disable($courseId);
 
     public function generate($startTime, $endTime, $studyDays, $courseId);
 }

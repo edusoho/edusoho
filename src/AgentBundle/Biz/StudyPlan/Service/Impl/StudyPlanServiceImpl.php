@@ -16,11 +16,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 {
     public function enable($aiStudyConfig)
     {
+        $aiStudyConfig['isActive'] = 1;
         $this->getAiStudyConfigDao()->create($aiStudyConfig);
     }
 
-    public function disable($aiStudyConfig)
+    public function disable($courseId)
     {
+        $this->getAiStudyConfigDao()->update($courseId, ['isActive' => 0]);
     }
 
     public function generate($startTime, $endTime, $weekDays, $courseId)

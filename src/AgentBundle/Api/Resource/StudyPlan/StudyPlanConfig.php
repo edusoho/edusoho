@@ -11,7 +11,17 @@ class StudyPlanConfig extends AbstractResource
     public function add(ApiRequest $request, $operate)
     {
         $params = $request->request->all();
+        $this->$operate($params);
+    }
+
+    private function enable($params)
+    {
         $this->getStudyPlanService()->enable($params);
+    }
+
+    private function disable($courseId)
+    {
+        $this->getStudyPlanService()->disable($courseId);
     }
 
     /**
