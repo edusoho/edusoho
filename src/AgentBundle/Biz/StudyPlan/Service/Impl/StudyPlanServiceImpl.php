@@ -77,6 +77,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             'courseId' => $params['courseId'],
             'startDate' => $params['startTime'],
             'endDate' => $params['endTime'],
+            'totalDays' => $learnTotalDay,
             'weekDays' => $params['weekDays'],
             'dailyAvgTime' => $learnTimePerDay,
         ]);
