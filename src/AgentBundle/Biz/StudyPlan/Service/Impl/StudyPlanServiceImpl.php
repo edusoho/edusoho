@@ -85,12 +85,66 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         ]);
         $studyPlan = $this->generateStudyPlan($dates, $learnTimePerDay, $waitLearnTasks);
 
-        return $studyPlan;
+        return $this->convertToMarkdown($studyPlan);
     }
 
-    private function convertToMarkdown()
+    private function convertToMarkdown($studyPlan)
     {
+        // 基础参数配置
+        $params = [
+            'course' => 'PMP培训课程',
+            'task_count' => 40,
+            'total_hours' => 45,
+            'date_range' => '2025年2月12日 至 2025年2月20日',
+            'study_days' => '周一、周四、周六',
+            'study_total' => 15,
+            'daily_min' => 3
+        ];
 
+        $scheduleData = [
+            [
+                'date' => '2月13日(周四)',
+                'content' => '项目管理基本原则',
+                'link' => '/courses/pmp-basics',
+                'duration' => '3小时'
+            ],
+            [
+                'date' => '2月14日(周五)',
+                'content' => '项目启动阶段',
+                'link' => '/courses/pmp-initiation',
+                'duration' => '3.5小时'
+            ]
+        ];
+
+
+        // 构建动态表格
+        $table = "| 日期 | 学习内容 | 每日学习 |\n";
+        $table .= "| ---- | -------- | -------- |\n";
+
+        foreach ($scheduleData as $item) {
+            // 自动处理超链接格式
+            $content = isset($item['link']) ? "[{$item['content']}]({$item['link']})" : $item['content'];
+            $table .= sprintf("| %s | %s | %s |\n",
+                $item['date'],
+                $content,
+                $item['duration']);
+        }
+
+        // 组装完整内容
+        return <<<MARKDOWN
+            根据您的需求生成以下学习计划：
+            
+            1. **学习内容**：{$params['course']}，共{$params['task_count']}个任务，学完需要{$params['total_hours']}小时
+            2. **学习周期**：{$params['date_range']}  
+               每周学习日：{$params['study_days']}，共计{$params['study_total']}个学习日
+            3. **学习要求**：每次至少学习{$params['daily_min']}小时
+            
+            以下是详细学习安排：
+            {$table}
+            我会在每个学习日提醒您完成目标，请点击表格中的「学习内容」直接访问课程
+            MARKDOWN;
+
+        return $content;
     }
 
     protected function getActivityLearnTime($courseId)
@@ -135,13 +189,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             if ($currentWeekday == $weekday) {
                 return $startTime;
             } else {
-                return strtotime('next ' . ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday], $startTime);
+                return strtotime('next ' . ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday -1], $startTime);
             }
         }
 
         $count = 0;
         $dates = array();
-        $weekarray = array("一", "二", "三", "四", "五", "六", "日"); // 定义中文星期数组
+        $weekarray = array("日", "一", "二", "三", "四", "五", "六"); // 定义中文星期数组
 
         foreach ($weekDays as $weekday) {
             $current = getFirstOccurrence($startTime, $weekday);
