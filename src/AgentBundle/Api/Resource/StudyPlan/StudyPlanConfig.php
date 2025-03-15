@@ -15,12 +15,12 @@ class StudyPlanConfig extends AbstractResource
         return ['ok' => 'true'];
     }
 
-    private function create($params)
+    private function enable($params)
     {
         $this->getStudyPlanService()->createConfig($params);
     }
 
-    private function update($params)
+    private function disable($params)
     {
         $this->getStudyPlanService()->updateConfig($params);
     }
