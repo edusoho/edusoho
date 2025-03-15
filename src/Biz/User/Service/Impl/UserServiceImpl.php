@@ -2440,6 +2440,7 @@ class UserServiceImpl extends BaseService implements UserService
         try {
             $fields = [
                 'passwordInit' => 1,
+                'passwordUpgraded' => 1,
             ];
 
             $this->getAuthService()->changePassword($id, null, $newPassword);

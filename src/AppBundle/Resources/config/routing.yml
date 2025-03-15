@@ -136,10 +136,6 @@ password_init:
     path: '/password/init'
     defaults:
         _controller: 'AppBundle:Password:initPassword'
-password_upgrade:
-    path: '/password/upgrade'
-    defaults:
-      _controller: 'AppBundle:Password:upgradePassword'
 common_qrcode:
     path: '/common/qrcode'
     defaults:

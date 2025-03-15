@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use Biz\User\CurrentUser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -26,57 +27,76 @@ class KernelControllerListener
             return;
         }
 
-        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node('cloud_sms.sms_bind')) {
+        if (!$this->getCurrentUser()->isLogin()) {
             return;
         }
 
         $request = $event->getRequest();
-
-        $currentUser = $this->getBiz()['user'];
-        if (!$currentUser->isLogin()) {
-            return;
-        }
         if (in_array($request->getPathInfo(), $this->getRouteWhiteList())
             || strstr($request->getPathInfo(), '/mapi_v2')
             || strstr($request->getPathInfo(), '/api')
             || strstr($request->getPathInfo(), '/drag_captcha')
             || strstr($request->getPathInfo(), '/h5_entry')
-            || strstr($request->getPathInfo(), '/password/reset/')
+            || strstr($request->getPathInfo(), '/password/reset')
         ) {
             return;
         }
+
+        $this->checkMobileBind($event);
+
+        $this->checkPasswordUpgrade($event);
+
+        $this->checkPasswordInit($event);
+    }
+
+    private function checkMobileBind(FilterControllerEvent $event)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!empty($currentUser['verifiedMobile'])) {
+            return;
+        }
+        $request = $event->getRequest();
+        if (strstr($request->getPathInfo(), '/admin')) {
+            return;
+        }
+        if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node('cloud_sms.sms_bind')) {
+            return;
+        }
         $mobileBindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
+        if ('closed' === $mobileBindMode) {
+            return;
+        }
+        if ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind'])) {
+            return;
+        }
+        $url = $this->generateUrl('settings_mobile_bind', ['goto' => $this->getTargetPath($request)]);
+        $event->setController(function () use ($url) {
+            return new RedirectResponse($url);
+        });
+    }
 
-        if ('closed' !== $mobileBindMode && empty($currentUser['verifiedMobile'])) {
-
-            if (strstr($request->getPathInfo(), '/admin')
-                || ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind']))
-            ) {
-                return;
-            }
-
-            $url = $this->generateUrl('settings_mobile_bind', ['goto' => $this->getTargetPath($request)]);
+    private function checkPasswordInit(FilterControllerEvent $event)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (empty($currentUser['passwordInit'])) {
+            $url = $this->generateUrl('password_init', ['goto' => $this->getTargetPath($event->getRequest())]);
             $event->setController(function () use ($url) {
                 return new RedirectResponse($url);
             });
+        }
+    }
+
+    private function checkPasswordUpgrade(FilterControllerEvent $event)
+    {
+        $currentUser = $this->getCurrentUser();
+        if (!empty($currentUser['passwordUpgraded'])) {
             return;
         }
-
-        if (!$currentUser['passwordInit']) {
-            $url = $this->generateUrl('password_init', ['goto' => $this->getTargetPath($request)]);
-            $event->setController(function () use ($url) {
-                return new RedirectResponse($url);
-            });
-            return;
-        }
-
+        $request = $event->getRequest();
         if (empty($request->getSession()->get('needUpgradePassword'))) {
             return;
         }
         $request->getSession()->getFlashBag()->add('danger', '检测到您当前密码等级较低，请重新设置密码');
-        if ('/password/reset' == $request->getPathInfo()) {
-            return;
-        }
         $url = $this->generateUrl('password_reset');
         $event->setController(function () use ($url) {
             return new RedirectResponse($url);
@@ -128,6 +148,14 @@ class KernelControllerListener
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return CurrentUser
+     */
+    protected function getCurrentUser()
+    {
+        return $this->getBiz()['user'];
     }
 
     protected function getBiz()

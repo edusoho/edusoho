@@ -20,14 +20,9 @@ class PasswordController extends BaseController
 
             $goto = empty($formData['goto']) ? $this->generateUrl('homepage') : $formData['goto'];
 
-            return $this->redirect($formData['goto']);
+            return $this->redirect($goto);
         }
 
         return $this->render('init-password/init-password.html.twig');
-    }
-
-    public function upgradePasswordAction(Request $request)
-    {
-
     }
 }
