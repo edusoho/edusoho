@@ -2,7 +2,6 @@
 
 namespace AgentBundle\Client;
 
-use Agent\AgentClient\AgentApi;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 
