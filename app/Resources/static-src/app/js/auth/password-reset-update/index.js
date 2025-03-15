@@ -3,8 +3,7 @@ let validator = $form.validate({
   rules: {
     'form[password]': {
       required: true,
-      minlength: 5,
-      maxlength: 20
+      check_password_high: true,
     },
     'form[confirmPassword]': {
       required: true,
