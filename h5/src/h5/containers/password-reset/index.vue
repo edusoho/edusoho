@@ -1,6 +1,7 @@
 <template>
-  <div class="register">
+  <div class="password-reset">
     <e-loading v-if="isLoading" />
+    <div v-if="upgradePassword" class="alert-danger">检测到您当前密码等级较低，请重新设置密码</div>
     <span class="register-title">{{ $t('title.retrievePassword') }}</span>
 
     <e-drag ref="dragComponent" :key="dragKey" @success="handleSmsSuccess" />
@@ -18,7 +19,7 @@
       v-model="resetInfo.encrypt_password"
       :error-message="errorMessage.encrypt_password"
       type="password"
-      max-length="20"
+      max-length="32"
       :placeholder="$t('placeholder.setPassword')"
       @blur="validateAccountOrPsw('encrypt_password')"
     />
@@ -94,10 +95,12 @@ export default {
         codeBtnDisable: false,
       },
       isEmail: false,
+      smsEnable: false,
     };
   },
-  created() {
+  async created() {
     this.getEmailServiceState();
+    await this.getSmsSetting();
   },
   computed: {
     ...mapState({
@@ -112,6 +115,9 @@ export default {
       );
     },
     accountType() {
+      if (!this.smsEnable) {
+        return 'email';
+      }
       if (this.isEmail) {
         return this.resetInfo.account.includes('@') ? 'email' : 'mobile';
       } else {
@@ -119,8 +125,14 @@ export default {
       }
     },
     accountPlaceHolder() {
+      if (!this.smsEnable) {
+        return this.$t('placeholder.email');
+      }
       return this.isEmail ? this.$t('placeholder.mobileNumberOrEmail') : this.$t('placeholder.mobileNumber');
     },
+    upgradePassword() {
+      return this.$route.query.upgradePassword;
+    }
   },
   methods: {
     validateAccountOrPsw(type = 'account') {
@@ -133,8 +145,8 @@ export default {
         return false;
       }
 
-      if (type === 'encrypt_password' && ele.length > 20) {
-        this.errorMessage[type] = this.$t('toast.enterUpTo20Characters');
+      if (type === 'encrypt_password' && ele.length > 32) {
+        this.errorMessage[type] = this.$t('toast.enterUpTo32Characters');
         return false;
       }
 
@@ -275,6 +287,13 @@ export default {
       Api.getEmailServiceState().then(res => {
         this.isEmail = res.enabled;
       });
+    },
+    async getSmsSetting() {
+      const res = await Api.settingsCloud()
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+      this.smsEnable = !!res.sms_enabled;
     },
   },
 };

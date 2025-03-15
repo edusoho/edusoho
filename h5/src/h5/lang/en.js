@@ -134,7 +134,7 @@ export default {
     signInSuccessfully: 'Sign in successfully',
     contactTheAdministrator:
       'The online school has not opened the mobile phone registration, please contact the administrator',
-    enterUpTo20Characters: 'Enter up to 20 characters',
+    enterUpTo32Characters: 'Enter up to 32 characters',
     bindingSuccess: 'Binding success',
     registrationSuccess: 'Registration success',
     pleaseCompleteThePuzzleVerification:
@@ -151,6 +151,7 @@ export default {
     setPassword: 'Set password(5-20 characters)',
     verificationCode: 'Verification code',
     mobileNumberOrEmail: 'Mobile number or email',
+    email: 'Email',
     dragTheSliderToCompleteThePuzzle: 'Drag the slider to complete the puzzle',
   },
   enter: {
