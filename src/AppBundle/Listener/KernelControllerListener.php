@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Common\SimpleValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -33,17 +34,23 @@ class KernelControllerListener
         $request = $event->getRequest();
 
         $currentUser = $this->getBiz()['user'];
+        if (!$currentUser->isLogin()) {
+            return;
+        }
+        if (in_array($request->getPathInfo(), $this->getRouteWhiteList())
+            || strstr($request->getPathInfo(), '/mapi_v2')
+            || strstr($request->getPathInfo(), '/api')
+            || strstr($request->getPathInfo(), '/drag_captcha')
+            || strstr($request->getPathInfo(), '/h5_entry')
+            || strstr($request->getPathInfo(), '/password/reset/')
+        ) {
+            return;
+        }
         $mobileBindMode = $this->getSettingService()->node('login_bind.mobile_bind_mode', 'constraint');
 
-        if ($currentUser->isLogin() && 'closed' !== $mobileBindMode && empty($currentUser['verifiedMobile'])) {
-            $whiteList = $this->getRouteWhiteList();
+        if ('closed' !== $mobileBindMode && empty($currentUser['verifiedMobile'])) {
 
-            if (in_array($request->getPathInfo(), $whiteList)
-                || strstr($request->getPathInfo(), '/mapi_v2')
-                || strstr($request->getPathInfo(), '/api')
-                || strstr($request->getPathInfo(), '/drag_captcha')
-                || strstr($request->getPathInfo(), '/admin')
-                || strstr($request->getPathInfo(), '/h5_entry')
+            if (strstr($request->getPathInfo(), '/admin')
                 || ('option' === $mobileBindMode && (isset($_COOKIE['is_skip_mobile_bind']) && 1 == $_COOKIE['is_skip_mobile_bind']))
             ) {
                 return;
@@ -53,7 +60,33 @@ class KernelControllerListener
             $event->setController(function () use ($url) {
                 return new RedirectResponse($url);
             });
+            return;
         }
+
+        if (!$currentUser['passwordInit']) {
+            $url = $this->generateUrl('password_init', ['goto' => $this->getTargetPath($request)]);
+            $event->setController(function () use ($url) {
+                return new RedirectResponse($url);
+            });
+            return;
+        }
+
+        $password = $request->getSession()->get('password');
+        if (empty($password)) {
+            return;
+        }
+        if (SimpleValidator::highPassword($password)) {
+            $request->getSession()->remove('password');
+            return;
+        }
+        $request->getSession()->getFlashBag()->add('danger', '检测到您当前密码等级较低，请重新设置密码');
+        if ('/password/reset' == $request->getPathInfo()) {
+            return;
+        }
+        $url = $this->generateUrl('password_reset');
+        $event->setController(function () use ($url) {
+            return new RedirectResponse($url);
+        });
     }
 
     protected function getRouteWhiteList()
@@ -76,6 +109,7 @@ class KernelControllerListener
             '/edu_cloud/sms_send_check_captcha', '/settings/mobile_bind', '/switch/language',
             '/scrm/buy/goods/callback', '/file/upload', '/file/img/crop', '/online/sample',
             '/settings/setup_password',
+            '/password/init',
         ];
     }
 

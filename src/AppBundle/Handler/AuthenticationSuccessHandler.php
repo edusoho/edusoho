@@ -2,6 +2,7 @@
 
 namespace AppBundle\Handler;
 
+use AppBundle\Common\EncryptionToolkit;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -19,25 +20,19 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             throw new AuthenticationException($forbidden['message']);
         }
 
+        $currentUser = $this->getServiceKernel()->getCurrentUser();
+        if(!$currentUser->isAccountNonLocked()) {
+            throw new AuthenticationException('账号已被禁用');
+        }
+        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($request->request->get('_password')), 'EduSoho');
+        $request->getSession()->set('password', $password);
+
         if ($request->isXmlHttpRequest()) {
             $content = [
                 'success' => true,
             ];
 
             return new JsonResponse($content, 200);
-        }
-
-        $currentUser = $this->getServiceKernel()->getCurrentUser();
-        if(!$currentUser->isAccountNonLocked()) {
-            throw new AuthenticationException("账号已被禁用");
-        }
-
-        if (!$currentUser['passwordInit']) {
-            $url = $this->httpUtils->generateUri($request, 'password_init');
-            $queries = ['goto' => $this->determineTargetUrl($request)];
-            $url = $url.'?'.http_build_query($queries);
-
-            return $this->httpUtils->createRedirectResponse($request, $url);
         }
 
         if ($this->getAuthService()->hasPartnerAuth()) {

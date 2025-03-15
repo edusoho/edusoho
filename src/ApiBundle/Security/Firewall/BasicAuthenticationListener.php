@@ -33,6 +33,10 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
             throw UserException::PASSWORD_ERROR();
         }
 
+        if (!$this->getUserService()->validatePassword($password)) {
+            throw UserException::PASSWORD_REQUIRE_UPGRADE();
+        }
+
         if ($user['locked']) {
             throw UserException::LOCKED_USER();
         }

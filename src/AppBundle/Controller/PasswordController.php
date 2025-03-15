@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class PasswordInitController extends BaseController
+class PasswordController extends BaseController
 {
     public function initPasswordAction(Request $request)
     {
@@ -24,5 +24,10 @@ class PasswordInitController extends BaseController
         }
 
         return $this->render('init-password/init-password.html.twig');
+    }
+
+    public function upgradePasswordAction(Request $request)
+    {
+
     }
 }

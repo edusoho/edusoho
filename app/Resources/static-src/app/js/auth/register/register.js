@@ -1,12 +1,12 @@
-import SmsSender from "app/common/widget/sms-sender";
-import Drag from "app/common/drag";
-import Coordinate from "app/common/coordinate";
+import SmsSender from 'app/common/widget/sms-sender';
+import Drag from 'app/common/drag';
+import Coordinate from 'app/common/coordinate';
 
 export default class Register {
   constructor() {
-    this.drag = $("#drag-btn").length
-      ? new Drag($("#drag-btn"), $(".js-jigsaw"), {
-          limitType: "web_register"
+    this.drag = $('#drag-btn').length
+      ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+          limitType: 'web_register'
         })
       : null;
     this.setValidateRule();
@@ -21,7 +21,7 @@ export default class Register {
   dragEvent() {
     let self = this;
     if (this.drag) {
-      this.drag.on("success", function(token) {
+      this.drag.on('success', function(token) {
         self._smsBtnable();
       });
     }
@@ -29,19 +29,19 @@ export default class Register {
 
   setValidateRule() {
     $.validator.addMethod(
-      "spaceNoSupport",
+      'spaceNoSupport',
       function(value, element) {
-        return value.indexOf(" ") < 0;
+        return value.indexOf(' ') < 0;
       },
-      $.validator.format(Translator.trans("validate.have_spaces"))
+      $.validator.format(Translator.trans('validate.have_spaces'))
     );
   }
 
   initValidator() {
     let self = this;
-    $("#register-form").validate(this._validataRules());
+    $('#register-form').validate(this._validataRules());
     $.validator.addMethod(
-      "email_or_mobile_check",
+      'email_or_mobile_check',
       function(value, element, params) {
         let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         var reg_mobile = /^1\d{10}$/;
@@ -49,96 +49,96 @@ export default class Register {
         var isEmail = reg_email.test(value);
         var isMobile = reg_mobile.test(value);
         if (isMobile) {
-          $(".email_mobile_msg").removeClass("hidden");
+          $('.email_mobile_msg').removeClass('hidden');
           if (!self.captchEnable) {
-            $(".js-drag-jigsaw").addClass("hidden");
+            $('.js-drag-jigsaw').addClass('hidden');
           }
         } else {
-          $(".email_mobile_msg").addClass("hidden");
-          $(".js-drag-jigsaw").removeClass("hidden");
+          $('.email_mobile_msg').addClass('hidden');
+          $('.js-drag-jigsaw').removeClass('hidden');
         }
         if (isEmail || isMobile) {
           result = true;
         }
         $.validator.messages.email_or_mobile_check = Translator.trans(
-          "validate.mobile_or_email_message"
+          'validate.mobile_or_email_message'
         );
         return this.optional(element) || result;
       },
-      Translator.trans("validate.email_or_mobile_check.message")
+      Translator.trans('validate.email_or_mobile_check.message')
     );
   }
 
   inEventMobile() {
-    $("#register_emailOrMobile").blur(() => {
-      let emailOrMobile = $("#register_emailOrMobile").val();
+    $('#register_emailOrMobile').blur(() => {
+      let emailOrMobile = $('#register_emailOrMobile').val();
       this.emSmsCodeValidate(emailOrMobile);
     });
 
-    $("#register_mobile").blur(() => {
-      let mobile = $("#register_mobile").val();
+    $('#register_mobile').blur(() => {
+      let mobile = $('#register_mobile').val();
       this.emSmsCodeValidate(mobile);
     });
   }
 
   initDragCaptchaCodeRule() {
-    if ($(".js-drag-img").length) {
-      $('[name="dragCaptchaToken"]').rules("add", {
+    if ($('.js-drag-img').length) {
+      $('[name="dragCaptchaToken"]').rules('add', {
         required: true,
         messages: {
-          required: Translator.trans("auth.register.drag_captcha_tips")
+          required: Translator.trans('auth.register.drag_captcha_tips')
         }
       });
     }
   }
 
   _smsBtnDisable() {
-    $(".js-sms-send-btn")
-      .addClass("disabled")
-      .attr("disabled", true);
+    $('.js-sms-send-btn')
+      .addClass('disabled')
+      .attr('disabled', true);
   }
 
   _smsBtnable() {
-    $(".js-sms-send-btn")
-      .removeClass("disabled")
-      .attr("disabled", false);
+    $('.js-sms-send-btn')
+      .removeClass('disabled')
+      .attr('disabled', false);
   }
 
   initSmsCodeRule() {
-    $('[name="sms_code"]').rules("add", {
+    $('[name="sms_code"]').rules('add', {
       required: true,
       unsigned_integer: true,
       rangelength: [6, 6],
       es_remote: {
-        type: "get"
+        type: 'get'
       },
       messages: {
-        rangelength: Translator.trans("validate.sms_code.message")
+        rangelength: Translator.trans('validate.sms_code.message')
       }
     });
   }
 
   initMobileMsgVeriCodeSendBtn() {
-    let $smsSendBtn = $(".js-sms-send-btn");
+    let $smsSendBtn = $('.js-sms-send-btn');
     let self = this;
     $smsSendBtn.click(function(event) {
       let coordinate = new Coordinate();
       const encryptedPoint = coordinate.getCoordinate(
         event,
-        $("meta[name=csrf-token]").attr("content")
+        $('meta[name=csrf-token]').attr('content')
       );
       self._smsBtnDisable();
-      let fieldName = $("[name='verifiedMobile']").length
-        ? "verifiedMobile"
-        : "emailOrMobile";
+      let fieldName = $('[name="verifiedMobile"]').length
+        ? 'verifiedMobile'
+        : 'emailOrMobile';
       new SmsSender({
         element: $smsSendBtn,
-        url: $(this).data("smsUrl"),
-        smsType: "sms_registration",
+        url: $(this).data('smsUrl'),
+        smsType: 'sms_registration',
         dataTo: fieldName,
         captcha: true,
         captchaValidated: true,
-        captchaNum: "dragCaptchaToken",
+        captchaNum: 'dragCaptchaToken',
         encryptedPoint: encryptedPoint,
         preSmsSend: function() {
           return true;
@@ -147,9 +147,9 @@ export default class Register {
           self.drag.initDragCaptcha();
         },
         additionalAction: function(ackResponse) {
-          if (ackResponse == "captchaRequired") {
-            $smsSendBtn.attr("disabled", true);
-            $(".js-drag-jigsaw").removeClass("hidden");
+          if (ackResponse === 'captchaRequired') {
+            $smsSendBtn.attr('disabled', true);
+            $('.js-drag-jigsaw').removeClass('hidden');
             self.captchEnable = true;
             if (self.drag) {
               self.drag.initDragCaptcha();
@@ -173,29 +173,32 @@ export default class Register {
           nickname: true,
           chinese_alphanumeric: true,
           es_remote: {
-            type: "get"
+            type: 'get'
           }
         },
-        password: this._passwordValidateRules(),
+        password: {
+          spaceNoSupport: true,
+          check_password_high: true,
+        },
         email: {
           required: true,
           email: true,
           es_remote: {
-            type: "get"
+            type: 'get'
           }
         },
         invitedCode: {
           required: false,
           reg_inviteCode: true,
           es_remote: {
-            type: "get"
+            type: 'get'
           }
         },
         emailOrMobile: {
           required: true,
           email_or_mobile_check: true,
           es_remote: {
-            type: "get",
+            type: 'get',
             callback: function(bool) {
               if (bool) {
                 self._smsBtnable();
@@ -209,7 +212,7 @@ export default class Register {
           required: true,
           phone: true,
           es_remote: {
-            type: "get",
+            type: 'get',
             callback: function(bool) {
               if (bool) {
                 self._smsBtnable();
@@ -226,38 +229,28 @@ export default class Register {
       messages: {
         nickname: {
           required: Translator.trans(
-            "auth.register.nickname_required_error_hit"
+            'auth.register.nickname_required_error_hit'
           )
         },
         verifiedMobile: {
-          required: Translator.trans("validate.phone.message")
+          required: Translator.trans('validate.phone.message')
         },
         emailOrMobile: {
-          required: Translator.trans("validate.phone_and_email_input.message")
+          required: Translator.trans('validate.phone_and_email_input.message')
         },
         email: {
-          required: Translator.trans("validate.valid_email_input.message")
+          required: Translator.trans('validate.valid_email_input.message')
         },
         dragCaptchaToken: {
-          required: Translator.trans("auth.register.drag_captcha_tips")
+          required: Translator.trans('auth.register.drag_captcha_tips')
         },
         password: {
           required: Translator.trans(
-            "auth.register.password_required_error_hint"
+            'auth.register.password_required_error_hint'
           )
         }
       }
     };
-  }
-
-  _passwordValidateRules() {
-    let passwordLevel = $("#password_level").val();
-    let rules = {
-      spaceNoSupport: true
-    };
-    rules[`check_password_${passwordLevel}`] = true;
-
-    return rules;
   }
 
   emSmsCodeValidate(mobile) {
@@ -265,28 +258,28 @@ export default class Register {
     let isMobile = reg_mobile.test(mobile);
     if (isMobile) {
       this.initSmsCodeRule();
-      $('[name="dragCaptchaToken"]').rules("remove");
+      $('[name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initDragCaptchaCodeRule();
-      $('[name="sms_code"]').rules("remove");
+      $('[name="sms_code"]').rules('remove');
     }
   }
 
   initFieldVisitId() {
     $(document).ready(() => {
-      if ("undefined" !== window._VISITOR_ID) {
+      if ('undefined' !== window._VISITOR_ID) {
         $('[name="registerVisitId"]').val(window._VISITOR_ID);
       }
     });
   }
 
   submitFrom() {
-    const $registerFrom = $("#register-form");
-    const $modal = $("#modal");
+    const $registerFrom = $('#register-form');
+    const $modal = $('#modal');
 
-    $("#register-btn").on("click", () => {
+    $('#register-btn').on('click', () => {
       const validator = $registerFrom.validate();
-      const inputCheckbox = $('input[name="agree_policy"]').prop("checked");
+      const inputCheckbox = $('input[name="agree_policy"]').prop('checked');
 
       if (!validator.form()) return;
 
@@ -296,18 +289,18 @@ export default class Register {
         return;
       }
 
-      // $("#modal").modal({backdrop:'static'}); // 点击遮罩关闭弹框
-      $modal.load("/register/agreement");
-      $modal.modal("show");
+      // $('#modal').modal({backdrop:'static'}); // 点击遮罩关闭弹框
+      $modal.load('/register/agreement');
+      $modal.modal('show');
 
-      $modal.on("click", ".js-agree-register", () => {
-        $('input[name="agree_policy"]').prop("checked", true);
-        $modal.modal("hide");
+      $modal.on('click', '.js-agree-register', () => {
+        $('input[name="agree_policy"]').prop('checked', true);
+        $modal.modal('hide');
         $registerFrom.submit();
       });
 
-      $modal.on("click", ".js-close-modal", () => {
-        $modal.modal("hide");
+      $modal.on('click', '.js-close-modal', () => {
+        $modal.modal('hide');
       });
     });
   }

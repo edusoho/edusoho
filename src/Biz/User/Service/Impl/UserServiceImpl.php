@@ -791,13 +791,10 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(UserException::PASSWORD_INVALID());
         }
 
-        $user = $this->getUser($id);
+        $user = $this->getUser($id) ?: $this->getUserByUUID($id);
 
         if (empty($user)) {
-            $user = $this->getUserByUUID($id);
-            if (empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
-            }
+            $this->createNewException(UserException::NOTFOUND_USER());
         }
 
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -805,6 +802,7 @@ class UserServiceImpl extends BaseService implements UserService
         $fields = [
             'salt' => $salt,
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
+            'passwordUpgraded' => 1,
         ];
 
         $updatePass = $this->getUserDao()->update($id, $fields);
@@ -2458,19 +2456,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function validatePassword($password)
     {
-        $auth = $this->getSettingService()->get('auth', []);
-        $passwordLevel = empty($auth['password_level']) ? 'low' : $auth['password_level'];
-        if ('low' == $passwordLevel && SimpleValidator::lowPassword($password)) {
-            return true;
-        }
-        if ('middle' == $passwordLevel && SimpleValidator::middlePassword($password)) {
-            return true;
-        }
-        if ('high' == $passwordLevel && SimpleValidator::highPassword($password)) {
-            return true;
-        }
-
-        return false;
+        return SimpleValidator::highPassword($password);
     }
 
     public function setFaceRegistered($id)

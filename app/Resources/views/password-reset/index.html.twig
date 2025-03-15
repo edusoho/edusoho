@@ -9,6 +9,7 @@
   <div class="" style="max-width: 450px; margin:auto;">
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>{{ 'user.settings.security.password_reset.content_title'|trans }}</h2></div>
+      {{ web_macro.flash_messages() }}
       <ul class="nav nav-tabs mbl js-find-password">
         {% if mailSetting %}
           <li class="active js-find-by-email" data-target="#password-reset-form">
@@ -64,7 +65,7 @@
           <div class="controls">
             <input type="password" id="reset_password" name="reset_password" required="required" class="form-control"
                    aria-required="true">
-            <p class="help-block">{{ ('user.settings.password_level.'~setting('auth.password_level')|default('low'))|trans }}</p>
+            <p class="help-block">{{ 'user.settings.password_level.high'|trans }}</p>
           </div>
         </div>
 

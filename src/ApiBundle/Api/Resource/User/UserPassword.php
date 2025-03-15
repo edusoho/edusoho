@@ -44,7 +44,7 @@ class UserPassword extends AbstractResource
         }
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encrypt_password']), $request->getHttpRequest()->getHost());
-        if (!SimpleValidator::password($password)) {
+        if (!SimpleValidator::highPassword($password)) {
             throw CommonException::ERROR_PARAMETER();
         }
 
