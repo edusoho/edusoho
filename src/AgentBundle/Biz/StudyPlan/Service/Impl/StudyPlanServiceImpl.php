@@ -57,7 +57,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         // 计算全部可学习天数
         $params['startTime'] = strtotime($params['startDate']);
         $params['endTime'] = strtotime($params['endDate']);
-        $learnTotalDay = $this->getLearnTotalDay($params['startTime'], $params['endTime'], $params['weekDays']);
+        list($learnTotalDay, $dates) = $this->getLearnTotalDay($params['startTime'], $params['endTime'], $params['weekDays']);
         // 计算每天学多长时间
         $learnTimePerDay = ceil($totalStudyTime / $learnTotalDay);
         // 每天学习时长 / 每天每个任务学习时长 = 每天学习几个任务
@@ -83,7 +83,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             'weekDays' => $params['weekDays'],
             'dailyAvgTime' => $learnTimePerDay,
         ]);
-        $studyPlan = $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
+        $studyPlan = $this->generateStudyPlan($dates, $learnTimePerDay, $waitLearnTasks);
 
         return $studyPlan;
     }
@@ -128,28 +128,65 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
      */
     public function getLearnTotalDay($startTime, $endTime, $weekDays)
     {
-        // 设置时区（与服务器时区一致）
         date_default_timezone_set('Asia/Shanghai');
-        function getFirstOccurrence($startTime, $weekday)
-        {
+
+        function getFirstOccurrence($startTime, $weekday) {
             $currentWeekday = date('N', $startTime);
             if ($currentWeekday == $weekday) {
                 return $startTime;
             } else {
-                return strtotime('next '.['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday - 1], $startTime);
+                return strtotime('next ' . ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday - 1], $startTime);
             }
         }
+
         $count = 0;
+        $dates = array();
+        $weekarray = array("日", "一", "二", "三", "四", "五", "六"); // 定义中文星期数组
+
         foreach ($weekDays as $weekday) {
             $current = getFirstOccurrence($startTime, $weekday);
             while ($current <= $endTime) {
                 ++$count;
+                $dateStr = date('Y-m-d', $current);
+                // 获取中文星期几
+                $chineseWeekday = "星期" . $weekarray[date('w', $current)]; // date('w')返回0-6对应日-六
+                $dates[] = array(
+                    'date' => $dateStr,
+                    'weekday' => $chineseWeekday
+                );
                 $current = strtotime('+1 week', $current);
             }
         }
 
-        return $count;
+        return array(
+            'count' => $count,
+            'dates' => $dates
+        );
     }
+//    public function getLearnTotalDay($startTime, $endTime, $weekDays)
+//    {
+//        // 设置时区（与服务器时区一致）
+//        date_default_timezone_set('Asia/Shanghai');
+//        function getFirstOccurrence($startTime, $weekday)
+//        {
+//            $currentWeekday = date('N', $startTime);
+//            if ($currentWeekday == $weekday) {
+//                return $startTime;
+//            } else {
+//                return strtotime('next '.['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday - 1], $startTime);
+//            }
+//        }
+//        $count = 0;
+//        foreach ($weekDays as $weekday) {
+//            $current = getFirstOccurrence($startTime, $weekday);
+//            while ($current <= $endTime) {
+//                ++$count;
+//                $current = strtotime('+1 week', $current);
+//            }
+//        }
+//
+//        return $count;
+//    }
 
     /**
      *
@@ -157,7 +194,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
      * @param array $tasks
      * @return array
      */
-    protected function generateStudyPlan(int $dailyTime, array $tasks): array
+    protected function generateStudyPlan(array $dates, int $dailyTime, array $tasks): array
     {
         // 检查任务时间是否合法
         foreach ($tasks as $task) {
@@ -174,7 +211,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         $days = [];
         foreach ($tasks as $task) {
             $allocated = false;
-
+            $dataIndex = 0;
             // 尝试将任务放入已有的天数
             foreach ($days as &$day) {
                 if ($day['remaining'] >= $task['time']) {
@@ -182,6 +219,8 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
                         'id' => $task['id'],
                         'time' => $task['time'],
                         'title' => $task['title'],
+                        'date' => $dates[$dataIndex]['date'],
+                        'weekday' => $dates[$dataIndex]['weekday']
                     ];
                     $day['remaining'] -= $task['time'];
                     $allocated = true;
@@ -191,12 +230,15 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 
             // 无法放入则创建新天数
             if (!$allocated) {
+                $dataIndex++;
                 $days[] = [
                     'tasks' => [
                         [
                             'id' => $task['id'],
                             'time' => $task['time'],
                             'title' => $task['title'],
+                            'date' => $dates[$dataIndex]['date'],
+                            'weekday' => $dates[$dataIndex]['weekday']
                         ],
                     ],
                     'remaining' => $dailyTime - $task['time'],
