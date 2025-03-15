@@ -24,6 +24,8 @@ class AgentApi
 
     private static $secretKey = '';
 
+    private static $api = '/v1/';
+
     public function __construct($storage)
     {
         $mallUrl = ServiceKernel::instance()->getParameter('marketing_mall_url');
@@ -42,6 +44,24 @@ class AgentApi
         $logger = self::getLogger();
         $spec = new JsonHmacSpecification('sha1');
         self::$client = new RestApiClient($config, $spec, null, $logger);
+    }
+
+    public function enableAiService($params)
+    {
+        $params['name'] = 'teacher';
+        $this->post(self::$api.'feature/enable', $params);
+    }
+
+    public function disableAiService($params)
+    {
+        $params['name'] = 'teacher';
+        $this->post(self::$api.'feature/disable', $params);
+    }
+
+    public function disableLearnAssistant($params)
+    {
+        $params['name'] = 'teacher';
+        $this->post(self::$api.'feature/disable', $params);
     }
 
     private function get($uri, array $params = [])

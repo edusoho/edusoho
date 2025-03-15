@@ -25,6 +25,19 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         $this->getAiStudyConfigDao()->update($courseId, ['isActive' => 0]);
     }
 
+    public function getGenerateConfig($data)
+    {
+        $generateConfig = $this->getAiStudyConfigDao()->getAiStudyConfigByCourseId($data['courseId']);
+        if (empty($generateConfig)) {
+            return ['status' => 'AI_DISABLED'];
+        }
+
+        return [
+            'status' => 'ok',
+            'data' => $generateConfig,
+        ];
+    }
+
     public function generate($startTime, $endTime, $weekDays, $courseId)
     {
         $activities = $this->getActivityLearnTime($courseId);

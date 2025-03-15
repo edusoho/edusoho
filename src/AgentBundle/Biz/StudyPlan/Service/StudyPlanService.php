@@ -8,5 +8,7 @@ interface StudyPlanService
 
     public function disable($courseId);
 
+    public function getGenerateConfig($data);
+
     public function generate($startTime, $endTime, $studyDays, $courseId);
 }
