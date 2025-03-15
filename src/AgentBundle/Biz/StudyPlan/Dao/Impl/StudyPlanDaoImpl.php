@@ -15,6 +15,7 @@ class StudyPlanDaoImpl extends GeneralDaoImpl implements StudyPlanDao
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
+                'serializes' => ['weekDays' => 'json'],
             ],
         ];
     }

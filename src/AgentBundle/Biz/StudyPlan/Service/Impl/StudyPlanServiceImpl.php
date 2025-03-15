@@ -61,7 +61,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         // 计算每天学多长时间
         $learnTimePerDay = ceil($totalStudyTime / $learnTotalDay);
         // 每天学习时长 / 每天每个任务学习时长 = 每天学习几个任务
-        $waitLearnTasks = $this->getTaskService()->searchTasks(['' => ''], [], 0, PHP_INT_MAX);
+        $waitLearnTasks = $this->getTaskService()->searchTasks(['courseId' => $params['courseId'], 'activityIds' => array_column($activities, 'id')], [], 0, PHP_INT_MAX);
         // 构建 activityId => learnTime 的映射
         $activityMap = [];
         foreach ($activities as $activity) {
@@ -86,6 +86,11 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         $studyPlan = $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
 
         return $studyPlan;
+    }
+
+    private function convertToMarkdown()
+    {
+
     }
 
     protected function getActivityLearnTime($courseId)
