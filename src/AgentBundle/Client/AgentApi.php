@@ -33,7 +33,7 @@ class AgentApi
         self::$accessKey = $setting['access_key'] ?? '';
         self::$secretKey = $setting['secret_key'] ?? '';
         $headers[] = 'Content-type: application/json';
-        $headers[] = 'Authorization: '.$this->makeToken();
+        $headers[] = 'Authorization: Bearer '.$this->makeToken();
         self::$headers = $headers;
         self::$timestamp = time();
         $config = [
