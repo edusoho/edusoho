@@ -3,9 +3,12 @@
 namespace AgentBundle\Biz\StudyPlan\Service\Impl;
 
 use AgentBundle\Biz\StudyPlan\Dao\AiStudyConfigDao;
+use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDao;
+use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDetail;
 use AgentBundle\Biz\StudyPlan\Factory\CalculationStrategyFactory;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use AgentBundle\Biz\StudyPlan\StudyPlanException;
+use AgentBundle\Client\AgentClient;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
@@ -16,7 +19,11 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 {
     public function enable($aiStudyConfig)
     {
+        $client = new AgentClient($this->biz);
+        $course = $this->getCourseService()->getCourse($aiStudyConfig['courseId']);
+        $result = $client->createDataset($course, $aiStudyConfig);
         $aiStudyConfig['isActive'] = 1;
+        $aiStudyConfig['databaseId'] = $result['id'];
         $this->getAiStudyConfigDao()->create($aiStudyConfig);
     }
 
@@ -61,7 +68,16 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             $task['learnTime'] = $activityMap[$activityId] ?? 0; // 处理未找到的情况
         }
         unset($task); // 重要：清除引用
+        $this->getStudyPlanDao()->create([
+            'userId' => $this->getCurrentUser()->getId(),
+            'courseId' => $courseId,
+            'startDate' => $startTime,
+            'endDate' => $endTime,
+            'weekDays' => $weekDays,
+            'dailyAvgTime' => $learnTimePerDay,
+        ]);
         $studyPlan = $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
+
     }
 
     protected function getActivityLearnTime($courseId)
@@ -208,5 +224,21 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
     protected function getAiStudyConfigDao()
     {
         return $this->createDao('AgentBundle:StudyPlan:AiStudyConfigDao');
+    }
+
+    /**
+     * @return StudyPlanDao
+     */
+    protected function getStudyPlanDao()
+    {
+        return $this->createDao('AgentBundle:StudyPlan:StudyPlanDao');
+    }
+
+    /**
+     * @return StudyPlanDetail
+     */
+    protected function getStudyPlanDetail()
+    {
+        return $this->createDao('AgentBundle:StudyPlan:StudyPlanDetail');
     }
 }

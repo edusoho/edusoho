@@ -42,6 +42,7 @@ class InitStudyPlan extends Migration
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
                 `courseId` INT(11) NOT NULL COMMENT '课程ID',
                 `isActive` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AI伴学服务开启状态 0-关闭 1-开启',
+                `databaseId` varchar(256) NOT NULL COMMENT '知识库ID',
                 `majorId` varchar(32) NOT NULL COMMENT '用户选择的专业类型',
                 `planDeadline` text NOT NULL COMMENT '学习计划截止时间',
                 `isDiagnosisActive` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AI知识点诊断开关 0-关闭 1-开启',

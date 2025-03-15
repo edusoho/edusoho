@@ -64,6 +64,22 @@ class AgentApi
         $this->post(self::$api.'feature/disable', $params);
     }
 
+    /**
+     * 创建知识库
+     * @param $course
+     * @return void
+     */
+    public function createDataset($course, $aiStudyConfig)
+    {
+        $params = [
+            'no' => $course['id'],
+            'name' => $course['courseSetTitle'],
+            'domainId' => $aiStudyConfig['majorId'],
+            'autoIndex' => $aiStudyConfig['isDiagnosisActive'] == 1,
+        ];
+        $this->post(self::$api.'dataset/create', $params);
+    }
+
     private function get($uri, array $params = [])
     {
         $params['code'] = self::$accessKey;
