@@ -69,8 +69,10 @@ class AgentApi
      * @param $course
      * @return void
      */
-    public function createDataset($course, $aiStudyConfig)
+    public function createDataset($params)
     {
+        $course = $params['course'];
+        $aiStudyConfig = $params['aiStudyConfig'];
         $params = [
             'no' => $course['id'],
             'name' => $course['courseSetTitle'],
