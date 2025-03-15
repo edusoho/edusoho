@@ -151,12 +151,18 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         return $count;
     }
 
+    /**
+     *
+     * @param int $dailyTime
+     * @param array $tasks
+     * @return array
+     */
     protected function generateStudyPlan(int $dailyTime, array $tasks): array
     {
         // 检查任务时间是否合法
         foreach ($tasks as $task) {
             if ($task['time'] > $dailyTime) {
-                throw new InvalidArgumentException("任务 {$task['id']} 时间超过每日上限");
+//                throw new InvalidArgumentException("任务 {$task['id']} 时间超过每日上限");
             }
         }
 
@@ -175,6 +181,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
                     $day['tasks'][] = [
                         'id' => $task['id'],
                         'time' => $task['time'],
+                        'title' => $task['title'],
                     ];
                     $day['remaining'] -= $task['time'];
                     $allocated = true;
@@ -189,6 +196,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
                         [
                             'id' => $task['id'],
                             'time' => $task['time'],
+                            'title' => $task['title'],
                         ],
                     ],
                     'remaining' => $dailyTime - $task['time'],
