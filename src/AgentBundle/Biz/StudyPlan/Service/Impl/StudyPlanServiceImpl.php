@@ -135,13 +135,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             if ($currentWeekday == $weekday) {
                 return $startTime;
             } else {
-                return strtotime('next ' . ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday - 1], $startTime);
+                return strtotime('next ' . ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday], $startTime);
             }
         }
 
         $count = 0;
         $dates = array();
-        $weekarray = array("日", "一", "二", "三", "四", "五", "六"); // 定义中文星期数组
+        $weekarray = array("一", "二", "三", "四", "五", "六", "日"); // 定义中文星期数组
 
         foreach ($weekDays as $weekday) {
             $current = getFirstOccurrence($startTime, $weekday);
