@@ -119,7 +119,23 @@ class AgentApi
 
     private function makeToken()
     {
-        return self::$accessKey.':'.JWT::encode(['exp' => time() + 1000 * 3600 * 24, 'access_key' => self::$accessKey], self::$secretKey);
+        $header = [
+            "kid" => self::$accessKey,
+            "typ" => "JWT",
+            "alg" => "HS256"
+        ];
+        $payload = [
+            "iss" => "AI_CLIENT_SDK",
+            "sub" => getCurrentUser()->getId(),
+            "exp" => time() + 1000 * 3600 * 24 // 过期时间戳（需确保大于当前时间）
+        ];
+        return JWT::encode(
+            $payload,
+            self::$accessKey,
+            'HS256',
+            null,
+            $header
+        );
     }
 
     private function getLogger()
