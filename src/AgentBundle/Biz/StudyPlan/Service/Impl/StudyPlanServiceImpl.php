@@ -2,18 +2,27 @@
 
 namespace AgentBundle\Biz\StudyPlan\Service\Impl;
 
+use AgentBundle\Biz\StudyPlan\Dao\AiStudyConfigDao;
 use AgentBundle\Biz\StudyPlan\Factory\CalculationStrategyFactory;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use AgentBundle\Biz\StudyPlan\StudyPlanException;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
 use Biz\Course\Service\CourseService;
-use Biz\StudyPlan\Service\Impl\InvalidArgumentException;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 
 class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 {
+    public function enable($aiStudyConfig)
+    {
+        $this->getAiStudyConfigDao()->create($aiStudyConfig);
+    }
+
+    public function disable($aiStudyConfig)
+    {
+    }
+
     public function generate($startTime, $endTime, $weekDays, $courseId)
     {
         $activities = $this->getActivityLearnTime($courseId);
@@ -38,7 +47,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         }
         unset($task); // 重要：清除引用
         $studyPlan = $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
-        file_put_contents("/tmp/jc123", json_encode($studyPlan), 8);
+        file_put_contents('/tmp/jc123', json_encode($studyPlan), 8);
     }
 
     protected function getActivityLearnTime($courseId)
@@ -67,28 +76,31 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 
     /**
      * 计算全部学习天数
+     *
      * @param $startTime
      * @param $endTime
      * @param $weekDays
+     *
      * @return int
      */
     public function getLearnTotalDay($startTime, $endTime, $weekDays)
     {
         // 设置时区（与服务器时区一致）
         date_default_timezone_set('Asia/Shanghai');
-        function getFirstOccurrence($startTime, $weekday) {
+        function getFirstOccurrence($startTime, $weekday)
+        {
             $currentWeekday = date('N', $startTime);
             if ($currentWeekday == $weekday) {
                 return $startTime;
             } else {
-                return strtotime("next ".['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'][$weekday-1], $startTime);
+                return strtotime('next '.['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday - 1], $startTime);
             }
         }
         $count = 0;
         foreach ($weekDays as $weekday) {
             $current = getFirstOccurrence($startTime, $weekday);
             while ($current <= $endTime) {
-                $count++;
+                ++$count;
                 $current = strtotime('+1 week', $current);
             }
         }
@@ -174,5 +186,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return AiStudyConfigDao
+     */
+    protected function getAiStudyConfigDao()
+    {
+        return $this->createDao('AgentBundle:StudyPlan:AiStudyConfigDao');
     }
 }

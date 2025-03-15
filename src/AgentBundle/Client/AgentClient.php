@@ -1,11 +1,12 @@
 <?php
 
-namespace MarketingMallBundle\Client;
+namespace AgentBundle\Client;
 
+use Agent\AgentClient\AgentApi;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 
-class MarketingMallClient
+class AgentClient
 {
     protected $biz;
 
