@@ -110,7 +110,7 @@ class UserLoginTokenListener
 
         $user = $this->getUserService()->getUser($user['id']);
 
-        if (empty($user['passwordUpgraded']) && 1 != count($user['roles'])) {
+        if (empty($user['passwordUpgraded']) && (1 != count($user['roles'])) && empty($request->getSession()->get('needUpgradePassword'))) {
             $request->getSession()->invalidate();
             $response = $this->logout('', $request->isXmlHttpRequest());
             $event->setResponse($response);

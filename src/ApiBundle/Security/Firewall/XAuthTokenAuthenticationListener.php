@@ -23,7 +23,7 @@ class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
             throw UserException::NOTFOUND_TOKEN();
         }
         $user = $this->getUserService()->getUser($rawToken['userId']);
-        if (empty($user['passwordUpgraded']) && 1 != count($user['roles'])) {
+        if (empty($user['passwordUpgraded']) && (1 != count($user['roles']))) {
             throw UserException::NOTFOUND_TOKEN();
         }
 

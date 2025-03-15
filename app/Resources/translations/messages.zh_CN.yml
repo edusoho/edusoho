@@ -10718,7 +10718,7 @@ exception.user.mobile_not_found: 用户手机号码不存在
 exception.user.user_is_destroyed: 用户已注销
 exception.user.email_password_error: 邮箱密码错误
 exception.user.already_bind: 用户已绑定
-exception.user.password_require_upgrade: 需要升级密码强度
+exception.user.password_require_upgrade: 检测到您当前密码等级较低，请重新设置密码
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
