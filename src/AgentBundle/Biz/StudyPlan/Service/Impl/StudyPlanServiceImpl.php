@@ -17,7 +17,7 @@ use Biz\Task\Service\TaskService;
 
 class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 {
-    public function enable($aiStudyConfig)
+    public function createConfig($aiStudyConfig)
     {
         $client = new AgentClient($this->biz);
         $course = $this->getCourseService()->getCourse($aiStudyConfig['courseId']);
@@ -31,9 +31,9 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         $this->getAiStudyConfigDao()->create($aiStudyConfig);
     }
 
-    public function disable($courseId)
+    public function updateConfig($aiStudyConfig)
     {
-        $this->getAiStudyConfigDao()->update($courseId, ['isActive' => 0]);
+        $this->getAiStudyConfigDao()->update($aiStudyConfig['id'], $aiStudyConfig);
     }
 
     public function getGenerateConfig($data)

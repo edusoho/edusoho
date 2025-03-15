@@ -119,7 +119,7 @@ class AgentApi
             $payload,
             self::$secretKey,
             'HS256',
-            self::$accessKey,
+            self::$accessKey
         );
     }
 

@@ -4,9 +4,9 @@ namespace AgentBundle\Biz\StudyPlan\Service;
 
 interface StudyPlanService
 {
-    public function enable($aiStudyConfig);
+    public function createConfig($aiStudyConfig);
 
-    public function disable($courseId);
+    public function updateConfig($aiStudyConfig);
 
     public function getGenerateConfig($data);
 
