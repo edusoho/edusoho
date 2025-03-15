@@ -19,6 +19,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 {
     public function enable($aiStudyConfig)
     {
+        file_put_contents("/tmp/jc123", \GuzzleHttp\json_encode($aiStudyConfig), 8);
         $client = new AgentClient($this->biz);
         $course = $this->getCourseService()->getCourse($aiStudyConfig['courseId']);
         $result = $client->createDataset($course, $aiStudyConfig);

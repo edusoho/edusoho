@@ -1,6 +1,6 @@
 <?php
 
-namespace Agent\AgentClient;
+namespace AgentBundle\Client;
 
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification;
