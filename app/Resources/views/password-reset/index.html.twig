@@ -4,6 +4,7 @@
 
 {# mailSetting判断邮箱服务是否开启 #}
 {% set mailSetting = cloud_mail_settings() %}
+{% set smsSetting = setting('cloud_sms') %}
 
 {% block content %}
   <div class="" style="max-width: 450px; margin:auto;">
@@ -11,20 +12,20 @@
       <div class="panel-heading"><h2>{{ 'user.settings.security.password_reset.content_title'|trans }}</h2></div>
       {{ web_macro.flash_messages() }}
       <ul class="nav nav-tabs mbl js-find-password">
-        {% if mailSetting %}
-          <li class="active js-find-by-email" data-target="#password-reset-form">
-            <a style="cursor: pointer;">{{ 'user.settings.security.password_reset.email'|trans }}
+        {% if smsSetting.sms_enabled|default(0) %}
+          <li class="active js-find-by-mobile" data-target="#password-reset-by-mobile-form">
+            <a style="cursor: pointer;">{{ 'user.settings.security.password_reset.mobile'|trans }}
             </a>
           </li>
         {% endif %}
-        <li class="js-find-by-mobile" data-target="#password-reset-by-mobile-form">
-          <a style="cursor: pointer;">{{ 'user.settings.security.password_reset.mobile'|trans }}
+        <li class="{% if not smsSetting.sms_enabled|default(0) %}active{% endif%} js-find-by-email" data-target="#password-reset-form">
+          <a style="cursor: pointer;">{{ 'user.settings.security.password_reset.email'|trans }}
           </a>
         </li>
       </ul>
 
       <form id="password-reset-form" class="form-vertical password-reset-form"
-            method="post" {% if not mailSetting %} style="display: none;" {% endif %}
+            method="post" {% if smsSetting.sms_enabled|default(0) %} style="display: none;" {% endif %}
             data-success="{{ path('password_reset_by_email_success') }}">
         <div class="form-group mtl ptm">
           <label class="control-label required" for="form_email"
@@ -47,10 +48,9 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
 
-
       <form id="password-reset-by-mobile-form" class="form-vertical password-reset-form"
             action="{{ path('password_reset_by_sms') }}"
-            method="post" {% if mailSetting %} style="display: none;" {% endif %}
+            method="post" {% if not smsSetting.sms_enabled|default(0) %} style="display: none;" {% endif %}
             data-success="{{ path('password_reset_by_email_success') }}">
         <div class="form-group mtl ptm">
           <label class="control-label required" for="mobile">{{ 'user.settings.security.mobile'|trans }}</label>
