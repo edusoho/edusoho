@@ -5,7 +5,6 @@ namespace AgentBundle\Client;
 use Codeages\RestApiClient\RestApiClient;
 use Codeages\RestApiClient\Specification\JsonHmacSpecification;
 use Firebase\JWT\JWT;
-use MarketingMallBundle\Exception\MarketingMallApiException;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Topxia\Service\Common\ServiceKernel;
@@ -24,44 +23,37 @@ class AgentApi
 
     private static $secretKey = '';
 
-    private static $api = '/v1/';
+    private static $url = 'https://test-ai-service.edusoho.cn/v1/';
 
     public function __construct($storage)
     {
-        $mallUrl = ServiceKernel::instance()->getParameter('marketing_mall_url');
-        $setting = $this->getSettingService()->get('marketing_mall', []);
-        self::$accessKey = $setting['access_key'] ?? '';
-        self::$secretKey = $setting['secret_key'] ?? '';
+        self::$accessKey = $storage['cloud_access_key'] ?? '';
+        self::$secretKey = $storage['cloud_secret_key'] ?? '';
         $headers[] = 'Content-type: application/json';
         $headers[] = 'Authorization: Bearer '.$this->makeToken();
         self::$headers = $headers;
         self::$timestamp = time();
-        $config = [
-            'access_key' => $storage['cloud_access_key'] ?? '',
-            'secret_key' => $storage['cloud_secret_key'] ?? '',
-            'endpoint' => empty($storage['mall_private_server']) ? $mallUrl : rtrim($storage['mall_private_server'], '/'),
-        ];
         $logger = self::getLogger();
         $spec = new JsonHmacSpecification('sha1');
-        self::$client = new RestApiClient($config, $spec, null, $logger);
+        self::$client = new RestApiClient([], $spec, null, $logger);
     }
 
     public function enableAiService($params)
     {
         $params['name'] = 'teacher';
-        $this->post(self::$api.'feature/enable', $params);
+        $this->post(self::$url.'feature/enable', $params);
     }
 
     public function disableAiService($params)
     {
         $params['name'] = 'teacher';
-        $this->post(self::$api.'feature/disable', $params);
+        $this->post(self::$url.'feature/disable', $params);
     }
 
     public function disableLearnAssistant($params)
     {
         $params['name'] = 'teacher';
-        $this->post(self::$api.'feature/disable', $params);
+        $this->post(self::$url.'feature/disable', $params);
     }
 
     /**
@@ -79,7 +71,7 @@ class AgentApi
             'domainId' => $aiStudyConfig['majorId'],
             'autoIndex' => $aiStudyConfig['isDiagnosisActive'] == 1,
         ];
-        $this->post(self::$api.'dataset/create', $params);
+        return $this->post(self::$url.'dataset/create', $params);
     }
 
     private function get($uri, array $params = [])
@@ -89,12 +81,13 @@ class AgentApi
         try {
             $response = self::$client->get($uri, $params, self::$headers);
         } catch (\RuntimeException $e) {
-            throw new MarketingMallApiException('营销商城服务异常，请联系管理员('.$uri.')');
+            $this->getLogger()->error('agent-post', ['uri' => $uri, 'params' => $params, 'response' => $e]);
+            return [];
         }
         if (empty($response)) {
-            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params]);
+            $this->getLogger()->warn('agent-post', ['uri' => $uri, 'params' => $params]);
         } else {
-            $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+            $this->getLogger()->debug('agent-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
         }
 
         return $response;
@@ -105,13 +98,14 @@ class AgentApi
         try {
             $response = self::$client->post($uri, $params, self::$headers);
         } catch (\RuntimeException $e) {
-            throw new MarketingMallApiException('营销商城服务异常，请联系管理员('.$uri.')');
+            $this->getLogger()->error('agent-post', ['uri' => $uri, 'params' => $params, 'response' => $e]);
+            return [];
         }
 
         if (empty($response)) {
-            $this->getLogger()->warn('market-mall-post', ['uri' => $uri, 'params' => $params]);
+            $this->getLogger()->warn('agent-post', ['uri' => $uri, 'params' => $params]);
         } else {
-            $this->getLogger()->debug('market-mall-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
+            $this->getLogger()->debug('agent-post', ['uri' => $uri, 'params' => $params, 'response' => $response]);
         }
 
         return $response;
@@ -119,22 +113,15 @@ class AgentApi
 
     private function makeToken()
     {
-        $header = [
-            "kid" => self::$accessKey,
-            "typ" => "JWT",
-            "alg" => "HS256"
-        ];
         $payload = [
-            "iss" => "AI_CLIENT_SDK",
-            "sub" => getCurrentUser()->getId(),
+            "iss" => "AI",
             "exp" => time() + 1000 * 3600 * 24 // 过期时间戳（需确保大于当前时间）
         ];
         return JWT::encode(
             $payload,
-            self::$accessKey,
+            self::$secretKey,
             'HS256',
-            null,
-            $header
+            self::$accessKey,
         );
     }
 
@@ -143,8 +130,8 @@ class AgentApi
         if (self::$logger) {
             return self::$logger;
         }
-        $logger = new Logger('marketing-mall');
-        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/marketing-mall.log', Logger::DEBUG));
+        $logger = new Logger('agent');
+        $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/agent.log', Logger::DEBUG));
 
         self::$logger = $logger;
 
