@@ -85,7 +85,10 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         ]);
         $studyPlan = $this->generateStudyPlan($dates, $learnTimePerDay, $waitLearnTasks);
 
-        return $this->convertToMarkdown($studyPlan);
+        return [
+            "status" => 'ok',
+            "content" => $this->convertToMarkdown($studyPlan)
+        ];
     }
 
     private function convertToMarkdown($studyPlan)
@@ -132,17 +135,17 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 
         // 组装完整内容
         return <<<MARKDOWN
-            根据您的需求生成以下学习计划：
-            
-            1. **学习内容**：{$params['course']}，共{$params['task_count']}个任务，学完需要{$params['total_hours']}小时
-            2. **学习周期**：{$params['date_range']}  
-               每周学习日：{$params['study_days']}，共计{$params['study_total']}个学习日
-            3. **学习要求**：每次至少学习{$params['daily_min']}小时
-            
-            以下是详细学习安排：
-            {$table}
-            我会在每个学习日提醒您完成目标，请点击表格中的「学习内容」直接访问课程
-            MARKDOWN;
+根据您的需求生成以下学习计划：
+
+1. **学习内容**：{$params['course']}，共{$params['task_count']}个任务，学完需要{$params['total_hours']}小时
+2. **学习周期**：{$params['date_range']}  
+   每周学习日：{$params['study_days']}，共计{$params['study_total']}个学习日
+3. **学习要求**：每次至少学习{$params['daily_min']}小时
+
+以下是详细学习安排：
+{$table}
+我会在每个学习日提醒您完成目标，请点击表格中的「学习内容」直接访问课程
+MARKDOWN;
 
         return $content;
     }
