@@ -71,7 +71,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         // 填充 learnTime 到任务中
         foreach ($waitLearnTasks as &$task) {
             $activityId = $task['activityId'];
-            $task['learnTime'] = $activityMap[$activityId] ?? 0; // 处理未找到的情况
+            $task['time'] = $activityMap[$activityId] ?? 0; // 处理未找到的情况
         }
         unset($task); // 重要：清除引用
         $this->getStudyPlanDao()->create([
