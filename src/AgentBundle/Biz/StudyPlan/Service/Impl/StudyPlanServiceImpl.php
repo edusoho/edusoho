@@ -49,13 +49,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         ];
     }
 
-    public function generate($startTime, $endTime, $weekDays, $courseId)
+    public function generate($params)
     {
-        $activities = $this->getActivityLearnTime($courseId);
+        $activities = $this->getActivityLearnTime($params['courseId']);
         // 获取学习全部任务时间
         $totalStudyTime = array_sum(array_column($activities, 'learnTime'));
         // 计算全部可学习天数
-        $learnTotalDay = $this->getLearnTotalDay($startTime, $endTime, $weekDays);
+        $learnTotalDay = $this->getLearnTotalDay($params['startTime'], $params['endTime'], $params['weekDays']);
         // 计算每天学多长时间
         $learnTimePerDay = ceil($totalStudyTime / $learnTotalDay);
         // 每天学习时长 / 每天每个任务学习时长 = 每天学习几个任务
@@ -74,14 +74,15 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         unset($task); // 重要：清除引用
         $this->getStudyPlanDao()->create([
             'userId' => $this->getCurrentUser()->getId(),
-            'courseId' => $courseId,
-            'startDate' => $startTime,
-            'endDate' => $endTime,
-            'weekDays' => $weekDays,
+            'courseId' => $params['courseId'],
+            'startDate' => $params['startTime'],
+            'endDate' => $params['endTime'],
+            'weekDays' => $params['weekDays'],
             'dailyAvgTime' => $learnTimePerDay,
         ]);
         $studyPlan = $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
 
+        return $studyPlan;
     }
 
     protected function getActivityLearnTime($courseId)

@@ -10,5 +10,5 @@ interface StudyPlanService
 
     public function getGenerateConfig($data);
 
-    public function generate($startTime, $endTime, $studyDays, $courseId);
+    public function generate($params);
 }
