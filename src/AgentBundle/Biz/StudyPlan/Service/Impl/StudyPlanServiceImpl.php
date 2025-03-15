@@ -26,7 +26,8 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             'aiStudyConfig' => $aiStudyConfig
         ]);
         $aiStudyConfig['isActive'] = 1;
-        $aiStudyConfig['databaseId'] = $result['id'];
+        // 零时把错误数据变成1，需要删掉做异常处理
+        $aiStudyConfig['databaseId'] = $result['id'] ?? 1;
         $this->getAiStudyConfigDao()->create($aiStudyConfig);
     }
 

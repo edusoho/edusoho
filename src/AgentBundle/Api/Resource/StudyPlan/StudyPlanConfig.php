@@ -12,6 +12,7 @@ class StudyPlanConfig extends AbstractResource
     {
         $params = $request->request->all();
         $this->$operate($params);
+        return ['ok' => 'true'];
     }
 
     private function enable($params)
