@@ -76,8 +76,6 @@ class AgentApi
 
     private function get($uri, array $params = [])
     {
-        $params['code'] = self::$accessKey;
-
         try {
             $response = self::$client->get($uri, $params, self::$headers);
         } catch (\RuntimeException $e) {
