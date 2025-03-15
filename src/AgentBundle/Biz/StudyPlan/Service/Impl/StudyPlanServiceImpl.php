@@ -158,10 +158,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             }
         }
 
-        return array(
-            'count' => $count,
-            'dates' => $dates
-        );
+        return [$count, $dates];
     }
 //    public function getLearnTotalDay($startTime, $endTime, $weekDays)
 //    {
