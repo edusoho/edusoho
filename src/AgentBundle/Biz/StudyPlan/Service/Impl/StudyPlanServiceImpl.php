@@ -55,6 +55,8 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         // 获取学习全部任务时间
         $totalStudyTime = array_sum(array_column($activities, 'learnTime'));
         // 计算全部可学习天数
+        $params['startTime'] = strtotime($params['startTime']);
+        $params['endTime'] = strtotime($params['endTime']);
         $learnTotalDay = $this->getLearnTotalDay($params['startTime'], $params['endTime'], $params['weekDays']);
         // 计算每天学多长时间
         $learnTimePerDay = ceil($totalStudyTime / $learnTotalDay);
