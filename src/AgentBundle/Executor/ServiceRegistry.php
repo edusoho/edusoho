@@ -4,7 +4,6 @@ namespace AgentBundle\Executor;
 
 use Topxia\Service\Common\ServiceKernel;
 
-// ServiceRegistry.php
 class ServiceRegistry
 {
     private static $services = [
@@ -15,9 +14,7 @@ class ServiceRegistry
     public static function resolve(string $serviceName): object
     {
         if (!isset(self::$services[$serviceName])) {
-            return [
-                'status' => '400002',
-            ];
+            return throwException(new \RuntimeException(sprintf('Service %s not found.', $serviceName)));
         }
         $serviceClass = self::$services[$serviceName];
 

@@ -28,7 +28,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
     public function getGenerateConfig($data)
     {
         $generateConfig = $this->getAiStudyConfigDao()->getAiStudyConfigByCourseId($data['courseId']);
-        if (empty($generateConfig)) {
+        if (empty($generateConfig) || $generateConfig['isActive'] == 0) {
             return ['status' => 'AI_DISABLED'];
         }
 
@@ -62,7 +62,6 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         }
         unset($task); // 重要：清除引用
         $studyPlan = $this->generateStudyPlan($learnTimePerDay, $waitLearnTasks);
-        file_put_contents('/tmp/jc123', json_encode($studyPlan), 8);
     }
 
     protected function getActivityLearnTime($courseId)
