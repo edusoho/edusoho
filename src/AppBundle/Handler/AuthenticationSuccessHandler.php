@@ -3,6 +3,7 @@
 namespace AppBundle\Handler;
 
 use AppBundle\Common\EncryptionToolkit;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -25,7 +26,11 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             throw new AuthenticationException('账号已被禁用');
         }
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($request->request->get('_password')), 'EduSoho');
-        $request->getSession()->set('password', $password);
+        if ($this->getUserService()->validatePassword($password)) {
+            $this->getUserService()->updateUser($currentUser->getId(), ['passwordUpgraded' => 1]);
+        } else {
+            $request->getSession()->set('needUpgradePassword', 1);
+        }
 
         if ($request->isXmlHttpRequest()) {
             $content = [
@@ -49,6 +54,14 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     private function getAuthService()
     {
         return ServiceKernel::instance()->createService('User:AuthService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
     protected function getSettingService()

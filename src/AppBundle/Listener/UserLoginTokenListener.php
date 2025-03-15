@@ -108,11 +108,19 @@ class UserLoginTokenListener
             }
         }
 
-        if (empty($loginBind['login_limit'])) {
+        $user = $this->getUserService()->getUser($user['id']);
+
+        if (empty($user['passwordUpgraded']) && 1 != count($user['roles'])) {
+            $request->getSession()->invalidate();
+            $response = $this->logout('', $request->isXmlHttpRequest());
+            $event->setResponse($response);
+
             return;
         }
 
-        $user = $this->getUserService()->getUser($user['id']);
+        if (empty($loginBind['login_limit'])) {
+            return;
+        }
 
         if (empty($user['loginSessionId']) || strlen($user['loginSessionId']) <= 0) {
             $sessionId = $request->getSession()->getId();
@@ -148,7 +156,9 @@ class UserLoginTokenListener
     {
         $this->container->get('security.token_storage')->setToken(null);
 
-        $this->container->get('session')->getFlashBag()->add('danger', $content);
+        if (!empty($content)) {
+            $this->container->get('session')->getFlashBag()->add('danger', $content);
+        }
 
         $goto = $this->container->get('router')->generate('login');
         $response = $isXmlHttpRequest ? new JsonResponse(['goto' => $goto], 403) : new RedirectResponse($goto, '302');

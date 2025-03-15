@@ -2,7 +2,6 @@
 
 namespace AppBundle\Listener;
 
-use AppBundle\Common\SimpleValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
@@ -71,12 +70,7 @@ class KernelControllerListener
             return;
         }
 
-        $password = $request->getSession()->get('password');
-        if (empty($password)) {
-            return;
-        }
-        if (SimpleValidator::highPassword($password)) {
-            $request->getSession()->remove('password');
+        if (empty($request->getSession()->get('needUpgradePassword'))) {
             return;
         }
         $request->getSession()->getFlashBag()->add('danger', '检测到您当前密码等级较低，请重新设置密码');
