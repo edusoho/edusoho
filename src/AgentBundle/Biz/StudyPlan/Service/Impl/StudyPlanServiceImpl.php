@@ -262,11 +262,9 @@ MARKDOWN;
         usort($tasks, function ($a, $b) {
             return $b['time'] <=> $a['time'];
         });
-
         $days = [];
-        foreach ($tasks as $task) {
+        foreach ($tasks as $key => $task) {
             $allocated = false;
-            $dataIndex = 0;
             // 尝试将任务放入已有的天数
             foreach ($days as &$day) {
                 if ($day['remaining'] >= $task['time']) {
@@ -274,8 +272,8 @@ MARKDOWN;
                         'id' => $task['id'],
                         'time' => $task['time'],
                         'title' => $task['title'],
-                        'date' => $dates[$dataIndex]['date'],
-                        'weekday' => $dates[$dataIndex]['weekday']
+                        'date' => $dates[$key]['date'],
+                        'weekday' => $dates[$key]['weekday']
                     ];
                     $day['remaining'] -= $task['time'];
                     $allocated = true;
@@ -285,15 +283,14 @@ MARKDOWN;
 
             // 无法放入则创建新天数
             if (!$allocated) {
-                $dataIndex++;
                 $days[] = [
                     'tasks' => [
                         [
                             'id' => $task['id'],
                             'time' => $task['time'],
                             'title' => $task['title'],
-                            'date' => $dates[$dataIndex]['date'],
-                            'weekday' => $dates[$dataIndex]['weekday']
+                            'date' => $dates[$key]['date'],
+                            'weekday' => $dates[$key]['weekday']
                         ],
                     ],
                     'remaining' => $dailyTime - $task['time'],
