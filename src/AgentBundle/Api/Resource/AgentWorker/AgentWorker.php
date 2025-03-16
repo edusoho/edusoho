@@ -13,6 +13,6 @@ class AgentWorker extends AbstractResource
         $params = $request->request->all();
         $commandExecutor = new CommandExecutor();
 
-        return $commandExecutor->execute($params['instruct'], $params['data']);
+        return $commandExecutor->execute($params['workflow'], $params['data']);
     }
 }
