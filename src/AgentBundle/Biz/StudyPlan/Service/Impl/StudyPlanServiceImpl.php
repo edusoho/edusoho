@@ -83,12 +83,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             'weekDays' => $params['weekDays'],
             'dailyAvgTime' => $learnTimePerDay,
         ]);
-        $studyPlan = $this->generateStudyPlan($dates, $learnTimePerDay, $waitLearnTasks);
 
-        return [
-            "status" => 'ok',
-            "content" => $this->convertToMarkdown($studyPlan)
-        ];
+        $studyPlan = $this->generateStudyPlan($this->calculateDaysInRange($params['startTime'], $params['endTime'], $params['weekDays'])['days'], $learnTimePerDay, $waitLearnTasks);
+        return $studyPlan;
+//        return [
+//            "status" => 'ok',
+//            "content" => $this->convertToMarkdown($studyPlan)
+//        ];
     }
 
     private function convertToMarkdown($studyPlan)
@@ -301,6 +302,51 @@ MARKDOWN;
         }
 
         return $days;
+    }
+
+    function calculateDaysInRange($startTimestamp, $endTimestamp, $weekdays) {
+        date_default_timezone_set('Asia/Shanghai');
+
+        $startDate = DateTime::createFromFormat('U', $startTimestamp);
+        $startDate->setTime(0, 0, 0);
+
+        $endDate = DateTime::createFromFormat('U', $endTimestamp);
+        $endDate->setTime(0, 0, 0);
+
+        if ($startDate > $endDate) {
+            return ['total' => 0, 'days' => []];
+        }
+
+        $weekdayMap = [
+            1 => '周一',
+            2 => '周二',
+            3 => '周三',
+            4 => '周四',
+            5 => '周五',
+            6 => '周六',
+            7 => '周日'
+        ];
+
+        $matchedDays = [];
+        $currentDate = clone $startDate;
+
+        while ($currentDate <= $endDate) {
+            $dayOfWeek = (int)$currentDate->format('N');
+
+            if (in_array($dayOfWeek, $weekdays)) {
+                $matchedDays[] = [
+                    'weekday' => $weekdayMap[$dayOfWeek],
+                    'date' => $currentDate->format('Y年n月j日') // 修改为中文日期格式
+                ];
+            }
+
+            $currentDate->modify('+1 day');
+        }
+
+        return [
+            'total' => count($matchedDays),
+            'days' => $matchedDays
+        ];
     }
 
     /**
