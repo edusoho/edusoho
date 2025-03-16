@@ -41,6 +41,7 @@ class UserSettingController extends BaseController
             'privacy_policy' => 'closed',
             'privacy_policy_body' => '',
             'captcha_enabled' => 0,
+            'password_level' => 'high',
             'register_protective' => 'high',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
