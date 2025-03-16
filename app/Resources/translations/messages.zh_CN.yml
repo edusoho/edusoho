@@ -466,6 +466,7 @@ form.btn.confirm.normal: 确认正常
 form.btn.confirm.illegal: 确认违规
 form.btn.batch.normal: 批量正常
 form.btn.batch.illegal: 批量违规
+form.btn.send_verify_email: 发送验证邮件
 
 #财务通用
 finance.income: 收入
@@ -3541,6 +3542,10 @@ user.cards.used: 已使用
 user.cards.outdate: 已过期
 user.cards.invalid: 已作废
 user.cards.moneycard_not_install_tips: 网站没有开启%coin_name%功能,学习卡功能暂时没法使用
+
+user.verify: 账号验证
+user.verify.email_sending: 正在发送验证邮件
+user.verify.email_sent: 查阅邮件, 点击邮件中的链接进行验证。
 
 #用户通知模块
 notification: 通知
@@ -10739,6 +10744,7 @@ exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
 exception.setting.app_client_closed: App客户端已关闭!
+exception.setting.mail_disable: 网校未开启邮件服务，请联系管理员处理
 exception.sms.code_invalid: 短信验证码错误
 exception.sms.type_error: sms类型错误
 exception.sms.send_failed: 发送失败！
