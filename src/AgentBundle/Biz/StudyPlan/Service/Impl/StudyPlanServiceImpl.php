@@ -57,7 +57,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         // 计算全部可学习天数
         $params['startTime'] = strtotime($params['startDate']);
         $params['endTime'] = strtotime($params['endDate']);
-        list($learnTotalDay, $dates) = $this->getLearnTotalDay($params['startTime'], $params['endTime'], $params['weekDays']);
+        $learnTotalDay = $this->getLearnTotalDay($params['startTime'], $params['endTime'], $params['weekDays']);
         // 计算每天学多长时间
         $learnTimePerDay = ceil($totalStudyTime / $learnTotalDay);
         // 每天学习时长 / 每天每个任务学习时长 = 每天学习几个任务
@@ -84,61 +84,47 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
             'dailyAvgTime' => $learnTimePerDay,
         ]);
 
-        $studyPlan = $this->generateStudyPlan($this->calculateDaysInRange($params['startTime'], $params['endTime'], $params['weekDays'])['days'], $learnTimePerDay, $waitLearnTasks);
-        return $studyPlan;
-//        return [
-//            "status" => 'ok',
-//            "content" => $this->convertToMarkdown($studyPlan)
-//        ];
+        $studyPlans = $this->generateStudyPlan($this->calculateDaysInRange($params['startTime'], $params['endTime'], $params['weekDays'])['days'], $learnTimePerDay, $waitLearnTasks);
+
+        return [
+            "status" => 'ok',
+            "content" => $this->convertToMarkdown([
+                'studyPlans' => $studyPlans,
+                'taskCount' => count($waitLearnTasks),
+                'total_hours' => $totalStudyTime / 60,
+                'study_total' => $learnTotalDay,
+                'daily_min' => $learnTimePerDay,
+                'study_days' => $this->weekdayConvertChinese($params['weekDays']),
+                'course' => $this->getCourseService()->getCourse($params['courseId']),
+                'date_range' => date('Y年n月j日', $params['startTime']).'至'.date('Y年n月j日', $params['endTime'])
+            ])
+        ];
     }
 
-    private function convertToMarkdown($studyPlan)
+    private function convertToMarkdown($params)
     {
-        // 基础参数配置
-        $params = [
-            'course' => 'PMP培训课程',
-            'task_count' => 40,
-            'total_hours' => 45,
-            'date_range' => '2025年2月12日 至 2025年2月20日',
-            'study_days' => '周一、周四、周六',
-            'study_total' => 15,
-            'daily_min' => 3
-        ];
-
-        $scheduleData = [
-            [
-                'date' => '2月13日(周四)',
-                'content' => '项目管理基本原则',
-                'link' => '/courses/pmp-basics',
-                'duration' => '3小时'
-            ],
-            [
-                'date' => '2月14日(周五)',
-                'content' => '项目启动阶段',
-                'link' => '/courses/pmp-initiation',
-                'duration' => '3.5小时'
-            ]
-        ];
-
-
         // 构建动态表格
         $table = "| 日期 | 学习内容 | 每日学习 |\n";
         $table .= "| ---- | -------- | -------- |\n";
 
-        foreach ($scheduleData as $item) {
-            // 自动处理超链接格式
-            $content = isset($item['link']) ? "[{$item['content']}]({$item['link']})" : $item['content'];
-            $table .= sprintf("| %s | %s | %s |\n",
-                $item['date'],
-                $content,
-                $item['duration']);
+        foreach ($params['studyPlans'] as $studyPlan) {
+            foreach ($studyPlan['tasks'] as $task) {
+                // 自动处理超链接格式
+                $task['link'] = 'course/'.$params['course']['id'].'/task/'.$task['id'].'/show';
+                $content = isset($task['link']) ? "[{$task['title']}]({$task['link']})" : $task['title'];
+                $table .= sprintf("| %s | %s | %s |\n",
+                    $task['date'].'('.$task['weekday'].')',
+                    $content,
+                    ($task['time']/60).'小时');
+            }
+
         }
 
         // 组装完整内容
         return <<<MARKDOWN
 根据您的需求生成以下学习计划：
 
-1. **学习内容**：{$params['course']}，共{$params['task_count']}个任务，学完需要{$params['total_hours']}小时
+1. **学习内容**：{$params['course']['courseSetTitle']}，共{$params['task_count']}个任务，学完需要{$params['total_hours']}小时
 2. **学习周期**：{$params['date_range']}  
    每周学习日：{$params['study_days']}，共计{$params['study_total']}个学习日
 3. **学习要求**：每次至少学习{$params['daily_min']}小时
@@ -149,6 +135,24 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 MARKDOWN;
 
         return $content;
+    }
+
+    private function weekdayConvertChinese($weekdays)
+    {
+        $weekMap = [
+            1 => '周一',
+            2 => '周二',
+            3 => '周三',
+            4 => '周四',
+            5 => '周五',
+            6 => '周六',
+            7 => '周日'
+        ];
+        $converted = array_map(function($day) use ($weekMap) {
+            return $weekMap[$day] ?? '未知'; // 处理无效数字
+        }, $weekdays);
+
+        return implode('、', $converted);
     }
 
     protected function getActivityLearnTime($courseId)
@@ -186,62 +190,28 @@ MARKDOWN;
      */
     public function getLearnTotalDay($startTime, $endTime, $weekDays)
     {
+        // 设置时区（与服务器时区一致）
         date_default_timezone_set('Asia/Shanghai');
-
-        function getFirstOccurrence($startTime, $weekday) {
+        function getFirstOccurrence($startTime, $weekday)
+        {
             $currentWeekday = date('N', $startTime);
             if ($currentWeekday == $weekday) {
                 return $startTime;
             } else {
-                return strtotime('next ' . ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday -1], $startTime);
+                return strtotime('next '.['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday - 1], $startTime);
             }
         }
-
         $count = 0;
-        $dates = array();
-        $weekarray = array("日", "一", "二", "三", "四", "五", "六"); // 定义中文星期数组
-
         foreach ($weekDays as $weekday) {
             $current = getFirstOccurrence($startTime, $weekday);
             while ($current <= $endTime) {
                 ++$count;
-                $dateStr = date('Y-m-d', $current);
-                // 获取中文星期几
-                $chineseWeekday = "星期" . $weekarray[date('w', $current)]; // date('w')返回0-6对应日-六
-                $dates[] = array(
-                    'date' => $dateStr,
-                    'weekday' => $chineseWeekday
-                );
                 $current = strtotime('+1 week', $current);
             }
         }
 
-        return [$count, $dates];
+        return $count;
     }
-//    public function getLearnTotalDay($startTime, $endTime, $weekDays)
-//    {
-//        // 设置时区（与服务器时区一致）
-//        date_default_timezone_set('Asia/Shanghai');
-//        function getFirstOccurrence($startTime, $weekday)
-//        {
-//            $currentWeekday = date('N', $startTime);
-//            if ($currentWeekday == $weekday) {
-//                return $startTime;
-//            } else {
-//                return strtotime('next '.['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][$weekday - 1], $startTime);
-//            }
-//        }
-//        $count = 0;
-//        foreach ($weekDays as $weekday) {
-//            $current = getFirstOccurrence($startTime, $weekday);
-//            while ($current <= $endTime) {
-//                ++$count;
-//                $current = strtotime('+1 week', $current);
-//            }
-//        }
-//
-//        return $count;
-//    }
 
     /**
      *
