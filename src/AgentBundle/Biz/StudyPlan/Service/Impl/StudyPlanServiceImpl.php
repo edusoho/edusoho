@@ -307,10 +307,10 @@ MARKDOWN;
     function calculateDaysInRange($startTimestamp, $endTimestamp, $weekdays) {
         date_default_timezone_set('Asia/Shanghai');
 
-        $startDate = DateTime::createFromFormat('U', $startTimestamp);
+        $startDate = \DateTime::createFromFormat('U', $startTimestamp);
         $startDate->setTime(0, 0, 0);
 
-        $endDate = DateTime::createFromFormat('U', $endTimestamp);
+        $endDate = \DateTime::createFromFormat('U', $endTimestamp);
         $endDate->setTime(0, 0, 0);
 
         if ($startDate > $endDate) {
