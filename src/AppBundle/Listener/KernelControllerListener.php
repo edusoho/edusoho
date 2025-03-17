@@ -41,6 +41,7 @@ class KernelControllerListener
             || strstr($request->getPathInfo(), '/drag_captcha')
             || strstr($request->getPathInfo(), '/h5_entry')
             || strstr($request->getPathInfo(), '/password/reset')
+            || strstr($request->getPathInfo(), '/app/package_update')
         ) {
             return;
         }
