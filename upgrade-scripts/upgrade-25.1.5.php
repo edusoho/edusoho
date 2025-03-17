@@ -33,8 +33,9 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = [
-            'updateUserSettings',
             'alterTableUserAddField',
+            'updateUserPasswordInit',
+            'updateUserSettings',
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -92,6 +93,14 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("ALTER TABLE `user` ADD COLUMN `passwordUpgraded` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否已升级密码';");
         }
         $this->logger('info', '`user`表新增字段`passwordUpgraded`成功');
+
+        return 1;
+    }
+
+    protected function updateUserPasswordInit()
+    {
+        $this->getConnection()->exec("UPDATE `user` SET `passwordInit`=1;");
+        $this->logger('info', '`user`表更新字段`passwordInit`值设为1成功');
 
         return 1;
     }
