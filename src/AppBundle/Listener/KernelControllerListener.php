@@ -32,6 +32,9 @@ class KernelControllerListener
         }
 
         $request = $event->getRequest();
+        if ($request->isMethod('POST')) {
+            return;
+        }
         if (in_array($request->getPathInfo(), $this->getRouteWhiteList())
             || strstr($request->getPathInfo(), '/mapi_v2')
             || strstr($request->getPathInfo(), '/api')

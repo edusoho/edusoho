@@ -110,7 +110,7 @@ class UserLoginTokenListener
 
         $user = $this->getUserService()->getUser($user['id']);
 
-        if (empty($user['passwordUpgraded']) && (1 != count($user['roles'])) && empty($request->getSession()->get('needUpgradePassword'))) {
+        if (empty($user['passwordUpgraded']) && (1 != count($user['roles'])) && empty($request->getSession()->get('needUpgradePassword')) && $request->isMethod('GET')) {
             if (!strstr($request->getPathInfo(), '/app/package_update')) {
                 $request->getSession()->invalidate();
                 $response = $this->logout('', $request->isXmlHttpRequest());
