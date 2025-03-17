@@ -36,10 +36,13 @@ class MeCourseMember extends AbstractResource
                 $courseMember['expire']['deadline'] = empty($classroomMember['expire']['deadline']) ? 0 : strtotime($classroomMember['expire']['deadline']);
             }
         }
-        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
-        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
         if ($courseMember) {
+            $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+            $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
             $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
+
+            $courseMember['aiTeacherEnabled'] = true;
+            $courseMember['studyPlanGenerated'] = false;
         }
 
         return $courseMember;
