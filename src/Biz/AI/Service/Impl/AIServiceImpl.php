@@ -83,6 +83,11 @@ class AIServiceImpl extends BaseService implements AIService
         $this->getAIService()->enableTenant();
     }
 
+    public function disableTenant()
+    {
+        $this->getAIService()->disableTenant();
+    }
+
     public function inspectTenant()
     {
         return $this->getAIService()->inspectTenant();

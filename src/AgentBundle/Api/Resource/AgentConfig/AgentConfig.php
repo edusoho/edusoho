@@ -32,7 +32,9 @@ class AgentConfig extends AbstractResource
         $agentConfig = empty($agentConfig) ? ['isActive' => 0] : $agentConfig;
         $inspectResult = $this->getAIService()->inspectTenant();
         if (('ok' != $inspectResult['status']) || !in_array('agent', $inspectResult['permissions'])) {
-            $agentConfig['agentDisable'] = true;
+            $agentConfig['agentEnable'] = false;
+        } else {
+            $agentConfig['agentEnable'] = true;
         }
 
         return $agentConfig;
@@ -40,6 +42,8 @@ class AgentConfig extends AbstractResource
 
     public function update(ApiRequest $request, $id)
     {
+        $agentConfig = $this->getAgentConfigService()->getAgentConfig($id);
+
         return ['ok' => true];
     }
 

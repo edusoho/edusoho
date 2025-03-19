@@ -103,6 +103,11 @@ class AIService extends BaseService
         return $this->request('POST', '/v1/tenant/enable');
     }
 
+    public function disableTenant()
+    {
+        return $this->request('POST', '/v1/tenant/disable');
+    }
+
     public function inspectTenant()
     {
         return $this->request('GET', '/v1/tenant/inspect');

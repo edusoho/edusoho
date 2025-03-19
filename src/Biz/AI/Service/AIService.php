@@ -20,6 +20,8 @@ interface AIService
 
     public function enableTenant();
 
+    public function disableTenant();
+
     public function inspectTenant();
 
     public function findDomains($category);

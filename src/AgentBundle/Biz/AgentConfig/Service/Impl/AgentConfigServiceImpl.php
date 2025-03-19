@@ -43,6 +43,11 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         ]);
     }
 
+    public function getAgentConfig($id)
+    {
+        return $this->getAiStudyConfigDao()->get($id);
+    }
+
     public function getAgentConfigByCourseId($courseId)
     {
         return $this->getAiStudyConfigDao()->getAiStudyConfigByCourseId($courseId);
