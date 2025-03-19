@@ -63,7 +63,7 @@ const showConfirm = () => {
     icon: createVNode(ExclamationCircleOutlined),
     async onOk() {
       spinning.value = true;
-      const params = {
+      const activeParams = {
         courseId: props.courseId,
         domainId: formState.domainId,
         planDeadline: formState.planDeadline
@@ -73,8 +73,12 @@ const showConfirm = () => {
       };
       try {
         if (editType.value === 'create') {
-          await Api.aiCompanionStudy.createAgentConfig(params);
-        } else {
+          await Api.aiCompanionStudy.createAgentConfig(activeParams);
+        } else if (editType.value === 'update') {
+          const inactiveParams = {
+            courseId: props.courseId,
+            isActive: false
+          };
           //todo
         }
       } finally {
@@ -104,7 +108,7 @@ onMounted(async () => {
     editType.value = 'update';
     formState.isActive = agentConfig.isActive == 1;
     formState.domainId = agentConfig.domainId;
-    formState.planDeadline = agentConfig.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD')));
+    formState.planDeadline = agentConfig.planDeadline.length > 0 ? agentConfig.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD'))) : [ref()];
     formState.isDiagnosisActive = agentConfig.isDiagnosisActive == 1;
   } else {
     editType.value = 'create';
@@ -210,12 +214,12 @@ onMounted(async () => {
               <a-alert class="mt-12 w-fit" message="知识点生成失败，请联系我们"
                        type="error" show-icon/>
             </a-form-item>
-            <a-form-item
-              v-bind="formItemLayoutWithOutLabel"
-            >
-              <a-button type="primary" html-type="submit">保存</a-button>
-            </a-form-item>
           </div>
+          <a-form-item
+            v-bind="formItemLayoutWithOutLabel"
+          >
+            <a-button type="primary" html-type="submit">保存</a-button>
+          </a-form-item>
         </a-form>
       </a-spin>
     </div>
