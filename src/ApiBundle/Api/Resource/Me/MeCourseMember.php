@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -41,8 +42,10 @@ class MeCourseMember extends AbstractResource
             $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
             $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
 
-            $courseMember['aiTeacherEnabled'] = true;
+            $studyPlanConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+            $courseMember['aiTeacherEnabled'] = !empty($studyPlanConfig['isActive']);
             $courseMember['studyPlanGenerated'] = false;
+            $courseMember['aiTeacherDomain'] = $studyPlanConfig['domainId'] ?? '';
         }
 
         return $courseMember;
@@ -173,5 +176,13 @@ class MeCourseMember extends AbstractResource
     private function getContractService()
     {
         return $this->service('Contract:ContractService');
+    }
+
+    /**
+     * @return AgentConfigService
+     */
+    private function getAgentConfigService()
+    {
+        return $this->biz->service('AgentBundle:AgentConfig:AgentConfigService');
     }
 }

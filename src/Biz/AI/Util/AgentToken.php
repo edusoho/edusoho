@@ -22,7 +22,7 @@ class AgentToken
     public function make()
     {
         $payload = [
-            'iss' => 'AI_CLIENT_SDK',
+            'iss' => 'AI_AGENT',
             'sub' => $this->getCurrentUser()->getId(),
             'exp' => time() + 3600 * 24 * 7,
         ];

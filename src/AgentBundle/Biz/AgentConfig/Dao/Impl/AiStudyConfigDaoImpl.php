@@ -1,8 +1,8 @@
 <?php
 
-namespace AgentBundle\Biz\StudyPlan\Dao\Impl;
+namespace AgentBundle\Biz\AgentConfig\Dao\Impl;
 
-use AgentBundle\Biz\StudyPlan\Dao\AiStudyConfigDao;
+use AgentBundle\Biz\AgentConfig\Dao\AiStudyConfigDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class AiStudyConfigDaoImpl extends GeneralDaoImpl implements AiStudyConfigDao

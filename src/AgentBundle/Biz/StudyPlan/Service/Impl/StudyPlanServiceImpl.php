@@ -2,7 +2,7 @@
 
 namespace AgentBundle\Biz\StudyPlan\Service\Impl;
 
-use AgentBundle\Biz\StudyPlan\Dao\AiStudyConfigDao;
+use AgentBundle\Biz\AgentConfig\Dao\AiStudyConfigDao;
 use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDao;
 use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDetail;
 use AgentBundle\Biz\StudyPlan\Factory\CalculationStrategyFactory;
@@ -27,7 +27,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         ]);
         $aiStudyConfig['isActive'] = 1;
         // 零时把错误数据变成1，需要删掉做异常处理
-        $aiStudyConfig['databaseId'] = $result['id'] ?? 1;
+        $aiStudyConfig['datasetId'] = $result['id'] ?? 1;
         $this->getAiStudyConfigDao()->create($aiStudyConfig);
     }
 

@@ -98,6 +98,56 @@ class AIService extends BaseService
         $this->request('POST', '/api/open/app/stopCompletion', array('app' => $app, 'messageId' => $messageId, 'taskId' => $taskId));
     }
 
+    public function enableTenant()
+    {
+        return $this->request('POST', '/v1/tenant/enable');
+    }
+
+    public function inspectTenant()
+    {
+        return $this->request('GET', '/v1/tenant/inspect');
+    }
+
+    public function findDomains($category)
+    {
+        return $this->request('GET', '/v1/domain/listByCategory', ['category' => $category]);
+    }
+
+    public function runWorkflow($alias, $data)
+    {
+        return $this->request('POST', '/v1/workflow/run', ['alias' => $alias, 'data' => $data]);
+    }
+
+    public function createDataset($externalId, $name, $domainId, $autoIndex)
+    {
+        return $this->request('POST', '/v1/dataset/create', ['externalId' => $externalId, 'name' => $name, 'domainId' => $domainId, 'autoIndex' => $autoIndex]);
+    }
+
+    public function getDataset($id)
+    {
+        return $this->request('GET', '/v1/dataset/get', ['id' => $id]);
+    }
+
+    public function updateDataset($id, $name, $domainId, $autoIndex)
+    {
+        return $this->request('POST', '/v1/dataset/update', ['id' => $id, 'name' => $name, 'domainId' => $domainId, 'autoIndex' => $autoIndex]);
+    }
+
+    public function deleteDataset($id)
+    {
+        return $this->request('POST', '/v1/dataset/delete', ['id' => $id]);
+    }
+
+    public function createDocumentByText($datasetId, $no, $name, $content)
+    {
+        return $this->request('POST', '/v1/dataset/document/createByText', ['datasetId' => $datasetId, 'no' => $no, 'name' => $name, 'content' => $content]);
+    }
+
+    public function deleteDocument($id)
+    {
+        return $this->request('POST', '/v1/dataset/document/delete', ['id' => $id]);
+    }
+
     private function makeClientToken($lifetime)
     {
         $payload = array(

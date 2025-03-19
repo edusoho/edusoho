@@ -11,7 +11,7 @@ class InitStudyPlan extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            CREATE TABLE `study_plan` (
+            CREATE TABLE IF NOT EXISTS `study_plan` (
               `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '计划ID',
               `userId` INT(11) NOT NULL COMMENT '学员ID',
               `courseId` INT(11) NOT NULL COMMENT '课程ID',
@@ -26,7 +26,8 @@ class InitStudyPlan extends Migration
               KEY `idxUserId` (`userId`),
               KEY `idxCourseId` (`courseId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习计划主表';
-            CREATE TABLE `study_plan_detail` (
+
+            CREATE TABLE IF NOT EXISTS `study_plan_detail` (
               `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
               `planId` INT(11) NOT NULL COMMENT '学习计划ID',
               `studyDate` BIGINT NOT NULL COMMENT '学习日期',
@@ -38,12 +39,13 @@ class InitStudyPlan extends Migration
               KEY `idxPlanId` (`planId`),
               KEY `idxStudyDate` (`studyDate`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习计划每日任务详情表';
-            CREATE TABLE `ai_study_config` (
+
+            CREATE TABLE IF NOT EXISTS `ai_study_config` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-                `courseId` INT(11) NOT NULL COMMENT '课程ID',
+                `courseId` INT(11) NOT NULL COMMENT '课程计划ID',
                 `isActive` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AI伴学服务开启状态 0-关闭 1-开启',
-                `databaseId` varchar(256) NOT NULL COMMENT '知识库ID',
-                `majorId` varchar(32) NOT NULL COMMENT '用户选择的专业类型',
+                `datasetId` varchar(256) NOT NULL COMMENT '知识库ID',
+                `domainId` varchar(32) NOT NULL COMMENT '用户选择的专业类型',
                 `planDeadline` text NOT NULL COMMENT '学习计划截止时间',
                 `isDiagnosisActive` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AI知识点诊断开关 0-关闭 1-开启',
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',

@@ -68,7 +68,7 @@ class AgentApi
         $params = [
             'no' => $course['id'],
             'name' => $course['courseSetTitle'],
-            'domainId' => $aiStudyConfig['majorId'],
+            'domainId' => $aiStudyConfig['domainId'],
             'autoIndex' => $aiStudyConfig['isDiagnosisActive'] == 1,
         ];
         return $this->post(self::$url.'dataset/create', $params);
