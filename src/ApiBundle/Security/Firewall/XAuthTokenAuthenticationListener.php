@@ -22,6 +22,10 @@ class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
         if (null === $rawToken = $this->getUserService()->getToken('mobile_login', $tokenInHeader)) {
             throw UserException::NOTFOUND_TOKEN();
         }
+        $user = $this->getUserService()->getUser($rawToken['userId']);
+        if (empty($user['passwordUpgraded']) && (1 != count($user['roles']))) {
+            throw UserException::NOTFOUND_TOKEN();
+        }
 
         $token = $this->createTokenFromRequest($request, $rawToken['userId'], $rawToken['token']);
 

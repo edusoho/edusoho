@@ -34,12 +34,10 @@ define(function (require, exports, module) {
       return value.indexOf(' ') < 0;
     }, Translator.trans('validate.have_spaces'));
 
-    let passwordLevel = $('#password_level').val();
-
     validator.addItem({
       element: '[name="newPassword"]',
       required: true,
-      rule: 'check_password_' + passwordLevel + ' spaceNoSupport'
+      rule: 'check_password_high spaceNoSupport',
     });
 
     validator.addItem({
