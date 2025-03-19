@@ -31,6 +31,8 @@ class AgentConfig extends AbstractResource
         $this->getCourseService()->tryManageCourse($courseId);
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
         $agentConfig = empty($agentConfig) ? ['isActive' => 0] : $agentConfig;
+//        $this->getAIService()->disableTenant();
+        $this->getAIService()->enableTenant();
         $inspectResult = $this->getAIService()->inspectTenant();
         if (('ok' != $inspectResult['status']) || !in_array('agent', $inspectResult['permissions'])) {
             $agentConfig['agentEnable'] = false;
