@@ -5,7 +5,7 @@ import { Button, Form, Switch, Select, Input, DatePicker, Popover, Alert, Spin }
 import AICompanionStudy from './AICompanionStudy.vue';
 
 const app = createApp(AICompanionStudy, {
-
+  courseId: $('#ai-companion-study').data('courseId'),
 });
 
 setCurrentPrimaryColor(app);
