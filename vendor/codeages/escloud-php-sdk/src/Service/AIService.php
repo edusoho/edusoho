@@ -133,9 +133,18 @@ class AIService extends BaseService
         return $this->request('GET', '/v1/dataset/get', ['id' => $id]);
     }
 
-    public function updateDataset($id, $name, $domainId, $autoIndex)
+    public function updateDataset($id, array $params)
     {
-        return $this->request('POST', '/v1/dataset/update', ['id' => $id, 'name' => $name, 'domainId' => $domainId, 'autoIndex' => $autoIndex]);
+        $data = [
+            'id' => $id,
+        ];
+        foreach (['name', 'domainId', 'autoIndex'] as $key) {
+            if (isset($params[$key])) {
+                $data[$key] = $params[$key];
+            }
+        }
+
+        return $this->request('POST', '/v1/dataset/update', $data);
     }
 
     public function deleteDataset($id)

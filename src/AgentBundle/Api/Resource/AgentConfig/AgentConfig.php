@@ -2,6 +2,7 @@
 
 namespace AgentBundle\Api\Resource\AgentConfig;
 
+use AgentBundle\Biz\AgentConfig\Exception\AgentConfigException;
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -36,6 +37,11 @@ class AgentConfig extends AbstractResource
         } else {
             $agentConfig['agentEnable'] = true;
         }
+        if (!empty($agentConfig['isDiagnosisActive'])) {
+            $dataset = $this->getAIService()->getDataset($agentConfig['datasetId']);
+            $agentConfig['indexStatus'] = $this->getIndexStatus($dataset);
+            $agentConfig['indexProgress'] = $this->calIndexProgress($dataset);
+        }
 
         return $agentConfig;
     }
@@ -43,8 +49,30 @@ class AgentConfig extends AbstractResource
     public function update(ApiRequest $request, $id)
     {
         $agentConfig = $this->getAgentConfigService()->getAgentConfig($id);
+        if (empty($agentConfig)) {
+            throw AgentConfigException::AGENT_CONFIG_NOT_FOUND();
+        }
+        $this->getCourseService()->tryManageCourse($agentConfig['courseId']);
+        $this->getAgentConfigService()->updateAgentConfig($id, $request->request->all());
 
         return ['ok' => true];
+    }
+
+    private function getIndexStatus($dataset)
+    {
+        if ($dataset['successCount'] == $dataset['totalCount']) {
+            return 'success';
+        }
+        if ($dataset['failedCount'] > 0) {
+            return 'failed';
+        }
+
+        return 'doing';
+    }
+
+    private function calIndexProgress($dataset)
+    {
+        return ($dataset['successCount'] / $dataset['totalCount']);
     }
 
     /**
@@ -60,7 +88,7 @@ class AgentConfig extends AbstractResource
      */
     private function getAgentConfigService()
     {
-        return $this->biz->service('AgentBundle:AgentConfig:AgentConfigService');
+        return $this->service('AgentBundle:AgentConfig:AgentConfigService');
     }
 
     /**
@@ -68,6 +96,6 @@ class AgentConfig extends AbstractResource
      */
     private function getAIService()
     {
-        return $this->biz->service('AI:AIService');
+        return $this->service('AI:AIService');
     }
 }

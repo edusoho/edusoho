@@ -26,11 +26,7 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         if (!empty($agentConfig)) {
             throw AgentConfigException::AGENT_CONFIG_ALREADY_CREATED();
         }
-        $domains = $this->getAIService()->findDomains('vt');
-        $domains = array_column($domains, null, 'id');
-        if (empty($domains[$params['domainId']])) {
-            throw AgentConfigException::UNKNOWN_DOMAIN();
-        }
+        $this->checkDomain($params['domainId']);
         $dataset = $this->getAIService()->createDataset([
             'externalId' => $params['courseId'],
             'name' => $params['name'],
@@ -53,6 +49,29 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
     public function getAgentConfig($id)
     {
         return $this->getAiStudyConfigDao()->get($id);
+    }
+
+    public function updateAgentConfig($id, $params)
+    {
+        $agentConfig = $this->getAgentConfig($id);
+        if (empty($agentConfig)) {
+            throw AgentConfigException::AGENT_CONFIG_NOT_FOUND();
+        }
+        $params = ArrayToolkit::parts($params, ['isActive', 'domainId', 'planDeadline', 'isDiagnosisActive']);
+        if (!empty($params['domainId'])) {
+            $this->checkDomain($params['domainId']);
+        }
+        $agentConfig = $this->getAiStudyConfigDao()->update($id, $params);
+        $this->getAIService()->updateDataset($id, ['domainId' => $agentConfig['domainId'], 'autoIndex' => !empty($agentConfig['isDiagnosisActive'])]);
+    }
+
+    private function checkDomain($domainId)
+    {
+        $domains = $this->getAIService()->findDomains('vt');
+        $domains = array_column($domains, null, 'id');
+        if (empty($domains[$domainId])) {
+            throw AgentConfigException::UNKNOWN_DOMAIN();
+        }
     }
 
     /**

@@ -32,7 +32,7 @@ interface AIService
 
     public function getDataset($id);
 
-    public function updateDataset(array $params);
+    public function updateDataset($id, array $params);
 
     public function deleteDataset($id);
 
