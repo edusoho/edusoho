@@ -17,6 +17,7 @@ import tag from './modules/tag'
 import crop from './modules/crop';
 import courseSets from './modules/courseSets';
 import classroom from './modules/classroom';
+import aiCompanionStudy from './modules/aiCompanionStudy';
 
 const Api = {
   contract,
@@ -38,6 +39,7 @@ const Api = {
   crop,
   courseSets,
   classroom,
+  aiCompanionStudy,
 };
 
 export default Api;
