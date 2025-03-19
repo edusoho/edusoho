@@ -69,7 +69,11 @@ class AgentConfig extends AbstractResource
 
     private function calIndexProgress($dataset)
     {
-        return ($dataset['successCount'] / $dataset['totalCount']);
+        if (empty($dataset['totalCount'])) {
+            return 100;
+        }
+
+        return intval($dataset['successCount'] / $dataset['totalCount']);
     }
 
     /**
