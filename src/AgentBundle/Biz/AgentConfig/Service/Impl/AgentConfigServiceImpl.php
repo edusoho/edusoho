@@ -12,6 +12,11 @@ use Biz\Common\CommonException;
 
 class AgentConfigServiceImpl extends BaseService implements AgentConfigService
 {
+    public function getAgentConfigByCourseId($courseId)
+    {
+        return $this->getAiStudyConfigDao()->getAiStudyConfigByCourseId($courseId);
+    }
+
     public function createAgentConfig($params)
     {
         if (!ArrayToolkit::requireds($params, ['courseId', 'name', 'domainId'])) {
@@ -32,8 +37,7 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
             'domainId' => $params['domainId'],
             'autoIndex' => !empty($params['isDiagnosisActive']),
         ]);
-
-        return $this->getAiStudyConfigDao()->create([
+        $agentConfig = $this->getAiStudyConfigDao()->create([
             'courseId' => $params['courseId'],
             'isActive' => 1,
             'datasetId' => $dataset['id'],
@@ -41,16 +45,14 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
             'planDeadline' => $params['planDeadline'],
             'isDiagnosisActive' => $params['isDiagnosisActive'],
         ]);
+        $this->dispatchEvent('agentConfig.create', $agentConfig);
+
+        return $agentConfig;
     }
 
     public function getAgentConfig($id)
     {
         return $this->getAiStudyConfigDao()->get($id);
-    }
-
-    public function getAgentConfigByCourseId($courseId)
-    {
-        return $this->getAiStudyConfigDao()->getAiStudyConfigByCourseId($courseId);
     }
 
     /**

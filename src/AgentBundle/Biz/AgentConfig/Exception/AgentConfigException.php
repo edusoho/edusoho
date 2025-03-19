@@ -12,8 +12,11 @@ class AgentConfigException extends AbstractException
 
     const UNKNOWN_DOMAIN = 4009102;
 
+    const AGENT_CONFIG_NOT_FOUND = 4009103;
+
     public $messages = [
         4009101 => '',
         4009102 => '',
+        4009103 => '',
     ];
 }

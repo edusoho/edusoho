@@ -111,7 +111,7 @@ class AIServiceImpl extends BaseService implements AIService
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $this->getAIService()->createDataset($params['externalId'], $params['name'], $params['domainId'], $params['autoIndex']);
+        return $this->getAIService()->createDataset($params['externalId'], $params['name'], $params['domainId'], $params['autoIndex']);
     }
 
     public function getDataset($id)
@@ -121,7 +121,11 @@ class AIServiceImpl extends BaseService implements AIService
 
     public function updateDataset(array $params)
     {
-        // TODO: Implement updateDataset() method.
+        if (!ArrayToolkit::requireds($params, ['id', 'name', 'domainId', 'autoIndex'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $this->getAIService()->updateDataset($params['id'], $params['name'], $params['domainId'], $params['autoIndex']);
     }
 
     public function deleteDataset($id)
