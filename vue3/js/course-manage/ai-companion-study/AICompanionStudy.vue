@@ -55,7 +55,6 @@ const addDeadline = () => {
   formState.planDeadline.push(ref(null));
 };
 
-
 const showConfirm = () => {
   Modal.confirm({
     centered: true,
@@ -97,6 +96,7 @@ const showConfirm = () => {
 const masking = ref(true);
 const domainOptions = ref([]);
 const editType = ref('create');
+const agentConfig = ref();
 onMounted(async () => {
   const options = await Api.aiCompanionStudy.getDomains(props.courseId);
   domainOptions.value = options.map(item => ({
@@ -104,19 +104,21 @@ onMounted(async () => {
     value: item.id,
   }));
 
-  const agentConfig = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
-  if (agentConfig.agentEnable === true) {
+  agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
+  if (agentConfig.value.agentEnable === true) {
     masking.value = false;
   }
-  if (agentConfig.isActive == 1) {
+  if (agentConfig.value.isActive == 1) {
     editType.value = 'update';
-    formState.isActive = agentConfig.isActive == 1;
-    formState.domainId = agentConfig.domainId;
-    formState.planDeadline = agentConfig.planDeadline.length > 0 ? agentConfig.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD'))) : [ref(null)];
-    formState.isDiagnosisActive = agentConfig.isDiagnosisActive == 1;
   } else {
     editType.value = 'create';
   }
+  formState.isActive = agentConfig.value?.isActive == 1 ?? false;
+  formState.domainId = agentConfig.value?.domainId ?? null;
+  formState.planDeadline = agentConfig.value?.planDeadline?.length > 0
+    ? agentConfig.value.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD')))
+    : [ref(null)];
+  formState.isDiagnosisActive = agentConfig.value?.isDiagnosisActive == 1 ?? false;
 });
 </script>
 
@@ -211,11 +213,11 @@ onMounted(async () => {
               <div class="text-14 leading-24 font-normal text-[#919399]">
                 开启后，学员在网校内提交答题后根据答题结果找出学员掌握薄弱的知识点，推荐对应的课程任务进行学习
               </div>
-              <a-alert class="mt-12 w-fit" message="知识点生成中，完成后将通过站内信通知您，请您放心保存AI伴学服务的配置"
+              <a-alert v-if="agentConfig.indexStatus === 'doing'" class="mt-12 w-fit" :message="`知识点生成中...${agentConfig.indexProgress}%，完成后将通过站内信通知您，请您放心保存AI伴学服务的配置`"
                        type="info" show-icon/>
-              <a-alert class="mt-12 w-fit" message="知识点生成成功"
+              <a-alert v-if="agentConfig.indexStatus === 'success'" class="mt-12 w-fit" message="知识点生成成功"
                        type="success" show-icon/>
-              <a-alert class="mt-12 w-fit" message="知识点生成失败，请联系我们"
+              <a-alert v-if="agentConfig.indexStatus === 'failed'" class="mt-12 w-fit" message="知识点生成失败，请联系我们"
                        type="error" show-icon/>
             </a-form-item>
           </div>
