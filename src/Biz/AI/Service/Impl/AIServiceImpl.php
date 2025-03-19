@@ -2,10 +2,12 @@
 
 namespace Biz\AI\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\AI\Dao\AIAnswerRecordDao;
 use Biz\AI\Dao\AIAnswerResultDao;
 use Biz\AI\Service\AIService;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 
 class AIServiceImpl extends BaseService implements AIService
 {
@@ -74,6 +76,62 @@ class AIServiceImpl extends BaseService implements AIService
         }
 
         return '';
+    }
+
+    public function enableTenant()
+    {
+        $this->getAIService()->enableTenant();
+    }
+
+    public function inspectTenant()
+    {
+        return $this->getAIService()->inspectTenant();
+    }
+
+    public function findDomains($category)
+    {
+        $category = empty($category) ? 'vt' : $category;
+
+        return $this->getAIService()->findDomains($category);
+    }
+
+    public function runWorkflow($alias, array $data)
+    {
+        return $this->getAIService()->runWorkflow($alias, $data);
+    }
+
+    public function createDataset(array $params)
+    {
+        if (!ArrayToolkit::requireds($params, ['externalId', 'name', 'domainId', 'autoIndex'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $this->getAIService()->createDataset($params['externalId'], $params['name'], $params['domainId'], $params['autoIndex']);
+    }
+
+    public function getDataset($id)
+    {
+        return $this->getAIService()->getDataset($id);
+    }
+
+    public function updateDataset(array $params)
+    {
+        // TODO: Implement updateDataset() method.
+    }
+
+    public function deleteDataset($id)
+    {
+        $this->getAIService()->deleteDataset($id);
+    }
+
+    public function createDocument(array $params)
+    {
+        // TODO: Implement createDocument() method.
+    }
+
+    public function deleteDocument($id)
+    {
+        $this->getAIService()->deleteDocument($id);
     }
 
     private function recordNewAnswer($app, $inputs, $response)

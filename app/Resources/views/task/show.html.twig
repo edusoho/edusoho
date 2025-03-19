@@ -157,6 +157,12 @@
     </div>
   </div>
 
+  {% if is_show_ai_agent(course.id) %}
+    <input type="hidden" name="aiAgentToken" value="{{ ai_agent_token() }}" />
+    <input type="hidden" name="aiTeacherDomain" value="{{ ai_teacher_domain(course.id) }}" />
+    <input type="hidden" name="studyPlanGenerated" value="0" />
+  {% endif %}
+
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>

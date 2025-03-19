@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -36,10 +37,15 @@ class MeCourseMember extends AbstractResource
                 $courseMember['expire']['deadline'] = empty($classroomMember['expire']['deadline']) ? 0 : strtotime($classroomMember['expire']['deadline']);
             }
         }
-        $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
-        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
         if ($courseMember) {
+            $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+            $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
             $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
+
+            $studyPlanConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+            $courseMember['aiTeacherEnabled'] = !empty($studyPlanConfig['isActive']);
+            $courseMember['studyPlanGenerated'] = false;
+            $courseMember['aiTeacherDomain'] = $studyPlanConfig['domainId'] ?? '';
         }
 
         return $courseMember;
@@ -170,5 +176,13 @@ class MeCourseMember extends AbstractResource
     private function getContractService()
     {
         return $this->service('Contract:ContractService');
+    }
+
+    /**
+     * @return AgentConfigService
+     */
+    private function getAgentConfigService()
+    {
+        return $this->biz->service('AgentBundle:AgentConfig:AgentConfigService');
     }
 }

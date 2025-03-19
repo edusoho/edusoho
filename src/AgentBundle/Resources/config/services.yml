@@ -1,0 +1,5 @@
+services:
+  api_agent_authentication_listener:
+    class: AgentBundle\Security\Firewall\AgentAuthenticationListener
+    arguments:
+      - '@service_container'

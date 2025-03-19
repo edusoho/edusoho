@@ -5,9 +5,9 @@ namespace ApiBundle\Api\Resource\Token;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\System\Service\LogService;
-use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
+use Firebase\JWT\JWT;
 
 class Token extends AbstractResource
 {
@@ -22,8 +22,8 @@ class Token extends AbstractResource
         $user = $this->getCurrentUser()->toArray();
 
         $expiredTime = time() + 3600 * 24 * 30;
-        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'],$expiredTime , ['client' => $client]);
-        $refreshToken = $this->getUserService()->makeToken("refreshToken", $user['id'], time() + 3600 * 24 * 180, ['client' => $client]);
+        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], $expiredTime, ['client' => $client]);
+        $refreshToken = $this->getUserService()->makeToken('refreshToken', $user['id'], time() + 3600 * 24 * 180, ['client' => $client]);
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
@@ -35,6 +35,7 @@ class Token extends AbstractResource
 
         return [
             'token' => $token,
+            'jwtToken' => $this->getJwtToken($user),
             'tokenExpire' => $expiredTime,
             'refreshToken' => $refreshToken,
             'user' => $user,
@@ -92,13 +93,34 @@ class Token extends AbstractResource
     protected function deleteInvalidToken($userId, $token, $refreshToken)
     {
         $delTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, self::TOKEN_TYPE);
-        $delRefreshTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, "refreshToken");
+        $delRefreshTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, 'refreshToken');
         $delTokens = array_merge($delTokens, $delRefreshTokens);
         foreach ($delTokens as $delToken) {
             if ($delToken['token'] != $token && $delToken['token'] != $refreshToken) {
                 $this->getTokenService()->destoryToken($delToken['token']);
             }
         }
+    }
+
+    /** AI功能专用token
+     * @param $user
+     *
+     * @return string|void
+     */
+    protected function getJwtToken($user)
+    {
+        $storage = $this->getSettingService()->get('storage', []);
+        if (empty($storage)) {
+            return;
+        }
+        $payload = [
+            'iss' => 'ai.edusoho.net',
+            'aud' => 'agent',
+            'sub' => $user['id'],
+            'exp' => time() + 30 * 24 * 60,
+        ];
+
+        return 'Bearer:'.JWT::encode($payload, $storage['cloud_access_key']);
     }
 
     protected function getBatchNotificationService()

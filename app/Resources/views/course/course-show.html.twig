@@ -109,4 +109,9 @@
     }%}
 
   {{ slot('course.bottom.extension', {'course': course}) }}
+  {% if is_show_ai_agent(course.id) %}
+    <input type="hidden" name="aiAgentToken" value="{{ ai_agent_token() }}" />
+    <input type="hidden" name="aiTeacherDomain" value="{{ ai_teacher_domain(course.id) }}" />
+    <input type="hidden" name="studyPlanGenerated" value="0" />
+  {% endif %}
 {% endblock %}
