@@ -8,7 +8,5 @@ interface AgentConfigService
 
     public function createAgentConfig($params);
 
-    public function getAgentConfig($id);
-
-    public function updateAgentConfig($id, $params);
+    public function updateAgentConfig($courseId, $params);
 }

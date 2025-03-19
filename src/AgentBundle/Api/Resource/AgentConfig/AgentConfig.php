@@ -2,7 +2,6 @@
 
 namespace AgentBundle\Api\Resource\AgentConfig;
 
-use AgentBundle\Biz\AgentConfig\Exception\AgentConfigException;
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -46,14 +45,10 @@ class AgentConfig extends AbstractResource
         return $agentConfig;
     }
 
-    public function update(ApiRequest $request, $id)
+    public function update(ApiRequest $request, $courseId)
     {
-        $agentConfig = $this->getAgentConfigService()->getAgentConfig($id);
-        if (empty($agentConfig)) {
-            throw AgentConfigException::AGENT_CONFIG_NOT_FOUND();
-        }
-        $this->getCourseService()->tryManageCourse($agentConfig['courseId']);
-        $this->getAgentConfigService()->updateAgentConfig($id, $request->request->all());
+        $this->getCourseService()->tryManageCourse($courseId);
+        $this->getAgentConfigService()->updateAgentConfig($courseId, $request->request->all());
 
         return ['ok' => true];
     }

@@ -46,14 +46,9 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         return $agentConfig;
     }
 
-    public function getAgentConfig($id)
+    public function updateAgentConfig($courseId, $params)
     {
-        return $this->getAiStudyConfigDao()->get($id);
-    }
-
-    public function updateAgentConfig($id, $params)
-    {
-        $agentConfig = $this->getAgentConfig($id);
+        $agentConfig = $this->getAgentConfigByCourseId($courseId);
         if (empty($agentConfig)) {
             throw AgentConfigException::AGENT_CONFIG_NOT_FOUND();
         }
@@ -61,8 +56,8 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         if (!empty($params['domainId'])) {
             $this->checkDomain($params['domainId']);
         }
-        $agentConfig = $this->getAiStudyConfigDao()->update($id, $params);
-        $this->getAIService()->updateDataset($id, ['domainId' => $agentConfig['domainId'], 'autoIndex' => !empty($agentConfig['isDiagnosisActive'])]);
+        $agentConfig = $this->getAiStudyConfigDao()->update($agentConfig['id'], $params);
+        $this->getAIService()->updateDataset($agentConfig['datasetId'], ['domainId' => $agentConfig['domainId'], 'autoIndex' => !empty($agentConfig['isDiagnosisActive'])]);
     }
 
     private function checkDomain($domainId)
