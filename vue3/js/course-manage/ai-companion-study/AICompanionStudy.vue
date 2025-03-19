@@ -79,7 +79,7 @@ const showConfirm = () => {
             courseId: props.courseId,
             isActive: false
           };
-          //todo
+          await Api.aiCompanionStudy.updateAgentConfig(, inactiveParams);
         }
       } finally {
         spinning.value = false;
@@ -108,7 +108,7 @@ onMounted(async () => {
     editType.value = 'update';
     formState.isActive = agentConfig.isActive == 1;
     formState.domainId = agentConfig.domainId;
-    formState.planDeadline = agentConfig.planDeadline.length > 0 ? agentConfig.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD'))) : [ref()];
+    formState.planDeadline = agentConfig.planDeadline.length > 0 ? agentConfig.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD'))) : [ref(null)];
     formState.isDiagnosisActive = agentConfig.isDiagnosisActive == 1;
   } else {
     editType.value = 'create';
