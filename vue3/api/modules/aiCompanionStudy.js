@@ -10,7 +10,7 @@ export default {
   async createAgentConfig(params) {
     return apiClient.post('/agent_config', params);
   },
-  async updateAgentConfig(agentConfigId, params) {
-    return apiClient.patch(`/agent_config/${agentConfigId}`, params);
+  async updateAgentConfig(courseId, params) {
+    return apiClient.patch(`/agent_config/${courseId}`, params);
   },
 }

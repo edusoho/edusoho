@@ -63,23 +63,27 @@ const showConfirm = () => {
     icon: createVNode(ExclamationCircleOutlined),
     async onOk() {
       spinning.value = true;
-      const activeParams = {
-        courseId: props.courseId,
-        domainId: formState.domainId,
-        planDeadline: formState.planDeadline
-          .filter(itemRef => itemRef.value != null)
-          .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
-        isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
-      };
       try {
         if (editType.value === 'create') {
-          await Api.aiCompanionStudy.createAgentConfig(activeParams);
-        } else if (editType.value === 'update') {
-          const inactiveParams = {
+          const params = {
             courseId: props.courseId,
-            isActive: false
+            domainId: formState.domainId,
+            planDeadline: formState.planDeadline
+              .filter(itemRef => itemRef.value != null)
+              .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
+            isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
           };
-          await Api.aiCompanionStudy.updateAgentConfig(, inactiveParams);
+          await Api.aiCompanionStudy.createAgentConfig(params);
+        } else if (editType.value === 'update') {
+          const params = {
+            isActive: formState.isActive === true ? 1 : 0,
+            domainId: formState.domainId,
+            planDeadline: formState.planDeadline
+              .filter(itemRef => itemRef.value != null)
+              .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
+            isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
+          };
+          await Api.aiCompanionStudy.updateAgentConfig(props.courseId, params);
         }
       } finally {
         spinning.value = false;
