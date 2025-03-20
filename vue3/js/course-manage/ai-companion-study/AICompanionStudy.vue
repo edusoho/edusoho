@@ -108,7 +108,7 @@ onMounted(async () => {
   if (agentConfig.value.agentEnable === true) {
     masking.value = false;
   }
-  if (agentConfig.value.isActive == 1) {
+  if (agentConfig.value.id) {
     editType.value = 'update';
   } else {
     editType.value = 'create';
@@ -201,19 +201,20 @@ onMounted(async () => {
               label="AI 知识点诊断"
             >
               <a-switch v-model:checked="formState.isDiagnosisActive" checked-children="开" un-checked-children="关"/>
-              <a-popover placement="top">
+              <a-popover placement="right" overlayClassName="example-popover">
                 <template #title>
                   查看示例
                 </template>
                 <template #content>
+                  <div class="mb-16 text-14 leading-22 font-normal text-[#87898F] w-480">AI 知识点诊断开启后，学员在网校内提交答题后根据答题结果找出学员掌握薄弱的知识点，推荐对应的课程任务进行学习</div>
                   <img class="w-480 h-318" src="../../../img/course-manage/ai-companion-study/example.png" alt="示例">
                 </template>
-                <a-button class="text-[--primary-color]" type="link">查看示例</a-button>
+                <a-button style="color: var(--primary-color)" type="link">查看示例</a-button>
               </a-popover>
               <div class="text-14 leading-24 font-normal text-[#919399]">
-                开启后，学员在网校内提交答题后根据答题结果找出学员掌握薄弱的知识点，推荐对应的课程任务进行学习
+                知识点生成完成后将通过站内信通知您，请您放心保存AI伴学服务的配置
               </div>
-              <a-alert v-if="agentConfig.indexStatus === 'doing'" class="mt-12 w-fit" :message="`知识点生成中...${agentConfig.indexProgress}%，完成后将通过站内信通知您，请您放心保存AI伴学服务的配置`"
+              <a-alert v-if="agentConfig.indexStatus === 'doing'" class="mt-12 w-fit" :message="`知识点生成中...${agentConfig.indexProgress}%`"
                        type="info" show-icon/>
               <a-alert v-if="agentConfig.indexStatus === 'success'" class="mt-12 w-fit" message="知识点生成成功"
                        type="success" show-icon/>
@@ -231,3 +232,9 @@ onMounted(async () => {
     </div>
   </AntConfigProvider>
 </template>
+
+<style>
+.example-popover .ant-popover-inner {
+  border-radius: 12px;
+}
+</style>
