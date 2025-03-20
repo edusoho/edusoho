@@ -11,6 +11,20 @@ class AgentServiceProvider implements ServiceProviderInterface
     {
         $this->rewriteService($biz);
         $this->rewriteDao($biz);
+        $this->registerWorkflow($biz);
+    }
+
+    private function registerWorkflow($biz)
+    {
+        $workflows = [
+            'plan.getGenerateConfig' => '\AgentBundle\Workflow\PlanGetGenerateConfig',
+            'plan.generate' => '\AgentBundle\Workflow\PlanGenerate',
+        ];
+        foreach ($workflows as $workflow => $class) {
+            $biz["agent.workflow.{$workflow}"] = function ($biz) use ($class) {
+                return new $class($biz);
+            };
+        }
     }
 
     private function rewriteService($biz)

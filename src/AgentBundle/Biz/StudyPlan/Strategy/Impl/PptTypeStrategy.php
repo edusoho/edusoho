@@ -10,6 +10,6 @@ class PptTypeStrategy implements TimeCalculationStrategy
 
     public function calculateTime(array $activity): int
     {
-        return $activity['content']['length'] * self::SECOND_PER_PAGE;
+        return $activity['length'] * self::SECOND_PER_PAGE;
     }
 }

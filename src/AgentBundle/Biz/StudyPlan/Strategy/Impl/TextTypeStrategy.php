@@ -14,6 +14,6 @@ class TextTypeStrategy implements TimeCalculationStrategy
 
     public function calculateTime(array $activity): int
     {
-        return ceil($activity['content'] / self::WORDS_PER_SECOND * self::SECONDS_PER_MINUTE);
+        return ceil(count($activity['content']) / self::WORDS_PER_SECOND * self::SECONDS_PER_MINUTE);
     }
 }

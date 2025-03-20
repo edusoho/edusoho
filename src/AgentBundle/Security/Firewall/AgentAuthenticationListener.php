@@ -10,34 +10,26 @@ use Topxia\Service\Common\ServiceKernel;
 
 class AgentAuthenticationListener extends BaseAuthenticationListener
 {
-    const AGENT_HEADER = 'Authentication';
+    const AGENT_AUTH_HEADER = 'Authorization';
 
     public function handle(Request $request)
     {
-        if (null === $tokenInHeader = $request->headers->get(self::AGENT_HEADER)) {
+        $authorization = $request->headers->get(self::AGENT_AUTH_HEADER);
+        if (!empty($authorization)) {
+            $token = str_replace('Bearer ', '', $authorization);
+        } else {
+            $token = $request->query->get('token');
+        }
+        if (empty($token)) {
             return;
         }
-        $mallSettings = $this->getSettingService()->get('marketing_mall', []);
-        $storages = $this->getSettingService()->get('storage', []);
+        $storage = $this->getSettingService()->get('storage', []);
         try {
-            if (empty($mallSettings['secret_key'])) {
-                $result = JWT::decode($tokenInHeader, $storages['cloud_secret_key'], ['HS256']);
-                $access_key = $storages['cloud_access_key'];
-            } else {
-                $result = JWT::decode($tokenInHeader, $mallSettings['secret_key'], ['HS256']);
-                $access_key = $mallSettings['access_key'];
-            }
+            $payload = JWT::decode($token, [$storage['cloud_access_key'] => $storage['cloud_secret_key']], ['HS256']);
         } catch (\RuntimeException $e) {
             throw new NotFoundException('token error！');
         }
-        if ($result->access_key !== $access_key) {
-            throw new NotFoundException('token auth error！');
-        }
-        if (empty($result->userId)) {
-            $user = $this->getUserService()->getUserByType('system');
-        } else {
-            $user = $this->getUserService()->getUser($result->userId);
-        }
+        $user = $this->getUserService()->getUser($payload->sub);
         if (empty($user)) {
             throw new NotFoundException('user not found！');
         }

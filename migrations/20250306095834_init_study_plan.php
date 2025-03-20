@@ -15,8 +15,8 @@ class InitStudyPlan extends Migration
               `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '计划ID',
               `userId` INT(11) NOT NULL COMMENT '学员ID',
               `courseId` INT(11) NOT NULL COMMENT '课程ID',
-              `startDate` BIGINT NOT NULL COMMENT '计划开始日期',
-              `endDate` BIGINT NOT NULL COMMENT '计划截止日期',
+              `startDate` VARCHAR(16) NOT NULL COMMENT '计划开始日期',
+              `endDate` VARCHAR(16) NOT NULL COMMENT '计划截止日期',
               `weekDays` VARCHAR(20) NOT NULL COMMENT '每周学习日（如1,3,5表示周一、三、五）',
               `totalDays` INT(11) NOT NULL COMMENT '总学习天数（自动计算）',
               `dailyAvgTime` BIGINT NOT NULL COMMENT '每日平均学习时长（分钟）',
@@ -53,6 +53,8 @@ class InitStudyPlan extends Migration
                 UNIQUE INDEX `uniqueCourseId`(`courseId`),
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI伴学服务配置表';
+
+            ALTER TABLE `course_task` ADD `documentId` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '知识库文档ID';
         ");
     }
 
