@@ -63,7 +63,7 @@ const showConfirm = () => {
     async onOk() {
       spinning.value = true;
       try {
-        if (editType.value === 'create') {
+        if (!agentConfig.value.id) {
           const params = {
             courseId: props.courseId,
             domainId: formState.domainId,
@@ -73,7 +73,7 @@ const showConfirm = () => {
             isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
           };
           await Api.aiCompanionStudy.createAgentConfig(params);
-        } else if (editType.value === 'update') {
+        } else {
           const params = {
             isActive: formState.isActive === true ? 1 : 0,
             domainId: formState.domainId,
@@ -95,7 +95,6 @@ const showConfirm = () => {
 
 const masking = ref(true);
 const domainOptions = ref([]);
-const editType = ref('create');
 const agentConfig = ref();
 onMounted(async () => {
   const options = await Api.aiCompanionStudy.getDomains(props.courseId);
@@ -107,11 +106,6 @@ onMounted(async () => {
   agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
   if (agentConfig.value.agentEnable === true) {
     masking.value = false;
-  }
-  if (agentConfig.value.id) {
-    editType.value = 'update';
-  } else {
-    editType.value = 'create';
   }
   formState.isActive = agentConfig.value?.isActive == 1 ?? false;
   formState.domainId = agentConfig.value?.domainId ?? null;
