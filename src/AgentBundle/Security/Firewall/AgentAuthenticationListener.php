@@ -15,6 +15,9 @@ class AgentAuthenticationListener extends BaseAuthenticationListener
     public function handle(Request $request)
     {
         $authorization = $request->headers->get(self::AGENT_AUTH_HEADER);
+        if (false === strpos($authorization, 'Bearer')) {
+            return;
+        }
         if (!empty($authorization)) {
             $token = str_replace('Bearer ', '', $authorization);
         } else {
