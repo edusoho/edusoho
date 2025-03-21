@@ -137,7 +137,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'orderbys' => ['endTime', 'startTime', 'createdTime'],
             'conditions' => [
                 'id IN (:ids)',
-                'is NOT IN (:excludeIds)',
+                'id NOT IN (:excludeIds)',
                 'fromCourseId = :fromCourseId',
                 'mediaType = :mediaType',
                 'fromCourseId IN (:courseIds)',
