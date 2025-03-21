@@ -2,6 +2,9 @@
 
 namespace AgentBundle\Biz\StudyPlan\Dao;
 
-interface StudyPlanDao
+use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+
+interface StudyPlanDao extends GeneralDaoInterface
 {
+    public function getStudyPlanByUserIdAndCourseId($userId, $courseId);
 }

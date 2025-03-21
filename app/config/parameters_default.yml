@@ -43,6 +43,7 @@ parameters:
         - '/cashier/wechat/notify'
         - '/agreement/course/purchase'
         - 'disclaimers'
+        - '/agent_worker'
 
     qrcode_protocol_whitelist_default:
         - 'weixin'

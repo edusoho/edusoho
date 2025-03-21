@@ -9,8 +9,10 @@ use AgentBundle\Biz\StudyPlan\Factory\CalculationStrategyFactory;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use AgentBundle\Biz\StudyPlan\StudyPlanException;
 use AgentBundle\Client\AgentClient;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -99,6 +101,28 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
                 'date_range' => date('Y年n月j日', $params['startTime']).'至'.date('Y年n月j日', $params['endTime'])
             ])
         ];
+    }
+
+    public function generatePlan($data)
+    {
+        if (!ArrayToolkit::requireds($data, ['courseId', 'startDate', 'endDate', 'weekDays'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $studyPlan = $this->getStudyPlanDao()->getStudyPlanByUserIdAndCourseId($this->getCurrentUser()->getId(), $data['courseId']);
+        if (empty($studyPlan)) {
+            return $this->getStudyPlanDao()->create([
+                'userId' => $this->getCurrentUser()->getId(),
+                'courseId' => $data['courseId'],
+                'startDate' => $data['startDate'],
+                'endDate' => $data['endDate'],
+                'weekDays' => $data['weekDays'],
+                'totalDays' => 0,
+                'dailyAvgTime' => 0,
+            ]);
+        }
+        $data = ArrayToolkit::parts($data, ['courseId', 'startDate', 'endDate', 'weekDays']);
+
+        return $this->getStudyPlanDao()->update($studyPlan['id'], $data);
     }
 
     private function convertToMarkdown($params)
