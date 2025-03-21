@@ -8,12 +8,18 @@ class PlanGetGenerateConfig extends AbstractWorkflow
     {
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($data['courseId']);
         if (empty($agentConfig['isActive'])) {
-            return ['status' => 'AI_DISABLED'];
+            return [
+                'ok' => false,
+                'error' => [
+                    'code' => 'AI_DISABLED',
+                    'message' => '伴学服务未开启',
+                ],
+            ];
         }
 
         return [
-            'status' => 'OK',
-            'data' => [
+            'ok' => true,
+            'outputs' => [
                 'deadlines' => $agentConfig['planDeadline'],
             ],
         ];

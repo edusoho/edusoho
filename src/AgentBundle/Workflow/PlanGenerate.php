@@ -11,13 +11,21 @@ class PlanGenerate extends AbstractWorkflow
     {
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($data['courseId']);
         if (empty($agentConfig['isActive'])) {
-            return ['status' => 'AI_DISABLED'];
+            return [
+                'ok' => false,
+                'error' => [
+                    'code' => 'AI_DISABLED',
+                    'message' => '伴学服务未开启',
+                ],
+            ];
         }
         $plan = $this->getStudyPlanService()->generatePlan($data);
 
         return [
-            'status' => 'OK',
-            'content' => $this->makeMarkdown($plan),
+            'ok' => true,
+            'outputs' => [
+                'content' => $this->makeMarkdown($plan),
+            ],
         ];
     }
 

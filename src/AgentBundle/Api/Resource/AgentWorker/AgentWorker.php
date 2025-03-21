@@ -11,20 +11,26 @@ class AgentWorker extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        if (!ArrayToolkit::requireds($params, ['workflow', 'data'])) {
+        if (!ArrayToolkit::requireds($params, ['workflow', 'inputs'])) {
             return [
-                'status' => 'PARAMS_LACK',
-                'content' => '',
+                'ok' => false,
+                'error' => [
+                    'code' => 'PARAMS_LACK',
+                    'message' => '参数缺失',
+                ],
             ];
         }
         if (empty($this->biz["agent.workflow.{$params['workflow']}"])) {
             return [
-                'status' => 'UNKNOWN_WORKFLOW',
-                'content' => '',
+                'ok' => false,
+                'error' => [
+                    'code' => 'UNKNOWN_WORKFLOW',
+                    'message' => '未知工作流',
+                ],
             ];
         }
         $workflow = $this->biz["agent.workflow.{$params['workflow']}"];
 
-        return $workflow->execute($params['data']);
+        return $workflow->execute($params['inputs']);
     }
 }
