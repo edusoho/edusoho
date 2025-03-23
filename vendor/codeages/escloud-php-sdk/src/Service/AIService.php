@@ -152,9 +152,19 @@ class AIService extends BaseService
         return $this->request('POST', '/v1/dataset/delete', ['id' => $id]);
     }
 
-    public function createDocumentByText($datasetId, $no, $name, $content)
+    public function createDocumentByText($datasetId, $extId, $name, $content)
     {
-        return $this->request('POST', '/v1/dataset/document/createByText', ['datasetId' => $datasetId, 'no' => $no, 'name' => $name, 'content' => $content]);
+        return $this->request('POST', '/v1/dataset/document/createByText', ['datasetId' => $datasetId, 'extId' => $extId, 'name' => $name, 'content' => $content]);
+    }
+
+    public function createDocumentByResource($datasetId, $extId, $name, $resNo)
+    {
+        return $this->request('POST', '/v1/dataset/document/createByResource', ['datasetId' => $datasetId, 'extId' => $extId, 'name' => $name, 'resNo' => $resNo]);
+    }
+
+    public function batchCreateDocumentByResource($datasetId, $items)
+    {
+        return $this->request('POST', '/v1/dataset/document/batchCreateByResource', ['datasetId' => $datasetId, 'items' => $items]);
     }
 
     public function deleteDocument($id)

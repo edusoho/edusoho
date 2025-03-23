@@ -14,7 +14,7 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
 {
     public function getAgentConfigByCourseId($courseId)
     {
-        return $this->getAiStudyConfigDao()->getAiStudyConfigByCourseId($courseId);
+        return $this->getAiStudyConfigDao()->getByCourseId($courseId);
     }
 
     public function createAgentConfig($params)
@@ -58,6 +58,11 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         }
         $agentConfig = $this->getAiStudyConfigDao()->update($agentConfig['id'], $params);
         $this->getAIService()->updateDataset($agentConfig['datasetId'], ['domainId' => $agentConfig['domainId'], 'autoIndex' => !empty($agentConfig['isDiagnosisActive'])]);
+    }
+
+    public function findAgentConfigsByCourseIds($courseIds)
+    {
+        return $this->getAiStudyConfigDao()->findByCourseIds($courseIds);
     }
 
     private function checkDomain($domainId)

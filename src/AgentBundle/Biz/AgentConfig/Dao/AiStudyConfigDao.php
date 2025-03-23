@@ -6,5 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface AiStudyConfigDao extends GeneralDaoInterface
 {
-    public function getAiStudyConfigByCourseId($courseId);
+    public function getByCourseId($courseId);
+
+    public function findByCourseIds($courseIds);
 }

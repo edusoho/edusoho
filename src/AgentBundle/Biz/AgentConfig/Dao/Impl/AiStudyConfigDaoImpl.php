@@ -9,9 +9,14 @@ class AiStudyConfigDaoImpl extends GeneralDaoImpl implements AiStudyConfigDao
 {
     protected $table = 'ai_study_config';
 
-    public function getAiStudyConfigByCourseId($courseId)
+    public function getByCourseId($courseId)
     {
         return $this->getByFields(['courseId' => $courseId]);
+    }
+
+    public function findByCourseIds($courseIds)
+    {
+        return $this->findInField('courseId', $courseIds);
     }
 
     public function declares()
