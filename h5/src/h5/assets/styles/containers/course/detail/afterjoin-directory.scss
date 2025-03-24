@@ -194,7 +194,6 @@
 		.lesson-title {
 			box-sizing: border-box;
 			width: 100%;
-			padding: 0 vw(15);
 			font-size: vw(14);
 			background: rgba(245, 245, 245, 1);
 
@@ -214,13 +213,15 @@
 					.l22 {
 						.tryLes,
 						.freeAdmission {
+							height: fit-content;
+							white-space: nowrap;
 							vertical-align: middle;
 						}
 					}
 
 					.ks {
 						display: inline-flex;
-						width: vw(224);
+						width: vw(220);
 						padding-top: 4px;
 						padding-bottom: 4px;
 						vertical-align: top;
@@ -262,7 +263,7 @@
 		}
 
 		.zb-ks {
-			padding: vw(10) vw(15);
+			padding: 10px 12px;
 
 			.lesson-title-l {
 				line-height: vw(40);
@@ -270,7 +271,7 @@
 
 			.zbtime {
 				margin-top: vw(3);
-				margin-left: vw(26);
+				margin-left: 26px;
 				color: #408ffb;
 				font-size: vw(12);
 			}

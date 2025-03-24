@@ -1,10 +1,8 @@
-import axios from 'axios';
-
 // API配置
 import config from 'admin/api/config';
 
 // 拦截器
-import 'admin/api/interceptors';
+import axiosAdminInstance from 'admin/api/interceptors';
 import { parseUrl, addPrefix } from './utils';
 
 const Api = {};
@@ -16,7 +14,7 @@ const axiosApi = () => {
       url = options && options.query ? parseUrl(url, options.query) : url;
       url = item.noPrefix ? url : addPrefix(url);
 
-      return axios(Object.assign({}, item, options, { url }));
+      return axiosAdminInstance(Object.assign({}, item, options, { url }));
     };
     return item;
   });

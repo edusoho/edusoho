@@ -82,25 +82,28 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 发布预览按钮 -->
     <div class="setting-button-group">
       <el-button
-        class="setting-button-group__button text-14 btn-border-primary"
+        style="font-size: 14px"
+        class="setting-button-group__button btn-border-primary"
         size="mini"
         @click="quit"
         :disabled="isLoading"
         >{{ $t('btn.cancel') }}</el-button
       >
       <el-button
-        class="setting-button-group__button text-14 btn-border-primary"
+        style="font-size: 14px"
+        class="setting-button-group__button btn-border-primary"
         size="mini"
         @click="save('draft')"
         :disabled="isLoading"
         >{{ $t('btn.preview') }}</el-button
       >
       <el-button
-        class="setting-button-group__button text-14"
+        style="font-size: 14px"
+        class="setting-button-group__button"
         type="primary"
         size="mini"
         @click="save('published')"
@@ -386,7 +389,6 @@ export default {
         mode,
       })
         .then(res => {
-          console.log(1);
           // 默认排列方式
           this.formateRes(res);
         })

@@ -76,7 +76,7 @@
     <div class="intro-footer">
       <template v-if="result">
         <van-button
-          v-if="result.status === 'doing' && canDoAgain"
+          v-if="result.status === 'doing'"
           class="intro-footer__btn"
           type="primary"
           @click="startTestpaper(true, true)"
@@ -291,7 +291,11 @@ export default {
         },
       })
         .then(res => {
-          this.testId = res.testpaper.id
+          if (res.testpaperResult?.status === 'doing') {
+            this.goDoTestpaper(KeepDoing, reDo);
+            return;
+          }
+          this.testId = res.testpaper.id;
           this.canDoAgain = res.task.activity.testpaperInfo.canDoAgain === '1';
 					if(this.canDoAgain){
 						if (this.enable_facein === 1) {

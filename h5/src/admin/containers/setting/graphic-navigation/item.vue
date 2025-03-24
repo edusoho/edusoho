@@ -261,7 +261,6 @@ export default {
       this.getCategoryType({
         type: this.item.link.type,
       }).then(res => {
-        console.log(res);
         res.forEach(item => {
           this.groupList.push(item);
         });

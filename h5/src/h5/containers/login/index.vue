@@ -37,8 +37,8 @@
           >{{ $t('btn.login') }}</van-button
         >
     </div>
-     
-   
+
+
     <div class="login-bottom text-center">
       <div v-if="userTerms || privacyPolicy" class="login-agree">
         <van-checkbox
@@ -86,7 +86,7 @@
         @click="agreeSign"
         >{{ $t('btn.agreeAndSignin') }}</van-button
       >
-     
+
     </van-popup>
   </div>
 </template>
@@ -215,7 +215,11 @@ export default {
             this.afterLogin();
           })
           .catch(err => {
-            Toast.fail(err.message);
+            if (err.code === 4000147) {
+              this.upgradePassword();
+            } else {
+              Toast.fail(err.message);
+            }
           });
 
         return;

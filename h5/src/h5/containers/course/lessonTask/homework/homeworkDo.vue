@@ -23,20 +23,12 @@
     <guide-page />
 
     <!-- 底部 -->
-    <div class="paper-footer">
-      <div>
-        <span @click="cardShow = true">
-          <i class="mb-8 iconfont icon-Questioncard" />
-          {{ $t('courseLearning.questionCard') }}
-        </span>
-      </div>
-      <div>
-        <span @click="submitpaper">
-          <i class="mb-8 iconfont icon-submit" />
-          {{ $t('courseLearning.handInThePaper') }}
-        </span>
-      </div>
-    </div>
+    <ibs-footer
+      :mode="'do'"
+      :show-save-process-btn="false"
+      @showcard="showCard"
+      @submitPaper="submitpaper"
+    />
 
     <!-- 答题卡 -->
     <van-popup v-model="cardShow" position="bottom">
@@ -81,12 +73,14 @@ import homeworkMixin from '@/mixins/lessonTask/homework.js';
 import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
+import IbsFooter from '@/src/components/common/footer.vue';
 
 // 由于会重定向到说明页或者结果页，为了避免跳转后不能返回，添加backUrl机制
 let backUrl = '';
 export default {
   name: 'HomeworkDo',
   components: {
+    IbsFooter,
     itemBank,
     guidePage,
     OutFocusMask,
@@ -160,6 +154,9 @@ export default {
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
     ...mapActions('course', ['handHomeworkdo', 'saveAnswerdo']),
+    showCard() {
+      this.cardShow = true;
+    },
     // 初始化上报数据
     initReport() {
       this.initReportData(

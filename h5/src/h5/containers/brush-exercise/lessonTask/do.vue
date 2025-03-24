@@ -33,7 +33,6 @@ const config = {
     api: 'getChapterExerciseRecord',
   },
 };
-let backUrl = '';
 
 export default {
   mixins: [isAuthorized],
@@ -179,7 +178,7 @@ export default {
           this.canLeave = true;
           const exerciseId = this.$route.query.exerciseId;
           this.$router.replace({
-            path: `/item_bank_exercise/${exerciseId}`,
+            path: `/item_bank_exercise/${exerciseId}?categoryId=${this.$route.query.categoryId}`,
           });
         })
         .catch(err => {
@@ -250,7 +249,7 @@ export default {
         assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
         categoryId: this.$route.query.categoryId,
-        backUrl: backUrl,
+        backUrl: `/item_bank_exercise/${this.$route.query.exerciseId}?categoryId=${this.$route.query.categoryId}`,
       };
       const answerRecordId = this.assessmentResponse.answer_record_id;
       this.$router.replace({

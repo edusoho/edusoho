@@ -163,8 +163,8 @@ export default {
   },
   props: {
     exerciseInfo: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     },
   },
   inject: ['brushDo'],

@@ -252,7 +252,7 @@ export default {
       this.hideLoading = false;
       this[apiConfigObj[this.type].apiName](apiConfigObj[this.type].params)
         .then(res => {
-          cb(res);
+          cb(res.data);
         })
         .catch(err => {
           this.hideLoading = true;

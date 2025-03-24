@@ -7,7 +7,9 @@ import proxyMap from '../../../build/env';
 //   EXPIRED_CREDENTIAL: 5
 // };
 
-axios.interceptors.request.use(
+const axiosAdminInstance = axios.create({});
+
+axiosAdminInstance.interceptors.request.use(
   config => {
     config.headers.Accept = 'application/vnd.edusoho.v2+json';
 
@@ -27,7 +29,7 @@ axios.interceptors.request.use(
   error => Promise.reject(error),
 );
 
-axios.interceptors.response.use(
+axiosAdminInstance.interceptors.response.use(
   res => {
     store.commit('UPDATE_LOADING_STATUS', false);
     return res.data;
@@ -47,3 +49,5 @@ axios.interceptors.response.use(
     return Promise.reject(error.response.data.error);
   },
 );
+
+export default axiosAdminInstance;

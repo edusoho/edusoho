@@ -7,7 +7,7 @@
           v-for="(item, index) in exercise"
           :key="index"
         >
-          <div class="exam-left">
+          <div class="exam-left" v-if="item.assessment">
             <div class="exam-title">{{ item.assessment.name }}</div>
             <div class="exam-score">
               {{ item.assessment.question_count }}题/
@@ -15,7 +15,7 @@
             </div>
           </div>
           <div class="exam-right" v-if="isMember">
-            <div :class="[getBtnText(item).class]" @click="clickBtn(item)">
+            <div class="text-12 whitespace-nowrap p-4 px-8" :class="[getBtnText(item).class]" @click="clickBtn(item)" style="line-height: 20px; border-radius: 6px;">
               {{ getBtnText(item).text }}
             </div>
           </div>
@@ -88,7 +88,7 @@ export default {
     startDo(item) {
       if (this.ItemBankExercise?.status == 'closed') {
         closedToast('exercise')
-        return 
+        return
       }
 
       const query = {
@@ -104,7 +104,7 @@ export default {
     continueDo(item) {
       if (this.ItemBankExercise?.status == 'closed') {
         closedToast('exercise')
-        return 
+        return
       }
 
       const query = {

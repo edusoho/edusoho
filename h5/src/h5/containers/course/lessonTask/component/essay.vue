@@ -88,7 +88,7 @@
             {{ $t('courseLearning.score') }}：<div>{{ itemdata.testResult ? itemdata.testResult.score : 0.0 }}</div>
           </div>
           <div v-if="mode === 'exam'" class="analysis-color mb-8">
-            {{ $t('courseLearning.comment') }}：<div>{{ itemdata.testResult ? itemdata.testResult.teacherSay === null ? '--' : itemdata.testResult.teacherSay : '' }}</div>
+            {{ $t('courseLearning.comment') }}：<div v-html="getTeacherSay()"></div>
           </div>
           <div class="analysis-color">
             {{ $t('courseLearning.analyze') }}：
@@ -433,7 +433,15 @@ export default {
       this.isShowAiExplain = false;
       this.anewAiExplain = true;
       this.stopAiAnalysis();
-    }
+    },
+    getTeacherSay() {
+      const testResult = this.itemdata.testResult;
+      return testResult
+        ? testResult.teacherSay === null
+          ? '--'
+          : testResult.teacherSay
+        : '';
+    },
   },
 };
 </script>

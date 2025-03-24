@@ -19,7 +19,7 @@
         <span v-show="!item.image.uri"><i class="text-18">+</i>{{ $t('carousel.addPictures') }}</span>
       </el-upload>
     </div>
-    
+
 
     <el-dialog
       :visible.sync="dialogVisible"
@@ -54,7 +54,7 @@
       src="static/images/delete.png"
       @click="handleRemove($event, index, itemNum)"
     />
-    
+
     <!-- <div v-if="pathName !== 'appSetting'" class="add-title">
       {{ $t('carousel.title') }}：<el-input
         v-model="item.title"
@@ -72,9 +72,9 @@
         <!-- <el-radio v-model="radio" label="url">{{ $t('carousel.customLink') }}</el-radio> -->
       </div>
     </div>
-    
+
     <div v-if="radio === 'insideLink'" class="add-inner">
-      <el-dropdown v-show="!linkTextShow">
+      <el-dropdown v-if="!linkTextShow">
         <el-button size="mini" class="el-dropdown-link">
           {{ $t('carousel.addLink') }}
         </el-button>
@@ -88,11 +88,11 @@
         </el-dropdown-menu>
       </el-dropdown>
       <el-tag
-        v-show="linkTextShow"
+        v-if="linkTextShow"
         :disable-transitions="true"
-        class="courseLink"
         closable
         @close="handleClose"
+        style="max-width: 150px; width: fit-content; display: flex; align-items: center;"
       >
         <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
           <span slot="content">{{ linkTextShow }}</span>
