@@ -4,18 +4,6 @@ $.validator.addMethod('spaceNoSupport', function (value, element) {
   return value.indexOf(' ') < 0;
 }, $.validator.format(Translator.trans('validate.have_spaces')));
 
-let passwordRules = function () {
-  let rules = {
-    required: true,
-    visible_character: true,
-    spaceNoSupport: true,
-  };
-  let passwordLevel = $('#password_level').val();
-  rules[`check_password_${passwordLevel}`] = true;
-
-  return rules;
-};
-
 $('#settings-password-form').validate({
   currentDom: '#password-save-btn',
   ajax: true,
@@ -23,7 +11,12 @@ $('#settings-password-form').validate({
     'currentPassword': {
       required: true,
     },
-    'newPassword': passwordRules(),
+    'newPassword': {
+      required: true,
+      visible_character: true,
+      spaceNoSupport: true,
+      check_password_high: true,
+    },
     'confirmPassword': {
       required: true,
       equalTo: '#form_newPassword',
