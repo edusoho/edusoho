@@ -208,7 +208,7 @@ export default {
         return false;
       }
 
-      if (type === 'encrypt_password' && ele.length > 20) {
+      if (type === 'encrypt_password' && ele.length > 32) {
         this.errorMessage[type] = this.$t('toast.enterUpTo32Characters');
         return false;
       }
