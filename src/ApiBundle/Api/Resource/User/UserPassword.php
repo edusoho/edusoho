@@ -12,6 +12,7 @@ use AppBundle\Common\SimpleValidator;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\Sms\SmsException;
+use Biz\System\SettingException;
 use Biz\User\UserException;
 
 class UserPassword extends AbstractResource
@@ -44,7 +45,7 @@ class UserPassword extends AbstractResource
         }
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encrypt_password']), $request->getHttpRequest()->getHost());
-        if (!SimpleValidator::password($password)) {
+        if (!SimpleValidator::highPassword($password)) {
             throw CommonException::ERROR_PARAMETER();
         }
 
@@ -62,6 +63,13 @@ class UserPassword extends AbstractResource
 
     private function resetPasswordByEmail($email, $request)
     {
+        $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+        $mailEnable = (isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled']);
+        if (empty($mailEnable)) {
+            throw SettingException::MAIL_DISABLE();
+        }
+
         $biz = $this->getBiz();
         $dragCaptcha = $biz['biz_drag_captcha'];
         $dragCaptcha->check($request->request->get('dragCaptchaToken'));

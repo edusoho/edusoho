@@ -9,15 +9,8 @@ class UserPasswordLevel extends BaseResource
 {
     public function search(ApiRequest $request)
     {
-        $auth = $this->getSettingService()->get('auth', []);
-
         return [
-            'passwordLevel' => $auth['password_level'] ?? 'low',
+            'passwordLevel' => 'high',
         ];
-    }
-
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
     }
 }
