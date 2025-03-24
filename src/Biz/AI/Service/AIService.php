@@ -36,7 +36,11 @@ interface AIService
 
     public function deleteDataset($id);
 
-    public function createDocument(array $params);
+    public function createDocumentByText(array $params);
+
+    public function createDocumentByResource(array $params);
+
+    public function batchCreateDocumentByResource($datasetId, $items);
 
     public function deleteDocument($id);
 }

@@ -131,9 +131,27 @@ class AIServiceImpl extends BaseService implements AIService
         $this->getAIService()->deleteDataset($id);
     }
 
-    public function createDocument(array $params)
+    public function createDocumentByText(array $params)
     {
-        // TODO: Implement createDocument() method.
+        if (!ArrayToolkit::requireds($params, ['datasetId', 'extId', 'name', 'content'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getAIService()->createDocumentByText($params['datasetId'], $params['extId'], $params['name'], $params['content']);
+    }
+
+    public function createDocumentByResource(array $params)
+    {
+        if (!ArrayToolkit::requireds($params, ['datasetId', 'extId', 'name', 'resNo'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getAIService()->createDocumentByResource($params['datasetId'], $params['extId'], $params['name'], $params['resNo']);
+    }
+
+    public function batchCreateDocumentByResource($datasetId, $items)
+    {
+        return $this->getAIService()->batchCreateDocumentByResource($datasetId, $items);
     }
 
     public function deleteDocument($id)

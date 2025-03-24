@@ -54,7 +54,7 @@ class InitStudyPlan extends Migration
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI伴学服务配置表';
 
-            ALTER TABLE `course_task` ADD `documentId` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '知识库文档ID';
+            ALTER TABLE `activity` ADD `documentId` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '知识库文档ID';
         ");
     }
 
@@ -68,6 +68,7 @@ class InitStudyPlan extends Migration
             DROP TABLE IF EXISTS `study_plan`;
             DROP TABLE IF EXISTS `study_plan_detail`;
             DROP TABLE IF EXISTS `ai_study_config`;
+            ALTER TABLE `activity` DROP COLUMN `documentId`;
         ');
     }
 }

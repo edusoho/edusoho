@@ -30,7 +30,7 @@ class AuthSettingEventSubscriber extends EventSubscriber
         ]);
 
         $this->getMallClient()->notifyPasswordLevelUpdate([
-            'passwordLevel' => $auth['password_level'] ?? 'low',
+            'passwordLevel' => 'high',
         ]);
     }
 

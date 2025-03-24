@@ -9,4 +9,6 @@ interface AgentConfigService
     public function createAgentConfig($params);
 
     public function updateAgentConfig($courseId, $params);
+
+    public function findAgentConfigsByCourseIds($courseIds);
 }

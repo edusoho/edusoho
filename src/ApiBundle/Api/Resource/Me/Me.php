@@ -6,7 +6,6 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
 use Biz\AI\Util\AgentToken;
-use Biz\System\Service\SettingService;
 use Codeages\Biz\Pay\Service\AccountService;
 
 class Me extends AbstractResource

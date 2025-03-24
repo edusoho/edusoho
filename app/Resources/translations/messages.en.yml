@@ -2639,6 +2639,7 @@ form.btn.confirm.normal: 'Confirm normal'
 form.btn.confirm.illegal: 'Confirm illegal'
 form.btn.batch.normal: 'Batch normal'
 form.btn.batch.illegal: 'Batch illegal'
+form.btn.send_verify_email: 'Send verify email'
 
 user.login.account_type_label: 'Email / phone numbers / username'
 user.login.content_title: 'Sign in'
@@ -3087,6 +3088,10 @@ user.cards.used: Used
 user.cards.outdate: Expired
 user.cards.invalid: Invalid
 user.cards.moneycard_not_install_tips: 'The %coin_name% feature is not enabled. The learning card cannot be used.'
+user.verify: 'User Verify'
+user.verify.email_sending: 'A verification email is being sent'
+user.verify.email_sent: 'Check the email and click on the link in the email to verify.'
+
 notification: Notification
 notification.user_notification: Notification
 notification.user_notification.content_title: Notification
@@ -9392,6 +9397,7 @@ exception.user.mobile_not_found: 'User mobile is not found'
 exception.user.user_is_destroyed: User is destroyed
 exception.user.email_password_error: The email password is incorrect
 exception.user.already_bind: The user is already bound
+exception.user.password_require_upgrade: 'Your current password level is detected to be lower, please reset the password'
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
@@ -9412,6 +9418,7 @@ exception.rate_limit_error_captcha: Graphic verification code error!
 exception.sms.setting_enable: Cloud SMS related settings are not enabled!
 exception.setting.attachment.setting_enable: Cloud Attachement settings are not enabled!
 exception.setting.app_client_closed: App client closed!
+exception.setting.mail_disable: 'The email service is not enabled on the network school. Please contact the administrator'
 exception.sms.code_invalid: SMS verification code error
 exception.sms.type_error: Sms type error
 exception.sms.send_failed: Failed to send!

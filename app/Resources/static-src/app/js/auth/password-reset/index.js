@@ -154,8 +154,7 @@ class Reset {
         },
         'reset_password': {
           required: true,
-          minlength: 5,
-          maxlength: 20,
+          check_password_high: true,
         }
       },
       messages: {

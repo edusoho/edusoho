@@ -41,10 +41,15 @@ class PlanGenerate extends AbstractWorkflow
 
         return <<<MARKDOWN
 根据上述内容为你生成以下学习计划：
+
 1、学习内容：{$course['courseSetTitle']}，共{$taskCount}个任务，学完需要{$learnHour}小时
+
 2、学习时间：{$this->makeStudyBoundaryDate($plan['startDate'])} 至 {$this->makeStudyBoundaryDate($plan['endDate'])} 内，每{$this->makeChineseWeekDays($plan['weekDays'])}，共计{$studyDateCount}个学习日
+
 3、每次至少学习：{$everytimeLearnHour}小时
+
 我会在每个学习日提醒你完成学习，期待你的参与！
+
 {$this->makeTable($plan['courseId'], $studyDates, $tasks)}
 点击「学习内容」链接直达
 MARKDOWN;
