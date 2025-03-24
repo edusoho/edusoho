@@ -3,7 +3,7 @@
 @import './global.scss';
 @import './vant.scss';
 @import '../fonts/iconfont.css';
-@import '../../src/styles/index.scss';
+//@import '../../src/styles/index.scss';
 // components
 @import './components/reviews.scss';
 @import './components/report-mask.scss';
@@ -13,6 +13,7 @@
 @import './containers/login/index.scss';
 @import './containers/login/face-varification.scss';
 @import './containers/register/index.scss';
+@import './containers/password-reset/index.scss';
 @import './containers/my/index.scss';
 @import './containers/my/setting/index.scss';
 @import './containers/my/activity/index.scss';

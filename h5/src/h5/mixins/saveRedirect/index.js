@@ -25,7 +25,7 @@ export default {
         .then(({ is_bind_mobile, mobile_bind_mode }) => {
           // res.mobile_bind_mode: constraint：强制绑定，option：非强制绑定，closed：不绑定
           this[types.SET_MOBILE_BIND]({ is_bind_mobile, mobile_bind_mode });
-          
+
           if (!is_bind_mobile && mobile_bind_mode !== 'closed') {
             this.$router.replace({
               name: 'binding',
@@ -79,6 +79,14 @@ export default {
     checkMobileBind() {
       return Api.mobileBindCheck({
         query: { userId: this.user.id },
+      });
+    },
+    upgradePassword() {
+      this.$router.replace({
+        name: 'password_reset',
+        query: {
+          upgradePassword: 1,
+        }
       });
     },
   },
