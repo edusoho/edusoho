@@ -2,6 +2,8 @@
 
 namespace AppBundle\Handler;
 
+use AppBundle\Common\EncryptionToolkit;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -19,25 +21,23 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             throw new AuthenticationException($forbidden['message']);
         }
 
+        $currentUser = $this->getServiceKernel()->getCurrentUser();
+        if(!$currentUser->isAccountNonLocked()) {
+            throw new AuthenticationException('账号已被禁用');
+        }
+        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($request->request->get('_password')), 'EduSoho');
+        if ($this->getUserService()->validatePassword($password)) {
+            $this->getUserService()->updateUser($currentUser->getId(), ['passwordUpgraded' => 1]);
+        } else {
+            $request->getSession()->set('needUpgradePassword', 1);
+        }
+
         if ($request->isXmlHttpRequest()) {
             $content = [
                 'success' => true,
             ];
 
             return new JsonResponse($content, 200);
-        }
-
-        $currentUser = $this->getServiceKernel()->getCurrentUser();
-        if(!$currentUser->isAccountNonLocked()) {
-            throw new AuthenticationException("账号已被禁用");
-        }
-
-        if (!$currentUser['passwordInit']) {
-            $url = $this->httpUtils->generateUri($request, 'password_init');
-            $queries = ['goto' => $this->determineTargetUrl($request)];
-            $url = $url.'?'.http_build_query($queries);
-
-            return $this->httpUtils->createRedirectResponse($request, $url);
         }
 
         if ($this->getAuthService()->hasPartnerAuth()) {
@@ -54,6 +54,14 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     private function getAuthService()
     {
         return ServiceKernel::instance()->createService('User:AuthService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
     protected function getSettingService()

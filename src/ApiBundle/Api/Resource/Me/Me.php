@@ -5,7 +5,6 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
-use Biz\System\Service\SettingService;
 use Codeages\Biz\Pay\Service\AccountService;
 
 class Me extends AbstractResource
