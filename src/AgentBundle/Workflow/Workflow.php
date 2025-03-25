@@ -4,5 +4,5 @@ namespace AgentBundle\Workflow;
 
 interface Workflow
 {
-    public function execute($data);
+    public function execute($inputs);
 }

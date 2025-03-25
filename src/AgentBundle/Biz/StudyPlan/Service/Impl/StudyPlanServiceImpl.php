@@ -125,6 +125,13 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         return $this->getStudyPlanDao()->update($studyPlan['id'], $data);
     }
 
+    public function isUserStudyPlanGenerated($userId, $courseId)
+    {
+        $studyPlan = $this->getStudyPlanDao()->getStudyPlanByUserIdAndCourseId($userId, $courseId);
+
+        return !empty($studyPlan);
+    }
+
     private function convertToMarkdown($params)
     {
         // 构建动态表格

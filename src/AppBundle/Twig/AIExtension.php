@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
+use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use Biz\AI\Util\AgentToken;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -34,6 +35,7 @@ class AIExtension extends \Twig_Extension
             new \Twig_SimpleFunction('ai_agent_token', [$this, 'makeAIAgentToken']),
             new \Twig_SimpleFunction('is_show_ai_agent', [$this, 'isShowAIAgent']),
             new \Twig_SimpleFunction('ai_teacher_domain', [$this, 'getAiTeacherDomain']),
+            new \Twig_SimpleFunction('is_study_plan_generated', [$this, 'isStudyPlanGenerated']),
         ];
     }
 
@@ -62,6 +64,11 @@ class AIExtension extends \Twig_Extension
         $studyPlanConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
 
         return $studyPlanConfig['domainId'] ?? '';
+    }
+
+    public function isStudyPlanGenerated($courseId)
+    {
+        return $this->getStudyPlanService()->isUserStudyPlanGenerated($this->getCurrentUser()->getId(), $courseId) ? 1 : 0;
     }
 
     /**
@@ -94,5 +101,13 @@ class AIExtension extends \Twig_Extension
     private function getAgentConfigService()
     {
         return $this->biz->service('AgentBundle:AgentConfig:AgentConfigService');
+    }
+
+    /**
+     * @return StudyPlanService
+     */
+    private function getStudyPlanService()
+    {
+        return $this->biz->service('AgentBundle:StudyPlan:StudyPlanService');
     }
 }

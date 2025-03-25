@@ -4,9 +4,9 @@ namespace AgentBundle\Workflow;
 
 class PlanGetGenerateConfig extends AbstractWorkflow
 {
-    public function execute($data)
+    public function execute($inputs)
     {
-        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($data['courseId']);
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($inputs['courseId']);
         if (empty($agentConfig['isActive'])) {
             return [
                 'ok' => false,

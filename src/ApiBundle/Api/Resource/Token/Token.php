@@ -4,10 +4,10 @@ namespace ApiBundle\Api\Resource\Token;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\AI\Util\AgentToken;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
-use Firebase\JWT\JWT;
 
 class Token extends AbstractResource
 {
@@ -32,10 +32,10 @@ class Token extends AbstractResource
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
             $this->deleteInvalidToken($user['id'], $token, $refreshToken);
         }
+        $user['aiAgentToken'] = (new AgentToken())->make();
 
         return [
             'token' => $token,
-            'jwtToken' => $this->getJwtToken($user),
             'tokenExpire' => $expiredTime,
             'refreshToken' => $refreshToken,
             'user' => $user,
@@ -100,27 +100,6 @@ class Token extends AbstractResource
                 $this->getTokenService()->destoryToken($delToken['token']);
             }
         }
-    }
-
-    /** AI功能专用token
-     * @param $user
-     *
-     * @return string|void
-     */
-    protected function getJwtToken($user)
-    {
-        $storage = $this->getSettingService()->get('storage', []);
-        if (empty($storage)) {
-            return;
-        }
-        $payload = [
-            'iss' => 'ai.edusoho.net',
-            'aud' => 'agent',
-            'sub' => $user['id'],
-            'exp' => time() + 30 * 24 * 60,
-        ];
-
-        return 'Bearer:'.JWT::encode($payload, $storage['cloud_access_key']);
     }
 
     protected function getBatchNotificationService()
