@@ -43,8 +43,9 @@ const filterOption = (input, option) => {
 };
 
 const disabledDate = current => {
-  return  current && current < dayjs().endOf('day') || formState.planDeadline.some((dateRef) => dayjs(dateRef.value).isSame(current, "day"));
+  return  current && current < dayjs().startOf('day') || formState.planDeadline.some((dateRef) => dayjs(dateRef.value).isSame(current, "day"));
 };
+
 const removeDeadline = item => {
   const index = formState.planDeadline.indexOf(item);
   if (index !== -1) {
@@ -124,7 +125,7 @@ onMounted(async () => {
   <AntConfigProvider>
     <div class="flex flex-col w-full">
       <div class="py-24 pl-32 border border-x-0 border-t-0 border-[#F1F1F1] text-16 leading-16 font-medium text-[rgba(0,0,0,0.88)] border-solid">AI伴学服务</div>
-      <a-spin :spinning="spinning" size="large" class="relative min-h-735">
+      <a-spin :spinning="spinning" size="large" class="relative min-h-735" tip="加载中...">
         <div v-if="masking" class="flex justify-center items-center w-full min-h-735 absolute z-20 left-0 -top-28 bg-[rgba(0,0,0,0.70)]">
           <img class="w-924 h-530" src="../../../img/course-manage/ai-companion-study/poster.png" alt="海报">
         </div>
