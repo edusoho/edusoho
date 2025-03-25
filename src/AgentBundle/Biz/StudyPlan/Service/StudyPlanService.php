@@ -13,4 +13,6 @@ interface StudyPlanService
     public function generate($params);
 
     public function generatePlan($data);
+
+    public function isUserStudyPlanGenerated($userId, $courseId);
 }

@@ -7,9 +7,9 @@ use DateTime;
 
 class PlanGenerate extends AbstractWorkflow
 {
-    public function execute($data)
+    public function execute($inputs)
     {
-        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($data['courseId']);
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($inputs['courseId']);
         if (empty($agentConfig['isActive'])) {
             return [
                 'ok' => false,
@@ -19,7 +19,7 @@ class PlanGenerate extends AbstractWorkflow
                 ],
             ];
         }
-        $plan = $this->getStudyPlanService()->generatePlan($data);
+        $plan = $this->getStudyPlanService()->generatePlan($inputs);
 
         return [
             'ok' => true,
@@ -37,7 +37,7 @@ class PlanGenerate extends AbstractWorkflow
         $tasks = $this->findToLearnTasks($plan['courseId']);
         $taskCount = count($tasks);
         $learnHour = intval(array_sum(array_column($tasks, 'learnTime')) / 3600);
-        $everytimeLearnHour = round($learnHour / $studyDateCount, 1);
+        $everytimeLearnHour = max(round($learnHour / $studyDateCount, 1), 0.1);
 
         return <<<MARKDOWN
 根据上述内容为你生成以下学习计划：

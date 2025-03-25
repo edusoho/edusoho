@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
+use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -44,7 +45,7 @@ class MeCourseMember extends AbstractResource
 
             $studyPlanConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
             $courseMember['aiTeacherEnabled'] = !empty($studyPlanConfig['isActive']);
-            $courseMember['studyPlanGenerated'] = false;
+            $courseMember['studyPlanGenerated'] = $this->getStudyPlanService()->isUserStudyPlanGenerated($this->getCurrentUser()->getId(), $courseId);
             $courseMember['aiTeacherDomain'] = $studyPlanConfig['domainId'] ?? '';
         }
 
@@ -184,5 +185,13 @@ class MeCourseMember extends AbstractResource
     private function getAgentConfigService()
     {
         return $this->biz->service('AgentBundle:AgentConfig:AgentConfigService');
+    }
+
+    /**
+     * @return StudyPlanService
+     */
+    private function getStudyPlanService()
+    {
+        return $this->service('AgentBundle:StudyPlan:StudyPlanService');
     }
 }

@@ -114,6 +114,6 @@
     <input type="hidden" id="aiTeacherDomain" value="{{ ai_teacher_domain(course.id) }}" />
     <input type="hidden" id="agentCourseId" value="{{ course.id }}" />
     <input type="hidden" id="agentCourseName" value="{{ course.courseSetTitle }}" />
-    <input type="hidden" id="studyPlanGenerated" value="0" />
+    <input type="hidden" id="studyPlanGenerated" value="{{ is_study_plan_generated(course.id) }}" />
   {% endif %}
 {% endblock %}
