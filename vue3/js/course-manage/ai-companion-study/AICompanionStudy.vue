@@ -3,8 +3,6 @@ import {onMounted, reactive, ref} from 'vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons-vue';
 import {Modal} from 'ant-design-vue';
-import {ExclamationCircleOutlined} from '@ant-design/icons-vue';
-import {createVNode} from 'vue';
 import {message} from 'ant-design-vue';
 import Api from '../../../api';
 import dayjs from 'dayjs';
@@ -92,10 +90,6 @@ const domainOptions = ref([]);
 const agentConfig = ref();
 onMounted(async () => {
   spinning.value = true;
-  const domain = await Api.aiCompanionStudy.getDomainId(props.courseId);
-  if (domain.id.trim()) {
-    formState.domainId = domain.id;
-  }
   const options = await Api.aiCompanionStudy.getDomains(props.courseId);
   domainOptions.value = options.map(item => ({
     label: item.name,
@@ -103,6 +97,12 @@ onMounted(async () => {
   }));
 
   agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
+  if (!agentConfig.value.id) {
+    const domain = await Api.aiCompanionStudy.getDomainId(props.courseId);
+    if (domain.id.trim()) {
+      formState.domainId = domain.id;
+    }
+  }
   masking.value = agentConfig.value.agentEnable !== true;
   formState.isActive = agentConfig.value?.isActive == 1 ?? false;
   formState.domainId = agentConfig.value?.domainId ?? null;
