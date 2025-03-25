@@ -2,7 +2,6 @@
 import {onMounted, reactive, ref} from 'vue';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons-vue';
-import {Modal} from 'ant-design-vue';
 import {message} from 'ant-design-vue';
 import Api from '../../../api';
 import dayjs from 'dayjs';
@@ -80,7 +79,6 @@ const save = async () => {
     }
   } finally {
     spinning.value = false;
-    Modal.destroyAll()
   }
   message.success('保存成功');
 };
