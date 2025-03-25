@@ -26,7 +26,7 @@ interface AIService
 
     public function findDomains($category);
 
-    public function runWorkflow($alias, array $data);
+    public function runWorkflow($workflow, array $inputs);
 
     public function createDataset(array $params);
 

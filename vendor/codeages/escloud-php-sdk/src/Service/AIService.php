@@ -118,9 +118,9 @@ class AIService extends BaseService
         return $this->request('GET', '/v1/domain/listByCategory', ['category' => $category]);
     }
 
-    public function runWorkflow($alias, $data)
+    public function runWorkflow($workflow, $inputs)
     {
-        return $this->request('POST', '/v1/workflow/run', ['alias' => $alias, 'data' => $data]);
+        return $this->request('POST', '/v1/workflow/run', ['workflow' => $workflow, 'inputs' => $inputs]);
     }
 
     public function createDataset($externalId, $name, $domainId, $autoIndex)

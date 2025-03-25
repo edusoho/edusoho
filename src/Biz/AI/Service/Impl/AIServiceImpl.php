@@ -100,9 +100,9 @@ class AIServiceImpl extends BaseService implements AIService
         return $this->getAIService()->findDomains($category);
     }
 
-    public function runWorkflow($alias, array $data)
+    public function runWorkflow($workflow, array $inputs)
     {
-        return $this->getAIService()->runWorkflow($alias, $data);
+        return $this->getAIService()->runWorkflow($workflow, $inputs);
     }
 
     public function createDataset(array $params)
