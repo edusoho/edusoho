@@ -170,7 +170,7 @@ onMounted(async () => {
                 @click="removeDeadline(deadlineRef)"
               />
               <div v-if="index === 9" class="text-14 leading-24 font-normal text-[#919399]">
-                学员学习计划的最晚完成时间，未设置时学员可自由选择时间
+                为了约束学员在考试前完成课程学习，可设置多个学习截止时间，供学员在制定学习计划时选择
               </div>
             </a-form-item>
             <a-form-item
@@ -182,7 +182,7 @@ onMounted(async () => {
                 添加时间
               </a-button>
               <div class="text-14 leading-24 font-normal text-[#919399]">
-                学员学习计划的最晚完成时间，未设置时学员可自由选择时间
+                为了约束学员在考试前完成课程学习，可设置多个学习截止时间，供学员在制定学习计划时选择
               </div>
             </a-form-item>
             <a-form-item
