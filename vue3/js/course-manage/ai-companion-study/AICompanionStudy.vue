@@ -93,10 +93,11 @@ const showConfirm = () => {
   });
 };
 
-const masking = ref(true);
+const masking = ref();
 const domainOptions = ref([]);
 const agentConfig = ref();
 onMounted(async () => {
+  spinning.value = true;
   const options = await Api.aiCompanionStudy.getDomains(props.courseId);
   domainOptions.value = options.map(item => ({
     label: item.name,
@@ -104,30 +105,25 @@ onMounted(async () => {
   }));
 
   agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
-  if (agentConfig.value.agentEnable === true) {
-    masking.value = false;
-  }
+  masking.value = agentConfig.value.agentEnable !== true;
   formState.isActive = agentConfig.value?.isActive == 1 ?? false;
   formState.domainId = agentConfig.value?.domainId ?? null;
   formState.planDeadline = agentConfig.value?.planDeadline?.length > 0
     ? agentConfig.value.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD')))
     : [ref(null)];
   formState.isDiagnosisActive = agentConfig.value?.isDiagnosisActive == 1 ?? false;
+  spinning.value = false;
 });
 </script>
 
 <template>
   <AntConfigProvider>
     <div class="flex flex-col w-full">
-      <div
-        class="py-24 pl-32 border border-x-0 border-t-0 border-[#F1F1F1] text-16 leading-16 font-medium text-[rgba(0,0,0,0.88)] border-solid">
-        AI伴学服务
-      </div>
-      <div v-if="masking"
-           class="flex justify-center items-center w-[calc(100%-200px)] h-[calc(100%-65px)] absolute z-10 left-200 top-65 bg-[rgba(0,0,0,0.70)]">
-        <img class="w-924 h-530" src="../../../img/course-manage/ai-companion-study/poster.png" alt="海报">
-      </div>
-      <a-spin :spinning="spinning" size="large">
+      <div class="py-24 pl-32 border border-x-0 border-t-0 border-[#F1F1F1] text-16 leading-16 font-medium text-[rgba(0,0,0,0.88)] border-solid">AI伴学服务</div>
+      <a-spin :spinning="spinning" size="large" class="relative min-h-735">
+        <div v-if="masking" class="flex justify-center items-center w-full min-h-735 absolute z-20 left-0 -top-28 bg-[rgba(0,0,0,0.70)]">
+          <img class="w-924 h-530" src="../../../img/course-manage/ai-companion-study/poster.png" alt="海报">
+        </div>
         <a-form
           class="mt-28"
           ref="formRef"
