@@ -56,42 +56,35 @@ const addDeadline = () => {
   formState.planDeadline.push(ref(null));
 };
 
-const showConfirm = () => {
-  Modal.confirm({
-    centered: true,
-    title: '已编辑内容未保存，是否保存？',
-    icon: createVNode(ExclamationCircleOutlined),
-    async onOk() {
-      spinning.value = true;
-      try {
-        if (!agentConfig.value.id) {
-          const params = {
-            courseId: props.courseId,
-            domainId: formState.domainId,
-            planDeadline: formState.planDeadline
-              .filter(itemRef => itemRef.value != null)
-              .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
-            isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
-          };
-          await Api.aiCompanionStudy.createAgentConfig(params);
-        } else {
-          const params = {
-            isActive: formState.isActive === true ? 1 : 0,
-            domainId: formState.domainId,
-            planDeadline: formState.planDeadline
-              .filter(itemRef => itemRef.value != null)
-              .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
-            isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
-          };
-          await Api.aiCompanionStudy.updateAgentConfig(props.courseId, params);
-        }
-      } finally {
-        spinning.value = false;
-        Modal.destroyAll()
-      }
-      message.success('保存成功');
-    },
-  });
+const save = async () => {
+  spinning.value = true;
+  try {
+    if (!agentConfig.value.id) {
+      const params = {
+        courseId: props.courseId,
+        domainId: formState.domainId,
+        planDeadline: formState.planDeadline
+          .filter(itemRef => itemRef.value != null)
+          .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
+        isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
+      };
+      await Api.aiCompanionStudy.createAgentConfig(params);
+    } else {
+      const params = {
+        isActive: formState.isActive === true ? 1 : 0,
+        domainId: formState.domainId,
+        planDeadline: formState.planDeadline
+          .filter(itemRef => itemRef.value != null)
+          .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
+        isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
+      };
+      await Api.aiCompanionStudy.updateAgentConfig(props.courseId, params);
+    }
+  } finally {
+    spinning.value = false;
+    Modal.destroyAll()
+  }
+  message.success('保存成功');
 };
 
 const masking = ref();
@@ -136,7 +129,7 @@ onMounted(async () => {
           :rules="rules"
           v-bind="formItemLayout"
           autocomplete="off"
-          @finish="showConfirm"
+          @finish="save"
         >
           <a-form-item
             label="AI 伴学服务"
