@@ -32,10 +32,10 @@ class Token extends AbstractResource
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
             $this->deleteInvalidToken($user['id'], $token, $refreshToken);
         }
+        $user['aiAgentToken'] = (new AgentToken())->make();
 
         return [
             'token' => $token,
-            'aiAgentToken' => (new AgentToken())->make(),
             'tokenExpire' => $expiredTime,
             'refreshToken' => $refreshToken,
             'user' => $user,
