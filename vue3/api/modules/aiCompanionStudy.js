@@ -7,6 +7,9 @@ export default {
   async getDomains(courseId) {
     return apiClient.get(`/domains/${courseId}`);
   },
+  async getDomainId(courseId) {
+    return apiClient.post(`/domains/${courseId}/match`);
+  },
   async createAgentConfig(params) {
     return apiClient.post('/agent_config', params);
   },

@@ -43,8 +43,9 @@ const filterOption = (input, option) => {
 };
 
 const disabledDate = current => {
-  return  current && current < dayjs().endOf('day') || formState.planDeadline.some((dateRef) => dayjs(dateRef.value).isSame(current, "day"));
+  return  current && current < dayjs().startOf('day') || formState.planDeadline.some((dateRef) => dayjs(dateRef.value).isSame(current, "day"));
 };
+
 const removeDeadline = item => {
   const index = formState.planDeadline.indexOf(item);
   if (index !== -1) {
@@ -55,42 +56,35 @@ const addDeadline = () => {
   formState.planDeadline.push(ref(null));
 };
 
-const showConfirm = () => {
-  Modal.confirm({
-    centered: true,
-    title: '已编辑内容未保存，是否保存？',
-    icon: createVNode(ExclamationCircleOutlined),
-    async onOk() {
-      spinning.value = true;
-      try {
-        if (!agentConfig.value.id) {
-          const params = {
-            courseId: props.courseId,
-            domainId: formState.domainId,
-            planDeadline: formState.planDeadline
-              .filter(itemRef => itemRef.value != null)
-              .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
-            isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
-          };
-          await Api.aiCompanionStudy.createAgentConfig(params);
-        } else {
-          const params = {
-            isActive: formState.isActive === true ? 1 : 0,
-            domainId: formState.domainId,
-            planDeadline: formState.planDeadline
-              .filter(itemRef => itemRef.value != null)
-              .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
-            isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
-          };
-          await Api.aiCompanionStudy.updateAgentConfig(props.courseId, params);
-        }
-      } finally {
-        spinning.value = false;
-        Modal.destroyAll()
-      }
-      message.success('保存成功');
-    },
-  });
+const save = async () => {
+  spinning.value = true;
+  try {
+    if (!agentConfig.value.id) {
+      const params = {
+        courseId: props.courseId,
+        domainId: formState.domainId,
+        planDeadline: formState.planDeadline
+          .filter(itemRef => itemRef.value != null)
+          .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
+        isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
+      };
+      await Api.aiCompanionStudy.createAgentConfig(params);
+    } else {
+      const params = {
+        isActive: formState.isActive === true ? 1 : 0,
+        domainId: formState.domainId,
+        planDeadline: formState.planDeadline
+          .filter(itemRef => itemRef.value != null)
+          .map(itemRef => { return dayjs(itemRef.value).format('YYYY-MM-DD') }),
+        isDiagnosisActive: formState.isDiagnosisActive === true ? 1 : 0,
+      };
+      await Api.aiCompanionStudy.updateAgentConfig(props.courseId, params);
+    }
+  } finally {
+    spinning.value = false;
+    Modal.destroyAll()
+  }
+  message.success('保存成功');
 };
 
 const masking = ref();
@@ -98,6 +92,10 @@ const domainOptions = ref([]);
 const agentConfig = ref();
 onMounted(async () => {
   spinning.value = true;
+  const domain = await Api.aiCompanionStudy.getDomainId(props.courseId);
+  if (domain.id.trim()) {
+    formState.domainId = domain.id;
+  }
   const options = await Api.aiCompanionStudy.getDomains(props.courseId);
   domainOptions.value = options.map(item => ({
     label: item.name,
@@ -120,7 +118,7 @@ onMounted(async () => {
   <AntConfigProvider>
     <div class="flex flex-col w-full">
       <div class="py-24 pl-32 border border-x-0 border-t-0 border-[#F1F1F1] text-16 leading-16 font-medium text-[rgba(0,0,0,0.88)] border-solid">AI伴学服务</div>
-      <a-spin :spinning="spinning" size="large" class="relative min-h-735">
+      <a-spin :spinning="spinning" size="large" class="relative min-h-735" tip="加载中...">
         <div v-if="masking" class="flex justify-center items-center w-full min-h-735 absolute z-20 left-0 -top-28 bg-[rgba(0,0,0,0.70)]">
           <img class="w-924 h-530" src="../../../img/course-manage/ai-companion-study/poster.png" alt="海报">
         </div>
@@ -131,7 +129,7 @@ onMounted(async () => {
           :rules="rules"
           v-bind="formItemLayout"
           autocomplete="off"
-          @finish="showConfirm"
+          @finish="save"
         >
           <a-form-item
             label="AI 伴学服务"
@@ -172,7 +170,7 @@ onMounted(async () => {
                 @click="removeDeadline(deadlineRef)"
               />
               <div v-if="index === 9" class="text-14 leading-24 font-normal text-[#919399]">
-                学员学习计划的最晚完成时间，未设置时学员可自由选择时间
+                为了约束学员在考试前完成课程学习，可设置多个学习截止时间，供学员在制定学习计划时选择
               </div>
             </a-form-item>
             <a-form-item
@@ -184,7 +182,7 @@ onMounted(async () => {
                 添加时间
               </a-button>
               <div class="text-14 leading-24 font-normal text-[#919399]">
-                学员学习计划的最晚完成时间，未设置时学员可自由选择时间
+                为了约束学员在考试前完成课程学习，可设置多个学习截止时间，供学员在制定学习计划时选择
               </div>
             </a-form-item>
             <a-form-item
