@@ -98,8 +98,10 @@ const domainOptions = ref([]);
 const agentConfig = ref();
 onMounted(async () => {
   spinning.value = true;
-  const domainId = await Api.aiCompanionStudy.getDomainId(props.courseId);
-  console.log(domainId);
+  const domain = await Api.aiCompanionStudy.getDomainId(props.courseId);
+  if (domain.id.trim()) {
+    formState.domainId = domain.id;
+  }
   const options = await Api.aiCompanionStudy.getDomains(props.courseId);
   domainOptions.value = options.map(item => ({
     label: item.name,
