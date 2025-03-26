@@ -55,7 +55,7 @@ const addDeadline = () => {
 
 const save = async () => {
   if (!agentConfig.value.id && !formState.isActive) {
-    return
+    return;
   }
   spinning.value = true;
   try {
@@ -83,6 +83,7 @@ const save = async () => {
   } finally {
     spinning.value = false;
   }
+  agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
   message.success('保存成功');
 };
 
