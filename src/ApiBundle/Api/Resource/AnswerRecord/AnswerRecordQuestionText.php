@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\QuestionContent;
+namespace ApiBundle\Api\Resource\AnswerRecord;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -8,13 +8,13 @@ use Biz\Question\Traits\QuestionFlatTrait;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
-class QuestionContent extends AbstractResource
+class AnswerRecordQuestionText extends AbstractResource
 {
     use QuestionFlatTrait;
 
-    public function get(ApiRequest $request, $questionId)
+    public function get(ApiRequest $request, $answerRecordId, $questionId)
     {
-        $this->check($request->query->get('answerRecordId'), $questionId);
+        $this->check($answerRecordId, $questionId);
         $question = $this->getItemService()->getQuestion($questionId);
         $item = $this->getItemService()->getItem($question['item_id']);
         $question['material'] = $item['material'];
