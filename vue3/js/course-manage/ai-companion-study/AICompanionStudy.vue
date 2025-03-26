@@ -54,6 +54,9 @@ const addDeadline = () => {
 };
 
 const save = async () => {
+  if (!agentConfig.value.id && !formState.isActive) {
+    return
+  }
   spinning.value = true;
   try {
     if (!agentConfig.value.id) {
@@ -88,27 +91,32 @@ const domainOptions = ref([]);
 const agentConfig = ref();
 onMounted(async () => {
   spinning.value = true;
+  agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
+  masking.value = agentConfig.value.agentEnable !== true;
+  if (agentConfig.value.id) {
+    formState.isActive = agentConfig.value?.isActive == 1 ?? false;
+    formState.domainId = agentConfig.value?.domainId ?? null;
+    formState.planDeadline = agentConfig.value?.planDeadline?.length > 0
+      ? agentConfig.value.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD')))
+      : [ref(null)];
+    formState.isDiagnosisActive = agentConfig.value?.isDiagnosisActive == 1 ?? false;
+  }
+  spinning.value = false;
+
   const options = await Api.aiCompanionStudy.getDomains(props.courseId);
   domainOptions.value = options.map(item => ({
     label: item.name,
     value: item.id,
   }));
-
-  agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.courseId);
   if (!agentConfig.value.id) {
+    if (formState.domainId) {
+      return
+    }
     const domain = await Api.aiCompanionStudy.getDomainId(props.courseId);
     if (domain.id.trim()) {
       formState.domainId = domain.id;
     }
   }
-  masking.value = agentConfig.value.agentEnable !== true;
-  formState.isActive = agentConfig.value?.isActive == 1 ?? false;
-  formState.domainId = agentConfig.value?.domainId ?? null;
-  formState.planDeadline = agentConfig.value?.planDeadline?.length > 0
-    ? agentConfig.value.planDeadline.map(item => ref(dayjs(item, 'YYYY-MM-DD')))
-    : [ref(null)];
-  formState.isDiagnosisActive = agentConfig.value?.isDiagnosisActive == 1 ?? false;
-  spinning.value = false;
 });
 </script>
 
