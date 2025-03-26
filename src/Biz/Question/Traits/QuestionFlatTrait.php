@@ -4,54 +4,52 @@ namespace Biz\Question\Traits;
 
 trait QuestionFlatTrait
 {
-    private function flatten($item)
+    use QuestionAnswerModeTrait;
+    use ItemTypeChineseNameTrait;
+
+    private function flattenMain($type, $question)
     {
-        $typePart = [
-            'single_choice' => '单选题',
-            'choice' => '多选题',
-            'uncertain_choice' => '不定项',
-            'determine' => '判断题',
-            'fill' => '填空题',
-            'essay' => '问答题',
-        ][$item['type']];
-
-        if ('material' != $item['type']) {
-            $question = $item['questions'][0];
-
-            return "[$typePart] {$this->flattenStem($item, $question)}[正确答案] {$this->flattenAnswer($item, $question)}\n".($question['analysis'] ? "[答案解析] {$question['analysis']}" : '');
+        if ('material' == $type) {
+            $content = "[材料] {$question['material']}\n[{$this->chineseNames[$this->modeToType[$question['answer_mode']]]}] ";
+        } else {
+            $content = "[{$this->chineseNames[$type]}] ";
         }
 
-        return "[材料题] ";
-    }
-
-    private function flattenStem($item, $question)
-    {
-        if (in_array($item['type'], ['determine', 'essay', 'fill'])) {
-            return $question['stem']."\n";
-        }
-        if (in_array($item['type'], ['single_choice', 'choice', 'uncertain_choice'])) {
-            $stem = $question['stem']."\n";
+        if (in_array($type, ['single_choice', 'choice', 'uncertain_choice'])) {
             $responsePoints = array_column($question['response_points'], 'radio') ?: array_column($question['response_points'], 'checkbox');
+            $options = [];
             foreach ($responsePoints as $responsePoint) {
-                $stem .= "{$responsePoint['val']}. {$responsePoint['text']}\n";
+                $options[] = "{$responsePoint['val']}. {$responsePoint['text']}";
             }
-
-            return $stem;
+            $content .= $question['stem']."\n".implode("\n", $options);
+        }
+        if (in_array($type, ['determine', 'essay'])) {
+            $content .= $question['stem'];
+        }
+        if ('fill' == $type) {
+            $content .= str_replace('[[]]', '__', $question['stem']);
         }
 
-        return '';
+        return $content;
     }
 
-    private function flattenAnswer($item, $question)
+    private function flattenAnswer($type, $question)
     {
-        if (in_array($item['type'], ['single_choice', 'choice', 'uncertain_choice', 'essay'])) {
-            return implode('', $question['answer']);
+        if (in_array($type, ['single_choice', 'choice', 'uncertain_choice', 'essay'])) {
+            $answer = implode('', $question['answer']);
         }
-        if ('determine' == $item['type']) {
-            return 'T' == $question['answer'][0] ? '正确' : '错误';
+        if ('determine' == $type) {
+            $answer = 'T' == $question['answer'][0] ? '正确' : '错误';
         }
-        if ('fill' == $item['type']) {
-            return implode(',', $question['answer']);
+        if ('fill' == $type) {
+            $answer = str_replace('|', '或', implode(';', $question['answer']));
         }
+
+        return empty($answer) ? '' : "\n[正确答案] {$answer}";
+    }
+
+    private function flattenAnalysis($question)
+    {
+        return empty($question['analysis']) ? '' : "\n[答案解析] {$question['analysis']}";
     }
 }

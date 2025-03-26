@@ -12,15 +12,20 @@ class QuestionContent extends AbstractResource
 {
     use QuestionFlatTrait;
 
-    public function get(ApiRequest $request, $itemId)
+    public function get(ApiRequest $request, $questionId)
     {
-        $this->check($request->query->get(''), $itemId);
-        $item = $this->getItemService()->getItemWithQuestions($itemId, true);
+        $this->check($request->query->get('answerRecordId'), $questionId);
+        $question = $this->getItemService()->getQuestion($questionId);
+        $item = $this->getItemService()->getItem($question['item_id']);
+        $question['material'] = $item['material'];
 
-        return ['content' => $this->flatten($item)];
+        return [
+            'content' => $this->flattenMain($item['type'], $question),
+            'question' => "{$this->flattenMain($item['type'], $question)}{$this->flattenAnswer($item['type'], $question)}{$this->flattenAnalysis($question)}",
+        ];
     }
 
-    private function check($answerRecordId, $itemId)
+    private function check($answerRecordId, $questionId)
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
     }
