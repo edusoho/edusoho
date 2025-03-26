@@ -18,7 +18,6 @@ class AgentConfigEventSubscriber extends EventSubscriber
             'agentConfig.create' => 'onAgentConfigCreate',
             'course.delete' => 'onCourseDelete',
             'course-set.update' => 'onCourseSetUpdate',
-            'course.update' => 'onCourseUpdate',
             'activity.create' => 'onActivityCreate',
             'activity.update' => 'onActivityUpdate',
             'activity.delete' => 'onActivityDelete',
@@ -79,27 +78,10 @@ class AgentConfigEventSubscriber extends EventSubscriber
             return;
         }
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-        $courses = array_column($courses, null, 'id');
         $agentConfigs = $this->getAgentConfigService()->findAgentConfigsByCourseIds(array_column($courses, 'id'));
         foreach ($agentConfigs as $agentConfig) {
-            $name = '默认计划' == $courses[$agentConfig['courseId']]['title'] ? $courseSet['title'] : "{$courseSet['title']}-{$courses[$agentConfig['courseId']]['title']}";
-            $this->getAIService()->updateDataset($agentConfig['datasetId'], ['name' => $name]);
+            $this->getAIService()->updateDataset($agentConfig['datasetId'], ['name' => $courseSet['title']]);
         }
-    }
-
-    public function onCourseUpdate(Event $event)
-    {
-        $course = $event->getSubject();
-        $oldCourse = $event->getArgument('oldCourse');
-        if ($course['title'] == $oldCourse['title']) {
-            return;
-        }
-        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($course['id']);
-        if (empty($agentConfig)) {
-            return;
-        }
-        $name = '默认计划' == $course['title'] ? $course['courseSetTitle'] : "{$course['courseSetTitle']}-{$course['title']}";
-        $this->getAIService()->updateDataset($agentConfig['datasetId'], ['name' => $name]);
     }
 
     public function onActivityCreate(Event $event)
@@ -109,26 +91,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
         if (empty($agentConfig)) {
             return;
         }
-        if ('text' == $activity['mediaType']) {
-            $document = $this->getAIService()->createDocumentByText([
-                'datasetId' => $agentConfig['datasetId'],
-                'extId' => $activity['id'],
-                'name' => $activity['title'],
-                'content' => $activity['content'],
-            ]);
-        }
-        if (in_array($activity['mediaType'], ['audio', 'doc', 'ppt', 'video'])) {
-            $activity = $this->getActivityService()->getActivity($activity['id'], true);
-            $document = $this->getAIService()->createDocumentByResource([
-                'datasetId' => $agentConfig['datasetId'],
-                'extId' => $activity['id'],
-                'name' => $activity['title'],
-                'resNo' => $activity['ext']['file']['globalId'],
-            ]);
-        }
-        if (!empty($document)) {
-            $this->getActivityService()->updateActivity($activity['id'], ['documentId' => $document['id']]);
-        }
+        $this->createDatasetDocumentIfNecessary($agentConfig['datasetId'], $activity);
     }
 
     public function onActivityUpdate(Event $event)
@@ -142,9 +105,22 @@ class AgentConfigEventSubscriber extends EventSubscriber
             return;
         }
         $this->getAIService()->deleteDocument($activity['documentId']);
+        $this->createDatasetDocumentIfNecessary($agentConfig['datasetId'], $activity);
+    }
+
+    public function onActivityDelete(Event $event)
+    {
+        $activity = $event->getSubject();
+        if (!empty($activity['documentId'])) {
+            $this->getAIService()->deleteDocument($activity['documentId']);
+        }
+    }
+
+    private function createDatasetDocumentIfNecessary($datasetId, $activity)
+    {
         if ('text' == $activity['mediaType']) {
             $document = $this->getAIService()->createDocumentByText([
-                'datasetId' => $agentConfig['datasetId'],
+                'datasetId' => $datasetId,
                 'extId' => $activity['id'],
                 'name' => $activity['title'],
                 'content' => $activity['content'],
@@ -153,7 +129,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
         if (in_array($activity['mediaType'], ['audio', 'doc', 'ppt', 'video'])) {
             $activity = $this->getActivityService()->getActivity($activity['id'], true);
             $document = $this->getAIService()->createDocumentByResource([
-                'datasetId' => $agentConfig['datasetId'],
+                'datasetId' => $datasetId,
                 'extId' => $activity['id'],
                 'name' => $activity['title'],
                 'resNo' => $activity['ext']['file']['globalId'],
@@ -161,14 +137,6 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
         if (!empty($document)) {
             $this->getActivityService()->updateActivity($activity['id'], ['documentId' => $document['id']]);
-        }
-    }
-
-    public function onActivityDelete(Event $event)
-    {
-        $activity = $event->getSubject();
-        if (!empty($activity['documentId'])) {
-            $this->getAIService()->deleteDocument($activity['documentId']);
         }
     }
 

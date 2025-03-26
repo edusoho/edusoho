@@ -19,7 +19,7 @@ class AgentConfig extends AbstractResource
         }
         $this->getCourseService()->tryManageCourse($params['courseId']);
         $course = $this->getCourseService()->getCourse($params['courseId']);
-        $params['name'] = '默认计划' == $course['title'] ? $course['courseSetTitle'] : "{$course['courseSetTitle']}-{$course['title']}";
+        $params['name'] = $course['courseSetTitle'];
         $agentConfig = $this->getAgentConfigService()->createAgentConfig($params);
 
         return ['id' => $agentConfig['id']];

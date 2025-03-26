@@ -21,12 +21,12 @@ class DomainMatch extends AbstractResource
         $domains = $this->getAIService()->findDomains('vt');
         $course = $this->getCourseService()->getCourse($courseId);
         $result = $this->getAIService()->runWorkflow('domain.match.vt', [
-            'title' => '默认计划' == $course['title'] ? $course['courseSetTitle'] : "{$course['courseSetTitle']}-{$course['title']}",
+            'title' => $course['courseSetTitle'],
             'domains' => $domains,
         ]);
 
         return [
-            'id' => $result['data']['id'] ?? '',
+            'id' => $result['outputs']['id'] ?? '',
         ];
     }
 
