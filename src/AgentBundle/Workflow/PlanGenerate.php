@@ -19,22 +19,31 @@ class PlanGenerate extends AbstractWorkflow
                 ],
             ];
         }
+        $tasks = $this->findUnFinishedTasks($inputs['courseId']);
+        if (empty($tasks)) {
+            return [
+                'ok' => false,
+                'error' => [
+                    'code' => 'NO_LESSON_TO_LEARN',
+                    'message' => '没有待学的任务',
+                ],
+            ];
+        }
         $plan = $this->getStudyPlanService()->generatePlan($inputs);
 
         return [
             'ok' => true,
             'outputs' => [
-                'content' => $this->makeMarkdown($plan),
+                'content' => $this->makeMarkdown($plan, $tasks),
             ],
         ];
     }
 
-    private function makeMarkdown($plan)
+    private function makeMarkdown($plan, $tasks)
     {
         $course = $this->getCourseService()->getCourse($plan['courseId']);
         $studyDates = $this->calculateStudyDates($plan['startDate'], $plan['endDate'], $plan['weekDays']);
         $studyDateCount = count($studyDates);
-        $tasks = $this->findToLearnTasks($plan['courseId']);
         $taskCount = count($tasks);
         $learnHour = intval(array_sum(array_column($tasks, 'learnTime')) / 3600);
         $everytimeLearnHour = max(round($learnHour / $studyDateCount, 1), 0.1);
@@ -106,10 +115,10 @@ MARKDOWN;
         return $weekdayMap[$weekday] ?? '';
     }
 
-    private function findToLearnTasks($courseId)
+    private function findUnFinishedTasks($courseId)
     {
         $taskResults = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
-        $conditions = ['fromCourseId' => $courseId, 'status' => 'published'];
+        $conditions = ['fromCourseId' => $courseId, 'status' => 'published', 'mediaTypes' => ['video', 'audio', 'live', 'replay', 'pseudolive', 'text', 'doc', 'ppt', 'testpaper']];
         if (!empty($taskResults)) {
             $conditions['excludeIds'] = array_column($taskResults, 'activityId');
         }
@@ -117,7 +126,8 @@ MARKDOWN;
             $conditions,
             [],
             0,
-            PHP_INT_MAX['id']
+            PHP_INT_MAX,
+            ['id']
         );
         if (empty($activities)) {
             return [];
