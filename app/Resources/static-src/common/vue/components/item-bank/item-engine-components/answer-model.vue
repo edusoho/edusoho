@@ -377,9 +377,29 @@ export default {
   },
   methods: {
     async showAgentSdk() {
-      if (window.parent.agentSdk) {
-        window.parent.agentSdk.show();
-      }
+      $.ajax({
+        url: `/api/answer_record/${this.answerRecord.id}/question_text/${this.question.id}`,
+        type: 'GET',
+        headers:{
+          'Accept':'application/vnd.edusoho.v2+json'
+        },
+        contentType: 'application/json;charset=utf-8',
+      }).done((res) => {
+        if (window.parent.agentSdk) {
+          window.parent.agentSdk.show();
+          const workflow = {
+            workflow: "question.analysis",
+            inputs: {
+              domainId: window.parent.document.getElementById('aiTeacherDomain').value,
+              question: res.question,
+            }
+          }
+          window.parent.agentSdk.chat(res.content, workflow, true);
+        }
+      }).fail((err) => {
+        console.log(err)
+      })
+
     },
     replaceHtmlSpace(htmlStr) {
       return htmlStr ? htmlStr.replace(/ /g, " ") : "";

@@ -179,8 +179,8 @@ if (aiAgentToken) {
     domainId: document.getElementById('aiTeacherDomain').value,
     courseId: document.getElementById('agentCourseId').value,
     courseName: document.getElementById('agentCourseName').value,
-    lessonId: '1',
-    lessonName: '啦啦啦啦',
+    lessonId: document.getElementById('agentLessonId')?.value,
+    lessonName: document.getElementById('agentLessonName')?.value,
   })
   sdk.boot();
   window.agentSdk = sdk;
