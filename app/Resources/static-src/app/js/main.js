@@ -183,4 +183,5 @@ if (aiAgentToken) {
     lessonName: '啦啦啦啦',
   })
   sdk.boot();
+  window.agentSdk = sdk;
 }

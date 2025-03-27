@@ -87,6 +87,7 @@
           </div>
 
           <slot name="response_points"></slot>
+          <button @click="showAgentSdk">解析</button>
           <div class="ibs-clearfix" v-if="showCollectBtn">
             <a-button
               class="ibs-right ibs-collect-toggle-btn"
@@ -96,7 +97,7 @@
             >
               {{
                 canShowAnalysis
-                  ? t("itemEngine.closeExplain")
+                  ? t("itemEngine.closeEx plain")
                   : t("itemEngine.openExplain")
               }}
             </a-button>
@@ -260,6 +261,12 @@ export default {
   },
   inject: ["cdnHost", "previewAttachmentCallback", "showCKEditorData"],
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     question: {
       type: Object,
       default() {
@@ -369,6 +376,11 @@ export default {
     }
   },
   methods: {
+    async showAgentSdk() {
+      if (window.parent.agentSdk) {
+        window.parent.agentSdk.show();
+      }
+    },
     replaceHtmlSpace(htmlStr) {
       return htmlStr ? htmlStr.replace(/ /g, " ") : "";
     },
