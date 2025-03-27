@@ -10,7 +10,7 @@ trait QuestionFlatTrait
     private function flattenMain($type, $question)
     {
         if ('material' == $type) {
-            $content = "[材料] {$question['material']}\n[{$this->chineseNames[$this->modeToType[$question['answer_mode']]]}] ";
+            $content = "[材料] {$question['material']}  \n[{$this->chineseNames[$this->modeToType[$question['answer_mode']]]}] ";
         } else {
             $content = "[{$this->chineseNames[$type]}] ";
         }
@@ -21,7 +21,7 @@ trait QuestionFlatTrait
             foreach ($responsePoints as $responsePoint) {
                 $options[] = "{$responsePoint['val']}. {$responsePoint['text']}";
             }
-            $content .= $question['stem']."\n".implode("\n", $options);
+            $content .= $question['stem']."  \n".implode("  \n", $options);
         }
         if (in_array($type, ['determine', 'essay'])) {
             $content .= $question['stem'];
@@ -30,7 +30,7 @@ trait QuestionFlatTrait
             $content .= str_replace('[[]]', '__', $question['stem']);
         }
 
-        return $content;
+        return strip_tags($content);
     }
 
     private function flattenAnswer($type, $question)
@@ -45,11 +45,11 @@ trait QuestionFlatTrait
             $answer = str_replace('|', '或', implode(';', $question['answer']));
         }
 
-        return empty($answer) ? '' : "\n[正确答案] {$answer}";
+        return empty($answer) ? '' : strip_tags("  \n[正确答案] {$answer}");
     }
 
     private function flattenAnalysis($question)
     {
-        return empty($question['analysis']) ? '' : "\n[答案解析] {$question['analysis']}";
+        return empty($question['analysis']) ? '' : strip_tags("  \n[答案解析] {$question['analysis']}");
     }
 }
