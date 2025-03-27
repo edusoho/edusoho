@@ -27,7 +27,6 @@ class AgentConfig extends AbstractResource
 
     public function get(ApiRequest $request, $courseId)
     {
-        $this->getCourseService()->tryManageCourse($courseId);
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
         $agentConfig = empty($agentConfig) ? ['isActive' => 0] : $agentConfig;
         $inspectResult = $this->getAIService()->inspectTenant();
