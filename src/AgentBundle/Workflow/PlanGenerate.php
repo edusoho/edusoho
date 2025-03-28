@@ -31,12 +31,18 @@ class PlanGenerate extends AbstractWorkflow
                 ],
             ];
         }
-        $plan = $this->getStudyPlanService()->generatePlan($inputs);
+        $plan = $this->getStudyPlanService()->generatePlan([
+            'courseId' => $inputs['courseId'],
+            'startDate' => empty($inputs['startDate']) ? date('Y-m-d') : $inputs['startDate'],
+            'endDate' => empty($inputs['endDate']) ? 0 : $inputs['endDate'],
+            'weekDays' => $inputs['weekDays'],
+            'dailyAvgTime' => empty($inputs['dailyLearnDuration']) ? 0 : ($inputs['dailyLearnDuration'] * 60),
+        ]);
 
         return [
             'ok' => true,
             'outputs' => [
-                'content' => $this->makeMarkdown($plan, $tasks),
+                'content' => $this->makeMarkdown($plan, $this->planTasks($inputs, $tasks)),
             ],
         ];
     }
@@ -47,22 +53,18 @@ class PlanGenerate extends AbstractWorkflow
         $studyDates = $this->calculateStudyDates($plan['startDate'], $plan['endDate'], $plan['weekDays']);
         $studyDateCount = count($studyDates);
         $taskCount = count($tasks);
-        $learnHour = intval(array_sum(array_column($tasks, 'learnTime')) / 3600);
+        $learnHour = array_sum(array_column($tasks, 'duration'));
         $everytimeLearnHour = max(round($learnHour / $studyDateCount, 1), 0.1);
 
         return <<<MARKDOWN
-根据上述内容为你生成以下学习计划：
-
-1、学习内容：{$course['courseSetTitle']}，共{$taskCount}个任务，学完需要{$learnHour}小时
-
-2、学习时间：{$this->makeStudyBoundaryDate($plan['startDate'])} 至 {$this->makeStudyBoundaryDate($plan['endDate'])} 内，每{$this->makeChineseWeekDays($plan['weekDays'])}，共计{$studyDateCount}个学习日
-
-3、每次至少学习：{$everytimeLearnHour}小时
-
+根据上述内容为你生成以下学习计划：  
+1、学习内容：{$course['courseSetTitle']}，共{$taskCount}个任务，学完需要{$learnHour}小时  
+2、学习时间：{$this->makeStudyBoundaryDate($plan['startDate'])} 至 {$this->makeStudyBoundaryDate($plan['endDate'])} 内，每{$this->makeChineseWeekDays($plan['weekDays'])}，共计{$studyDateCount}个学习日  
+3、每次至少学习：{$everytimeLearnHour}小时  
 我会在每个学习日提醒你完成学习，期待你的参与！
 
 {$this->makeTable($plan['courseId'], $studyDates, $tasks)}
-点击「学习内容」链接直达
+点击「学习内容」链接直达任务。
 MARKDOWN;
     }
 

@@ -105,7 +105,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 
     public function generatePlan($data)
     {
-        if (!ArrayToolkit::requireds($data, ['courseId', 'startDate', 'endDate', 'weekDays'])) {
+        if (!ArrayToolkit::requireds($data, ['courseId', 'startDate', 'endDate', 'weekDays', 'dailyAvgTime'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $studyPlan = $this->getStudyPlanDao()->getStudyPlanByUserIdAndCourseId($this->getCurrentUser()->getId(), $data['courseId']);
@@ -117,7 +117,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
                 'endDate' => $data['endDate'],
                 'weekDays' => $data['weekDays'],
                 'totalDays' => 0,
-                'dailyAvgTime' => 0,
+                'dailyAvgTime' => $data['dailyAvgTime'],
             ]);
         }
         $data = ArrayToolkit::parts($data, ['courseId', 'startDate', 'endDate', 'weekDays']);
