@@ -18,6 +18,7 @@ class AgentServiceProvider implements ServiceProviderInterface
     {
         $workflows = [
             'plan.getGenerateConfig' => '\AgentBundle\Workflow\PlanGetGenerateConfig',
+            'plan.preview' => '\AgentBundle\Workflow\PlanPreview',
             'plan.generate' => '\AgentBundle\Workflow\PlanGenerate',
         ];
         foreach ($workflows as $workflow => $class) {

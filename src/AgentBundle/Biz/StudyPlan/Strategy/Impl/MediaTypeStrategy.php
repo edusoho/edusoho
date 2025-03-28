@@ -11,6 +11,6 @@ class MediaTypeStrategy implements TimeCalculationStrategy
 {
     public function calculateTime(array $activity): int
     {
-        return (int)$activity['length'];
+        return intval($activity['length']);
     }
 }

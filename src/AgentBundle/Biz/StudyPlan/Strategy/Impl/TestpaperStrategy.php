@@ -11,13 +11,6 @@ class TestpaperStrategy implements TimeCalculationStrategy
 {
     public function calculateTime(array $activity): int
     {
-        $testPaperTime = 0;
-        if ($activity['ext']['limitedTime'] != 0) {
-            $testPaperTime = (int)$activity['ext']['limitedTime'];
-        }
-        if ($activity['length'] != 0) {
-            $testPaperTime = $activity['length'];
-        }
-        return $testPaperTime;
+        return $activity['length'] * 60;
     }
 }

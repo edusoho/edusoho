@@ -7,6 +7,8 @@ use DateTime;
 
 class PlanGenerate extends AbstractWorkflow
 {
+    use TaskTrait;
+
     public function execute($inputs)
     {
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($inputs['courseId']);
@@ -19,13 +21,13 @@ class PlanGenerate extends AbstractWorkflow
                 ],
             ];
         }
-        $tasks = $this->findUnFinishedTasks($inputs['courseId']);
+        $tasks = $this->findSchedulableTasks($inputs['courseId']);
         if (empty($tasks)) {
             return [
                 'ok' => false,
                 'error' => [
-                    'code' => 'NO_LESSON_TO_LEARN',
-                    'message' => '没有待学的任务',
+                    'code' => 'NO_LESSON_CAN_PLAN',
+                    'message' => '无法制定学习计划',
                 ],
             ];
         }
@@ -113,34 +115,6 @@ MARKDOWN;
         ];
 
         return $weekdayMap[$weekday] ?? '';
-    }
-
-    private function findUnFinishedTasks($courseId)
-    {
-        $taskResults = $this->getTaskResultService()->findUserFinishedTaskResultsByCourseId($courseId);
-        $conditions = ['fromCourseId' => $courseId, 'status' => 'published', 'mediaTypes' => ['video', 'audio', 'live', 'replay', 'pseudolive', 'text', 'doc', 'ppt', 'testpaper']];
-        if (!empty($taskResults)) {
-            $conditions['excludeIds'] = array_column($taskResults, 'activityId');
-        }
-        $activities = $this->getActivityService()->search(
-            $conditions,
-            [],
-            0,
-            PHP_INT_MAX,
-            ['id']
-        );
-        if (empty($activities)) {
-            return [];
-        }
-        $activities = $this->getActivityService()->findActivities(array_column($activities, 'id'), true);
-        $activities = array_column($activities, null, 'id');
-        $tasks = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'status' => 'published', 'activityIds' => array_column($activities, 'id')], ['number' => 'ASC'], 0, count($activities), ['id', 'activityId', 'title']);
-        foreach ($tasks as &$task) {
-            $activity = $activities[$task['activityId']];
-            $task['learnTime'] = CalculationStrategyFactory::create($activity)->calculateTime($activity);
-        }
-
-        return $tasks;
     }
 
     private function makeTable($courseId, $studyDates, $tasks)

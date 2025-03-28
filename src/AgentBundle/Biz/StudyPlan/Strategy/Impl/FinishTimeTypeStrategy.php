@@ -9,7 +9,7 @@ use AgentBundle\Biz\StudyPlan\Strategy\TimeCalculationStrategy;
  */
 class FinishTimeTypeStrategy implements TimeCalculationStrategy
 {
-    private const SECONDS_PER_MINUTE = 60;
+    const SECONDS_PER_MINUTE = 60;
 
     public function calculateTime(array $activity): int
     {

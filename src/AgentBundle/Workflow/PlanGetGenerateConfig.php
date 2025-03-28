@@ -4,6 +4,8 @@ namespace AgentBundle\Workflow;
 
 class PlanGetGenerateConfig extends AbstractWorkflow
 {
+    use TaskTrait;
+
     public function execute($inputs)
     {
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($inputs['courseId']);
@@ -21,7 +23,15 @@ class PlanGetGenerateConfig extends AbstractWorkflow
             'ok' => true,
             'outputs' => [
                 'deadlines' => $agentConfig['planDeadline'],
+                'canGenerate' => $this->canGenerate($inputs['courseId']),
             ],
         ];
+    }
+
+    private function canGenerate($courseId)
+    {
+        $tasks = $this->findSchedulableTasks($courseId);
+
+        return !empty($tasks);
     }
 }
