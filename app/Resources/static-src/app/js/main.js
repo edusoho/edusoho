@@ -176,6 +176,7 @@ if (aiAgentToken) {
     }
   })
   sdk.setChatMetadata({
+    workerUrl: document.getElementById('workerUrl').value,
     domainId: document.getElementById('aiTeacherDomain').value,
     courseId: document.getElementById('agentCourseId').value,
     courseName: document.getElementById('agentCourseName').value,
