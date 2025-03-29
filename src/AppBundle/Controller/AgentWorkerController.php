@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AgentBundle\Workflow\Workflow;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Firebase\JWT\JWT;
@@ -46,8 +47,8 @@ class AgentWorkerController extends BaseController
                 ]
             );
         }
-        $biz = $this->getBiz();
-        if (empty($biz["agent.workflow.{$params['workflow']}"])) {
+        $worker = $this->getWorkflowWorker($params['workflow']);
+        if (empty($worker)) {
             return $this->createJsonResponse(
                 [
                     'ok' => false,
@@ -58,9 +59,19 @@ class AgentWorkerController extends BaseController
                 ]
             );
         }
-        $workflow = $biz["agent.workflow.{$params['workflow']}"];
+        try {
+            $result = $worker->execute($params['inputs']);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse([
+                'ok' => false,
+                'error' => [
+                    'code' => 'UNKNOWN_ERROR',
+                    'message' => $e->getMessage(),
+                ],
+            ]);
+        }
 
-        return $this->createJsonResponse($workflow->execute($params['inputs']));
+        return $this->createJsonResponse($result);
     }
 
     private function auth(Request $request)
@@ -85,6 +96,17 @@ class AgentWorkerController extends BaseController
             return;
         }
         $this->authenticateUser($user);
+    }
+
+    /**
+     * @param $workflow
+     * @return Workflow
+     */
+    private function getWorkflowWorker($workflow)
+    {
+        $biz = $this->getBiz();
+
+        return $biz["agent.workflow.{$workflow}"] ?? null;
     }
 
     /**
