@@ -165,6 +165,7 @@
     <input type="hidden" id="agentCourseName" value="{{ course.courseSetTitle }}" />
     <input type="hidden" id="agentLessonId" value="{{ task.id }}" />
     <input type="hidden" id="agentLessonName" value="{{ task.title }}" />
+    <input type="hidden" id="workerUrl" value="{{ url('agent_worker') }}" />
   {% endif %}
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
