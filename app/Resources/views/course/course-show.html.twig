@@ -115,5 +115,6 @@
     <input type="hidden" id="agentCourseId" value="{{ course.id }}" />
     <input type="hidden" id="agentCourseName" value="{{ course.courseSetTitle }}" />
     <input type="hidden" id="studyPlanGenerated" value="{{ is_study_plan_generated(course.id) }}" />
+    <input type="hidden" id="workerUrl" value="{{ url('agent_worker') }}" />
   {% endif %}
 {% endblock %}
