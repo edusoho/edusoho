@@ -75,13 +75,10 @@ trait TaskTrait
         $currentDate = new DateTime($startDate);
         $taskSeq = 0;
         $planTasks = [];
-        while (true) {
-            if (count(array_unique(array_column($planTasks, 'id'))) == count($tasks)) {
-                break;
-            }
+        while ($taskSeq < count($tasks)) {
             if (in_array($currentDate->format('N'), $inputs['weekDays'])) {
                 $duration = $dailyLearnDuration;
-                while ($duration > 0) {
+                while ($duration > 0 && $taskSeq < count($tasks)) {
                     $taskDuration = max(round($tasks[$taskSeq]['duration'] / 3600, 1), 0.1);
                     $planTasks[] = [
                         'id' => $tasks[$taskSeq]['id'],
@@ -118,5 +115,17 @@ trait TaskTrait
         }
 
         return $studyDateCount;
+    }
+
+    private function groupTasksByDate($tasks)
+    {
+        $dates = [];
+        foreach ($tasks as $task) {
+            $dates[$task['date']] = $dates[$task['date']] ?? ['tasks' => [], 'duration' => 0];
+            $dates[$task['date']]['tasks'][] = $task;
+            $dates[$task['date']]['duration'] += $task['duration'];
+        }
+
+        return $dates;
     }
 }

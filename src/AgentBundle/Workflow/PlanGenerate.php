@@ -31,10 +31,11 @@ class PlanGenerate extends AbstractWorkflow
                 ],
             ];
         }
+        $tasks = $this->planTasks($inputs, $tasks);
         $plan = $this->getStudyPlanService()->generatePlan([
             'courseId' => $inputs['courseId'],
             'startDate' => empty($inputs['startDate']) ? date('Y-m-d') : $inputs['startDate'],
-            'endDate' => empty($inputs['endDate']) ? 0 : $inputs['endDate'],
+            'endDate' => empty($inputs['endDate']) ? end($tasks)['date'] : $inputs['endDate'],
             'weekDays' => $inputs['weekDays'],
             'dailyAvgTime' => empty($inputs['dailyLearnDuration']) ? 0 : ($inputs['dailyLearnDuration'] * 60),
         ]);
@@ -42,7 +43,7 @@ class PlanGenerate extends AbstractWorkflow
         return [
             'ok' => true,
             'outputs' => [
-                'content' => $this->makeMarkdown($plan, $this->planTasks($inputs, $tasks)),
+                'content' => $this->makeMarkdown($plan, $tasks),
             ],
         ];
     }
@@ -50,40 +51,22 @@ class PlanGenerate extends AbstractWorkflow
     private function makeMarkdown($plan, $tasks)
     {
         $course = $this->getCourseService()->getCourse($plan['courseId']);
-        $studyDates = $this->calculateStudyDates($plan['startDate'], $plan['endDate'], $plan['weekDays']);
+        $studyDates = $this->groupTasksByDate($tasks);
         $studyDateCount = count($studyDates);
         $taskCount = count($tasks);
         $learnHour = array_sum(array_column($tasks, 'duration'));
-        $everytimeLearnHour = max(round($learnHour / $studyDateCount, 1), 0.1);
+        $minDuration = min(array_column($studyDates, 'duration'));
 
         return <<<MARKDOWN
 根据上述内容为你生成以下学习计划：  
 1、学习内容：{$course['courseSetTitle']}，共{$taskCount}个任务，学完需要{$learnHour}小时  
 2、学习时间：{$this->makeStudyBoundaryDate($plan['startDate'])} 至 {$this->makeStudyBoundaryDate($plan['endDate'])} 内，每{$this->makeChineseWeekDays($plan['weekDays'])}，共计{$studyDateCount}个学习日  
-3、每次至少学习：{$everytimeLearnHour}小时  
+3、每次至少学习：{$minDuration}小时  
 我会在每个学习日提醒你完成学习，期待你的参与！
 
-{$this->makeTable($plan['courseId'], $studyDates, $tasks)}
+{$this->makeList($studyDates)}
 点击「学习内容」链接直达任务。
 MARKDOWN;
-    }
-
-    private function calculateStudyDates($startDate, $endDate, $weekdays)
-    {
-        $studyDates = [];
-        $currentDate = new DateTime($startDate);
-        $endDate = new DateTime($endDate);
-        while ($currentDate <= $endDate) {
-            if (in_array($currentDate->format('N'), $weekdays)) {
-                $studyDates[] = [
-                    'date' => $currentDate->format('m月d日'),
-                    'weekday' => $this->convertChineseWeekDay($currentDate->format('N')),
-                ];
-            }
-            $currentDate->modify('+1 day');
-        }
-
-        return $studyDates;
     }
 
     private function makeStudyBoundaryDate($date)
@@ -119,35 +102,16 @@ MARKDOWN;
         return $weekdayMap[$weekday] ?? '';
     }
 
-    private function makeTable($courseId, $studyDates, $tasks)
+    private function makeList($studyDates)
     {
-        $learnHour = intval(array_sum(array_column($tasks, 'learnTime')) / 3600);
-        $studyDateCount = count($studyDates);
-        $everytimeLearnHour = round($learnHour / $studyDateCount, 1);
-        $everytimeLearnSecond = intval(array_sum(array_column($tasks, 'learnTime')) / $studyDateCount);
-        $dateSeq = 0;
-        $taskSeq = 0;
-        while ($dateSeq < $studyDateCount) {
-            $learnSecond = $everytimeLearnSecond;
-            while ($learnSecond > 0) {
-                $studyDates[$dateSeq]['tasks'] = $studyDates[$dateSeq]['tasks'] ?? [];
-                $studyDates[$dateSeq]['tasks'][] = "[{$tasks[$taskSeq]['title']}](/course/{$courseId}/task/{$tasks[$taskSeq]['id']})";
-                if ($learnSecond < $tasks[$taskSeq]['learnTime']) {
-                    $tasks[$taskSeq]['learnTime'] -= $learnSecond;
-                    $learnSecond = 0;
-                } else {
-                    $learnSecond -= $tasks[$taskSeq]['learnTime'];
-                    $taskSeq++;
-                }
+        $list = '';
+        foreach ($studyDates as $studyDate => $dateTasks) {
+            $list .= '### `'.date('Y/m/d', strtotime($studyDate))." {$this->convertChineseWeekDay(date('N', strtotime($studyDate)))}".'`'."\n\n";
+            foreach ($dateTasks['tasks'] as $task) {
+                $list .= "* **[{$task['title']}](/course/{$task['courseId']}/task/{$task['id']})**  \n每日学习・{$task['duration']}小时\n\n\n";
             }
-            $dateSeq++;
-        }
-        $table = "| 日期 | 学习内容 | 每日学习 |\n| - | - | - |\n";
-        foreach ($studyDates as $studyDate) {
-            $studyDateTasks = implode('<br>', $studyDate['tasks']);
-            $table .= "| {$studyDate['date']}（{$studyDate['weekday']}） | {$studyDateTasks} |  {$everytimeLearnHour}小时 |\n";
         }
 
-        return $table;
+        return $list;
     }
 }
