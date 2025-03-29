@@ -21,6 +21,15 @@ class PlanGenerate extends AbstractWorkflow
                 ],
             ];
         }
+        if (empty($inputs['endDate']) && empty($inputs['dailyLearnDuration'])) {
+            return [
+                'ok' => false,
+                'error' => [
+                    'code' => 'PARAMS_ERROR',
+                    'message' => 'endDate和dailyLearnDuration不能都为空',
+                ],
+            ];
+        }
         $tasks = $this->findSchedulableTasks($inputs['courseId']);
         if (empty($tasks)) {
             return [
