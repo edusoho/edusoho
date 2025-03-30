@@ -388,7 +388,7 @@ export default {
         if (window.parent.agentSdk) {
           window.parent.agentSdk.show();
           const workflow = {
-            workflow: "question.analysis",
+            workflow: "teacher.question.idea",
             inputs: {
               domainId: window.parent.document.getElementById('aiTeacherDomain').value,
               question: res.question,
