@@ -159,7 +159,8 @@ const aiAgentToken = document.getElementById('aiAgentToken');
 if (aiAgentToken) {
   const sdk = new AgentSDK({
     token: aiAgentToken.value,
-    uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html'
+    uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html',
+    signalServerUrl: 'wss://test-ai-signal.edusoho.cn/'
   });
   sdk.addShortcut("key1", {
     name: "制定学习计划",
