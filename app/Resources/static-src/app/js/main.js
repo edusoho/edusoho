@@ -185,5 +185,8 @@ if (aiAgentToken) {
     lessonName: document.getElementById('agentLessonName')?.value,
   })
   sdk.boot();
+  if (document.getElementById('studyPlanGenerated').value) {
+    sdk.showReminder();
+  }
   window.agentSdk = sdk;
 }
