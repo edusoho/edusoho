@@ -157,15 +157,9 @@
     </div>
   </div>
 
-  {% if is_show_ai_agent(course.id) %}
+  {% if is_course_show_ai_agent(course.id) %}
     <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
-    <input type="hidden" id="aiTeacherDomain" value="{{ ai_teacher_domain(course.id) }}" />
-    <input type="hidden" id="studyPlanGenerated" value="{{ is_study_plan_generated(course.id) }}" />
-    <input type="hidden" id="agentCourseId" value="{{ course.id }}" />
-    <input type="hidden" id="agentCourseName" value="{{ course.courseSetTitle }}" />
-    <input type="hidden" id="agentLessonId" value="{{ task.id }}" />
-    <input type="hidden" id="agentLessonName" value="{{ task.title }}" />
-    <input type="hidden" id="workerUrl" value="{{ url('agent_worker') }}" />
+    <input type="hidden" id="chatMetaData" value="{{ get_lesson_chat_meta_data(course, task) }}" />
   {% endif %}
 
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>

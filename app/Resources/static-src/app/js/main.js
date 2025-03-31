@@ -175,15 +175,8 @@ if (aiAgentToken) {
     data: {
       content: "制定学习计划"
     }
-  })
-  sdk.setChatMetadata({
-    workerUrl: document.getElementById('workerUrl').value,
-    domainId: document.getElementById('aiTeacherDomain').value,
-    courseId: document.getElementById('agentCourseId').value,
-    courseName: document.getElementById('agentCourseName').value,
-    lessonId: document.getElementById('agentLessonId')?.value,
-    lessonName: document.getElementById('agentLessonName')?.value,
-  })
+  });
+  sdk.setChatMetadata(JSON.parse(document.getElementById('chatMetaData')?.value));
   sdk.boot();
   window.agentSdk = sdk;
 }

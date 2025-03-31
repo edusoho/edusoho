@@ -7,9 +7,12 @@ use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use Biz\AI\Util\AgentToken;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AIExtension extends \Twig_Extension
 {
@@ -33,8 +36,11 @@ class AIExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('ai_agent_token', [$this, 'makeAIAgentToken']),
-            new \Twig_SimpleFunction('is_show_ai_agent', [$this, 'isShowAIAgent']),
-            new \Twig_SimpleFunction('ai_teacher_domain', [$this, 'getAiTeacherDomain']),
+            new \Twig_SimpleFunction('is_course_show_ai_agent', [$this, 'isCourseShowAIAgent']),
+            new \Twig_SimpleFunction('is_answer_show_ai_agent', [$this, 'isAnswerShowAIAgent']),
+            new \Twig_SimpleFunction('get_course_chat_meta_data', [$this, 'getCourseChatMetaData']),
+            new \Twig_SimpleFunction('get_lesson_chat_meta_data', [$this, 'getLessonChatMetaData']),
+            new \Twig_SimpleFunction('get_answer_chat_meta_data', [$this, 'getAnswerChatMetaData']),
             new \Twig_SimpleFunction('is_study_plan_generated', [$this, 'isStudyPlanGenerated']),
         ];
     }
@@ -44,7 +50,7 @@ class AIExtension extends \Twig_Extension
         return (new AgentToken())->make();
     }
 
-    public function isShowAIAgent($courseId)
+    public function isCourseShowAIAgent($courseId)
     {
         if (!$this->getCourseMemberService()->isCourseStudent($courseId, $this->getCurrentUser()->getId())) {
             return false;
@@ -54,21 +60,96 @@ class AIExtension extends \Twig_Extension
         if ($this->container->get('web.twig.course_extension')->isMemberExpired($course, $courseMember)) {
             return false;
         }
-        $studyPlanConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
 
-        return !empty($studyPlanConfig['isActive']);
+        return !empty($agentConfig['isActive']);
     }
 
-    public function getAiTeacherDomain($courseId)
+    public function isAnswerShowAIAgent($answerSceneId)
     {
-        $studyPlanConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        if (empty($module)) {
+            return false;
+        }
+        $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
+        if (empty($exerciseBinds)) {
+            return false;
+        }
+        foreach ($exerciseBinds as $exerciseBind) {
+            if ('course' == $exerciseBind['bindType']) {
+                $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($exerciseBind['bindId']);
+                if (!empty($agentConfig['isActive'])) {
+                    return true;
+                }
+            }
+        }
 
-        return $studyPlanConfig['domainId'] ?? '';
+        return false;
+    }
+
+    public function getCourseChatMetaData($course)
+    {
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($course['id']);
+
+        return json_encode([
+            'workerUrl' => $this->getAgentWorkerUrl(),
+            'domainId' => $agentConfig['domainId'] ?? '',
+            'courseId' => $course['id'],
+            'courseName' => $course['courseSetTitle'],
+        ]);
+    }
+
+    public function getLessonChatMetaData($course, $task)
+    {
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($course['id']);
+
+        return json_encode([
+            'workerUrl' => $this->getAgentWorkerUrl(),
+            'domainId' => $agentConfig['domainId'] ?? '',
+            'courseId' => $course['id'],
+            'courseName' => $course['courseSetTitle'],
+            'lessonId' => $task['id'],
+            'lessonName' => $task['title'],
+        ]);
+    }
+
+    public function getAnswerChatMetaData($answerSceneId)
+    {
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        if (empty($module)) {
+            return '';
+        }
+        $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
+        if (empty($exerciseBinds)) {
+            return '';
+        }
+        foreach ($exerciseBinds as $exerciseBind) {
+            if ('course' == $exerciseBind['bindType']) {
+                $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($exerciseBind['bindId']);
+                if (!empty($agentConfig['isActive'])) {
+                    $course = $this->getCourseService()->getCourse($agentConfig['courseId']);
+
+                    return json_encode([
+                        'workerUrl' => $this->getAgentWorkerUrl(),
+                        'domainId' => $agentConfig['domainId'],
+                        'courseId' => $course['id'],
+                        'courseName' => $course['courseSetTitle'],
+                    ]);
+                }
+            }
+        }
+
+        return '';
     }
 
     public function isStudyPlanGenerated($courseId)
     {
         return $this->getStudyPlanService()->isUserStudyPlanGenerated($this->getCurrentUser()->getId(), $courseId) ? 1 : 0;
+    }
+
+    private function getAgentWorkerUrl()
+    {
+        return $this->container->get('router')->generate('agent_worker', [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
@@ -93,6 +174,22 @@ class AIExtension extends \Twig_Extension
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    private function getItemBankExerciseModuleService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    private function getItemBankExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseService');
     }
 
     /**
