@@ -87,7 +87,7 @@
           </div>
 
           <slot name="response_points"></slot>
-          <button @click="showAgentSdk">解析</button>
+          <button v-if="mode === 'do' || 'report'" @click="showAgentSdk">解析</button>
           <div class="ibs-clearfix" v-if="showCollectBtn">
             <a-button
               class="ibs-right ibs-collect-toggle-btn"
@@ -377,29 +377,30 @@ export default {
   },
   methods: {
     async showAgentSdk() {
-      $.ajax({
-        url: `/api/answer_record/${this.answerRecord.id}/question_text/${this.question.id}`,
-        type: 'GET',
-        headers:{
-          'Accept':'application/vnd.edusoho.v2+json'
-        },
-        contentType: 'application/json;charset=utf-8',
-      }).done((res) => {
-        if (window.parent.agentSdk) {
-          window.parent.agentSdk.show();
-          const workflow = {
-            workflow: "teacher.question.idea",
-            inputs: {
-              domainId: window.parent.document.getElementById('aiTeacherDomain').value,
-              question: res.question,
+      if (this.mode === 'do' || this.mode === 'report') {
+        $.ajax({
+          url: `/api/answer_record/${this.answerRecord.id}/question_text/${this.question.id}`,
+          type: 'GET',
+          headers:{
+            'Accept':'application/vnd.edusoho.v2+json'
+          },
+          contentType: 'application/json;charset=utf-8',
+        }).done((res) => {
+          if (window.parent.agentSdk) {
+            window.parent.agentSdk.show();
+            const workflow = {
+              workflow: this.mode === 'do' ? "teacher.question.idea" : this.mode === 'report' ? 'teacher.question.analysis' : null,
+              inputs: {
+                domainId: window.parent.document.getElementById('aiTeacherDomain').value,
+                question: res.question,
+              }
             }
+            window.parent.agentSdk.chat(res.content, workflow, true);
           }
-          window.parent.agentSdk.chat(res.content, workflow, true);
-        }
-      }).fail((err) => {
-        console.log(err)
-      })
-
+        }).fail((err) => {
+          console.log(err)
+        })
+      }
     },
     replaceHtmlSpace(htmlStr) {
       return htmlStr ? htmlStr.replace(/ /g, " ") : "";
