@@ -22,10 +22,17 @@ class PlanGetGenerateConfig extends AbstractWorkflow
         return [
             'ok' => true,
             'outputs' => [
-                'deadlines' => $agentConfig['planDeadline'],
+                'deadlines' => $this->filterDeadlines($agentConfig['planDeadline']),
                 'canGenerate' => $this->canGenerate($inputs['courseId']),
             ],
         ];
+    }
+
+    private function filterDeadlines($deadlines)
+    {
+        return array_values(array_filter($deadlines, function ($deadline) {
+            return $deadline > date('Y-m-d');
+        }));
     }
 
     private function canGenerate($courseId)

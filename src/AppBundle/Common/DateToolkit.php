@@ -2,6 +2,8 @@
 
 namespace AppBundle\Common;
 
+use DateTime;
+
 class DateToolkit
 {
     /**
@@ -36,5 +38,20 @@ class DateToolkit
     public static function getMicroSecond()
     {
         return (int) (microtime(true) * 1000000);
+    }
+
+    public static function countWeekdaysInDateRange($startDate, $endDate, $weekdays)
+    {
+        $count = 0;
+        $currentDate = new DateTime($startDate);
+        $endDate = new DateTime($endDate);
+        while ($currentDate <= $endDate) {
+            if (in_array($currentDate->format('N'), $weekdays)) {
+                $count++;
+            }
+            $currentDate->modify('+1 day');
+        }
+
+        return $count;
     }
 }

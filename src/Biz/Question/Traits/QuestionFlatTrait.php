@@ -10,7 +10,8 @@ trait QuestionFlatTrait
     private function flattenMain($type, $question)
     {
         if ('material' == $type) {
-            $content = "[材料] {$question['material']}  \n[{$this->chineseNames[$this->modeToType[$question['answer_mode']]]}] ";
+            $type = $this->modeToType[$question['answer_mode']];
+            $content = "[材料] {$question['material']}  \n[{$this->chineseNames[$type]}] ";
         } else {
             $content = "[{$this->chineseNames[$type]}] ";
         }
