@@ -16,20 +16,22 @@ class AnswerRecordQuestionText extends AbstractResource
 
     public function get(ApiRequest $request, $answerRecordId, $questionId)
     {
-        if (!$this->check($answerRecordId, $questionId)) {
+        $assessmentItem = $this->getAssessmentItem($answerRecordId, $questionId);
+        if (empty($assessmentItem)) {
             throw CommonException::ERROR_PARAMETER();
         }
         $question = $this->getItemService()->getQuestion($questionId);
         $item = $this->getItemService()->getItem($question['item_id']);
         $question['material'] = $item['material'];
+        $scoreRule = array_column($assessmentItem['score_rule'], null, 'question_id');
 
         return [
-            'content' => $this->flattenMain($item['type'], $question),
+            'content' => "{$scoreRule[$questionId]['seq']}、{$this->flattenMain($item['type'], $question)}",
             'question' => "{$this->flattenMain($item['type'], $question)}{$this->flattenAnswer($item['type'], $question)}{$this->flattenAnalysis($question)}",
         ];
     }
 
-    private function check($answerRecordId, $questionId)
+    private function getAssessmentItem($answerRecordId, $questionId)
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
         if (empty($answerRecord) || ($this->getCurrentUser()->getId() != $answerRecord['user_id'])) {
@@ -43,12 +45,8 @@ class AnswerRecordQuestionText extends AbstractResource
         if (empty($item)) {
             return false;
         }
-        $sectionItem = $this->getSectionItemService()->getItemByAssessmentIdAndItemId($answerRecord['assessment_id'], $item['id']);
-        if (empty($sectionItem)) {
-            return false;
-        }
 
-        return true;
+        return $this->getSectionItemService()->getItemByAssessmentIdAndItemId($answerRecord['assessment_id'], $item['id']);
     }
 
     /**
