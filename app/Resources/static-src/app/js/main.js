@@ -162,7 +162,7 @@ if (aiAgentToken) {
     uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html',
     signalServerUrl: 'wss://test-ai-signal.edusoho.cn/'
   });
-  sdk.addShortcut("key1", {
+  sdk.addShortcut("plan.create", {
     name: "制定学习计划",
     icon: "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
       "<path d=\"M1.66665 6.33301H14.3333V13.6663C14.3333 14.0345 14.0348 14.333 13.6666 14.333H2.33332C1.96513 14.333 1.66665 14.0345 1.66665 13.6663V6.33301Z\" stroke=\"#333333\" stroke-linejoin=\"round\"/>\n" +
