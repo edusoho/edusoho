@@ -31,7 +31,7 @@ class PlanGetGenerateConfig extends AbstractWorkflow
     private function filterDeadlines($deadlines)
     {
         return array_values(array_filter($deadlines, function ($deadline) {
-            return $deadline > date('Y-m-d');
+            return $deadline >= date('Y-m-d');
         }));
     }
 
