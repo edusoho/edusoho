@@ -41,7 +41,7 @@ class PlanPreview extends AbstractWorkflow
         return [
             'ok' => true,
             'outputs' => [
-                'tasks' => $this->planTasks($inputs, $tasks),
+                'tasks' => $this->scheduleTasks($inputs, $tasks),
             ],
         ];
     }
