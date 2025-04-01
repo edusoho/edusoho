@@ -386,7 +386,6 @@ export default {
   },
   methods: {
     async showAgentSdk() {
-      console.log('showAgentSdk')
       $.ajax({
         url: `/api/answer_record/${this.answerRecord.id}/question_text/${this.question.id}`,
         type: 'GET',
