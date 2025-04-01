@@ -1,9 +1,9 @@
 <template>
   <div class="ibs-engine">
-    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover">
-      <template slot="content">
+    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="(mode === 'do' || mode === 'report') && aiAgentEnabled ? 'hover' : 'manual'">
+      <template slot="content" @click="showAgentSdk">
         <div class="ai-agent-popover-content">
-          <button class="ai-agent-button" v-if="(mode === 'do' || mode === 'report') && aiAgentEnabled" @click="showAgentSdk"><span>请教小知老师解题思路～</span></button>
+          <button class="ai-agent-button"><span>请教小知老师解题思路～</span></button>
           <img src="/static-dist/app/img/ai-agent/icon.png" alt="头像">
         </div>
       </template>
