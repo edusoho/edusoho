@@ -1,161 +1,168 @@
 <template>
   <div class="ibs-engine">
-    <div class="ibs-engine-item">
-      <a-row>
-        <!-- 序号和分数 -->
-        <a-col :sm="2" :xs="3" class="ibs-text-center" v-show="showScoreAndSeq">
-          <div class="ibs-order">{{ question.seq }}</div>
-          <span
-            v-if="assessmentStatus === 'preview' && Number(!question.isDelete)"
-            class="ibs-score-tag"
-            style="display: inline-block;"
-            v-html="getScoringRules"
-          >
+    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover">
+      <template slot="content">
+        <div class="ai-agent-popover-content">
+          <button class="ai-agent-button" v-if="(mode === 'do' || mode === 'report') && aiAgentEnabled" @click="showAgentSdk"><span>请教小知老师解题思路～</span></button>
+          <img src="/static-dist/app/img/ai-agent/icon.png" alt="头像">
+        </div>
+      </template>
+      <div class="ibs-engine-item">
+        <a-row>
+          <!-- 序号和分数 -->
+          <a-col :sm="2" :xs="3" class="ibs-text-center" v-show="showScoreAndSeq">
+            <div class="ibs-order">{{ question.seq }}</div>
+            <span
+              v-if="assessmentStatus === 'preview' && Number(!question.isDelete)"
+              class="ibs-score-tag"
+              style="display: inline-block;"
+              v-html="getScoringRules"
+            >
           </span>
-          <span
-            class="ibs-score-tag"
-            v-else-if="needScore && Number(!question.isDelete)"
-          >
+            <span
+              class="ibs-score-tag"
+              v-else-if="needScore && Number(!question.isDelete)"
+            >
             {{ question.score }}{{ t("itemEngine.score") }}
           </span>
 
-          <a-button
-            v-show="showTag"
-            class="ibs-mt8 ibs-toggle-btn"
-            size="small"
-            type="primary"
-            :ghost="this.isTag ? false : true"
-            @click="changeTag"
+            <a-button
+              v-show="showTag"
+              class="ibs-mt8 ibs-toggle-btn"
+              size="small"
+              type="primary"
+              :ghost="this.isTag ? false : true"
+              @click="changeTag"
             ><i :class="tagClass"></i>{{ tagText }}</a-button
-          >
-          <a-button
-            v-show="showCollect"
-            class="ibs-mt8 ibs-collect-btn"
-            size="small"
-            type="primary"
-            :ghost="this.isCollect ? false : true"
-            @click="changeCollect"
+            >
+            <a-button
+              v-show="showCollect"
+              class="ibs-mt8 ibs-collect-btn"
+              size="small"
+              type="primary"
+              :ghost="this.isCollect ? false : true"
+              @click="changeCollect"
             ><i :class="collectClass"></i>{{ collectText }}</a-button
+            >
+          </a-col>
+          <a-col
+            :xs="showScoreAndSeq ? 21 : 24"
+            :sm="showScoreAndSeq ? 22 : 24"
+            v-if="Number(!question.isDelete)"
           >
-        </a-col>
-        <a-col
-          :xs="showScoreAndSeq ? 21 : 24"
-          :sm="showScoreAndSeq ? 22 : 24"
-          v-if="Number(!question.isDelete)"
-        >
-          <!-- word导入解析错误 -->
-          <div
-            class="ibs-stem ibs-danger-color"
-            v-if="
+            <!-- word导入解析错误 -->
+            <div
+              class="ibs-stem ibs-danger-color"
+              v-if="
               (question.errors &&
                 question.errors.stem &&
                 question.errors.stem.code == 100001) ||
                 !question.stem
             "
-          >
-            {{ t("itemEngine.stemErrorMessage") }}
-          </div>
-          <div
-            v-else
-            class="ibs-stem ibs-editor-text"
-            v-html="replaceHtmlSpace(question.stem)"
-          ></div>
+            >
+              {{ t("itemEngine.stemErrorMessage") }}
+            </div>
+            <div
+              v-else
+              class="ibs-stem ibs-editor-text"
+              v-html="replaceHtmlSpace(question.stem)"
+            ></div>
 
-          <div
-            class="ibs-stem ibs-danger-color"
-            v-if="
+            <div
+              class="ibs-stem ibs-danger-color"
+              v-if="
               question.errors &&
                 question.errors.stem &&
                 question.errors.stem.code == 100006
             "
-          >
-            {{ t("itemEngine.stemAnsweringArea") }}
-          </div>
-
-          <div
-            v-if="getAttachmentTypeData('stem').length > 0"
-            style="padding: 8px 8px 0;background-color: #f5f5f5;border: 1px solid #F2F3F5;border-radius: 6px;"
-          >
-            <attachment-preview
-              v-for="(item, index) in getAttachmentTypeData('stem')"
-              :index="index"
-              :key="item.no"
-              :cdnHost="cdnHost"
-              :fileData="item"
-              mode="do"
-            ></attachment-preview>
-          </div>
-
-          <slot name="response_points"></slot>
-          <button v-if="mode === 'do' || 'report'" @click="showAgentSdk">解析</button>
-          <div class="ibs-clearfix" v-if="showCollectBtn">
-            <a-button
-              class="ibs-right ibs-collect-toggle-btn"
-              type="primary"
-              ghost
-              @click="lookAnalysis"
             >
-              {{
-                canShowAnalysis
-                  ? t("itemEngine.closeEx plain")
-                  : t("itemEngine.openExplain")
-              }}
-            </a-button>
-          </div>
+              {{ t("itemEngine.stemAnsweringArea") }}
+            </div>
 
-          <div v-show="showAnalysis">
-            <!--对于章节练习题需要和解析一起展示答案-->
-            <slot
-              v-if="doingLookAnalysis"
-              name="analysis_response_points"
-            ></slot>
-            <div class="ibs-explain ibs-mt16"
-              v-if="mode !== 'import' || !question.aiAnalysisEnable"
-              v-html="
+            <div
+              v-if="getAttachmentTypeData('stem').length > 0"
+              style="padding: 8px 8px 0;background-color: #f5f5f5;border: 1px solid #F2F3F5;border-radius: 6px;"
+            >
+              <attachment-preview
+                v-for="(item, index) in getAttachmentTypeData('stem')"
+                :index="index"
+                :key="item.no"
+                :cdnHost="cdnHost"
+                :fileData="item"
+                mode="do"
+              ></attachment-preview>
+            </div>
+
+            <slot name="response_points"></slot>
+            <div class="ibs-clearfix" v-if="showCollectBtn">
+              <a-button
+                class="ibs-right ibs-collect-toggle-btn"
+                type="primary"
+                ghost
+                @click="lookAnalysis"
+              >
+                {{
+                  canShowAnalysis
+                    ? t("itemEngine.closeExplain")
+                    : t("itemEngine.openExplain")
+                }}
+              </a-button>
+            </div>
+
+            <div v-show="showAnalysis">
+              <!--对于章节练习题需要和解析一起展示答案-->
+              <slot
+                v-if="doingLookAnalysis"
+                name="analysis_response_points"
+              ></slot>
+              <div class="ibs-explain ibs-mt16"
+                   v-if="mode !== 'import' || !question.aiAnalysisEnable"
+                   v-html="
                 `<span class='ibs-label'>${t(
                   'itemEngine.Explain'
                 )}</span><div class='ibs-content ibs-editor-text ibs-mr8'>${question.analysis ||
                   t('itemReport.no_analysis')}</div>`
               "
-            ></div>
-            <ai-analysis
-              v-if="isShowAiAnalysis && question.aiAnalysisEnable && ['report', 'import'].includes(mode)"
-              :questionId="question.id"
-              @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
-              @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
-              @clearAnalysis="clearAnalysis"
-              @appendAnalysis="appendAnalysis"
-            ></ai-analysis>
-            <a-textarea
-              v-if="mode === 'import' && question.aiAnalysisEnable"
-              :rows="4"
-              :data-image-download-url="showCKEditorData.filebrowserImageDownloadUrl"
-              :name="`analysis${seq}`"
-            />
-            <div
-              v-if="getAttachmentTypeData('analysis').length > 0"
-              class="ibs-mt16"
-              style="padding: 8px 8px 0;background-color: #f5f5f5;border: 1px solid #F2F3F5;border-radius: 6px;"
-            >
-              <attachment-preview
-                v-for="item in getAttachmentTypeData('analysis')"
-                :key="item.no"
-                :fileData="item"
-                :cdnHost="cdnHost"
-                mode="do"
-              ></attachment-preview>
+              ></div>
+              <ai-analysis
+                v-if="isShowAiAnalysis && question.aiAnalysisEnable && ['report', 'import'].includes(mode)"
+                :questionId="question.id"
+                @prepareStudentAiAnalysis="prepareStudentAiAnalysis"
+                @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
+                @clearAnalysis="clearAnalysis"
+                @appendAnalysis="appendAnalysis"
+              ></ai-analysis>
+              <a-textarea
+                v-if="mode === 'import' && question.aiAnalysisEnable"
+                :rows="4"
+                :data-image-download-url="showCKEditorData.filebrowserImageDownloadUrl"
+                :name="`analysis${seq}`"
+              />
+              <div
+                v-if="getAttachmentTypeData('analysis').length > 0"
+                class="ibs-mt16"
+                style="padding: 8px 8px 0;background-color: #f5f5f5;border: 1px solid #F2F3F5;border-radius: 6px;"
+              >
+                <attachment-preview
+                  v-for="item in getAttachmentTypeData('analysis')"
+                  :key="item.no"
+                  :fileData="item"
+                  :cdnHost="cdnHost"
+                  mode="do"
+                ></attachment-preview>
+              </div>
             </div>
-          </div>
-        </a-col>
-        <a-col
-          :xs="showScoreAndSeq ? 21 : 24"
-          :sm="showScoreAndSeq ? 22 : 24"
-          class="ibs-text-center"
-          v-else
+          </a-col>
+          <a-col
+            :xs="showScoreAndSeq ? 21 : 24"
+            :sm="showScoreAndSeq ? 22 : 24"
+            class="ibs-text-center"
+            v-else
           >{{ deleteTip }}</a-col
-        >
-      </a-row>
-    </div>
+          >
+        </a-row>
+      </div>
+    </a-popover>
   </div>
 </template>
 
@@ -171,6 +178,7 @@ export default {
   inheritAttrs: false,
   data() {
     return {
+      aiAgentEnabled: null,
       isTag: false,
       isCollect: false,
       canShowAnalysis: false,
@@ -341,6 +349,7 @@ export default {
     },
   },
   mounted() {
+    this.aiAgentEnabled = window.parent.document.getElementById('aiAgentToken')?.value
     // 判断是否被收藏
     this.isTag = this.section_responses[0]?.item_responses[
       Number(this.question.seq) - 1
@@ -377,30 +386,28 @@ export default {
   },
   methods: {
     async showAgentSdk() {
-      if (this.mode === 'do' || this.mode === 'report') {
-        $.ajax({
-          url: `/api/answer_record/${this.answerRecord.id}/question_text/${this.question.id}`,
-          type: 'GET',
-          headers:{
-            'Accept':'application/vnd.edusoho.v2+json'
-          },
-          contentType: 'application/json;charset=utf-8',
-        }).done((res) => {
-          if (window.parent.agentSdk) {
-            window.parent.agentSdk.show();
-            const workflow = {
-              workflow: this.mode === 'do' ? "teacher.question.idea" : this.mode === 'report' ? 'teacher.question.analysis' : null,
-              inputs: {
-                domainId: window.parent.document.getElementById('aiTeacherDomain').value,
-                question: res.question,
-              }
+      $.ajax({
+        url: `/api/answer_record/${this.answerRecord.id}/question_text/${this.question.id}`,
+        type: 'GET',
+        headers:{
+          'Accept':'application/vnd.edusoho.v2+json'
+        },
+        contentType: 'application/json;charset=utf-8',
+      }).done((res) => {
+        if (window.parent.agentSdk) {
+          window.parent.agentSdk.show();
+          const workflow = {
+            workflow: this.mode === 'do' ? "teacher.question.idea" : this.mode === 'report' ? 'teacher.question.analysis' : null,
+            inputs: {
+              domainId: JSON.parse(window.parent.document.getElementById('chatMetaData')?.value).domainId,
+              question: res.question,
             }
-            window.parent.agentSdk.chat(res.content, workflow, true);
           }
-        }).fail((err) => {
-          console.log(err)
-        })
-      }
+          window.parent.agentSdk.chat(res.content, workflow, true);
+        }
+      }).fail((err) => {
+        console.log(err)
+      })
     },
     replaceHtmlSpace(htmlStr) {
       return htmlStr ? htmlStr.replace(/ /g, " ") : "";
@@ -443,7 +450,7 @@ export default {
     },
     lookAnalysis() {
       this.canShowAnalysis = !this.canShowAnalysis;
-      this.$emit("setMaterialAnalysis", this.canShowAnalysis, this.keys);
+      // this.$emit("setMaterialAnalysis", this.canShowAnalysis, this.keys);
     },
     prepareStudentAiAnalysis(gen) {
       this.$emit('prepareStudentAiAnalysis', gen);
