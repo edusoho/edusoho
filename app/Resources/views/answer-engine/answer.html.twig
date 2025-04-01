@@ -25,9 +25,9 @@
   <input type="hidden" name="return_url" value="{{ returnUrl }}">
   <input type="hidden" name="show_save_progress_btn" value="{{ showSaveProgressBtn|default(1) }}">
 
-  {% if is_answer_show_ai_agent(answerRecord.answer_scene_id) %}
+  {% if is_answer_show_ai_agent(answerRecord.id) %}
     <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
-    <input type="hidden" id="chatMetaData" value="{{ get_answer_chat_meta_data(answerRecord.answer_scene_id) }}" />
+    <input type="hidden" id="chatMetaData" value="{{ get_answer_chat_meta_data(answerRecord.id) }}" />
   {% endif %}
 
   {% if contract.sign|default('') != 'no' %}

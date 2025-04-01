@@ -11,6 +11,7 @@ use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -65,9 +66,10 @@ class AIExtension extends \Twig_Extension
         return !empty($agentConfig['isActive']);
     }
 
-    public function isAnswerShowAIAgent($answerSceneId)
+    public function isAnswerShowAIAgent($answerRecordId)
     {
-        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
         if (empty($module)) {
             return false;
         }
@@ -113,9 +115,10 @@ class AIExtension extends \Twig_Extension
         ]);
     }
 
-    public function getAnswerChatMetaData($answerSceneId)
+    public function getAnswerChatMetaData($answerRecordId)
     {
-        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
         if (empty($module)) {
             return '';
         }
@@ -174,6 +177,14 @@ class AIExtension extends \Twig_Extension
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return AnswerRecordService
+     */
+    private function getAnswerRecordService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerRecordService');
     }
 
     /**
