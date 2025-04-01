@@ -178,7 +178,7 @@ if (aiAgentToken) {
   });
   sdk.setChatMetadata(JSON.parse(document.getElementById('chatMetaData')?.value));
   sdk.boot();
-  if (document.getElementById('studyPlanGenerated').value === '1') {
+  if (document.getElementById('studyPlanGenerated')?.value === '1') {
     window.agentSdk.removeShortcut('plan.create');
   }
   window.agentSdk = sdk;

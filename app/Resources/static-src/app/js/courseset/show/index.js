@@ -93,7 +93,4 @@ function remainTime() {
 
 if (document.getElementById('studyPlanGenerated').value === '0') {
   window.agentSdk.showReminder();
-} else {
-  window.agentSdk.closeReminder();
-  window.agentSdk.removeShortcut('plan.create');
 }
