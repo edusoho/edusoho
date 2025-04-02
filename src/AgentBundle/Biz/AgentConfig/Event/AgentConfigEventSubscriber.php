@@ -151,8 +151,10 @@ class AgentConfigEventSubscriber extends EventSubscriber
             $flatQuestions[] = "{$this->flattenMain($type, $question)}{$this->flattenAnswer($type, $question)}{$this->flattenWrongAnswer($type, $wrongAnswerQuestionReports[$question['id']]['response'])}{$this->flattenAnalysis($question)}";
         }
         $agentConfigs = $this->getAgentConfigService()->findAgentConfigsByDomainId($domainId);
+        $biz = $this->getBiz();
         $this->getAIService()->asyncRunWorkflow('teacher.question.analysis-weaknesses', [
             'domainId' => $domainId,
+            'userId' => $biz['user']['id'],
             'questions' => $flatQuestions,
             'datasets' => array_column($agentConfigs, 'datasetId'),
         ]);
