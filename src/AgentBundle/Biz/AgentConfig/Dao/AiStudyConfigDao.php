@@ -9,4 +9,6 @@ interface AiStudyConfigDao extends GeneralDaoInterface
     public function getByCourseId($courseId);
 
     public function findByCourseIds($courseIds);
+
+    public function findByDomainId($domainId);
 }

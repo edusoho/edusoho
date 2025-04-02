@@ -51,6 +51,7 @@ class InitStudyPlan extends Migration
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 UNIQUE INDEX `uniqueCourseId`(`courseId`),
+                KEY `domainId` (`domainId`),
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='AI伴学服务配置表';
 

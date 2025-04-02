@@ -53,4 +53,23 @@ trait QuestionFlatTrait
     {
         return empty($question['analysis']) ? '' : strip_tags("  \n[答案解析] {$question['analysis']}");
     }
+
+    private function flattenWrongAnswer($type, $response)
+    {
+        if (empty($response)) {
+            return strip_tags("  \n[学员错误的回答] ");
+        }
+        $wrongAnswer = '';
+        if (in_array($type, ['single_choice', 'choice', 'uncertain_choice', 'essay'])) {
+            $wrongAnswer = implode('', $response);
+        }
+        if ('determine' == $type) {
+            $wrongAnswer = 'T' == $response[0] ? '正确' : '错误';
+        }
+        if ('fill' == $type) {
+            $wrongAnswer = implode(';', $response);
+        }
+
+        return strip_tags("  \n[学员错误的回答] {$wrongAnswer}");
+    }
 }

@@ -65,6 +65,11 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         return $this->getAiStudyConfigDao()->findByCourseIds($courseIds);
     }
 
+    public function findAgentConfigsByDomainId($domainId)
+    {
+        return $this->getAiStudyConfigDao()->findByDomainId($domainId);
+    }
+
     private function checkDomain($domainId)
     {
         $domains = $this->getAIService()->findDomains('vt');
