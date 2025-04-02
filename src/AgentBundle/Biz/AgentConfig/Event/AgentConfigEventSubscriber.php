@@ -7,11 +7,22 @@ use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\AI\Service\AIService;
 use Biz\Course\Service\CourseService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Question\Traits\QuestionAnswerModeTrait;
+use Biz\Question\Traits\QuestionFlatTrait;
+use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AgentConfigEventSubscriber extends EventSubscriber
 {
+    use QuestionAnswerModeTrait;
+
+    use QuestionFlatTrait;
+
     public static function getSubscribedEvents()
     {
         return [
@@ -21,6 +32,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
             'activity.create' => 'onActivityCreate',
             'activity.update' => 'onActivityUpdate',
             'activity.delete' => 'onActivityDelete',
+            'answer.submitted' => 'onAnswerSubmitted',
         ];
     }
 
@@ -116,6 +128,32 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
     }
 
+    public function onAnswerSubmitted(Event $event)
+    {
+        $answerRecord = $event->getSubject();
+        $domainId = $this->findRelatedCourseDomainId($answerRecord['answer_scene_id']);
+        if (empty($domainId)) {
+            return;
+        }
+        $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
+            'answer_record_id' => $answerRecord['id'],
+            'statues' => ['wrong', 'no_answer', 'part_right'],
+        ], [], 0, PHP_INT_MAX, ['question_id', 'response']);
+        $wrongAnswerQuestionReports = array_column($wrongAnswerQuestionReports, null, 'question_id');
+        $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(array_column($wrongAnswerQuestionReports, 'question_id'));
+        $flatQuestions = [];
+        foreach ($questions as $question) {
+            $type = $this->modeToType[$question['answer_mode']];
+            $flatQuestions[] = "{$this->flattenMain($type, $question)}{$this->flattenAnswer($type, $question)}{$this->flattenWrongAnswer($type, $wrongAnswerQuestionReports[$question['id']]['response'])}{$this->flattenAnalysis($question)}";
+        }
+        $agentConfigs = $this->getAgentConfigService()->findAgentConfigsByDomainId($domainId);
+        $this->getAIService()->asyncRunWorkflow('teacher.question.analysis-weaknesses', [
+            'domainId' => $domainId,
+            'questions' => $flatQuestions,
+            'datasets' => array_column($agentConfigs, 'datasetId'),
+        ]);
+    }
+
     private function createDatasetDocumentIfNecessary($datasetId, $activity)
     {
         if ('text' == $activity['mediaType']) {
@@ -140,6 +178,47 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
     }
 
+    private function findRelatedCourseDomainId($answerSceneId)
+    {
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        if (!empty($activity)) {
+            return $this->findDomainIdByCourseId($activity['fromCourseId']);
+        }
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        if (!empty($module)) {
+            $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
+            if (empty($exerciseBinds)) {
+                return false;
+            }
+            foreach ($exerciseBinds as $exerciseBind) {
+                if ('course' != $exerciseBind['bindType']) {
+                    continue;
+                }
+                $domainId = $this->findDomainIdByCourseId($exerciseBind['bindId']);
+                if (!empty($domainId)) {
+                    return $domainId;
+                }
+            }
+            return false;
+        }
+        $pool = $this->getWrongQuestionService()->getPoolBySceneId($answerSceneId);
+        if (empty($pool) || 'course' != $pool['target_type']) {
+            return false;
+        }
+
+        return $this->findDomainIdByCourseId($pool['target_id']);
+    }
+
+    private function findDomainIdByCourseId($courseId)
+    {
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+        if (!empty($agentConfig['isActive']) && !empty($agentConfig['isDiagnosisActive'])) {
+            return $agentConfig['domainId'];
+        }
+
+        return false;
+    }
+
     /**
      * @return ActivityService
      */
@@ -154,6 +233,46 @@ class AgentConfigEventSubscriber extends EventSubscriber
     private function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return AnswerQuestionReportService
+     */
+    protected function getAnswerQuestionReportService()
+    {
+        return $this->getBiz()->service('ItemBank:Answer:AnswerQuestionReportService');
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->getBiz()->service('ItemBank:Item:ItemService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    private function getItemBankExerciseModuleService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    private function getItemBankExerciseService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    private function getWrongQuestionService()
+    {
+        return $this->getBiz()->service('WrongBook:WrongQuestionService');
     }
 
     /**

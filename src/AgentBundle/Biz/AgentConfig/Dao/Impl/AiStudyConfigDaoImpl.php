@@ -19,6 +19,11 @@ class AiStudyConfigDaoImpl extends GeneralDaoImpl implements AiStudyConfigDao
         return $this->findInField('courseId', $courseIds);
     }
 
+    public function findByDomainId($domainId)
+    {
+        return $this->findByFields(['domainId' => $domainId]);
+    }
+
     public function declares()
     {
         return [
