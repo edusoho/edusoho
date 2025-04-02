@@ -403,7 +403,7 @@ export default {
               question: res.question,
             }
           }
-          window.parent.agentSdk.chat(res.content, workflow, true);
+          window.parent.agentSdk.chat(res.content, workflow);
         }
       }).fail((err) => {
         console.log(err)
