@@ -3,3 +3,9 @@ services:
     class: AgentBundle\Security\Firewall\AgentAuthenticationListener
     arguments:
       - '@service_container'
+
+  agent_config_event_subscriber:
+    class: AgentBundle\Biz\AgentConfig\Event\AgentConfigEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
