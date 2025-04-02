@@ -47,6 +47,7 @@ class MeCourseMember extends AbstractResource
             $courseMember['aiTeacherEnabled'] = !empty($studyPlanConfig['isActive']);
             $courseMember['studyPlanGenerated'] = $this->getStudyPlanService()->isUserStudyPlanGenerated($this->getCurrentUser()->getId(), $courseId);
             $courseMember['aiTeacherDomain'] = $studyPlanConfig['domainId'] ?? '';
+            $courseMember['courseSetTitle'] = $course['courseSetTitle'];
         }
 
         return $courseMember;
