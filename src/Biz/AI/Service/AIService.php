@@ -40,9 +40,9 @@ interface AIService
 
     public function createDocumentByText(array $params);
 
-    public function createDocumentByResource(array $params);
+    public function createDocumentByObject(array $params);
 
-    public function batchCreateDocumentByResource($datasetId, $items);
+    public function batchCreateDocumentByObject($datasetId, $objects);
 
     public function deleteDocument($id);
 }

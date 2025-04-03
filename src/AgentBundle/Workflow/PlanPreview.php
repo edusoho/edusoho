@@ -22,7 +22,7 @@ class PlanPreview extends AbstractWorkflow
             return [
                 'ok' => false,
                 'error' => [
-                    'code' => 'PARAMS_ERROR',
+                    'code' => 'INVALID_ARGUMENT',
                     'message' => 'endDate和dailyLearnDuration不能都为空',
                 ],
             ];

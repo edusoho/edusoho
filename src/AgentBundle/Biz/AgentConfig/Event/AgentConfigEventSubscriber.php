@@ -48,7 +48,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
                     'datasetId' => $agentConfig['datasetId'],
                     'extId' => $activity['id'],
                     'name' => $activity['title'],
-                    'content' => $activity['content'],
+                    'content' => strip_tags($activity['content']),
                 ]);
                 $updateActivities[$activity['id']] = ['documentId' => $document['id']];
             }
@@ -57,15 +57,16 @@ class AgentConfigEventSubscriber extends EventSubscriber
             }
         }
         $cloudFileActivities = $this->getActivityService()->findActivities($cloudFileActivityIds, true, 0);
-        $items = [];
+        $objects = [];
         foreach ($cloudFileActivities as $cloudFileActivity) {
-            $items[] = [
-                'extId' => $cloudFileActivity['id'],
+            $objects[] = [
                 'name' => $cloudFileActivity['title'],
-                'resNo' => $cloudFileActivity['ext']['file']['globalId'],
+                'objectKey' => $cloudFileActivity['ext']['file']['globalId'],
+                'objectVendor' => 'escloud',
+                'extId' => $cloudFileActivity['id'],
             ];
         }
-        $documents = $this->getAIService()->batchCreateDocumentByResource($agentConfig['datasetId'], $items);
+        $documents = $this->getAIService()->batchCreateDocumentByObject($agentConfig['datasetId'], $objects);
         foreach ($documents as $document) {
             $updateActivities[$document['extId']] = ['documentId' => $document['id']];
         }
@@ -84,6 +85,9 @@ class AgentConfigEventSubscriber extends EventSubscriber
 
     public function onCourseSetUpdate(Event $event)
     {
+        if (!$event->hasArgument('oldCourseSet')) {
+            return;
+        }
         $courseSet = $event->getSubject();
         $oldCourseSet = $event->getArgument('oldCourseSet');
         if ($courseSet['title'] == $oldCourseSet['title']) {
@@ -147,8 +151,10 @@ class AgentConfigEventSubscriber extends EventSubscriber
             $flatQuestions[] = "{$this->flattenMain($type, $question)}{$this->flattenAnswer($type, $question)}{$this->flattenWrongAnswer($type, $wrongAnswerQuestionReports[$question['id']]['response'])}{$this->flattenAnalysis($question)}";
         }
         $agentConfigs = $this->getAgentConfigService()->findAgentConfigsByDomainId($domainId);
+        $biz = $this->getBiz();
         $this->getAIService()->asyncRunWorkflow('teacher.question.analysis-weaknesses', [
             'domainId' => $domainId,
+            'userId' => $biz['user']['id'],
             'questions' => $flatQuestions,
             'datasets' => array_column($agentConfigs, 'datasetId'),
         ]);
@@ -166,7 +172,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
         if (in_array($activity['mediaType'], ['audio', 'doc', 'ppt', 'video'])) {
             $activity = $this->getActivityService()->getActivity($activity['id'], true);
-            $document = $this->getAIService()->createDocumentByResource([
+            $document = $this->getAIService()->createDocumentByObject([
                 'datasetId' => $datasetId,
                 'extId' => $activity['id'],
                 'name' => $activity['title'],
@@ -174,7 +180,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
             ]);
         }
         if (!empty($document)) {
-            $this->getActivityService()->updateActivity($activity['id'], ['documentId' => $document['id']]);
+            $this->getActivityDao()->update($activity['id'], ['documentId' => $document['id']]);
         }
     }
 

@@ -57,7 +57,7 @@ trait QuestionFlatTrait
     private function flattenWrongAnswer($type, $response)
     {
         if (empty($response)) {
-            return strip_tags("  \n[学员错误的回答] ");
+            return "  \n[学员错误的回答]";
         }
         $wrongAnswer = '';
         if (in_array($type, ['single_choice', 'choice', 'uncertain_choice', 'essay'])) {
