@@ -3,10 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\SmsToolkit;
-use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsException;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
+use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
@@ -228,7 +228,7 @@ class EduCloudController extends BaseController
 
     protected function checkSmsType($smsType, CurrentUser $user)
     {
-        if (!in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind'])) {
+        if (!in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind', 'sms_secondary_verification'])) {
             $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 
@@ -237,7 +237,7 @@ class EduCloudController extends BaseController
         }
 
         if ('on' != $this->setting("cloud_sms.{$smsType}") && !$this->getUserService()->isMobileRegisterMode()) {
-            $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
+//            $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
         }
     }
 
@@ -262,6 +262,9 @@ class EduCloudController extends BaseController
                 break;
             case 'system_remind':
                 $description = '直播公开课';
+                break;
+            case 'sms_secondary_verification':
+                $description = '系统二次验证';
                 break;
             default:
                 $description = '';
@@ -441,7 +444,10 @@ class EduCloudController extends BaseController
 
         $description = $this->generateDescription($smsType);
         $smsCode = $this->generateSmsCode();
-
+        $smsTypeOld = $smsType;
+        if ('sms_secondary_verification' == $smsType) {
+            $smsType = 'sms_forget_password';
+        }
         try {
             $api = CloudAPIFactory::create('leaf');
             $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", [
@@ -458,6 +464,9 @@ class EduCloudController extends BaseController
         }
         if (isset($result['error'])) {
             return ['error' => sprintf('发送失败, %s', $result['error'])];
+        }
+        if ('sms_secondary_verification' == $smsTypeOld) {
+            $smsType = 'sms_secondary_verification';
         }
 
         $result['to'] = $to;

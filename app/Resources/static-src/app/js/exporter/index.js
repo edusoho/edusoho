@@ -43,7 +43,9 @@ class Export {
       url : tryUrl,
       async : false,
       data: {
-        names: self.names
+        names: self.names,
+        sms_code: $('#sms_code').val(),
+        mobile: $('#mobile').val()
       },
       success : function(response){
         if (!response.success) {

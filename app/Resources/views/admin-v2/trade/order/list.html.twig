@@ -59,10 +59,8 @@
       </div>
 
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
-      {% include 'export/export-btn.html.twig' with
-      { 'exportFileName': 'order',
-        'targetFormId': 'order-search-form'}
-      %}
+      <button class="cd-btn cd-btn-info cd-btn-sm mhs" type="button" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_secondary_verification', {exportFileName:'order', targetFormId: 'order-search-form'}) }}"><i class="glyphicon glyphicon-plus"></i> {{'form.btn.export'|trans}}</button>
+      {% include 'export/export-modal.html.twig' %}
     </div>
   </form>
   {% include 'admin-v2/trade/order/order-table.html.twig' %}
