@@ -20,8 +20,8 @@ export default class MobileBind {
   initExportBtnEvent() {
     const self = this;
     $('.js-export-btn').on('click', function(e) {
-      console.log('***********');
       e.preventDefault(); // 防止链接默认行为
+      e.stopPropagation();
       if (self.$form.valid()) { // 手动触发表单验证
         // 如果验证通过，执行后续操作（如提交表单或导出）
         console.log('验证成功，执行导出逻辑...');
@@ -51,22 +51,6 @@ export default class MobileBind {
       currentDom: '.js-export-btn',
       ajax: true,
       rules: {
-        mobile: {
-          required: true,
-          phone: true,
-          es_remote: {
-            type: 'get',
-            callback: (bool) => {
-              if (bool) {
-                self.$smsCode.removeAttr('disabled');
-                $('.binded-tip').addClass('hidden');
-              } else {
-                self.$smsCode.attr('disabled', true);
-                $('.binded-tip').removeClass('hidden');
-              }
-            }
-          },
-        },
         sms_code: {
           required: true,
           unsigned_integer: true,

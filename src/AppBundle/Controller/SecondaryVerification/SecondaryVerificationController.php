@@ -19,8 +19,7 @@ class SecondaryVerificationController extends BaseController
             [
                 'exportFileName' => $params['exportFileName'],
                 'targetFormId' => $params['targetFormId'],
-//                'mobile' => $result['mobile']
-                'mobile' => '15925602888',
+                'mobile' => $result['mobile'],
             ]
         );
     }

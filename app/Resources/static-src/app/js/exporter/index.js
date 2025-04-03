@@ -15,6 +15,11 @@ class Export {
   {
     let self  = this;
     self.$exportBtns.on('click', function () {
+      const $smsCodeInput = $('#sms_code');
+      if ($smsCodeInput.val().trim() === '') {
+        return false; // 验证失败，阻止导出（空值或纯空格）
+      }
+
       self.$exportBtn = $(this);
       self.names = self.$exportBtn.data('fileNames');
       let $form = $(self.$exportBtn.data('targetForm'));
