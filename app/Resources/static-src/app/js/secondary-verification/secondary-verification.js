@@ -29,11 +29,10 @@ export default class MobileBind {
     });
 
     $('.js-export-user-btn').on('click', function (e) {
-      console.log('*********************');
       $('[name="sms_code"]').valid();
       e.preventDefault();
       const url = location.href;
-      if (url.includes('order/manage') || url.includes('admin/v2/user')) {
+      if (url.includes('order/manage') || url.includes('admin/v2/user') || url.includes('admin/v2/staff')) {
         const $smsCodeInput = $('#sms_code');
         if ($smsCodeInput.val().trim() === '') {
           return false;

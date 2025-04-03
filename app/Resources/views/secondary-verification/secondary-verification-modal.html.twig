@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% set modal_class= "modal-sm" %}
+{% set modal_class= "modal-custom" %}
 
 {% do script(['libs/jquery-validation.js', 'app/js/secondary-verification/index.js', 'app/js/exporter/index.js']) %}
 
@@ -58,5 +58,14 @@
 
 
   </form>
-
+  <style>
+    /* 自定义模态框宽度 (576px以上屏幕生效) */
+    @media (min-width: 576px) {
+      .modal-custom {
+        max-width: 350px; /* 介于modal-sm和modal-md之间 */
+        margin: 1.75rem auto;
+      }
+    }
+  </style>
 {% endblock %}
+
