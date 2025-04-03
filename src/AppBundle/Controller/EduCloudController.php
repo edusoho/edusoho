@@ -237,7 +237,7 @@ class EduCloudController extends BaseController
         }
 
         if ('on' != $this->setting("cloud_sms.{$smsType}") && !$this->getUserService()->isMobileRegisterMode()) {
-//            $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
+            $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
         }
     }
 

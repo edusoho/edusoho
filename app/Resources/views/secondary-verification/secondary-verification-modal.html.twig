@@ -36,7 +36,6 @@
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input class="form-control" type="hidden" id="mobile" name="mobile" value="{{ mobile }}"/>
-{#        <div style="display:none" class="hide-js-export-btn">#}
     <a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} btn cd-btn cd-btn-lg mobile-bind-form__btn {% endif %} mhs {{ exportClass|default('cd-btn-primary') }} js-export-btn"
        href="javascript:;"
        data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
@@ -51,7 +50,6 @@
         {{ text|default('form.btn.submit')|trans }}
       {% endif %}
     </a>
-{#        </div>#}
   </form>
 
 {% endblock %}
