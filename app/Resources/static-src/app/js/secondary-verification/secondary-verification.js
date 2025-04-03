@@ -27,6 +27,54 @@ export default class MobileBind {
         console.log('验证成功，执行导出逻辑...');
       }
     });
+
+    $('.js-export-user-btn').on('click', function (e) {
+      console.log('*********************');
+      $('[name="sms_code"]').valid();
+      e.preventDefault();
+      const url = location.href;
+      if (url.includes('order/manage') || url.includes('admin/v2/user')) {
+        const $smsCodeInput = $('#sms_code');
+        if ($smsCodeInput.val().trim() === '') {
+          return false;
+        }else {
+          const smsCode = $smsCodeInput.val().trim();
+          let ajaxResult = false;
+          $.ajax({
+            url: $smsCodeInput.data('url')+'?value='+smsCode,
+            type: 'GET',
+            async: false,
+            success: function(response) {
+              console.log(response);
+              console.log(response.success);
+              if (response.success) {
+                ajaxResult = true;
+              }
+            }
+          });
+          if (!ajaxResult) {
+            return false;
+          }
+          const newUrl = '/admin/v2/users/export?sms_code='+$('#sms_code').val()+'&mobile='+$('#mobile').val();
+          // 先隐藏模态框
+          $('#modal').modal('hide');
+          // 清空原有内容（包括表单数据）
+          $(this).find('#modal').empty();
+
+          // 加载新数据
+          $.get(newUrl, function(data) {
+            // 填充新内容
+            $('#modal').html(data);
+            // 重新展示模态框
+            $('#modal').modal('show');
+          });
+          // $.get(newUrl, function (data) {
+          //   $('#modal .modal-body').html(data);
+          //   $('#modal').modal('show');
+          // });
+        }
+      }
+    });
   }
 
   dragEvent() {
