@@ -201,6 +201,7 @@ import headTop from '../component/head';
 import choiceType from '../component/choice';
 import singleChoice from '../component/single-choice';
 import determineType from '../component/determine';
+import aiAgent from '@/mixins/aiAgent';
 import { Toast } from 'vant';
 import _ from 'lodash';
 
@@ -298,7 +299,8 @@ export default {
       iscando: [],
       refreshKey: true,
       myAnswer: null,
-      touchable: true
+      touchable: true,
+      question: {},
     };
   },
   computed: {
@@ -353,22 +355,77 @@ export default {
     }
 
   },
+  async mounted() {
+    this.question = await Api.getExerciseQuestion({
+      query: {
+        answerRecordId: this.exerciseInfo.id,
+        questionId: this.info[this.currentIndex].id,
+      },
+    })
+    this.tryInitAIAgentSdk();
+  },
+  mixins: [aiAgent],
   methods: {
     ...mapActions(['setCloudAddress']),
+    tryInitAIAgentSdk() {
+      Api.meCourseMember({
+        query: {
+          id: this.$route.query.courseId,
+        },
+      }).then(res => {
+        if (res.aiTeacherEnabled) {
+          const sdk = this.initAIAgentSdk(80, 20, this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+            courseId: res.courseId,
+            courseName:res.courseSetTitle,
+            lessonId: this.$route.query.targetId
+          });
+          sdk.showReminder({
+            title: "Hi，我是小知老师～",
+            content: "我将在你答题过程中随时为你答疑解惑",
+            duration: 2000,
+          });
+          setTimeout(() => {
+            sdk.showReminder({
+              title: "遇到问题啦？",
+              content: "小知老师来为你理清解题思路～",
+              buttonContent: 'teacher.question',
+              workflow: "teacher.question.idea",
+              question: this.question,
+            });
+          }, 2000)
+          if (res.studyPlanGenerated) {
+            sdk.removeShortcut('plan.create')
+          }
+        }
+      })
+    },
     changeswiper(index) {
       this.currentIndex = index;
       this.$emit('update:current', index + 1);
       this.$emit('update:slideIndex', index);
     },
     // 左滑动
-    last() {
+    async last() {
+      this.question = await Api.getExerciseQuestion({
+        query: {
+          answerRecordId: this.exerciseInfo.id,
+          questionId: this.info[this.currentIndex].id,
+        },
+      })
       if (this.currentIndex == 0 || !this.touchable) {
         return;
       }
       this.$refs.swipe.swipeTo(this.currentIndex - 1);
     },
     // 右滑动
-    next() {
+    async next() {
+      this.question = await Api.getExerciseQuestion({
+        query: {
+          answerRecordId: this.exerciseInfo.id,
+          questionId: this.info[this.currentIndex].id,
+        },
+      })
       if (this.currentIndex == this.info.length - 1 || !this.touchable) {
         return;
       }

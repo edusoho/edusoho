@@ -1254,6 +1254,14 @@ router.beforeEach(async (to, from, next) => {
     destroyWatermark();
   }
 
+  if ([
+    'course',
+    'exerciseDo'
+  ].includes(from.name)) {
+    if (window.aiAgentSdk) {
+      window.aiAgentSdk.shutdown();
+    }
+  }
   next();
 });
 

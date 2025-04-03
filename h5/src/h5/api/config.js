@@ -20,6 +20,7 @@ import infoCollection from './infoCollection/index';
 import wrongQuestionBook from './wrong-question-book/index';
 import contract from './contract/index';
 import watermark from './watermark';
+import exercise from './exercise';
 
 const config = [
   ...openCourse,
@@ -44,6 +45,7 @@ const config = [
   ...wrongQuestionBook,
   ...contract,
   ...watermark,
+  ...exercise,
 ];
 
 export default config;
