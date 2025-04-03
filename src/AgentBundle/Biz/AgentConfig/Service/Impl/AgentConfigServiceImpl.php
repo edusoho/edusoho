@@ -40,6 +40,7 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
             'domainId' => $params['domainId'],
             'planDeadline' => $params['planDeadline'],
             'isDiagnosisActive' => $params['isDiagnosisActive'],
+            'indexing' => empty($params['isDiagnosisActive']) ? 0 : 1,
         ]);
         $this->dispatchEvent('agentConfig.create', $agentConfig);
 
@@ -56,6 +57,11 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         if (!empty($params['domainId'])) {
             $this->checkDomain($params['domainId']);
         }
+        if (empty($params['isActive']) || empty($params['isDiagnosisActive'])) {
+            $params['indexing'] = 0;
+        } elseif (empty($agentConfig['isActive']) || empty($agentConfig['isDiagnosisActive'])) {
+            $params['indexing'] = 1;
+        }
         $agentConfig = $this->getAiStudyConfigDao()->update($agentConfig['id'], $params);
         $this->getAIService()->updateDataset($agentConfig['datasetId'], ['domainId' => $agentConfig['domainId'], 'autoIndex' => !empty($agentConfig['isDiagnosisActive'])]);
     }
@@ -68,6 +74,16 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
     public function findAgentConfigsByDomainId($domainId)
     {
         return $this->getAiStudyConfigDao()->findByDomainId($domainId);
+    }
+
+    public function findIndexingAgentConfigs()
+    {
+        return $this->getAiStudyConfigDao()->findIndexing();
+    }
+
+    public function markIndexFinished($id)
+    {
+        $this->getAiStudyConfigDao()->update($id, ['indexing' => 0]);
     }
 
     private function checkDomain($domainId)

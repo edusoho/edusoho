@@ -7953,6 +7953,8 @@ notification.destroy-account.reject: "%who%,Your account cancellation applicatio
 #TODO trans
 notification.delete-cloud-mp4: 'Your normal video has been deleted successfully, and all existing cloud videos are in encrypted format.'
 notification.distributor-reward: 'Congratulations on your successful registration reward: a %money% CNY coupon, which can be used for all-site consumption and has been sent to %where%.'
+notification.dataset-index.success: 'The knowledge of course %course% are successfully generated, students will get the recommended learning content of weak knowledge points according to their answer results.'
+notification.dataset-index.failed: 'The knowledge of course %course%  failed to generate, please contact technical support.'
 
 status.become_auditor.simple: became an auditor
 status.become_student.course.simple: Enroll to learn

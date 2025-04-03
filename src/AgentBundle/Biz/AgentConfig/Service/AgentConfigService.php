@@ -13,4 +13,8 @@ interface AgentConfigService
     public function findAgentConfigsByCourseIds($courseIds);
 
     public function findAgentConfigsByDomainId($domainId);
+
+    public function findIndexingAgentConfigs();
+
+    public function markIndexFinished($id);
 }

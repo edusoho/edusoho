@@ -48,6 +48,7 @@ class InitStudyPlan extends Migration
                 `domainId` varchar(64) NOT NULL COMMENT '用户选择的专业类型',
                 `planDeadline` text NOT NULL COMMENT '学习计划截止时间',
                 `isDiagnosisActive` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'AI知识点诊断开关 0-关闭 1-开启',
+                `indexing` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '知识库是否在索引中',
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0',
                 UNIQUE INDEX `uniqueCourseId`(`courseId`),
