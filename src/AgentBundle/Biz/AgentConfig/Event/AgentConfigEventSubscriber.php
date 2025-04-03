@@ -19,8 +19,6 @@ use Codeages\Biz\ItemBank\Item\Service\ItemService;
 
 class AgentConfigEventSubscriber extends EventSubscriber
 {
-    use QuestionAnswerModeTrait;
-
     use QuestionFlatTrait;
 
     public static function getSubscribedEvents()
