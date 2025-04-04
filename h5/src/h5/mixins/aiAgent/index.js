@@ -4,6 +4,7 @@ export default {
       const sdk = new window.AgentSDK({
         token: token,
         uiIframeSrc: 'http://edusoho.me/static-dist/libs/agent-web-sdk/ui/index.html',
+        // uiIframeSrc: `${window.location.origin}/static-dist/libs/agent-web-sdk/ui/index.html`,
         signalServerUrl: 'wss://test-ai-signal.edusoho.cn/',
         bottom: bottom,
         right: right,
@@ -22,7 +23,8 @@ export default {
           content: "制定学习计划"
         }
       });
-      chatMetaData.workerUrl = `${window.location.origin}/agent_worker`;
+      chatMetaData.workerUrl = 'http://edusoho.me/agent_worker';
+      // chatMetaData.workerUrl = `${window.location.origin}/agent_worker`;
       sdk.setChatMetadata(chatMetaData);
       sdk.boot();
       window.aiAgentSdk = sdk;

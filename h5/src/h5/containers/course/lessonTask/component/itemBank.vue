@@ -380,23 +380,32 @@ export default {
             courseName:res.courseSetTitle,
             lessonId: this.$route.query.targetId
           });
+          if (res.studyPlanGenerated) {
+            sdk.removeShortcut('plan.create')
+          }
+          sdk.showButton();
           sdk.showReminder({
             title: "Hi，我是小知老师～",
             content: "我将在你答题过程中随时为你答疑解惑",
             duration: 2000,
           });
           setTimeout(() => {
-            sdk.showReminder({
-              title: "遇到问题啦？",
-              content: "小知老师来为你理清解题思路～",
-              buttonContent: 'teacher.question',
-              workflow: "teacher.question.idea",
-              question: this.question,
-            });
+            sdk.hideButton();
           }, 2000)
-          if (res.studyPlanGenerated) {
-            sdk.removeShortcut('plan.create')
-          }
+            // sdk.showReminder({
+            //   title: "遇到问题啦？",
+            //   content: "小知老师来为你理清解题思路～",
+            //   buttonContent: 'teacher.question',
+            //   workflow: {
+            //     workflow: 'teacher.question.idea',
+            //     inputs: {
+            //       domainId: res.aiTeacherDomain,
+            //       question: this.question.question,
+            //     }
+            //   },
+            //   chatContent: this.question.content,
+            // });
+
         }
       })
     },
