@@ -2017,3 +2017,6 @@ admin_v2:
                             children:
                                 admin_v2_api_swagger_ui_api:
                                     name: API 列表
+        custom_export_permission:  # 权限标识符（唯一）
+            name: admin_v2.total_site_export  # 显示名称
+            group: system           # 分组（一般为system或自定义模块名）
