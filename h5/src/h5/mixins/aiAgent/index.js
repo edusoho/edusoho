@@ -1,6 +1,6 @@
 export default {
   methods: {
-    initAIAgentSdk(bottom, right, token, chatMetaData) {
+    initAIAgentSdk(token, chatMetaData, bottom, right, preventDefault = false) {
       const sdk = new window.AgentSDK({
         token: token,
         uiIframeSrc: 'http://edusoho.me/static-dist/libs/agent-web-sdk/ui/index.html',
@@ -8,6 +8,7 @@ export default {
         signalServerUrl: 'wss://test-ai-signal.edusoho.cn/',
         bottom: bottom,
         right: right,
+        preventDefault: preventDefault,
       });
       sdk.addShortcut("plan.create", {
         name: "制定学习计划",

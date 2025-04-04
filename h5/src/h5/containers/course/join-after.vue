@@ -337,11 +337,11 @@ export default {
         },
       }).then(res => {
         if (res.aiTeacherEnabled) {
-          const sdk = this.initAIAgentSdk(20, 20, this.$store.state.user.aiAgentToken, {
+          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
             courseId: res.courseId,
             courseName: res.courseSetTitle,
-          });
+          }, 20, 20);
           if (!res.studyPlanGenerated) {
             sdk.showButton();
             sdk.showReminder({

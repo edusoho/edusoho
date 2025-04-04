@@ -356,6 +356,7 @@ export default {
 
   },
   async mounted() {
+    console.log('----------', this.mode);
     this.question = await Api.getExerciseQuestion({
       query: {
         answerRecordId: this.exerciseInfo.id,
@@ -374,12 +375,12 @@ export default {
         },
       }).then(res => {
         if (res.aiTeacherEnabled) {
-          const sdk = this.initAIAgentSdk(80, 20, this.$store.state.user.aiAgentToken, {
+          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
             courseId: res.courseId,
             courseName:res.courseSetTitle,
             lessonId: this.$route.query.targetId
-          });
+          }, 80, 20, true);
           if (res.studyPlanGenerated) {
             sdk.removeShortcut('plan.create')
           }
@@ -392,20 +393,24 @@ export default {
           setTimeout(() => {
             sdk.hideButton();
           }, 2000)
-            // sdk.showReminder({
-            //   title: "遇到问题啦？",
-            //   content: "小知老师来为你理清解题思路～",
-            //   buttonContent: 'teacher.question',
-            //   workflow: {
-            //     workflow: 'teacher.question.idea',
-            //     inputs: {
-            //       domainId: res.aiTeacherDomain,
-            //       question: this.question.question,
-            //     }
-            //   },
-            //   chatContent: this.question.content,
-            // });
 
+          const btn = document.getElementById('agent-sdk-floating-button');
+          btn?.addEventListener('click', () => {
+            sdk.showButton();
+            sdk.showReminder({
+              title: "遇到问题啦？",
+              content: "小知老师来为你理清解题思路～",
+              buttonContent: 'teacher.question',
+              workflow: {
+                workflow: 'teacher.question.idea',
+                inputs: {
+                  domainId: res.aiTeacherDomain,
+                  question: this.question.question,
+                }
+              },
+              chatContent: this.question.content,
+            });
+          });
         }
       })
     },
@@ -419,7 +424,7 @@ export default {
       this.question = await Api.getExerciseQuestion({
         query: {
           answerRecordId: this.exerciseInfo.id,
-          questionId: this.info[this.currentIndex].id,
+          questionId: this.info[this.currentIndex - 1].id,
         },
       })
       if (this.currentIndex == 0 || !this.touchable) {
@@ -432,7 +437,7 @@ export default {
       this.question = await Api.getExerciseQuestion({
         query: {
           answerRecordId: this.exerciseInfo.id,
-          questionId: this.info[this.currentIndex].id,
+          questionId: this.info[this.currentIndex + 1].id,
         },
       })
       if (this.currentIndex == this.info.length - 1 || !this.touchable) {
