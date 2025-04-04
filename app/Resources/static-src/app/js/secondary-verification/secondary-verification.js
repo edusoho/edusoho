@@ -54,7 +54,8 @@ export default class MobileBind {
           if (!ajaxResult) {
             return false;
           }
-          const newUrl = '/admin/v2/users/export?sms_code='+$('#sms_code').val()+'&mobile='+$('#mobile').val();
+          const userSearchData = $('#user-search-form').serialize();
+          const newUrl = '/admin/v2/users/export?sms_code='+$('#sms_code').val()+'&mobile='+$('#mobile').val()+'&'+userSearchData;
           // 先隐藏模态框
           $('#modal').modal('hide');
           // 清空原有内容（包括表单数据）
