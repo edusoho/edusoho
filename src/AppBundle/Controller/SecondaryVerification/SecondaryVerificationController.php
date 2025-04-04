@@ -12,6 +12,9 @@ class SecondaryVerificationController extends BaseController
     public function indexAction(Request $request)
     {
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
+        if ($cloudSmsSetting['sms_enabled'] == 0) {
+            return $this->render('secondary-verification/sms-open-redirect-modal.html.twig');
+        }
         if (empty($cloudSmsSetting['sms_secondary_verification'])) {
             $cloudSmsSetting['sms_secondary_verification'] = 'on';
             $this->getSettingService()->set('cloud_sms', $cloudSmsSetting);
