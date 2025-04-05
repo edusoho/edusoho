@@ -1,0 +1,10 @@
+{% import 'macro.html.twig' as macro %}
+
+{% set data = notification.content %}
+{% set course = macro.link(data.courseSetTitle, path('course_set_manage_course_ai_companion_study', {courseSetId: data.courseSetId, courseId: data.courseId})) %}
+
+{% if data.status == 'success' %}
+  {{ 'notification.dataset-index.success'|trans({'%course%': course}) }}
+{% else %}
+  {{ 'notification.dataset-index.failed'|trans({'%course%': course}) }}
+{% endif %}

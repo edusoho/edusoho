@@ -2,6 +2,7 @@
 
 namespace AgentBundle\Api\Resource\AgentConfig;
 
+use AgentBundle\Biz\AgentConfig\Constant\IndexStatus;
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -55,13 +56,13 @@ class AgentConfig extends AbstractResource
     private function getIndexStatus($dataset)
     {
         if ($dataset['successCount'] == $dataset['totalCount']) {
-            return 'success';
+            return IndexStatus::SUCCESS;
         }
         if ($dataset['failedCount'] > 0) {
-            return 'failed';
+            return IndexStatus::FAILED;
         }
 
-        return 'doing';
+        return IndexStatus::INDEXING;
     }
 
     private function calIndexProgress($dataset)

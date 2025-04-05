@@ -166,7 +166,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function hideUserNickname($user)
     {
         if (empty($user)) {
-            return ;
+            return;
         }
         // 判断用户名长度并进行处理
         if (2 == mb_strlen($user['nickname'], 'UTF-8')) {
@@ -1806,6 +1806,15 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->waveCounterById($userId, $name, $number);
+    }
+
+    public function waveUsersCounter($userIds, $name, $number)
+    {
+        if (!ctype_digit((string) $number)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        $this->getUserDao()->waveCounterByIds($userIds, $name, $number);
     }
 
     public function clearUserCounter($userId, $name)

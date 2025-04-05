@@ -9264,6 +9264,8 @@ notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请
 notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
 
 notification.distributor-reward: 恭喜您获得注册成功奖励：%money%元面值抵价优惠券一张，可用于全站消费，已发至【%account%】-【%coupon%】。
+notification.dataset-index.success: '%course%课程知识点生成成功，学员答题后将会根据其答题结果获得薄弱知识点推荐学习内容。'
+notification.dataset-index.failed: '%course%课程知识点生成失败，请联系技术人员处理。'
 
 # 学习动态
 status.become_auditor.simple: 成为了旁听生
