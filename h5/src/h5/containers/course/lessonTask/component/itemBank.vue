@@ -356,7 +356,13 @@ export default {
 
   },
   async mounted() {
-    console.log('----------', this.mode);
+    console.log('---info-----', this.info);
+    console.log('---canDo-----', this.canDo);
+    console.log('---isWrongMode-----', this.isWrongMode);
+    console.log('---isExercise-----', this.isExercise);
+    console.log('---mode-----', this.mode);
+    console.log('---exerciseMode-----', this.exerciseMode);
+    console.log('---paper-----', this.paper);
     this.question = await Api.getExerciseQuestion({
       query: {
         answerRecordId: this.exerciseInfo.id,
@@ -384,7 +390,6 @@ export default {
           if (res.studyPlanGenerated) {
             sdk.removeShortcut('plan.create')
           }
-          sdk.showButton();
           sdk.showReminder({
             title: "Hi，我是小知老师～",
             content: "我将在你答题过程中随时为你答疑解惑",
@@ -396,13 +401,12 @@ export default {
 
           const btn = document.getElementById('agent-sdk-floating-button');
           btn?.addEventListener('click', () => {
-            sdk.showButton();
             sdk.showReminder({
               title: "遇到问题啦？",
               content: "小知老师来为你理清解题思路～",
               buttonContent: 'teacher.question',
               workflow: {
-                workflow: 'teacher.question.idea',
+                workflow: this.canDo ? 'teacher.question.idea' : 'teacher.question.analysis',
                 inputs: {
                   domainId: res.aiTeacherDomain,
                   question: this.question.question,
