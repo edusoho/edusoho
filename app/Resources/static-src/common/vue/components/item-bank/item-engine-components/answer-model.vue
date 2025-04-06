@@ -395,7 +395,6 @@ export default {
         contentType: 'application/json;charset=utf-8',
       }).done((res) => {
         if (window.parent.agentSdk) {
-          window.parent.agentSdk.show();
           const workflow = {
             workflow: this.mode === 'do' ? "teacher.question.idea" : this.mode === 'report' ? 'teacher.question.analysis' : null,
             inputs: {
