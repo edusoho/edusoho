@@ -383,11 +383,19 @@ export default {
           if (res.studyPlanGenerated) {
             sdk.removeShortcut('plan.create')
           }
-          sdk.showReminder({
-            title: "Hi，我是小知老师～",
-            content: "我将在你答题过程中随时为你答疑解惑",
-            duration: 2000,
-          });
+          if (this.canDo) {
+            sdk.showReminder({
+              title: "Hi，我是小知老师～",
+              content: "我将在你答题过程中随时为你答疑解惑",
+              duration: 2000,
+            });
+          } else {
+            sdk.showReminder({
+              title: "战绩新鲜出炉",
+              content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
+              duration: 2000,
+            });
+          }
           setTimeout(() => {
             sdk.hideButton();
           }, 2000)
