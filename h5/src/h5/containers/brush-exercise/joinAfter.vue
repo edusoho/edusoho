@@ -32,6 +32,8 @@ import directory from './directory';
 import reviewList from './review-list';
 import introduction from './introduction';
 import closedFixed from '@/components/closed-fixed.vue'
+import Api from '@/api';
+import aiAgent from '@/mixins/aiAgent';
 
 const { mapState } = createNamespacedHelpers('ItemBank');
 export default {
@@ -42,6 +44,7 @@ export default {
     closedFixed
   },
   props: ['details'],
+  mixins: [aiAgent],
   data() {
     return {
       active: 1,
@@ -61,7 +64,26 @@ export default {
   created() {
     this.signContractConfirm()
   },
+  mounted() {
+    this.tryInitAIAgentSdk()
+  },
   methods: {
+    tryInitAIAgentSdk() {
+      Api.getItemBankExercise({
+        query: {
+          id: this.$route.params.id,
+        }
+      }).then(res => {
+        if (res.aiTeacherDomain) {
+          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+          }, 20, 20);
+        }
+      })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     signContractConfirm() {
       const { contract, isContractSigned } = this.ItemBankExercise
 

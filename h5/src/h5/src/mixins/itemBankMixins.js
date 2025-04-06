@@ -13,15 +13,16 @@ export default {
     itemSlidePrev() {
       this.$refs.mySwiper.$swiper.slidePrev();
     },
-    slideNextTransitionEnd() {
+    async slideNextTransitionEnd() {
       if (this.current === this.items.length - 1) {
         return;
       }
       this.current += 1;
       this.changeRenderItems(this.current);
+      await this.getQuestion();
       this.fastSlide();
     },
-    slidePrevTransitionEnd() {
+    async slidePrevTransitionEnd() {
       if (this.current === 0) {
         return;
       }
@@ -33,13 +34,14 @@ export default {
         const childSwiper = this.$refs[itemKey][0].$refs[
           `childSwiper${item.id}`
         ];
-        let childSwiperSlide = Math.max(item.questions.length - 1, 0);
+        const childSwiperSlide = Math.max(item.questions.length - 1, 0);
         childSwiper.$swiper.slideTo(childSwiperSlide, 0, false);
       });
+      await this.getQuestion();
       this.fastSlide();
     },
     changeRenderItems(current) {
-      let renderItmes = [];
+      const renderItmes = [];
       if (this.items[current - 1]) {
         renderItmes.push(this.items[current - 1]);
       }
