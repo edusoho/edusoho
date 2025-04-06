@@ -1260,6 +1260,7 @@ router.beforeEach(async (to, from, next) => {
     'exerciseAnalysis',
     'homeworkDo',
     'homeworkAnalysis',
+    'course_web',
   ].includes(from.name)) {
     if (window.aiAgentSdk) {
       window.aiAgentSdk.shutdown();
