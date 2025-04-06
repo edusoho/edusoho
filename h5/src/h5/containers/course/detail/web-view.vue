@@ -104,7 +104,7 @@ export default {
             domainId: res.aiTeacherDomain,
             courseId: res.courseId,
             courseName: res.courseSetTitle,
-          }, null, null, null, true);
+          }, 60, null, null, true);
           if (!res.studyPlanGenerated) {
             //todo
           } else {

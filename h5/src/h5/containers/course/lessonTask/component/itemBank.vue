@@ -356,13 +356,6 @@ export default {
 
   },
   async mounted() {
-    console.log('---info-----', this.info);
-    console.log('---canDo-----', this.canDo);
-    console.log('---isWrongMode-----', this.isWrongMode);
-    console.log('---isExercise-----', this.isExercise);
-    console.log('---mode-----', this.mode);
-    console.log('---exerciseMode-----', this.exerciseMode);
-    console.log('---paper-----', this.paper);
     this.question = await Api.getExerciseQuestion({
       query: {
         answerRecordId: this.exerciseInfo.id,
