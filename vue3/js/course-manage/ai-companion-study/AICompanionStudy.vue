@@ -196,7 +196,7 @@ onMounted(async () => {
               label="AI 知识点诊断"
             >
               <a-switch v-model:checked="formState.isDiagnosisActive" checked-children="开" un-checked-children="关"/>
-              <a-popover placement="right" overlayClassName="example-popover">
+              <a-popover placement="right" overlayClassName="example-popover" trigger="click">
                 <template #title>
                   查看示例
                 </template>
@@ -230,6 +230,6 @@ onMounted(async () => {
 
 <style>
 .example-popover .ant-popover-inner {
-  border-radius: 12px;
+  border-radius: 12px !important;
 }
 </style>
