@@ -12,6 +12,7 @@ class AgentServiceProvider implements ServiceProviderInterface
         $this->rewriteService($biz);
         $this->rewriteDao($biz);
         $this->registerWorkflow($biz);
+        $this->registerWorkflowCallback($biz);
     }
 
     private function registerWorkflow($biz)
@@ -23,6 +24,18 @@ class AgentServiceProvider implements ServiceProviderInterface
         ];
         foreach ($workflows as $workflow => $class) {
             $biz["agent.workflow.{$workflow}"] = function ($biz) use ($class) {
+                return new $class($biz);
+            };
+        }
+    }
+
+    private function registerWorkflowCallback($biz)
+    {
+        $workflows = [
+            'analysis-weaknesses' => '\AgentBundle\Workflow\Callback\AnalysisWeaknesses',
+        ];
+        foreach ($workflows as $workflow => $class) {
+            $biz["workflow.callback.{$workflow}"] = function ($biz) use ($class) {
                 return new $class($biz);
             };
         }

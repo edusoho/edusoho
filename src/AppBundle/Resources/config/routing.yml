@@ -4247,3 +4247,9 @@ agent_worker:
   path: '/agent_worker'
   defaults:
     _controller: 'AppBundle:AgentWorker:index'
+workflow_callback:
+  path: '/workflow_callback/{workflow}'
+  defaults:
+    _controller: 'AppBundle:WorkflowCallback:index'
+  methods:
+    - POST

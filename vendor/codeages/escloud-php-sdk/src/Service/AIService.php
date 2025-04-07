@@ -177,6 +177,11 @@ class AIService extends BaseService
         return $this->request('POST', '/v1/dataset/document/delete', ['id' => $id]);
     }
 
+    public function pushMessgae($domainId, $userId, $contentType, $content, $push)
+    {
+        return $this->request('POST', '/v1/message/push', ['domainId' => $domainId, 'userId' => $userId, 'contentType' => $contentType, 'content' => $content, 'push' => $push]);
+    }
+
     private function makeClientToken($lifetime)
     {
         $payload = array(
