@@ -164,6 +164,15 @@ class AIServiceImpl extends BaseService implements AIService
         $this->getAIService()->deleteDocument($id);
     }
 
+    public function pushMessage(array $params)
+    {
+        if (!ArrayToolkit::requireds($params, ['domainId', 'userId', 'contentType', 'content', 'push'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getAIService()->pushMessgae($params['domainId'], $params['userId'], $params['contentType'], $params['content'], $params['push']);
+    }
+
     private function recordNewAnswer($app, $inputs, $response)
     {
         $inputsHash = $this->makeHashForInputs($inputs);

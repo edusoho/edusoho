@@ -44,6 +44,7 @@ parameters:
         - '/agreement/course/purchase'
         - 'disclaimers'
         - '/agent_worker'
+        - '/workflow_callback/analysis-weaknesses'
 
     qrcode_protocol_whitelist_default:
         - 'weixin'

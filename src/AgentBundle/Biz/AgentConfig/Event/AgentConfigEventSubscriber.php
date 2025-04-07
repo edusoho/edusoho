@@ -6,6 +6,7 @@ use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\AI\Service\AIService;
+use Biz\AI\Util\AgentToken;
 use Biz\Course\Service\CourseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -16,6 +17,7 @@ use Codeages\Biz\Framework\Event\EventSubscriber;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AgentConfigEventSubscriber extends EventSubscriber
 {
@@ -155,6 +157,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
             'userId' => $biz['user']['id'],
             'questions' => $flatQuestions,
             'datasets' => array_column($agentConfigs, 'datasetId'),
+            'callback' => $this->generateUrl('workflow_callback', ['workflow' => 'analysis-weaknesses', 'token' => (new AgentToken())->make()]),
         ]);
     }
 
@@ -221,6 +224,13 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
 
         return false;
+    }
+
+    private function generateUrl($route, $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
+    {
+        global $kernel;
+
+        return $kernel->getContainer()->get('router')->generate($route, $parameters, $referenceType);
     }
 
     /**

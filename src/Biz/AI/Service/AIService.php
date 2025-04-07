@@ -45,4 +45,6 @@ interface AIService
     public function batchCreateDocumentByObject($datasetId, $objects);
 
     public function deleteDocument($id);
+
+    public function pushMessage(array $params);
 }

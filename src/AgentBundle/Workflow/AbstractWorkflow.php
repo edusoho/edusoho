@@ -9,6 +9,7 @@ use Biz\AI\Service\AIService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 
 abstract class AbstractWorkflow implements Workflow
@@ -18,6 +19,14 @@ abstract class AbstractWorkflow implements Workflow
     function __construct(Biz $biz)
     {
         $this->biz = $biz;
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
     }
 
     /**
