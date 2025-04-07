@@ -196,7 +196,7 @@ onMounted(async () => {
               label="AI 知识点诊断"
             >
               <a-switch v-model:checked="formState.isDiagnosisActive" checked-children="开" un-checked-children="关"/>
-              <a-popover placement="right" overlayClassName="example-popover" trigger="click">
+              <a-popover placement="right" overlayClassName="example-popover">
                 <template #title>
                   查看示例
                 </template>
