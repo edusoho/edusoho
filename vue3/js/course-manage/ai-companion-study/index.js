@@ -21,7 +21,7 @@ app.use(Alert);
 app.use(Spin);
 
 if (process.env.NODE_ENV === 'production') {
-  createStyleTag(`/static-dist/vue3/js/course-manage/item-bank/index.css?${window.app.version}`);
+  createStyleTag(`/static-dist/vue3/js/course-manage/ai-companion-study/index.css?${window.app.version}`);
 }
 
 app.mount('#ai-companion-study')
