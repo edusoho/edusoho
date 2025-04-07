@@ -228,8 +228,10 @@ onMounted(async () => {
   </AntConfigProvider>
 </template>
 
-<style>
-.example-popover .ant-popover-inner {
-  border-radius: 12px !important;
-}
+<style lang="less">
+  .example-popover {
+    .ant-popover-inner {
+      border-radius: 12px !important;
+    }
+  }
 </style>
