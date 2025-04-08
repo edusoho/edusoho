@@ -394,16 +394,16 @@ export default {
         },
         contentType: 'application/json;charset=utf-8',
       }).done((res) => {
-        if (window.parent.agentSdk) {
-          const workflow = {
-            workflow: this.mode === 'do' ? "teacher.question.idea" : this.mode === 'report' ? 'teacher.question.analysis' : null,
-            inputs: {
-              domainId: JSON.parse(window.parent.document.getElementById('chatMetaData')?.value).domainId,
-              question: res.question,
-            }
+        if (!window.parent.agentSdk) return;
+        window.parent.agentSdk.removeShortcut('plan.create');
+        const workflow = {
+          workflow: this.mode === 'do' ? "teacher.question.idea" : this.mode === 'report' ? 'teacher.question.analysis' : null,
+          inputs: {
+            domainId: JSON.parse(window.parent.document.getElementById('chatMetaData')?.value).domainId,
+            question: res.question,
           }
-          window.parent.agentSdk.teacherQuestion(res.content, workflow);
         }
+        window.parent.agentSdk.teacherQuestion(res.content, workflow);
       }).fail((err) => {
         console.log(err)
       })
