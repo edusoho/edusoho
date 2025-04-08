@@ -141,7 +141,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
         $wrongAnswerQuestionReports = $this->getAnswerQuestionReportService()->search([
             'answer_record_id' => $answerRecord['id'],
-            'statues' => ['wrong', 'no_answer', 'part_right'],
+            'statues' => ['wrong', 'part_right'],
         ], [], 0, PHP_INT_MAX, ['question_id', 'response']);
         $wrongAnswerQuestionReports = array_column($wrongAnswerQuestionReports, null, 'question_id');
         $questions = $this->getItemService()->findQuestionsByQuestionIdsIncludeDeleted(array_column($wrongAnswerQuestionReports, 'question_id'));
