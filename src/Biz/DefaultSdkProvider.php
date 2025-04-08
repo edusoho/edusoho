@@ -227,6 +227,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return null;
         };
+
+        $biz['ESCloudSdk.appPush'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, [], $biz['logger']);
+            if (!empty($sdk)) {
+                $service = $sdk->getAppPushService();
+            }
+
+            return $service;
+        };
     }
 
     /**
