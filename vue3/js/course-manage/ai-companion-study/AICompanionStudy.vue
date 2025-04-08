@@ -209,7 +209,7 @@ onMounted(async () => {
               <div class="text-14 leading-24 font-normal text-[#919399]">
                 知识点生成完成后将通过站内信通知您，请您放心保存AI伴学服务的配置
               </div>
-              <a-alert v-if="agentConfig.indexStatus === 'doing'" class="mt-12 w-fit" :message="`知识点生成中...${agentConfig.indexProgress}%`"
+              <a-alert v-if="agentConfig.indexStatus === 'indexing'" class="mt-12 w-fit" :message="`知识点生成中...${agentConfig.indexProgress}%`"
                        type="info" show-icon/>
               <a-alert v-if="agentConfig.indexStatus === 'success'" class="mt-12 w-fit" message="知识点生成成功"
                        type="success" show-icon/>

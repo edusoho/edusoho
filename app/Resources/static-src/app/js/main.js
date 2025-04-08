@@ -178,7 +178,9 @@ if (aiAgentToken) {
   });
   sdk.setChatMetadata(JSON.parse(document.getElementById('chatMetaData')?.value));
   sdk.on('clickLink', (data) => {
-    window.open(`${data}/show`, '_blank');
+    const match = data.match(/\/course\/\d+\/task\/\d+/);
+    const result = match ? match[0] : null;
+    window.open(`${result}/show`, '_blank');
   });
   sdk.boot();
   if (document.getElementById('studyPlanGenerated')?.value === '1') {
