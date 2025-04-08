@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex';
+import {createNamespacedHelpers, mapMutations} from 'vuex';
 import { Dialog } from 'vant';
 import directory from './directory';
 import reviewList from './review-list';
@@ -34,6 +34,7 @@ import introduction from './introduction';
 import closedFixed from '@/components/closed-fixed.vue'
 import Api from '@/api';
 import aiAgent from '@/mixins/aiAgent';
+import * as types from '@/store/mutation-types';
 
 const { mapState } = createNamespacedHelpers('ItemBank');
 export default {
@@ -68,6 +69,9 @@ export default {
     this.tryInitAIAgentSdk()
   },
   methods: {
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE,
+    }),
     tryInitAIAgentSdk() {
       Api.getItemBankExercise({
         query: {
@@ -77,7 +81,7 @@ export default {
         if (res.aiTeacherDomain) {
           const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
-          }, 20, 20);
+          }, 20, 20, null);
         }
       })
         .catch(err => {

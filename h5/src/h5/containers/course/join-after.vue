@@ -328,8 +328,8 @@ export default {
   methods: {
     ...mapMutations('course', {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
+      setSourceType: types.SET_SOURCETYPE,
     }),
-
     tryInitAIAgentSdk() {
       Api.meCourseMember({
         query: {

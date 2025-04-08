@@ -537,7 +537,7 @@ export default {
         if (res.aiTeacherDomain) {
           const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
-          }, 80, 20, true);
+          }, 80, 20,true);
           if (this.mode === 'do') {
             sdk.showReminder({
               title: "Hi，我是小知老师～",
