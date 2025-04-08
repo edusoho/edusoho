@@ -14,7 +14,7 @@ class WorkflowCallbackController extends BaseController
         $params = json_decode($request->getContent(), true);
         $biz = $this->getBiz();
         $callback = $biz["workflow.callback.{$workflow}"];
-        $callback->execute($params['data']);
+        $callback->execute($params['outputs']);
 
         return $this->createJsonResponse([
             'ok' => true,

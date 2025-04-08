@@ -28,6 +28,9 @@ class AnalysisWeaknesses extends AbstractWorkflow
             $seq = $key + 1;
             $markdown .= "{$seq}. $keypoint\n";
         }
+        if (empty($inputs['documents'])) {
+            return $markdown;
+        }
         $markdown .= "\n推荐以下学习知识点的相关课程任务：";
         $tasks = $this->getTaskService()->findTasksByActivityIds(array_column($inputs['documents'], 'extId'));
         foreach ($inputs['documents'] as $key => $document) {
