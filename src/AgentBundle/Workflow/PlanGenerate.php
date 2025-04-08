@@ -67,6 +67,7 @@ class PlanGenerate extends AbstractWorkflow
         $startDate = empty($inputs['startDate']) ? '从今日起' : $this->makeStudyBoundaryDate($inputs['startDate']);
         $endDate = empty($inputs['endDate']) ? '学完即止' : $this->makeStudyBoundaryDate($inputs['endDate']);
         $minDuration = min(array_column($studyDates, 'duration'));
+        $tasks = $this->getTaskService()->findTasksByIds(array_column($tasks, 'id'));
 
         return <<<MARKDOWN
 根据上述内容为你生成以下学习计划：  
@@ -75,7 +76,7 @@ class PlanGenerate extends AbstractWorkflow
 3、每次至少学习：{$minDuration}小时  
 我会在每个学习日提醒你完成学习，期待你的参与！
 
-{$this->makeList($studyDates)}
+{$this->makeList($studyDates, $tasks)}
 点击「学习内容」链接直达任务。
 MARKDOWN;
     }
@@ -113,13 +114,14 @@ MARKDOWN;
         return $weekdayMap[$weekday] ?? '';
     }
 
-    private function makeList($studyDates)
+    private function makeList($studyDates, $tasks)
     {
+        $tasks = array_column($tasks, null, 'id');
         $list = '';
         foreach ($studyDates as $studyDate => $dateTasks) {
             $list .= '### '.date('Y/m/d', strtotime($studyDate))." {$this->convertChineseWeekDay(date('N', strtotime($studyDate)))}\n\n";
             foreach ($dateTasks['tasks'] as $task) {
-                $list .= "* &nbsp; **[任务: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']}/task_type/{$task['type']})**  \n用时・{$task['duration']}小时\n\n\n";
+                $list .= "* &nbsp; **[任务: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']}/task_type/{$tasks[$task['id']]['type']})**  \n用时・{$task['duration']}小时\n\n\n";
             }
         }
 
