@@ -19,7 +19,6 @@ export default {
       }
       this.current += 1;
       this.changeRenderItems(this.current);
-      await this.getQuestion();
       this.fastSlide();
     },
     async slidePrevTransitionEnd() {
@@ -37,7 +36,6 @@ export default {
         const childSwiperSlide = Math.max(item.questions.length - 1, 0);
         childSwiper.$swiper.slideTo(childSwiperSlide, 0, false);
       });
-      await this.getQuestion();
       this.fastSlide();
     },
     changeRenderItems(current) {

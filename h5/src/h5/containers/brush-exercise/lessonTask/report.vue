@@ -60,8 +60,8 @@ export default {
   },
   methods: {
     getResourceToken(globalId) {
-      return Api.getItemDetail({ 
-        params: { globalId } 
+      return Api.getItemDetail({
+        params: { globalId }
       })
     },
     getData() {

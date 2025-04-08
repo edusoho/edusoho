@@ -396,9 +396,6 @@ export default {
               duration: 2000,
             });
           }
-          setTimeout(() => {
-            sdk.hideButton();
-          }, 2000)
 
           const btn = document.getElementById('agent-sdk-floating-button');
           btn?.addEventListener('click', () => {

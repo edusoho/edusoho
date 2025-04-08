@@ -40,6 +40,7 @@
 							:choiceIsCando="choiceIsCando"
 							:reviewedQuestion="reviewedQuestion"
 							:EssayRadio="EssayRadio"
+              :answerRecord="answerRecord"
 							@changeIsCando="changeIsCando"
 							@changeChoiceCando="changeChoiceCando"
 							@changeTouch="changeTouch"
@@ -96,11 +97,10 @@ import { compareNowTime, timeStampFormatTime } from "@/src/utils/date-toolkit";
 import { Dialog, Toast } from "vant";
 import itemBankMixins from "@/src/mixins/itemBankMixins.js"
 import Api from '@/api';
-import aiAgent from '@/mixins/aiAgent';
 
 export default {
   name: "item-engine",
-  mixins: [itemBankMixins, aiAgent],
+  mixins: [itemBankMixins],
   components: {
     ibsItem,
     card,
@@ -178,7 +178,6 @@ export default {
 			reviewedQuestion: [],
 			fillStatus: [],
 			EssayRadio: [],
-      question: {},
     };
   },
   beforeDestroy() {
@@ -218,51 +217,8 @@ export default {
     if (this.brushDo.exerciseModes === '0') {
       this.countTime();
     }
-    await this.getQuestion();
-    this.tryInitAIAgentSdk();
   },
   methods: {
-    tryInitAIAgentSdk() {
-      Api.getItemBankExercise({
-        query: {
-          id: this.$route.query.exerciseId,
-        }
-      }).then(res => {
-        if (res.aiTeacherDomain) {
-          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
-            domainId: res.aiTeacherDomain,
-          }, 80, 20, true);
-          const btn = document.getElementById('agent-sdk-floating-button');
-          if (!btn) return;
-          btn.addEventListener('click', () => {
-            sdk.showReminder({
-              title: "遇到问题啦？",
-              content: "小知老师来为你理清解题思路～",
-              buttonContent: 'teacher.question',
-              workflow: {
-                workflow: 'teacher.question.idea',
-                inputs: {
-                  domainId: res.aiTeacherDomain,
-                  question: this.question.question,
-                }
-              },
-              chatContent: this.question.content,
-            });
-          });
-        }
-      })
-        .catch(err => {
-          console.log(err);
-        })
-    },
-    async getQuestion() {
-      this.question = await Api.getExerciseQuestion({
-        query: {
-          answerRecordId: this.answerRecord.id,
-          questionId: this.renderItmes[this.current].id,
-        },
-      })
-    },
 		changeIsCando(index, flag) {
 			this.iscando[index] = flag
 		},
@@ -474,20 +430,8 @@ export default {
           className: 'backDialog'
         })
           .then(() => {
-            // 显示答题卡
-            // this.cardShow = true;
-            // const isLeave = true;
             if (this.isAnswerFinished == 1) {
               this.goResult()
-              // this.$router.replace({
-              //   path: `/item_bank_exercise/${this.$route.query.exerciseId}`,
-              //   query: {
-              //     targetId: this.$route.query.exerciseId,
-              //     type: 'item_bank_exercise',
-              //     hasCertificate: '',
-              //     isLeave
-              //   },
-              // })
               document.getElementsByClassName('backDialog')[0].remove();
               resolve();
             } else {

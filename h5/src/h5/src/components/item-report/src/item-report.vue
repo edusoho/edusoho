@@ -19,6 +19,7 @@
             <ibs-item
               :ref="`item${item.id}`"
               :item="item"
+              :items="items"
               :mode="mode"
               :wrongMode="wrongMode"
               :itemUserAnswer="getUserAnwer(item.sectionIndex, item.itemIndex)"
@@ -32,6 +33,7 @@
               :wrong="wrong"
               :itemLength="items.length"
               :exerciseInfo="answerRecord"
+              :answerRecord="answerRecord"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
             />
@@ -63,15 +65,13 @@ import ibsItem from "@/src/components/item/src/item.vue";
 import card from "@/src/components/common/card";
 import ibsFooter from "@/src/components/common/footer";
 import itemBankMixins from "@/src/mixins/itemBankMixins.js";
-import Api from '@/api';
-import aiAgent from '@/mixins/aiAgent';
 let lastItemId = 0;
 let questionIndex = 0;
 let itemIndex = 0;
 
 export default {
   name: "item-report",
-  mixins: [itemBankMixins, aiAgent],
+  mixins: [itemBankMixins],
   components: {
     ibsItem,
     card,
@@ -139,51 +139,8 @@ export default {
   async mounted() {
     this.setSwiperHeight();
     this.getSectionResponses();
-    await this.getQuestion();
-    this.tryInitAIAgentSdk();
   },
   methods: {
-    tryInitAIAgentSdk() {
-      Api.getItemBankExercise({
-        query: {
-          id: this.$route.query.exerciseId,
-        }
-      }).then(res => {
-        if (res.aiTeacherDomain) {
-          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
-            domainId: res.aiTeacherDomain,
-          }, 80, 20, true);
-          const btn = document.getElementById('agent-sdk-floating-button');
-          if (!btn) return;
-          btn.addEventListener('click', () => {
-            sdk.showReminder({
-              title: "遇到问题啦？",
-              content: "小知老师来为你理清解题思路～",
-              buttonContent: 'teacher.question',
-              workflow: {
-                workflow: 'teacher.question.analysis',
-                inputs: {
-                  domainId: res.aiTeacherDomain,
-                  question: this.question.question,
-                }
-              },
-              chatContent: this.question.content,
-            });
-          });
-        }
-      })
-        .catch(err => {
-          console.log(err);
-        })
-    },
-    async getQuestion() {
-      this.question = await Api.getExerciseQuestion({
-        query: {
-          answerRecordId: this.answerRecord.id,
-          questionId: this.renderItmes[this.current].id,
-        },
-      })
-    },
     getResponseAttachments() {
       if (!this.assessmentResponse.section_responses) return;
 

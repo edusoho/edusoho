@@ -341,10 +341,12 @@ import sectionTitle from "./component/section-title.vue";
 import _ from 'lodash';
 import { Toast } from 'vant';
 import Api from '@/api';
+import aiAgent from '@/mixins/aiAgent';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
 export default {
+  mixins: [aiAgent],
   name: "ibs-item",
   components: {
     sectionTitle,
@@ -367,6 +369,9 @@ export default {
       touchable: true,
       showShadow: '',
       width: WINDOWWIDTH,
+      question: {},
+      itemIndex: 0,
+      questionIndex: 0,
     };
   },
   props: {
@@ -469,6 +474,10 @@ export default {
     EssayRadio: {
       type: Array,
       default: () => []
+    },
+    answerRecord: {
+      type: Object,
+      default: () => {}
     }
   },
   inject: ["brushDo"],
@@ -515,8 +524,64 @@ export default {
       }
     })
     this.setSwiperHeight();
+    this.getQuestion();
+    this.tryInitAIAgentSdk();
   },
   methods: {
+    tryInitAIAgentSdk() {
+      Api.getItemBankExercise({
+        query: {
+          id: this.$route.query.exerciseId,
+        }
+      }).then(res => {
+        if (res.aiTeacherDomain) {
+          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+          }, 80, 20, true);
+          if (this.mode === 'do') {
+            sdk.showReminder({
+              title: "Hi，我是小知老师～",
+              content: "我将在你答题过程中随时为你答疑解惑",
+              duration: 2000,
+            });
+          } else {
+            sdk.showReminder({
+              title: "战绩新鲜出炉",
+              content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
+              duration: 2000,
+            });
+          }
+          const btn = document.getElementById('agent-sdk-floating-button');
+          if (!btn) return;
+          btn.addEventListener('click', () => {
+            sdk.showReminder({
+              title: "遇到问题啦？",
+              content: "小知老师来为你理清解题思路～",
+              buttonContent: 'teacher.question',
+              workflow: {
+                workflow: this.mode === 'do' ? 'teacher.question.idea' : 'teacher.question.analysis',
+                inputs: {
+                  domainId: res.aiTeacherDomain,
+                  question: this.item.questions[this.questionIndex].id,
+                }
+              },
+              chatContent: this.question.content,
+            });
+          });
+        }
+      })
+        .catch(err => {
+          console.log(err);
+        })
+    },
+    async getQuestion() {
+      this.question = await Api.getExerciseQuestion({
+        query: {
+          answerRecordId: this.answerRecord.id,
+          questionId: this.items[this.itemIndex].questions[this.questionIndex].id,
+        },
+      })
+    },
     changeReviewList(status) {
       this.$emit('changeStatus', status)
     },
@@ -655,7 +720,7 @@ export default {
     changeChoiceCando() {
       this.$emit('changeChoiceCando', this.current, true)
     },
-    slidePrev() {
+    async slidePrev() {
       if (!this.touchable) {
         return
       }
@@ -664,8 +729,20 @@ export default {
       if (!slide) {
         this.$emit("itemSlidePrev");
       }
+
+      if (this.itemIndex === 0 && this.questionIndex === 0) {
+        await this.getQuestion();
+        return;
+      }
+      if (this.questionIndex === 0) {
+        this.itemIndex -= 1;
+        this.questionIndex = this.items[this.itemIndex].questions.length - 1;
+      } else {
+        this.questionIndex -= 1;
+      }
+      await this.getQuestion();
     },
-    slideNext(flag) {
+    async slideNext(flag) {
       if (!this.touchable && !flag) {
         return
       }
@@ -674,6 +751,20 @@ export default {
       if (!slide || flag) {
         this.$emit("itemSlideNext");
       }
+
+      const isLastItem = this.itemIndex >= this.items.length - 1;
+      const isLastQuestion = this.questionIndex >= this.items[this.itemIndex].questions.length - 1;
+      if (isLastItem && isLastQuestion) {
+        await this.getQuestion();
+        return;
+      }
+      if (isLastQuestion) {
+        this.itemIndex += 1;
+        this.questionIndex = 0;
+      } else {
+        this.questionIndex += 1;
+      }
+      await this.getQuestion();
     },
     goBrushResult() {
       this.isLeave = true;
