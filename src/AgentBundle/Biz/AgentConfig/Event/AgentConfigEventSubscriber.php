@@ -157,8 +157,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
             'userId' => $biz['user']['id'],
             'questions' => $flatQuestions,
             'datasets' => array_column($agentConfigs, 'datasetId'),
-            'callback' => $this->generateUrl('workflow_callback', ['workflow' => 'analysis-weaknesses', 'token' => (new AgentToken())->make()]),
-        ]);
+        ], $this->generateUrl('workflow_callback', ['workflow' => 'analysis-weaknesses', 'token' => (new AgentToken())->make()]));
     }
 
     private function createDatasetDocumentIfNecessary($datasetId, $activity)

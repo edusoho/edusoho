@@ -71,7 +71,7 @@ class AgentConfig extends AbstractResource
             return 100;
         }
 
-        return intval($dataset['successCount'] / $dataset['totalCount']);
+        return intval($dataset['successCount'] / $dataset['totalCount'] * 100);
     }
 
     /**

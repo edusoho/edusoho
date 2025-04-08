@@ -105,9 +105,9 @@ class AIServiceImpl extends BaseService implements AIService
         return $this->getAIService()->runWorkflow($workflow, $inputs);
     }
 
-    public function asyncRunWorkflow($workflow, array $inputs)
+    public function asyncRunWorkflow($workflow, array $inputs, $callback)
     {
-        return $this->getAIService()->asyncRunWorkflow($workflow, $inputs);
+        return $this->getAIService()->asyncRunWorkflow($workflow, $inputs, $callback);
     }
 
     public function createDataset(array $params)
