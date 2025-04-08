@@ -28,7 +28,7 @@ interface AIService
 
     public function runWorkflow($workflow, array $inputs);
 
-    public function asyncRunWorkflow($workflow, array $inputs);
+    public function asyncRunWorkflow($workflow, array $inputs, $callback);
 
     public function createDataset(array $params);
 

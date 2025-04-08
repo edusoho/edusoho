@@ -32,4 +32,24 @@ class AppPushService extends BaseService
     {
         return $this->request('POST', '/v1/device/unbind', ['userId' => $userId]);
     }
+
+    public function addTags($userId, $tags)
+    {
+        return $this->request('POST', '/v1/user/addTags', ['userId' => $userId, 'tags' => $tags]);
+    }
+
+    public function batchAddTags($userIds, $tag)
+    {
+        return $this->request('POST', '/v1/user/addTags', ['userIds' => $userIds, 'tags' => $tags]);
+    }
+
+    public function deleteTags($userId, $tags)
+    {
+        return $this->request('POST', '/v1/user/deleteTags', ['userId' => $userId, 'tags' => $tags]);
+    }
+
+    public function batchDeleteTags($userIds, $tag)
+    {
+        return $this->request('POST', '/v1/user/batchDeleteTags', ['userIds' => $userIds, 'tags' => $tags]);
+    }
 }

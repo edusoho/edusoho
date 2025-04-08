@@ -14,8 +14,8 @@ class AnalysisWeaknesses extends AbstractWorkflow
             'contentType' => 'text',
             'content' => $this->makeMarkdown($inputs),
             'push' => [
-                'title' => '',
-                'content' => '',
+                'title' => '推荐学习',
+                'content' => '刚才的答题结果✍️已帮你分析出薄弱知识点，快来看看自己哪方面知识需要加强👉 ',
             ],
         ]);
     }
@@ -28,7 +28,10 @@ class AnalysisWeaknesses extends AbstractWorkflow
             $seq = $key + 1;
             $markdown .= "{$seq}. $keypoint\n";
         }
-        $markdown .= "\n推荐以下学习知识点的相关课程任务：";
+        if (empty($inputs['documents'])) {
+            return $markdown;
+        }
+        $markdown .= "\n推荐以下学习知识点的相关课程任务：  \n";
         $tasks = $this->getTaskService()->findTasksByActivityIds(array_column($inputs['documents'], 'extId'));
         foreach ($inputs['documents'] as $key => $document) {
             $seq = $key + 1;
