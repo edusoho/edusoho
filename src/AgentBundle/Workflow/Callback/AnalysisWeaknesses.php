@@ -35,7 +35,7 @@ class AnalysisWeaknesses extends AbstractWorkflow
         $tasks = $this->getTaskService()->findTasksByActivityIds(array_column($inputs['documents'], 'extId'));
         foreach ($inputs['documents'] as $key => $document) {
             $seq = $key + 1;
-            $markdown .= "* [任务{$seq}: {$document['name']}](/course/{$document['dataset']['extId']}/task/{$tasks[$document['extId']]['id']})\n";
+            $markdown .= "* [任务{$seq}: {$document['name']}](/course/{$document['dataset']['extId']}/task/{$tasks[$document['extId']]['id']}/task_type/{$tasks[$document['extId']]['type']})\n";
         }
 
         return $markdown;
