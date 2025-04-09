@@ -120,7 +120,7 @@ MARKDOWN;
         foreach ($studyDates as $studyDate => $dateTasks) {
             $list .= '### '.date('Y/m/d', strtotime($studyDate))." {$this->convertChineseWeekDay(date('N', strtotime($studyDate)))}\n\n";
             foreach ($dateTasks['tasks'] as $task) {
-                $list .= "* &nbsp; **[任务: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']})**  \n用时・{$task['duration']}小时\n\n\n";
+                $list .= "* [任务: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']})  \n<span class='usetime'>用时・{$task['duration']}小时</span>\n\n\n";
             }
         }
 
