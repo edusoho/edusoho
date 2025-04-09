@@ -1,6 +1,6 @@
 <template>
   <div class="ibs-engine">
-    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="(mode === 'do' || mode === 'report') && aiAgentEnabled ? 'hover' : 'manual'">
+    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="showTeacherQuestion() ? 'hover' : 'manual'">
       <template slot="content">
         <div class="ai-agent-popover-content">
           <button class="ai-agent-button" @click="showAgentSdk"><span>请教小知老师解题思路～</span></button>
@@ -402,10 +402,16 @@ export default {
             question: res.question,
           }
         }
-        window.parent.agentSdk.teacherQuestion(res.content, workflow);
+        window.parent.agentSdk.chat(res.content, workflow);
       }).fail((err) => {
         console.log(err)
       })
+    },
+    showTeacherQuestion() {
+      if (this.mode === 'report') {
+        return true;
+      }
+      return this.mode === 'do' && !Number(this.answerRecord.limited_time);
     },
     replaceHtmlSpace(htmlStr) {
       return htmlStr ? htmlStr.replace(/ /g, " ") : "";
@@ -448,7 +454,6 @@ export default {
     },
     lookAnalysis() {
       this.canShowAnalysis = !this.canShowAnalysis;
-      // this.$emit("setMaterialAnalysis", this.canShowAnalysis, this.keys);
     },
     prepareStudentAiAnalysis(gen) {
       this.$emit('prepareStudentAiAnalysis', gen);
