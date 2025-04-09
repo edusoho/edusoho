@@ -19,7 +19,7 @@ class StudyPlanDetailDaoImpl extends AdvancedDaoImpl implements StudyPlanDetailD
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
-            'orderbys' => ['id', 'createdTime', 'updatedTime'],
+            'orderbys' => ['id', 'studyDate', 'createdTime', 'updatedTime'],
             'serializes' => ['tasks' => 'json'],
             'conditions' => [
                 'id IN (:ids)',
@@ -27,6 +27,7 @@ class StudyPlanDetailDaoImpl extends AdvancedDaoImpl implements StudyPlanDetailD
                 'studyDate = :studyDate',
                 'learned = :learned',
                 'courseId IN (:courseIds)',
+                'studyDate > :studyDate_GT',
             ],
         ];
     }

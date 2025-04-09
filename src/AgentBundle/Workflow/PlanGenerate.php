@@ -2,8 +2,7 @@
 
 namespace AgentBundle\Workflow;
 
-use AgentBundle\Biz\StudyPlan\Factory\CalculationStrategyFactory;
-use DateTime;
+use AppBundle\Common\DateToolkit;
 
 class PlanGenerate extends AbstractWorkflow
 {
@@ -101,26 +100,18 @@ MARKDOWN;
 
     private function convertChineseWeekDay($weekday)
     {
-        $weekdayMap = [
-            1 => '周一',
-            2 => '周二',
-            3 => '周三',
-            4 => '周四',
-            5 => '周五',
-            6 => '周六',
-            7 => '周日'
-        ];
-
-        return $weekdayMap[$weekday] ?? '';
+        return DateToolkit::convertToZHWeekday($weekday);
     }
 
     private function makeList($studyDates)
     {
         $list = '';
+        $seq = 1;
         foreach ($studyDates as $studyDate => $dateTasks) {
             $list .= '### '.date('Y/m/d', strtotime($studyDate))." {$this->convertChineseWeekDay(date('N', strtotime($studyDate)))}\n\n";
             foreach ($dateTasks['tasks'] as $task) {
-                $list .= "* [任务: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']})  \n<span class='usetime'>用时・{$task['duration']}小时</span>\n\n\n";
+                $list .= "* [任务{$seq}: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']})  \n<span class='usetime'>用时・{$task['duration']}小时</span>\n\n\n";
+                $seq++;
             }
         }
 

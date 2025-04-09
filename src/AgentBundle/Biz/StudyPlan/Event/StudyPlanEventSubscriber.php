@@ -2,8 +2,12 @@
 
 namespace AgentBundle\Biz\StudyPlan\Event;
 
+use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
+use AppBundle\Common\DateToolkit;
+use Biz\AI\Service\AIService;
 use Biz\Task\Service\TaskResultService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 
@@ -40,6 +44,7 @@ class StudyPlanEventSubscriber extends EventSubscriber
         $this->getStudyPlanService()->updatePlanDetailTasks($detail['id'], $detail['tasks']);
         if (array_sum(array_values($detail['tasks'])) == 0) {
             $this->getStudyPlanService()->updatePlanDetailLearned([$detail['id']]);
+            $this->pushMessageIfNecessary($plan, $detail);
         }
     }
 
@@ -60,7 +65,36 @@ class StudyPlanEventSubscriber extends EventSubscriber
         $this->getStudyPlanService()->updatePlanDetailLearned($finishedDetailIds);
     }
 
-    public function isDetailAllTasksFinished($taskIds, $finishedTaskResults)
+    private function pushMessageIfNecessary($plan, $detail)
+    {
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($plan['courseId']);
+        if (empty($agentConfig['isActive'])) {
+            return;
+        }
+        $user = $this->getUserService()->getUser($plan['userId']);
+        $content = "hi，{$user['nickname']}同学，恭喜完成今日学习，快快放松休息一下吧~";
+        $nextStudyDate = $this->getNextStudyDate($detail);
+        if (!empty($nextStudyDate)) {
+            $nextStudyDate = new \DateTime($nextStudyDate);
+            $zhWeekday = DateToolkit::convertToZHWeekday($nextStudyDate->format('N'));
+            $content .= "  \n下次学习在 {$nextStudyDate->format('Y年m月d日')}（{$zhWeekday}），届时我来提醒你哦~";
+        }
+        $this->getAIService()->pushMessage([
+            'domainId' => $agentConfig['domainId'],
+            'userId' => $user['id'],
+            'contentType' => 'text',
+            'content' => $content,
+        ]);
+    }
+
+    private function getNextStudyDate($detail)
+    {
+        $nextDetails = $this->getStudyPlanService()->searchPlanDetails(['planId' => $detail['planId'], 'studyDate_GT' => $detail['studyDate']], ['studyDate' => 'ASC'], 0, 1);
+
+        return $nextDetails[0]['studyDate'] ?? '';
+    }
+
+    private function isDetailAllTasksFinished($taskIds, $finishedTaskResults)
     {
         foreach ($taskIds as $taskId) {
             if (empty($finishedTaskResults[$taskId])) {
@@ -74,9 +108,17 @@ class StudyPlanEventSubscriber extends EventSubscriber
     /**
      * @return TaskResultService
      */
-    protected function getTaskResultService()
+    private function getTaskResultService()
     {
         return $this->getBiz()->service('Task:TaskResultService');
+    }
+
+    /**
+     * @return UserService
+     */
+    private function getUserService()
+    {
+        return $this->getBiz()->service('User:UserService');
     }
 
     /**
@@ -85,5 +127,21 @@ class StudyPlanEventSubscriber extends EventSubscriber
     private function getStudyPlanService()
     {
         return $this->getBiz()->service('AgentBundle:StudyPlan:StudyPlanService');
+    }
+
+    /**
+     * @return AgentConfigService
+     */
+    private function getAgentConfigService()
+    {
+        return $this->getBiz()->service('AgentBundle:AgentConfig:AgentConfigService');
+    }
+
+    /**
+     * @return AIService
+     */
+    private function getAIService()
+    {
+        return $this->getBiz()->service('AI:AIService');
     }
 }
