@@ -81,6 +81,11 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         return $this->getAiStudyConfigDao()->findIndexing();
     }
 
+    public function findActiveAgentConfigs()
+    {
+        return $this->getAiStudyConfigDao()->findActive();
+    }
+
     public function markIndexFinished($id)
     {
         $this->getAiStudyConfigDao()->update($id, ['indexing' => 0]);

@@ -52,4 +52,37 @@ class AppPushService extends BaseService
     {
         return $this->request('POST', '/v1/user/batchDeleteTags', ['userIds' => $userIds, 'tags' => $tags]);
     }
+
+    public function sendToTag($tag, $params)
+    {
+        return $this->request('POST', '/v1/push/sendToTag', [
+            'tag' => $tag,
+            'title' => $params['title'],
+            'message' => $params['message'],
+            'category' => $params['category'],
+            'extra' => $params['extra'],
+        ]);
+    }
+
+    public function sendToUser($userId, $params)
+    {
+        return $this->request('POST', '/v1/push/sendToUser', [
+            'userId' => $userId,
+            'title' => $params['title'],
+            'message' => $params['message'],
+            'category' => $params['category'],
+            'extra' => $params['extra'],
+        ]);
+    }
+
+    public function sendToUsers($userIds, $params)
+    {
+        return $this->request('POST', '/v1/push/sendToUsers', [
+            'userIds' => $userIds,
+            'title' => $params['title'],
+            'message' => $params['message'],
+            'category' => $params['category'],
+            'extra' => $params['extra'],
+        ]);
+    }
 }

@@ -14,8 +14,13 @@ class AnalysisWeaknesses extends AbstractWorkflow
             'contentType' => 'text',
             'content' => $this->makeMarkdown($inputs),
             'push' => [
-                'title' => '推荐学习',
+                'title' => '小知老师帮你抓到以下薄弱知识点，速来学习～',
                 'content' => '刚才的答题结果✍️已帮你分析出薄弱知识点，快来看看自己哪方面知识需要加强👉 ',
+                'category' => 'todo',
+                'extra' => [
+                    'domainId' => $inputs['domainId'],
+                    'to' => 'ai',
+                ],
             ],
         ]);
     }

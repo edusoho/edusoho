@@ -13,4 +13,6 @@ interface AiStudyConfigDao extends GeneralDaoInterface
     public function findByDomainId($domainId);
 
     public function findIndexing();
+
+    public function findActive();
 }

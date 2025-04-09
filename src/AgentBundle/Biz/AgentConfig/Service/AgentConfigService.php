@@ -16,5 +16,7 @@ interface AgentConfigService
 
     public function findIndexingAgentConfigs();
 
+    public function findActiveAgentConfigs();
+
     public function markIndexFinished($id);
 }

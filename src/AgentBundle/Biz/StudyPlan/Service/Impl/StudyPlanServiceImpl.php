@@ -4,7 +4,7 @@ namespace AgentBundle\Biz\StudyPlan\Service\Impl;
 
 use AgentBundle\Biz\AgentConfig\Dao\AiStudyConfigDao;
 use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDao;
-use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDetail;
+use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDetailDao;
 use AgentBundle\Biz\StudyPlan\Factory\CalculationStrategyFactory;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use AgentBundle\Biz\StudyPlan\StudyPlanException;
@@ -123,6 +123,31 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         $data = ArrayToolkit::parts($data, ['courseId', 'startDate', 'endDate', 'weekDays']);
 
         return $this->getStudyPlanDao()->update($studyPlan['id'], $data);
+    }
+
+    public function createPlanDetails($planId, $studyDates)
+    {
+        $plan = $this->getStudyPlanDao()->get($planId);
+        $details = [];
+        foreach ($studyDates as $studyDate => $data) {
+            $details[] = [
+                'planId' => $planId,
+                'courseId' => $plan['courseId'],
+                'studyDate' => $studyDate,
+                'taskIds' => array_column($data['tasks'], 'id'),
+            ];
+        }
+        $this->getStudyPlanDetailDao()->batchCreate($details);
+    }
+
+    public function searchPlanDetails($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getStudyPlanDetailDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function findPlansByIds($ids)
+    {
+        return $this->getStudyPlanDao()->findByIds($ids);
     }
 
     public function isUserStudyPlanGenerated($userId, $courseId)
@@ -396,10 +421,10 @@ MARKDOWN;
     }
 
     /**
-     * @return StudyPlanDetail
+     * @return StudyPlanDetailDao
      */
-    protected function getStudyPlanDetail()
+    protected function getStudyPlanDetailDao()
     {
-        return $this->createDao('AgentBundle:StudyPlan:StudyPlanDetail');
+        return $this->createDao('AgentBundle:StudyPlan:StudyPlanDetailDao');
     }
 }
