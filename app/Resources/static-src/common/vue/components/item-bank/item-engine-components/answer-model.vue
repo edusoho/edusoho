@@ -408,6 +408,9 @@ export default {
       })
     },
     showTeacherQuestion() {
+      if (!window.parent.document.getElementById('aiAgentToken')) {
+        return false;
+      }
       if (this.mode === 'report') {
         return true;
       }
