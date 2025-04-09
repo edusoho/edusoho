@@ -4239,3 +4239,8 @@ user_show_mobile:
     _controller: 'AppBundle:MobileMask:showMobile'
   methods:
     - POST
+
+secondary_verification:
+    path: '/secondary/verification'
+    defaults:
+        _controller: 'AppBundle:SecondaryVerification/SecondaryVerification:index'

@@ -28,6 +28,11 @@ export default class MobileBind {
       }
     });
 
+    $('.js-export-classroom-student-btn').on('click', function(e) {
+      e.preventDefault();
+      self.exportData();
+    });
+
     $('.js-export-user-btn').on('click', function (e) {
       $('[name="sms_code"]').valid();
       e.preventDefault();
@@ -76,6 +81,30 @@ export default class MobileBind {
       }
     });
   }
+  exportData() {
+    var paramsStr = $('#params').val(); // 获取 JSON 字符串
+    var params = JSON.parse(paramsStr); // 转成对象
+
+    $.ajax({
+      url: '/classroom/' + params['targetFormId'] + '/manage/student/export/student/datas',
+      method: 'GET',
+      data: params,
+      success: function(response) {
+        if (response.status === 'getData') {
+          // 如果返回的是数据起点与文件名，递归导出或分页导出
+          exportDataChunk(response.start, response.fileName);
+        } else {
+          // 否则直接跳转到下载链接
+          window.location.href = '/classroom/' + params['targetFormId'] + '/manage/student/export?role=student&fileName=' + response.fileName;
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('导出失败：', error);
+        alert('导出失败，请稍后重试');
+      }
+    });
+  }
+
 
   dragEvent() {
     let self = this;
