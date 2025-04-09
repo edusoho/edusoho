@@ -345,11 +345,7 @@ export default {
     if (this.canDo && this.mode === 'exercise') {
 
       this.info.forEach((item, index) => {
-        if (this.exerciseInfo.submittedQuestions.filter(subItem => subItem.questionId + '' === item.id).length > 0) {
-          this.iscando[index] = false
-        } else {
-          this.iscando[index] = true
-        }
+        this.iscando[index] = this.exerciseInfo.submittedQuestions.filter(subItem => subItem.questionId + '' === item.id).length <= 0;
       });
 
     }
@@ -368,53 +364,45 @@ export default {
   methods: {
     ...mapActions(['setCloudAddress']),
     tryInitAIAgentSdk() {
-      Api.meCourseMember({
-        query: {
-          id: this.$route.query.courseId,
-        },
-      }).then(res => {
-        if (res.aiTeacherEnabled) {
-          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
-            domainId: res.aiTeacherDomain,
-            courseId: res.courseId,
-            courseName:res.courseSetTitle,
-            lessonId: this.$route.query.targetId
-          }, 80, 20, true);
-          if (res.studyPlanGenerated) {
-            sdk.removeShortcut('plan.create')
-          }
-          if (this.canDo) {
-            sdk.showReminder({
-              title: "Hi，我是小知老师～",
-              content: "我将在你答题过程中随时为你答疑解惑",
-              duration: 2000,
-            });
-          } else {
+      if (!this.canDo) {
+        Api.meCourseMember({
+          query: {
+            id: this.$route.query.courseId,
+          },
+        }).then(res => {
+          if (res.aiTeacherEnabled) {
+            const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+              domainId: res.aiTeacherDomain,
+              courseId: res.courseId,
+              courseName:res.courseSetTitle,
+              lessonId: this.$route.query.targetId
+            }, 80, 20, true);
+            sdk.removeShortcut('plan.create');
             sdk.showReminder({
               title: "战绩新鲜出炉",
               content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
               duration: 2000,
             });
-          }
 
-          const btn = document.getElementById('agent-sdk-floating-button');
-          btn?.addEventListener('click', () => {
-            sdk.showReminder({
-              title: "遇到问题啦？",
-              content: "小知老师来为你理清解题思路～",
-              buttonContent: 'teacher.question',
-              workflow: {
-                workflow: this.canDo ? 'teacher.question.idea' : 'teacher.question.analysis',
-                inputs: {
-                  domainId: res.aiTeacherDomain,
-                  question: this.question.question,
-                }
-              },
-              chatContent: this.question.content,
+            const btn = document.getElementById('agent-sdk-floating-button');
+            btn?.addEventListener('click', () => {
+              sdk.showReminder({
+                title: "遇到问题啦？",
+                content: "小知老师来为你理清解题思路～",
+                buttonContent: 'teacher.question',
+                workflow: {
+                  workflow: 'teacher.question.analysis',
+                  inputs: {
+                    domainId: res.aiTeacherDomain,
+                    question: this.question.question,
+                  }
+                },
+                chatContent: this.question.content,
+              });
             });
-          });
-        }
-      })
+          }
+        })
+      }
     },
     changeswiper(index) {
       this.currentIndex = index;
