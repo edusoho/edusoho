@@ -1,6 +1,6 @@
 <template>
   <div class="ibs-engine">
-    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="(mode === 'do' || mode === 'report') && aiAgentEnabled ? 'hover' : 'manual'">
+    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="((mode === 'do' && answerRecord.exam_mode == '0') || mode === 'report') && aiAgentEnabled ? 'hover' : 'manual'">
       <template slot="content">
         <div class="ai-agent-popover-content">
           <button class="ai-agent-button" @click="showAgentSdk"><span>请教小知老师解题思路～</span></button>
@@ -349,6 +349,7 @@ export default {
     },
   },
   mounted() {
+    console.log('---------', this.mode);
     this.aiAgentEnabled = window.parent.document.getElementById('aiAgentToken')?.value
     // 判断是否被收藏
     this.isTag = this.section_responses[0]?.item_responses[
