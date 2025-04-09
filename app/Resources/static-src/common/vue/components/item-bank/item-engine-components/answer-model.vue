@@ -349,7 +349,6 @@ export default {
     },
   },
   mounted() {
-    console.log('---------', this.answerRecord);
     this.aiAgentEnabled = window.parent.document.getElementById('aiAgentToken')?.value
     // 判断是否被收藏
     this.isTag = this.section_responses[0]?.item_responses[
