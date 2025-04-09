@@ -20,5 +20,13 @@ interface StudyPlanService
 
     public function findPlansByIds($ids);
 
+    public function getPlanByCourseIdAndUserId($courseId, $userId);
+
     public function isUserStudyPlanGenerated($userId, $courseId);
+
+    public function getPlanDetailByPlanIdAndStudyDate($planId, $studyDate);
+
+    public function updatePlanDetailTasks($id, $tasks);
+
+    public function updatePlanDetailLearned($ids);
 }

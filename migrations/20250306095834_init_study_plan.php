@@ -32,7 +32,7 @@ class InitStudyPlan extends Migration
               `planId` INT(11) NOT NULL COMMENT '学习计划ID',
               `courseId` INT(11) NOT NULL COMMENT '教学计划ID',
               `studyDate` VARCHAR(16) NOT NULL COMMENT '学习日期',
-              `taskIds` TEXT NOT NULL COMMENT '当日任务ids',
+              `tasks` TEXT NOT NULL COMMENT '当日任务',
               `learned` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否学完',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
