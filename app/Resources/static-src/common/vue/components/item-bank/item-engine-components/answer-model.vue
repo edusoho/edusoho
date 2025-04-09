@@ -1,6 +1,6 @@
 <template>
   <div class="ibs-engine">
-    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="((mode === 'do' && answerRecord.exam_mode == '0') || mode === 'report') && aiAgentEnabled ? 'hover' : 'manual'">
+    <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="showTeacherQuestion() ? 'hover' : 'manual'">
       <template slot="content">
         <div class="ai-agent-popover-content">
           <button class="ai-agent-button" @click="showAgentSdk"><span>请教小知老师解题思路～</span></button>
@@ -349,7 +349,7 @@ export default {
     },
   },
   mounted() {
-    console.log('---------', this.mode);
+    console.log('---------', this.answerRecord);
     this.aiAgentEnabled = window.parent.document.getElementById('aiAgentToken')?.value
     // 判断是否被收藏
     this.isTag = this.section_responses[0]?.item_responses[
@@ -408,6 +408,14 @@ export default {
         console.log(err)
       })
     },
+    showTeacherQuestion() {
+      if (this.mode === 'report') {
+        return true;
+      }
+      if (this.mode === 'do') {
+        return !((this.answerRecord.exam_mode == '0' || this.answerRecord.exam_mode == '1') && Number(this.answerRecord.limited_time));
+      }
+    },
     replaceHtmlSpace(htmlStr) {
       return htmlStr ? htmlStr.replace(/ /g, " ") : "";
     },
@@ -449,7 +457,6 @@ export default {
     },
     lookAnalysis() {
       this.canShowAnalysis = !this.canShowAnalysis;
-      // this.$emit("setMaterialAnalysis", this.canShowAnalysis, this.keys);
     },
     prepareStudentAiAnalysis(gen) {
       this.$emit('prepareStudentAiAnalysis', gen);
