@@ -26,7 +26,7 @@ class AnswerRecordQuestionText extends AbstractResource
         $scoreRule = array_column($assessmentItem['score_rule'], null, 'question_id');
 
         return [
-            'content' => "{$scoreRule[$questionId]['seq']}、{$this->flattenMain($item['type'], $question)}",
+            'content' => $this->makeContent($item['type'], $scoreRule[$questionId]['seq'], $question),
             'question' => "{$this->flattenMain($item['type'], $question)}{$this->flattenAnswer($item['type'], $question)}{$this->flattenAnalysis($question)}",
         ];
     }
@@ -47,6 +47,31 @@ class AnswerRecordQuestionText extends AbstractResource
         }
 
         return $this->getSectionItemService()->getItemByAssessmentIdAndItemId($answerRecord['assessment_id'], $item['id']);
+    }
+
+    private function makeContent($type, $seq, $question)
+    {
+        if ('material' == $type) {
+            $stem = $question['material'];
+        } elseif ('fill' == $type) {
+            $stem = str_replace('[[]]', '__', $question['stem']);
+        } else {
+            $stem = $question['stem'];
+        }
+        $content = "**{$this->chineseNames[$type]}**  \n{$seq}、{$stem}";
+        if ('material' == $type) {
+            $type = $this->modeToType[$question['answer_mode']];
+            $stem = 'fill' == $type ? str_replace('[[]]', '__', $question['stem']) : $question['stem'];
+            $content .= "  \n[{$this->chineseNames[$type]}]{$stem}";
+        }
+        if (in_array($type, ['single_choice', 'choice', 'uncertain_choice'])) {
+            $responsePoints = array_column($question['response_points'], 'radio') ?: array_column($question['response_points'], 'checkbox');
+            foreach ($responsePoints as $responsePoint) {
+                $content .= "  \n{$responsePoint['val']}. {$responsePoint['text']}";
+            }
+        }
+
+        return $content;
     }
 
     /**

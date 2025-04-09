@@ -17,12 +17,11 @@ trait QuestionFlatTrait
         }
 
         if (in_array($type, ['single_choice', 'choice', 'uncertain_choice'])) {
+            $content .= $question['stem'];
             $responsePoints = array_column($question['response_points'], 'radio') ?: array_column($question['response_points'], 'checkbox');
-            $options = [];
             foreach ($responsePoints as $responsePoint) {
-                $options[] = "{$responsePoint['val']}. {$responsePoint['text']}";
+                $content .= "  \n{$responsePoint['val']}. {$responsePoint['text']}";
             }
-            $content .= $question['stem']."  \n".implode("  \n", $options);
         }
         if (in_array($type, ['determine', 'essay'])) {
             $content .= $question['stem'];
