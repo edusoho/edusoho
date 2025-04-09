@@ -524,6 +524,7 @@ export default {
       }
     })
     this.setSwiperHeight();
+    this.getQuestion();
     this.tryInitAIAgentSdk();
   },
   methods: {
@@ -553,8 +554,7 @@ export default {
           sdk.removeShortcut('plan.create');
           const btn = document.getElementById('agent-sdk-floating-button');
           if (!btn) return;
-          btn.addEventListener('click', async () => {
-            await this.getQuestion();
+          btn.addEventListener('click', () => {
             sdk.showReminder({
               title: "遇到问题啦？",
               content: "小知老师来为你理清解题思路～",
@@ -732,6 +732,7 @@ export default {
       }
 
       if (this.itemIndex === 0 && this.questionIndex === 0) {
+        await this.getQuestion();
         return;
       }
       if (this.questionIndex === 0) {
@@ -740,6 +741,7 @@ export default {
       } else {
         this.questionIndex -= 1;
       }
+      await this.getQuestion();
     },
     async slideNext(flag) {
       if (!this.touchable && !flag) {
@@ -754,6 +756,7 @@ export default {
       const isLastItem = this.itemIndex >= this.items.length - 1;
       const isLastQuestion = this.questionIndex >= this.items[this.itemIndex].questions.length - 1;
       if (isLastItem && isLastQuestion) {
+        await this.getQuestion();
         return;
       }
       if (isLastQuestion) {
@@ -762,6 +765,7 @@ export default {
       } else {
         this.questionIndex += 1;
       }
+      await this.getQuestion();
     },
     goBrushResult() {
       this.isLeave = true;
