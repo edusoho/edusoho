@@ -538,17 +538,17 @@ export default {
           const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
           }, 80, 20,true);
-          if (this.mode === 'do') {
+          if (this.mode === 'do' && !Number(this.answerRecord.limited_time)) {
             sdk.showReminder({
               title: "Hi，我是小知老师～",
               content: "我将在你答题过程中随时为你答疑解惑",
-              duration: 2000,
+              duration: 5000,
             });
-          } else {
+          } else if (this.mode === 'report') {
             sdk.showReminder({
               title: "战绩新鲜出炉",
               content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
-              duration: 2000,
+              duration: 5000,
             });
           }
           const btn = document.getElementById('agent-sdk-floating-button');
