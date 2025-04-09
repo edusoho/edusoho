@@ -15,6 +15,12 @@ class RegisterPushEveningLearnNoticeJobCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $job = $this->getSchedulerService()->getJobByName('PushEveningLearnNoticeJob');
+        if (!empty($job)) {
+            $output->writeln('<info>Job已经注册过了</info>');
+
+            return;
+        }
         $this->getSchedulerService()->register([
             'name' => 'PushEveningLearnNoticeJob',
             'expression' => '0 20 * * *',

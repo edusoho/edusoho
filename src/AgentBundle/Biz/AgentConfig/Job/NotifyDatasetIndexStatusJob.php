@@ -19,7 +19,7 @@ class NotifyDatasetIndexStatusJob extends AbstractJob
             if (empty($dataset)) {
                 continue;
             }
-            if (empty($dataset['indexing'])) {
+            if (empty($dataset['indexing']) || !empty($dataset['failedCount'])) {
                 $this->getAgentConfigService()->markIndexFinished($agentConfig['id']);
                 $course = $this->getCourseService()->getCourse($agentConfig['courseId']);
                 $this->getNotificationService()->batchNotify($course['teacherIds'], 'dataset-index', [

@@ -10,13 +10,20 @@ class StudyPlanDetailDaoImpl extends AdvancedDaoImpl implements StudyPlanDetailD
 {
     protected $table = 'study_plan_detail';
 
+    public function getByPlanIdAndStudyDate($planId, $studyDate)
+    {
+        return $this->getByFields(['planId' => $planId, 'studyDate' => $studyDate]);
+    }
+
     public function declares()
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
-            'serializes' => ['taskIds' => 'json'],
+            'serializes' => ['tasks' => 'json'],
             'conditions' => [
+                'id IN (:ids)',
+                'planId = :planId',
                 'studyDate = :studyDate',
                 'learned = :learned',
                 'courseId IN (:courseIds)',

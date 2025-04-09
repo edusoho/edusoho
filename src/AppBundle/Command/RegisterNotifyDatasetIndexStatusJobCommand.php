@@ -15,6 +15,12 @@ class RegisterNotifyDatasetIndexStatusJobCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $job = $this->getSchedulerService()->getJobByName('NotifyDatasetIndexStatusJob');
+        if (!empty($job)) {
+            $output->writeln('<info>Job已经注册过了</info>');
+
+            return;
+        }
         $this->getSchedulerService()->register([
             'name' => 'NotifyDatasetIndexStatusJob',
             'expression' => '*/30 * * * *',

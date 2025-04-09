@@ -127,14 +127,19 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
 
     public function createPlanDetails($planId, $studyDates)
     {
+        $this->getStudyPlanDetailDao()->batchDelete(['planId' => $planId]);
         $plan = $this->getStudyPlanDao()->get($planId);
         $details = [];
         foreach ($studyDates as $studyDate => $data) {
+            $tasks = [];
+            foreach ($data['tasks'] as $task) {
+                $tasks[$task['id']] = $task['duration'] * 3600;
+            }
             $details[] = [
                 'planId' => $planId,
                 'courseId' => $plan['courseId'],
                 'studyDate' => $studyDate,
-                'taskIds' => array_column($data['tasks'], 'id'),
+                'tasks' => $tasks,
             ];
         }
         $this->getStudyPlanDetailDao()->batchCreate($details);
@@ -150,11 +155,34 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         return $this->getStudyPlanDao()->findByIds($ids);
     }
 
+    public function getPlanByCourseIdAndUserId($courseId, $userId)
+    {
+        return $this->getStudyPlanDao()->getStudyPlanByUserIdAndCourseId($userId, $courseId);
+    }
+
     public function isUserStudyPlanGenerated($userId, $courseId)
     {
-        $studyPlan = $this->getStudyPlanDao()->getStudyPlanByUserIdAndCourseId($userId, $courseId);
+        $studyPlan = $this->getPlanByCourseIdAndUserId($courseId, $userId);
 
         return !empty($studyPlan);
+    }
+
+    public function getPlanDetailByPlanIdAndStudyDate($planId, $studyDate)
+    {
+        return $this->getStudyPlanDetailDao()->getByPlanIdAndStudyDate($planId, $studyDate);
+    }
+
+    public function updatePlanDetailTasks($id, $tasks)
+    {
+        $this->getStudyPlanDetailDao()->update($id, ['tasks' => $tasks]);
+    }
+
+    public function updatePlanDetailLearned($ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getStudyPlanDetailDao()->update(['ids' => $ids], ['learned' => 1]);
     }
 
     private function convertToMarkdown($params)
