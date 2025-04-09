@@ -403,7 +403,7 @@ export default {
             question: res.question,
           }
         }
-        window.parent.agentSdk.teacherQuestion(res.content, workflow);
+        window.parent.agentSdk.chat(res.content, workflow);
       }).fail((err) => {
         console.log(err)
       })
@@ -412,9 +412,7 @@ export default {
       if (this.mode === 'report') {
         return true;
       }
-      if (this.mode === 'do') {
-        return !((this.answerRecord.exam_mode == '0' || this.answerRecord.exam_mode == '1') && Number(this.answerRecord.limited_time));
-      }
+      return this.mode === 'do' && !Number(this.answerRecord.limited_time);
     },
     replaceHtmlSpace(htmlStr) {
       return htmlStr ? htmlStr.replace(/ /g, " ") : "";
