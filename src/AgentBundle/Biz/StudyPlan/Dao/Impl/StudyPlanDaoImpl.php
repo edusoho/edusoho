@@ -14,6 +14,11 @@ class StudyPlanDaoImpl extends GeneralDaoImpl implements StudyPlanDao
         return $this->getByFields(['userId' => $userId, 'courseId' => $courseId]);
     }
 
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return [

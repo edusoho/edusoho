@@ -41,26 +41,27 @@ class PlanGenerate extends AbstractWorkflow
             ];
         }
         $tasks = $this->scheduleTasks($inputs, $tasks);
-        $this->getStudyPlanService()->generatePlan([
+        $plan = $this->getStudyPlanService()->generatePlan([
             'courseId' => $inputs['courseId'],
             'startDate' => empty($inputs['startDate']) ? date('Y-m-d') : $inputs['startDate'],
             'endDate' => empty($inputs['endDate']) ? end($tasks)['date'] : $inputs['endDate'],
             'weekDays' => $inputs['weekDays'],
             'dailyAvgTime' => empty($inputs['dailyLearnDuration']) ? 0 : ($inputs['dailyLearnDuration'] * 60),
         ]);
+        $studyDates = $this->groupTasksByDate($tasks);
+        $this->getStudyPlanService()->createPlanDetails($plan['id'], $studyDates);
 
         return [
             'ok' => true,
             'outputs' => [
-                'content' => $this->makeMarkdown($inputs, $tasks),
+                'content' => $this->makeMarkdown($inputs, $studyDates, $tasks),
             ],
         ];
     }
 
-    private function makeMarkdown($inputs, $tasks)
+    private function makeMarkdown($inputs, $studyDates, $tasks)
     {
         $course = $this->getCourseService()->getCourse($inputs['courseId']);
-        $studyDates = $this->groupTasksByDate($tasks);
         $studyDateCount = count($studyDates);
         $taskCount = count($tasks);
         $learnHour = array_sum(array_column($tasks, 'duration'));

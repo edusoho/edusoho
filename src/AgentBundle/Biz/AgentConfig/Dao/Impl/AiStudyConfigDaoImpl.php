@@ -29,6 +29,11 @@ class AiStudyConfigDaoImpl extends GeneralDaoImpl implements AiStudyConfigDao
         return $this->findByFields(['indexing' => 1]);
     }
 
+    public function findActive()
+    {
+        return $this->findByFields(['isActive' => 1]);
+    }
+
     public function declares()
     {
         return [

@@ -14,5 +14,11 @@ interface StudyPlanService
 
     public function generatePlan($data);
 
+    public function createPlanDetails($planId, $studyDates);
+
+    public function searchPlanDetails($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function findPlansByIds($ids);
+
     public function isUserStudyPlanGenerated($userId, $courseId);
 }

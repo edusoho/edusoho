@@ -30,14 +30,15 @@ class InitStudyPlan extends Migration
             CREATE TABLE IF NOT EXISTS `study_plan_detail` (
               `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
               `planId` INT(11) NOT NULL COMMENT '学习计划ID',
-              `studyDate` BIGINT NOT NULL COMMENT '学习日期',
-              `taskNames` TEXT NOT NULL COMMENT '当日任务名称（多个用逗号分隔）',
-              `totalTime` BIGINT NOT NULL COMMENT '当日学习总时长（分钟）',
+              `courseId` INT(11) NOT NULL COMMENT '教学计划ID',
+              `studyDate` VARCHAR(16) NOT NULL COMMENT '学习日期',
+              `taskIds` TEXT NOT NULL COMMENT '当日任务ids',
+              `learned` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否学完',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
               KEY `idxPlanId` (`planId`),
-              KEY `idxStudyDate` (`studyDate`)
+              KEY `idxStudyDateCourseId` (`studyDate`, `courseId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习计划每日任务详情表';
 
             CREATE TABLE IF NOT EXISTS `ai_study_config` (
