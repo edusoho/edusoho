@@ -26,7 +26,22 @@ export default {
       });
       chatMetaData.workerUrl = `${window.location.origin}/agent_worker`;
       sdk.setChatMetadata(chatMetaData);
-      sdk.on('clickLink', (data) => {});
+      sdk.on('clickLink', (data) => {
+        const regex = /\/course\/(\d+)\/task\/(\d+)/;
+        const matches = data.match(regex);
+        const courseId = matches[1];
+        const taskId = matches[2];
+        this.$router.push({
+          name: 'course',
+          params: {
+            id: courseId
+          }
+        })
+        this.$nextTick(() => {
+          const taskElement = document.getElementById(taskId)
+          taskElement.click();
+        })
+      });
       sdk.boot();
       window.aiAgentSdk = sdk;
       return sdk;
