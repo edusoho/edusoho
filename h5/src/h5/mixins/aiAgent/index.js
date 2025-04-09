@@ -41,6 +41,7 @@ export default {
           const taskElement = document.getElementById(taskId)
           taskElement.click();
         })
+        sdk.hideIframe();
       });
       sdk.boot();
       window.aiAgentSdk = sdk;
