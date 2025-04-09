@@ -1255,6 +1255,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if ([
+    'course',
     'exerciseDo',
     'exerciseAnalysis',
     'homeworkDo',
@@ -1265,10 +1266,6 @@ router.beforeEach(async (to, from, next) => {
     'brush_report',
     'brush_do',
   ].includes(from.name)) {
-    if (window.aiAgentSdk) {
-      window.aiAgentSdk.shutdown();
-    }
-  } else if (from.name === 'course' && to.name !== 'course') {
     if (window.aiAgentSdk) {
       window.aiAgentSdk.shutdown();
     }
