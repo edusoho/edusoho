@@ -1255,18 +1255,20 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if ([
-    'course',
     'exerciseDo',
     'exerciseAnalysis',
     'homeworkDo',
     'homeworkAnalysis',
-    'course_web',
     'testpaperDo',
     'testpaperAnalysis',
     'item_bank_exercise',
     'brush_report',
     'brush_do',
   ].includes(from.name)) {
+    if (window.aiAgentSdk) {
+      window.aiAgentSdk.shutdown();
+    }
+  } else if (from.name === 'course' && to.name !== 'course') {
     if (window.aiAgentSdk) {
       window.aiAgentSdk.shutdown();
     }
