@@ -97,10 +97,11 @@ import { compareNowTime, timeStampFormatTime } from "@/src/utils/date-toolkit";
 import { Dialog, Toast } from "vant";
 import itemBankMixins from "@/src/mixins/itemBankMixins.js"
 import Api from '@/api';
+import aiAgent from '@/mixins/aiAgent';
 
 export default {
   name: "item-engine",
-  mixins: [itemBankMixins],
+  mixins: [itemBankMixins, aiAgent],
   components: {
     ibsItem,
     card,
@@ -178,6 +179,10 @@ export default {
 			reviewedQuestion: [],
 			fillStatus: [],
 			EssayRadio: [],
+      question: {},
+      itemIndex: 0,
+      questionIndex: 0,
+      aiAgentSdk: null,
     };
   },
   beforeDestroy() {
@@ -196,7 +201,7 @@ export default {
     }
   },
   async mounted() {
-		this.$nextTick(()=> {
+    this.$nextTick(()=> {
 			this.items.forEach((item,index) => {
 				item.questions.forEach((sub)=> {
 					this.allItems.push(sub);
@@ -206,7 +211,8 @@ export default {
 			this.allItems.forEach((item, index) => {
         this.iscando[index] = this.exerciseInfo.filter(subItem => subItem.questionId + '' === item.id).length <= 0;
 			});
-
+      this.getQuestion();
+      this.tryInitAIAgentSdk();
 		})
     if (compareNowTime(Number(this.answerScene.start_time) * 1000)) {
       this.noStartTool();
@@ -217,8 +223,48 @@ export default {
     if (this.brushDo.exerciseModes === '0') {
       this.countTime();
     }
+
   },
   methods: {
+    tryInitAIAgentSdk() {
+      Api.getItemBankExercise({
+        query: {
+          id: this.$route.query.exerciseId,
+        }
+      }).then(res => {
+        if (res.aiTeacherDomain) {
+          this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+          }, 80, 20,true);
+          this.aiAgentSdk.showReminder({
+            title: "Hi，我是小知老师～",
+            content: "我将在你答题过程中随时为你答疑解惑",
+            duration: 5000,
+          });
+          this.aiAgentSdk.removeShortcut('plan.create');
+          const btn = document.getElementById('agent-sdk-floating-button');
+          if (!btn) return;
+          btn.addEventListener('click', () => {
+            this.aiAgentSdk.showReminder({
+              title: "遇到问题啦？",
+              content: "小知老师来为你理清解题思路～",
+              buttonContent: 'teacher.question',
+              workflow: {
+                workflow: 'teacher.question.idea',
+                inputs: {
+                  domainId: res.aiTeacherDomain,
+                  question: this.items[this.itemIndex].questions[this.questionIndex].id,
+                }
+              },
+              chatContent: this.question.content,
+            });
+          });
+        }
+      })
+        .catch(err => {
+          console.log(err);
+        })
+    },
 		changeIsCando(index, flag) {
 			this.iscando[index] = flag
 		},

@@ -341,12 +341,10 @@ import sectionTitle from "./component/section-title.vue";
 import _ from 'lodash';
 import { Toast } from 'vant';
 import Api from '@/api';
-import aiAgent from '@/mixins/aiAgent';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
 export default {
-  mixins: [aiAgent],
   name: "ibs-item",
   components: {
     sectionTitle,
@@ -370,8 +368,6 @@ export default {
       showShadow: '',
       width: WINDOWWIDTH,
       question: {},
-      itemIndex: 0,
-      questionIndex: 0,
     };
   },
   props: {
@@ -526,61 +522,6 @@ export default {
     this.setSwiperHeight();
   },
   methods: {
-    tryInitAIAgentSdk() {
-      Api.getItemBankExercise({
-        query: {
-          id: this.$route.query.exerciseId,
-        }
-      }).then(res => {
-        if (res.aiTeacherDomain) {
-          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
-            domainId: res.aiTeacherDomain,
-          }, 80, 20,true);
-          if (this.mode === 'do' && !Number(this.answerRecord.limited_time)) {
-            sdk.showReminder({
-              title: "Hi，我是小知老师～",
-              content: "我将在你答题过程中随时为你答疑解惑",
-              duration: 5000,
-            });
-          } else if (this.mode === 'report') {
-            sdk.showReminder({
-              title: "战绩新鲜出炉",
-              content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
-              duration: 5000,
-            });
-          }
-          sdk.removeShortcut('plan.create');
-          const btn = document.getElementById('agent-sdk-floating-button');
-          if (!btn) return;
-          btn.addEventListener('click', () => {
-            sdk.showReminder({
-              title: "遇到问题啦？",
-              content: "小知老师来为你理清解题思路～",
-              buttonContent: 'teacher.question',
-              workflow: {
-                workflow: this.mode === 'do' ? 'teacher.question.idea' : 'teacher.question.analysis',
-                inputs: {
-                  domainId: res.aiTeacherDomain,
-                  question: this.item.questions[this.questionIndex].id,
-                }
-              },
-              chatContent: this.question.content,
-            });
-          });
-        }
-      })
-        .catch(err => {
-          console.log(err);
-        })
-    },
-    async getQuestion() {
-      this.question = await Api.getExerciseQuestion({
-        query: {
-          answerRecordId: this.answerRecord.id,
-          questionId: this.items[this.itemIndex].questions[this.questionIndex].id,
-        },
-      })
-    },
     changeReviewList(status) {
       this.$emit('changeStatus', status)
     },

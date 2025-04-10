@@ -304,6 +304,7 @@ export default {
       myAnswer: null,
       touchable: true,
       question: {},
+      aiAgentSdk: null,
     };
   },
   computed: {
@@ -369,23 +370,23 @@ export default {
         },
       }).then(res => {
         if (!res.aiTeacherEnabled) return;
-        const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+         this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
           domainId: res.aiTeacherDomain,
           courseId: res.courseId,
           courseName:res.courseSetTitle,
           lessonId: this.$route.query.targetId
         }, 80, 20, true);
         if (res.studyPlanGenerated) {
-          sdk.removeShortcut('plan.create')
+          this.aiAgentSdk.removeShortcut('plan.create')
         }
         if (this.canDo) {
-          sdk.showReminder({
+          this.aiAgentSdk.showReminder({
             title: "Hi，我是小知老师～",
             content: "我将在你答题过程中随时为你答疑解惑",
             duration: 5000,
           });
         } else {
-          sdk.showReminder({
+          this.aiAgentSdk.showReminder({
             title: "战绩新鲜出炉！",
             content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
             duration: 5000,
@@ -393,7 +394,7 @@ export default {
         }
         const btn = document.getElementById('agent-sdk-floating-button');
         btn?.addEventListener('click', () => {
-          sdk.showReminder({
+          this.aiAgentSdk.showReminder({
             title: "遇到问题啦？",
             content: "小知老师来为你理清解题思路～",
             buttonContent: 'teacher.question',
@@ -437,6 +438,7 @@ export default {
       if (this.currentIndex == 0 || !this.touchable) {
         return;
       }
+      this.aiAgentSdk.hideReminder();
       this.$refs.swipe.swipeTo(this.currentIndex - 1);
     },
     // 右滑动
@@ -452,6 +454,7 @@ export default {
       if (this.currentIndex == this.info.length - 1 || !this.touchable) {
         return;
       }
+      this.aiAgentSdk.hideReminder();
       this.$refs.swipe.swipeTo(this.currentIndex + 1);
     },
     // 题目类型过滤

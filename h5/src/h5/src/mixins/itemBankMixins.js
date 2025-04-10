@@ -1,4 +1,5 @@
 import { ImagePreview } from 'vant'
+import Api from '@/api';
 
 export default {
   computed: {
@@ -7,10 +8,44 @@ export default {
     }
   },
   methods: {
-    itemSlideNext() {
+    async getQuestion() {
+      this.question = await Api.getExerciseQuestion({
+        query: {
+          answerRecordId: this.answerRecord.id,
+          questionId: this.items[this.itemIndex].questions[this.questionIndex].id,
+        },
+      })
+    },
+    async itemSlideNext() {
+      const isLastItem = this.itemIndex >= this.items.length - 1;
+      const isLastQuestion = this.questionIndex >= this.items[this.itemIndex].questions.length - 1;
+      if (isLastItem && isLastQuestion) {
+        await this.getQuestion();
+        return;
+      }
+      if (isLastQuestion) {
+        this.itemIndex += 1;
+        this.questionIndex = 0;
+      } else {
+        this.questionIndex += 1;
+      }
+      await this.getQuestion();
+      this.aiAgentSdk.hideReminder();
       this.$refs.mySwiper.$swiper.slideNext();
     },
-    itemSlidePrev() {
+    async itemSlidePrev() {
+      if (this.itemIndex === 0 && this.questionIndex === 0) {
+        await this.getQuestion();
+        return;
+      }
+      if (this.questionIndex === 0) {
+        this.itemIndex -= 1;
+        this.questionIndex = this.items[this.itemIndex].questions.length - 1;
+      } else {
+        this.questionIndex -= 1;
+      }
+      await this.getQuestion();
+      this.aiAgentSdk.hideReminder();
       this.$refs.mySwiper.$swiper.slidePrev();
     },
     async slideNextTransitionEnd() {
