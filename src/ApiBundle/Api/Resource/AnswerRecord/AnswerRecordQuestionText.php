@@ -71,7 +71,7 @@ class AnswerRecordQuestionText extends AbstractResource
             }
         }
 
-        return $content;
+        return strip_tags($content);
     }
 
     /**
