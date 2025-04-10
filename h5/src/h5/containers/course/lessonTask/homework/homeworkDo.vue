@@ -17,7 +17,7 @@
       :show-score="false"
       :slide-index.sync="slideIndex"
       :all="info.length"
-      :record-id="recordId"
+      :ai-agent-record-id="recordId"
     />
 
     <!-- 引导页 -->

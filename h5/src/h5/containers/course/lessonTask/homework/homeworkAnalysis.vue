@@ -17,7 +17,7 @@
       :can-do="canDo"
       :all="allList.length"
       :exerciseInfo="result"
-      :record-id="recordId"
+      :ai-agent-record-id="recordId"
     />
 
     <!-- 底部 -->

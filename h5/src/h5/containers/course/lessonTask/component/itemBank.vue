@@ -285,7 +285,7 @@ export default {
       type: String,
       default: ''
     },
-    recordId: {
+    aiAgentRecordId: {
       type: String,
       default: ''
     }
@@ -362,7 +362,7 @@ export default {
   methods: {
     ...mapActions(['setCloudAddress']),
     tryInitAIAgentSdk() {
-      if (!this.recordId) return;
+      if (!this.aiAgentRecordId) return;
       Api.meCourseMember({
         query: {
           id: this.$route.query.courseId,
@@ -408,10 +408,10 @@ export default {
       })
     },
     async getQuestion() {
-      if (this.recordId) {
+      if (this.aiAgentRecordId) {
         this.question = await Api.getExerciseQuestion({
           query: {
-            answerRecordId: this.recordId,
+            answerRecordId: this.aiAgentRecordId,
             questionId: this.info[this.currentIndex].id,
           },
         })
@@ -424,10 +424,10 @@ export default {
     },
     // 左滑动
     async last() {
-      if (this.recordId) {
+      if (this.aiAgentRecordId) {
         this.question = await Api.getExerciseQuestion({
           query: {
-            answerRecordId: this.recordId,
+            answerRecordId: this.aiAgentRecordId,
             questionId: this.info[this.currentIndex - 1].id,
           },
         })
@@ -439,10 +439,10 @@ export default {
     },
     // 右滑动
     async next() {
-      if (this.recordId) {
+      if (this.aiAgentRecordId) {
         this.question = await Api.getExerciseQuestion({
           query: {
-            answerRecordId: this.recordId,
+            answerRecordId: this.aiAgentRecordId,
             questionId: this.info[this.currentIndex + 1].id,
           },
         })
