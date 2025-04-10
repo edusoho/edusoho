@@ -182,6 +182,11 @@ class AIService extends BaseService
         return $this->request('POST', '/v1/message/push', ['domainId' => $domainId, 'userId' => $userId, 'contentType' => $contentType, 'content' => $content, 'push' => $push]);
     }
 
+    public function batchPushMessage(array $params)
+    {
+        return $this->request('POST', '/v1/message/batchPush', $params);
+    }
+
     private function makeClientToken($lifetime)
     {
         $payload = array(
