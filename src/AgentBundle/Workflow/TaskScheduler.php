@@ -50,7 +50,7 @@ class TaskScheduler
         $this->dateCursor = new DateTime($this->startDate);
         $dailyDuration = $this->calculateDailyDuration();
         while (!$this->isFinished()) {
-            $this->currentDateDuration = $dailyDuration;
+            $this->currentDateDuration = $dailyDuration * 3600;
             $this->scheduleTimeLimitTasks();
             $this->scheduleNoLimitTasks();
             $this->dateCursor->modify('+1 day');
@@ -119,35 +119,35 @@ class TaskScheduler
     private function scheduleTimeLimitTasks()
     {
         while ($this->shouldScheduleCurrentTimeLimitTask()) {
-            $taskDuration = $this->formatDuration($this->timeLimitTasks[$this->timeLimitTaskCursor]['duration']);
+            $taskDuration = $this->timeLimitTasks[$this->timeLimitTaskCursor]['duration'];
             $this->scheduledTasks[] = [
                 'id' => $this->timeLimitTasks[$this->timeLimitTaskCursor]['id'],
                 'courseId' => $this->inputs['courseId'],
                 'title' => $this->timeLimitTasks[$this->timeLimitTaskCursor]['title'],
                 'date' => $this->dateCursor->format('Y-m-d'),
-                'duration' => $taskDuration,
+                'duration' => $this->formatDuration($taskDuration),
             ];
             $this->timeLimitTaskCursor++;
-            $this->currentDateDuration = round($this->currentDateDuration - $taskDuration, 1);
+            $this->currentDateDuration = $this->currentDateDuration - $taskDuration;
         }
     }
 
     private function scheduleNoLimitTasks()
     {
         while ($this->shouldScheduleCurrentNoLimitTask()) {
-            $taskDuration = $this->formatDuration($this->noLimitTasks[$this->noLimitTaskCursor]['duration']);
+            $taskDuration = $this->noLimitTasks[$this->noLimitTaskCursor]['duration'];
             $this->scheduledTasks[] = [
                 'id' => $this->noLimitTasks[$this->noLimitTaskCursor]['id'],
                 'courseId' => $this->inputs['courseId'],
                 'title' => $this->noLimitTasks[$this->noLimitTaskCursor]['title'],
                 'date' => $this->dateCursor->format('Y-m-d'),
-                'duration' => min($taskDuration, $this->currentDateDuration),
+                'duration' => min($this->formatDuration($taskDuration), $this->formatDuration($this->currentDateDuration)),
             ];
             if ($this->currentDateDuration < $taskDuration) {
-                $this->noLimitTasks[$this->noLimitTaskCursor]['duration'] -= $this->currentDateDuration * 3600;
+                $this->noLimitTasks[$this->noLimitTaskCursor]['duration'] -= $this->currentDateDuration;
                 $this->currentDateDuration = 0;
             } else {
-                $this->currentDateDuration = round($this->currentDateDuration - $taskDuration, 1);
+                $this->currentDateDuration -= $taskDuration;
                 $this->noLimitTaskCursor++;
             }
         }
