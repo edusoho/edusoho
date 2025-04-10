@@ -19,6 +19,7 @@
       :is-exercise="true"
       :mode="mode"
       :exerciseInfo="result"
+      :record-id="result.id"
     />
 
     <!-- 底部 -->
