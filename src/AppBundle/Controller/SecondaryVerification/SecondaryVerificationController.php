@@ -20,7 +20,6 @@ class SecondaryVerificationController extends BaseController
             $this->getSettingService()->set('cloud_sms', $cloudSmsSetting);
         }
         $params = $request->query->all();
-        file_put_contents('/tmp/jc123', json_encode($this->getMobile($params['exportFileName'])), 8);
 
         return $this->render(
             'secondary-verification/secondary-verification-modal.html.twig',
