@@ -50,7 +50,7 @@ class TaskScheduler
         $this->dateCursor = new DateTime($this->startDate);
         $dailyDuration = $this->calculateDailyDuration();
         while (!$this->isFinished()) {
-            $this->currentDateDuration = $dailyDuration * 3600;
+            $this->currentDateDuration = $dailyDuration;
             $this->scheduleTimeLimitTasks();
             $this->scheduleNoLimitTasks();
             $this->dateCursor->modify('+1 day');
@@ -101,7 +101,7 @@ class TaskScheduler
         $totalSeconds = array_sum(array_column($tasks, 'duration'));
         $studyDateCount = DateToolkit::countWeekdaysInDateRange($this->startDate, $this->inputs['endDate'], $this->inputs['weekDays']);
 
-        return $this->formatDuration($totalSeconds / $studyDateCount);
+        return max(round($totalSeconds / $studyDateCount), 360);
     }
 
     private function isFinished()
