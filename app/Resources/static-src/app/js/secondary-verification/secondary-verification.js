@@ -30,7 +30,7 @@ export default class MobileBind {
 
     $('.js-export-classroom-student-btn').on('click', function(e) {
       e.preventDefault();
-      self.exportData();
+      self.exportClassroomData();
     });
 
     $('.js-export-user-btn').on('click', function (e) {
@@ -81,10 +81,13 @@ export default class MobileBind {
       }
     });
   }
-  exportData() {
+  exportClassroomData(start, fileName) {
     var paramsStr = $('#params').val(); // 获取 JSON 字符串
     var params = JSON.parse(paramsStr); // 转成对象
-
+    if ((start != undefined) && (fileName != undefined)) {
+      params['start'] = start;
+      params['fileName'] = fileName;
+    }
     $.ajax({
       url: '/classroom/' + params['targetFormId'] + '/manage/student/export/student/datas',
       method: 'GET',
@@ -92,7 +95,7 @@ export default class MobileBind {
       success: function(response) {
         if (response.status === 'getData') {
           // 如果返回的是数据起点与文件名，递归导出或分页导出
-          exportDataChunk(response.start, response.fileName);
+          self.exportData(response.start, response.fileName);
         } else {
           // 否则直接跳转到下载链接
           window.location.href = '/classroom/' + params['targetFormId'] + '/manage/student/export?role=student&fileName=' + response.fileName;
