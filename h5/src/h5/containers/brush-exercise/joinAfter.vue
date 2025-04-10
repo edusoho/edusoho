@@ -83,6 +83,9 @@ export default {
             domainId: res.aiTeacherDomain,
           }, 20, 20, null);
         }
+        if (res.studyPlanGenerated) {
+          sdk.removeShortcut('plan.create')
+        }
       })
         .catch(err => {
           console.log(err);

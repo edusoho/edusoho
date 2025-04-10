@@ -105,9 +105,7 @@ export default {
             courseId: res.courseId,
             courseName: res.courseSetTitle,
           }, 60, null, null, true);
-          if (!res.studyPlanGenerated) {
-            //todo
-          } else {
+          if (res.studyPlanGenerated) {
             sdk.removeShortcut('plan.create')
           }
         }

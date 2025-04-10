@@ -375,7 +375,9 @@ export default {
           courseName:res.courseSetTitle,
           lessonId: this.$route.query.targetId
         }, 80, 20, true);
-        sdk.removeShortcut('plan.create');
+        if (res.studyPlanGenerated) {
+          sdk.removeShortcut('plan.create')
+        }
         if (this.canDo) {
           sdk.showReminder({
             title: "Hi，我是小知老师～",
