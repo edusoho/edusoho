@@ -359,6 +359,8 @@ export default {
       const q = childSwiper.$swiper.activeIndex;
       const question = this.assessment.sections[s].items[i].questions[q];
       this.items = this.wrongItems;
+      this.itemIndex = 0;
+      this.questionIndex = 0;
       if (currentItem.wrongIndex) {
         this.current = currentItem.wrongIndex;
         this.changeRenderItems(this.current);
