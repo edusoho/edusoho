@@ -362,58 +362,60 @@ export default {
   methods: {
     ...mapActions(['setCloudAddress']),
     tryInitAIAgentSdk() {
+      if (!this.recordId) return;
       Api.meCourseMember({
         query: {
           id: this.$route.query.courseId,
         },
       }).then(res => {
-        if (res.aiTeacherEnabled) {
-          const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
-            domainId: res.aiTeacherDomain,
-            courseId: res.courseId,
-            courseName:res.courseSetTitle,
-            lessonId: this.$route.query.targetId
-          }, 80, 20, true);
-          sdk.removeShortcut('plan.create');
-          if (this.canDo) {
-            sdk.showReminder({
-              title: "Hi，我是小知老师～",
-              content: "我将在你答题过程中随时为你答疑解惑",
-              duration: 5000,
-            });
-          } else {
-            sdk.showReminder({
-              title: "战绩新鲜出炉！",
-              content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
-              duration: 5000,
-            });
-          }
-          const btn = document.getElementById('agent-sdk-floating-button');
-          btn?.addEventListener('click', () => {
-            sdk.showReminder({
-              title: "遇到问题啦？",
-              content: "小知老师来为你理清解题思路～",
-              buttonContent: 'teacher.question',
-              workflow: {
-                workflow: 'teacher.question.analysis',
-                inputs: {
-                  domainId: res.aiTeacherDomain,
-                  question: this.question.question,
-                }
-              },
-              chatContent: this.question.content,
-            });
+        if (!res.aiTeacherEnabled) return;
+        const sdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+          domainId: res.aiTeacherDomain,
+          courseId: res.courseId,
+          courseName:res.courseSetTitle,
+          lessonId: this.$route.query.targetId
+        }, 80, 20, true);
+        sdk.removeShortcut('plan.create');
+        if (this.canDo) {
+          sdk.showReminder({
+            title: "Hi，我是小知老师～",
+            content: "我将在你答题过程中随时为你答疑解惑",
+            duration: 5000,
+          });
+        } else {
+          sdk.showReminder({
+            title: "战绩新鲜出炉！",
+            content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
+            duration: 5000,
           });
         }
+        const btn = document.getElementById('agent-sdk-floating-button');
+        btn?.addEventListener('click', () => {
+          sdk.showReminder({
+            title: "遇到问题啦？",
+            content: "小知老师来为你理清解题思路～",
+            buttonContent: 'teacher.question',
+            workflow: {
+              workflow: 'teacher.question.analysis',
+              inputs: {
+                domainId: res.aiTeacherDomain,
+                question: this.question.question,
+              }
+            },
+            chatContent: this.question.content,
+          });
+        });
       })
     },
     async getQuestion() {
-      this.question = await Api.getExerciseQuestion({
-        query: {
-          answerRecordId: this.recordId,
-          questionId: this.info[this.currentIndex].id,
-        },
-      })
+      if (this.recordId) {
+        this.question = await Api.getExerciseQuestion({
+          query: {
+            answerRecordId: this.recordId,
+            questionId: this.info[this.currentIndex].id,
+          },
+        })
+      }
     },
     changeswiper(index) {
       this.currentIndex = index;
@@ -422,12 +424,14 @@ export default {
     },
     // 左滑动
     async last() {
-      this.question = await Api.getExerciseQuestion({
-        query: {
-          answerRecordId: this.recordId,
-          questionId: this.info[this.currentIndex - 1].id,
-        },
-      })
+      if (this.recordId) {
+        this.question = await Api.getExerciseQuestion({
+          query: {
+            answerRecordId: this.recordId,
+            questionId: this.info[this.currentIndex - 1].id,
+          },
+        })
+      }
       if (this.currentIndex == 0 || !this.touchable) {
         return;
       }
@@ -435,12 +439,14 @@ export default {
     },
     // 右滑动
     async next() {
-      this.question = await Api.getExerciseQuestion({
-        query: {
-          answerRecordId: this.recordId,
-          questionId: this.info[this.currentIndex + 1].id,
-        },
-      })
+      if (this.recordId) {
+        this.question = await Api.getExerciseQuestion({
+          query: {
+            answerRecordId: this.recordId,
+            questionId: this.info[this.currentIndex + 1].id,
+          },
+        })
+      }
       if (this.currentIndex == this.info.length - 1 || !this.touchable) {
         return;
       }
