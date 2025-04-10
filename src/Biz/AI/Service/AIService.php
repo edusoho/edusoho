@@ -47,4 +47,6 @@ interface AIService
     public function deleteDocument($id);
 
     public function pushMessage(array $params);
+
+    public function batchPushMessage(array $params);
 }

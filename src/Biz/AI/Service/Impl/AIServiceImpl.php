@@ -173,6 +173,11 @@ class AIServiceImpl extends BaseService implements AIService
         return $this->getAIService()->pushMessgae($params['domainId'], $params['userId'], $params['contentType'], $params['content'], $params['push']);
     }
 
+    public function batchPushMessage(array $params)
+    {
+        return $this->getAIService()->batchPushMessage($params);
+    }
+
     private function recordNewAnswer($app, $inputs, $response)
     {
         $inputsHash = $this->makeHashForInputs($inputs);
