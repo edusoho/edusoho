@@ -524,8 +524,6 @@ export default {
       }
     })
     this.setSwiperHeight();
-    this.getQuestion();
-    this.tryInitAIAgentSdk();
   },
   methods: {
     tryInitAIAgentSdk() {
@@ -730,18 +728,6 @@ export default {
       if (!slide) {
         this.$emit("itemSlidePrev");
       }
-
-      if (this.itemIndex === 0 && this.questionIndex === 0) {
-        await this.getQuestion();
-        return;
-      }
-      if (this.questionIndex === 0) {
-        this.itemIndex -= 1;
-        this.questionIndex = this.items[this.itemIndex].questions.length - 1;
-      } else {
-        this.questionIndex -= 1;
-      }
-      await this.getQuestion();
     },
     async slideNext(flag) {
       if (!this.touchable && !flag) {
@@ -752,20 +738,6 @@ export default {
       if (!slide || flag) {
         this.$emit("itemSlideNext");
       }
-
-      const isLastItem = this.itemIndex >= this.items.length - 1;
-      const isLastQuestion = this.questionIndex >= this.items[this.itemIndex].questions.length - 1;
-      if (isLastItem && isLastQuestion) {
-        await this.getQuestion();
-        return;
-      }
-      if (isLastQuestion) {
-        this.itemIndex += 1;
-        this.questionIndex = 0;
-      } else {
-        this.questionIndex += 1;
-      }
-      await this.getQuestion();
     },
     goBrushResult() {
       this.isLeave = true;
