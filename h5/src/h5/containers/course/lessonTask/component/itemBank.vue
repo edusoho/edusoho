@@ -399,7 +399,7 @@ export default {
             content: "小知老师来为你理清解题思路～",
             buttonContent: 'teacher.question',
             workflow: {
-              workflow: 'teacher.question.analysis',
+              workflow: this.canDo ? 'teacher.question.idea' : 'teacher.question.analysis',
               inputs: {
                 domainId: res.aiTeacherDomain,
                 question: this.question.question,
