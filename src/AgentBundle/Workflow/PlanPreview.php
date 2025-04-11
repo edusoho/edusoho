@@ -37,11 +37,15 @@ class PlanPreview extends AbstractWorkflow
                 ],
             ];
         }
+        $tasks = $this->scheduleTasks($inputs, $tasks);
+        foreach ($tasks as &$task) {
+            $task['duration'] = $this->convertSecondsToCN($task['duration']);
+        }
 
         return [
             'ok' => true,
             'outputs' => [
-                'tasks' => $this->scheduleTasks($inputs, $tasks),
+                'tasks' => $tasks,
             ],
         ];
     }

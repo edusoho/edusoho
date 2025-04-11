@@ -117,4 +117,12 @@ class TimeMachine
 
         return $diff->d;
     }
+
+    public static function formatSecondsToZH($seconds)
+    {
+        $hours = intval($seconds / 3600);
+        $minutes = round(($seconds - $hours * 3600) / 60);
+
+        return (empty($hours) ? '' : "{$hours}小时") . (empty($minutes) ? '' : "{$minutes}分钟");
+    }
 }

@@ -125,7 +125,7 @@ class TaskScheduler
                 'courseId' => $this->inputs['courseId'],
                 'title' => $this->timeLimitTasks[$this->timeLimitTaskCursor]['title'],
                 'date' => $this->dateCursor->format('Y-m-d'),
-                'duration' => $this->formatDuration($taskDuration),
+                'duration' => max($taskDuration, 60),
             ];
             $this->timeLimitTaskCursor++;
             $this->currentDateDuration = $this->currentDateDuration - $taskDuration;
@@ -141,7 +141,7 @@ class TaskScheduler
                 'courseId' => $this->inputs['courseId'],
                 'title' => $this->noLimitTasks[$this->noLimitTaskCursor]['title'],
                 'date' => $this->dateCursor->format('Y-m-d'),
-                'duration' => min($this->formatDuration($taskDuration), $this->formatDuration($this->currentDateDuration)),
+                'duration' => min($taskDuration, $this->currentDateDuration),
             ];
             if ($this->currentDateDuration < $taskDuration) {
                 $this->noLimitTasks[$this->noLimitTaskCursor]['duration'] -= $this->currentDateDuration;
@@ -184,10 +184,5 @@ class TaskScheduler
         }
 
         return $this->currentDateDuration > 0;
-    }
-
-    private function formatDuration($seconds)
-    {
-        return max(round($seconds / 3600, 1), 0.1);
     }
 }
