@@ -144,6 +144,7 @@ export default {
   async mounted() {
     this.setSwiperHeight();
     this.getSectionResponses();
+    await this.getQuestion();
     this.tryInitAIAgentSdk();
   },
   methods: {
