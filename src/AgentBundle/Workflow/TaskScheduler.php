@@ -93,7 +93,7 @@ class TaskScheduler
     private function calculateDailyDuration()
     {
         if (empty($this->inputs['endDate'])) {
-            return $this->inputs['dailyLearnDuration'];
+            return $this->inputs['dailyLearnDuration'] * 3600;
         }
         $tasks = array_filter($this->tasks, function ($task) {
             return date('Y-m-d', $task['startTime']) < $this->inputs['endDate'];
