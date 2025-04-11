@@ -128,9 +128,9 @@ class AIService extends BaseService
         return $this->request('POST', '/v1/workflow/asyncRun', ['workflow' => $workflow, 'inputs' => $inputs, 'callback' => $callback]);
     }
 
-    public function createDataset($externalId, $name, $domainId, $autoIndex)
+    public function createDataset($extId, $name, $domainId, $autoIndex)
     {
-        return $this->request('POST', '/v1/dataset/create', ['externalId' => $externalId, 'name' => $name, 'domainId' => $domainId, 'autoIndex' => $autoIndex]);
+        return $this->request('POST', '/v1/dataset/create', ['extId' => $extId, 'name' => $name, 'domainId' => $domainId, 'autoIndex' => $autoIndex]);
     }
 
     public function getDataset($id)

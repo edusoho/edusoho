@@ -89,7 +89,7 @@ class StudyPlanEventSubscriber extends EventSubscriber
 
     private function getNextStudyDate($detail)
     {
-        $nextDetails = $this->getStudyPlanService()->searchPlanDetails(['planId' => $detail['planId'], 'studyDate_GT' => $detail['studyDate']], ['studyDate' => 'ASC'], 0, 1);
+        $nextDetails = $this->getStudyPlanService()->searchPlanDetails(['planId' => $detail['planId'], 'studyDate_GT' => $detail['studyDate'], 'learned' => 0], ['studyDate' => 'ASC'], 0, 1);
 
         return $nextDetails[0]['studyDate'] ?? '';
     }

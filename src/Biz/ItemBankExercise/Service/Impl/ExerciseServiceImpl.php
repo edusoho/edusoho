@@ -725,6 +725,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         return $this->getExerciseBindDao()->delete($id);
     }
 
+    public function searchExerciseBind($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getExerciseBindDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
     /**
      * @return ExerciseDao
      */

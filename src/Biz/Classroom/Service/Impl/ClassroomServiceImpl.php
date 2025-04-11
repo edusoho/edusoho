@@ -621,6 +621,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], $userIds, $day, $waveType);
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $classroomId, 'bindType' => 'classroom', 'updateType' => 'day', 'userIds' => $userIds]));
     }
 
     public function updateMembersDeadlineByDate($classroomId, $userIds, $date)
@@ -641,6 +642,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], $userIds, $date);
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $classroomId, 'bindType' => 'classroom', 'userIds' => $userIds]));
     }
 
     public function checkDayAndWaveTypeForUpdateDeadline($classroomId, $userIds, $day, $waveType = 'plus')
@@ -2286,6 +2288,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
             $this->getCourseMemberService()->changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
             $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $classroomId, 'bindType' => 'classroom', 'updateType' => 'day', 'all' => true]));
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -2299,6 +2302,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->beginTransaction();
             $this->updateMember($classroomId, $date);
             $this->getCourseMemberService()->updateMembersDeadlineByClassroomId($classroomId, $date['deadline']);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $classroomId, 'bindType' => 'classroom', 'all' => true]));
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();

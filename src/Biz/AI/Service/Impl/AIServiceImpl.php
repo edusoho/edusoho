@@ -112,11 +112,11 @@ class AIServiceImpl extends BaseService implements AIService
 
     public function createDataset(array $params)
     {
-        if (!ArrayToolkit::requireds($params, ['externalId', 'name', 'domainId', 'autoIndex'])) {
+        if (!ArrayToolkit::requireds($params, ['extId', 'name', 'domainId', 'autoIndex'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        return $this->getAIService()->createDataset($params['externalId'], $params['name'], $params['domainId'], $params['autoIndex']);
+        return $this->getAIService()->createDataset($params['extId'], $params['name'], $params['domainId'], $params['autoIndex']);
     }
 
     public function getDataset($id)
