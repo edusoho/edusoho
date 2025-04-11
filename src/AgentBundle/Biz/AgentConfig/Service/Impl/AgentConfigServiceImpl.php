@@ -28,7 +28,7 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         }
         $this->checkDomain($params['domainId']);
         $dataset = $this->getAIService()->createDataset([
-            'externalId' => $params['courseId'],
+            'extId' => $params['courseId'],
             'name' => $params['name'],
             'domainId' => $params['domainId'],
             'autoIndex' => !empty($params['isDiagnosisActive']),
