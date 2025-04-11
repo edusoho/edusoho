@@ -141,7 +141,7 @@ class TaskScheduler
                 'courseId' => $this->inputs['courseId'],
                 'title' => $this->noLimitTasks[$this->noLimitTaskCursor]['title'],
                 'date' => $this->dateCursor->format('Y-m-d'),
-                'duration' => min($taskDuration, $this->currentDateDuration),
+                'duration' => max(min($taskDuration, $this->currentDateDuration), 60),
             ];
             if ($this->currentDateDuration < $taskDuration) {
                 $this->noLimitTasks[$this->noLimitTaskCursor]['duration'] -= $this->currentDateDuration;
