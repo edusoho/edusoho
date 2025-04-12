@@ -119,37 +119,37 @@ class TaskScheduler
     private function scheduleTimeLimitTasks()
     {
         while ($this->shouldScheduleCurrentTimeLimitTask()) {
-            $taskDuration = $this->timeLimitTasks[$this->timeLimitTaskCursor]['duration'];
+            $task = $this->timeLimitTasks[$this->timeLimitTaskCursor];
             $this->scheduledTasks[] = [
-                'id' => $this->timeLimitTasks[$this->timeLimitTaskCursor]['id'],
+                'id' => $task['id'],
                 'courseId' => $this->inputs['courseId'],
-                'title' => $this->timeLimitTasks[$this->timeLimitTaskCursor]['title'],
+                'title' => $task['title'],
                 'date' => $this->dateCursor->format('Y-m-d'),
-                'duration' => max($taskDuration, 60),
+                'duration' => max($task['duration'], 60),
             ];
             $this->timeLimitTaskCursor++;
-            $this->currentDateDuration = $this->currentDateDuration - $taskDuration;
+            $this->currentDateDuration -= $task['duration'];
         }
     }
 
     private function scheduleNoLimitTasks()
     {
         while ($this->shouldScheduleCurrentNoLimitTask()) {
-            $taskDuration = $this->noLimitTasks[$this->noLimitTaskCursor]['duration'];
+            $task = $this->noLimitTasks[$this->noLimitTaskCursor];
+            $duration = 'testpaper' == $task['type'] ? $task['duration'] : min($task['duration'], $this->currentDateDuration);
             $this->scheduledTasks[] = [
-                'id' => $this->noLimitTasks[$this->noLimitTaskCursor]['id'],
+                'id' => $task['id'],
                 'courseId' => $this->inputs['courseId'],
-                'title' => $this->noLimitTasks[$this->noLimitTaskCursor]['title'],
+                'title' => $task['title'],
                 'date' => $this->dateCursor->format('Y-m-d'),
-                'duration' => max(min($taskDuration, $this->currentDateDuration), 60),
+                'duration' => max($duration, 60),
             ];
-            if ($this->currentDateDuration < $taskDuration) {
+            if (($this->currentDateDuration < $task['duration']) && ('testpaper' != $task['type'])) {
                 $this->noLimitTasks[$this->noLimitTaskCursor]['duration'] -= $this->currentDateDuration;
-                $this->currentDateDuration = 0;
             } else {
-                $this->currentDateDuration -= $taskDuration;
                 $this->noLimitTaskCursor++;
             }
+            $this->currentDateDuration -= $task['duration'];
         }
     }
 
@@ -164,7 +164,7 @@ class TaskScheduler
         if ($this->dateCursor->format('Y-m-d') == date('Y-m-d', $this->timeLimitTasks[$this->timeLimitTaskCursor]['endTime'])) {
             return true;
         }
-        if ($this->currentDateDuration <= 0) {
+        if ($this->currentDateDuration < 1) {
             return false;
         }
         if (in_array($this->dateCursor->format('N'), $this->inputs['weekDays'])) {
@@ -183,6 +183,6 @@ class TaskScheduler
             return false;
         }
 
-        return $this->currentDateDuration > 0;
+        return $this->currentDateDuration > 59;
     }
 }
