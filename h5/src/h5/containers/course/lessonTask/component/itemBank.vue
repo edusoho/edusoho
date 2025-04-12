@@ -356,7 +356,7 @@ export default {
 
   },
   async mounted() {
-    await this.getQuestion();
+    await this.getQuestion(0);
     this.tryInitAIAgentSdk();
   },
   mixins: [aiAgent],
@@ -411,51 +411,35 @@ export default {
         });
       })
     },
-    async getQuestion() {
+    async getQuestion(index) {
       if (this.aiAgentRecordId) {
         this.question = await Api.getExerciseQuestion({
           query: {
             answerRecordId: this.aiAgentRecordId,
-            questionId: this.info[this.currentIndex].id,
+            questionId: this.info[index].id,
           },
         })
       }
     },
-    changeswiper(index) {
+    async changeswiper(index) {
+      await this.getQuestion(index);
+      this.aiAgentSdk.hideReminder();
       this.currentIndex = index;
       this.$emit('update:current', index + 1);
       this.$emit('update:slideIndex', index);
     },
     // 左滑动
     async last() {
-      if (this.aiAgentRecordId) {
-        this.question = await Api.getExerciseQuestion({
-          query: {
-            answerRecordId: this.aiAgentRecordId,
-            questionId: this.info[this.currentIndex - 1].id,
-          },
-        })
-      }
       if (this.currentIndex == 0 || !this.touchable) {
         return;
       }
-      this.aiAgentSdk.hideReminder();
       this.$refs.swipe.swipeTo(this.currentIndex - 1);
     },
     // 右滑动
     async next() {
-      if (this.aiAgentRecordId) {
-        this.question = await Api.getExerciseQuestion({
-          query: {
-            answerRecordId: this.aiAgentRecordId,
-            questionId: this.info[this.currentIndex + 1].id,
-          },
-        })
-      }
       if (this.currentIndex == this.info.length - 1 || !this.touchable) {
         return;
       }
-      this.aiAgentSdk.hideReminder();
       this.$refs.swipe.swipeTo(this.currentIndex + 1);
     },
     // 题目类型过滤

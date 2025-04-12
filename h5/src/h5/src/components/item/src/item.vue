@@ -367,7 +367,6 @@ export default {
       touchable: true,
       showShadow: '',
       width: WINDOWWIDTH,
-      question: {},
     };
   },
   props: {
@@ -470,10 +469,6 @@ export default {
     EssayRadio: {
       type: Array,
       default: () => []
-    },
-    answerRecord: {
-      type: Object,
-      default: () => {}
     }
   },
   inject: ["brushDo"],

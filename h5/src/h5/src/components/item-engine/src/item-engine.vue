@@ -40,7 +40,6 @@
 							:choiceIsCando="choiceIsCando"
 							:reviewedQuestion="reviewedQuestion"
 							:EssayRadio="EssayRadio"
-              :answerRecord="answerRecord"
 							@changeIsCando="changeIsCando"
 							@changeChoiceCando="changeChoiceCando"
 							@changeTouch="changeTouch"

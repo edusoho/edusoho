@@ -33,7 +33,6 @@
               :wrong="wrong"
               :itemLength="items.length"
               :exerciseInfo="answerRecord"
-              :answerRecord="answerRecord"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
             />

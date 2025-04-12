@@ -16,7 +16,21 @@ export default {
         },
       })
     },
-    async itemSlideNext() {
+    async swipeToPrevQuestion() {
+      if (this.itemIndex === 0 && this.questionIndex === 0) {
+        await this.getQuestion();
+        return;
+      }
+      if (this.questionIndex === 0) {
+        this.itemIndex -= 1;
+        this.questionIndex = this.items[this.itemIndex].questions.length - 1;
+      } else {
+        this.questionIndex -= 1;
+      }
+      await this.getQuestion();
+      this.aiAgentSdk.hideReminder();
+    },
+    async swipeToNextQuestion() {
       const isLastItem = this.itemIndex >= this.items.length - 1;
       const isLastQuestion = this.questionIndex >= this.items[this.itemIndex].questions.length - 1;
       if (isLastItem && isLastQuestion) {
@@ -31,24 +45,17 @@ export default {
       }
       await this.getQuestion();
       this.aiAgentSdk.hideReminder();
+    },
+    async itemSlideNext() {
+      await this.swipeToNextQuestion();
       this.$refs.mySwiper.$swiper.slideNext();
     },
     async itemSlidePrev() {
-      if (this.itemIndex === 0 && this.questionIndex === 0) {
-        await this.getQuestion();
-        return;
-      }
-      if (this.questionIndex === 0) {
-        this.itemIndex -= 1;
-        this.questionIndex = this.items[this.itemIndex].questions.length - 1;
-      } else {
-        this.questionIndex -= 1;
-      }
-      await this.getQuestion();
-      this.aiAgentSdk.hideReminder();
+      await this.swipeToPrevQuestion();
       this.$refs.mySwiper.$swiper.slidePrev();
     },
     async slideNextTransitionEnd() {
+      await this.swipeToNextQuestion();
       if (this.current === this.items.length - 1) {
         return;
       }
@@ -57,6 +64,7 @@ export default {
       this.fastSlide();
     },
     async slidePrevTransitionEnd() {
+      await this.swipeToPrevQuestion();
       if (this.current === 0) {
         return;
       }
