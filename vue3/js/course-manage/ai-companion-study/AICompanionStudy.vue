@@ -146,7 +146,7 @@ onMounted(async () => {
           </a-form-item>
           <div v-if="formState.isActive === true">
             <a-form-item
-              label="选择专业"
+              label="选择AI智能体老师"
               name="domainId"
               extra="请选择AI教师的专业为学员提供精准的题目答疑和解答服务"
             >
@@ -162,7 +162,7 @@ onMounted(async () => {
             <a-form-item
               v-for="(deadlineRef, index) in formState.planDeadline"
               v-bind="index === 0 ? formItemLayout : formItemLayoutWithOutLabel"
-              :label="index === 0 ? '学习计划截止时间' : ''"
+              :label="index === 0 ? '认证考试日' : ''"
             >
               <a-date-picker
                 v-model:value="deadlineRef.value"
