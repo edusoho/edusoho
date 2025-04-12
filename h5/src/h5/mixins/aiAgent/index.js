@@ -31,19 +31,52 @@ export default {
       sdk.on('clickLink', (data) => {
         const regex = /\/course\/(\d+)\/task\/(\d+)/;
         const matches = data.match(regex);
-        const courseId = matches[1];
-        const taskId = matches[2];
-        this.$router.push({
-          name: 'course',
-          params: {
-            id: courseId
+        if (matches){
+          const courseId = matches[1];
+          const taskId = matches[2];
+          this.$router.push({
+            name: 'course',
+            params: {
+              id: courseId
+            }
+          })
+          this.$nextTick(() => {
+            const taskElement = document.getElementById(taskId)
+            taskElement.click();
+          })
+          sdk.hideIframe();
+        } else {
+          window.open(data, '_blank');
+        }
+      });
+      sdk.on('generateStudyPlan', () => {
+        sdk.removeShortcut('plan.create');
+        sdk.addShortcut('plan.check', {
+          name: '查看学习计划',
+          icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">\n' +
+            '<path d="M13 2H3C2.44772 2 2 2.44772 2 3V13C2 13.5523 2.44772 14 3 14H13C13.5523 14 14 13.5523 14 13V3C14 2.44772 13.5523 2 13 2Z" stroke="#333333" stroke-linejoin="round"/>\n' +
+            '<path d="M7.00016 4.33301H4.3335V6.99967H7.00016V4.33301Z" stroke="#333333" stroke-linejoin="round"/>\n' +
+            '<path d="M7.00016 9H4.3335V11.6667H7.00016V9Z" stroke="#333333" stroke-linejoin="round"/>\n' +
+            '<path d="M9 9.33301H11.6667" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+            '<path d="M9 11.667H11.6667" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+            '<path d="M9 4.33301H11.6667" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+            '<path d="M9 6.66699H11.6667" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+            '</svg>',
+          type: 'Send',
+          data: {
+            content: '查看学习计划'
           }
-        })
-        this.$nextTick(() => {
-          const taskElement = document.getElementById(taskId)
-          taskElement.click();
-        })
-        sdk.hideIframe();
+        });
+        sdk.addShortcut('plan.recreate', {
+          name: '重新制定学习计划',
+          icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">\n' +
+            '<path d="M12.2426 12.2426C11.1569 13.3284 9.65687 14 8 14C4.6863 14 2 11.3137 2 8C2 4.6863 4.6863 2 8 2C9.65687 2 11.1569 2.67157 12.2426 3.75737C12.7953 4.31003 14 5.66667 14 5.66667" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>\n' +
+            '<path d="M14 2.66699V5.66699H11" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>\n',
+          type: 'Send',
+          data: {
+            content: '重新制定学习计划'
+          }
+        });
       });
       sdk.boot();
       window.aiAgentSdk = sdk;
