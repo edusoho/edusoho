@@ -25,7 +25,7 @@ trait TaskTrait
         }
         $activities = $this->getActivityService()->findActivities(array_column($activities, 'id'));
         $activities = array_column($activities, null, 'id');
-        $tasks = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'status' => 'published', 'activityIds' => array_column($activities, 'id')], ['seq' => 'ASC'], 0, count($activities), ['id', 'activityId', 'title', 'startTime', 'endTime']);
+        $tasks = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'status' => 'published', 'activityIds' => array_column($activities, 'id')], ['seq' => 'ASC'], 0, count($activities), ['id', 'activityId', 'title', 'type']);
         foreach ($tasks as &$task) {
             $activity = $activities[$task['activityId']];
             $task['duration'] = CalculationStrategyFactory::create($activity)->calculateTime($activity);

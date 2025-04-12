@@ -2,8 +2,6 @@
 
 namespace AgentBundle\Workflow;
 
-use AppBundle\Common\DateToolkit;
-
 class PlanGenerate extends AbstractWorkflow
 {
     use TaskTrait;
@@ -62,17 +60,17 @@ class PlanGenerate extends AbstractWorkflow
     {
         $course = $this->getCourseService()->getCourse($inputs['courseId']);
         $studyDateCount = count($studyDates);
-        $taskCount = count($tasks);
-        $learnHour = array_sum(array_column($tasks, 'duration'));
-        $startDate = empty($inputs['startDate']) ? '从今日起' : $this->makeStudyBoundaryDate($inputs['startDate']);
-        $endDate = empty($inputs['endDate']) ? '学完即止' : $this->makeStudyBoundaryDate($inputs['endDate']);
-        $minDuration = min(array_column($studyDates, 'duration'));
+        $taskCount = count(array_unique(array_column($tasks, 'id')));
+        $totalLearnTime = $this->convertSecondsToCN(array_sum(array_column($tasks, 'duration')));
+        $startDate = empty($inputs['startDate']) ? '从今日起' : $this->convertDateToCN($inputs['startDate']);
+        $endDate = empty($inputs['endDate']) ? '学完即止' : $this->convertDateToCN($inputs['endDate']);
+        $everyLearnTime = $this->convertSecondsToCN(current(array_column($studyDates, 'duration')));
 
         return <<<MARKDOWN
-根据上述内容为你生成以下学习计划：  
-1、学习内容：{$course['courseSetTitle']}，共{$taskCount}个任务，学完需要{$learnHour}小时  
+根据上述内容为你生成以下学习计划，计划内容将会根据学习情况智能调整：  
+1、学习内容：{$course['courseSetTitle']}，共{$taskCount}个任务，学完需要{$totalLearnTime}  
 2、学习时间：{$startDate} 至 {$endDate} 内，每{$this->makeChineseWeekDays($inputs['weekDays'])}，共计{$studyDateCount}个学习日  
-3、每次至少学习：{$minDuration}小时  
+3、每次至少学习：{$everyLearnTime}  
 我会在每个学习日提醒你完成学习，期待你的参与！
 
 {$this->makeList($studyDates)}
@@ -80,37 +78,14 @@ class PlanGenerate extends AbstractWorkflow
 MARKDOWN;
     }
 
-    private function makeStudyBoundaryDate($date)
-    {
-        return date('Y年m月d日', strtotime($date));
-    }
-
-    private function makeChineseWeekDays($weekDays)
-    {
-        $chineseWeekdays = [];
-        foreach ($weekDays as $weekDay) {
-            $chineseWeekday = $this->convertChineseWeekDay($weekDay);
-            if (!empty($chineseWeekday)) {
-                $chineseWeekdays[] = $chineseWeekday;
-            }
-        }
-
-        return implode('、', $chineseWeekdays);
-    }
-
-    private function convertChineseWeekDay($weekday)
-    {
-        return DateToolkit::convertToZHWeekday($weekday);
-    }
-
     private function makeList($studyDates)
     {
         $list = '';
         $seq = 1;
         foreach ($studyDates as $studyDate => $dateTasks) {
-            $list .= '### '.date('Y/m/d', strtotime($studyDate))." {$this->convertChineseWeekDay(date('N', strtotime($studyDate)))}\n\n";
+            $list .= '### '.date('Y/m/d', strtotime($studyDate))." {$this->convertWeekDayToCN(date('N', strtotime($studyDate)))}\n\n";
             foreach ($dateTasks['tasks'] as $task) {
-                $list .= "* [任务{$seq}: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']})  \n<span class='usetime'>用时・{$task['duration']}小时</span>\n\n\n";
+                $list .= "* [任务{$seq}: {$task['title']}](/course/{$task['courseId']}/task/{$task['id']})  \n<span class='usetime'>用时・{$this->convertSecondsToCN($task['duration'])}</span>\n\n\n";
                 $seq++;
             }
         }

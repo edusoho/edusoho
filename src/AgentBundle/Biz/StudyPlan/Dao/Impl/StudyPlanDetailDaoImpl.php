@@ -27,7 +27,6 @@ class StudyPlanDetailDaoImpl extends AdvancedDaoImpl implements StudyPlanDetailD
                 'studyDate = :studyDate',
                 'learned = :learned',
                 'courseId IN (:courseIds)',
-                'studyDate > :studyDate_GT',
             ],
         ];
     }

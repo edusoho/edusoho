@@ -133,7 +133,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         foreach ($studyDates as $studyDate => $data) {
             $tasks = [];
             foreach ($data['tasks'] as $task) {
-                $tasks[$task['id']] = $task['duration'] * 3600;
+                $tasks[$task['id']] = $task['duration'];
             }
             $details[] = [
                 'planId' => $planId,

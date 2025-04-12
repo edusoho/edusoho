@@ -4,6 +4,8 @@ namespace AgentBundle\Workflow;
 
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
+use AppBundle\Common\DateToolkit;
+use AppBundle\Common\TimeMachine;
 use Biz\Activity\Service\ActivityService;
 use Biz\AI\Service\AIService;
 use Biz\Course\Service\CourseService;
@@ -19,6 +21,34 @@ abstract class AbstractWorkflow implements Workflow
     function __construct(Biz $biz)
     {
         $this->biz = $biz;
+    }
+
+    protected function convertDateToCN($date)
+    {
+        return date('Y年m月d日', strtotime($date));
+    }
+
+    protected function makeChineseWeekDays($weekDays)
+    {
+        $chineseWeekdays = [];
+        foreach ($weekDays as $weekDay) {
+            $chineseWeekday = $this->convertWeekDayToCN($weekDay);
+            if (!empty($chineseWeekday)) {
+                $chineseWeekdays[] = $chineseWeekday;
+            }
+        }
+
+        return implode('、', $chineseWeekdays);
+    }
+
+    protected function convertWeekDayToCN($weekday)
+    {
+        return DateToolkit::convertToZHWeekday($weekday);
+    }
+
+    protected function convertSecondsToCN($seconds)
+    {
+        return TimeMachine::formatSecondsToZH($seconds);
     }
 
     /**
