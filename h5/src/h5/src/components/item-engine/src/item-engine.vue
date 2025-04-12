@@ -234,7 +234,7 @@ export default {
         if (res.aiTeacherDomain) {
           this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
-          }, 80, 20,true);
+          }, 80, 20);
           if (res.studyPlanGenerated) {
             this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
           }
