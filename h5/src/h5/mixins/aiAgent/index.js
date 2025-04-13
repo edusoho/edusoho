@@ -25,12 +25,13 @@ export default {
                 id: courseId
               }
             })
+          } else {
+            sdk.hideIframe();
           }
           this.$nextTick(() => {
             const taskElement = document.getElementById(taskId)
             taskElement.click();
           })
-          sdk.hideIframe();
         } else {
           window.open(data, '_blank');
         }
