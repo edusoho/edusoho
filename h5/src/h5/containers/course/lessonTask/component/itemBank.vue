@@ -395,6 +395,7 @@ export default {
         }
         const btn = document.getElementById('agent-sdk-floating-button');
         btn?.addEventListener('click', async () => {
+          await this.getQuestion();
           this.aiAgentSdk.showReminder({
             title: "遇到问题啦？",
             content: "小知老师来为你理清解题思路～",
