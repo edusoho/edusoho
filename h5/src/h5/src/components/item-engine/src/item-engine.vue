@@ -252,7 +252,7 @@ export default {
               title: "遇到问题啦？",
               content: "小知老师来为你理清解题思路～",
               buttonContent: 'teacher.question',
-              duration: 0,
+              duration: 5000,
               workflow: {
                 workflow: 'teacher.question.idea',
                 inputs: {

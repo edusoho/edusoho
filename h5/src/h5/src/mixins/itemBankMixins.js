@@ -16,7 +16,7 @@ export default {
         },
       })
     },
-    async swipeToPrevQuestion() {
+    async swipeToPrevItem() {
       if (this.itemIndex === 0 && this.questionIndex === 0) {
         await this.getQuestion();
         return;
@@ -30,7 +30,7 @@ export default {
       await this.getQuestion();
       this.aiAgentSdk.hideReminder();
     },
-    async swipeToNextQuestion() {
+    async swipeToNextItem() {
       const isLastItem = this.itemIndex >= this.items.length - 1;
       const isLastQuestion = this.questionIndex >= this.items[this.itemIndex].questions.length - 1;
       if (isLastItem && isLastQuestion) {
@@ -46,16 +46,23 @@ export default {
       await this.getQuestion();
       this.aiAgentSdk.hideReminder();
     },
+    async slideQuestion(index) {
+      this.questionIndex = index;
+      await this.getQuestion();
+    },
     async itemSlideNext() {
-      await this.swipeToNextQuestion();
+      this.questionIndex = 0;
+      await this.swipeToNextItem();
       this.$refs.mySwiper.$swiper.slideNext();
     },
     async itemSlidePrev() {
-      await this.swipeToPrevQuestion();
+      this.questionIndex = 0;
+      await this.swipeToPrevItem();
       this.$refs.mySwiper.$swiper.slidePrev();
     },
     async slideNextTransitionEnd() {
-      await this.swipeToNextQuestion();
+      this.questionIndex = 0;
+      await this.swipeToNextItem();
       if (this.current === this.items.length - 1) {
         return;
       }
@@ -64,7 +71,8 @@ export default {
       this.fastSlide();
     },
     async slidePrevTransitionEnd() {
-      await this.swipeToPrevQuestion();
+      this.questionIndex = 0;
+      await this.swipeToPrevItem();
       if (this.current === 0) {
         return;
       }
