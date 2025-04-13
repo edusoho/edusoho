@@ -16,62 +16,28 @@ export default {
         },
       })
     },
-    async swipeToPrevItem() {
-      if (this.itemIndex === 0 && this.questionIndex === 0) {
-        return;
-      }
-      if (this.questionIndex === 0) {
-        this.itemIndex -= 1;
-        this.questionIndex = this.items[this.itemIndex].questions.length - 1;
-      } else {
-        this.questionIndex -= 1;
-      }
-      this.aiAgentSdk.hideReminder();
-    },
-    async swipeToNextItem() {
-      const isLastItem = this.itemIndex >= this.items.length - 1;
-      const isLastQuestion = this.questionIndex >= this.items[this.itemIndex].questions.length - 1;
-      if (isLastItem && isLastQuestion) {
-        return;
-      }
-      if (isLastQuestion) {
-        this.itemIndex += 1;
-        this.questionIndex = 0;
-      } else {
-        this.questionIndex += 1;
-      }
-      this.aiAgentSdk.hideReminder();
-    },
-    async questionSlideChange(index) {
+    questionSlideChange(index) {
       this.questionIndex = index;
       this.aiAgentSdk.hideReminder();
     },
-    async itemSlideNext() {
+    slideNextTransitionEnd() {
       this.questionIndex = 0;
-      await this.swipeToNextItem();
-      this.$refs.mySwiper.$swiper.slideNext();
-    },
-    async itemSlidePrev() {
-      this.questionIndex = 0;
-      await this.swipeToPrevItem();
-      this.$refs.mySwiper.$swiper.slidePrev();
-    },
-    async slideNextTransitionEnd() {
-      this.questionIndex = 0;
-      await this.swipeToNextItem();
       if (this.current === this.items.length - 1) {
         return;
       }
+      this.itemIndex += 1;
+      this.aiAgentSdk.hideReminder();
       this.current += 1;
       this.changeRenderItems(this.current);
       this.fastSlide();
     },
-    async slidePrevTransitionEnd() {
-      this.questionIndex = 0;
-      await this.swipeToPrevItem();
+    slidePrevTransitionEnd() {
       if (this.current === 0) {
         return;
       }
+      this.questionIndex = 0;
+      this.itemIndex -= 1;
+      this.aiAgentSdk.hideReminder();
       this.current -= 1;
       this.changeRenderItems(this.current);
       const item = this.items[this.current];
@@ -84,6 +50,12 @@ export default {
         childSwiper.$swiper.slideTo(childSwiperSlide, 0, false);
       });
       this.fastSlide();
+    },
+    itemSlideNext() {
+      this.$refs.mySwiper.$swiper.slideNext();
+    },
+    itemSlidePrev() {
+      this.$refs.mySwiper.$swiper.slidePrev();
     },
     changeRenderItems(current) {
       const renderItmes = [];

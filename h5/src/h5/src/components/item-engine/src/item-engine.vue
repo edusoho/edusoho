@@ -46,12 +46,12 @@
 							@noChangeTouch="noChangeTouch"
 							@updataIsAnswerFinished="updataIsAnswerFinished"
               @changeAnswer="changeAnswer"
-              @itemSlideNext="itemSlideNext"
-              @itemSlidePrev="itemSlidePrev"
-              @questionSlideChange="questionSlideChange"
 							@changeEssayRadio="changeEssayRadio"
               @changeReviewedCount="changeReviewedCount"
 							@submitedQuestionStatus="submitedQuestionStatus"
+              @itemSlideNext="itemSlideNext"
+              @itemSlidePrev="itemSlidePrev"
+              @questionSlideChange="questionSlideChange"
             />
           </swiper-slide>
         </template>
@@ -142,7 +142,7 @@ export default {
       default: true
     },
 		exerciseInfo: {
-			type: [Array, Object],
+			type: Array,
       default: () => []
 		},
 		wrong: {
