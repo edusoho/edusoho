@@ -27,19 +27,22 @@ class InitStudyPlan extends Migration
               KEY `idxCourseId` (`courseId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习计划主表';
 
-            CREATE TABLE IF NOT EXISTS `study_plan_detail` (
+            CREATE TABLE IF NOT EXISTS `study_plan_task` (
               `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
               `planId` INT(11) NOT NULL COMMENT '学习计划ID',
               `courseId` INT(11) NOT NULL COMMENT '教学计划ID',
               `studyDate` VARCHAR(16) NOT NULL COMMENT '学习日期',
-              `tasks` TEXT NOT NULL COMMENT '当日任务',
+              `taskId` INT(11) NOT NULL COMMENT '任务ID',
               `learned` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否学完',
+              `targetDuration` INT(10) unsigned NOT NULL COMMENT '目标学习时长（秒）',
+              `learnedDuration` INT(10) unsigned NOT NULL DEFAULT 0 COMMENT '已学时长（秒）',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `idxPlanId` (`planId`),
-              KEY `idxStudyDateCourseId` (`studyDate`, `courseId`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习计划每日任务详情表';
+              KEY `idxPlanIdTaskId` (`planId`, `taskId`),
+              KEY `idxStudyDateCourseId` (`studyDate`, `courseId`),
+              KEY `idxCourseIdTaskId` (`courseId`, `taskId`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='学习计划任务表';
 
             CREATE TABLE IF NOT EXISTS `ai_study_config` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -69,7 +72,7 @@ class InitStudyPlan extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec('
             DROP TABLE IF EXISTS `study_plan`;
-            DROP TABLE IF EXISTS `study_plan_detail`;
+            DROP TABLE IF EXISTS `study_plan_task`;
             DROP TABLE IF EXISTS `ai_study_config`;
             ALTER TABLE `activity` DROP COLUMN `documentId`;
         ');

@@ -66,6 +66,11 @@ class AgentConfigServiceImpl extends BaseService implements AgentConfigService
         $this->getAIService()->updateDataset($agentConfig['datasetId'], ['domainId' => $agentConfig['domainId'], 'autoIndex' => !empty($agentConfig['isDiagnosisActive'])]);
     }
 
+    public function deleteAgentConfig($id)
+    {
+        $this->getAiStudyConfigDao()->delete($id);
+    }
+
     public function findAgentConfigsByCourseIds($courseIds)
     {
         return $this->getAiStudyConfigDao()->findByCourseIds($courseIds);

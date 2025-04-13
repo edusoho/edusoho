@@ -81,6 +81,7 @@ class AgentConfigEventSubscriber extends EventSubscriber
             return;
         }
         $this->getAIService()->deleteDataset($agentConfig['datasetId']);
+        $this->getAgentConfigService()->deleteAgentConfig($agentConfig['id']);
     }
 
     public function onCourseSetUpdate(Event $event)

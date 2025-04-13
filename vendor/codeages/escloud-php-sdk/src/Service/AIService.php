@@ -128,9 +128,9 @@ class AIService extends BaseService
         return $this->request('POST', '/v1/workflow/asyncRun', ['workflow' => $workflow, 'inputs' => $inputs, 'callback' => $callback]);
     }
 
-    public function streamRunWorkflow($workflow, $inputs)
+    public function streamRunWorkflow($workflow, $inputs, callable $streamCallback)
     {
-        return $this->request('POST', '/v1/workflow/streamRun', ['workflow' => $workflow, 'inputs' => $inputs], [], 'root', true);
+        return $this->request('POST', '/v1/workflow/streamRun', ['workflow' => $workflow, 'inputs' => $inputs], [], 'root', $streamCallback);
     }
 
     public function createDataset($extId, $name, $domainId, $autoIndex)

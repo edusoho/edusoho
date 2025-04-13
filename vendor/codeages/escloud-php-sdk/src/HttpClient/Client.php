@@ -40,8 +40,9 @@ class Client implements ClientInterface
             $body = json_encode($options['json']);
             $headers['Content-Type'] = 'application/json';
         }
-        $stream = !empty($options['stream']);
+        $stream = !empty($options['streamCallback']);
         if ($stream) {
+            $streamCallback = $options['streamCallback'];
             $headers['Accept'] = 'text/event-stream';
         }
 
@@ -58,15 +59,8 @@ class Client implements ClientInterface
         );
         if ($stream) {
             $streamRawResponse = '';
-            $canEcho = false;
-            $options[CURLOPT_WRITEFUNCTION] = function ($curl, $data) use (&$streamRawResponse, &$canEcho) {
-                if ('id:' === substr($data, 0, 3)) {
-                    $canEcho = true;
-                }
-                if ($canEcho) {
-                    echo $data;
-                    flush();
-                }
+            $options[CURLOPT_WRITEFUNCTION] = function ($curl, $data) use (&$streamRawResponse, $streamCallback) {
+                $streamCallback($data);
                 $streamRawResponse .= $data;
                 return strlen($data);
             };

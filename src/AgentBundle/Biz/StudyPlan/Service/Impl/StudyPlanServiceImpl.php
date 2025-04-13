@@ -4,7 +4,7 @@ namespace AgentBundle\Biz\StudyPlan\Service\Impl;
 
 use AgentBundle\Biz\AgentConfig\Dao\AiStudyConfigDao;
 use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDao;
-use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDetailDao;
+use AgentBundle\Biz\StudyPlan\Dao\StudyPlanTaskDao;
 use AgentBundle\Biz\StudyPlan\Factory\CalculationStrategyFactory;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use AgentBundle\Biz\StudyPlan\StudyPlanException;
@@ -125,34 +125,56 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         return $this->getStudyPlanDao()->update($studyPlan['id'], $data);
     }
 
-    public function createPlanDetails($planId, $studyDates)
+    public function deletePlan($id)
     {
-        $this->getStudyPlanDetailDao()->batchDelete(['planId' => $planId]);
+        $this->getStudyPlanDao()->delete($id);
+    }
+
+    public function generatePlanTasks($planId, $tasks)
+    {
+        $this->getStudyPlanTaskDao()->batchDelete(['planId' => $planId, 'learned' => 0]);
         $plan = $this->getStudyPlanDao()->get($planId);
-        $details = [];
-        foreach ($studyDates as $studyDate => $data) {
-            $tasks = [];
-            foreach ($data['tasks'] as $task) {
-                $tasks[$task['id']] = $task['duration'];
-            }
-            $details[] = [
+        $planTasks = [];
+        foreach ($tasks as $task) {
+            $planTasks[] = [
                 'planId' => $planId,
                 'courseId' => $plan['courseId'],
-                'studyDate' => $studyDate,
-                'tasks' => $tasks,
+                'studyDate' => $task['date'],
+                'taskId' => $task['id'],
+                'targetDuration' => $task['duration'],
             ];
         }
-        $this->getStudyPlanDetailDao()->batchCreate($details);
+        $this->getStudyPlanTaskDao()->batchCreate($planTasks);
     }
 
-    public function searchPlanDetails($conditions, $orderBys, $start, $limit, $columns = [])
+    public function deletePlanTasksByPlanId($planId)
     {
-        return $this->getStudyPlanDetailDao()->search($conditions, $orderBys, $start, $limit, $columns);
+        $this->getStudyPlanTaskDao()->batchDelete(['planId' => $planId]);
     }
 
-    public function findPlansByIds($ids)
+    public function searchPlanTasks($conditions, $orderBys, $start, $limit, $columns = [])
     {
-        return $this->getStudyPlanDao()->findByIds($ids);
+        return $this->getStudyPlanTaskDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function findActivePlansByIds($ids)
+    {
+        $plans = $this->getStudyPlanDao()->findByIds($ids);
+        $plans = array_filter($plans, function ($plan) {
+            return empty($plan['endDate']) || ($plan['endDate'] > date('Y-m-d'));
+        });
+
+        return $plans;
+    }
+
+    public function findActivePlansByCourseId($courseId)
+    {
+        $plans = $this->getStudyPlanDao()->findByCourseId($courseId);
+        $plans = array_filter($plans, function ($plan) {
+            return empty($plan['endDate']) || ($plan['endDate'] > date('Y-m-d'));
+        });
+
+        return $plans;
     }
 
     public function getPlanByCourseIdAndUserId($courseId, $userId)
@@ -167,22 +189,17 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
         return !empty($studyPlan);
     }
 
-    public function getPlanDetailByPlanIdAndStudyDate($planId, $studyDate)
+    public function wavePlanTaskLearnedDuration($id, $increment)
     {
-        return $this->getStudyPlanDetailDao()->getByPlanIdAndStudyDate($planId, $studyDate);
+        $this->getStudyPlanTaskDao()->wave([$id], ['learnedDuration' => $increment]);
     }
 
-    public function updatePlanDetailTasks($id, $tasks)
-    {
-        $this->getStudyPlanDetailDao()->update($id, ['tasks' => $tasks]);
-    }
-
-    public function updatePlanDetailLearned($ids)
+    public function markPlanTaskLearned($ids)
     {
         if (empty($ids)) {
             return;
         }
-        $this->getStudyPlanDetailDao()->update(['ids' => $ids], ['learned' => 1]);
+        $this->getStudyPlanTaskDao()->update(['ids' => $ids], ['learned' => 1]);
     }
 
     private function convertToMarkdown($params)
@@ -449,10 +466,10 @@ MARKDOWN;
     }
 
     /**
-     * @return StudyPlanDetailDao
+     * @return StudyPlanTaskDao
      */
-    protected function getStudyPlanDetailDao()
+    protected function getStudyPlanTaskDao()
     {
-        return $this->createDao('AgentBundle:StudyPlan:StudyPlanDetailDao');
+        return $this->createDao('AgentBundle:StudyPlan:StudyPlanTaskDao');
     }
 }

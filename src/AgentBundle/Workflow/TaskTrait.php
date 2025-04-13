@@ -28,12 +28,17 @@ trait TaskTrait
         $tasks = $this->getTaskService()->searchTasks(['courseId' => $courseId, 'status' => 'published', 'activityIds' => array_column($activities, 'id')], ['seq' => 'ASC'], 0, count($activities), ['id', 'activityId', 'title', 'type']);
         foreach ($tasks as &$task) {
             $activity = $activities[$task['activityId']];
-            $task['duration'] = CalculationStrategyFactory::create($activity)->calculateTime($activity);
+            $task['duration'] = $this->calculateDuration($activity);
             $task['startTime'] = $activity['startTime'];
             $task['endTime'] = $activity['endTime'];
         }
 
         return $tasks;
+    }
+
+    private function calculateDuration($activity)
+    {
+        return CalculationStrategyFactory::create($activity)->calculateTime($activity);
     }
 
     private function filterSchedulableActivities($activities)
@@ -61,17 +66,5 @@ trait TaskTrait
         $taskScheduler = new TaskScheduler();
 
         return $taskScheduler->schedule($inputs, $tasks);
-    }
-
-    private function groupTasksByDate($tasks)
-    {
-        $dates = [];
-        foreach ($tasks as $task) {
-            $dates[$task['date']] = $dates[$task['date']] ?? ['tasks' => [], 'duration' => 0];
-            $dates[$task['date']]['tasks'][] = $task;
-            $dates[$task['date']]['duration'] += $task['duration'];
-        }
-
-        return $dates;
     }
 }

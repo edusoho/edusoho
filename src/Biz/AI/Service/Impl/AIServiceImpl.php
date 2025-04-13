@@ -30,7 +30,30 @@ class AIServiceImpl extends BaseService implements AIService
 
     public function generateAnswer($app, $inputs)
     {
-        $response = $this->getAIService()->streamRunWorkflow($app, $inputs);
+        $canEcho = false;
+        $buffer = '';
+        $response = $this->getAIService()->streamRunWorkflow($app, $inputs, function ($data) use (&$canEcho, &$buffer) {
+            if ('id:' === substr($data, 0, 3)) {
+                $canEcho = true;
+            }
+            if (!$canEcho) {
+                return;
+            }
+            $buffer .= $data;
+            if (substr($buffer, -2) !== "\n\n") {
+                return;
+            }
+            $parsed = explode("\n", $buffer);
+            $buffer = '';
+            if (substr($parsed[1], 6) == 'workflow.message') {
+                $parsedData = json_decode(substr($parsed[2], 5), true);
+                echo 'data:'.json_encode(['event' => 'message', 'answer' => $parsedData['content']], JSON_UNESCAPED_UNICODE)."\n\n";
+            }
+            if (substr($parsed[1], 6) == 'workflow.finished') {
+                echo 'data:'.json_encode(['event' => 'message_end'])."\n\n";
+            }
+            flush();
+        });
 //        $this->recordNewAnswer($app, $inputs, $response);
     }
 
