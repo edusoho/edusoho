@@ -49,6 +49,7 @@ export default {
     async slideQuestion(index) {
       this.questionIndex = index;
       await this.getQuestion();
+      this.aiAgentSdk.hideReminder();
     },
     async itemSlideNext() {
       this.questionIndex = 0;
