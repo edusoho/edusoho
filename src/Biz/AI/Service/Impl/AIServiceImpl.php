@@ -30,27 +30,27 @@ class AIServiceImpl extends BaseService implements AIService
 
     public function generateAnswer($app, $inputs)
     {
-        $response = $this->getAIService()->startAppCompletionStream($app, $inputs);
-        $this->recordNewAnswer($app, $inputs, $this->makeSSE($response));
+        $response = $this->getAIService()->streamRunWorkflow($app, $inputs);
+//        $this->recordNewAnswer($app, $inputs, $response);
     }
 
     public function stopGeneratingAnswer($app, $messageId, $taskId)
     {
-        $this->getAIService()->stopAppCompletion($app, $messageId, $taskId);
+//        $this->getAIService()->stopAppCompletion($app, $messageId, $taskId);
     }
 
     public function needGenerateNewAnswer($app, $inputs)
     {
-        $inputsHash = $this->makeHashForInputs($inputs);
-        $userId = $this->getCurrentUser()->getId();
-        if ($this->getAIAnswerRecordDao()->count(['userId' => $userId, 'app' => $app, 'inputsHash' => $inputsHash]) >= self::MAX_AI_ANALYSIS_COUNT) {
-            return false;
-        }
-        $results = $this->getAIAnswerResultDao()->findByAppAndInputsHash($app, $inputsHash);
-        $records = $this->getAIAnswerRecordDao()->findByUserIdAndAppAndInputsHash($userId, $app, $inputsHash);
-        if (array_diff(array_column($results, 'id'), array_column($records, 'resultId'))) {
-            return false;
-        }
+//        $inputsHash = $this->makeHashForInputs($inputs);
+//        $userId = $this->getCurrentUser()->getId();
+//        if ($this->getAIAnswerRecordDao()->count(['userId' => $userId, 'app' => $app, 'inputsHash' => $inputsHash]) >= self::MAX_AI_ANALYSIS_COUNT) {
+//            return false;
+//        }
+//        $results = $this->getAIAnswerResultDao()->findByAppAndInputsHash($app, $inputsHash);
+//        $records = $this->getAIAnswerRecordDao()->findByUserIdAndAppAndInputsHash($userId, $app, $inputsHash);
+//        if (array_diff(array_column($results, 'id'), array_column($records, 'resultId'))) {
+//            return false;
+//        }
 
         return true;
     }
@@ -197,16 +197,6 @@ class AIServiceImpl extends BaseService implements AIService
             'inputsHash' => $inputsHash,
             'resultId' => $resultId,
         ]);
-    }
-
-    private function makeSSE($response)
-    {
-        $sse = '';
-        foreach ($response as $data) {
-            $sse .= 'data:'.json_encode($data)."\n\n";
-        }
-
-        return $sse;
     }
 
     private function makeHashForInputs($inputs)

@@ -115,9 +115,10 @@ export default {
           if (index === messages.length - 1) {
             lastMessage = message;
           } else {
-            const parseMessage = JSON.parse(message.slice(5));
-            if (parseMessage.event === 'message') {
-              this.answers.push(parseMessage.answer);
+            const parseMessage = message.split('\n');
+            if (parseMessage[1].slice(6) === 'workflow.message') {
+              const parseData = JSON.parse(parseMessage[2].slice(5));
+              this.answers.push(parseData.content);
             }
           }
         });

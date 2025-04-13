@@ -11,7 +11,7 @@ use ESCloud\SDK\HttpClient\ClientException;
  */
 class AIService extends BaseService
 {
-    protected $host = 'ai-service.edusoho.net';
+    protected $host = 'ai.edusoho.net';
 
     protected $service = 'AI';
 
@@ -126,6 +126,11 @@ class AIService extends BaseService
     public function asyncRunWorkflow($workflow, $inputs, $callback)
     {
         return $this->request('POST', '/v1/workflow/asyncRun', ['workflow' => $workflow, 'inputs' => $inputs, 'callback' => $callback]);
+    }
+
+    public function streamRunWorkflow($workflow, $inputs)
+    {
+        return $this->request('POST', '/v1/workflow/streamRun', ['workflow' => $workflow, 'inputs' => $inputs], [], 'root', true);
     }
 
     public function createDataset($extId, $name, $domainId, $autoIndex)

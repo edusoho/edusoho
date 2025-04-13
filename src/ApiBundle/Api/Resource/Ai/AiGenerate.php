@@ -256,9 +256,10 @@ class AiGenerate extends AbstractResource
     {
         $answer = '';
         foreach (array_filter(explode("\n\n", $response)) as $slice) {
-            $data = json_decode(substr($slice, 5), true);
-            if ('message' == $data['event']) {
-                $answer .= $data['answer'];
+            $slices = explode("\n", $slice);
+            if (substr($slices[1], 6) == 'workflow.finished') {
+                $data = json_decode(substr($slices[2], 5), true);
+                $answer = $data['outputs']['content'];
             }
         }
 

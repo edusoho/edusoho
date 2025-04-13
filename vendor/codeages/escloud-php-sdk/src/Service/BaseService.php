@@ -164,16 +164,8 @@ abstract class BaseService
     protected function extractResultFromStreamResponse(Response $response)
     {
         $this->checkResponseHttpCode($response);
-        $result = [];
-        try {
-            foreach (array_filter(explode("\n\n", $response->getBody())) as $data) {
-                $result[] = SDK\json_decode(substr($data, 5), true);
-            }
-        } catch (\Exception $e) {
-            throw new SDKException($e->getMessage() . "(response: {$response->getBody()}");
-        }
 
-        return $result;
+        return $response->getBody();
     }
 
     /**

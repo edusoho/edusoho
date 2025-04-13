@@ -41,6 +41,9 @@ class Client implements ClientInterface
             $headers['Content-Type'] = 'application/json';
         }
         $stream = !empty($options['stream']);
+        if ($stream) {
+            $headers['Accept'] = 'text/event-stream';
+        }
 
         $uri = $this->buildUri($uri);
 
@@ -57,7 +60,7 @@ class Client implements ClientInterface
             $streamRawResponse = '';
             $canEcho = false;
             $options[CURLOPT_WRITEFUNCTION] = function ($curl, $data) use (&$streamRawResponse, &$canEcho) {
-                if ('data:' === substr($data, 0, 5)) {
+                if ('id:' === substr($data, 0, 3)) {
                     $canEcho = true;
                 }
                 if ($canEcho) {
