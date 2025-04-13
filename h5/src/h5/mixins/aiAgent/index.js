@@ -3,14 +3,14 @@ export default {
     initAIAgentSdk(token, chatMetaData, bottom, right, draggable = false) {
       const sdk = new window.AgentSDK({
         token: token,
-        uiIframeSrc: `${window.location.origin}/static-dist/libs/agent-web-sdk/ui/index.html`,
-        // uiIframeSrc: `http://edusoho.me/static-dist/libs/agent-web-sdk/ui/index.html`,
+        // uiIframeSrc: `${window.location.origin}/static-dist/libs/agent-web-sdk/ui/index.html`,
+        uiIframeSrc: `http://edusoho.me/static-dist/libs/agent-web-sdk/ui/index.html`,
         bottom: bottom,
         right: right,
         draggable: draggable,
       });
-      chatMetaData.workerUrl = `${window.location.origin}/agent_worker`;
-      // chatMetaData.workerUrl = `http://edusoho.me/agent_worker`;
+      // chatMetaData.workerUrl = `${window.location.origin}/agent_worker`;
+      chatMetaData.workerUrl = `http://edusoho.me/agent_worker`;
       sdk.setChatMetadata(chatMetaData);
       sdk.on('clickLink', (data) => {
         const regex = /\/course\/(\d+)\/task\/(\d+)/;
