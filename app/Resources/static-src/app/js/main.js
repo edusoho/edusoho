@@ -161,7 +161,7 @@ if (aiAgentToken) {
     token: aiAgentToken.value,
     uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html',
   });
-  sdk.setVariable('studyPlanGenerated', document.getElementById('studyPlanGenerated')?.value == '1'? true : false)
+  sdk.setVariable('studyPlanGenerated', document.getElementById('studyPlanGenerated')?.value == '1')
   sdk.setChatMetadata(JSON.parse(document.getElementById('chatMetaData')?.value));
   sdk.on('clickLink', (data) => {
     const regex = /\/course\/(\d+)\/task\/(\d+)/;
