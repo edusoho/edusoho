@@ -48,6 +48,7 @@
               @changeAnswer="changeAnswer"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
+              @questionSlideChange="questionSlideChange"
 							@changeEssayRadio="changeEssayRadio"
               @changeReviewedCount="changeReviewedCount"
 							@submitedQuestionStatus="submitedQuestionStatus"
@@ -210,7 +211,6 @@ export default {
 			this.allItems.forEach((item, index) => {
         this.iscando[index] = this.exerciseInfo.filter(subItem => subItem.questionId + '' === item.id).length <= 0;
 			});
-      this.getQuestion();
       this.tryInitAIAgentSdk();
 		})
     if (compareNowTime(Number(this.answerScene.start_time) * 1000)) {
@@ -247,7 +247,8 @@ export default {
 
           const btn = document.getElementById('agent-sdk-floating-button');
           if (!btn) return;
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', async () => {
+            await this.getQuestion();
             this.aiAgentSdk.showReminder({
               title: "遇到问题啦？",
               content: "小知老师来为你理清解题思路～",

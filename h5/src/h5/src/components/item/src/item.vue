@@ -524,7 +524,7 @@ export default {
     slideChange(index) {
       const swiperName = `childSwiper${this.item.id}`;
       this.swiperActiveIndex = this.$refs[swiperName].$swiper.activeIndex;
-      this.$emit("slideQuestion", this.swiperActiveIndex);
+      this.$emit("questionSlideChange", this.swiperActiveIndex);
     },
     setSwiperHeight() {
       const offsetTopHeight = document.getElementById("ibs-item-bank")

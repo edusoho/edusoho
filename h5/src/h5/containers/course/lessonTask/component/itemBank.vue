@@ -9,7 +9,7 @@
       :loop="false"
       :duration="100"
       :lazy-render="true"
-      @change="changeswiper"
+      @change="changeSwiper"
     >
       <van-swipe-item
         v-for="(paper, index) in info"
@@ -303,6 +303,7 @@ export default {
       refreshKey: true,
       myAnswer: null,
       touchable: true,
+      questionIndex: 0,
       question: {},
       aiAgentSdk: null,
     };
@@ -356,7 +357,6 @@ export default {
 
   },
   async mounted() {
-    await this.getQuestion(0);
     this.tryInitAIAgentSdk();
   },
   mixins: [aiAgent],
@@ -394,7 +394,7 @@ export default {
           });
         }
         const btn = document.getElementById('agent-sdk-floating-button');
-        btn?.addEventListener('click', () => {
+        btn?.addEventListener('click', async () => {
           this.aiAgentSdk.showReminder({
             title: "遇到问题啦？",
             content: "小知老师来为你理清解题思路～",
@@ -412,18 +412,18 @@ export default {
         });
       })
     },
-    async getQuestion(index) {
+    async getQuestion() {
       if (this.aiAgentRecordId) {
         this.question = await Api.getExerciseQuestion({
           query: {
             answerRecordId: this.aiAgentRecordId,
-            questionId: this.info[index].id,
+            questionId: this.info[this.questionIndex].id,
           },
         })
       }
     },
-    async changeswiper(index) {
-      await this.getQuestion(index);
+    async changeSwiper(index) {
+      this.questionIndex = index;
       this.aiAgentSdk.hideReminder();
       this.currentIndex = index;
       this.$emit('update:current', index + 1);

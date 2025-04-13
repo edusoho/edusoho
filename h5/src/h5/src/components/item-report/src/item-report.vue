@@ -35,7 +35,7 @@
               :exerciseInfo="answerRecord"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
-              @slideQuestion="slideQuestion"
+              @questionSlideChange="questionSlideChange"
             />
           </swiper-slide>
         </template>
@@ -144,7 +144,6 @@ export default {
   async mounted() {
     this.setSwiperHeight();
     this.getSectionResponses();
-    await this.getQuestion();
     this.tryInitAIAgentSdk();
   },
   methods: {
@@ -169,7 +168,8 @@ export default {
           });
           const btn = document.getElementById('agent-sdk-floating-button');
           if (!btn) return;
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', async () => {
+            await this.getQuestion();
             this.aiAgentSdk.showReminder({
               title: "遇到问题啦？",
               content: "小知老师来为你理清解题思路～",
