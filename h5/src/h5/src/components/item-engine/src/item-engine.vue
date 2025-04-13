@@ -258,7 +258,7 @@ export default {
                 workflow: 'teacher.question.idea',
                 inputs: {
                   domainId: res.aiTeacherDomain,
-                  question: this.items[this.itemIndex].questions[this.questionIndex].id,
+                  question: this.question.question,
                 }
               },
               chatContent: this.question.content,
