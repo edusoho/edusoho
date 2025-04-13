@@ -18,12 +18,14 @@ export default {
         if (matches){
           const courseId = matches[1];
           const taskId = matches[2];
-          this.$router.push({
-            name: 'course',
-            params: {
-              id: courseId
-            }
-          })
+          if (this.$route.name !== 'course') {
+            this.$router.push({
+              name: 'course',
+              params: {
+                id: courseId
+              }
+            })
+          }
           this.$nextTick(() => {
             const taskElement = document.getElementById(taskId)
             taskElement.click();
