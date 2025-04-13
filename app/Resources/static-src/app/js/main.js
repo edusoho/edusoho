@@ -161,7 +161,7 @@ if (aiAgentToken) {
     token: aiAgentToken.value,
     uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html',
   });
-  if (document.getElementById('studyPlanGenerated')?.value === '1') {
+  if (document.getElementById('studyPlanGenerated')?.value == '1') {
     sdk.setVariable('studyPlanGenerated', true)
   }
   sdk.setChatMetadata(JSON.parse(document.getElementById('chatMetaData')?.value));
