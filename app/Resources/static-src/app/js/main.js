@@ -160,7 +160,6 @@ if (aiAgentToken) {
   const sdk = new AgentSDK({
     token: aiAgentToken.value,
     uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html',
-    signalServerUrl: 'wss://test-ai-signal.edusoho.cn/',
   });
   if (document.getElementById('studyPlanGenerated')?.value === '1') {
     sdk.setVariable('studyPlanGenerated', true)
