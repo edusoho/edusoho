@@ -82,7 +82,7 @@ export default {
         if (res.aiTeacherDomain) {
           this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
-          }, 20, 20);
+          }, 20, 20, true);
           if (res.studyPlanGenerated) {
             this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
           }

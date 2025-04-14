@@ -375,7 +375,7 @@ export default {
           courseId: res.courseId,
           courseName:res.courseSetTitle,
           lessonId: this.$route.query.targetId
-        }, 80, 20, true);
+        }, 80, 20);
         if (res.studyPlanGenerated) {
           this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
         }
