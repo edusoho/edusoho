@@ -208,12 +208,16 @@ class StudyPlanEventSubscriber extends EventSubscriber
             $zhWeekday = DateToolkit::convertToZHWeekday($nextStudyDate->format('N'));
             $content .= "  \n下次学习在 {$nextStudyDate->format('Y年m月d日')}（{$zhWeekday}），届时我来提醒你哦~";
         }
-        $this->getAIService()->pushMessage([
-            'domainId' => $agentConfig['domainId'],
-            'userId' => $user['id'],
-            'contentType' => 'text',
-            'content' => $content,
-        ]);
+        try {
+            $this->getAIService()->pushMessage([
+                'domainId' => $agentConfig['domainId'],
+                'userId' => $user['id'],
+                'contentType' => 'text',
+                'content' => $content,
+            ]);
+        } catch (\Exception $e) {
+            $this->getBiz()['logger']->error('push message error: '.$e->getMessage());
+        }
     }
 
     private function getNextStudyDate($planId)

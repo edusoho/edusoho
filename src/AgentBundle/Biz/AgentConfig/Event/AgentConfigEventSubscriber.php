@@ -10,13 +10,13 @@ use Biz\AI\Util\AgentToken;
 use Biz\Course\Service\CourseService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\Question\Traits\QuestionAnswerModeTrait;
 use Biz\Question\Traits\QuestionFlatTrait;
 use Biz\WrongBook\Service\WrongQuestionService;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
+use Monolog\Logger;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AgentConfigEventSubscriber extends EventSubscriber
@@ -80,7 +80,11 @@ class AgentConfigEventSubscriber extends EventSubscriber
         if (empty($agentConfig)) {
             return;
         }
-        $this->getAIService()->deleteDataset($agentConfig['datasetId']);
+        try {
+            $this->getAIService()->deleteDataset($agentConfig['datasetId']);
+        } catch (\Exception $e) {
+            $this->getLogger()->error('delete dataset error: '.$e->getMessage());
+        }
         $this->getAgentConfigService()->deleteAgentConfig($agentConfig['id']);
     }
 
@@ -97,7 +101,11 @@ class AgentConfigEventSubscriber extends EventSubscriber
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
         $agentConfigs = $this->getAgentConfigService()->findAgentConfigsByCourseIds(array_column($courses, 'id'));
         foreach ($agentConfigs as $agentConfig) {
-            $this->getAIService()->updateDataset($agentConfig['datasetId'], ['name' => $courseSet['title']]);
+            try {
+                $this->getAIService()->updateDataset($agentConfig['datasetId'], ['name' => $courseSet['title']]);
+            } catch (\Exception $e) {
+                $this->getLogger()->error('update dataset error: '.$e->getMessage());
+            }
         }
     }
 
@@ -121,7 +129,11 @@ class AgentConfigEventSubscriber extends EventSubscriber
         if (empty($agentConfig)) {
             return;
         }
-        $this->getAIService()->deleteDocument($activity['documentId']);
+        try {
+            $this->getAIService()->deleteDocument($activity['documentId']);
+        } catch (\Exception $e) {
+            $this->getLogger()->error('delete document error: '.$e->getMessage());
+        }
         $this->createDatasetDocumentIfNecessary($agentConfig['datasetId'], $activity);
     }
 
@@ -129,7 +141,11 @@ class AgentConfigEventSubscriber extends EventSubscriber
     {
         $activity = $event->getSubject();
         if (!empty($activity['documentId'])) {
-            $this->getAIService()->deleteDocument($activity['documentId']);
+            try {
+                $this->getAIService()->deleteDocument($activity['documentId']);
+            } catch (\Exception $e) {
+                $this->getLogger()->error('delete document error: '.$e->getMessage());
+            }
         }
     }
 
@@ -165,28 +181,36 @@ class AgentConfigEventSubscriber extends EventSubscriber
                 'datasets' => [$agentConfig['datasetId']],
             ], $this->generateUrl('workflow_callback', ['workflow' => 'analysis-weaknesses', 'token' => (new AgentToken())->make()]));
         } catch (\Exception $e) {
-            $this->getBiz()['logger']->error('async run workflow error: '.$e->getMessage());
+            $this->getLogger()->error('async run workflow error: '.$e->getMessage());
         }
     }
 
     private function createDatasetDocumentIfNecessary($datasetId, $activity)
     {
         if ('text' == $activity['mediaType']) {
-            $document = $this->getAIService()->createDocumentByText([
-                'datasetId' => $datasetId,
-                'extId' => $activity['id'],
-                'name' => $activity['title'],
-                'content' => $activity['content'],
-            ]);
+            try {
+                $document = $this->getAIService()->createDocumentByText([
+                    'datasetId' => $datasetId,
+                    'extId' => $activity['id'],
+                    'name' => $activity['title'],
+                    'content' => $activity['content'],
+                ]);
+            } catch (\Exception $e) {
+                $this->getLogger()->error('create document by text error: '.$e->getMessage());
+            }
         }
         if (in_array($activity['mediaType'], ['audio', 'doc', 'ppt', 'video'])) {
             $activity = $this->getActivityService()->getActivity($activity['id'], true);
-            $document = $this->getAIService()->createDocumentByObject([
-                'datasetId' => $datasetId,
-                'extId' => $activity['id'],
-                'name' => $activity['title'],
-                'resNo' => $activity['ext']['file']['globalId'],
-            ]);
+            try {
+                $document = $this->getAIService()->createDocumentByObject([
+                    'datasetId' => $datasetId,
+                    'extId' => $activity['id'],
+                    'name' => $activity['title'],
+                    'resNo' => $activity['ext']['file']['globalId'],
+                ]);
+            } catch (\Exception $e) {
+                $this->getLogger()->error('create document by object error: '.$e->getMessage());
+            }
         }
         if (!empty($document)) {
             $this->getActivityDao()->update($activity['id'], ['documentId' => $document['id']]);
@@ -239,6 +263,14 @@ class AgentConfigEventSubscriber extends EventSubscriber
         global $kernel;
 
         return $kernel->getContainer()->get('router')->generate($route, $parameters, $referenceType);
+    }
+
+    /**
+     * @return Logger
+     */
+    private function getLogger()
+    {
+        return $this->getBiz()['logger'];
     }
 
     /**
