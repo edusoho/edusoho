@@ -157,12 +157,16 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
         $biz = $this->getBiz();
-        $this->getAIService()->asyncRunWorkflow('teacher.question.analysis-weaknesses', [
-            'domainId' => $domainId,
-            'userId' => $biz['user']['id'],
-            'questions' => $flatQuestions,
-            'datasets' => [$agentConfig['datasetId']],
-        ], $this->generateUrl('workflow_callback', ['workflow' => 'analysis-weaknesses', 'token' => (new AgentToken())->make()]));
+        try {
+            $this->getAIService()->asyncRunWorkflow('teacher.question.analysis-weaknesses', [
+                'domainId' => $domainId,
+                'userId' => $biz['user']['id'],
+                'questions' => $flatQuestions,
+                'datasets' => [$agentConfig['datasetId']],
+            ], $this->generateUrl('workflow_callback', ['workflow' => 'analysis-weaknesses', 'token' => (new AgentToken())->make()]));
+        } catch (\Exception $e) {
+            $this->getBiz()['logger']->error('async run workflow error: '.$e->getMessage());
+        }
     }
 
     private function createDatasetDocumentIfNecessary($datasetId, $activity)
