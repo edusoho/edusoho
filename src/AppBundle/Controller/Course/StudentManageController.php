@@ -80,7 +80,7 @@ class StudentManageController extends BaseController
             'paginator' => $paginator,
             'offset' => $paginator->getOffsetCount(),
             'isEnableAddAndRemove' => $isEnableAddAndRemove,
-            'enableExport' => $hasExportPermission,
+            'enableExport' => $hasExportPermission && $this->getCurrentUser()->hasPermission('custom_export_permission'),
         ]);
     }
 

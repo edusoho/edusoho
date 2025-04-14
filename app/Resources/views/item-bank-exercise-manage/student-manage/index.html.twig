@@ -12,7 +12,7 @@
     <div id="student-list-app"
          data-exercise-id="{{ exercise.id }}"
          data-enable-add-and-remove="{{ app.user.isAdmin() or setting('course.teacher_manage_student', 0) }}"
-         data-enable-export="{{ app.user.isAdmin() or setting('course.teacher_export_student', false) }}"
+         data-enable-export="{{ (app.user.isAdmin() or setting('course.teacher_export_student', false)) and canExport }}"
          data-exercise-status="{{ exercise.status }}"
     ></div>
   </div>
