@@ -15,7 +15,8 @@ export default {
       sdk.on('clickLink', (data) => {
         const regex = /\/course\/(\d+)\/task\/(\d+)/;
         const matches = data.match(regex);
-        if (matches){
+        if (matches) {
+          sdk.hideIframe();
           const courseId = matches[1];
           const taskId = matches[2];
           if (this.$route.name !== 'course') {
@@ -25,8 +26,6 @@ export default {
                 id: courseId
               }
             })
-          } else {
-            sdk.hideIframe();
           }
           this.$nextTick(() => {
             const taskElement = document.getElementById(taskId)
