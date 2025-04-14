@@ -841,7 +841,6 @@ export default {
               courseId: this.selectedPlanId,
               taskId: task.id,
               type: task.type,
-              backUrl: `/course/${this.selectedPlanId}`,
             },
           });
           break;
