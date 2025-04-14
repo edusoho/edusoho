@@ -120,7 +120,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
                 'dailyAvgTime' => $data['dailyAvgTime'],
             ]);
         }
-        $data = ArrayToolkit::parts($data, ['courseId', 'startDate', 'endDate', 'weekDays']);
+        $data = ArrayToolkit::parts($data, ['startDate', 'endDate', 'weekDays', 'dailyAvgTime']);
 
         return $this->getStudyPlanDao()->update($studyPlan['id'], $data);
     }
