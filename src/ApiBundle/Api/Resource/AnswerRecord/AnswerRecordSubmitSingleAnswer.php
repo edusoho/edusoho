@@ -53,7 +53,7 @@ class AnswerRecordSubmitSingleAnswer extends AbstractResource
             'reviewedCount' => $reviewedCount,
             'totalCount' => $assessment['question_count'],
             'isAnswerFinished' => (AnswerRecordStatus::FINISHED == $answerRecord['status']) ? 1 : 0,
-            'aiAnalysisEnable' => $this->canGenerateAIAnalysisForStudent($question, $item),
+            'aiAnalysisEnable' => !$this->isAgentActive($answerRecord['answer_scene_id']) && $this->canGenerateAIAnalysisForStudent($question, $item),
         ];
     }
 
