@@ -1256,6 +1256,7 @@ router.beforeEach(async (to, from, next) => {
 
   if ([
     'course',
+    'course_web',
     'exerciseDo',
     'exerciseAnalysis',
     'homeworkDo',
