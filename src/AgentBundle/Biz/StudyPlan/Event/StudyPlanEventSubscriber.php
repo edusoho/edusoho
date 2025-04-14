@@ -85,7 +85,7 @@ class StudyPlanEventSubscriber extends EventSubscriber
             $this->pushMessageIfNecessary($plan);
         }
         if ($hasLaterTaskLearned) {
-            $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planId' => $plan['id'], 'learned' => 0], ['studyDate' => 'ASC'], 0, PHP_INT_MAX);
+            $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planId' => $plan['id'], 'learned' => 0], ['studyDate' => 'ASC', 'id' => 'ASC'], 0, PHP_INT_MAX);
             $courseTasks = $this->getTaskService()->findTasksByIds(array_column($planTasks, 'taskId'));
             $courseTasks = array_column($courseTasks, null, 'id');
             $taskScheduler = new TaskScheduler();
@@ -121,7 +121,7 @@ class StudyPlanEventSubscriber extends EventSubscriber
             $this->pushMessageIfNecessary($plan);
         }
         if ($hasLaterTaskLearned) {
-            $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planId' => $plan['id'], 'learned' => 0], ['studyDate' => 'ASC'], 0, PHP_INT_MAX);
+            $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planId' => $plan['id'], 'learned' => 0], ['studyDate' => 'ASC', 'id' => 'ASC'], 0, PHP_INT_MAX);
             $courseTasks = $this->getTaskService()->findTasksByIds(array_column($planTasks, 'taskId'));
             $courseTasks = array_column($courseTasks, null, 'id');
             $taskScheduler = new TaskScheduler();
@@ -145,9 +145,9 @@ class StudyPlanEventSubscriber extends EventSubscriber
             return;
         }
         $planIds = array_column($plans, 'id');
-        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => $planIds, 'taskId' => $task['id']], ['studyDate' => 'ASC'], 0, PHP_INT_MAX);
+        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => $planIds, 'taskId' => $task['id']], [], 0, PHP_INT_MAX);
         $planIds = array_values(array_diff($planIds, array_unique(array_column($planTasks, 'planId'))));
-        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => $planIds, 'learned' => 0], ['studyDate' => 'ASC'], 0, PHP_INT_MAX);
+        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => $planIds, 'learned' => 0], ['studyDate' => 'ASC', 'id' => 'ASC'], 0, PHP_INT_MAX);
         $courseTasks = $this->getTaskService()->findTasksByIds(array_column($planTasks, 'taskId'));
         $courseTasks = array_column($courseTasks, null, 'id');
         $planTasksGroup = ArrayToolkit::group($planTasks, 'planId');
@@ -171,7 +171,7 @@ class StudyPlanEventSubscriber extends EventSubscriber
             return;
         }
         $plans = $this->getStudyPlanService()->findActivePlansByIds(array_column($planTasks, 'planId'));
-        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => array_column($plans, 'id'), 'excludeTaskId' => $task['id'], 'learned' => 0], ['studyDate' => 'ASC'], 0, PHP_INT_MAX);
+        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => array_column($plans, 'id'), 'excludeTaskId' => $task['id'], 'learned' => 0], ['studyDate' => 'ASC', 'id' => 'ASC'], 0, PHP_INT_MAX);
         $courseTasks = $this->getTaskService()->findTasksByIds(array_column($planTasks, 'taskId'));
         $courseTasks = array_column($courseTasks, null, 'id');
         $planTasksGroup = ArrayToolkit::group($planTasks, 'planId');

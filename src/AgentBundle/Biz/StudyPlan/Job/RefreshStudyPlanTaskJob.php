@@ -17,7 +17,7 @@ class RefreshStudyPlanTaskJob extends AbstractJob
             return;
         }
         $plans = $this->getStudyPlanService()->findActivePlansByIds(array_column($planTasks, 'planId'));
-        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => array_column($plans, 'id'), 'learned' => 0], ['studyDate' => 'ASC'], 0, PHP_INT_MAX);
+        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['planIds' => array_column($plans, 'id'), 'learned' => 0], ['studyDate' => 'ASC', 'id' => 'ASC'], 0, PHP_INT_MAX);
         $courseTasks = $this->getTaskService()->findTasksByIds(array_column($planTasks, 'taskId'));
         $courseTasks = array_column($courseTasks, null, 'id');
         $planTasksGroup = ArrayToolkit::group($planTasks, 'planId');
