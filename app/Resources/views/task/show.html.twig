@@ -157,7 +157,7 @@
     </div>
   </div>
 
-  {% if is_course_show_ai_agent(course.id) and task.type != 'testpaper' %}
+  {% if is_course_task_show_ai_agent(course.id, task.id) %}
     <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
     <input type="hidden" id="chatMetaData" value="{{ get_lesson_chat_meta_data(course, task) }}" />
     <input type="hidden" id="studyPlanGenerated" value="{{ is_study_plan_generated(course.id) }}" />
