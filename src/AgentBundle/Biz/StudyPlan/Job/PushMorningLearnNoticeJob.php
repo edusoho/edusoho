@@ -4,6 +4,7 @@ namespace AgentBundle\Biz\StudyPlan\Job;
 
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
+use AppBundle\Common\ArrayToolkit;
 use Biz\AI\Service\AIService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
@@ -20,24 +21,24 @@ class PushMorningLearnNoticeJob extends AbstractJob
         }
         $agentConfigs = array_column($agentConfigs, null, 'courseId');
         $courseIds = array_column($agentConfigs, 'courseId');
-        $details = $this->getStudyPlanService()->searchPlanDetails(['studyDate' => date('Y-m-d'), 'courseIds' => $courseIds, 'learned' => 0], [], 0, PHP_INT_MAX);
-        $plans = $this->getStudyPlanService()->findPlansByIds(array_column($details, 'planId'));
-        $plans = array_column($plans, null, 'id');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $planTasks = $this->getStudyPlanService()->searchPlanTasks(['studyDate' => date('Y-m-d'), 'courseIds' => $courseIds, 'learned' => 0], [], 0, PHP_INT_MAX);
+        $plans = $this->getStudyPlanService()->findActivePlansByIds(array_column($planTasks, 'planId'));
         $users = $this->getUserService()->findUsersByIds(array_column($plans, 'userId'));
-        $tasks = $this->findTasks($details);
-        foreach (array_chunk($details, 1000) as $detailsChunk) {
+        $tasks = $this->getTaskService()->findTasksByIds(array_column($planTasks, 'taskId'));
+        $tasks = array_column($tasks, null, 'id');
+        $planTasksGroup = ArrayToolkit::group($planTasks, 'planId');
+        foreach (array_chunk($plans, 1000) as $plansChunk) {
             $params = [];
-            foreach ($detailsChunk as $detail) {
-                $userId = $plans[$detail['planId']]['userId'];
-                $domainId = $agentConfigs[$detail['courseId']]['domainId'];
+            foreach ($plansChunk as $plan) {
+                $domainId = $agentConfigs[$plan['courseId']]['domainId'];
                 $params[] = [
                     'domainId' => $domainId,
-                    'userId' => $userId,
+                    'userId' => $plan['userId'],
                     'contentType' => 'text',
-                    'content' => $this->makeMarkdown($users[$userId]['nickname'], $courses[$detail['courseId']]['courseSetTitle'], array_keys($detail['tasks']), $tasks),
+                    'content' => $this->makeMarkdown($users[$plan['userId']]['nickname'], $courses[$plan['courseId']]['courseSetTitle'], $planTasksGroup[$plan['id']], $tasks),
                     'push' => [
-                        'userId' => $userId,
+                        'userId' => $plan['userId'],
                         'title' => '小知老师提醒你来学',
                         'message' => '今日挑战等你来完成，快来学习啊~',
                         'category' => 'todo',
@@ -52,23 +53,12 @@ class PushMorningLearnNoticeJob extends AbstractJob
         }
     }
 
-    private function findTasks($details)
-    {
-        $taskIds = [];
-        foreach ($details as $detail) {
-            $taskIds = array_merge($taskIds, array_keys($detail['tasks']));
-        }
-        $tasks = $this->getTaskService()->findTasksByIds($taskIds);
-
-        return array_column($tasks, null, 'id');
-    }
-
-    private function makeMarkdown($nickname, $courseTitle, $taskIds, $tasks)
+    private function makeMarkdown($nickname, $courseTitle, $planTasks, $tasks)
     {
         $markdown = "Hi，{$nickname}同学，今日你将学习《{$courseTitle}》，这是我为你规划的今日学习内容：  \n";
-        foreach ($taskIds as $key => $taskId) {
+        foreach ($planTasks as $key => $planTask) {
             $seq = $key + 1;
-            $markdown .= "* [任务{$seq}：{$tasks[$taskId]['title']}](/course/{$tasks[$taskId]['courseId']}/task/{$taskId})\n";
+            $markdown .= "* [任务{$seq}：{$tasks[$planTask['taskId']]['title']}](/course/{$tasks[$planTask['taskId']]['courseId']}/task/{$planTask['taskId']})\n";
         }
 
         return $markdown;

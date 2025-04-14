@@ -2,31 +2,28 @@
 
 namespace AgentBundle\Biz\StudyPlan\Dao\Impl;
 
-use AgentBundle\Biz\StudyPlan\Dao\StudyPlanDetailDao;
+use AgentBundle\Biz\StudyPlan\Dao\StudyPlanTaskDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class StudyPlanDetailDaoImpl extends AdvancedDaoImpl implements StudyPlanDetailDao
+class StudyPlanTaskDaoImpl extends AdvancedDaoImpl implements StudyPlanTaskDao
 {
-    protected $table = 'study_plan_detail';
-
-    public function getByPlanIdAndStudyDate($planId, $studyDate)
-    {
-        return $this->getByFields(['planId' => $planId, 'studyDate' => $studyDate]);
-    }
+    protected $table = 'study_plan_task';
 
     public function declares()
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['id', 'studyDate', 'createdTime', 'updatedTime'],
-            'serializes' => ['tasks' => 'json'],
             'conditions' => [
                 'id IN (:ids)',
                 'planId = :planId',
+                'planId IN (:planIdIds)',
                 'studyDate = :studyDate',
                 'learned = :learned',
                 'courseId IN (:courseIds)',
+                'courseId = :courseId',
+                'taskId = :taskId',
+                'taskId != :excludeTaskId',
             ],
         ];
     }

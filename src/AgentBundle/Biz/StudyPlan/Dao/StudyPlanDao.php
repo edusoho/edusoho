@@ -9,4 +9,6 @@ interface StudyPlanDao extends GeneralDaoInterface
     public function getStudyPlanByUserIdAndCourseId($userId, $courseId);
 
     public function findByIds($ids);
+
+    public function findByCourseId($courseId);
 }
