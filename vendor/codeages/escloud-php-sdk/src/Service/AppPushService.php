@@ -4,7 +4,7 @@ namespace ESCloud\SDK\Service;
 
 class AppPushService extends BaseService
 {
-    protected $host = 'test-push-service.edusoho.cn';
+    protected $host = 'push-service.edusoho.net';
 
     protected $service = 'push';
 
