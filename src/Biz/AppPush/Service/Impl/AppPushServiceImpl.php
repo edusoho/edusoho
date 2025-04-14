@@ -21,6 +21,10 @@ class AppPushServiceImpl extends BaseService implements AppPushService
 
     public function unbindDevice($userId)
     {
+        $result = $this->getAppPushService()->inspectTenant();
+        if ('ok' != $result['status']) {
+            $this->getAppPushService()->enableTenant();
+        }
         $this->getAppPushService()->unbindDevice($userId);
     }
 
