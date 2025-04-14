@@ -136,7 +136,11 @@ class AgentConfigEventSubscriber extends EventSubscriber
     public function onAnswerSubmitted(Event $event)
     {
         $answerRecord = $event->getSubject();
-        $domainId = $this->findRelatedCourseDomainId($answerRecord['answer_scene_id']);
+        $courseId = $this->getRelatedCourseId($answerRecord['answer_scene_id']);
+        if (empty($courseId)) {
+            return;
+        }
+        $domainId = $this->getDomainIdByCourseId($courseId);
         if (empty($domainId)) {
             return;
         }
@@ -151,13 +155,13 @@ class AgentConfigEventSubscriber extends EventSubscriber
             $type = $this->modeToType[$question['answer_mode']];
             $flatQuestions[] = "{$this->flattenMain($type, $question)}{$this->flattenAnswer($type, $question)}{$this->flattenWrongAnswer($type, $wrongAnswerQuestionReports[$question['id']]['response'])}{$this->flattenAnalysis($question)}";
         }
-        $agentConfigs = $this->getAgentConfigService()->findAgentConfigsByDomainId($domainId);
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
         $biz = $this->getBiz();
         $this->getAIService()->asyncRunWorkflow('teacher.question.analysis-weaknesses', [
             'domainId' => $domainId,
             'userId' => $biz['user']['id'],
             'questions' => $flatQuestions,
-            'datasets' => array_column($agentConfigs, 'datasetId'),
+            'datasets' => [$agentConfig['datasetId']],
         ], $this->generateUrl('workflow_callback', ['workflow' => 'analysis-weaknesses', 'token' => (new AgentToken())->make()]));
     }
 
@@ -185,11 +189,11 @@ class AgentConfigEventSubscriber extends EventSubscriber
         }
     }
 
-    private function findRelatedCourseDomainId($answerSceneId)
+    private function getRelatedCourseId($answerSceneId)
     {
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
         if (!empty($activity)) {
-            return $this->findDomainIdByCourseId($activity['fromCourseId']);
+            return $activity['fromCourseId'];
         }
         $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
         if (!empty($module)) {
@@ -201,9 +205,9 @@ class AgentConfigEventSubscriber extends EventSubscriber
                 if ('course' != $exerciseBind['bindType']) {
                     continue;
                 }
-                $domainId = $this->findDomainIdByCourseId($exerciseBind['bindId']);
+                $domainId = $this->getDomainIdByCourseId($exerciseBind['bindId']);
                 if (!empty($domainId)) {
-                    return $domainId;
+                    return $exerciseBind['bindId'];
                 }
             }
             return false;
@@ -213,10 +217,10 @@ class AgentConfigEventSubscriber extends EventSubscriber
             return false;
         }
 
-        return $this->findDomainIdByCourseId($pool['target_id']);
+        return $pool['target_id'];
     }
 
-    private function findDomainIdByCourseId($courseId)
+    private function getDomainIdByCourseId($courseId)
     {
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
         if (!empty($agentConfig['isActive']) && !empty($agentConfig['isDiagnosisActive'])) {
