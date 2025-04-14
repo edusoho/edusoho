@@ -9,6 +9,8 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -38,6 +40,7 @@ class AIExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFunction('ai_agent_token', [$this, 'makeAIAgentToken']),
             new \Twig_SimpleFunction('is_course_show_ai_agent', [$this, 'isCourseShowAIAgent']),
+            new \Twig_SimpleFunction('is_course_task_show_ai_agent', [$this, 'isCourseTaskShowAIAgent']),
             new \Twig_SimpleFunction('is_answer_show_ai_agent', [$this, 'isAnswerShowAIAgent']),
             new \Twig_SimpleFunction('get_course_chat_meta_data', [$this, 'getCourseChatMetaData']),
             new \Twig_SimpleFunction('get_lesson_chat_meta_data', [$this, 'getLessonChatMetaData']),
@@ -64,6 +67,32 @@ class AIExtension extends \Twig_Extension
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
 
         return !empty($agentConfig['isActive']);
+    }
+
+    public function isCourseTaskShowAIAgent($courseId, $taskId)
+    {
+        if (!$this->getCourseMemberService()->isCourseStudent($courseId, $this->getCurrentUser()->getId())) {
+            return false;
+        }
+        $course = $this->getCourseService()->getCourse($courseId);
+        $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        if ($this->container->get('web.twig.course_extension')->isMemberExpired($course, $courseMember)) {
+            return false;
+        }
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+        if (empty($agentConfig['isActive'])) {
+            return false;
+        }
+        $task = $this->getTaskService()->getTask($taskId);
+        if ('testpaper' != $task['type']) {
+            return true;
+        }
+        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($taskId, $this->getCurrentUser()->getId());
+        if (!empty($taskResult) && 'finish' == $taskResult['status']) {
+            return true;
+        }
+
+        return false;
     }
 
     public function isAnswerShowAIAgent($answerRecordId)
@@ -169,6 +198,22 @@ class AIExtension extends \Twig_Extension
     private function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    private function getTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    private function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
     }
 
     /**
