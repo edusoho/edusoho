@@ -342,7 +342,7 @@ export default {
             domainId: res.aiTeacherDomain,
             courseId: res.courseId,
             courseName: res.courseSetTitle,
-          }, null, null, null, true);
+          }, null, null);
           if (res.studyPlanGenerated) {
             this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
           }

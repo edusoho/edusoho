@@ -845,12 +845,8 @@ export default {
           });
           break;
         case 'live':
-          // eslint-disable-next-line no-case-declarations
           const nowDate = new Date();
-          // eslint-disable-next-line no-case-declarations
           const endDate = new Date(task.endTime * 1000);
-          // const startDate = new Date(task.startTime * 1000);
-          // eslint-disable-next-line no-case-declarations
           let replay = false;
           if (nowDate > endDate) {
             if (
@@ -890,7 +886,6 @@ export default {
           });
           break;
         case 'testpaper':
-          // eslint-disable-next-line no-case-declarations
           const testId = task.activity.testpaperInfo.testpaperId;
           this.$router.push({
             name: 'testpaperIntro',
