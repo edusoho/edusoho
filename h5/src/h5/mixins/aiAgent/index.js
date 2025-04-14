@@ -16,7 +16,6 @@ export default {
         const regex = /\/course\/(\d+)\/task\/(\d+)/;
         const matches = data.match(regex);
         if (matches) {
-          sdk.hideIframe();
           const courseId = matches[1];
           const taskId = matches[2];
           if (this.$route.name !== 'course') {
@@ -26,11 +25,15 @@ export default {
                 id: courseId
               }
             })
-          }
-          this.$nextTick(() => {
+            this.$nextTick(() => {
+              const taskElement = document.getElementById(taskId)
+              taskElement.click();
+            })
+          } else {
+            sdk.hideIframe();
             const taskElement = document.getElementById(taskId)
             taskElement.click();
-          })
+          }
         } else {
           window.open(data, '_blank');
         }
