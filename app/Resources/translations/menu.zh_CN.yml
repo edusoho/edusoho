@@ -1086,3 +1086,5 @@ admin.wap_setting.version_setting: 版本设置
 admin.wap_setting.pay_setting: 支付设置
 admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件
 admin_v2.cloud.question_bank.attachment_setting.basic_tab: 题库附件设置
+
+admin_v2.total_site_export: 全站导出权限

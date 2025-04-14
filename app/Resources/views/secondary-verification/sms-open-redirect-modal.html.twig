@@ -1,0 +1,15 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-custom" %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/secondary-verification/index.js', 'app/js/exporter/index.js']) %}
+
+{% block title %}
+  {{ 'admin_v2.secondary.verification.security_verification'|trans }}
+{% endblock %}
+{% block body %}
+  为了保障网校数据安全导出时需进行短信验证，前往<a href="/admin/v2/edu_cloud/sms/overview">开通云短信>></a>
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}
+

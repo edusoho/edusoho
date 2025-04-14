@@ -136,6 +136,7 @@ class ClassroomManageController extends BaseController
                 'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($students, 'userId')),
                 'paginator' => $paginator,
                 'role' => $role,
+                'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
                 'disableDeleteSearchResult' => empty($fields['keyword']) && empty($fields['expired']),
                 'offset' => $paginator->getOffsetCount(),
             ]
@@ -405,7 +406,7 @@ class ClassroomManageController extends BaseController
             'deadlineBefore',
             'userKeyword',
         ]);
-        if (isset($condition['userKeyword']) && $condition['userKeyword'] != '') {
+        if (isset($condition['userKeyword']) && '' != $condition['userKeyword']) {
             $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($condition['userKeyword']);
             unset($condition['userKeyword']);
         }
@@ -815,6 +816,7 @@ class ClassroomManageController extends BaseController
     public function itemBankAction($id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
+
         return $this->render(
             'classroom-manage/item-bank.html.twig',
             [
@@ -1327,6 +1329,7 @@ class ClassroomManageController extends BaseController
             $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'user_id' => $member['userId'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
             if (!empty($records)) {
                 $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+
                 return "{$operator['nickname']}添加";
             }
         }

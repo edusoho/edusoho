@@ -52,6 +52,7 @@ class StudentManageController extends BaseController
             'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($students, 'userId')),
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             'paginator' => $paginator,
+            'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
         ]);
     }
 

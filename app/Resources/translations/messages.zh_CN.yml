@@ -12555,3 +12555,6 @@ admin_v2.question.ai_analysis.upgrade_now: 立即升级
 #电子合同
 admin_v2.contract.experience: ，体验安全的电子合同功能
 admin_v2.contract.tittle: 全新上线电子合同功能，带来高效、安全的签署体验，助力企业迈向数字化合规管理新阶段
+
+#二次验证
+admin_v2.secondary.verification.security_verification: 安全验证
