@@ -4,16 +4,15 @@ namespace AppBundle\Twig;
 
 use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
-use Biz\Activity\Service\ActivityService;
 use Biz\AI\Util\AgentToken;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\ItemBank\Answer\Constant\AnswerRecordStatus;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -88,12 +87,8 @@ class AIExtension extends \Twig_Extension
         if ('testpaper' != $task['type']) {
             return true;
         }
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()->getId());
-        if (empty($answerRecord)) {
-            return false;
-        }
-        if (AnswerRecordStatus::FINISHED == $answerRecord['status']) {
+        $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($taskId, $this->getCurrentUser()->getId());
+        if (!empty($taskResult) && 'finish' == $taskResult['status']) {
             return true;
         }
 
@@ -214,11 +209,11 @@ class AIExtension extends \Twig_Extension
     }
 
     /**
-     * @return ActivityService
+     * @return TaskResultService
      */
-    private function getActivityService()
+    private function getTaskResultService()
     {
-        return $this->biz->service('Activity:ActivityService');
+        return $this->biz->service('Task:TaskResultService');
     }
 
     /**
