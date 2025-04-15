@@ -17,7 +17,7 @@ class StudyPlanTaskDaoImpl extends AdvancedDaoImpl implements StudyPlanTaskDao
             'conditions' => [
                 'id IN (:ids)',
                 'planId = :planId',
-                'planId IN (:planIdIds)',
+                'planId IN (:planIds)',
                 'studyDate = :studyDate',
                 'learned = :learned',
                 'courseId IN (:courseIds)',
