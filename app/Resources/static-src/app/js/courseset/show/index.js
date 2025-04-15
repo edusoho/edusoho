@@ -90,30 +90,11 @@ function remainTime() {
     });
   }
 }
-// 暂时去掉块状
-// let orderLearnSwiper = null;
-// $('.js-task-show-type').on('click', 'a', function() {
-//     let $this = $(this).addClass('active');
-//     $($this.data('list')).removeClass('hidden');
-//     $($this.siblings('a').removeClass('active').data('list')).addClass('hidden');
-//     if($this.data('type') == 'chart'&& !orderLearnSwiper) {
-//       initSwiper();
-//     }
-// })
-// 暂时去掉块状
-// function initSwiper() {
-//   orderLearnSwiper = new Swiper('.swiper-container',{
-//     pagination: '.swiper-pager',
-//     loop:true,
-//     grabCursor: true,
-//     paginationClickable: true
-//   })
-//   $('.arrow-left').on('click', function(e){
-//     e.preventDefault()
-//     orderLearnSwiper.swipePrev();
-//   })
-//   $('.arrow-right').on('click', function(e){
-//     e.preventDefault()
-//     orderLearnSwiper.swipeNext();
-//   })
-// }
+
+if (document.getElementById('studyPlanGenerated').value == '0') {
+  window.agentSdk.showReminder({
+    title: "HI，我是你的 AI 老师小知～",
+    content: `欢迎加入《${JSON.parse(document.getElementById('chatMetaData')?.value).courseName}》课程，我将在你学习的过程中为你提供专业答疑、督学提醒等学习服务，现在点击下方「制定学习计划」来生成专属学习计划吧！`,
+    buttonContent: 'plan.generate',
+  })
+}

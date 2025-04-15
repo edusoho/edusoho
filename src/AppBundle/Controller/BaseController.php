@@ -10,6 +10,7 @@ use Biz\Common\CommonException;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -85,6 +86,33 @@ class BaseController extends Controller
         $currentUser->fromArray($user);
 
         return $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+    }
+
+    protected function authByToken(Request $request)
+    {
+        $authorization = $request->headers->get('Authorization');
+        if (!empty($authorization) && (false !== strpos($authorization, 'Bearer '))) {
+            $token = str_replace('Bearer ', '', $authorization);
+        } else {
+            $token = $request->query->get('token');
+        }
+        if (empty($token)) {
+            return;
+        }
+        $storage = $this->setting('storage', []);
+        try {
+            $payload = JWT::decode($token, [$storage['cloud_access_key'] => $storage['cloud_secret_key']], ['HS256']);
+        } catch (\RuntimeException $e) {
+            return;
+        }
+        $user = $this->getUserService()->getUser($payload->sub);
+        if (empty($user)) {
+            return;
+        }
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $biz = $this->getBiz();
+        $biz['user'] = $currentUser;
     }
 
     protected function fillUserStatus($conditions)
