@@ -161,7 +161,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
     {
         $plans = $this->getStudyPlanDao()->findByIds($ids);
         $plans = array_filter($plans, function ($plan) {
-            return empty($plan['endDate']) || ($plan['endDate'] > date('Y-m-d'));
+            return empty($plan['endDate']) || ($plan['endDate'] >= date('Y-m-d'));
         });
 
         return $plans;
@@ -171,7 +171,7 @@ class StudyPlanServiceImpl extends BaseService implements StudyPlanService
     {
         $plans = $this->getStudyPlanDao()->findByCourseId($courseId);
         $plans = array_filter($plans, function ($plan) {
-            return empty($plan['endDate']) || ($plan['endDate'] > date('Y-m-d'));
+            return empty($plan['endDate']) || ($plan['endDate'] >= date('Y-m-d'));
         });
 
         return $plans;
