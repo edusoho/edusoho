@@ -28,25 +28,75 @@ define(function(require, exports, module) {
             });
         });
 
-        $table.on('click', '.delete-user', function() {
-            var $trigger = $(this);
-
-            if (!confirm(Translator.trans('admin.user.lock_operational_hint_new',{title:$trigger.attr('title')}))) {
-                return;
+      $table.on('click', '.delete-user', function() {
+        var $trigger = $(this);
+        var performDelete = function() {
+          $.post($trigger.data('url'), function(result) {
+            Notify.success(Translator.trans('admin.user.lock_operational_success_hint',{title:$trigger.attr('title')}));
+            window.location.reload();
+          }).error(function(e, textStatus, errorThrown) {
+            var $json = jQuery.parseJSON(e.responseText);
+            if($json.error.message){
+              Notify.danger(Translator.trans($json.error.message));
+            }else{
+              Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
             }
+          });
+        };
 
-            $.post($(this).data('url'), function(result) {
-                Notify.success(Translator.trans('admin.user.lock_operational_success_hint',{title:$trigger.attr('title')}));
-                window.location.reload();
-            }).error(function(e, textStatus, errorThrown) {
-                var $json = jQuery.parseJSON(e.responseText);
-                if($json.error.message){
-                    Notify.danger(Translator.trans($json.error.message));
-                }else{
-                    Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
-                }
+        // 第一步：先进行常规确认
+        if (!confirm(Translator.trans('admin.user.lock_operational_hint_new',{title:$trigger.attr('title')}))) {
+          return;
+        }
+
+        // 第二步：确认后检查是否需要二次验证
+        if ($('#needValidate').val() == 1) {
+          var $modal = $('#modal');
+          $modal.load('/secondary/verification?exportFileName=courseStudent&targetFormId=1', function() {
+            $modal.modal('show');
+
+            // 监听验证成功事件（需要与后端验证逻辑配合）
+            $modal.off('verification.success').on('verification.success', function() {
+              $modal.modal('hide');
+              performDelete();
             });
-        });
+          });
+        } else {
+          // 无需二次验证直接执行
+          performDelete();
+        }
+      });
+
+        // $table.on('click', '.delete-user', function() {
+        //     var $trigger = $(this);
+        //   if ($('#needValidate').val() == 1) {
+        //     console.log('&&&&&&&&&&&&&&');
+        //     // const verificationResponse = fetch(`/secondary/verification?exportFileName=courseStudent&targetFormId=1`;
+        //     // const html = await verificationResponse.text();
+        //     const $modal = $('#modal');
+        //     const html = 'abcddd';
+        //     // $modal.html(html).modal('show');
+        //     // $modal.html(html).modal('show');
+        //     $modal.load('/secondary/verification?exportFileName=courseStudent&targetFormId=1');
+        //     $modal.modal('show');
+        //     return;
+        //   }
+        //     if (!confirm(Translator.trans('admin.user.lock_operational_hint_new',{title:$trigger.attr('title')}))) {
+        //         return;
+        //     }
+        //
+        //     $.post($(this).data('url'), function(result) {
+        //         Notify.success(Translator.trans('admin.user.lock_operational_success_hint',{title:$trigger.attr('title')}));
+        //         window.location.reload();
+        //     }).error(function(e, textStatus, errorThrown) {
+        //         var $json = jQuery.parseJSON(e.responseText);
+        //         if($json.error.message){
+        //             Notify.danger(Translator.trans($json.error.message));
+        //         }else{
+        //             Notify.danger(Translator.trans('admin.user.lock_operational_fail_hint',{title:$trigger.attr('title')}));
+        //         }
+        //     });
+        // });
 
         $table.on('click', '.send-passwordreset-email', function() {
             Notify.info(Translator.trans('admin.user.sending_passwordreset_email_hint'), 60);
@@ -90,6 +140,7 @@ define(function(require, exports, module) {
         });
 
         $("#endDate").datetimepicker('setStartDate', $("#startDate").val().substring(0, 16));
+
     };
 
 });
