@@ -46,6 +46,9 @@
     {% elseif exportFileName == 'courseStudent' %}
       <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-course-student-btn cd-btn-primary" id="coruse-student-export" data-toggle="modal" data-target="#modal"
       >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'itemBankExercise' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn item-bank-exercise-student-export cd-btn-primary" id="item-bank-exercise-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
     {% else %}
       <a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} btn cd-btn cd-btn-lg mobile-bind-form__btn {% endif %} mhs {{ exportClass|default('cd-btn-primary') }} js-export-btn"
          href="javascript:;"

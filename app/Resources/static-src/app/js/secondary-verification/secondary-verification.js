@@ -19,7 +19,7 @@ export default class MobileBind {
   // +++ 新增方法：绑定导出按钮的点击事件 +++
   initExportBtnEvent() {
     const self = this;
-    $('.js-export-btn').on('click', function(e) {
+    $('.js-export-btn').on('click', function (e) {
       e.preventDefault(); // 防止链接默认行为
       e.stopPropagation();
       if (self.$form.valid()) { // 手动触发表单验证
@@ -28,7 +28,7 @@ export default class MobileBind {
       }
     });
 
-    $('.js-export-classroom-student-btn').on('click', function(e) {
+    $('.js-export-classroom-student-btn').on('click', function (e) {
       $('[name="sms_code"]').valid();
       e.preventDefault();
       const $smsCodeInput = $('#sms_code');
@@ -39,7 +39,7 @@ export default class MobileBind {
       // }
     });
 
-    $('.js-export-course-student-btn').on('click', function(e) {
+    $('.js-export-course-student-btn').on('click', function (e) {
       e.preventDefault();
       const $modal = $('#modal');
       var paramsStr = $('#params').val(); // 获取 JSON 字符串
@@ -51,6 +51,76 @@ export default class MobileBind {
         data: {
           courseSetId: params['courseSetId'],
           courseId: params['courseId']
+        },
+        success: function (response) {
+          if (response.success) {
+            window.totalCount = response.counts.reduce(function (acc, val) {
+              return acc + val;
+            }, 0);
+          } else {
+            window.exporting = false;
+            return;
+          }
+
+          $modal.html($('#export-modal').html());
+          $modal.modal({backdrop: 'static', keyboard: false});
+          exportDataAjax(params, 0, '', '');
+        },
+        error: function () {
+          window.exporting = false;
+        }
+      });
+
+      function exportDataAjax(params, start, fileName, name) {
+        $.ajax({
+          url: '/pre/export/course-students', // 替换为实际地址
+          method: 'GET',
+          data: params,
+          success: function (response) {
+            if (!response.success) {
+              window.exporting = false;
+              return;
+            }
+
+            if (response.status === 'finish') {
+              if (!response.csvName) {
+                $modal.modal('hide');
+                window.exporting = false;
+                return;
+              }
+
+              window.location.href = `/export/course-students?fileNames[]=${response.csvName}`;
+              $modal.find('#progress-bar').width('100%').parent().removeClass('active');
+              setTimeout(function () {
+                $modal.modal('hide');
+                window.exporting = false;
+              }, 500);
+            } else {
+              const progress = (response.start / window.totalCount * 100) + '%';
+              $modal.find('#progress-bar').width(progress);
+              exportDataAjax(params, response.start, response.fileName, response.name);
+            }
+          },
+          error: function () {
+            window.exporting = false;
+          }
+        });
+      }
+    });
+
+    $('.item-bank-exercise-student-export').on('click', function(e) {
+      // debugger;
+      console.log('^^^^^^^^^^^^^^^^^^^^^^');
+      e.preventDefault();
+      const $modal = $('#modal');
+      var paramsStr = $('#params').val(); // 获取 JSON 字符串
+      const params = JSON.parse(paramsStr);
+
+      $.ajax({
+        url: '/try/export/item-bank-exercise-students',
+        method: 'GET',
+        data: {
+          exerciseId: params['exerciseId']
         },
         success: function(response) {
           if (response.success) {
@@ -73,7 +143,7 @@ export default class MobileBind {
 
       function exportDataAjax(params, start, fileName, name) {
         $.ajax({
-          url: '/pre/export/course-students', // 替换为实际地址
+          url: '/pre/export/item-bank-exercise-students', // 替换为实际地址
           method: 'GET',
           data: params,
           success: function(response) {
@@ -89,7 +159,7 @@ export default class MobileBind {
                 return;
               }
 
-              window.location.href = `/export/course-students?fileNames[]=${response.csvName}`;
+              window.location.href = `/export/item-bank-exercise-students?fileNames[]=${response.csvName}`;
               $modal.find('#progress-bar').width('100%').parent().removeClass('active');
               setTimeout(function() {
                 $modal.modal('hide');
@@ -196,7 +266,7 @@ export default class MobileBind {
   initDrag() {
     this.drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
       limitType: 'web_register'
-    }) : null
+    }) : null;
   }
 
   initValidator() {
