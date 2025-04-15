@@ -29,8 +29,14 @@ export default class MobileBind {
     });
 
     $('.js-export-classroom-student-btn').on('click', function(e) {
+      $('[name="sms_code"]').valid();
       e.preventDefault();
+      const $smsCodeInput = $('#sms_code');
+      // if ($smsCodeInput.val().trim() === '') {
+      //   return false;
+      // }else {
       self.exportClassroomData();
+      // }
     });
 
     $('.js-export-course-student-btn').on('click', function(e) {
@@ -85,7 +91,6 @@ export default class MobileBind {
 
               window.location.href = `/export/course-students?fileNames[]=${response.csvName}`;
               $modal.find('#progress-bar').width('100%').parent().removeClass('active');
-              $modal.modal('hide');
               setTimeout(function() {
                 $modal.modal('hide');
                 window.exporting = false;
@@ -153,8 +158,8 @@ export default class MobileBind {
     });
   }
   exportClassroomData(start, fileName) {
-    var paramsStr = $('#params').val(); // 获取 JSON 字符串
-    var params = JSON.parse(paramsStr); // 转成对象
+    const paramsStr = $('#params').val(); // 获取 JSON 字符串
+    const params = JSON.parse(paramsStr); // 转成对象
     if ((start != undefined) && (fileName != undefined)) {
       params['start'] = start;
       params['fileName'] = fileName;
@@ -178,7 +183,6 @@ export default class MobileBind {
       }
     });
   }
-
 
   dragEvent() {
     let self = this;
