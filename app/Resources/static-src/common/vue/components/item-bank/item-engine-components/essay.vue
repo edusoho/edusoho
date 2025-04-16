@@ -1,5 +1,6 @@
 <template>
   <answer-model
+    :answerRecord="answerRecord"
     :question="question"
     :mode="mode"
     :needScore="needScore"
@@ -10,7 +11,6 @@
     :section_responses="section_responses"
     :keys="keys"
     @changeTag="changeTag"
-    @changeCollect="changeCollect"
     @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
@@ -215,6 +215,12 @@ export default {
   },
   components: { answerModel, attachmentUpload, attachmentPreview },
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     mode: {
       type: String,
       default: "do"
@@ -253,12 +259,6 @@ export default {
       type: String,
       default() {
         return "exam";
-      }
-    },
-    answerRecord: {
-      type: Object,
-      default() {
-        return {};
       }
     },
     needScore: {
@@ -376,9 +376,6 @@ export default {
     },
     deleteFile(fileId) {
       this.$emit("deleteEssayAttachment", fileId, this.keys);
-    },
-    changeCollect(data, collectStatus) {
-      this.$emit("changeCollect", data, collectStatus, this.keys);
     },
     getAttachmentTypeData(type) {
       const data =

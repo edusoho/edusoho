@@ -1,5 +1,6 @@
 <template>
   <answer-model
+    :answerRecord="answerRecord"
     :question="formatQuestion"
     :questionFavoritesItem="questionFavoritesItem"
     :needScore="needScore"
@@ -10,7 +11,6 @@
     v-bind="$attrs"
     v-on="$listeners"
     @changeTag="changeTag"
-    @changeCollect="changeCollect"
     @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
@@ -154,11 +154,17 @@ export default {
       isErrorCorrectionBtn: false,
       correctionAnwer: [],
       correctionRequired: [],
-      formatQuestion: this.question,
+      formatQuestion: JSON.parse(JSON.stringify(this.question)),
     };
   },
   components: { answerModel },
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     needScore: {
       type: Number,
       default() {
@@ -321,9 +327,6 @@ export default {
     },
     changeTag(data) {
       this.$emit("changeTag", data, this.keys);
-    },
-    changeCollect(data, collectStatus) {
-      this.$emit("changeCollect", data, collectStatus, this.keys);
     },
     getFillOrder(index) {
       return this.t("itemEngine.fillOrder")(index);

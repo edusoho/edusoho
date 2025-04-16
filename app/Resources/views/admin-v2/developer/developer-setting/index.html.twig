@@ -242,6 +242,15 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.push_api_server'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="push_api_server" value="{{ developerSetting.push_api_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
       <label>{{ 'admin.developer_setting.resource_api_server'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">

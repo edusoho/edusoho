@@ -19,7 +19,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         if (empty($lesson)) {
             return $this->createMessageResponse('info', $this->trans('exception.opencourse.not_found_lesson'));
         }
-        if ($lesson['replayStatus'] == 'generated') {
+        if ('generated' == $lesson['replayStatus']) {
             return $this->redirect($this->generateUrl('live_open_course_live_replay_entry', [
                 'courseId' => $courseId,
                 'lessonId' => $lessonId,
@@ -247,7 +247,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
             if (empty($replays)) {
                 return $this->createMessageResponse('error', '直播回放不存在');
             }
-            $result = $this->getLiveReplayService()->entryReplay($replays[0]['id'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure());
+            $result = $this->getLiveReplayService()->entryReplay($replays[0]['id'], $lesson['mediaId'], $lesson['liveProvider'], $request->isSecure(), false);
 
             return $this->render('live-course/eslive-entry.html.twig', [
                 'replayUrl' => $result['url'] ?? '',

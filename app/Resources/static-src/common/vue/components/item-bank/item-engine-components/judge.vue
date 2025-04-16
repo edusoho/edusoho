@@ -1,5 +1,6 @@
 <template>
   <answer-model
+    :answerRecord="answerRecord"
     :question="question"
     :questionFavoritesItem="questionFavoritesItem"
     :needScore="needScore"
@@ -10,7 +11,6 @@
     v-bind="$attrs"
     v-on="$listeners"
     @changeTag="changeTag"
-    @changeCollect="changeCollect"
     @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
@@ -183,6 +183,12 @@ export default {
     }
   },
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     needScore: {
       type: Number,
       default() {
@@ -293,9 +299,6 @@ export default {
     },
     changeTag(data) {
       this.$emit("changeTag", data, this.keys);
-    },
-    changeCollect(data, collectStatus) {
-      this.$emit("changeCollect", data, collectStatus, this.keys);
     },
     judgeAnswer(str) {
       if (!str) {

@@ -246,6 +246,7 @@ class TestpaperForm {
     let self = this;
     if (this.scoreValidator.form()) {
       let type = $('.js-score-modal').find('.js-tab-type').val();
+
       switch (type){
       case 'single_choice':
         self.__setJsScore(type);
@@ -322,15 +323,21 @@ class TestpaperForm {
   __setSelectJsScore(type, target = null){
     let $target = target ? target :$('#testpaper-table-'+type);
     let miss_score = Number($('.js-score-modal').find('.js-score-set-'+type).find('.js-miss-choice-score').val());
-    $target.find('.js-miss-choice-score').val(miss_score);
     let select = $('.js-score-modal').find('.js-score-set-'+type).find('.js-score-type').val();
-    $target.find('.js-score-type').val(select);
+
+    $target.find('[data-role="batch-item"]:checked').each(function () {
+      $(this).closest('tr').find('.js-miss-choice-score').val(miss_score);
+      $(this).closest('tr').find('.js-score-type').val(select);
+    });
   }
 
   __setJsScore(type, target = null){
     let $target = target ? target :$('#testpaper-table-'+type);
     let score = Number($('.js-score-modal').find('.js-score-set-'+type).find('.js-score').val());
-    $target.find('.js-score').val(score);
+
+    $target.find('[data-role="batch-item"]:checked').each(function (){
+      $(this).closest('tr').find('.js-score').val(score);
+    });
   }
 
   setScore($item, scoreObj) {

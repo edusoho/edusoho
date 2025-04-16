@@ -2,7 +2,12 @@
 
 namespace Biz\Question\Traits;
 
+use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
+use Biz\Activity\Service\ActivityService;
+use Biz\ItemBankExercise\Service\ExerciseModuleService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\System\Service\SettingService;
+use Biz\WrongBook\Service\WrongQuestionService;
 
 trait QuestionAIAnalysisTrait
 {
@@ -72,11 +77,88 @@ trait QuestionAIAnalysisTrait
         return true;
     }
 
+    private function isAgentActive($answerSceneId)
+    {
+        $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerSceneId);
+        if (!empty($activity)) {
+            return $this->isCourseAgentActive($activity['fromCourseId']);
+        }
+        $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerSceneId);
+        if (!empty($module)) {
+            $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
+            if (empty($exerciseBinds)) {
+                return false;
+            }
+            foreach ($exerciseBinds as $exerciseBind) {
+                if ('course' != $exerciseBind['bindType']) {
+                    continue;
+                }
+                if ($this->isCourseAgentActive($exerciseBind['bindId'])) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        $pool = $this->getWrongQuestionService()->getPoolBySceneId($answerSceneId);
+        if (empty($pool) || 'course' != $pool['target_type']) {
+            return false;
+        }
+
+        return $this->isCourseAgentActive($pool['target_id']);
+    }
+
+    private function isCourseAgentActive($courseId)
+    {
+        $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+
+        return !empty($agentConfig['isActive']);
+    }
+
     /**
      * @return SettingService
      */
     protected function getSettingService()
     {
         return $this->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    private function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    /**
+     * @return ExerciseModuleService
+     */
+    private function getItemBankExerciseModuleService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    private function getItemBankExerciseService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return WrongQuestionService
+     */
+    private function getWrongQuestionService()
+    {
+        return $this->getBiz()->service('WrongBook:WrongQuestionService');
+    }
+
+    /**
+     * @return AgentConfigService
+     */
+    private function getAgentConfigService()
+    {
+        return $this->getBiz()->service('AgentBundle:AgentConfig:AgentConfigService');
     }
 }

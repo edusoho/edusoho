@@ -712,7 +712,7 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
 
     public function findExerciseBindByExerciseId($exerciseId)
     {
-        return $this->getExerciseBindDao()->search(['itemBankExerciseId' => $exerciseId, 'statusNotEqual' => 'delete'], [], 0, PHP_INT_MAX);
+        return $this->getExerciseBindDao()->search(['itemBankExerciseId' => $exerciseId, 'statusNotEqual' => 'delete'], ['createdTime' => 'DESC'], 0, PHP_INT_MAX);
     }
 
     public function countExerciseBind($conditions)
@@ -723,6 +723,11 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     public function deleteExerciseBind($id)
     {
         return $this->getExerciseBindDao()->delete($id);
+    }
+
+    public function searchExerciseBind($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getExerciseBindDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     /**

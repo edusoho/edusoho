@@ -69,11 +69,16 @@ class AnswerRecord extends AbstractResource
 
     private function wrapAIAnalysis($assessment, $answerRecord)
     {
+        $isAgentActive = $this->isAgentActive($answerRecord['answer_scene_id']);
         $user = $this->getCurrentUser();
         foreach ($assessment['sections'] as &$section) {
             foreach ($section['items'] as &$item) {
                 foreach ($item['questions'] as &$question) {
-                    $question['aiAnalysisEnable'] = $answerRecord['user_id'] == $user['id'] && $this->canGenerateAIAnalysisForStudent($question, $item);
+                    if ($isAgentActive) {
+                        $question['aiAnalysisEnable'] = false;
+                    } else {
+                        $question['aiAnalysisEnable'] = $answerRecord['user_id'] == $user['id'] && $this->canGenerateAIAnalysisForStudent($question, $item);
+                    }
                 }
             }
         }

@@ -13,6 +13,8 @@ interface NotificationService
      */
     public function notify($userId, $type, $content);
 
+    public function batchNotify($userIds, $type, $content);
+
     /**
      * 获得用户最新的通知.
      *

@@ -180,6 +180,7 @@
                         getErrorData(sectionsIndex, itemIndex, questionIndex)
                     "
                     v-bind="$attrs"
+                    :answerRecord="answerRecord"
                     :question="question"
                     :item="item"
                     :mode="mode"
@@ -223,6 +224,7 @@
                         getErrorData(sectionsIndex, itemIndex, questionIndex)
                     "
                     v-bind="$attrs"
+                    :answerRecord="answerRecord"
                     :question="question"
                     :item="item"
                     :mode="mode"
@@ -267,6 +269,7 @@
                         getErrorData(sectionsIndex, itemIndex, questionIndex)
                     "
                     v-bind="$attrs"
+                    :answerRecord="answerRecord"
                     :question="question"
                     :item="item"
                     :mode="mode"
@@ -313,6 +316,7 @@
                       )
                     "
                     v-bind="$attrs"
+                    :answerRecord="answerRecord"
                     :question="question"
                     :item="item"
                     :mode="mode"
@@ -333,7 +337,6 @@
                         questionIndex
                       )
                     "
-                    :answerRecord="answerRecord"
                     :keys="[sectionsIndex, itemIndex, questionIndex]"
                     :userAnwer="
                       getUserAnwer(sectionsIndex, itemIndex, questionIndex)
@@ -388,6 +391,7 @@
                         questionIndex
                       )
                     "
+                    :answerRecord="answerRecord"
                     :question="question"
                     :item="item"
                     :mode="mode"

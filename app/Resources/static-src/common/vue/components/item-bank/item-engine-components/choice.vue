@@ -1,5 +1,6 @@
 <template>
   <answer-model
+    :answerRecord="answerRecord"
     :question="question"
     :questionFavoritesItem="questionFavoritesItem"
     :needScore="needScore"
@@ -10,7 +11,6 @@
     :seq="seq"
     :section_responses="section_responses"
     @changeTag="changeTag"
-    @changeCollect="changeCollect"
     @prepareTeacherAiAnalysis="prepareTeacherAiAnalysis"
   >
     <template v-slot:response_points>
@@ -187,6 +187,12 @@ export default {
     }
   },
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     // 模式 preview:预览模式 report:答题结果模式 do:做题模式
     mode: {
       type: String,
@@ -274,9 +280,6 @@ export default {
     },
     changeTag(data) {
       this.$emit("changeTag", data, this.keys);
-    },
-    changeCollect(data, collectStatus) {
-      this.$emit("changeCollect", data, collectStatus, this.keys);
     },
     getStatus() {
       const status = {

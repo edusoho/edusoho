@@ -64,6 +64,13 @@
               {{ 'course.announcement_manage'|trans }}
             </a>
           </li>
+
+          <li class="cd-sidebar__item {% if course_side_nav == 'ai-companion-study' %}active{% endif %}" style="position: relative">
+            <div style="color: white; font-size: 12px; line-height: 16px; font-weight: 500; padding: 0 6px; background-color: #FF4D4F; border-radius: 6px 6px 6px 0; position: absolute; left: 105px; top: 5px">NEW</div>
+            <a href="{{ path('course_set_manage_course_ai_companion_study', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              AI伴学服务
+            </a>
+          </li>
           {#录播管理#}
           {% if (hasLiveTasks or courseSet.type == 'live') %}
             <li class="cd-sidebar__item {% if course_side_nav == 'replay' %}active{% endif %}">
