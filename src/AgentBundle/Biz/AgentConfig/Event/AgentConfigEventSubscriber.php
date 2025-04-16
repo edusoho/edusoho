@@ -59,12 +59,17 @@ class AgentConfigEventSubscriber extends EventSubscriber
         $cloudFileActivities = $this->getActivityService()->findActivities($cloudFileActivityIds, true, 0);
         $objects = [];
         foreach ($cloudFileActivities as $cloudFileActivity) {
-            $objects[] = [
-                'name' => $cloudFileActivity['title'],
-                'objectKey' => $cloudFileActivity['ext']['file']['globalId'],
-                'objectVendor' => 'escloud',
-                'extId' => $cloudFileActivity['id'],
-            ];
+            if (!empty($cloudFileActivity['ext']['file']['globalId'])) {
+                $objects[] = [
+                    'name' => $cloudFileActivity['title'],
+                    'objectKey' => $cloudFileActivity['ext']['file']['globalId'],
+                    'objectVendor' => 'escloud',
+                    'extId' => $cloudFileActivity['id'],
+                ];
+            }
+        }
+        if (empty($objects)) {
+            return;
         }
         $documents = $this->getAIService()->batchCreateDocumentByObject($agentConfig['datasetId'], $objects);
         foreach ($documents as $document) {

@@ -8,6 +8,7 @@ use Biz\AI\Dao\AIAnswerResultDao;
 use Biz\AI\Service\AIService;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\System\Service\SettingService;
 
 class AIServiceImpl extends BaseService implements AIService
 {
@@ -113,7 +114,20 @@ class AIServiceImpl extends BaseService implements AIService
 
     public function inspectTenant()
     {
-        return $this->getAIService()->inspectTenant();
+        $tenant = $this->getAIService()->inspectTenant();
+        $this->getSettingService()->set('ai_tenant', $tenant);
+
+        return $tenant;
+    }
+
+    public function isAgentEnable()
+    {
+        $tenant = $this->getSettingService()->get('ai_tenant', [
+            'status' => '',
+            'permissions' => [],
+        ]);
+
+        return 'ok' == $tenant['status'] && in_array('agent', $tenant['permissions']);
     }
 
     public function findDomains($category)
@@ -225,6 +239,14 @@ class AIServiceImpl extends BaseService implements AIService
     private function makeHashForInputs($inputs)
     {
         return md5(json_encode($inputs));
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**

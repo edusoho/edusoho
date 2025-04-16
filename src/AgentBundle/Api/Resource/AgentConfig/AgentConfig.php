@@ -30,16 +30,12 @@ class AgentConfig extends AbstractResource
     {
         $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
         $agentConfig = empty($agentConfig) ? ['isActive' => 0] : $agentConfig;
-        $inspectResult = $this->getAIService()->inspectTenant();
-        if ('ok' != $inspectResult['status']) {
+        $tenant = $this->getAIService()->inspectTenant();
+        if ('ok' != $tenant['status']) {
             $this->getAIService()->enableTenant();
-            $inspectResult = $this->getAIService()->inspectTenant();
+            $this->getAIService()->inspectTenant();
         }
-        if (!in_array('agent', $inspectResult['permissions'])) {
-            $agentConfig['agentEnable'] = false;
-        } else {
-            $agentConfig['agentEnable'] = true;
-        }
+        $agentConfig['agentEnable'] = $this->getAIService()->isAgentEnable();
         if (!empty($agentConfig['isDiagnosisActive'])) {
             $dataset = $this->getAIService()->getDataset($agentConfig['datasetId']);
             $agentConfig['indexStatus'] = $this->getIndexStatus($dataset);

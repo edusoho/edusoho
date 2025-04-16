@@ -12,8 +12,7 @@ class DomainMatch extends AbstractResource
     public function add(ApiRequest $request, $courseId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
-        $inspectResult = $this->getAIService()->inspectTenant();
-        if ('ok' != $inspectResult['status']) {
+        if (!$this->getAIService()->isAgentEnable()) {
             return [
                 'id' => '',
             ];
