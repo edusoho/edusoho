@@ -24,6 +24,13 @@
   <input type="hidden" name="save_goto_url" value='{{ saveGotoUrl }}'>
   <input type="hidden" name="return_url" value="{{ returnUrl }}">
   <input type="hidden" name="show_save_progress_btn" value="{{ showSaveProgressBtn|default(1) }}">
+
+  {% if is_answer_show_ai_agent(answerRecord.id) %}
+    <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
+    <input type="hidden" id="chatMetaData" value="{{ get_answer_chat_meta_data(answerRecord.id) }}" />
+    <input type="hidden" id="studyPlanGenerated" value="1" />
+  {% endif %}
+
   {% if contract.sign|default('') != 'no' %}
     <input type="hidden" name="sign" value="{{ contract.sign }}">
     <input type="hidden" name="contract-id" value="{{ contract.id}}">

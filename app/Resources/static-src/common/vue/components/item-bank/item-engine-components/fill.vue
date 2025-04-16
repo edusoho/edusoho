@@ -1,5 +1,6 @@
 <template>
   <answer-model
+    :answerRecord="answerRecord"
     :question="formatQuestion"
     :questionFavoritesItem="questionFavoritesItem"
     :needScore="needScore"
@@ -159,6 +160,12 @@ export default {
   },
   components: { answerModel },
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     needScore: {
       type: Number,
       default() {

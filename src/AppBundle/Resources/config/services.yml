@@ -443,3 +443,12 @@ services:
         tags:
             -
                 name: twig.extension
+    web.twig.ai_extension:
+        class: AppBundle\Twig\AIExtension
+        arguments:
+            - '@service_container'
+            - '@biz'
+        public: true
+        tags:
+            -
+                name: twig.extension

@@ -4,8 +4,8 @@ namespace ApiBundle\Api\Resource\Token;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\AI\Util\AgentToken;
 use Biz\System\Service\LogService;
-use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
 
@@ -22,8 +22,8 @@ class Token extends AbstractResource
         $user = $this->getCurrentUser()->toArray();
 
         $expiredTime = time() + 3600 * 24 * 30;
-        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'],$expiredTime , ['client' => $client]);
-        $refreshToken = $this->getUserService()->makeToken("refreshToken", $user['id'], time() + 3600 * 24 * 180, ['client' => $client]);
+        $token = $this->getUserService()->makeToken(self::TOKEN_TYPE, $user['id'], $expiredTime, ['client' => $client]);
+        $refreshToken = $this->getUserService()->makeToken('refreshToken', $user['id'], time() + 3600 * 24 * 180, ['client' => $client]);
 
         $this->appendUser($user);
         $this->getUserService()->markLoginInfo($type);
@@ -32,6 +32,7 @@ class Token extends AbstractResource
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
             $this->deleteInvalidToken($user['id'], $token, $refreshToken);
         }
+        $user['aiAgentToken'] = (new AgentToken())->make();
 
         return [
             'token' => $token,
@@ -92,7 +93,7 @@ class Token extends AbstractResource
     protected function deleteInvalidToken($userId, $token, $refreshToken)
     {
         $delTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, self::TOKEN_TYPE);
-        $delRefreshTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, "refreshToken");
+        $delRefreshTokens = $this->getTokenService()->findTokensByUserIdAndType($userId, 'refreshToken');
         $delTokens = array_merge($delTokens, $delRefreshTokens);
         foreach ($delTokens as $delToken) {
             if ($delToken['token'] != $token && $delToken['token'] != $refreshToken) {

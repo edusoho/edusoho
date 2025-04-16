@@ -36,6 +36,11 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         $params = $event->getSubject(); // exerciseBinds, bindType, bindId
         $userIds = $this->getStudentIds($params['bindType'], $params['bindId']);
         if (empty($userIds)) {
+            foreach ($params['exerciseBinds'] as $exerciseBind) {
+                $exerciseBind['status'] = 'finished';
+                $this->getExerciseService()->updateBindExercise($exerciseBind);
+            }
+
             return;
         }
         if (count($userIds) > 2000) {
@@ -85,7 +90,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $params = $event->getSubject();
         $exerciseBind = $this->getExerciseService()->getExerciseBindById($params['id']);
-        $this->setDeleteStatus($exerciseBind);
+        $this->setDeleteStatus($params);
         $userIds = $this->getStudentIds(
             $exerciseBind ? $exerciseBind['bindType'] : $params['bindType'],
             $exerciseBind ? $exerciseBind['bindId'] : $params['bindId']
@@ -108,7 +113,7 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
         }
 
         if (empty($exerciseBind)) {
-            $exerciseBinds = $this->getExerciseService()->findBindExercise($params['bindType'], $params['bindId']);
+            $exerciseBinds = $this->getExerciseService()->searchExerciseBind(['bindType' => $params['bindType'], 'bindId' => $params['bindId']], [], 0, PHP_INT_MAX);
             foreach ($exerciseBinds as $exerciseBind) {
                 $this->unBindByExerciseBind($exerciseBind);
             }
@@ -136,6 +141,8 @@ class ExerciseBindEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $userIds = $this->getStudentIds($exerciseBind['bindType'], $exerciseBind['bindId']);
         if (empty($userIds)) {
+            $this->getExerciseService()->deleteExerciseBind($exerciseBind['id']);
+
             return;
         }
         // 查询成员、获取成员IDs

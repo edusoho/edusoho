@@ -100,13 +100,18 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
 
     public function waveCounterById($id, $name, $number)
     {
+        return $this->waveCounterByIds([$id], $name, $number);
+    }
+
+    public function waveCounterByIds($ids, $name, $number)
+    {
         $names = ['newMessageNum', 'newNotificationNum'];
 
         if (!in_array($name, $names)) {
             return [];
         }
 
-        return $this->wave([$id], [$name => $number]);
+        return $this->wave($ids, [$name => $number]);
     }
 
     public function deleteCounterById($id, $name)

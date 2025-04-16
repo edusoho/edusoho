@@ -17,4 +17,36 @@ interface AIService
     public function needGenerateNewAnswer($app, $inputs);
 
     public function getAnswerFromLocal($app, $inputs);
+
+    public function enableTenant();
+
+    public function disableTenant();
+
+    public function inspectTenant();
+
+    public function findDomains($category);
+
+    public function runWorkflow($workflow, array $inputs);
+
+    public function asyncRunWorkflow($workflow, array $inputs, $callback);
+
+    public function createDataset(array $params);
+
+    public function getDataset($id);
+
+    public function updateDataset($id, array $params);
+
+    public function deleteDataset($id);
+
+    public function createDocumentByText(array $params);
+
+    public function createDocumentByObject(array $params);
+
+    public function batchCreateDocumentByObject($datasetId, $objects);
+
+    public function deleteDocument($id);
+
+    public function pushMessage(array $params);
+
+    public function batchPushMessage(array $params);
 }

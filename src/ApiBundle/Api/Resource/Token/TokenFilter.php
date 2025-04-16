@@ -7,9 +7,9 @@ use ApiBundle\Api\Resource\User\UserFilter;
 
 class TokenFilter extends Filter
 {
-    protected $publicFields = array(
-        'token', 'user', 'success', 'tokenExpire', 'refreshToken'
-    );
+    protected $publicFields = [
+        'token', 'user', 'success', 'tokenExpire', 'refreshToken',
+    ];
 
     protected function publicFields(&$data)
     {

@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\ItemBankExercise;
 
+use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -57,6 +58,9 @@ class ItemBankExercise extends AbstractResource
                 'id' => $itemBankExercise['contract']['contractId'],
                 'goodsKey' => $goodsKey,
             ];
+        }
+        if (!empty($itemBankExercise['canLearn'])) {
+            $itemBankExercise = $this->appendAiTeacherDomainIfNecessary($itemBankExercise);
         }
 
         return $itemBankExercise;
@@ -121,6 +125,26 @@ class ItemBankExercise extends AbstractResource
         return $this->makePagingObject($itemBankExercises, $this->getItemBankExerciseService()->count($conditions), $offset, $limit);
     }
 
+    private function appendAiTeacherDomainIfNecessary($itemBankExercise)
+    {
+        $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($itemBankExercise['id']);
+        if (empty($exerciseBinds)) {
+            return $itemBankExercise;
+        }
+        foreach ($exerciseBinds as $exerciseBind) {
+            if ('course' == $exerciseBind['bindType']) {
+                $agentConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($exerciseBind['bindId']);
+                if (!empty($agentConfig['isActive'])) {
+                    $itemBankExercise['aiTeacherDomain'] = $agentConfig['domainId'];
+
+                    return $itemBankExercise;
+                }
+            }
+        }
+
+        return $itemBankExercise;
+    }
+
     /**
      * @return \Biz\ItemBankExercise\Service\ExerciseService
      */
@@ -159,5 +183,13 @@ class ItemBankExercise extends AbstractResource
     private function getCategoryService()
     {
         return $this->service('QuestionBank:CategoryService');
+    }
+
+    /**
+     * @return AgentConfigService
+     */
+    private function getAgentConfigService()
+    {
+        return $this->biz->service('AgentBundle:AgentConfig:AgentConfigService');
     }
 }
