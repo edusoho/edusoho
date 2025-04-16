@@ -66,7 +66,6 @@ class SystemController extends BaseController
             'plugins' => [],
             'api' => [],
             'vendor' => ['depth' => '<1', 'dir' => true],
-            'vendor_user' => ['depth' => '<1', 'dir' => true],
             'web' => ['depth' => '<1', 'dir' => true],
         ];
 

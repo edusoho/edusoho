@@ -14,10 +14,10 @@
       {% include 'default/switch-language.html.twig' with {langClass: langClass} %}
     {% endif %}
   </ul>
-  <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
+  <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get" style="padding: 0;">
     <div class="form-group">
-      <input class="form-control js-search" value="{{ app.request.get('q')|default() }}" name="q" placeholder="{{ 'homepage.header.search'|trans }}">
-      <button class="button es-icon es-icon-search"></button>
+      <input class="form-control js-search" value="{{ app.request.get('q')|default() }}" name="q" placeholder="{{ 'homepage.header.search'|trans }}" style="padding:2px 10px; ">
+      <button class="button es-icon es-icon-search" style="right: 0;"></button>
     </div>
   </form>
 </div>
