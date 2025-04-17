@@ -114,6 +114,9 @@ export default class MobileBind {
 
 
       function exportDataAjax(params, start, fileName, name) {
+        params['start'] = start;
+        params['fileName'] = fileName;
+        params['name'] = name;
         $.ajax({
           url: '/pre/export/course-students', // 替换为实际地址
           method: 'GET',
@@ -138,7 +141,7 @@ export default class MobileBind {
                 window.exporting = false;
               }, 500);
             } else {
-              const progress = (response.start / window.totalCount * 100) + '%';
+              const progress = (response.start / response.count * 100) + '%';
               $modal.find('#progress-bar').width(progress);
               exportDataAjax(params, response.start, response.fileName, response.name);
             }
