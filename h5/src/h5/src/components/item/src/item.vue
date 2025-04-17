@@ -443,7 +443,7 @@ export default {
       default: 0
     },
     exerciseInfo: {
-      type: [Array, Object],
+      type: Array,
       default: () => []
     },
     items: {
@@ -521,9 +521,10 @@ export default {
       this.$emit('changeStatus', status)
     },
 
-    slideChange() {
+    slideChange(index) {
       const swiperName = `childSwiper${this.item.id}`;
       this.swiperActiveIndex = this.$refs[swiperName].$swiper.activeIndex;
+      this.$emit("questionSlideChange", this.swiperActiveIndex);
     },
     setSwiperHeight() {
       const offsetTopHeight = document.getElementById("ibs-item-bank")
@@ -655,7 +656,7 @@ export default {
     changeChoiceCando() {
       this.$emit('changeChoiceCando', this.current, true)
     },
-    slidePrev() {
+    async slidePrev() {
       if (!this.touchable) {
         return
       }
@@ -665,7 +666,7 @@ export default {
         this.$emit("itemSlidePrev");
       }
     },
-    slideNext(flag) {
+    async slideNext(flag) {
       if (!this.touchable && !flag) {
         return
       }

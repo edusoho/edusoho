@@ -9,7 +9,7 @@
       :loop="false"
       :duration="100"
       :lazy-render="true"
-      @change="changeswiper"
+      @change="changeSwiper"
     >
       <van-swipe-item
         v-for="(paper, index) in info"
@@ -201,6 +201,7 @@ import headTop from '../component/head';
 import choiceType from '../component/choice';
 import singleChoice from '../component/single-choice';
 import determineType from '../component/determine';
+import aiAgent from '@/mixins/aiAgent';
 import { Toast } from 'vant';
 import _ from 'lodash';
 
@@ -263,7 +264,6 @@ export default {
       default: '',
     },
     exerciseInfo: {
-      // 答题记录id
       type: Object,
       default: () => {},
     },
@@ -284,6 +284,10 @@ export default {
     type: {
       type: String,
       default: ''
+    },
+    aiAgentRecordId: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -298,7 +302,10 @@ export default {
       iscando: [],
       refreshKey: true,
       myAnswer: null,
-      touchable: true
+      touchable: true,
+      questionIndex: 0,
+      question: {},
+      aiAgentSdk: null,
     };
   },
   computed: {
@@ -343,32 +350,95 @@ export default {
     if (this.canDo && this.mode === 'exercise') {
 
       this.info.forEach((item, index) => {
-        if (this.exerciseInfo.submittedQuestions.filter(subItem => subItem.questionId + '' === item.id).length > 0) {
-          this.iscando[index] = false
-        } else {
-          this.iscando[index] = true
-        }
+        this.iscando[index] = this.exerciseInfo.submittedQuestions.filter(subItem => subItem.questionId + '' === item.id).length <= 0;
       });
 
     }
 
   },
+  async mounted() {
+    this.tryInitAIAgentSdk();
+  },
+  mixins: [aiAgent],
   methods: {
     ...mapActions(['setCloudAddress']),
-    changeswiper(index) {
+    tryInitAIAgentSdk() {
+      if (!this.aiAgentRecordId) return;
+      Api.meCourseMember({
+        query: {
+          id: this.$route.query.courseId,
+        },
+      }).then(res => {
+        if (!res.aiTeacherEnabled) return;
+         this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+          domainId: res.aiTeacherDomain,
+          courseId: res.courseId,
+          courseName:res.courseSetTitle,
+          lessonId: this.$route.query.targetId
+        }, 80, 20);
+        if (res.studyPlanGenerated) {
+          this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
+        }
+        this.aiAgentSdk.boot();
+        if (this.canDo) {
+          this.aiAgentSdk.showReminder({
+            title: "Hi，我是小知老师～",
+            content: "我将在你答题过程中随时为你答疑解惑",
+            duration: 5000,
+          });
+        } else {
+          this.aiAgentSdk.showReminder({
+            title: "战绩新鲜出炉！",
+            content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
+            duration: 5000,
+          });
+        }
+        const btn = document.getElementById('agent-sdk-floating-button');
+        btn?.addEventListener('click', async () => {
+          await this.getQuestion();
+          this.aiAgentSdk.showReminder({
+            title: "遇到问题啦？",
+            content: "小知老师来为你理清解题思路～",
+            buttonContent: 'teacher.question',
+            duration: 5000,
+            workflow: {
+              workflow: this.canDo ? 'teacher.question.idea' : 'teacher.question.analysis',
+              inputs: {
+                domainId: res.aiTeacherDomain,
+                question: this.question.question,
+              }
+            },
+            chatContent: this.question.content,
+          });
+        });
+      })
+    },
+    async getQuestion() {
+      if (this.aiAgentRecordId) {
+        this.question = await Api.getExerciseQuestion({
+          query: {
+            answerRecordId: this.aiAgentRecordId,
+            questionId: this.info[this.questionIndex].id,
+          },
+        })
+      }
+    },
+    async changeSwiper(index) {
+      this.questionIndex = index;
+      this.aiAgentSdk.hideReminder();
       this.currentIndex = index;
       this.$emit('update:current', index + 1);
       this.$emit('update:slideIndex', index);
     },
     // 左滑动
-    last() {
+    async last() {
       if (this.currentIndex == 0 || !this.touchable) {
         return;
       }
       this.$refs.swipe.swipeTo(this.currentIndex - 1);
     },
     // 右滑动
-    next() {
+    async next() {
       if (this.currentIndex == this.info.length - 1 || !this.touchable) {
         return;
       }

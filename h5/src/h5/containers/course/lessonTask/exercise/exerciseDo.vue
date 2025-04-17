@@ -22,6 +22,7 @@
       :assessment_id="exerciseInfo.testId"
       :exerciseMode="exerciseMode"
       :admission_ticket="exerciseInfo.admission_ticket"
+      :ai-agent-record-id="exerciseInfo.id"
       :mode="mode"
       @getData="getData"
       @goResults="goResults"

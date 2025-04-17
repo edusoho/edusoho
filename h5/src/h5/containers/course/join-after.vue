@@ -131,6 +131,7 @@ import Directory from './detail/directory';
 import DetailHead from './detail/head';
 import afterjoinDirectory from './detail/afterjoin-directory';
 import collectUserInfo from '@/mixins/collectUserInfo';
+import aiAgent from '@/mixins/aiAgent';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import infoCollection from '@/components/info-collection.vue';
@@ -215,10 +216,11 @@ export default {
       showTabs: true, // 是否显示 tabs
       showDrainage: false,
       bindItemBankList: [],
+      aiAgentSdk: null,
     };
   },
 
-  mixins: [collectUserInfo],
+  mixins: [collectUserInfo, aiAgent],
 
   computed: {
     ...mapState('course', {
@@ -313,6 +315,7 @@ export default {
       this.offsetHeight = SELFHEIGHT;
     });
     this.getBindItemBank();
+    this.tryInitAIAgentSdk();
   },
   async created() {
     this.showDialog();
@@ -326,7 +329,34 @@ export default {
   methods: {
     ...mapMutations('course', {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
+      setSourceType: types.SET_SOURCETYPE,
     }),
+    tryInitAIAgentSdk() {
+      Api.meCourseMember({
+        query: {
+          id: this.$route.params.id,
+        },
+      }).then(res => {
+        if (res.aiTeacherEnabled) {
+          this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+            courseId: res.courseId,
+            courseName: res.courseSetTitle,
+          }, null, null, true);
+          if (res.studyPlanGenerated) {
+            this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
+          }
+          this.aiAgentSdk.boot();
+          if (!res.studyPlanGenerated) {
+            this.aiAgentSdk.showReminder({
+              title: "HI，我是你的 AI 老师小知～",
+              content: `欢迎加入《${res.courseSetTitle}》课程，我将在你学习的过程中为你提供专业答疑、督学提醒等学习服务，现在点击下方「制定学习计划」来生成专属学习计划吧！`,
+              buttonContent: 'plan.generate',
+            })
+          }
+        }
+      })
+    },
 
     initTabs() {
       const { thread, note, review } = this.settingUgc;

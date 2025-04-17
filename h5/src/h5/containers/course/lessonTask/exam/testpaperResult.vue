@@ -390,6 +390,7 @@ export default {
       this.$router.push({
         name: 'testpaperAnalysis',
         query: {
+          courseId: this.courseId,
           resultId: this.$route.query.resultId,
           title: this.testpaperTitle,
           targetId: this.$route.query.targetId,

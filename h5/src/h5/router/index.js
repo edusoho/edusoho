@@ -1254,6 +1254,23 @@ router.beforeEach(async (to, from, next) => {
     destroyWatermark();
   }
 
+  if ([
+    'course',
+    'course_web',
+    'exerciseDo',
+    'exerciseAnalysis',
+    'homeworkDo',
+    'homeworkAnalysis',
+    'testpaperDo',
+    'testpaperAnalysis',
+    'item_bank_exercise',
+    'brush_report',
+    'brush_do',
+  ].includes(from.name)) {
+    if (window.aiAgentSdk) {
+      window.aiAgentSdk.shutdown();
+    }
+  }
   next();
 });
 

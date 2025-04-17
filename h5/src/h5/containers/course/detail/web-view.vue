@@ -47,13 +47,14 @@ import report from '@/mixins/course/report';
 import finishDialog from '../components/finish-dialog';
 import OutFocusMask from '@/components/out-focus-mask.vue';
 import {getTaskWatermark, destroyWatermark} from '@/utils/watermark';
+import aiAgent from '@/mixins/aiAgent';
 
 export default {
   components: {
     finishDialog,
     OutFocusMask,
   },
-  mixins: [report],
+  mixins: [report, aiAgent],
   data() {
     return {
       finishCondition: undefined,
@@ -66,6 +67,7 @@ export default {
       taskId: null,
       type: null,
       player: null,
+      aiAgentSdk: null,
     };
   },
   computed: {
@@ -85,13 +87,32 @@ export default {
   },
   async mounted() {
     this.initData();
+    this.tryInitAIAgentSdk();
   },
   methods: {
     ...mapActions(['setCloudAddress']),
-
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
+    tryInitAIAgentSdk() {
+      Api.meCourseMember({
+        query: {
+          id: this.$route.query.courseId,
+        },
+      }).then(res => {
+        if (res.aiTeacherEnabled) {
+          this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+            courseId: res.courseId,
+            courseName: res.courseSetTitle,
+          }, 60, null, true);
+          if (res.studyPlanGenerated) {
+            this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
+          }
+          this.aiAgentSdk.boot();
+        }
+      })
+    },
     async initData() {
       if (this.joinStatus) {
         this.initReport();

@@ -15,6 +15,7 @@
       :answer.sync="answer"
       :slide-index.sync="slideIndex"
       :all="info.length"
+      :exercise-info="testpaperResult"
     />
 
     <!-- 引导页 -->
@@ -459,7 +460,6 @@ export default {
     },
     // 提交试卷
     submitPaper() {
-      console.log('submitPaper')
       let index = 0;
       let message = this.$t('courseLearning.sureSubmit');
       const answer = JSON.parse(JSON.stringify(this.answer));

@@ -23,7 +23,7 @@
       :class="{ opened: isCoverOpen }"
       class="course-detail__nav--cover web-view"
     >
-      <div class="media-text" v-html="textContent" />
+      <div class="media-text" v-html="textContent"/>
       <div
         v-show="isCoverOpen"
         class="course-detail__nav--cover-control"
@@ -35,7 +35,7 @@
         />
       </div>
       <div class="course-detail__nav--cover-close-btn" @click="hideAudioDoc">
-        <i class="van-icon van-icon-arrow van-nav-bar__arrow" />
+        <i class="van-icon van-icon-arrow van-nav-bar__arrow"/>
       </div>
     </div>
     <div
@@ -44,7 +44,8 @@
       class="course-detail__head--img"
     >
 
-      <img v-if="courseSet.cover" :class="{ 'continue-learning-img': nextStudy.nextTask }" :src="courseSet.cover.large" alt />
+      <img v-if="courseSet.cover" :class="{ 'continue-learning-img': nextStudy.nextTask }" :src="courseSet.cover.large"
+           alt/>
       <div class="continue-learning" v-if="nextStudy.nextTask">
         <h3 class="continue-learning__title">{{ nextStudy.nextTask.title }}</h3>
         <div class="continue-learning__btn" @click="handleClickContinueLearning">{{ continueLearningText }}</div>
@@ -61,7 +62,7 @@
         @sellOut="sellOut"
       />
       <div class="wechat-subscribe-box">
-        <wechat-subscribe />
+        <wechat-subscribe/>
       </div>
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
@@ -105,7 +106,7 @@
     </template>
     <!-- 学习上报按钮 -->
 
-    <tagLink :tag-data="tagData" />
+    <tagLink :tag-data="tagData"/>
     <finishDialog
       v-if="finishDialog"
       :finishResult="finishResult"
@@ -115,14 +116,14 @@
 
     <open-app-dialog v-if="appShow"
                      :openAppUrl="openAppUrl" :courseId="course.details.id"
-                     :goodsId="course.details.goodsId" @cancel="cancel()" ></open-app-dialog>
+                     :goodsId="course.details.goodsId" @cancel="cancel()"></open-app-dialog>
   </div>
 </template>
 <script>
 import loadScript from 'load-script';
-import { mapState, mapActions, mapMutations } from 'vuex';
+import {mapState, mapActions, mapMutations} from 'vuex';
 import Api from '@/api';
-import { Toast, Dialog } from 'vant';
+import {Toast, Dialog} from 'vant';
 import countDown from '&/components/e-marketing/e-count-down/index';
 import tagLink from '&/components/e-tag-link/e-tag-link';
 import finishDialog from '../components/finish-dialog';
@@ -132,8 +133,8 @@ import VideoReportMask from '@/components/video-report-mask';
 import WechatSubscribe from '../components/wechat-subscribe';
 import * as types from '@/store/mutation-types.js';
 import copyUrl from '@/mixins/copyUrl';
-import { getLanguage } from '@/lang/index.js'
-import { closedToast } from '@/utils/on-status.js';
+import {getLanguage} from '@/lang/index.js'
+import {closedToast} from '@/utils/on-status.js';
 import {getTaskWatermark} from '@/utils/watermark';
 import openAppDialog from '../components/openAppDialog.vue'
 
@@ -195,7 +196,7 @@ export default {
   },
   inject: ['getDetailsContent'],
   computed: {
-    ...mapState(['DrpSwitch', 'cloudSdkCdn', 'courseSettings','course']),
+    ...mapState(['DrpSwitch', 'cloudSdkCdn', 'courseSettings', 'course']),
     ...mapState('course', {
       course: state => state,
       sourceType: state => state.sourceType,
@@ -212,8 +213,13 @@ export default {
     },
 
     continueLearningText() {
-      const { nextTask, progress } = this.nextStudy;
-      return nextTask && progress == 0  ? this.$t('courseLearning.startLearning') : this.$t('courseLearning.continueLearning');
+      const {nextTask, progress} = this.nextStudy;
+      return nextTask && progress == 0 ? this.$t('courseLearning.startLearning') : this.$t('courseLearning.continueLearning');
+    },
+
+    isAppleDevice() {
+      const ua = navigator.userAgent.toLowerCase();
+      return /iphone|ipad/i.test(ua);
     }
   },
   watch: {
@@ -296,15 +302,15 @@ export default {
       this.IsLivePlayback();
     },
     getFinishCondition() {
-        this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
-          this.activity = res.activity;
-          this.finishCondition = res.activity && res.activity.finishCondition;
-        });
+      this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
+        this.activity = res.activity;
+        this.finishCondition = res.activity && res.activity.finishCondition;
+      });
     },
     // 直播视频回放刚进入课程就算学习完成
     IsLivePlayback() {
       if (this.allTask[this.taskId].type === 'live') {
-        this.reprtData({ eventName: 'finish' });
+        this.reprtData({eventName: 'finish'});
       }
     },
     viewAudioDoc() {
@@ -323,24 +329,24 @@ export default {
       const canTryLookable = !this.joinStatus;
       return canTryLookable
         ? {
-            query: {
-              courseId: this.selectedPlanId,
-              taskId: this.taskId,
-            },
-            params: {
-              preview: 1,
-              version: 'escloud',
-            },
-          }
+          query: {
+            courseId: this.selectedPlanId,
+            taskId: this.taskId,
+          },
+          params: {
+            preview: 1,
+            version: 'escloud',
+          },
+        }
         : {
-            query: {
-              courseId: this.selectedPlanId,
-              taskId: this.taskId,
-            },
-            params: {
-              version: 'escloud',
-            },
-          };
+          query: {
+            courseId: this.selectedPlanId,
+            taskId: this.taskId,
+          },
+          params: {
+            version: 'escloud',
+          },
+        };
     },
     initData() {
       this.isShowOutFocusMask = false;
@@ -362,7 +368,7 @@ export default {
       Api.getMedia(this.getParams())
         .then(async res => {
           const {
-            media: { resNo },
+            media: {resNo},
             mediaType,
           } = res;
 
@@ -458,18 +464,18 @@ export default {
         taskId: ''
       })
       this.appShow = false;
-     },
+    },
 
     handleOnlyLearnOnApp() {
       if (this.courseSettings.only_learning_on_APP == 0) return false
 
-      const { goodsId, id } = this.course.details;
-      const { host, protocol } = window.location;
+      const {goodsId, id} = this.course.details;
+      const {host, protocol} = window.location;
 
       if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
         this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`;
       } else {
-        this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`;
+        this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":", "")}&courseId=${id}&goodsId=${goodsId}`;
       }
 
       this.appShow = true;
@@ -512,7 +518,7 @@ export default {
         id: 'course-detail__head--video',
         user: this.user,
         autoplay: true,
-        disableFullscreen: true,
+        disableFullscreen: this.isAppleDevice,
         strictMode: !media.supportMobile, // 视频是否加密 1表示普通  0表示加密
         pluck: {
           timelimit: timelimit,
@@ -544,7 +550,7 @@ export default {
         delete options.pluck;
       }
 
-      const { finishType, finishData  } = this.activity;
+      const {finishType, finishData} = this.activity;
       if (finishType == 'end' && finishData == '1') {
         options.controlBar = {
           disableProgressBar: true
@@ -597,7 +603,7 @@ export default {
         player.on('pagechanged', e => {
           if (e.page === e.total) {
             if (this.finishCondition && this.finishCondition.type === 'end') {
-              this.reprtData({ eventName: 'finish' });
+              this.reprtData({eventName: 'finish'});
             }
           }
         });
@@ -634,7 +640,8 @@ export default {
           Dialog.alert({
             message:
               '当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。',
-          }).then(() => {});
+          }).then(() => {
+          });
         });
         player.on('ready', () => {
           this.initReportData(
@@ -659,18 +666,22 @@ export default {
         player.on('ended', () => {
           this.clearComputeWatchTime();
           if (this.finishCondition && this.finishCondition.type === 'end') {
-            this.reprtData({ eventName: 'finish' });
+            this.reprtData({eventName: 'finish'});
           }
         });
-        player.on('requestFullscreen', data => {
-          if (data.metas?.type === 'video') {
-            if (data.isFullscreen) {
-              player.iframe.classList.add('fullscreen');
-            } else {
-              player.iframe.classList.remove('fullscreen');
+
+        if (this.isAppleDevice) {
+          player.on('requestFullscreen', data => {
+            if (data.metas?.type === 'video') {
+              if (data.isFullscreen) {
+                player.iframe.classList.add('fullscreen');
+              } else {
+                player.iframe.classList.remove('fullscreen');
+              }
             }
-          }
-        });
+          });
+        }
+
       });
     },
     isWechat() {
@@ -745,7 +756,7 @@ export default {
       });
     },
     toLearned() {
-      this.reprtData({ eventName: 'finish' }).then(res => {
+      this.reprtData({eventName: 'finish'}).then(res => {
         this.finishResult = res;
         this.finishDialog = true;
       });
@@ -768,7 +779,7 @@ export default {
     async handleClickContinueLearning() {
       await this.getDetailsContent()
 
-      if(this.courseSet?.status == 'closed') {
+      if (this.courseSet?.status == 'closed') {
         return closedToast('course');
       }
 
@@ -776,7 +787,7 @@ export default {
         return Toast(this.$t('learning.expired'));
       }
 
-      const { id } = this.nextStudy.nextTask;
+      const {id} = this.nextStudy.nextTask;
 
       const params = {
         courseId: this.selectedPlanId,
@@ -784,7 +795,7 @@ export default {
       };
 
       try {
-        Api.getCourseData({ query: params }).then(res => {
+        Api.getCourseData({query: params}).then(res => {
           this.toLearnTask(res);
         });
       } catch (err) {
@@ -792,7 +803,7 @@ export default {
       }
     },
 
-     // 跳转到task
+    // 跳转到task
     toLearnTask(task) {
       // 课程再创建阶段或者和未发布状态
       if (task.status === 'create') {
@@ -800,7 +811,7 @@ export default {
         return;
       }
       // 更改store中的当前学习
-      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask: task });
+      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, {nextTask: task});
       this.showTypeDetail(task);
     },
 
@@ -830,17 +841,12 @@ export default {
               courseId: this.selectedPlanId,
               taskId: task.id,
               type: task.type,
-              backUrl: `/course/${this.selectedPlanId}`,
             },
           });
           break;
         case 'live':
-          // eslint-disable-next-line no-case-declarations
           const nowDate = new Date();
-          // eslint-disable-next-line no-case-declarations
           const endDate = new Date(task.endTime * 1000);
-          // const startDate = new Date(task.startTime * 1000);
-          // eslint-disable-next-line no-case-declarations
           let replay = false;
           if (nowDate > endDate) {
             if (
@@ -880,7 +886,6 @@ export default {
           });
           break;
         case 'testpaper':
-          // eslint-disable-next-line no-case-declarations
           const testId = task.activity.testpaperInfo.testpaperId;
           this.$router.push({
             name: 'testpaperIntro',
