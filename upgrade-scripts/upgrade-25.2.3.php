@@ -35,6 +35,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = [
             'enableAITenant',
             'registerJob',
+            'modifyPermissions',
+            'fixQuestionData',
+            'fixItemData'
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -100,6 +103,57 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function modifyPermissions()
+    {
+        $role = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
+    
+        if (in_array('custom_export_permission', $role['data_v2'])) {
+            $newPermissions = array_values(array_diff($role['data_v2'], ['custom_export_permission']));
+            $this->getRoleDao()->update($role['id'], ['data_v2' => $newPermissions]);
+            $this->logger('info', '已移除ROLE_ADMIN的custom_export_permission权限');
+        }
+    
+        return 1;
+    }
+
+    protected function fixQuestionData()
+    {
+        $connection = $this->getConnection();
+        $index = 1;
+        $maxUpdates = 50;
+    
+        while ($index <= $maxUpdates) {
+            $count = (int)$connection->fetchColumn("SELECT COUNT(*) FROM biz_question WHERE stem LIKE '%<span class=\"ibs-stem-fill-blank\">%'");
+            if ($count === 0) {
+                break;
+            }
+            $connection->exec("update biz_question set stem= replace(stem, '<span class=\"ibs-stem-fill-blank\">(".$index.")</span>', ' [[]] ') where stem like '%<span class=\"ibs-stem-fill-blank\">%';");
+            $this->logger('info', 'biz_question更新索引为'.$index.'的数据成功');
+            $index++;
+        }
+
+        return 1;
+    }
+
+    protected function fixItemData()
+    {
+        $connection = $this->getConnection();
+        $index = 1;
+        $maxUpdates = 50;
+    
+        while ($index <= $maxUpdates) {
+            $count = (int)$connection->fetchColumn("SELECT COUNT(*) FROM biz_item WHERE material LIKE '%<span class=\"ibs-stem-fill-blank\">%'");
+            if ($count === 0) {
+                break;
+            }
+            $connection->exec("update biz_item set material= replace(material, '<span class=\"ibs-stem-fill-blank\">(".$index.")</span>', ' [[]] ') where material like '%<span class=\"ibs-stem-fill-blank\">%';");
+            $this->logger('info', 'biz_item更新索引为'.$index.'的数据成功');
+            $index++;
+        }
+
+        return 1;
+    }
+
     protected function generateIndex($step, $page)
     {
         return $step * 1000000 + $page;
@@ -157,6 +211,24 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createService('User:UserService');
     }
+
+        /**
+     * @return \Biz\Role\Service\RoleService
+     */
+    protected function getRoleService()
+    {
+        return $this->createService('Role:RoleService');
+    }
+
+        /**
+     * @return \Biz\Role\Dao\RoleDao
+     */
+    private function getRoleDao()
+    {
+        return $this->createDao('Role:RoleDao');
+    }
+
+
 }
 
 abstract class AbstractUpdater
