@@ -34,7 +34,7 @@ class SecondaryVerificationController extends BaseController
 
     private function getMobile($exportFileName)
     {
-        $useCurrentUser = in_array($exportFileName, ['classroomStudent', 'itemBankExercise', 'courseStudent'], true);
+        $useCurrentUser = in_array($exportFileName, ['classroomStudent', 'itemBankExercise', 'courseStudent', 'deleteUser'], true);
 
         if ($useCurrentUser) {
             return $this->getUser()['verifiedMobile'] ?? '';
