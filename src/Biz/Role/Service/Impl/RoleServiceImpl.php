@@ -268,9 +268,7 @@ class RoleServiceImpl extends BaseService implements RoleService
                 $this->initCreateRole($key, [], array_values($value));
             } else {
                 if ($key == 'ROLE_ADMIN') {
-                    if (in_array('custom_export_permission', $userRole['data_v2'])) {
-                        $value = array_values(array_diff($userRole['data_v2'], ['custom_export_permission']));
-                    }
+                    $value = array_values(array_diff($userRole['data_v2'], ['custom_export_permission']));
                 }
                 $this->getRoleDao()->update($userRole['id'], ['data' => [], 'data_v2' => array_values($value)]);
             }
