@@ -232,7 +232,7 @@ export default class MobileBind {
                 window.exporting = false;
               }, 500);
             } else {
-              const progress = (response.start / window.totalCount * 100) + '%';
+              const progress = (response.start / response.count * 100) + '%';
               $modal.find('#progress-bar').width(progress);
               exportDataAjax(params, response.start, response.fileName, response.name);
             }
