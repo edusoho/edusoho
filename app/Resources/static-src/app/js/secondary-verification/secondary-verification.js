@@ -209,6 +209,8 @@ export default class MobileBind {
 
       function exportDataAjax(params, start, fileName, name) {
         params['start'] = start;
+        params['fileName'] = fileName;
+        params['name'] = name;
         $.ajax({
           url: '/pre/export/item-bank-exercise-students', // 替换为实际地址
           method: 'GET',
