@@ -447,11 +447,22 @@ const onExport = async () => {
 };
 
 const exportData = async (start, fileName) => {
-  const params = getFormParams();
-  params.start = start || 0;
+  const rawParams = getFormParams();
+  rawParams.start = start || 0;
+  rawParams.userIds = table.rowSelection.selectedRowKeys;
   if (fileName) {
-    params.fileName = fileName;
+    rawParams.fileName = fileName;
   }
+
+  // 过滤掉值为 undefined 的参数
+  const params = Object.fromEntries(
+    Object.entries(rawParams).filter(([_, v]) => v !== undefined)
+  );
+  const verificationResponse = await fetch(`/secondary/verification?exportFileName=classroomStudent&targetFormId=${classroomId}&` + new URLSearchParams(params));
+  const html = await verificationResponse.text();
+  $modal.html(html).modal('show');
+  return;
+
   const response = await Api.classroomMember.export(classroomId, params);
   if (response.status === 'getData') {
     await exportData(response.start, response.fileName);

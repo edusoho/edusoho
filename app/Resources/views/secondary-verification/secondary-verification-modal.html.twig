@@ -7,7 +7,7 @@
   {{ 'admin_v2.secondary.verification.security_verification'|trans }}
 {% endblock %}
 {% block body %}
-  <form id="mobile-bind-form" class="mobile-bind-container" data-user-id="{{app.user.id}}">
+  <form id="mobile-bind-form" data-user-id="{{app.user.id}}">
     <div class="form-group cd-form-group">
       <label class="control-label" style="margin-bottom: 10px;" for="mobile">{{'site.mobile_bind.phone_number'|trans}}</label>
       <div class="controls"><p>{{ mobile|slice(0, 3) ~ '****' ~ mobile|slice(7, 4) }}</p></div>
@@ -36,9 +36,19 @@
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input class="form-control" type="hidden" id="mobile" name="mobile" value="{{ mobile }}"/>
+    <input class="form-control" type="hidden" id="params" name="params" value="{{ params|json_encode|e('html_attr') }}">
     {% if exportFileName == 'user' %}
       <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-user-btn cd-btn-primary" id="user-export" data-toggle="modal" data-target="#modal"
          >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'classroomStudent' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-classroom-student-btn cd-btn-primary" id="classroom-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'courseStudent' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-course-student-btn cd-btn-primary" id="coruse-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'itemBankExercise' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn item-bank-exercise-student-export cd-btn-primary" id="item-bank-exercise-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
     {% else %}
       <a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} btn cd-btn cd-btn-lg mobile-bind-form__btn {% endif %} mhs {{ exportClass|default('cd-btn-primary') }} js-export-btn"
          href="javascript:;"

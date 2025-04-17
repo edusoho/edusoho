@@ -205,6 +205,16 @@ let exporting = false;
 let totalCount = 0;
 const $modal = $('#modal');
 const onExport = async () => {
+  const params = getFormParams();
+  params.exerciseId = exerciseId;
+  params.name = name;
+  const filterParams = Object.fromEntries(
+    Object.entries(params).filter(([_, v]) => v !== undefined)
+  );
+  const verificationResponse = await fetch(`/secondary/verification?exportFileName=itemBankExercise&targetFormId=${exerciseId}&` + new URLSearchParams(filterParams));
+  const html = await verificationResponse.text();
+  $modal.html(html).modal('show');
+  return;
   if (exporting) {
     return;
   }
