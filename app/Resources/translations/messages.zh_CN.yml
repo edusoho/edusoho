@@ -12558,3 +12558,4 @@ admin_v2.contract.tittle: 全新上线电子合同功能，带来高效、安全
 
 #二次验证
 admin_v2.secondary.verification.security_verification: 安全验证
+admin_v2.secondary.verification.security_verification.tips: 为了保障网校数据安全导出时需进行短信验证，请使用开通网校时填写的手机号收取验证码。
