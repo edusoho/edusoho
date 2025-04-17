@@ -127,8 +127,9 @@ class EduSohoUpgrade extends AbstractUpdater
             if ($count === 0) {
                 break;
             }
-            $connection->exec("update biz_question set stem= replace(stem, '<span class=\"ibs-stem-fill-blank\">("+$index+")</span>', ' [[]] ') where stem like '%<span class=\"ibs-stem-fill-blank\">%';");
-            $this->logger('info', 'biz_question更新索引为'+$index+'的数据成功');
+            $connection->exec("update biz_question set stem= replace(stem, '<span class=\"ibs-stem-fill-blank\">(".$index.")</span>', ' [[]] ') where stem like '%<span class=\"ibs-stem-fill-blank\">%';");
+            $this->logger('info', 'biz_question更新索引为'.$index.'的数据成功');
+            $index++;
         }
 
         return 1;
@@ -145,8 +146,9 @@ class EduSohoUpgrade extends AbstractUpdater
             if ($count === 0) {
                 break;
             }
-            $connection->exec("update biz_item set stem= replace(material, '<span class=\"ibs-stem-fill-blank\">("+$index+")</span>', ' [[]] ') where stem like '%<span class=\"ibs-stem-fill-blank\">%';");
-            $this->logger('info', 'biz_item更新索引为'+$index+'的数据成功');
+            $connection->exec("update biz_item set material= replace(material, '<span class=\"ibs-stem-fill-blank\">(".$index.")</span>', ' [[]] ') where material like '%<span class=\"ibs-stem-fill-blank\">%';");
+            $this->logger('info', 'biz_item更新索引为'.$index.'的数据成功');
+            $index++;
         }
 
         return 1;
