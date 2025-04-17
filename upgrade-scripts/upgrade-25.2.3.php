@@ -36,7 +36,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'enableAITenant',
             'registerJob',
             'modifyPermissions',
-            'fixQuestionBankData',
+            'fixQuestionData',
             'fixItemData'
         ];
         $funcNames = array();
