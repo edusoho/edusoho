@@ -8,6 +8,9 @@
 {% endblock %}
 {% block body %}
   <form id="mobile-bind-form" data-user-id="{{app.user.id}}">
+    {% if exportFileName == 'user' or exportFileName == 'order' %}
+      <p>{{ 'admin_v2.secondary.verification.security_verification.tips'|trans }}</p>
+    {% endif %}
     <div class="form-group cd-form-group">
       <label class="control-label" style="margin-bottom: 10px;" for="mobile">{{'site.mobile_bind.phone_number'|trans}}</label>
       <div class="controls"><p>{{ mobile|slice(0, 3) ~ '****' ~ mobile|slice(7, 4) }}</p></div>
