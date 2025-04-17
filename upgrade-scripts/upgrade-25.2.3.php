@@ -36,7 +36,8 @@ class EduSohoUpgrade extends AbstractUpdater
             'enableAITenant',
             'registerJob',
             'modifyPermissions',
-            'fixQuestionBankData'
+            'fixQuestionBankData',
+            'fixItemData'
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -115,7 +116,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function fixQuestionBankData()
+    protected function fixQuestionData()
     {
         $connection = $this->getConnection();
         $index = 1;
@@ -127,6 +128,25 @@ class EduSohoUpgrade extends AbstractUpdater
                 break;
             }
             $connection->exec("update biz_question set stem= replace(stem, '<span class=\"ibs-stem-fill-blank\">("+$index+")</span>', ' [[]] ') where stem like '%<span class=\"ibs-stem-fill-blank\">%';");
+            $this->logger('info', 'biz_question更新索引为'+$index+'的数据成功');
+        }
+
+        return 1;
+    }
+
+    protected function fixItemData()
+    {
+        $connection = $this->getConnection();
+        $index = 1;
+        $maxUpdates = 50;
+    
+        while ($index <= $maxUpdates) {
+            $count = (int)$connection->fetchColumn("SELECT COUNT(*) FROM biz_item WHERE material LIKE '%<span class=\"ibs-stem-fill-blank\">%'");
+            if ($count === 0) {
+                break;
+            }
+            $connection->exec("update biz_item set stem= replace(material, '<span class=\"ibs-stem-fill-blank\">("+$index+")</span>', ' [[]] ') where stem like '%<span class=\"ibs-stem-fill-blank\">%';");
+            $this->logger('info', 'biz_item更新索引为'+$index+'的数据成功');
         }
 
         return 1;
