@@ -35,6 +35,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = [
             'enableAITenant',
             'registerJob',
+            'modifyPermissions',
+            'fixQuestionBankData'
         ];
         $funcNames = array();
         foreach ($definedFuncNames as $key => $funcName) {
@@ -100,6 +102,36 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function modifyPermissions()
+    {
+        $role = $this->getRoleService()->getRoleByCode('ROLE_ADMIN');
+    
+        if (in_array('custom_export_permission', $role['data_v2'])) {
+            $newPermissions = array_values(array_diff($role['data_v2'], ['custom_export_permission']));
+            $this->getRoleDao()->update($role['id'], ['data_v2' => $newPermissions]);
+            $this->logger('info', '已移除ROLE_ADMIN的custom_export_permission权限');
+        }
+    
+        return 1;
+    }
+
+    protected function fixQuestionBankData()
+    {
+        $connection = $this->getConnection();
+        $index = 1;
+        $maxUpdates = 50;
+    
+        while ($index <= $maxUpdates) {
+            $count = (int)$connection->fetchColumn("SELECT COUNT(*) FROM biz_question WHERE stem LIKE '%<span class=\"ibs-stem-fill-blank\">%'");
+            if ($count === 0) {
+                break;
+            }
+            $connection->exec("update biz_question set stem= replace(stem, '<span class=\"ibs-stem-fill-blank\">("+$index+")</span>', ' [[]] ') where stem like '%<span class=\"ibs-stem-fill-blank\">%';");
+        }
+
+        return 1;
+    }
+
     protected function generateIndex($step, $page)
     {
         return $step * 1000000 + $page;
@@ -157,6 +189,24 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createService('User:UserService');
     }
+
+        /**
+     * @return \Biz\Role\Service\RoleService
+     */
+    protected function getRoleService()
+    {
+        return $this->createService('Role:RoleService');
+    }
+
+        /**
+     * @return \Biz\Role\Dao\RoleDao
+     */
+    private function getRoleDao()
+    {
+        return $this->createDao('Role:RoleDao');
+    }
+
+
 }
 
 abstract class AbstractUpdater
