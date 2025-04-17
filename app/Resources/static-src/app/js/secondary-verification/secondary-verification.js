@@ -298,6 +298,47 @@ export default class MobileBind {
         }
       }
     });
+
+    $('.js-delete-user').on('click', function (e) {
+      var paramsStr = $('#params').val(); // 获取 JSON 字符串
+      const params = JSON.parse(paramsStr);
+      $('[name="sms_code"]').valid();
+      e.preventDefault();
+      const $smsCodeInput = $('#sms_code');
+      if ($smsCodeInput.val().trim() === '') {
+        return false;
+      } else {
+        const smsCode = $smsCodeInput.val().trim();
+        let ajaxResult = false;
+        $.ajax({
+          url: $smsCodeInput.data('url') + '?value=' + smsCode,
+          type: 'GET',
+          async: false,
+          success: function (response) {
+            console.log(response);
+            console.log(response.success);
+            if (response.success) {
+              ajaxResult = true;
+            }
+          }
+        });
+        if (!ajaxResult) {
+          return false;
+        }
+        $.post(params['url'], function(result) {
+          notify('success', Translator.trans('admin.user.lock_operational_success_hint',{title:params['title']}));
+          window.location.reload();
+        }).error(function(e, textStatus, errorThrown) {
+          var $json = jQuery.parseJSON(e.responseText);
+          if($json.error.message){
+
+            notify('danger', Translator.trans($json.error.message));
+          }else{
+            notify('danger', Translator.trans('admin.user.lock_operational_fail_hint',{title:params['title']}));
+          }
+        });
+      }
+    });
   }
   exportClassroomData(start, fileName) {
     const paramsStr = $('#params').val(); // 获取 JSON 字符串

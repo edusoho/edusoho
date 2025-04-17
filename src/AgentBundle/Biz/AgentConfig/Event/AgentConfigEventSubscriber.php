@@ -207,12 +207,14 @@ class AgentConfigEventSubscriber extends EventSubscriber
         if (in_array($activity['mediaType'], ['audio', 'doc', 'ppt', 'video'])) {
             $activity = $this->getActivityService()->getActivity($activity['id'], true);
             try {
-                $document = $this->getAIService()->createDocumentByObject([
-                    'datasetId' => $datasetId,
-                    'extId' => $activity['id'],
-                    'name' => $activity['title'],
-                    'resNo' => $activity['ext']['file']['globalId'],
-                ]);
+                if (!empty($activity['ext']['file']['globalId'])) {
+                    $document = $this->getAIService()->createDocumentByObject([
+                        'datasetId' => $datasetId,
+                        'extId' => $activity['id'],
+                        'name' => $activity['title'],
+                        'resNo' => $activity['ext']['file']['globalId'],
+                    ]);
+                }
             } catch (\Exception $e) {
                 $this->getLogger()->error('create document by object error: '.$e->getMessage());
             }
