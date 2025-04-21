@@ -59,12 +59,17 @@ class AgentConfigEventSubscriber extends EventSubscriber
         $cloudFileActivities = $this->getActivityService()->findActivities($cloudFileActivityIds, true, 0);
         $objects = [];
         foreach ($cloudFileActivities as $cloudFileActivity) {
-            $objects[] = [
-                'name' => $cloudFileActivity['title'],
-                'objectKey' => $cloudFileActivity['ext']['file']['globalId'],
-                'objectVendor' => 'escloud',
-                'extId' => $cloudFileActivity['id'],
-            ];
+            if (!empty($cloudFileActivity['ext']['file']['globalId'])) {
+                $objects[] = [
+                    'name' => $cloudFileActivity['title'],
+                    'objectKey' => $cloudFileActivity['ext']['file']['globalId'],
+                    'objectVendor' => 'escloud',
+                    'extId' => $cloudFileActivity['id'],
+                ];
+            }
+        }
+        if (empty($objects)) {
+            return;
         }
         $documents = $this->getAIService()->batchCreateDocumentByObject($agentConfig['datasetId'], $objects);
         foreach ($documents as $document) {
@@ -202,12 +207,14 @@ class AgentConfigEventSubscriber extends EventSubscriber
         if (in_array($activity['mediaType'], ['audio', 'doc', 'ppt', 'video'])) {
             $activity = $this->getActivityService()->getActivity($activity['id'], true);
             try {
-                $document = $this->getAIService()->createDocumentByObject([
-                    'datasetId' => $datasetId,
-                    'extId' => $activity['id'],
-                    'name' => $activity['title'],
-                    'resNo' => $activity['ext']['file']['globalId'],
-                ]);
+                if (!empty($activity['ext']['file']['globalId'])) {
+                    $document = $this->getAIService()->createDocumentByObject([
+                        'datasetId' => $datasetId,
+                        'extId' => $activity['id'],
+                        'name' => $activity['title'],
+                        'resNo' => $activity['ext']['file']['globalId'],
+                    ]);
+                }
             } catch (\Exception $e) {
                 $this->getLogger()->error('create document by object error: '.$e->getMessage());
             }

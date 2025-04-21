@@ -12,8 +12,7 @@ class Domain extends AbstractResource
     public function get(ApiRequest $request, $courseId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
-        $inspectResult = $this->getAIService()->inspectTenant();
-        if ('ok' != $inspectResult['status']) {
+        if (!$this->getAIService()->isAgentEnable()) {
             return [];
         }
 

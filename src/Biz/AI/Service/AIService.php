@@ -24,6 +24,8 @@ interface AIService
 
     public function inspectTenant();
 
+    public function isAgentEnable();
+
     public function findDomains($category);
 
     public function runWorkflow($workflow, array $inputs);

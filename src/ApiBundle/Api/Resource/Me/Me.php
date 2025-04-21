@@ -60,7 +60,10 @@ class Me extends AbstractResource
 
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
 
-        $user['aiAgentToken'] = (new AgentToken())->make();
+        $agentToken = (new AgentToken())->make();
+        if (!empty($agentToken)) {
+            $user['aiAgentToken'] = $agentToken;
+        }
 
         return $user;
     }

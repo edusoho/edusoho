@@ -184,7 +184,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $this->getUploadFileDao()->search($conditions, ['createdTime' => 'DESC'], $start, $limit);
     }
 
-    public function getFileByGlobalId($globalId)
+    public function getFileByGlobalId($globalId, $ssl = false)
     {
     }
 
@@ -257,10 +257,11 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
      * only support for cloud file.
      *
      * @param $globalId
+     * @param bool $ssl
      *
      * @return array
      */
-    public function getDefaultHumbnails($globalId)
+    public function getDefaultHumbnails($globalId, $ssl = false)
     {
         return [];
     }

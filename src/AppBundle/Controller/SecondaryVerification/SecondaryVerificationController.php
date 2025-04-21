@@ -12,7 +12,7 @@ class SecondaryVerificationController extends BaseController
     public function indexAction(Request $request)
     {
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
-        if ($cloudSmsSetting['sms_enabled'] == 0) {
+        if (0 == $cloudSmsSetting['sms_enabled']) {
             return $this->render('secondary-verification/sms-open-redirect-modal.html.twig');
         }
         if (empty($cloudSmsSetting['sms_secondary_verification'])) {
@@ -20,17 +20,29 @@ class SecondaryVerificationController extends BaseController
             $this->getSettingService()->set('cloud_sms', $cloudSmsSetting);
         }
         $params = $request->query->all();
-        $operateUser = $this->getUser();
-        $result = CloudAPIFactory::create('leaf')->get('/me');
 
         return $this->render(
             'secondary-verification/secondary-verification-modal.html.twig',
             [
                 'exportFileName' => $params['exportFileName'],
                 'targetFormId' => $params['targetFormId'],
-                'mobile' => $result['mobile'],
+                'mobile' => $this->getMobile($params['exportFileName']),
+                'params' => $params,
             ]
         );
+    }
+
+    private function getMobile($exportFileName)
+    {
+        $useCurrentUser = in_array($exportFileName, ['classroomStudent', 'itemBankExercise', 'courseStudent', 'deleteUser'], true);
+
+        if ($useCurrentUser) {
+            return $this->getUser()['verifiedMobile'] ?? '';
+        }
+
+        $result = CloudAPIFactory::create('leaf')->get('/me');
+
+        return $result['mobile'] ?? '';
     }
 
     /**

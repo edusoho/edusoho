@@ -2,6 +2,7 @@
 
 namespace Biz\AI\Util;
 
+use Biz\AI\Service\AIService;
 use Biz\System\Service\SettingService;
 use Firebase\JWT\JWT;
 use Topxia\Service\Common\ServiceKernel;
@@ -21,6 +22,9 @@ class AgentToken
 
     public function make()
     {
+        if (!$this->getAIService()->isAgentEnable()) {
+            return '';
+        }
         $payload = [
             'iss' => 'AI_AGENT',
             'sub' => $this->getCurrentUser()->getId(),
@@ -41,6 +45,14 @@ class AgentToken
     private function getSettingService()
     {
         return $this->getServiceKernel()->getBiz()->service('System:SettingService');
+    }
+
+    /**
+     * @return AIService
+     */
+    private function getAIService()
+    {
+        return $this->getServiceKernel()->getBiz()->service('AI:AIService');
     }
 
     private function getServiceKernel()

@@ -1124,7 +1124,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
-                    if ($questionResponse['isTag']) {
+                    if (!empty($questionResponse['isTag'])) {
                         $questionIds[] = $questionResponse['question_id'];
                     }
                 }
@@ -1132,14 +1132,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         if (empty($questionIds)) {
-            if ($answerRecord['isTag']) {
+            if (!empty($answerRecord['isTag'])) {
                 $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 0]);
                 $this->getAnswerQuestionTagService()->deleteByAnswerRecordId($answerRecord['id']);
             }
 
             return;
         }
-        if ($answerRecord['isTag']) {
+        if (!empty($answerRecord['isTag'])) {
             $this->getAnswerQuestionTagService()->updateByAnswerRecordId($answerRecord['id'], $questionIds);
         } else {
             $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerRecord['id'], $questionIds);
