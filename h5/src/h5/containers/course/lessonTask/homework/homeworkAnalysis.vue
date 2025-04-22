@@ -17,6 +17,7 @@
       :can-do="canDo"
       :all="allList.length"
       :exerciseInfo="result"
+      :ai-agent-record-id="recordId"
     />
 
     <!-- 底部 -->
@@ -111,6 +112,7 @@ export default {
       answer: {},
       slideIndex: 0, // 题库组件当前所在的划片位置
       canDo: false, // 是否能答题，解析模式下不能答题
+      recordId: null,
     };
   },
   computed: {
@@ -150,6 +152,7 @@ export default {
         },
       }).then(res => {
         this.result = res;
+        this.recordId = res.id;
         this.setNavbarTitle(res.paperName);
         this.title = res.paperName;
         this.formatData(res);

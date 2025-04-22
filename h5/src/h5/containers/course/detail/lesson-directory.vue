@@ -449,18 +449,6 @@ export default {
         }
       }
 
-      // if(Number(this.isOnlyApp) && onlyAppType.includes(task.type)) {
-      //   Dialog.confirm({
-      //     message: '将为您跳转至App进行学习',
-      //     confirmButtonText: '继续',
-      //     className: 'only-app-dialog'
-      //   }).then(() => {
-      //     this.openApp('com.edusoho.zhixiang://', this.goConfirmAddr())
-      //   }).catch(() => {
-      //   });
-      //   return;
-      // }
-
       this.$store.commit(types.SET_TASK_SATUS, '');
 
       // 课程错误和未发布状态，不允许学习任务
@@ -721,18 +709,6 @@ export default {
       if (lesson.progressStatus === 'live') {
         return 'play';
       }
-      // if (lesson.status != 'published' || lesson.type != 'live') {
-      //   return 'nopublished';
-      // }
-      // const now = new Date().getTime();
-      // const endTimeStamp = new Date(lesson.endTime * 1000);
-      // if (now > endTimeStamp) {
-      //   if (lesson.activity.replayStatus === 'ungenerated') {
-      //     return 'end';
-      //   }
-      //   return 'back';
-      // }
-      // return 'play';
     },
   },
 };

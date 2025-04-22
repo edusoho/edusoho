@@ -1,4 +1,5 @@
 import { ImagePreview } from 'vant'
+import Api from '@/api';
 
 export default {
   computed: {
@@ -7,16 +8,25 @@ export default {
     }
   },
   methods: {
-    itemSlideNext() {
-      this.$refs.mySwiper.$swiper.slideNext();
+    async getQuestion() {
+      this.question = await Api.getExerciseQuestion({
+        query: {
+          answerRecordId: this.answerRecord.id,
+          questionId: this.items[this.itemIndex].questions[this.questionIndex].id,
+        },
+      })
     },
-    itemSlidePrev() {
-      this.$refs.mySwiper.$swiper.slidePrev();
+    questionSlideChange(index) {
+      this.questionIndex = index;
+      this.aiAgentSdk.hideReminder();
     },
     slideNextTransitionEnd() {
+      this.questionIndex = 0;
       if (this.current === this.items.length - 1) {
         return;
       }
+      this.itemIndex += 1;
+      this.aiAgentSdk.hideReminder();
       this.current += 1;
       this.changeRenderItems(this.current);
       this.fastSlide();
@@ -25,6 +35,9 @@ export default {
       if (this.current === 0) {
         return;
       }
+      this.questionIndex = 0;
+      this.itemIndex -= 1;
+      this.aiAgentSdk.hideReminder();
       this.current -= 1;
       this.changeRenderItems(this.current);
       const item = this.items[this.current];
@@ -33,13 +46,19 @@ export default {
         const childSwiper = this.$refs[itemKey][0].$refs[
           `childSwiper${item.id}`
         ];
-        let childSwiperSlide = Math.max(item.questions.length - 1, 0);
+        const childSwiperSlide = Math.max(item.questions.length - 1, 0);
         childSwiper.$swiper.slideTo(childSwiperSlide, 0, false);
       });
       this.fastSlide();
     },
+    itemSlideNext() {
+      this.$refs.mySwiper.$swiper.slideNext();
+    },
+    itemSlidePrev() {
+      this.$refs.mySwiper.$swiper.slidePrev();
+    },
     changeRenderItems(current) {
-      let renderItmes = [];
+      const renderItmes = [];
       if (this.items[current - 1]) {
         renderItmes.push(this.items[current - 1]);
       }

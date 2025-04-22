@@ -26,12 +26,15 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex';
+import {createNamespacedHelpers, mapMutations} from 'vuex';
 import { Dialog } from 'vant';
 import directory from './directory';
 import reviewList from './review-list';
 import introduction from './introduction';
 import closedFixed from '@/components/closed-fixed.vue'
+import Api from '@/api';
+import aiAgent from '@/mixins/aiAgent';
+import * as types from '@/store/mutation-types';
 
 const { mapState } = createNamespacedHelpers('ItemBank');
 export default {
@@ -42,12 +45,14 @@ export default {
     closedFixed
   },
   props: ['details'],
+  mixins: [aiAgent],
   data() {
     return {
       active: 1,
       show_question_bank_review: this.$store.state.goods
         .show_question_bank_review,
-      isOpen: true
+      isOpen: true,
+      aiAgentSdk: null,
     };
   },
   computed: {
@@ -61,7 +66,33 @@ export default {
   created() {
     this.signContractConfirm()
   },
+  mounted() {
+    this.tryInitAIAgentSdk()
+  },
   methods: {
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE,
+    }),
+    tryInitAIAgentSdk() {
+      Api.getItemBankExercise({
+        query: {
+          id: this.$route.params.id,
+        }
+      }).then(res => {
+        if (res.aiTeacherDomain) {
+          this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+          }, 20, 20, true);
+          if (res.studyPlanGenerated) {
+            this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
+          }
+          this.aiAgentSdk.boot();
+        }
+      })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     signContractConfirm() {
       const { contract, isContractSigned } = this.ItemBankExercise
 

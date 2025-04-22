@@ -21,14 +21,12 @@
 </template>
 
 <script>
-// import { throttle } from '@/utils/utils.js';
 import { mapState, mapActions } from 'vuex';
 import swiperTab from './components/swiper-tab.vue';
 import exam from './components/exam.vue';
 import exercise from './components/exercise.vue';
 import Api from '@/api';
 const CHAPTER = 'chapter'; // 章节
-// eslint-disable-next-line no-unused-vars
 const ASSESSMENT = 'assessment'; // 模拟卷
 const defaultData = {
   data: [],
@@ -95,14 +93,6 @@ export default {
         this.moduleId = res[0].id;
         this.changeData(res[0].id);
       }
-      // this.getDirectoryModules(this.exerciseId).then(res => {
-      //   if (res.length) {
-      //     this.currentType = res[0].type;
-      //     this.list[res[0].id] = JSON.parse(JSON.stringify(defaultData));
-      //     this.moduleId = res[0].id;
-      //     this.changeData(res[0].id);
-      //   }
-      // });
     },
     judegIsAll(ItemBankInfomation) {
       return (

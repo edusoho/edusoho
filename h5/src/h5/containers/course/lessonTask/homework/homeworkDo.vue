@@ -17,6 +17,7 @@
       :show-score="false"
       :slide-index.sync="slideIndex"
       :all="info.length"
+      :ai-agent-record-id="recordId"
     />
 
     <!-- 引导页 -->
@@ -101,7 +102,8 @@ export default {
       isHandHomework: false, // 是否已经交完作业
       slideIndex: 0, // 题库组件当前所在的划片位置
       forceLeave: false,
-      interval: null
+      interval: null,
+      recordId: null,
     };
   },
   computed: {
@@ -179,6 +181,7 @@ export default {
         },
       })
         .then(res => {
+          this.recordId = res.id;
           this.afterGetData(res);
         })
         .catch(err => {

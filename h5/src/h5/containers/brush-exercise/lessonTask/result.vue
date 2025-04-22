@@ -180,6 +180,7 @@ export default {
       const query = {
         title: this.$route.query.title,
         type: this.$route.query.type,
+        exerciseId: this.$route.query.exerciseId,
       };
       const answerRecordId = this.$route.params.answerRecordId;
       this.$router.push({

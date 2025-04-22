@@ -19,6 +19,7 @@
       :result-show="resultShow"
       :mode="mode"
       :exerciseInfo="result"
+      :ai-agent-record-id="result.id"
     />
 
     <!-- 底部 -->

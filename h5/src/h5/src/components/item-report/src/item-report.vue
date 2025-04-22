@@ -19,6 +19,7 @@
             <ibs-item
               :ref="`item${item.id}`"
               :item="item"
+              :items="items"
               :mode="mode"
               :wrongMode="wrongMode"
               :itemUserAnswer="getUserAnwer(item.sectionIndex, item.itemIndex)"
@@ -34,6 +35,7 @@
               :exerciseInfo="answerRecord"
               @itemSlideNext="itemSlideNext"
               @itemSlidePrev="itemSlidePrev"
+              @questionSlideChange="questionSlideChange"
             />
           </swiper-slide>
         </template>
@@ -63,16 +65,17 @@ import ibsItem from "@/src/components/item/src/item.vue";
 import card from "@/src/components/common/card";
 import ibsFooter from "@/src/components/common/footer";
 import itemBankMixins from "@/src/mixins/itemBankMixins.js";
+import Api from '@/api';
+import aiAgent from '@/mixins/aiAgent';
 let lastItemId = 0;
 let questionIndex = 0;
 let itemIndex = 0;
 
 export default {
   name: "item-report",
-  mixins: [itemBankMixins],
+  mixins: [itemBankMixins, aiAgent],
   components: {
     ibsItem,
-    // ibsSlide,
     card,
     ibsFooter
   },
@@ -126,7 +129,11 @@ export default {
       wrongItems: [],
       defaultItems: [],
       renderItmes: [],
-      answerAttachments: {}
+      answerAttachments: {},
+      question: {},
+      itemIndex: 0,
+      questionIndex: 0,
+      aiAgentSdk: null,
     };
   },
   computed: {
@@ -134,11 +141,56 @@ export default {
       return !!Number(this.answerScene.need_score);
     }
   },
-  mounted() {
+  async mounted() {
     this.setSwiperHeight();
     this.getSectionResponses();
+    this.tryInitAIAgentSdk();
   },
   methods: {
+    tryInitAIAgentSdk() {
+      Api.getItemBankExercise({
+        query: {
+          id: this.$route.query.exerciseId,
+        }
+      }).then(res => {
+        if (res.aiTeacherDomain) {
+          this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+          }, 80, 20);
+          if (res.studyPlanGenerated) {
+            this.aiAgentSdk.setVariable('studyPlanGenerated', true)
+          }
+          this.aiAgentSdk.boot();
+          this.aiAgentSdk.showReminder({
+            title: "战绩新鲜出炉",
+            content: "别独自琢磨，快找小知老师唠唠，一起解锁答题背后的奥秘～",
+            duration: 5000,
+          });
+          const btn = document.getElementById('agent-sdk-floating-button');
+          if (!btn) return;
+          btn.addEventListener('click', async () => {
+            await this.getQuestion();
+            this.aiAgentSdk.showReminder({
+              title: "遇到问题啦？",
+              content: "小知老师来为你理清解题思路～",
+              buttonContent: 'teacher.question',
+              duration: 5000,
+              workflow: {
+                workflow: 'teacher.question.analysis',
+                inputs: {
+                  domainId: res.aiTeacherDomain,
+                  question: this.question.question,
+                }
+              },
+              chatContent: this.question.content,
+            });
+          });
+        }
+      })
+        .catch(err => {
+          console.log(err);
+        })
+    },
     getResponseAttachments() {
       if (!this.assessmentResponse.section_responses) return;
 
@@ -312,6 +364,8 @@ export default {
       const q = childSwiper.$swiper.activeIndex;
       const question = this.assessment.sections[s].items[i].questions[q];
       this.items = this.wrongItems;
+      this.itemIndex = 0;
+      this.questionIndex = 0;
       if (currentItem.wrongIndex) {
         this.current = currentItem.wrongIndex;
         this.changeRenderItems(this.current);
