@@ -140,6 +140,19 @@ export default class MobileBind {
       );
     });
 
+    $('.course-order-export').on('click', function (e) {
+      $('[name="sms_code"]').valid();
+      e.preventDefault();
+      if (!verifySmsCode()) return false;
+      const params = JSON.parse($('#params').val());
+      doExportAjax(
+        params,
+        '/try/export/order',
+        '/pre/export/order',
+        '/export/order'
+      );
+    });
+
     $('.js-export-user-btn').on('click', function (e) {
       $('[name="sms_code"]').valid();
       e.preventDefault();
