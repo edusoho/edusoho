@@ -59,20 +59,8 @@
       <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-order-export cd-btn-primary" id="course-order" data-toggle="modal" data-target="#modal"
       >{{ 'form.btn.submit'|trans }}</a>
     {% else %}
-      <a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} btn cd-btn cd-btn-lg mobile-bind-form__btn {% endif %} mhs {{ exportClass|default('cd-btn-primary') }} js-export-btn"
-         href="javascript:;"
-         data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
-         data-url="{{ path('export',{'name':exportFileName, 'customFileName': customFileName|default('')}) }}"
-         data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
-         data-loading-text="{{'form.btn.export.submiting'|trans}}"
-         data-target-form="#{{ targetFormId }}"
-         data-file-names="{{ fileNames|default([exportFileName])|json_encode }}"
-      >
-        <i class="cd-text-lg"></i>
-        {% if showDownLoadText|default(1) %}
-          {{ text|default('form.btn.submit')|trans }}
-        {% endif %}
-      </a>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-order-export cd-btn-primary" id="course-order" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
     {% endif %}
 
 
