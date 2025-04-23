@@ -40,7 +40,8 @@ export default class MobileBind {
 
     const doExportAjax = (verifyParams, fetchUrl, prepareUrl, finalUrl, extraParams = {}) => {
       const $modal = $('#modal');
-
+      verifyParams['sms_code'] = $('#sms_code').val().trim();
+      verifyParams['mobile'] = $('#mobile').val();
       $.ajax({
         url: fetchUrl,
         method: 'GET',
@@ -92,7 +93,6 @@ export default class MobileBind {
               error: () => window.exporting = false
             });
           };
-
           exportDataAjax({ ...verifyParams, ...extraParams }, 0, '', '');
         },
         error: () => window.exporting = false

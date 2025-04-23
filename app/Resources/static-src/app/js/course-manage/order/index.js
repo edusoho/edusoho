@@ -35,7 +35,6 @@ $('.course-order-js-export-btn').on('click', async function () {
     const query = new URLSearchParams(params).toString();
     const verificationResponse = await fetch(`/secondary/verification?exportFileName=courseOrder&targetFormId=${params['courseId']}&${query}`);
     const html = await verificationResponse.text();
-    $('modal').empty();
     // 显示 modal
     $('#modal').html(html).modal('show');
   } catch (error) {
