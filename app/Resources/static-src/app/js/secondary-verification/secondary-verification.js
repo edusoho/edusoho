@@ -19,11 +19,90 @@ export default class MobileBind {
   // +++ 新增方法：绑定导出按钮的点击事件 +++
   initExportBtnEvent() {
     const self = this;
+
+    const verifySmsCode = () => {
+      const $smsCodeInput = $('#sms_code');
+      const smsCode = $smsCodeInput.val().trim();
+      if (smsCode === '') return false;
+
+      let ajaxResult = false;
+      $.ajax({
+        url: $smsCodeInput.data('url') + '?value=' + smsCode,
+        type: 'GET',
+        async: false,
+        success: function (response) {
+          ajaxResult = !!response.success;
+        }
+      });
+
+      return ajaxResult;
+    };
+
+    const doExportAjax = (verifyParams, fetchUrl, prepareUrl, finalUrl, extraParams = {}) => {
+      const $modal = $('#modal');
+
+      $.ajax({
+        url: fetchUrl,
+        method: 'GET',
+        data: verifyParams,
+        success: function (response) {
+          if (!response.success) {
+            window.exporting = false;
+            return;
+          }
+
+          window.totalCount = response.counts.reduce((acc, val) => acc + val, 0);
+          $modal.html($('#export-modal').html());
+          $modal.modal({ backdrop: 'static', keyboard: false });
+
+          const exportDataAjax = (params, start, fileName, name) => {
+            params.start = start;
+            params.fileName = fileName;
+            params.name = name;
+
+            $.ajax({
+              url: prepareUrl,
+              method: 'GET',
+              data: params,
+              success: function (res) {
+                if (!res.success) {
+                  window.exporting = false;
+                  return;
+                }
+
+                if (res.status === 'finish') {
+                  if (!res.csvName) {
+                    $modal.modal('hide');
+                    window.exporting = false;
+                    return;
+                  }
+
+                  window.location.href = `${finalUrl}?fileNames[]=${res.csvName}`;
+                  $modal.find('#progress-bar').width('100%').parent().removeClass('active');
+                  setTimeout(() => {
+                    $modal.modal('hide');
+                    window.exporting = false;
+                  }, 500);
+                } else {
+                  const progress = `${(res.start / res.count) * 100}%`;
+                  $modal.find('#progress-bar').width(progress);
+                  exportDataAjax(params, res.start, res.fileName, res.name);
+                }
+              },
+              error: () => window.exporting = false
+            });
+          };
+
+          exportDataAjax({ ...verifyParams, ...extraParams }, 0, '', '');
+        },
+        error: () => window.exporting = false
+      });
+    };
+
     $('.js-export-btn').on('click', function (e) {
-      e.preventDefault(); // 防止链接默认行为
+      e.preventDefault();
       e.stopPropagation();
-      if (self.$form.valid()) { // 手动触发表单验证
-        // 如果验证通过，执行后续操作（如提交表单或导出）
+      if (self.$form.valid()) {
         console.log('验证成功，执行导出逻辑...');
       }
     });
@@ -31,336 +110,114 @@ export default class MobileBind {
     $('.js-export-classroom-student-btn').on('click', function (e) {
       $('[name="sms_code"]').valid();
       e.preventDefault();
-      const $smsCodeInput = $('#sms_code');
-      if ($smsCodeInput.val().trim() === '') {
-        return false;
-      } else {
-        const smsCode = $smsCodeInput.val().trim();
-        let ajaxResult = false;
-        $.ajax({
-          url: $smsCodeInput.data('url') + '?value=' + smsCode,
-          type: 'GET',
-          async: false,
-          success: function (response) {
-            console.log(response);
-            console.log(response.success);
-            if (response.success) {
-              ajaxResult = true;
-            }
-          }
-        });
-        if (!ajaxResult) {
-          return false;
-        }
-        self.exportClassroomData();
-      }
+      if (!verifySmsCode()) return false;
+      self.exportClassroomData();
     });
 
     $('.js-export-course-student-btn').on('click', function (e) {
-      const $modal = $('#modal');
       $('[name="sms_code"]').valid();
       e.preventDefault();
-      const $smsCodeInput = $('#sms_code');
-      if ($smsCodeInput.val().trim() === '') {
-        return false;
-      } else {
-        const smsCode = $smsCodeInput.val().trim();
-        let ajaxResult = false;
-        $.ajax({
-          url: $smsCodeInput.data('url') + '?value=' + smsCode,
-          type: 'GET',
-          async: false,
-          success: function (response) {
-            console.log(response);
-            console.log(response.success);
-            if (response.success) {
-              ajaxResult = true;
-            }
-          }
-        });
-        if (!ajaxResult) {
-          return false;
-        }
-
-        var paramsStr = $('#params').val(); // 获取 JSON 字符串
-        const params = JSON.parse(paramsStr);
-
-        $.ajax({
-          url: '/try/export/course-students',
-          method: 'GET',
-          data: {
-            courseSetId: params['courseSetId'],
-            courseId: params['courseId']
-          },
-          success: function (response) {
-            if (response.success) {
-              window.totalCount = response.counts.reduce(function (acc, val) {
-                return acc + val;
-              }, 0);
-            } else {
-              window.exporting = false;
-              return;
-            }
-
-            $modal.html($('#export-modal').html());
-            $modal.modal({backdrop: 'static', keyboard: false});
-            exportDataAjax(params, 0, '', '');
-          },
-          error: function () {
-            window.exporting = false;
-          }
-        });
-      }
-
-
-      function exportDataAjax(params, start, fileName, name) {
-        params['start'] = start;
-        params['fileName'] = fileName;
-        params['name'] = name;
-        $.ajax({
-          url: '/pre/export/course-students', // 替换为实际地址
-          method: 'GET',
-          data: params,
-          success: function (response) {
-            if (!response.success) {
-              window.exporting = false;
-              return;
-            }
-
-            if (response.status === 'finish') {
-              if (!response.csvName) {
-                $modal.modal('hide');
-                window.exporting = false;
-                return;
-              }
-
-              window.location.href = `/export/course-students?fileNames[]=${response.csvName}`;
-              $modal.find('#progress-bar').width('100%').parent().removeClass('active');
-              setTimeout(function () {
-                $modal.modal('hide');
-                window.exporting = false;
-              }, 500);
-            } else {
-              const progress = (response.start / response.count * 100) + '%';
-              $modal.find('#progress-bar').width(progress);
-              exportDataAjax(params, response.start, response.fileName, response.name);
-            }
-          },
-          error: function () {
-            window.exporting = false;
-          }
-        });
-      }
+      if (!verifySmsCode()) return false;
+      const params = JSON.parse($('#params').val());
+      doExportAjax(
+        { courseSetId: params.courseSetId, courseId: params.courseId },
+        '/try/export/course-students',
+        '/pre/export/course-students',
+        '/export/course-students'
+      );
     });
 
-    $('.item-bank-exercise-student-export').on('click', function(e) {
+    $('.item-bank-exercise-student-export').on('click', function (e) {
       $('[name="sms_code"]').valid();
       e.preventDefault();
-      const $modal = $('#modal');
-        const $smsCodeInput = $('#sms_code');
-        if ($smsCodeInput.val().trim() === '') {
-          return false;
-        } else {
-          const smsCode = $smsCodeInput.val().trim();
-          let ajaxResult = false;
-          $.ajax({
-            url: $smsCodeInput.data('url')+'?value='+smsCode,
-            type: 'GET',
-            async: false,
-            success: function(response) {
-              console.log(response);
-              console.log(response.success);
-              if (response.success) {
-                ajaxResult = true;
-              }
-            }
-          });
-          if (!ajaxResult) {
-            return false;
-          }
-
-
-          var paramsStr = $('#params').val(); // 获取 JSON 字符串
-          const params = JSON.parse(paramsStr);
-
-          $.ajax({
-            url: '/try/export/item-bank-exercise-students',
-            method: 'GET',
-            data: {
-              exerciseId: params['exerciseId']
-            },
-            success: function(response) {
-              if (response.success) {
-                window.totalCount = response.counts.reduce(function(acc, val) {
-                  return acc + val;
-                }, 0);
-              } else {
-                window.exporting = false;
-                return;
-              }
-
-              $modal.html($('#export-modal').html());
-              $modal.modal({backdrop: 'static', keyboard: false});
-              exportDataAjax(params,0, '', '');
-            },
-            error: function() {
-              window.exporting = false;
-            }
-          });
-        }
-
-
-      function exportDataAjax(params, start, fileName, name) {
-        params['start'] = start;
-        params['fileName'] = fileName;
-        params['name'] = name;
-        $.ajax({
-          url: '/pre/export/item-bank-exercise-students', // 替换为实际地址
-          method: 'GET',
-          data: params,
-          success: function(response) {
-            if (!response.success) {
-              window.exporting = false;
-              return;
-            }
-
-            if (response.status === 'finish') {
-              if (!response.csvName) {
-                $modal.modal('hide');
-                window.exporting = false;
-                return;
-              }
-
-              window.location.href = `/export/item-bank-exercise-students?fileNames[]=${response.csvName}`;
-              $modal.find('#progress-bar').width('100%').parent().removeClass('active');
-              setTimeout(function() {
-                $modal.modal('hide');
-                window.exporting = false;
-              }, 500);
-            } else {
-              const progress = (response.start / response.count * 100) + '%';
-              $modal.find('#progress-bar').width(progress);
-              exportDataAjax(params, response.start, response.fileName, response.name);
-            }
-          },
-          error: function() {
-            window.exporting = false;
-          }
-        });
-      }
+      if (!verifySmsCode()) return false;
+      const params = JSON.parse($('#params').val());
+      doExportAjax(
+        { exerciseId: params.exerciseId },
+        '/try/export/item-bank-exercise-students',
+        '/pre/export/item-bank-exercise-students',
+        '/export/item-bank-exercise-students'
+      );
     });
-
 
     $('.js-export-user-btn').on('click', function (e) {
       $('[name="sms_code"]').valid();
       e.preventDefault();
       const url = location.href;
-      if (url.includes('order/manage') || url.includes('admin/v2/user') || url.includes('admin/v2/staff')) {
-        const $smsCodeInput = $('#sms_code');
-        if ($smsCodeInput.val().trim() === '') {
-          return false;
-        }else {
-          const smsCode = $smsCodeInput.val().trim();
-          let ajaxResult = false;
-          $.ajax({
-            url: $smsCodeInput.data('url')+'?value='+smsCode,
-            type: 'GET',
-            async: false,
-            success: function(response) {
-              console.log(response);
-              console.log(response.success);
-              if (response.success) {
-                ajaxResult = true;
-              }
-            }
-          });
-          if (!ajaxResult) {
-            return false;
-          }
-          const userSearchData = $('#user-search-form').serialize();
-          const newUrl = '/admin/v2/users/export?sms_code='+$('#sms_code').val()+'&mobile='+$('#mobile').val()+'&'+userSearchData;
-          // 先隐藏模态框
-          $('#modal').modal('hide');
-          // 清空原有内容（包括表单数据）
-          $(this).find('#modal').empty();
+      if (!verifySmsCode()) return false;
 
-          // 加载新数据
-          $.get(newUrl, function(data) {
-            // 填充新内容
-            $('#modal').html(data);
-            // 重新展示模态框
-            $('#modal').modal('show');
-          });
-          // $.get(newUrl, function (data) {
-          //   $('#modal .modal-body').html(data);
-          //   $('#modal').modal('show');
-          // });
-        }
+      if (url.includes('order/manage') || url.includes('admin/v2/user') || url.includes('admin/v2/staff')) {
+        const smsCode = $('#sms_code').val().trim();
+        const query = $('#user-search-form').serialize();
+        const newUrl = `/admin/v2/users/export?sms_code=${smsCode}&mobile=${$('#mobile').val()}&${query}`;
+
+        $.get(newUrl, function (data) {
+          $('#modal').html(data);
+          $('#modal').modal('show');
+        });
       }
     });
 
     $('.js-delete-user').on('click', function (e) {
-      var paramsStr = $('#params').val(); // 获取 JSON 字符串
-      const params = JSON.parse(paramsStr);
       $('[name="sms_code"]').valid();
       e.preventDefault();
-      const $smsCodeInput = $('#sms_code');
-      if ($smsCodeInput.val().trim() === '') {
-        return false;
-      } else {
-        const smsCode = $smsCodeInput.val().trim();
-        let ajaxResult = false;
-        $.ajax({
-          url: $smsCodeInput.data('url') + '?value=' + smsCode,
-          type: 'GET',
-          async: false,
-          success: function (response) {
-            console.log(response);
-            console.log(response.success);
-            if (response.success) {
-              ajaxResult = true;
-            }
-          }
-        });
-        if (!ajaxResult) {
-          return false;
-        }
-        $.post(params['url'], function(result) {
-          notify('success', Translator.trans('admin.user.lock_operational_success_hint',{title:params['title']}));
-          window.location.reload();
-        }).error(function(e, textStatus, errorThrown) {
-          var $json = jQuery.parseJSON(e.responseText);
-          if($json.error.message){
+      const params = JSON.parse($('#params').val());
+      if (!verifySmsCode()) return false;
 
-            notify('danger', Translator.trans($json.error.message));
-          }else{
-            notify('danger', Translator.trans('admin.user.lock_operational_fail_hint',{title:params['title']}));
-          }
-        });
-      }
+      $.post(params.url, function () {
+        notify('success', Translator.trans('admin.user.lock_operational_success_hint', { title: params.title }));
+        window.location.reload();
+      }).fail(function (e) {
+        const $json = $.parseJSON(e.responseText);
+        const message = $json && $json.error && $json.error.message || 'admin.user.lock_operational_fail_hint';
+        notify('danger', Translator.trans(message, { title: params.title }));
+      });
     });
   }
-  exportClassroomData(start, fileName) {
-    const paramsStr = $('#params').val(); // 获取 JSON 字符串
-    const params = JSON.parse(paramsStr); // 转成对象
-    if ((start != undefined) && (fileName != undefined)) {
-      params['start'] = start;
-      params['fileName'] = fileName;
+
+  exportClassroomData(start = null, fileName = '') {
+    const paramsStr = $('#params').val();
+    let params;
+
+    try {
+      params = JSON.parse(paramsStr);
+    } catch (e) {
+      console.error('解析参数失败:', e);
+      alert('参数格式错误，无法导出数据');
+      return;
     }
+
+    if (start !== null) {
+      params.start = start;
+    }
+
+    if (fileName) {
+      params.fileName = fileName;
+    }
+
+    const targetFormId = params['targetFormId'];
+    if (!targetFormId) {
+      console.error('缺少 targetFormId');
+      alert('导出失败，未指定班级信息');
+      return;
+    }
+
     $.ajax({
-      url: '/classroom/' + params['targetFormId'] + '/manage/student/export/student/datas',
+      url: `/classroom/${targetFormId}/manage/student/export/student/datas`,
       method: 'GET',
       data: params,
-      success: function(response) {
+      success: (response) => {
         if (response.status === 'getData') {
-          // 如果返回的是数据起点与文件名，递归导出或分页导出
-          self.exportClassroomData(response.start, response.fileName);
+          // 继续导出下一部分
+          this.exportClassroomData(response.start, response.fileName);
+        } else if (response.fileName) {
+          // 完成导出，开始下载
+          window.location.href = `/classroom/${targetFormId}/manage/student/export?role=student&fileName=${encodeURIComponent(response.fileName)}`;
         } else {
-          // 否则直接跳转到下载链接
-          window.location.href = '/classroom/' + params['targetFormId'] + '/manage/student/export?role=student&fileName=' + response.fileName;
+          alert('导出失败，未返回文件名');
         }
       },
-      error: function(xhr, status, error) {
+      error: (xhr, status, error) => {
         console.error('导出失败：', error);
         alert('导出失败，请稍后重试');
       }
