@@ -27,7 +27,3 @@ if (props.displayBindPopUp.display === true) {
   <AntConfigProvider>
   </AntConfigProvider>
 </template>
-
-<style lang="less">
-
-</style>
