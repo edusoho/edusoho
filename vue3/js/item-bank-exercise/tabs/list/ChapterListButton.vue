@@ -1,7 +1,6 @@
 <script setup>
 import {message} from 'ant-design-vue';
 import {open} from '../../../common';
-import {ref} from 'vue';
 
 const props = defineProps({
   chapter: {type: Object, default: {}},
