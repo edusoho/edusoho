@@ -1,0 +1,95 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-custom" %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/secondary-verification/index.js', 'app/js/exporter/index.js']) %}
+
+{% block title %}
+  {{ 'admin_v2.secondary.verification.security_verification'|trans }}
+{% endblock %}
+{% block body %}
+  <form id="mobile-bind-form" data-user-id="{{app.user.id}}">
+    {% if exportFileName == 'user' or exportFileName == 'order' %}
+      <p>{{ 'admin_v2.secondary.verification.security_verification.tips'|trans }}</p>
+    {% endif %}
+    <div class="form-group cd-form-group">
+      <label class="control-label" style="margin-bottom: 10px;" for="mobile">{{'site.mobile_bind.phone_number'|trans}}</label>
+      <div class="controls"><p>{{ mobile|slice(0, 3) ~ '****' ~ mobile|slice(7, 4) }}</p></div>
+    </div>
+
+    {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+      <div class="form-group cd-mb24 js-drag-jigsaw hidden">
+        {% include 'common/drag.html.twig' with { auth: true } %}
+      </div>
+    {% endif %}
+
+    <div class="form-group cd-form-group">
+      <label class="control-label" style="margin-bottom: 10px;" for="sms_code">{{'form.sms_code'|trans}}</label>
+      <div class="controls cd-row">
+        <div class="col-xs-6">
+          <input type="text" maxlength="6" class="form-control input-sm" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_secondary_verification'})}}">
+          <p class="help-block"> </p>
+        </div>
+        <div class="col-xs-6">
+          <button type="button" style="padding-right:2px;" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send sms-send-btn"   data-url="{{ path('edu_cloud_sms_send_check_captcha') }}">
+            <span id="js-time-left"></span>
+            <span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input class="form-control" type="hidden" id="mobile" name="mobile" value="{{ mobile }}"/>
+    <input class="form-control" type="hidden" id="params" name="params" value="{{ params|json_encode|e('html_attr') }}">
+    {% if exportFileName == 'user' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-user-btn cd-btn-primary" id="user-export" data-toggle="modal" data-target="#modal"
+         >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'classroomStudent' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-classroom-student-btn cd-btn-primary" id="classroom-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'courseStudent' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-course-student-btn cd-btn-primary" id="coruse-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'itemBankExercise' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn item-bank-exercise-student-export cd-btn-primary" id="item-bank-exercise-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'deleteUser' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-delete-user cd-btn-primary" id="delete-user" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% else %}
+      <a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} btn cd-btn cd-btn-lg mobile-bind-form__btn {% endif %} mhs {{ exportClass|default('cd-btn-primary') }} js-export-btn"
+         href="javascript:;"
+         data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
+         data-url="{{ path('export',{'name':exportFileName, 'customFileName': customFileName|default('')}) }}"
+         data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
+         data-loading-text="{{'form.btn.export.submiting'|trans}}"
+         data-target-form="#{{ targetFormId }}"
+         data-file-names="{{ fileNames|default([exportFileName])|json_encode }}"
+      >
+        <i class="cd-text-lg"></i>
+        {% if showDownLoadText|default(1) %}
+          {{ text|default('form.btn.submit')|trans }}
+        {% endif %}
+      </a>
+    {% endif %}
+
+
+  </form>
+  <style>
+    /* 自定义模态框宽度 (576px以上屏幕生效) */
+    @media (min-width: 576px) {
+      .modal-custom {
+        max-width: 350px; /* 介于modal-sm和modal-md之间 */
+        margin: 1.75rem auto;
+      }
+      /* 针对所有包含 cd-btn-lg 类的按钮 */
+      .cd-btn-lg {
+        width: 80% !important;
+        box-sizing: border-box !important;
+        display: block !important;  /* 转换为块级元素 */
+        margin: 0 auto !important;   /* 水平自动居中 */
+      }
+    }
+
+  </style>
+{% endblock %}
+

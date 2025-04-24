@@ -510,6 +510,19 @@ class CourseManageController extends BaseController
         );
     }
 
+    public function aiCompanionStudyAction(Request $request, $courseSetId, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        return $this->render(
+            'course-manage/ai-companion-study.twig',
+            [
+                'course' => $course,
+                'courseSet' => $courseSet,
+            ]
+        );
+    }
+
     public function prepareExpiryMode($data)
     {
         if (empty($data['expiryMode']) || 'days' != $data['expiryMode']) {

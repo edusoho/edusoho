@@ -6825,6 +6825,7 @@ admin.developer_setting.app_center_api_address: 'Application Center API address'
 admin.developer_setting.es_live_api_server: ES Live API
 admin.developer_setting.question_parse_api_server: Question Parse API
 admin.developer_setting.ai_api_server: AI API address
+admin.developer_setting.push_api_server: New Push API
 admin.developer_setting.resource_api_server: 'Resource API address'
 admin.developer_face_address: AI Face API address
 admin.developer_push_address: Push API address
@@ -7953,6 +7954,8 @@ notification.destroy-account.reject: "%who%,Your account cancellation applicatio
 #TODO trans
 notification.delete-cloud-mp4: 'Your normal video has been deleted successfully, and all existing cloud videos are in encrypted format.'
 notification.distributor-reward: 'Congratulations on your successful registration reward: a %money% CNY coupon, which can be used for all-site consumption and has been sent to %where%.'
+notification.dataset-index.success: 'The knowledge of course %course% are successfully generated, students will get the recommended learning content of weak knowledge points according to their answer results.'
+notification.dataset-index.failed: 'The knowledge of course %course%  failed to generate, please contact technical support.'
 
 status.become_auditor.simple: became an auditor
 status.become_student.course.simple: Enroll to learn
@@ -11252,3 +11255,7 @@ admin_v2.question.ai_analysis.experience: , Experience powerful
 admin_v2.question.ai_analysis.problem: problem resolution
 admin_v2.question.ai_analysis.tittle: Build new heights of intelligent education, comprehensively upgrade cloud capabilities, lead a new era of deep interaction and accurate analysis of Al question bank, and open unlimited possibilities for personalized learning
 admin_v2.question.ai_analysis.upgrade_now: Upgrade now
+
+#二次验证
+admin_v2.secondary.verification.security_verification: 'Security verification'
+admin_v2.secondary.verification.security_verification.tips: 'To ensure the security of online school data export, SMS verification is required. Please use the phone number filled in when opening the online school to receive the verification code.'

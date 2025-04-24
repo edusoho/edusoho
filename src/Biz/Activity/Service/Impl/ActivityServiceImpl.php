@@ -230,6 +230,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         if (!empty($listener)) {
             $listener->handle($activity, []);
         }
+        $this->dispatchEvent('activity.create', $activity);
 
         return $activity;
     }
@@ -260,7 +261,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $fields = $this->filterFields($fields);
 
-        return $this->getActivityDao()->update($id, $fields);
+        $updatedActivity = $this->getActivityDao()->update($id, $fields);
+        $this->dispatchEvent('activity.update', $updatedActivity);
+
+        return $updatedActivity;
     }
 
     public function deleteActivity($id)
@@ -283,6 +287,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 $this->getLogService()->info(LogModule::COURSE, LogAction::DELETE_ACTIVITY, '删除教学活动成功', ['id' => $id]);
             }
             $this->commit();
+            $this->dispatchEvent('activity.delete', $activity);
 
             return $result;
         } catch (\Exception $e) {
@@ -569,6 +574,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 'finishType',
                 'finishData',
                 'validPeriodMode',
+                'documentId',
             ]
         );
 

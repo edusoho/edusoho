@@ -412,7 +412,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourseDao()->update($id, $fields);
         $this->getCourseSpecsMediator()->onUpdateNormalData($course);
 
-        $this->dispatchEvent('course.update', new Event($course));
+        $this->dispatchEvent('course.update', new Event($course), ['oldCourse' => $oldCourse]);
         $this->dispatchEvent('course.marketing.update', ['oldCourse' => $oldCourse, 'newCourse' => $course]);
 
         return $course;

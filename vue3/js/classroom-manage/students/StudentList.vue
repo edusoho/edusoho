@@ -67,7 +67,7 @@
               <button class="flex py-0 px-15 justify-center items-center rounded-6 border border-solid border-[#E5E6EB] bg-white shadow-[0_2px_0_0_rgba(0, 0, 0, 0.02)] h-32" @click="resetForm">
                 <span class="text-[#37393D] text-14 font-normal leading-22">重置</span>
               </button>
-              <div class="flex items-center gap-8 cursor-pointer" @click="onExport">
+              <div v-if="exportBtnVisible" class="flex items-center gap-8 cursor-pointer" @click="onExport">
                 <ExportOutlined class="text-16 text-[--primary-color]"/>
                 <span class="text-[--primary-color] text-14 font-normal leading-22">导出搜索结果</span>
               </div>
@@ -212,6 +212,7 @@ import {
 
 const classroomId = getData('student-list-app', 'classroom-id');
 const classroomStatus = getData('student-list-app', 'classroom-status');
+const isEnableExport = getData('student-list-app', 'enable-export');
 
 const permissions = ref([]);
 const fetchPermissions = async () => {
@@ -414,6 +415,10 @@ const openEyeVisible = computed(() => {
   };
 });
 
+const exportBtnVisible = computed(() => {
+  return isEnableExport;
+});
+
 const closeEyeVisible = computed(() => {
   return (userId, mobile) => {
     if (mobile.length === 0) {
@@ -442,11 +447,22 @@ const onExport = async () => {
 };
 
 const exportData = async (start, fileName) => {
-  const params = getFormParams();
-  params.start = start || 0;
+  const rawParams = getFormParams();
+  rawParams.start = start || 0;
+  rawParams.userIds = table.rowSelection.selectedRowKeys;
   if (fileName) {
-    params.fileName = fileName;
+    rawParams.fileName = fileName;
   }
+
+  // 过滤掉值为 undefined 的参数
+  const params = Object.fromEntries(
+    Object.entries(rawParams).filter(([_, v]) => v !== undefined)
+  );
+  const verificationResponse = await fetch(`/secondary/verification?exportFileName=classroomStudent&targetFormId=${classroomId}&` + new URLSearchParams(params));
+  const html = await verificationResponse.text();
+  $modal.html(html).modal('show');
+  return;
+
   const response = await Api.classroomMember.export(classroomId, params);
   if (response.status === 'getData') {
     await exportData(response.start, response.fileName);

@@ -2,10 +2,13 @@
 
 namespace Biz\AI\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\AI\Dao\AIAnswerRecordDao;
 use Biz\AI\Dao\AIAnswerResultDao;
 use Biz\AI\Service\AIService;
 use Biz\BaseService;
+use Biz\Common\CommonException;
+use Biz\System\Service\SettingService;
 
 class AIServiceImpl extends BaseService implements AIService
 {
@@ -28,27 +31,50 @@ class AIServiceImpl extends BaseService implements AIService
 
     public function generateAnswer($app, $inputs)
     {
-        $response = $this->getAIService()->startAppCompletionStream($app, $inputs);
-        $this->recordNewAnswer($app, $inputs, $this->makeSSE($response));
+        $canEcho = false;
+        $buffer = '';
+        $response = $this->getAIService()->streamRunWorkflow($app, $inputs, function ($data) use (&$canEcho, &$buffer) {
+            if ('id:' === substr($data, 0, 3)) {
+                $canEcho = true;
+            }
+            if (!$canEcho) {
+                return;
+            }
+            $buffer .= $data;
+            if (substr($buffer, -2) !== "\n\n") {
+                return;
+            }
+            $parsed = explode("\n", $buffer);
+            $buffer = '';
+            if (substr($parsed[1], 6) == 'workflow.message') {
+                $parsedData = json_decode(substr($parsed[2], 5), true);
+                echo 'data:'.json_encode(['event' => 'message', 'answer' => $parsedData['content']], JSON_UNESCAPED_UNICODE)."\n\n";
+            }
+            if (substr($parsed[1], 6) == 'workflow.finished') {
+                echo 'data:'.json_encode(['event' => 'message_end'])."\n\n";
+            }
+            flush();
+        });
+//        $this->recordNewAnswer($app, $inputs, $response);
     }
 
     public function stopGeneratingAnswer($app, $messageId, $taskId)
     {
-        $this->getAIService()->stopAppCompletion($app, $messageId, $taskId);
+//        $this->getAIService()->stopAppCompletion($app, $messageId, $taskId);
     }
 
     public function needGenerateNewAnswer($app, $inputs)
     {
-        $inputsHash = $this->makeHashForInputs($inputs);
-        $userId = $this->getCurrentUser()->getId();
-        if ($this->getAIAnswerRecordDao()->count(['userId' => $userId, 'app' => $app, 'inputsHash' => $inputsHash]) >= self::MAX_AI_ANALYSIS_COUNT) {
-            return false;
-        }
-        $results = $this->getAIAnswerResultDao()->findByAppAndInputsHash($app, $inputsHash);
-        $records = $this->getAIAnswerRecordDao()->findByUserIdAndAppAndInputsHash($userId, $app, $inputsHash);
-        if (array_diff(array_column($results, 'id'), array_column($records, 'resultId'))) {
-            return false;
-        }
+//        $inputsHash = $this->makeHashForInputs($inputs);
+//        $userId = $this->getCurrentUser()->getId();
+//        if ($this->getAIAnswerRecordDao()->count(['userId' => $userId, 'app' => $app, 'inputsHash' => $inputsHash]) >= self::MAX_AI_ANALYSIS_COUNT) {
+//            return false;
+//        }
+//        $results = $this->getAIAnswerResultDao()->findByAppAndInputsHash($app, $inputsHash);
+//        $records = $this->getAIAnswerRecordDao()->findByUserIdAndAppAndInputsHash($userId, $app, $inputsHash);
+//        if (array_diff(array_column($results, 'id'), array_column($records, 'resultId'))) {
+//            return false;
+//        }
 
         return true;
     }
@@ -76,6 +102,119 @@ class AIServiceImpl extends BaseService implements AIService
         return '';
     }
 
+    public function enableTenant()
+    {
+        $this->getAIService()->enableTenant();
+    }
+
+    public function disableTenant()
+    {
+        $this->getAIService()->disableTenant();
+    }
+
+    public function inspectTenant()
+    {
+        $tenant = $this->getAIService()->inspectTenant();
+        $this->getSettingService()->set('ai_tenant', $tenant);
+
+        return $tenant;
+    }
+
+    public function isAgentEnable()
+    {
+        $tenant = $this->getSettingService()->get('ai_tenant', [
+            'status' => '',
+            'permissions' => [],
+        ]);
+
+        return 'ok' == $tenant['status'] && in_array('agent', $tenant['permissions']);
+    }
+
+    public function findDomains($category)
+    {
+        $category = empty($category) ? 'vt' : $category;
+
+        return $this->getAIService()->findDomains($category);
+    }
+
+    public function runWorkflow($workflow, array $inputs)
+    {
+        return $this->getAIService()->runWorkflow($workflow, $inputs);
+    }
+
+    public function asyncRunWorkflow($workflow, array $inputs, $callback)
+    {
+        return $this->getAIService()->asyncRunWorkflow($workflow, $inputs, $callback);
+    }
+
+    public function createDataset(array $params)
+    {
+        if (!ArrayToolkit::requireds($params, ['extId', 'name', 'domainId', 'autoIndex'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getAIService()->createDataset($params['extId'], $params['name'], $params['domainId'], $params['autoIndex']);
+    }
+
+    public function getDataset($id)
+    {
+        return $this->getAIService()->getDataset($id);
+    }
+
+    public function updateDataset($id, array $params)
+    {
+        $params = ArrayToolkit::parts($params, ['name', 'domainId', 'autoIndex']);
+
+        $this->getAIService()->updateDataset($id, $params);
+    }
+
+    public function deleteDataset($id)
+    {
+        $this->getAIService()->deleteDataset($id);
+    }
+
+    public function createDocumentByText(array $params)
+    {
+        if (!ArrayToolkit::requireds($params, ['datasetId', 'extId', 'name', 'content'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getAIService()->createDocumentByText($params['datasetId'], $params['extId'], $params['name'], $params['content']);
+    }
+
+    public function createDocumentByObject(array $params)
+    {
+        if (!ArrayToolkit::requireds($params, ['datasetId', 'extId', 'name', 'resNo'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getAIService()->createDocumentByObject($params['datasetId'], $params['extId'], $params['name'], $params['resNo']);
+    }
+
+    public function batchCreateDocumentByObject($datasetId, $objects)
+    {
+        return $this->getAIService()->batchCreateDocumentByObject($datasetId, $objects);
+    }
+
+    public function deleteDocument($id)
+    {
+        $this->getAIService()->deleteDocument($id);
+    }
+
+    public function pushMessage(array $params)
+    {
+        if (!ArrayToolkit::requireds($params, ['domainId', 'userId', 'contentType', 'content', 'push'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return $this->getAIService()->pushMessgae($params['domainId'], $params['userId'], $params['contentType'], $params['content'], $params['push']);
+    }
+
+    public function batchPushMessage(array $params)
+    {
+        return $this->getAIService()->batchPushMessage($params);
+    }
+
     private function recordNewAnswer($app, $inputs, $response)
     {
         $inputsHash = $this->makeHashForInputs($inputs);
@@ -97,19 +236,17 @@ class AIServiceImpl extends BaseService implements AIService
         ]);
     }
 
-    private function makeSSE($response)
-    {
-        $sse = '';
-        foreach ($response as $data) {
-            $sse .= 'data:'.json_encode($data)."\n\n";
-        }
-
-        return $sse;
-    }
-
     private function makeHashForInputs($inputs)
     {
         return md5(json_encode($inputs));
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**

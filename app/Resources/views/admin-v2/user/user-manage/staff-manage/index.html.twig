@@ -68,9 +68,10 @@
 
     <button class="btn btn-primary">{{ 'admin.user.form.btn.search_submit_btn'|trans }}</button>
 
-    {% if is_plugin_installed('UserImporter') and has_permission('admin_v2_user_export') %}
-      <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal"
-         data-url="{{ path('admin_v2_user_export') }}">{{ 'plugin.admin.user.manage.form.user_staff_export_btn'|trans }}</a>
+    {% if is_plugin_installed('UserImporter') and has_permission('admin_v2_user_export') and canExport%}
+{#      <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal"#}
+{#         data-url="{{ path('admin_v2_user_export') }}">{{ 'plugin.admin.user.manage.form.user_staff_export_btn'|trans }}</a>#}
+      <button class="btn btn-primary mhs" type="button" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_secondary_verification', {exportFileName:'user', targetFormId: 'order-search-form'}) }}">{{'plugin.admin.user.manage.form.user_student_export_btn'|trans}}</button>
     {% endif %}
 
     <input type="hidden" name="isStaff" value="1">

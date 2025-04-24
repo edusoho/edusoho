@@ -1,5 +1,6 @@
 <template>
   <answer-model
+    :answerRecord="answerRecord"
     :question="question"
     :mode="mode"
     :needScore="needScore"
@@ -214,6 +215,12 @@ export default {
   },
   components: { answerModel, attachmentUpload, attachmentPreview },
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     mode: {
       type: String,
       default: "do"
@@ -252,12 +259,6 @@ export default {
       type: String,
       default() {
         return "exam";
-      }
-    },
-    answerRecord: {
-      type: Object,
-      default() {
-        return {};
       }
     },
     needScore: {

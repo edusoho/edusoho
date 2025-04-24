@@ -1,0 +1,17 @@
+services:
+  api_agent_authentication_listener:
+    class: AgentBundle\Security\Firewall\AgentAuthenticationListener
+    arguments:
+      - '@service_container'
+
+  agent_config_event_subscriber:
+    class: AgentBundle\Biz\AgentConfig\Event\AgentConfigEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  study_plan_event_subscriber:
+    class: AgentBundle\Biz\StudyPlan\Event\StudyPlanEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }

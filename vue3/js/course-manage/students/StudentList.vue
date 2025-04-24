@@ -463,6 +463,17 @@ let totalCount = 0;
 const $modal = $('#modal');
 
 const onExport = async () => {
+  const params = getFormParams();
+  params.courseSetId = courseSetId;
+  params.courseId = courseId;
+  params.name = name;
+  const filterParams = Object.fromEntries(
+    Object.entries(params).filter(([_, v]) => v !== undefined)
+  );
+  const verificationResponse = await fetch(`/secondary/verification?exportFileName=courseStudent&targetFormId=${courseId}&` + new URLSearchParams(filterParams));
+  const html = await verificationResponse.text();
+  $modal.html(html).modal('show');
+  return;
   if (exporting) {
     return;
   }

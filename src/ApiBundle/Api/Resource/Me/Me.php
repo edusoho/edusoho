@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Util\AssetHelper;
+use Biz\AI\Util\AgentToken;
 use Codeages\Biz\Pay\Service\AccountService;
 
 class Me extends AbstractResource
@@ -58,6 +59,11 @@ class Me extends AbstractResource
         }
 
         $user['havePayPassword'] = $this->getAccountService()->isPayPasswordSetted($user['id']) ? 1 : -1;
+
+        $agentToken = (new AgentToken())->make();
+        if (!empty($agentToken)) {
+            $user['aiAgentToken'] = $agentToken;
+        }
 
         return $user;
     }

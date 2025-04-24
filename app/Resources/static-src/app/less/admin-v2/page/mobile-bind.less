@@ -1,0 +1,131 @@
+.mobile-bind-container {
+  withth:460px;
+  @media(max-width: @screen-xs-max) {
+    width: 408px;
+    margin-left: -180px !important;
+  }
+
+  @media(max-width: @screen-xs-min) {
+    margin-left: -150px !important;
+  }
+
+  .modal-content {
+    width: 450px;
+    height: 392px;
+    padding: 24px 40px;
+    border-radius: 2px;
+    display: table;
+    @media(max-width: @screen-xs-max) {
+      width: 408px;
+      height: 604px;
+    }
+
+    @media(max-width: @screen-xs-min) {
+      width: 300px;
+    }
+
+    .modal-header {
+      padding: 0;
+      border: none;
+      .mobile-bind__title {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 500;
+      }
+    }
+
+    .modal-body {
+      padding: 32px 0 0;
+    }
+  }
+
+  .mobile-bind-form {
+    float: left;
+    width: 360px;
+    height: auto;
+    @media(max-width: @screen-xs-min) {
+      width: 252px;
+    }
+
+    .close {
+      width: 360px;
+      padding-top: 16px;
+      font-size: 16px;
+      line-height: 24px;
+      font-weight: 400;
+      opacity: 1;
+      color: #333;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .binded-tip {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #fe4040;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .mobile-bind-form__divider {
+    float: left;
+    width: 2px;
+    height: 85%;
+    min-height: 290px;
+    margin-left: 54px;
+    border-width: 0px 2px 0px 0px;
+    border-style: dashed;
+    border-color: @brand-primary;
+  }
+
+  .mobile-bind-form__btn {
+    width: 250px;
+    margin: -4px auto 0; // 合并 margin-top 和水平居中
+    display: block; // 确保元素为块级
+  }
+
+  .mobile-bind-reasons {
+    float: right;
+    @media(max-width: @screen-xs-max) {
+      float: left;
+      margin-top: 70px;
+    }
+    i {
+      color: @brand-primary;
+    }
+    .mobile-bind-reasons__title {
+      font-size: 14px;
+      color: #313131;
+      line-height: 14px;
+    }
+    .mobile-bind-reasons__contents {
+      width: 346px;
+      height: 192px;
+      margin-top: 16px;
+      padding: 16px;
+      background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .1);
+      border-radius: 4px;
+      @media(max-width: @screen-xs-max) {
+        width: 360px;
+      }
+
+      @media(max-width: @screen-xs-min) {
+        width: 252px;
+        height: 200px;
+      }
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #616161;
+        text-align: justify;
+        line-height: 20px;
+      }
+    }
+  }
+
+}

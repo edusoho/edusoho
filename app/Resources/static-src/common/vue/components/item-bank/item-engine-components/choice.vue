@@ -1,5 +1,6 @@
 <template>
   <answer-model
+    :answerRecord="answerRecord"
     :question="question"
     :questionFavoritesItem="questionFavoritesItem"
     :needScore="needScore"
@@ -186,6 +187,12 @@ export default {
     }
   },
   props: {
+    answerRecord: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     // 模式 preview:预览模式 report:答题结果模式 do:做题模式
     mode: {
       type: String,

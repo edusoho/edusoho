@@ -135,13 +135,13 @@ let currentPerPageCount = $('#currentPerPageCount').children('option:selected').
 $('#currentPerPageCount').on('change', function () {
   currentPerPageCount = $(this).val();
   window.location.href = pageQueryUrl + 'page=1&perpage=' + currentPerPageCount;
-})
+});
 
 // 分页
 $('.js-advanced-paginator a').on('click', function () {
   let page = $(this).data('page');
   window.location.href = pageQueryUrl + 'page=' + page + '&perpage=' + currentPerPageCount;
-})
+});
 
 // 跳页
 $('#jumpPage').on('blur', function () {
@@ -154,3 +154,25 @@ $('#jumpPage').on('blur', function () {
     window.location.href = pageQueryUrl + 'page=' + jumpPage + '&perpage=' + currentPerPageCount;
   }
 });
+
+const aiAgentToken = document.getElementById('aiAgentToken');
+if (aiAgentToken) {
+  const sdk = new AgentSDK({
+    token: aiAgentToken.value,
+    uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html',
+  });
+  sdk.setVariable('studyPlanGenerated', document.getElementById('studyPlanGenerated')?.value == '1')
+  sdk.setChatMetadata(JSON.parse(document.getElementById('chatMetaData')?.value));
+  sdk.on('clickLink', (data) => {
+    const regex = /\/course\/(\d+)\/task\/(\d+)/;
+    const matches = data.match(regex);
+    if (matches) {
+      window.open(`${data}/show`, '_blank');
+    } else {
+      window.open(data, '_blank');
+    }
+  });
+  sdk.boot();
+
+  window.agentSdk = sdk;
+}

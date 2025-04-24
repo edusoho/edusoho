@@ -2212,6 +2212,10 @@ course_set_manage_course_item_bank:
   path: '/course_set/{courseSetId}/manage/course/{courseId}/itemBank'
   defaults:
     _controller: 'AppBundle:Course/CourseManage:itemBank'
+course_set_manage_course_ai_companion_study:
+  path: '/course_set/{courseSetId}/manage/course/{courseId}/aiCompanionStudy'
+  defaults:
+    _controller: 'AppBundle:Course/CourseManage:aiCompanionStudy'
 course_set_manage_course_replay:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/replay'
     defaults:
@@ -4239,3 +4243,20 @@ user_show_mobile:
     _controller: 'AppBundle:MobileMask:showMobile'
   methods:
     - POST
+
+secondary_verification:
+    path: '/secondary/verification'
+    defaults:
+        _controller: 'AppBundle:SecondaryVerification/SecondaryVerification:index'
+
+agent_worker:
+  path: '/agent_worker'
+  defaults:
+    _controller: 'AppBundle:AgentWorker:index'
+workflow_callback:
+  path: '/workflow_callback/{workflow}'
+  defaults:
+    _controller: 'AppBundle:WorkflowCallback:index'
+  methods:
+    - POST
+

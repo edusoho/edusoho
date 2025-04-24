@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Export;
 
 use AppBundle\Common\FileToolkit;
+use AppBundle\Common\SmsToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -13,6 +14,18 @@ class ExportController extends BaseController
     public function tryExportAction(Request $request, $name, $limit)
     {
         $conditions = $request->query->all();
+        if ('order' == $name) {
+            $request->request->set('sms_code', $request->query->get('sms_code'));
+            $request->request->set('mobile', $request->query->get('mobile'));
+            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_secondary_verification');
+            if (!$result) {
+                $response = ['success' => 0, 'message' => 'export.not_allowed'];
+            }
+            if (!$this->getCurrentUser()->hasPermission('custom_export_permission')) {
+                $response = ['success' => 0, 'message' => 'export.not_allowed'];
+            }
+        }
+
         $names = $request->query->get('names', [$name]);
 
         try {

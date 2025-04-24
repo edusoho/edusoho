@@ -113,4 +113,6 @@ interface ExerciseService
     public function countExerciseBind($conditions);
 
     public function deleteExerciseBind($id);
+
+    public function searchExerciseBind($conditions, $orderBy, $start, $limit);
 }

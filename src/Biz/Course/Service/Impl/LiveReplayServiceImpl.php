@@ -114,7 +114,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $this->getLessonReplayDao()->findByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
     }
 
-    public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false)
+    public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false, $isNormalCourse = true)
     {
         $replay = $this->getReplay($replayId);
         $user = $this->getCurrentUser();
@@ -125,7 +125,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             'provider' => $liveProvider,
             'user' => $user->isLogin() ? $user['email'] : '',
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
-            'role' => $user->isLogin() ? $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($replay['courseId'], $user['id']) : 'student',
+            'role' => $this->getRole($user, $isNormalCourse, $replay),
         ];
 
         //用来计算当前直播用户数量
@@ -311,6 +311,29 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     public function getReplayByLessonIdAndReplayIdAndType($lessonId, $replayId, $type)
     {
         return $this->getLessonReplayDao()->getByLessonIdAndReplayIdAndType($lessonId, $replayId, $type);
+    }
+
+    private function getRole($user, $isNormalCourse, $replay)
+    {
+        $isLoggedIn = $user->isLogin();
+        $role = 'student'; // 默认角色设为学员
+
+        if ($isLoggedIn) {
+            if ($isNormalCourse) {
+                $role = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId(
+                    $replay['courseId'],
+                    $user['id']
+                ) ?? $role; // 防止返回空值
+            } else {
+                $member = $this->getOpenCourseService()->getCourseMember(
+                    $replay['courseId'],
+                    $user['id']
+                );
+                $role = $member['role'] ?? $role; // 确保从成员数据提取角色
+            }
+        }
+
+        return $role;
     }
 
     /**

@@ -97,6 +97,7 @@ class UserCommonController extends BaseController
         return $this->render($indexTwigUrl, [
             'users' => $users,
             'userCount' => $userCount,
+            'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
             'allRoles' => $this->getAllRoles(),
             'paginator' => $paginator,
             'profiles' => $profiles,

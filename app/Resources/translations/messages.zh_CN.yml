@@ -8166,6 +8166,7 @@ admin.developer_setting.app_center_api_address: 应用中心API地址
 admin.developer_setting.es_live_api_server: 自研直播API地址
 admin.developer_setting.question_parse_api_server: 题目解析API地址
 admin.developer_setting.ai_api_server: AI API地址
+admin.developer_setting.push_api_server: 新 Push API地址
 admin.developer_setting.resource_api_server: 资源 API地址
 admin.developer_face_address: 人脸识别API地址
 admin.developer_push_address: 消息推送API地址
@@ -9264,6 +9265,8 @@ notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请
 notification.delete-cloud-mp4: 您的普通视频已删除成功，现有的全部云视频为加密格式。
 
 notification.distributor-reward: 恭喜您获得注册成功奖励：%money%元面值抵价优惠券一张，可用于全站消费，已发至【%account%】-【%coupon%】。
+notification.dataset-index.success: '%course%课程知识点生成成功，学员答题后将会根据其答题结果获得薄弱知识点推荐学习内容。'
+notification.dataset-index.failed: '%course%课程知识点生成失败，请联系技术人员处理。'
 
 # 学习动态
 status.become_auditor.simple: 成为了旁听生
@@ -12552,3 +12555,7 @@ admin_v2.question.ai_analysis.upgrade_now: 立即升级
 #电子合同
 admin_v2.contract.experience: ，体验安全的电子合同功能
 admin_v2.contract.tittle: 全新上线电子合同功能，带来高效、安全的签署体验，助力企业迈向数字化合规管理新阶段
+
+#二次验证
+admin_v2.secondary.verification.security_verification: 安全验证
+admin_v2.secondary.verification.security_verification.tips: 为了保障网校数据安全导出时需进行短信验证，请使用开通网校时填写的手机号收取验证码。
