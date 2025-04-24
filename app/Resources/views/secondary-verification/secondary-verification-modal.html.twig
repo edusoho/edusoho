@@ -46,20 +46,20 @@
     {% elseif exportFileName == 'classroomStudent' %}
       <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-classroom-student-btn cd-btn-primary" id="classroom-student-export" data-toggle="modal" data-target="#modal"
       >{{ 'form.btn.submit'|trans }}</a>
-    {% elseif exportFileName == 'courseStudent' %}
-      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-course-student-btn cd-btn-primary" id="coruse-student-export" data-toggle="modal" data-target="#modal"
-      >{{ 'form.btn.submit'|trans }}</a>
-    {% elseif exportFileName == 'itemBankExercise' %}
-      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn item-bank-exercise-student-export cd-btn-primary" id="item-bank-exercise-student-export" data-toggle="modal" data-target="#modal"
-      >{{ 'form.btn.submit'|trans }}</a>
     {% elseif exportFileName == 'deleteUser' %}
       <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-delete-user cd-btn-primary" id="delete-user" data-toggle="modal" data-target="#modal"
       >{{ 'form.btn.submit'|trans }}</a>
-    {% elseif exportFileName == 'courseOrder' %}
-      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-order-export cd-btn-primary" id="course-order" data-toggle="modal" data-target="#modal"
+    {% elseif exportFileName == 'courseStudent' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="course-students"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-students-export cd-btn-primary" id="coruse-student-export" data-toggle="modal" data-target="#modal"
       >{{ 'form.btn.submit'|trans }}</a>
-    {% else %}
-      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-order-export cd-btn-primary" id="course-order" data-toggle="modal" data-target="#modal"
+    {% elseif exportFileName == 'itemBankExercise' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="item-bank-exercise-students"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn item-bank-exercise-students-export cd-btn-primary" id="item-bank-exercise-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'courseOrder' or exportFileName == 'order' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="order"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn order-export cd-btn-primary" id="course-order" data-toggle="modal" data-target="#modal"
       >{{ 'form.btn.submit'|trans }}</a>
     {% endif %}
 

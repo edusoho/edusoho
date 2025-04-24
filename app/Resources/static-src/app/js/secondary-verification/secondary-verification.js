@@ -105,45 +105,24 @@ export default class MobileBind {
       if (!verifySmsCode()) return false;
       self.exportClassroomData();
     });
+    bindExportButton($('#exportType').val());
+    function bindExportButton(exportType) {
+      console.log('.'+exportType+'-export');
+      $('.'+exportType+'-export').on('click', function (e) {
+        e.preventDefault();
+        $('[name="sms_code"]').valid();
+        if (!verifySmsCode()) return false;
 
-    $('.js-export-course-student-btn').on('click', function (e) {
-      $('[name="sms_code"]').valid();
-      e.preventDefault();
-      if (!verifySmsCode()) return false;
-      const params = JSON.parse($('#params').val());
-      doExportAjax(
-        { courseSetId: params.courseSetId, courseId: params.courseId },
-        '/try/export/course-students',
-        '/pre/export/course-students',
-        '/export/course-students'
-      );
-    });
+        const params = JSON.parse($('#params').val());
 
-    $('.item-bank-exercise-student-export').on('click', function (e) {
-      $('[name="sms_code"]').valid();
-      e.preventDefault();
-      if (!verifySmsCode()) return false;
-      const params = JSON.parse($('#params').val());
-      doExportAjax(
-        { exerciseId: params.exerciseId },
-        '/try/export/item-bank-exercise-students',
-        '/pre/export/item-bank-exercise-students',
-        '/export/item-bank-exercise-students'
-      );
-    });
-
-    $('.course-order-export').on('click', function (e) {
-      $('[name="sms_code"]').valid();
-      e.preventDefault();
-      if (!verifySmsCode()) return false;
-      const params = JSON.parse($('#params').val());
-      doExportAjax(
-        params,
-        '/try/export/order',
-        '/pre/export/order',
-        '/export/order'
-      );
-    });
+        doExportAjax(
+          params,
+          `/try/export/${exportType}`,
+          `/pre/export/${exportType}`,
+          `/export/${exportType}`
+        );
+      });
+    }
 
     $('.js-export-user-btn').on('click', function (e) {
       $('[name="sms_code"]').valid();
