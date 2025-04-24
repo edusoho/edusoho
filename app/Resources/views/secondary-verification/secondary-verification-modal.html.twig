@@ -1,7 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 {% set modal_class= "modal-custom" %}
 
-{% do script(['libs/jquery-validation.js', 'app/js/secondary-verification/index.js', 'app/js/exporter/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'app/js/secondary-verification/index.js']) %}
 
 {% block title %}
   {{ 'admin_v2.secondary.verification.security_verification'|trans }}

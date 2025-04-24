@@ -99,14 +99,6 @@ export default class MobileBind {
       });
     };
 
-    $('.js-export-btn').on('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      if (self.$form.valid()) {
-        console.log('验证成功，执行导出逻辑...');
-      }
-    });
-
     $('.js-export-classroom-student-btn').on('click', function (e) {
       $('[name="sms_code"]').valid();
       e.preventDefault();

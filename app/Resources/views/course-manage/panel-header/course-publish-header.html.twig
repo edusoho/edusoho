@@ -14,7 +14,7 @@
 </div>
 {% if btnGroup|default() %}
   <div class="course-main-header__operation">
-    <button class="cd-btn cd-btn-primary cd-btn-sm course-order-js-export-btn" type="button" id="student-add-btn" data-toggle="modal" data-target="#modal"><i class="es-icon es-icon-filedownload"></i> {{'form.btn.export'|trans}}</button>
+    <button class="cd-btn  mhs cd-btn-sm pull-right cd-btn-primary course-order-js-export-btn" type="button" id="student-add-btn" data-toggle="modal" data-target="#modal"><i class="es-icon es-icon-filedownload cd-text-sm"></i> {{'form.btn.export'|trans}}</button>
     {% include 'export/export-modal.html.twig' %}
   </div>
 {% endif %}
