@@ -44,11 +44,15 @@ class AgentConfigEventSubscriber extends EventSubscriber
         $cloudFileActivityIds = [];
         foreach ($activities as $activity) {
             if ('text' == $activity['mediaType']) {
+                $content = strip_tags($activity['content']);
+                if (empty($content)) {
+                    continue;
+                }
                 $document = $this->getAIService()->createDocumentByText([
                     'datasetId' => $agentConfig['datasetId'],
                     'extId' => $activity['id'],
                     'name' => $activity['title'],
-                    'content' => strip_tags($activity['content']),
+                    'content' => $content,
                 ]);
                 $updateActivities[$activity['id']] = ['documentId' => $document['id']];
             }
@@ -193,12 +197,16 @@ class AgentConfigEventSubscriber extends EventSubscriber
     private function createDatasetDocumentIfNecessary($datasetId, $activity)
     {
         if ('text' == $activity['mediaType']) {
+            $content = strip_tags($activity['content']);
+            if (empty($content)) {
+                return;
+            }
             try {
                 $document = $this->getAIService()->createDocumentByText([
                     'datasetId' => $datasetId,
                     'extId' => $activity['id'],
                     'name' => $activity['title'],
-                    'content' => $activity['content'],
+                    'content' => $content,
                 ]);
             } catch (\Exception $e) {
                 $this->getLogger()->error('create document by text error: '.$e->getMessage());
