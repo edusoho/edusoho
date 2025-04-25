@@ -107,7 +107,6 @@ export default class MobileBind {
     });
     bindExportButton($('#exportType').val());
     function bindExportButton(exportType) {
-      console.log('.'+exportType+'-export');
       $('.'+exportType+'-export').on('click', function (e) {
         e.preventDefault();
         $('[name="sms_code"]').valid();
