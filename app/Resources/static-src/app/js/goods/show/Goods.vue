@@ -79,7 +79,7 @@
                 <a-icon type="right" class="icon"/>
               </div>
             </div>
-            <div v-if="bindItemBankExerciseList.length && bindItemBankExerciseList.length > 0" class="item-bank-exercise-list">
+            <div v-if="bindItemBankExerciseList.length && bindItemBankExerciseList.length > 0" class="item-bank-exercise-list" @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">
               <div class="flex" style="width: 100%">
                 <img :src=bindItemBankExerciseList[0].itemBankExercise.cover.middle alt="">
                 <div class="content">
@@ -102,7 +102,7 @@
                 </div>
               </div>
               <div class="show-button">
-                <a-button type="primary" ghost @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
+                <a-button type="primary" ghost @click.stop="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
               </div>
             </div>
             <div v-else class="empty">暂无绑定的题库哦～</div>
