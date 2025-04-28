@@ -123,7 +123,7 @@
                 <a-icon type="close" @click="closeItemBanKDrawer"/>
             </div>
             <div class="body-container">
-              <div v-for="item in bindItemBankExerciseList">
+              <div v-for="(item, index) in bindItemBankExerciseList">
                 <div class="item-bank-exercise-list" @click="toItemBankExercisePage(item.itemBankExercise.id)">
                   <div class="flex width-full">
                     <img :src="item.itemBankExercise.cover.middle" alt="">
@@ -150,6 +150,7 @@
                     <a-button type="primary" ghost @click.stop="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
                   </div>
                 </div>
+                <a-divider v-if="bindItemBankExerciseList.length > 1 && index + 1 !== bindItemBankExerciseList.length"/>
               </div>
             </div>
             <div class="footer"><a-button @click="closeItemBanKDrawer">关闭</a-button></div>

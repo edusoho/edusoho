@@ -650,6 +650,10 @@
     display: flex;
     flex-direction: column;
     .item-bank-exercise-list {
+      @media (max-width: 992px) {
+        border: none;
+        padding: 0;
+      }
       display: flex;
       justify-content: space-between;
       padding: 16px 24px;
@@ -680,6 +684,9 @@
         flex-direction: column;
         justify-content: space-between;
         .title {
+          @media (max-width: 992px) {
+            max-width: 100%;
+          }
           font-size: 16px;
           color: #37393D;
           font-weight: 500;
