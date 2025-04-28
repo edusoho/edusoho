@@ -124,7 +124,7 @@
             </div>
             <div class="body-container">
               <div v-for="item in bindItemBankExerciseList">
-                <div class="item-bank-exercise-list">
+                <div class="item-bank-exercise-list" @click="toItemBankExercisePage(item.itemBankExercise.id)">
                   <div class="flex width-full">
                     <img :src="item.itemBankExercise.cover.middle" alt="">
                     <div class="content">
@@ -147,7 +147,7 @@
                     </div>
                   </div>
                   <div class="show-button">
-                    <a-button type="primary" ghost @click="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
+                    <a-button type="primary" ghost @click.stop="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
                   </div>
                 </div>
               </div>
