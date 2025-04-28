@@ -143,6 +143,131 @@
           }
         }
       }
+      .item-bank-exercise-container {
+        margin-top: 24px;
+        scroll-margin-top: 100px;
+        background-color: #FFF;
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 18px;
+          .title {
+            color: #333;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 24px;
+            padding-left: 6px
+          }
+          .show-button {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 400;
+            color: #919399;
+            cursor: pointer;
+          }
+          .icon {
+            line-height: 14px
+          }
+        }
+        .empty {
+          font-size: 14px;
+          font-weight: 400;
+          color: rgba(0, 0, 0, 0.56);
+        }
+        .item-bank-exercise-list {
+          position: relative;
+          display: flex;
+          justify-content: space-between;
+          img {
+            @media (max-width: 640px) {
+              height: 76px;
+            }
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 96px;
+            margin-right: 16px;
+            border-radius: 6px
+          }
+          .content {
+            @media (max-width: 640px) {
+              margin-left: 147px;
+              min-height: 76px;
+            }
+            min-height: 96px;
+            max-width: 320px;
+            margin-left: 182px;
+            width: calc(100% - 147px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .title {
+              max-width: 100%;
+              font-size: 16px;
+              color: #37393D;
+              font-weight: 500;
+              margin-bottom: 4px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            .exercise-container {
+              @media (max-width: 640px) {
+                display: flex;
+                flex-direction: column;
+              }
+              display: flex;
+              justify-content: flex-start;
+              .title {
+                margin-right: 16px;
+                font-size: 12px;
+                font-weight: 400;
+                color: #919399;
+                span {
+                  color: #37393D;
+                }
+              }
+            }
+            .price {
+              @media (max-width: 640px) {
+                display: none;
+              }
+              font-size: 20px;
+              font-weight: 600;
+              color: #FF7E56;
+              span {
+                font-size: 12px;
+                margin-right: 2px
+              }
+            }
+            .col-price {
+              @media (max-width: 640px) {
+                display: block;
+              }
+              display: none;
+              font-size: 20px;
+              font-weight: 600;
+              color: #FF7E56;
+              span {
+                font-size: 12px;
+                margin-right: 2px
+              }
+            }
+          }
+          .show-button {
+            @media (max-width: 640px) {
+              display: none;
+            }
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
     }
   }
   .product-info__right {
