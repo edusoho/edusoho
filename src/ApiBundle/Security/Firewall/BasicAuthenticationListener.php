@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use Biz\System\Service\SettingService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,8 +33,10 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
         if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
             throw UserException::PASSWORD_ERROR();
         }
-
-        if ($this->getUserService()->validatePassword($password)) {
+        $magic = $this->getSettingService()->get('magic');
+        $currentUser = getCurrentUser();
+        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && !empty($magic['enable_student_skip_strong_password_verification']) && 1 == $magic['enable_student_skip_strong_password_verification'];
+        if ($this->getUserService()->validatePassword($password) && !$skipPasswordUpdate) {
             $this->getUserService()->updateUser($user['id'], ['passwordUpgraded' => 1]);
         } else {
             throw UserException::PASSWORD_REQUIRE_UPGRADE();
@@ -44,5 +47,13 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
         }
 
         return $user;
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->container->get('biz')->service('System:SettingService');
     }
 }

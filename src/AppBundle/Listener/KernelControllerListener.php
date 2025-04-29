@@ -95,8 +95,8 @@ class KernelControllerListener
         $currentUser = $this->getCurrentUser();
         $magic = $this->getSettingService()->get('magic');
         $hasUpgradedPassword = !empty($currentUser['passwordUpgraded']);
-        $isRoleUserWithoutUpgrade = $currentUser['roles'] === ['ROLE_USER'] && !empty($magic['enable_student_skip_strong_password_verification']) && 1 == $magic['enable_student_skip_strong_password_verification'];
-        if ($hasUpgradedPassword || $isRoleUserWithoutUpgrade) {
+        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && !empty($magic['enable_student_skip_strong_password_verification']) && 1 == $magic['enable_student_skip_strong_password_verification'];
+        if ($hasUpgradedPassword || $skipPasswordUpdate) {
             return;
         }
         $request = $event->getRequest();
