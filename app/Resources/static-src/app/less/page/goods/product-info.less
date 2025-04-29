@@ -143,6 +143,130 @@
           }
         }
       }
+      .item-bank-exercise-container {
+        margin-top: 24px;
+        scroll-margin-top: 100px;
+        background-color: #FFF;
+        padding: 16px 24px;
+        display: flex;
+        flex-direction: column;
+        .header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 18px;
+          .title {
+            color: #333;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 24px;
+            padding-left: 6px
+          }
+          .show-button {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 400;
+            color: #919399;
+            cursor: pointer;
+          }
+          .icon {
+            line-height: 14px
+          }
+        }
+        .empty {
+          font-size: 14px;
+          font-weight: 400;
+          color: rgba(0, 0, 0, 0.56);
+        }
+        .item-bank-exercise-list {
+          position: relative;
+          display: flex;
+          justify-content: space-between;
+          img {
+            @media (max-width: 992px) {
+              height: 76px;
+            }
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 96px;
+            margin-right: 16px;
+            border-radius: 6px
+          }
+          .content {
+            @media (max-width: 992px) {
+              margin-left: 147px;
+              min-height: 76px;
+              width: calc(100% - 147px);
+            }
+            min-height: 96px;
+            margin-left: 182px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .title {
+              max-width: 320px;
+              font-size: 16px;
+              color: #37393D;
+              font-weight: 500;
+              margin-bottom: 4px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+            .exercise-container {
+              @media (max-width: 992px) {
+                display: flex;
+                flex-direction: column;
+              }
+              display: flex;
+              justify-content: flex-start;
+              .title {
+                margin-right: 16px;
+                font-size: 12px;
+                font-weight: 400;
+                color: #919399;
+                span {
+                  color: #37393D;
+                }
+              }
+            }
+            .price {
+              @media (max-width: 992px) {
+                display: none;
+              }
+              font-size: 20px;
+              font-weight: 600;
+              color: #FF7E56;
+              span {
+                font-size: 12px;
+                margin-right: 2px
+              }
+            }
+            .col-price {
+              @media (max-width: 992px) {
+                display: block;
+              }
+              display: none;
+              font-size: 20px;
+              font-weight: 600;
+              color: #FF7E56;
+              span {
+                font-size: 12px;
+                margin-right: 2px
+              }
+            }
+          }
+          .show-button {
+            @media (max-width: 992px) {
+              display: none;
+            }
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
     }
   }
   .product-info__right {
@@ -491,5 +615,147 @@
   p {
     margin-top: 12px;
     color: #666;
+  }
+}
+
+.item-bank-exercise-drawer {
+  .header {
+    @media (max-width: 992px) {
+      width: 100vw;
+    }
+    width: 70vw;
+    padding: 14px 20px;
+    border-bottom: 1px solid #EFF0F5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    background-color: #FFF;
+    .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #37393D;
+    }
+    .icon {
+      font-size: 16px
+    }
+  }
+  .body-container {
+    margin-top: 53px;
+    margin-bottom: 69px;
+    padding: 18px 20px 0 20px;
+    display: flex;
+    flex-direction: column;
+    .item-bank-exercise-list {
+      @media (max-width: 992px) {
+        border: none;
+        padding: 0;
+      }
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border: 1px solid #EFF0F5;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      .show-button {
+        display: flex;
+        align-items: center;
+        @media (max-width: 992px) {
+          display: none;
+        }
+      }
+      img {
+        @media (max-width: 992px) {
+          height: 76px;
+        }
+        height: 96px;
+        margin-right: 16px;
+        border-radius: 6px
+      }
+      .content {
+        @media (max-width: 992px) {
+          width: calc(100% - 147px);
+        }
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .title {
+          @media (max-width: 992px) {
+            max-width: 100%;
+          }
+          font-size: 16px;
+          color: #37393D;
+          font-weight: 500;
+          margin-bottom: 4px;
+          width: fit-content;
+          max-width: 320px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          cursor: pointer;
+        }
+      }
+      .exercise-container {
+        @media (max-width: 992px) {
+          display: flex;
+          flex-direction: column;
+        }
+        display: flex;
+        .exercise {
+          margin-top: 4px;
+          margin-right: 16px;
+          font-size: 12px;
+          font-weight: 400;
+          color: #919399;
+          span {
+            color: #37393D;
+          }
+        }
+      }
+      .price {
+        @media (max-width: 992px) {
+          display: none;
+        }
+        font-size: 20px;
+        font-weight: 600;
+        color: #FF7E56;
+        span {
+          font-size: 12px;
+          margin-right: 2px;
+        }
+      }
+      .col-price {
+        @media (max-width: 992px) {
+          display: block;
+        }
+        line-height: 20px;
+        display: none;
+        font-size: 20px;
+        font-weight: 600;
+        color: #FF7E56;
+        span {
+          font-size: 12px;
+          margin-right: 2px
+        }
+      }
+    }
+  }
+  .footer {
+    @media (max-width: 992px) {
+      display: none;
+    }
+    width: 70vw;
+    padding: 16px 24px;
+    border-top: 1px solid #EFF0F5;
+    display: flex;
+    flex-direction: row-reverse;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #FFF;
   }
 }

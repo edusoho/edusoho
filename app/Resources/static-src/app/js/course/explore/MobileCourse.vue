@@ -21,7 +21,7 @@
           <div class="course-item">
             <span v-if="Number(item.vipLevelId)" class="tag-vip-free"></span>
             <div class="course-img">
-              <a :href="'/course/'+item.id" target="_blank">
+              <a :href="'/course/'+item.defaultCourseId" target="_blank">
                 <span v-if="item.discountId > 0 && item.discount == 0" class="tag-discount free"></span>
                 <span v-if="item.discountId > 0 && item.discount != 0" class="tag-discount"></span>
                 <div v-if="isShowTag(item)" class="course-tag clearfix">
