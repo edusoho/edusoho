@@ -60,9 +60,6 @@ class KernelControllerListener
             return;
         }
         $request = $event->getRequest();
-        if (strstr($request->getPathInfo(), '/admin')) {
-            return;
-        }
         if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node('cloud_sms.sms_bind')) {
             return;
         }
