@@ -34,12 +34,13 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
             throw UserException::PASSWORD_ERROR();
         }
         $magic = $this->getSettingService()->get('magic');
-        $currentUser = getCurrentUser();
-        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && !empty($magic['enable_student_skip_strong_password_verification']) && 1 == $magic['enable_student_skip_strong_password_verification'];
-        if ($this->getUserService()->validatePassword($password) && !$skipPasswordUpdate) {
-            $this->getUserService()->updateUser($user['id'], ['passwordUpgraded' => 1]);
-        } else {
-            throw UserException::PASSWORD_REQUIRE_UPGRADE();
+        $skipPasswordUpdate = $user['roles'] === ['ROLE_USER'] && !empty($magic['enable_student_skip_strong_password_verification']) && 1 == $magic['enable_student_skip_strong_password_verification'];
+        if (!$skipPasswordUpdate) {
+            if ($this->getUserService()->validatePassword($password)) {
+                $this->getUserService()->updateUser($user['id'], ['passwordUpgraded' => 1]);
+            } else {
+                throw UserException::PASSWORD_REQUIRE_UPGRADE();
+            }
         }
 
         if ($user['locked']) {
