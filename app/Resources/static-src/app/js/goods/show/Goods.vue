@@ -69,114 +69,91 @@
                  style="padding-left: 14px; padding-top: 10px; color: #000000;"></div>
           </div>
 
-          <div id="info-left-2"
-               style="scroll-margin-top: 100px; background-color: #FFF; margin-top: 24px; padding: 16px 24px; display: flex; flex-direction: column;" class="content-item js-content-item">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
-              <div style="color: #333; font-size: 18px; font-weight: 500; line-height: 24px; padding-left: 6px">题库
-              </div>
+          <div id="info-left-2" class="js-content-item item-bank-exercise-container">
+            <div class="header">
+              <div class="title">题库</div>
               <div v-if="bindItemBankExerciseList.length > 1"
-                   style="display: flex; align-items: center; font-size: 14px; font-weight: 400; color: #919399; cursor: pointer;"
+                   class="show-button"
                    @click="showItemBanKDrawer">
                 <div>{{ `查看全部（${bindItemBankExerciseList.length}）` }}</div>
-                <a-icon type="right" style="line-height: 14px"/>
+                <a-icon type="right" class="icon"/>
               </div>
             </div>
-            <div v-if="bindItemBankExerciseList.length && bindItemBankExerciseList.length > 0"
-                 style="display: flex; justify-content: space-between;">
-              <div style="display: flex">
-                <img :src=bindItemBankExerciseList[0].itemBankExercise.cover.middle alt=""
-                     style="height: 96px; margin-right: 16px; border-radius: 6px">
-                <div style="display: flex; flex-direction: column;; justify-content: space-between;">
+            <div v-if="bindItemBankExerciseList.length && bindItemBankExerciseList.length > 0" class="item-bank-exercise-list" @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">
+              <div class="flex" style="width: 100%">
+                <img :src=bindItemBankExerciseList[0].itemBankExercise.cover.middle alt="">
+                <div class="content">
                   <div>
                     <a-tooltip placement="top">
                       <template slot="title">
                         <div style="max-width: 216px;">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
                       </template>
-                      <div
-                        style="font-size: 16px; color: #37393D; font-weight: 500; margin-bottom: 4px; width: fit-content; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        {{ bindItemBankExerciseList[0].itemBankExercise.title }}
-                      </div>
+                      <div class="title">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
                     </a-tooltip>
-                    <div style="display: flex">
-                      <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">章节练习：<span
-                        style="color: #37393D;">{{ bindItemBankExerciseList[0].chapterExerciseNum }}</span></div>
-                      <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">试卷练习：<span
-                        style="color: #37393D;">{{ bindItemBankExerciseList[0].assessmentNum }}</span></div>
+                    <div class="exercise-container">
+                      <div class="title">章节练习：<span>{{ bindItemBankExerciseList[0].chapterExerciseNum }}</span></div>
+                      <div class="flex justify-between">
+                        <div class="title">试卷练习：<span>{{ bindItemBankExerciseList[0].assessmentNum }}</span></div>
+                        <div class="col-price"><span>¥</span>{{`${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span>{{decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)}}</span></div>
+                      </div>
                     </div>
                   </div>
-                  <div style="font-size: 20px; font-weight: 600; color: #FF7E56;"><span
-                    style="font-size: 12px; margin-right: 2px">¥</span>{{
-                      `${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.`
-                    }}<span style="font-size: 12px;">{{
-                        decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)
-                      }}</span></div>
+                  <div class="price"><span>¥</span>{{`${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span>{{decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)}}</span></div>
                 </div>
               </div>
-              <div style="display: flex; align-items: center;">
-                <a-button type="primary" ghost
-                          @click="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看
-                </a-button>
+              <div class="show-button">
+                <a-button type="primary" ghost @click.stop="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
               </div>
             </div>
-            <div v-else style="font-size: 14px; font-weight: 400; color: rgba(0, 0, 0, 0.56); ">暂无绑定的题库哦～</div>
+            <div v-else class="empty">暂无绑定的题库哦～</div>
           </div>
           <a-drawer
-            placement="right"
-            width="50vw"
-            :z-index="1020"
+            :placement="drawerPlacement"
+            :width="drawerWidth"
+            :height="drawerHeight"
             :closable="false"
             :visible="bindItemBankDrawerVisible"
+            :headerStyle="{position: 'fixed', width: '100%', backgroundColor: '#FFF', zIndex: '1020'}"
+            wrapClassName="item-bank-exercise-drawer"
             @close="closeItemBanKDrawer"
             :bodyStyle="{padding: '0',}"
           >
-            <div
-              style="padding: 14px 20px; border-bottom: 1px solid #EFF0F5; display: flex; align-items: center; justify-content: space-between; width: 50vw; position: fixed; z-index: 10;; top: 0; right: 0; background-color: #FFF;">
-              <div style="font-size: 16px; font-weight: 500; color: #37393D;">题库</div>
-              <a-icon type="close" style="font-size: 16px" @click="closeItemBanKDrawer"/>
+            <div class="header">
+                <div class="title">题库</div>
+                <a-icon type="close" @click="closeItemBanKDrawer"/>
             </div>
-            <div
-              style="margin-top: 53px; margin-bottom: 69px; padding: 18px 20px 0 20px; display: flex; flex-direction: column;">
-              <div v-for="item in bindItemBankExerciseList">
-                <div
-                  style="display: flex; justify-content: space-between; padding: 16px 24px; border: 1px solid #EFF0F5; border-radius: 6px; margin-bottom: 16px;">
-                  <div style="display: flex">
-                    <img :src="item.itemBankExercise.cover.middle" alt=""
-                         style="height: 96px; margin-right: 16px; border-radius: 6px">
-                    <div style="display: flex; flex-direction: column;; justify-content: space-between;">
-                      <div>
+            <div class="body-container">
+              <div v-for="(item, index) in bindItemBankExerciseList">
+                <div class="item-bank-exercise-list" @click="toItemBankExercisePage(item.itemBankExercise.id)">
+                  <div class="flex width-full">
+                    <img :src="item.itemBankExercise.cover.middle" alt="">
+                    <div class="content">
+                      <div class="flex-col justify-between">
                         <a-tooltip placement="top">
                           <template slot="title">
                             <div style="max-width: 216px;">{{ item.itemBankExercise.title }}</div>
                           </template>
-                          <div
-                            style="font-size: 16px; color: #37393D; font-weight: 500; margin-bottom: 4px; width: fit-content; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer;">
-                            {{ item.itemBankExercise.title }}
-                          </div>
+                          <div class="title">{{ item.itemBankExercise.title }}</div>
                         </a-tooltip>
-                        <div style="display: flex">
-                          <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">
-                            章节练习：<span style="color: #37393D;">{{ item.chapterExerciseNum }}</span></div>
-                          <div style="margin-right: 16px; font-size: 12px; font-weight: 400; color: #919399;">
-                            试卷练习：<span style="color: #37393D;">{{ item.assessmentNum }}</span></div>
+                        <div class="exercise-container">
+                          <div class="exercise">章节练习：<span>{{ item.chapterExerciseNum }}</span></div>
+                          <div class="flex justify-between">
+                            <div class="exercise">试卷练习：<span>{{ item.assessmentNum }}</span></div>
+                            <div class="col-price"><span>¥</span>{{`${integerPart(item.itemBankExercise.price)}.` }}<span>{{ decimalPart(item.itemBankExercise.price) }}</span></div>
+                          </div>
                         </div>
                       </div>
-                      <div style="font-size: 20px; font-weight: 600; color: #FF7E56;"><span
-                        style="font-size: 12px; margin-right: 2px">¥</span>{{
-                          `${integerPart(item.itemBankExercise.price)}.`
-                        }}<span style="font-size: 12px;">{{ decimalPart(item.itemBankExercise.price) }}</span></div>
+                      <div class="price"><span>¥</span>{{`${integerPart(item.itemBankExercise.price)}.` }}<span>{{ decimalPart(item.itemBankExercise.price) }}</span></div>
                     </div>
                   </div>
-                  <div style="display: flex; align-items: center;">
-                    <a-button type="primary" ghost @click="toItemBankExercisePage(item.itemBankExercise.id)">查看
-                    </a-button>
+                  <div class="show-button">
+                    <a-button type="primary" ghost @click.stop="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
                   </div>
                 </div>
+                <a-divider v-if="bindItemBankExerciseList.length > 1 && index + 1 !== bindItemBankExerciseList.length"/>
               </div>
             </div>
-            <div
-              style="padding: 16px 24px; border-top: 1px solid #EFF0F5; display: flex; flex-direction: row-reverse; width: 50vw; position: fixed; bottom: 0; right: 0; background-color: #FFF;">
-              <a-button @click="closeItemBanKDrawer">关闭</a-button>
-            </div>
+            <div class="footer"><a-button @click="closeItemBanKDrawer">关闭</a-button></div>
           </a-drawer>
 
           <div v-if="goods.product.targetType === 'course'" id="info-left-3"
@@ -337,6 +314,15 @@ export default {
     Certificate,
   },
   computed: {
+    drawerPlacement() {
+      return window.innerWidth <= 992 ? 'bottom' : 'right';
+    },
+    drawerWidth() {
+      return window.innerWidth <= 992 ? '100vw' : '70vw';
+    },
+    drawerHeight() {
+      return window.innerWidth <= 992 ? '80vh' : '100vh';
+    },
     alertMessage() {
       if (this.goods.type === 'classroom') {
         return Translator.trans('goods.show_page.tab.classroom.closed_tip');
@@ -499,3 +485,22 @@ export default {
   }
 };
 </script>
+
+<style lang="less">
+.item-bank-exercise-drawer {
+  color: red;
+  .ant-drawer-body {
+    .footer {
+      padding: 16px 24px;
+      border-top: 1px solid #EFF0F5;
+      display: flex;
+      flex-direction: row-reverse;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      background-color: #FFF;
+      width: 100%
+    }
+  }
+}
+</style>
