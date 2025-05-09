@@ -100,7 +100,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->searchCourseSets($conditions, 'latest', $offset, $num);
     }
 
-    public function tryManageCourseSet($id)
+    public function tryManageCourseSet($id, $permission = 'admin_v2_course_content_manage')
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -120,7 +120,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
         }
-        if (!$this->hasCourseSetManageRole($id)) {
+        if (!$this->hasCourseSetManageRole($id) && !$user->hasPermission($permission)) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
@@ -700,7 +700,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function unpublishedCourseSet($id)
     {
-        $courseSet = $this->tryManageCourseSet($id);
+        $courseSet = $this->tryManageCourseSet($id, 'admin_v2_course_set_unpublished');
         if ('published' !== $courseSet['status']) {
             $this->createNewException(CourseSetException::UNPUBLISHED_COURSESET());
         }

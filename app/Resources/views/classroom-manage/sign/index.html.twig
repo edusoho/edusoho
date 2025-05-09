@@ -1,4 +1,5 @@
 {% extends 'classroom-manage/layout.html.twig' %}
+{% do script(['app/js/classroom-manage/order/index.js']) %}
 {% block title %}
   {{ 'classroom.manage.sign_statictics'|trans }}
   -
@@ -23,14 +24,8 @@
           <option value="auditor" {% if 'auditor' == app.request.query.get('role', '') %} selected {% endif %}>{{ 'classroom.manage.sign_statictics.role.auditor'|trans }}</option>
         </select>
         <button type="submit" class="cd-btn cd-btn-primary">{{ 'classroom.manage.sign_statictics.search_btn'|trans }}</button>
-        {% include 'export/export-btn.html.twig' with
-            {
-              exportFileName: 'classroom-sign-statistics',
-              targetFormId: 'sign-statistics',
-              exportClass: 'cd-btn mhs pull-right cd-btn-success',
-              exportWebpack: 'ture'
-            }
-          %}
+        <a class=" cd-btn  mhs cd-btn mhs pull-right cd-btn-success classroom-order-js-export-btn" type="button" id="student-add-btn" data-toggle="modal" data-target="#modal"><i class="es-icon es-icon-filedownload cd-text-sm"></i> {{'form.btn.export'|trans}}</a>
+        {% include 'export/export-modal.html.twig' %}
         <div class="clearfix"></div>
 
       </form>
