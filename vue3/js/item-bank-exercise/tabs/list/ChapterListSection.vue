@@ -30,7 +30,7 @@ function selectChapter(chapterId) {
       <div class="flex items-center">
         <UpOutlined v-if="isUnfold" class="mr-12 text-12 text-[#5E6166]" :class="{'opacity-0': props.chapter.children.length === 0}"/>
         <DownOutlined v-if="!isUnfold" class="mr-12 text-12 text-[#5E6166]" :class="{'opacity-0': props.chapter.children.length === 0}"/>
-        <div class="max-w-165 sm:max-w-210 truncate text-14 leading-22 text-[#37393D]" :class="{'font-medium': props.chapter.depth == 1, 'pl-16': props.chapter.depth == 3, 'text-[#5E6166]': props.chapter.depth == 3, 'text-[--primary-color]': props.chapter.id === props.selectedChapterId}">{{ props.chapter.name }}</div>
+        <div class="max-w-120 sm:max-w-210 truncate text-14 leading-22 text-[#37393D]" :class="{'font-medium': props.chapter.depth == 1, 'pl-16': props.chapter.depth == 3, 'text-[#5E6166]': props.chapter.depth == 3, 'text-[--primary-color]': props.chapter.id === props.selectedChapterId}">{{ props.chapter.name }}</div>
       </div>
       <chapter-list-button
         :chapter="props.chapter"

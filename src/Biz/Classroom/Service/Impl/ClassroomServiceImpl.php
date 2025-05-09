@@ -885,7 +885,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function unpublishedClassroom($id)
     {
-        $this->tryManageClassroom($id, 'admin_classroom_close');
+        $this->tryManageClassroom($id, 'admin_v2_classroom_unpublished');
 
         $classroom = $this->updateClassroom($id, ['status' => 'unpublished']);
         $this->getClassroomGoodsMediator()->onClose($classroom);

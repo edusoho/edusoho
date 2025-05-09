@@ -47,7 +47,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
 
             $isFillUserInfo = $this->checkUserinfoFieldsFill($currentUser);
             //TODO 因为移动端的第三方注册做到了web端，所以增加一个 skip 判断，如果以后移动端端这块业务剥离，这个判断要去掉
-            if (!$isFillUserInfo && !$request->getSession()->get(OAuthUser::SESSION_SKIP_KEY)) {
+            if (!$isFillUserInfo && !$request->getSession()->get(OAuthUser::SESSION_SKIP_KEY) && !empty($currentUser['passwordInit'])) {
                 $url = $this->container->get('router')->generate('login_after_fill_userinfo', ['goto' => $this->getTargetPath($request)]);
 
                 $response = new RedirectResponse($url);

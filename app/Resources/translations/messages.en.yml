@@ -6875,6 +6875,7 @@ admin.magic_setting.security_video_player: Security video player switch
 admin.magic_setting.enable_marketing_mall_alpha_test: mall alpha test switch
 admin.magic_setting.enable_marketing_mall_license: mall license switch
 admin.magic_setting.enable_cache_video_on_playing: Play and cache switch
+admin.magic_setting.enable_student_skip_strong_password_verification: Students skip the strong password verification switch
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'

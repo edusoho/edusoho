@@ -60,9 +60,6 @@ class KernelControllerListener
             return;
         }
         $request = $event->getRequest();
-        if (strstr($request->getPathInfo(), '/admin')) {
-            return;
-        }
         if ('1' != $this->getSettingService()->node('cloud_sms.sms_enabled') || 'on' != $this->getSettingService()->node('cloud_sms.sms_bind')) {
             return;
         }
@@ -93,7 +90,10 @@ class KernelControllerListener
     private function checkPasswordUpgrade(FilterControllerEvent $event)
     {
         $currentUser = $this->getCurrentUser();
-        if (!empty($currentUser['passwordUpgraded'])) {
+        $magic = $this->getSettingService()->get('magic');
+        $hasUpgradedPassword = !empty($currentUser['passwordUpgraded']);
+        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && !empty($magic['enable_student_skip_strong_password_verification']) && 1 == $magic['enable_student_skip_strong_password_verification'];
+        if ($hasUpgradedPassword || $skipPasswordUpdate) {
             return;
         }
         $request = $event->getRequest();
