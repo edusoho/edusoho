@@ -97,16 +97,6 @@ class RegisterController extends BaseController
                     'goto' => $this->getTargetPath($request),
                 ]);
 
-                if ($this->getAuthService()->hasPartnerAuth()) {
-                    $currentUser = $this->getCurrentUser();
-
-                    if (!$currentUser->isLogin()) {
-                        $this->authenticateUser($user);
-                    }
-
-                    $goto = $this->generateUrl('partner_login', ['goto' => $goto]);
-                }
-
                 $response = $this->redirect($this->generateUrl('register_success', ['goto' => $goto]));
                 $response = DistributorCookieToolkit::clearCookieToken(
                     $request,

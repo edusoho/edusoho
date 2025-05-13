@@ -70,7 +70,6 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             '/login/bind/weixinmob/choose', '/login/bind/weixinmob/changetoexist',
             '/login/bind/qq/new', '/login/bind/weibo/new', '/login/bind/renren/new',
             '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
-            '/partner/login', '/partner/logout',
             '/login/weixinmob', '/login/bind/weixinmob/existbind',
             '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
             '/edu_cloud/sms_check/sms_bind', '/settings/check_login_password',
@@ -100,10 +99,6 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
         }
 
         $url = explode('?', $targetPath);
-
-        if ($url[0] == $this->generateUrl('partner_logout', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
-            return $this->generateUrl('homepage');
-        }
 
         if ($url[0] == $this->generateUrl('password_reset_update', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
