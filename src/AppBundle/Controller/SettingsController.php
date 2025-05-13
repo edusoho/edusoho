@@ -1246,27 +1246,4 @@ class SettingsController extends BaseController
     {
         return $this->getBiz()->service('MultiClass:MultiClassService');
     }
-
-    protected function downloadImg($url)
-    {
-        $currentUser = $this->getCurrentUser();
-        //        $filename    = md5($url).'_'.time();
-        $filePath = $this->container->getParameter(
-                'topxia.upload.public_directory'
-            ).'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
-
-        $fp = fopen($filePath, 'w');
-        $img = fopen($url, 'r');
-        stream_get_meta_data($img);
-        $result = '';
-        while (!feof($img)) {
-            $result .= fgets($img, 1024);
-        }
-
-        fclose($img);
-        fwrite($fp, $result);
-        fclose($fp);
-
-        return $filePath;
-    }
 }
