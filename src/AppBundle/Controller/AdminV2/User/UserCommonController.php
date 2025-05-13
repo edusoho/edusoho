@@ -414,17 +414,8 @@ class UserCommonController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
-
-        if ($hasPartnerAuth) {
-            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
-        } else {
-            $partnerAvatar = null;
-        }
-
         return $this->render($avatarTwigUrl, [
             'user' => $user,
-            'partnerAvatar' => $partnerAvatar,
         ]);
     }
 

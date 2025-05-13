@@ -37,7 +37,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         $this->getKernel()->getConnection()->beginTransaction();
         try {
             $registration = $this->refillFormData($registration, $type);
-            $registration['providerType'] = $this->getAuthProvider()->getProviderName();
+            $registration['providerType'] = 'default';
             $newUser = $this->getUserService()->register(
                 $registration,
                 $this->biz['user.register.type.toolkit']->getRegisterTypes($registration)
@@ -127,68 +127,18 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $registration;
     }
 
-    public function syncLogin($userId)
-    {
-        $providerName = $this->getAuthProvider()->getProviderName();
-        $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
-
-        if (empty($bind)) {
-            return '';
-        }
-
-        return $this->getAuthProvider()->syncLogin($bind['fromId']);
-    }
-
-    public function syncLogout($userId)
-    {
-        $providerName = $this->getAuthProvider()->getProviderName();
-        $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
-
-        if (empty($bind)) {
-            return '';
-        }
-
-        return $this->getAuthProvider()->syncLogout($bind['fromId']);
-    }
-
     public function changeNickname($userId, $newName)
     {
-        if ($this->hasPartnerAuth()) {
-            $providerName = $this->getAuthProvider()->getProviderName();
-            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
-
-            if ($bind) {
-                $this->getAuthProvider()->changeNickname($bind['fromId'], $newName);
-            }
-        }
         $this->getUserService()->changeNickname($userId, $newName);
     }
 
     public function changeEmail($userId, $password, $newEmail)
     {
-        if ($this->hasPartnerAuth()) {
-            $providerName = $this->getAuthProvider()->getProviderName();
-            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
-
-            if ($bind) {
-                $this->getAuthProvider()->changeEmail($bind['fromId'], $password, $newEmail);
-            }
-        }
-
         $this->getUserService()->changeEmail($userId, $newEmail);
     }
 
     public function changePassword($userId, $oldPassword, $newPassword)
     {
-        if ($this->hasPartnerAuth()) {
-            $providerName = $this->getAuthProvider()->getProviderName();
-            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
-
-            if ($bind) {
-                $this->getAuthProvider()->changePassword($bind['fromId'], $oldPassword, $newPassword);
-            }
-        }
-
         $this->getUserService()->changePassword($userId, $newPassword);
     }
 
@@ -210,16 +160,6 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
         if (empty($randomName) || $username != $randomName) {
-            try {
-                $result = $this->getAuthProvider()->checkUsername($username);
-            } catch (\Exception $e) {
-                return ['error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'];
-            }
-
-            if ('success' != $result[0]) {
-                return $result;
-            }
-
             if (!SimpleValidator::nickname($username)) {
                 return ['error_mismatching', '用户名不合法!'];
             }
@@ -236,16 +176,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkEmail($email)
     {
-        try {
-            $result = $this->getAuthProvider()->checkEmail($email);
-        } catch (\Exception $e) {
-            return ['error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'];
-        }
-
-        if ('success' != $result[0]) {
-            return $result;
-        }
-
         $avaliable = $this->getUserService()->isEmailAvaliable($email);
 
         if (!$avaliable) {
@@ -257,16 +187,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkMobile($mobile)
     {
-        try {
-            $result = $this->getAuthProvider()->checkMobile($mobile);
-        } catch (\Exception $e) {
-            return ['error_db', '暂时无法注册，管理员正在努力修复中。（Ucenter配置或连接问题）'];
-        }
-
-        if ('success' != $result[0]) {
-            return $result;
-        }
-
         $avaliable = $this->getUserService()->isMobileAvaliable($mobile);
 
         if (!$avaliable) {
@@ -289,21 +209,6 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkPassword($userId, $password)
     {
-        if ($this->hasPartnerAuth()) {
-            $providerName = $this->getAuthProvider()->getProviderName();
-            $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
-
-            if (!$bind) {
-                return $this->getUserService()->verifyPassword($userId, $password);
-            }
-
-            $checked = $this->getAuthProvider()->checkPassword($bind['fromId'], $password);
-
-            if ($checked) {
-                return true;
-            }
-        }
-
         return $this->getUserService()->verifyPassword($userId, $password);
     }
 
@@ -312,41 +217,9 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $this->getUserService()->verifyPayPassword($userId, $payPassword);
     }
 
-    public function checkPartnerLoginById($userId, $password)
-    {
-        return $this->getAuthProvider()->checkLoginById($userId, $password);
-    }
-
-    public function checkPartnerLoginByNickname($nickname, $password)
-    {
-        return $this->getAuthProvider()->checkLoginByNickname($nickname, $password);
-    }
-
-    public function checkPartnerLoginByEmail($email, $password)
-    {
-        return $this->getAuthProvider()->checkLoginByEmail($email, $password);
-    }
-
-    public function getPartnerAvatar($userId, $size = 'middle')
-    {
-        $providerName = $this->getAuthProvider()->getProviderName();
-        $bind = $this->getUserService()->getUserBindByTypeAndUserId($providerName, $userId);
-
-        if (!$bind) {
-            return null;
-        }
-
-        return $this->getAuthProvider()->getAvatar($bind['fromId'], $size);
-    }
-
     public function hasPartnerAuth()
     {
-        return 'default' != $this->getAuthProvider()->getProviderName();
-    }
-
-    public function getPartnerName()
-    {
-        return $this->getAuthProvider()->getProviderName();
+        return false;
     }
 
     public function isRegisterEnabled()
@@ -360,28 +233,6 @@ class AuthServiceImpl extends BaseService implements AuthService
         }
 
         return true;
-    }
-
-    public function getAuthProvider()
-    {
-        if (!$this->partner) {
-            $setting = $this->getSettingService()->get('user_partner');
-            if (empty($setting) || empty($setting['mode'])) {
-                $partner = 'default';
-            } else {
-                $partner = $setting['mode'];
-            }
-
-            if ('default' != $partner) {
-                throw $this->createInvalidArgumentException('Invalid partner');
-            }
-
-            $class = substr(__NAMESPACE__, 0, -13).'\\AuthProvider\\'.ucfirst($partner).'AuthProvider';
-
-            $this->partner = new $class($this->biz);
-        }
-
-        return $this->partner;
     }
 
     protected function getSensitiveService()
