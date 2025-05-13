@@ -24,7 +24,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
 
             'course.material.create' => 'onMaterialCreate',
             'course.material.update' => 'onMaterialUpdate',
-            'course.material.delete' => 'onMaterialDelete',
+            'course.material.delete' => ['onMaterialDelete', -100],
 
             'open.course.lesson.delete' => 'onOpenCourseLessonDelete',
             'open.course.delete' => 'onOpenCourseDelete',
