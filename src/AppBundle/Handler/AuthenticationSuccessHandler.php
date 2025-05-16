@@ -43,22 +43,12 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
         return parent::onAuthenticationSuccess($request, $token);
     }
 
-    private function getAuthService()
-    {
-        return ServiceKernel::instance()->createService('User:AuthService');
-    }
-
     /**
      * @return UserService
      */
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User:UserService');
-    }
-
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getServiceKernel()
