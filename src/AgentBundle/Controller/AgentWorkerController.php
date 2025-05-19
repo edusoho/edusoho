@@ -1,9 +1,10 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AgentBundle\Controller;
 
 use AgentBundle\Workflow\Workflow;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class AgentWorkerController extends BaseController
