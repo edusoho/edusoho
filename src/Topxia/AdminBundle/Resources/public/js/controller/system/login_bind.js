@@ -96,8 +96,8 @@ define(function(require, exports, module) {
           };
         });
       var $checkbox = $('#strong_pwd_skip-agreement-checkbox');
-      var $closeRadio = $('#strong_pwd_skip_close_radio');
-      var $openRadio = $('input[name="login_strong_pwd_skip_enable"][value="1"]');
+      var $closeRadio = $('#strong_pwd_close_radio');
+      var $openRadio = $('input[name="login_strong_pwd_enable"][value="1"]');
 
       function removeTooltip($el) {
         $el.tooltip('destroy');
