@@ -95,6 +95,43 @@ define(function(require, exports, module) {
             $('.close-tip').removeClass('hidden');
           };
         });
+      var $checkbox = $('#strong_pwd_skip-agreement-checkbox');
+      var $closeRadio = $('#strong_pwd_skip_close_radio');
+      var $openRadio = $('input[name="login_strong_pwd_skip_enable"][value="1"]');
+
+      function removeTooltip($el) {
+        $el.tooltip('destroy');
+        $el.removeAttr('data-original-title');
+        $el.removeAttr('title');
+        $el.off('mouseenter mouseleave focus blur');
+      }
+      function updateCloseRadioState() {
+        if ($checkbox.prop('checked')) {
+          $closeRadio.prop('disabled', false);
+          removeTooltip($closeRadio);
+        } else {
+          $closeRadio.prop('disabled', true);
+          $closeRadio.attr('title', Translator.trans('admin.login_connect.strong_pwd_skip_close_radio.prompt'));
+          $closeRadio.tooltip();
+          if ($closeRadio.prop('checked')) {
+            $openRadio.prop('checked', true);
+          }
+        }
+      }
+      updateCloseRadioState();
+
+      $checkbox.on('change', function() {
+        updateCloseRadioState();
+      });
+
+      $openRadio.on('change', function() {
+        if ($(this).prop('checked')) {
+          $checkbox.prop('checked', false);
+          $closeRadio.prop('disabled', true);
+          $closeRadio.attr('title', Translator.trans('admin.login_connect.strong_pwd_skip_close_radio.prompt'));
+          $closeRadio.tooltip();
+        }
+      });
 
     };
 

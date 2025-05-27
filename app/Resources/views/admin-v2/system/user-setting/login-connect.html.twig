@@ -126,6 +126,30 @@
       </div>
     </fieldset>
 
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin.login_connect.student_strong_pwd.button'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          <label>
+            <input type="radio" name="login_strong_pwd_skip_enable" value="1" {% if loginConnect.strong_pwd_skip_checkbox_name == 1 %}checked{% endif %} >
+            {{ 'admin.login_connect.open'|trans }}
+          </label>
+          <label>
+            <input type="radio" name="login_strong_pwd_skip_enable" value="0" id="strong_pwd_skip_close_radio" {% if loginConnect.login_strong_pwd_skip_enable == 1 %}disabled{% endif %} data-toggle="tooltip" title="{{ 'admin.login_connect.strong_pwd_skip_close_radio.prompt'|trans }}" {% if loginConnect.login_strong_pwd_skip_enable == 0 %}checked{% endif %} >
+            {{ 'admin.login_connect.closed'|trans }}
+          </label>
+          <p class="help-block">
+            <label>
+              <input type="checkbox" name="strong_pwd_skip_checkbox_name" value="1" id="strong_pwd_skip-agreement-checkbox" {% if loginConnect.strong_pwd_skip_checkbox_name == 1 and loginConnect.login_strong_pwd_skip_enable == 0 %}checked{% endif %}>
+              {{ 'admin.login_connect.strong_pwd_skip.danger'|trans }}
+            </label>
+          </p>
+        </div>
+      </div>
+    </fieldset>
+
     <fieldset id="third_login" {% if loginConnect.enabled|default(null) == 0 %} style="display:none"{% endif %}>
       {% for type, client in clients if type not in ['weixinmob', 'weixinweb', 'apple']%}
         <fieldset data-role="oauth2-setting" data-type="{{ type }}">
