@@ -34,7 +34,7 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
             throw UserException::PASSWORD_ERROR();
         }
         $loginBind = $this->getSettingService()->get('login_bind');
-        $skipPasswordUpdate = $user['roles'] === ['ROLE_USER'] && !empty($loginBind['login_strong_pwd_enable']) && 0 == $loginBind['login_strong_pwd_enable'];
+        $skipPasswordUpdate = $user['roles'] === ['ROLE_USER'] && isset($loginBind['login_strong_pwd_enable']) && 0 == $loginBind['login_strong_pwd_enable'];
         if (!$skipPasswordUpdate) {
             if ($this->getUserService()->validatePassword($password)) {
                 $this->getUserService()->updateUser($user['id'], ['passwordUpgraded' => 1]);
