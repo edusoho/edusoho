@@ -2355,3 +2355,5 @@ course.market_setting.contract.model.handSignature: 手写签名
 course.market_setting.contract.model.partyBName: 乙方姓名
 course.market_setting.contract.model.iDNumber: 身份证号
 course.market_setting.contract.model.contactInformation: 联系方式
+
+admin.login_connect.strong_pwd_skip_close_radio.prompt: 请先勾选下方协议才能关闭

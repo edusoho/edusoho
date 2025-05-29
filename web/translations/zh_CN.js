@@ -2105,4 +2105,5 @@ t.add("course.market_setting.contract.model.handSignature", "\u624b\u5199\u7b7e\
 t.add("course.market_setting.contract.model.partyBName", "\u4e59\u65b9\u59d3\u540d", "js", "zh_CN");
 t.add("course.market_setting.contract.model.iDNumber", "\u8eab\u4efd\u8bc1\u53f7", "js", "zh_CN");
 t.add("course.market_setting.contract.model.contactInformation", "\u8054\u7cfb\u65b9\u5f0f", "js", "zh_CN");
+t.add("admin.login_connect.strong_pwd_skip_close_radio.prompt", "\u8bf7\u5148\u52fe\u9009\u4e0b\u65b9\u534f\u8bae\u624d\u80fd\u5173\u95ed", "js", "zh_CN");
 })(Translator);
