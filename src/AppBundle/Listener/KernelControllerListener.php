@@ -90,9 +90,9 @@ class KernelControllerListener
     private function checkPasswordUpgrade(FilterControllerEvent $event)
     {
         $currentUser = $this->getCurrentUser();
-        $magic = $this->getSettingService()->get('magic');
+        $loginBind = $this->getSettingService()->get('login_bind');
         $hasUpgradedPassword = !empty($currentUser['passwordUpgraded']);
-        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && !empty($magic['enable_student_skip_strong_password_verification']) && 1 == $magic['enable_student_skip_strong_password_verification'];
+        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && isset($loginBind['login_strong_pwd_enable']) && 0 == $loginBind['login_strong_pwd_enable'];
         if ($hasUpgradedPassword || $skipPasswordUpdate) {
             return;
         }

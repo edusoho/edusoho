@@ -72,21 +72,6 @@ class QuestionParserController extends BaseController
         foreach ($items as &$item) {
             $item['category_id'] = $categoryId;
             $item['category_name'] = $category['name'];
-            if (!empty($item['questions'])) {
-                foreach ($item['questions'] as &$question) {
-                    $question['stem'] = $this->purifyHtml($question['stem'], true);
-                    foreach ($question['response_points'] as &$responsePoint) {
-                        $responsePoint['radio']['text'] = $this->purifyHtml($responsePoint['radio']['text'], true);
-                        $responsePoint['checkbox']['text'] = $this->purifyHtml($responsePoint['checkbox']['text'], true);
-                    }
-                    foreach ($question['answer'] as &$answer) {
-                        $answer = $this->purifyHtml($answer, true);
-                    }
-                    foreach ($question['options'] as &$option) {
-                        $option = $this->purifyHtml($option, true);
-                    }
-                }
-            }
         }
         $templateInfo = $this->getTemplateInfo($type);
 
