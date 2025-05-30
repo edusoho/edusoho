@@ -22,6 +22,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\Player\PlayerException;
 use Biz\Player\Service\PlayerService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\ExerciseException;
 use Biz\Testpaper\Wrapper\TestpaperWrapper;
@@ -69,6 +70,7 @@ class CourseTaskMedia extends AbstractResource
         $media = $this->$method($course, $task, $activity, $request->getHttpRequest(), $ssl);
 
         list($watermarkSetting, $fingerPrintSetting) = $this->fingerPrintWatermark();
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
 
         return [
             'mediaType' => $activity['mediaType'],
@@ -76,6 +78,7 @@ class CourseTaskMedia extends AbstractResource
             'format' => $request->query->get('format', 'common'),
             'watermarkSetting' => $watermarkSetting,
             'fingerPrintSetting' => $fingerPrintSetting,
+            'lastLearnTime' => empty($taskResult) ? 0: $taskResult['lastLearnTime'],
         ];
     }
 
@@ -460,6 +463,14 @@ class CourseTaskMedia extends AbstractResource
         }
 
         return $this->generateUrl($result['route'], $result['params'], $result['referenceType']);
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
     }
 
     /**
