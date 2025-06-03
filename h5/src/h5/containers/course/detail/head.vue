@@ -192,6 +192,9 @@ export default {
       openAppUrl: '',
       appShow: false,
       watermark: {},
+      lastLearnTime: 0,
+      jsPlayer: '',
+      playKey: ''
     };
   },
   inject: ['getDetailsContent'],
@@ -373,7 +376,10 @@ export default {
           } = res;
 
           this.media = res.media
-
+          this.lastLearnTime = res.lastLearnTime
+          this.playKey = `playback_${this.user.id}_${res.media.resNo}`;
+          localStorage.setItem(this.playKey, this.lastLearnTime);
+          this.jsPlayer = res.media.jsPlayer
           if (resNo === '0') {
             const media = await Api.getLocalMediaLive({
               query: {
@@ -517,6 +523,8 @@ export default {
       const options = {
         id: 'course-detail__head--video',
         user: this.user,
+        initPos: this.lastLearnTime,
+        jsPlayer: this.jsPlayer,
         autoplay: true,
         disableFullscreen: this.isAppleDevice,
         strictMode: !media.supportMobile, // 视频是否加密 1表示普通  0表示加密
@@ -598,6 +606,7 @@ export default {
             this.selectedPlanId,
             this.taskId,
             this.sourceType,
+            this.playKey,
           );
         });
         player.on('pagechanged', e => {
@@ -648,12 +657,21 @@ export default {
             this.selectedPlanId,
             this.taskId,
             this.sourceType,
+            this.playKey,
           );
         });
         player.on('playing', () => {
           this.isPlaying = true;
           this.clearComputeWatchTime();
           this.computeWatchTime();
+        });
+        player.on('timeupdate', (data) => {
+          const { currentTime, duration } = data;
+          const isCloudPlayer = this.isCloudVideoPalyer() || this.isCloudAudioPlayer();
+          // 如果不是云播放器，且当前时间不等于总时长，才保存；否则云播放器直接保存
+          if (isCloudPlayer || parseInt(currentTime) !== parseInt(duration)) {
+            localStorage.setItem(this.playKey, currentTime);
+          }
         });
         player.on('paused', e => {
           this.isPlaying = false;
@@ -683,6 +701,13 @@ export default {
         }
 
       });
+    },
+
+    isCloudVideoPalyer() {
+      return 'balloon-cloud-video-player' === this.jsPlayer;
+    },
+    isCloudAudioPlayer() {
+      return 'audio-player' === this.jsPlayer;
     },
     isWechat() {
       const ua = navigator.userAgent.toLowerCase();

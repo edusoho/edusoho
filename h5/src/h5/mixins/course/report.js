@@ -24,6 +24,7 @@ export default {
       record: {},
       absorbed: 0, // 是否无效学习
       learnedTime: 0,
+      playKey: '',
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -53,10 +54,11 @@ export default {
      * @param {*} taskId
      * @param {*} sourceType  上报课程类型
      */
-    initReportData(courseId, taskId, sourceType, reportNow = true) {
+    initReportData(courseId, taskId, sourceType, playKey, reportNow = true) {
       this.clearReportIntervalTime();
       this.reportData = { courseId, taskId };
       this.reportType = sourceType;
+      this.playKey = playKey;
       this.isFinish = false;
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
@@ -169,6 +171,7 @@ export default {
         sign: this.sign,
         duration: this.learnTime,
         status: this.absorbed,
+        lastLearnTime: parseInt(localStorage.getItem(this.playKey)),
       };
       if (param.reActive) {
         data.reActive = param.reActive;
