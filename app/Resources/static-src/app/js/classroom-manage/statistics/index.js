@@ -15,12 +15,12 @@ class ClassroomStatistics{
     new ExportSecondaryVerification({
       buttonSelector: '.classroom-student-chart-js-export-btn',
       formSelector: '#overview-student-detail',
-      requestUrlBase: '/secondary/verification?exportFileName=overviewClassroomStudentDetail&targetFormId=' + $('#overview-student-detail').find('[name="courseId"]').val()
+      requestUrlBase: '/secondary/verification?exportFileName=overviewClassroomStudentDetail&targetFormId=' + $('#overview-student-detail').find('[name="classroomId"]').val()
     });
     new ExportSecondaryVerification({
       buttonSelector: '.classroom-course-chart-js-export-btn',
       formSelector: '#overview-task-list',
-      requestUrlBase: '/secondary/verification?exportFileName=overviewTaskList&targetFormId=' + $('#overview-task-list').find('[name="courseId"]').val()
+      requestUrlBase: '/secondary/verification?exportFileName=overviewClassroomStatisticsCourse&targetFormId=' + $('#overview-task-list').find('[name="classroomId"]').val()
     });
   }
 }
