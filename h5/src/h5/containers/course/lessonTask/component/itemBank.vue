@@ -425,7 +425,7 @@ export default {
     },
     async changeSwiper(index) {
       this.questionIndex = index;
-      this.aiAgentSdk.hideReminder();
+      this.aiAgentSdk && this.aiAgentSdk.hideReminder();
       this.currentIndex = index;
       this.$emit('update:current', index + 1);
       this.$emit('update:slideIndex', index);
