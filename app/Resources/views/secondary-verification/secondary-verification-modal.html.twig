@@ -65,6 +65,14 @@
       <input class="form-control" type="hidden" id="exportType" name="exportType" value="course-overview-task-list"/>
       <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-overview-task-list-export cd-btn-primary" id="course-overview-task-list-export" data-toggle="modal" data-target="#modal"
       >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'overviewClassroomStudentDetail' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="classroom-statistics-students-learn"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn classroom-statistics-students-learn-export cd-btn-primary" id="classroom-statistics-students-learn-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'overviewClassroomStatisticsCourse' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="classroom-statistics-course-learn"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn classroom-statistics-course-learn-export cd-btn-primary" id="classroom-statistics-course-learn-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
     {% elseif exportFileName == 'courseOrder' or exportFileName == 'order' or exportFileName == 'classroomOrder' %}
       <input class="form-control" type="hidden" id="exportType" name="exportType" value="order"/>
       <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn order-export cd-btn-primary" id="course-order" data-toggle="modal" data-target="#modal"
