@@ -9,6 +9,7 @@ use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
@@ -76,6 +77,74 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         $parameters['url'] = $url.' ';
 
         return array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters);
+    }
+
+    public function getSmsParams($targetId, $smsType)
+    {
+        $lesson = $this->getOpenCourseService()->getLesson($targetId);
+
+        if (empty($lesson)) {
+            throw OpenCourseException::NOTFOUND_LESSON();
+        }
+        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
+        if (empty($course)) {
+            throw OpenCourseException::NOTFOUND_OPENCOURSE();
+        }
+        $parameters['lesson_title'] = '';
+
+        if ('liveOpen' == $lesson['type']) {
+            $parameters['startTime'] = date('Y-m-d H:i:s', $lesson['startTime']);
+        }
+
+        $course['title'] = StringToolkit::cutter($course['title'], 20, 15, 4);
+        $parameters['course_title'] = '直播公开课：《'.$course['title'].'》';
+
+        global $kernel;
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
+
+        $referenceType = UrlGeneratorInterface::ABSOLUTE_URL;
+        if (!empty($url)) {
+            $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
+        }
+        $originUrl = $kernel->getContainer()->get('router')->generate('open_course_show', ['courseId' => $lesson['courseId']], $referenceType);
+
+        $shortUrl = SmsToolkit::getShortLink($originUrl);
+        $url = empty($shortUrl) ? $originUrl : $shortUrl;
+
+        $parameters['url'] = $url.' ';
+
+        return $parameters;
+    }
+
+    public function getSmcUserIds($targetId, $smsType, $start, $limit)
+    {
+        $lesson = $this->getOpenCourseService()->getLesson($targetId);
+
+        if (empty($lesson)) {
+            throw OpenCourseException::NOTFOUND_LESSON();
+        }
+        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
+        if (empty($course)) {
+            throw OpenCourseException::NOTFOUND_OPENCOURSE();
+        }
+        $students = $this->getOpenCourseService()->searchMembers(['courseId' => $course['id']], ['createdTime' => 'ASC'], $start, 1000, ['userId']);
+
+        return ArrayToolkit::column($students, 'userId');
+    }
+
+    public function getSmsUserCount($targetId, $smsType)
+    {
+        $lesson = $this->getOpenCourseService()->getLesson($targetId);
+
+        if (empty($lesson)) {
+            throw OpenCourseException::NOTFOUND_LESSON();
+        }
+        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
+        if (empty($course)) {
+            throw OpenCourseException::NOTFOUND_OPENCOURSE();
+        }
+        return $this->getOpenCourseService()->countMembers(['courseId' => $course['id']]);
     }
 
     protected function getSettingService()

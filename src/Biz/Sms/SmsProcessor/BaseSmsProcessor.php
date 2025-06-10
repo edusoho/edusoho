@@ -20,6 +20,12 @@ abstract class BaseSmsProcessor
 
     abstract public function getSmsInfo($targetId, $index, $smsType);
 
+    abstract public function getSmsParams($targetId, $smsType);
+
+    abstract public function getSmcUserIds($targetId, $smsType, $start, $limit);
+
+    abstract public function getSmsUserCount($targetId, $smsType);
+
     protected function getBiz()
     {
         return $this->biz;
