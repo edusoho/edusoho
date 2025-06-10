@@ -813,6 +813,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->findVideoActivityLevelsByCourseId($courseId);
     }
 
+    public function findActivitiesByCopyId($copyId)
+    {
+        return $this->getActivityDao()->findByCopyId($copyId);
+    }
+
     /**
      * @return AnswerRecordService
      */

@@ -10,6 +10,8 @@ interface MaterialService
 
     public function batchCreateMaterials($materials);
 
+    public function batchDeleteMaterials(array $materials);
+
     public function updateMaterial($id, $fields, $argument);
 
     public function deleteMaterial($courseSetId, $materialId, $argument = '');

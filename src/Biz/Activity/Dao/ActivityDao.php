@@ -41,4 +41,6 @@ interface ActivityDao extends AdvancedDaoInterface
     public function findActivitiesByCourseSetIdsAndTypes($courseSetIds, $mediaTypes);
 
     public function findVideoActivityLevelsByCourseId($courseId);
+
+    public function findByCopyId($copyId);
 }

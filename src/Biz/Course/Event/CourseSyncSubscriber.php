@@ -3,6 +3,7 @@
 namespace Biz\Course\Event;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
@@ -10,6 +11,7 @@ use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MaterialService;
 use Biz\Sync\Service\AbstractSychronizer;
 use Biz\Sync\Service\SyncService;
 use Biz\System\Service\LogService;
@@ -40,8 +42,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.lesson.batch_publish' => 'onCourseChapterBatchUpdate',
             'course.lesson.batch_unpublish' => 'onCourseChapterBatchUpdate',
             'course.lesson.setOptional' => 'onCourseChapterUpdate',
-            //同步新建的任务时同步新增material记录即可，这里无需处理
-            // 'course.material.create' => 'onCourseMaterialCreate',
+            'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
             'course.material.delete' => 'onCourseMaterialDelete',
 
@@ -270,8 +271,34 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if (empty($syncMaterials)) {
             return;
         }
-        $this->getMaterialDao()->batchDelete(['ids' => array_column($syncMaterials, 'id')]);
+        $this->getCourseMaterialService()->batchDeleteMaterials($syncMaterials);
     }
+
+    public function onCourseMaterialCreate(Event $event)
+    {
+        $material = $event->getSubject();
+        if ($material['copyId'] > 0) {
+            return;
+        }
+        $activities = $this->getActivityService()->findActivitiesByCopyId($material['lessonId']);
+        if (empty($activities)) {
+            return;
+        }
+        $newMaterials = [];
+        foreach ($activities as $activity) {
+
+            $newMaterial = ArrayToolkit::parts($material, ['title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'source', 'userId', 'type']);
+            $newMaterial['lessonId'] = $activity['id'];
+            $newMaterial['courseId'] = $activity['fromCourseId'];
+            $newMaterial['copyId'] = $material['id'];
+            $newMaterial['courseSetId'] = $activity['fromCourseSetId'];
+
+            $newMaterials[] = $newMaterial;
+        }
+
+        $this->getCourseMaterialService()->batchCreateMaterials($newMaterials);
+    }
+
 
     protected function setCourseTeachers($course, $teachers)
     {
@@ -355,6 +382,13 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     }
 
     /**
+     * @return MaterialService
+     */
+    protected function getCourseMaterialService()
+    {
+        return $this->getBiz()->service('Course:MaterialService');
+    }
+    /**
      * @return CourseChapterDao
      */
     protected function getChapterDao()
@@ -384,5 +418,13 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getSyncService()
     {
         return $this->getBiz()->service('Sync:SyncService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }
