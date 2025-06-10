@@ -31,7 +31,7 @@ class SmsSendJob extends AbstractJob
                 }
                 $processor = SmsProcessorFactory::create($targetType);
                 $params = $processor->getSmsParams($targetId, $smsType);
-                $userIds = $processor->getSmcUserIds($targetId, $smsType, $start, self::LIMIT);
+                $userIds = $processor->searchUserIds($targetId, $smsType, $start, self::LIMIT);
                 if (empty($userIds)) {
                     return;
                 }

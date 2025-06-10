@@ -5,80 +5,11 @@ namespace Biz\Sms\SmsProcessor;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\StringToolkit;
-use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\OpenCourseService;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Router;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
 {
-    public function getUrls($targetId, $smsType)
-    {
-        $lesson = $this->getOpenCourseService()->getLesson($targetId);
-        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
-        $count = 0;
-
-        $count = $this->getOpenCourseService()->countMembers(array('courseId' => $course['id']));
-
-        global $kernel;
-        $api = CloudAPIFactory::create('root');
-
-        $site = $this->getSettingService()->get('site');
-        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
-        for ($i = 0; $i <= intval($count / 1000); ++$i) {
-            $urls[$i] = empty($url) ? $kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId), UrlGeneratorInterface::ABSOLUTE_URL) : $url.$kernel->getContainer()->get('router')->generate('edu_cloud_sms_send_callback', array('targetType' => 'liveOpenLesson', 'targetId' => $targetId));
-            $urls[$i] .= '?index='.($i * 1000);
-            $urls[$i] .= '&smsType='.$smsType;
-            $sign = $this->getSignEncoder()->encodePassword($urls[$i], $api->getAccessKey());
-            $sign = rawurlencode($sign);
-            $urls[$i] .= '&sign='.$sign;
-        }
-
-        return array('count' => $count, 'urls' => $urls);
-    }
-
-    public function getSmsInfo($targetId, $index, $smsType)
-    {
-        $lesson = $this->getOpenCourseService()->getLesson($targetId);
-
-        if (empty($lesson)) {
-            throw OpenCourseException::NOTFOUND_LESSON();
-        }
-
-        global $kernel;
-        $site = $this->getSettingService()->get('site');
-        $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
-
-        $originUrl = empty($url) ? $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']), UrlGeneratorInterface::ABSOLUTE_URL) : $url.$kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']));
-
-        $shortUrl = SmsToolkit::getShortLink($originUrl);
-        $url = empty($shortUrl) ? $originUrl : $shortUrl;
-        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
-        $to = '';
-
-        $students = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime' => 'Desc'), $index, 1000);
-
-        $to = array_filter(ArrayToolkit::column($students, 'mobile'));
-        $to = implode(',', $to);
-
-        $parameters['lesson_title'] = '';
-
-        if ('liveOpen' == $lesson['type']) {
-            $parameters['startTime'] = date('Y-m-d H:i:s', $lesson['startTime']);
-        }
-
-        $course['title'] = StringToolkit::cutter($course['title'], 20, 15, 4);
-        $parameters['course_title'] = '直播公开课：《'.$course['title'].'》';
-
-        $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
-
-        $parameters['url'] = $url.' ';
-
-        return array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters);
-    }
-
     public function getSmsParams($targetId, $smsType)
     {
         $lesson = $this->getOpenCourseService()->getLesson($targetId);
@@ -103,11 +34,7 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         $site = $this->getSettingService()->get('site');
         $url = empty($site['url']) ? $site['url'] : rtrim($site['url'], ' \/');
 
-        $referenceType = UrlGeneratorInterface::ABSOLUTE_URL;
-        if (!empty($url)) {
-            $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH;
-        }
-        $originUrl = $kernel->getContainer()->get('router')->generate('open_course_show', ['courseId' => $lesson['courseId']], $referenceType);
+        $originUrl = $url . $kernel->getContainer()->get('router')->generate('open_course_show', ['courseId' => $lesson['courseId']]);
 
         $shortUrl = SmsToolkit::getShortLink($originUrl);
         $url = empty($shortUrl) ? $originUrl : $shortUrl;
@@ -117,7 +44,7 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         return $parameters;
     }
 
-    public function getSmcUserIds($targetId, $smsType, $start, $limit)
+    public function searchUserIds($targetId, $smsType, $start, $limit)
     {
         $lesson = $this->getOpenCourseService()->getLesson($targetId);
 
@@ -128,23 +55,9 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
         if (empty($course)) {
             throw OpenCourseException::NOTFOUND_OPENCOURSE();
         }
-        $students = $this->getOpenCourseService()->searchMembers(['courseId' => $course['id']], ['createdTime' => 'ASC'], $start, 1000, ['userId']);
+        $students = $this->getOpenCourseService()->searchMembers(['courseId' => $course['id'], 'role' => 'student'], ['createdTime' => 'ASC'], $start, $limit, ['userId']);
 
         return ArrayToolkit::column($students, 'userId');
-    }
-
-    public function getSmsUserCount($targetId, $smsType)
-    {
-        $lesson = $this->getOpenCourseService()->getLesson($targetId);
-
-        if (empty($lesson)) {
-            throw OpenCourseException::NOTFOUND_LESSON();
-        }
-        $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
-        if (empty($course)) {
-            throw OpenCourseException::NOTFOUND_OPENCOURSE();
-        }
-        return $this->getOpenCourseService()->countMembers(['courseId' => $course['id']]);
     }
 
     protected function getSettingService()
@@ -158,10 +71,5 @@ class LiveOpenLessonSmsProcessor extends BaseSmsProcessor
     protected function getOpenCourseService()
     {
         return $this->getBiz()->service('OpenCourse:OpenCourseService');
-    }
-
-    protected function getSignEncoder()
-    {
-        return new MessageDigestPasswordEncoder('sha256');
     }
 }
