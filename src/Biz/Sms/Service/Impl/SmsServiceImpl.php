@@ -237,6 +237,12 @@ class SmsServiceImpl extends BaseService implements SmsService
             case 'sms_coin_buy_notify':
                 $smsTag = SmsScenes::VIRTUAL_COIN_RECEIPT;
                 break;
+            case 'sms_live_play_one_day':
+                $smsTag = SmsScenes::ONE_DAY_LIVE_START;
+                break;
+            case 'sms_live_play_one_hour':
+                $smsTag = SmsScenes::ONE_HOUR_LIVE_START;
+                break;
             default:
                 $smsTag = '';
                 break;

@@ -149,31 +149,6 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(['error' => 'accessKey error!']);
     }
 
-    public function smsCallBackAction(Request $request, $targetType, $targetId)
-    {
-        $index = $request->query->get('index');
-        $smsType = $request->query->get('smsType');
-        $originSign = rawurldecode($request->query->get('sign'));
-
-        $url = $this->setting('site.url', '');
-        $url = empty($url) ? $url : rtrim($url, ' \/');
-        $url = empty($url) ? $this->generateUrl('edu_cloud_sms_send_callback', ['targetType' => $targetType, 'targetId' => $targetId], UrlGeneratorInterface::ABSOLUTE_URL) : $url.$this->generateUrl('edu_cloud_sms_send_callback', ['targetType' => $targetType, 'targetId' => $targetId]);
-        $url .= '?index='.$index.'&smsType='.$smsType;
-        $api = CloudAPIFactory::create('leaf');
-        $sign = $this->getSignEncoder()->encodePassword($url, $api->getAccessKey());
-
-        if ($originSign != $sign) {
-            return $this->createJsonResponse(['error' => 'sign error']);
-        }
-
-        $processor = SmsProcessorFactory::create($targetType);
-
-        $smsInfo = $processor->getSmsInfo($targetId, $index, $smsType);
-        $this->getLogService()->info('sms', 'sms-callback', 'url: '.$url, $smsInfo);
-
-        return $this->createJsonResponse($smsInfo);
-    }
-
     public function searchCallBackAction(Request $request)
     {
         $originSign = rawurldecode($request->query->get('sign'));
