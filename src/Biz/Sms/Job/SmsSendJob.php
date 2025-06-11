@@ -18,32 +18,32 @@ class SmsSendJob extends AbstractJob
     {
         $args = $this->args;
         $smsType = $args['smsType'];
-        $dayIsOpen = $this->getSmsService()->isOpen($smsType);
 
-        if ($dayIsOpen) {
-            try {
-                $targetType = $args['targetType'];
-                $targetId = $args['targetId'];
-                $start = $args['start'] ?? 0;
-                $templateId = $this->getSmsTemplateId($smsType);
-                if (empty($templateId)) {
-                    throw new \Exception("短信模板不存在 {$smsType}");
-                }
-                $processor = SmsProcessorFactory::create($targetType);
-                $params = $processor->getSmsParams($targetId, $smsType);
-                $userIds = $processor->searchUserIds($targetId, $smsType, $start, self::LIMIT);
-                if (empty($userIds)) {
-                    return;
-                }
-                $this->getSmsService()->smsSend($smsType, $userIds, $templateId, $params);
-                if (count($userIds) >= self::LIMIT) {
-                    $start += self::LIMIT;
-                    $this->registerNextJob($smsType, $targetId, $targetType, $start);
-                }
-
-            } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, $smsType, "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}, start:{$start}", ['error' => $e->getMessage()]);
+        if (!$this->getSmsService()->isOpen($smsType)) {
+            return;
+        }
+        try {
+            $targetType = $args['targetType'];
+            $targetId = $args['targetId'];
+            $start = $args['start'] ?? 0;
+            $templateId = $this->getSmsTemplateId($smsType);
+            if (empty($templateId)) {
+                throw new \Exception("短信模板不存在 {$smsType}");
             }
+            $processor = SmsProcessorFactory::create($targetType);
+            $params = $processor->getSmsParams($targetId, $smsType);
+            $userIds = $processor->searchUserIds($targetId, $smsType, $start, self::LIMIT);
+            if (empty($userIds)) {
+                return;
+            }
+            $this->getSmsService()->smsSend($smsType, $userIds, $templateId, $params);
+            if (count($userIds) >= self::LIMIT) {
+                $start += self::LIMIT;
+                $this->registerNextJob($smsType, $targetId, $targetType, $start);
+            }
+
+        } catch (\Exception $e) {
+            $this->getLogService()->error(AppLoggerConstant::SMS, $smsType, "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}, start:{$start}", ['error' => $e->getMessage()]);
         }
     }
 
