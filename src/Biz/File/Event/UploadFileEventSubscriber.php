@@ -196,32 +196,19 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onMaterialBatchCreate(Event $event)
     {
         $materials = $event->getSubject();
-        $materials = array_filter($materials, function($material) {
-            return 'coursematerial' != $material['source'] || 0 != $material['courseId'] || 0 != $material['lessonId'];
-        });
         if (empty($materials)) {
             return;
         }
 
-        $fileWaveMap = [];
-        foreach ($materials as $material) {
-            if (!isset($fileWaveMap[$material['fileId']])) {
-                $fileWaveMap[$material['fileId']] = 0;
-            }
-            $fileWaveMap[$material['fileId']] += 1;
-        }
-
-        foreach ($fileWaveMap as $fileId => $wave) {
-            $this->getUploadFileService()->waveUsedCount($fileId, $wave);
+        $fileIds = array_values(array_unique(array_column($materials, 'fileId')));
+        foreach ($fileIds as $fileId) {
+            $this->getUploadFileService()->updateUsedCount($fileId);
         }
     }
 
     public function onMaterialBatchDelete(Event $event)
     {
         $materials = $event->getSubject();
-        $materials = array_filter($materials, function($material) {
-            return 'coursematerial' != $material['source'] || 0 != $material['courseId'] || 0 != $material['lessonId'];
-        });
         if (empty($materials)) {
             return;
         }

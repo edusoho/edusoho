@@ -280,25 +280,86 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($material['copyId'] > 0) {
             return;
         }
-        $activities = $this->getActivityService()->findActivitiesByCopyId($material['lessonId']);
-        if (empty($activities)) {
+
+        if ($material['lessonId'] != 0) {
+            $newMaterials = $this->buildMaterialsByParentActivityId($material);
+        } else if ($material['courseId'] != 0) {
+            $newMaterials = $this->buildMaterialsByParentCourseId($material);
+        } else if ($material['courseSetId'] != 0) {
+            $newMaterials = $this->buildMaterialsByParentCourseSetId($material);
+        } else {
             return;
-        }
-        $newMaterials = [];
-        foreach ($activities as $activity) {
-
-            $newMaterial = ArrayToolkit::parts($material, ['title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'source', 'userId', 'type']);
-            $newMaterial['lessonId'] = $activity['id'];
-            $newMaterial['courseId'] = $activity['fromCourseId'];
-            $newMaterial['copyId'] = $material['id'];
-            $newMaterial['courseSetId'] = $activity['fromCourseSetId'];
-
-            $newMaterials[] = $newMaterial;
         }
 
         $this->getCourseMaterialService()->batchCreateMaterials($newMaterials);
     }
 
+    protected function buildMaterialsByParentActivityId($parentMaterial): array
+    {
+        $activities = $this->getActivityService()->findActivitiesByCopyId($parentMaterial['lessonId']);
+        if (empty($activities)) {
+            return [];
+        }
+        $courseSets = $this->getCourseSetDao()->search(['ids' => array_column($activities, 'fromCourseSetId'), 'locked' => 1], [], 0, PHP_INT_MAX);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $newMaterials = [];
+        foreach ($activities as $activity) {
+            if (!isset($courseSets[$activity['fromCourseSetId']])) {
+                continue;
+            }
+            $newMaterial = ArrayToolkit::parts($parentMaterial, ['title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'source', 'userId', 'type']);
+            $newMaterial['lessonId'] = $activity['id'];
+            $newMaterial['courseId'] = $activity['fromCourseId'];
+            $newMaterial['copyId'] = $parentMaterial['id'];
+            $newMaterial['courseSetId'] = $activity['fromCourseSetId'];
+
+            $newMaterials[] = $newMaterial;
+        }
+
+        return $newMaterials;
+    }
+
+    protected function buildMaterialsByParentCourseId($parentMaterial): array
+    {
+        $courses = $this->getCourseDao()->findCoursesByParentIdAndLocked($parentMaterial['courseId'], 1);
+        if (empty($courses)) {
+            return [];
+        }
+        $newMaterials = [];
+        foreach ($courses as $course) {
+
+            $newMaterial = ArrayToolkit::parts($parentMaterial, ['title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'source', 'userId', 'type']);
+            $newMaterial['lessonId'] = 0;
+            $newMaterial['courseId'] = $course['id'];
+            $newMaterial['copyId'] = $parentMaterial['id'];
+            $newMaterial['courseSetId'] = $course['courseSetId'];
+
+            $newMaterials[] = $newMaterial;
+        }
+
+        return $newMaterials;
+    }
+
+    protected function buildMaterialsByParentCourseSetId($parentMaterial): array
+    {
+        $courseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentMaterial['courseSetId'], 1);
+        if (empty($courseSets)) {
+            return [];
+        }
+        $newMaterials = [];
+        foreach ($courseSets as $courseSet) {
+
+            $newMaterial = ArrayToolkit::parts($parentMaterial, ['title', 'description', 'link', 'fileId', 'fileUri', 'fileMime', 'fileSize', 'source', 'userId', 'type']);
+            $newMaterial['lessonId'] = 0;
+            $newMaterial['courseId'] = 0;
+            $newMaterial['copyId'] = $parentMaterial['id'];
+            $newMaterial['courseSetId'] = $courseSet['id'];
+
+            $newMaterials[] = $newMaterial;
+        }
+
+        return $newMaterials;
+    }
 
     protected function setCourseTeachers($course, $teachers)
     {
