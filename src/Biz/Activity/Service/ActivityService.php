@@ -88,4 +88,6 @@ interface ActivityService
     public function orderAssessmentSubmitNumber($userIds, $answerSceneId);
 
     public function findVideoActivityLevelsByCourseId($courseId);
+
+    public function findActivitiesByCopyId($copyId);
 }
