@@ -113,6 +113,10 @@ abstract class BaseRegister
         if (in_array($type, ['default', 'marketing'])) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
+
+            if ($this->getUserService()->validatePassword($registration['password'])) {
+                $user['passwordUpgraded'] = 1;
+            }
         } else {
             $user['salt'] = '';
             $user['password'] = '';
