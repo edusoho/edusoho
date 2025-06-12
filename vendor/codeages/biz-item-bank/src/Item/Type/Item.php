@@ -106,7 +106,7 @@ abstract class Item
             $question['score_rule'] = [
                 'score' => $question['score'],
                 'scoreType' => empty($question['scoreType']) ? 'question':$question['scoreType'],
-                'otherScore' => empty($question['scoreType']) ? $question['score'] : $question['otherScore'],
+                'otherScore' => empty($question['otherScore']) ? 0 : $question['otherScore'],
             ];
             $question['seq'] = $seq++;
             $question['case_sensitive'] = (isset($question['case_sensitive']) && $question['case_sensitive'] == false) ? 0 : 1;
