@@ -111,7 +111,7 @@ class BaseController extends Controller
             return;
         }
 
-        $loginBindSetting = $this->getSettingService()->get('login_bind');
+        $loginBindSetting = $this->getBiz()->service('System:SettingService')->get('login_bind');
         if (!($loginBindSetting['login_strong_pwd_enable'] ?? 1)) {
             return;
         }
@@ -518,7 +518,7 @@ class BaseController extends Controller
      */
     protected function checkDragCaptchaToken(Request $request, $token)
     {
-        $enableAntiBrushCaptcha = $this->getSettingService()->node('ugc_content_audit.enable_anti_brush_captcha');
+        $enableAntiBrushCaptcha = $this->getBiz()->service('System:SettingService')->node('ugc_content_audit.enable_anti_brush_captcha');
         if (empty($enableAntiBrushCaptcha)) {
             return true;
         }
@@ -617,12 +617,5 @@ class BaseController extends Controller
         }
 
         return 'http';
-    }
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->getBiz()->service('System:SettingService');
     }
 }
