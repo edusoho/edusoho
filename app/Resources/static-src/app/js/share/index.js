@@ -84,7 +84,7 @@ function qzone(params) {
   var query = {};
   query.url = params.url;
   query.title = params.title;
-  query.summary = params.summary;
+  query.summary = params.summary ? params.summary.substring(0, 100) : '';
   query.desc = params.message;
   if (params.picture != '') {
     query.pics = params.picture;

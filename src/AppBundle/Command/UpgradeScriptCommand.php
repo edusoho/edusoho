@@ -30,7 +30,12 @@ class UpgradeScriptCommand extends BaseCommand
             $index = $input->getArgument('index');
         }
 
-        $this->executeScript($code, $version, $index);
+        try {
+            $this->executeScript($code, $version, $index);
+        } catch (\Exception $e) {
+            $output->writeln('<error>执行脚本失败：'.$e->getMessage().'</error>');
+            $output->writeln('<error> '. $e->getTraceAsString() .'</error>');
+        }
         $output->writeln('<info>执行脚本</info>');
 
         PluginUtil::refresh();
