@@ -331,6 +331,10 @@ class RoleServiceImpl extends BaseService implements RoleService
         $getWebRoles = $tree->find(function ($tree) {
             return 'web' === $tree->data['code'];
         });
+        $openCourseManagePermission = $tree->find(function ($tree) {
+            return 'admin_v2_open_course_manage' === $tree->data['code'];
+        });
+        $openCourseManageRoles = $openCourseManagePermission->column('code');
         $webRoles = $getWebRoles->column('code');
 
         $adminV2ForbidParentRoles = [
@@ -351,7 +355,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
         return [
             'ROLE_USER' => [],
-            'ROLE_TEACHER' => $webRoles,
+            'ROLE_TEACHER' => array_merge($webRoles, $openCourseManageRoles),
             'ROLE_ADMIN' => array_diff($superAdminV2Roles, $adminV2ForbidRoles),
             'ROLE_SUPER_ADMIN' => $superAdminV2Roles,
         ];
