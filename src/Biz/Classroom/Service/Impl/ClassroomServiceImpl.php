@@ -1881,7 +1881,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      *
      * @return bool
      */
-    public function canManageClassroom($id, $permission = 'admin_classroom_content_manage')
+    public function canManageClassroom($id, $permission = 'admin_v2_classroom_content_manage')
     {
         $classroom = $this->getClassroom($id);
 

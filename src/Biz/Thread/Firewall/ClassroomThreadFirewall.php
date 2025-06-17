@@ -103,7 +103,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     protected function hasManagePermission($resource, $ownerCanManage = false)
     {
-        if ($this->getClassroomService()->canManageClassroom($resource['targetId'], 'admin_course_thread')) {
+        if ($this->getClassroomService()->canManageClassroom($resource['targetId'], 'admin_v2_course_thread')) {
             return true;
         }
 
