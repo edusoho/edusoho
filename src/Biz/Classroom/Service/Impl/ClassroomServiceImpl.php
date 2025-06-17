@@ -764,7 +764,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if ('published' === $classroom['status']) {
             $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
         }
-        $this->tryManageClassroom($id, 'admin_classroom_delete');
+        $this->tryManageClassroom($id, 'admin_v2_classroom_delete');
         if ('error' === $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom')) {
             throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
         }
@@ -847,7 +847,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function publishClassroom($id)
     {
-        $this->tryManageClassroom($id, 'admin_classroom_open');
+        $this->tryManageClassroom($id, 'admin_v2_classroom_open');
         $classroom = $this->getClassroom($id);
         if (0 == $classroom['courseNum']) {
             $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
@@ -865,7 +865,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function closeClassroom($id)
     {
-        $this->tryManageClassroom($id, 'admin_classroom_close');
+        $this->tryManageClassroom($id, 'admin_v2_classroom_close');
         try {
             $this->beginTransaction();
             $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
