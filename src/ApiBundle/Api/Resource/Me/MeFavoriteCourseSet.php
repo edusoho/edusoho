@@ -5,7 +5,10 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\MemberService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Service\GoodsService;
@@ -69,6 +72,28 @@ class MeFavoriteCourseSet extends AbstractResource
         return ['success' => $success];
     }
 
+    private function appendAttrAndOrder($courses)
+    {
+        $members = $this->getCourseMemberService()->searchMembers([
+            'courseIds' => array_column($courses, 'id'),
+            'classroomId' => 0,
+            'joinedType' => 'course',
+            'role' => 'student',
+            'userId' => $this->getCurrentUser()->getId(),
+        ], [], 0, PHP_INT_MAX);
+
+        $members = ArrayToolkit::index($members, 'courseId');
+        foreach ($courses as &$course) {
+            $member = $members[$course['id']] ?? [];
+            $course['learnedNum'] = $member['learnedNum'] ?? 0;
+            $course['learnedCompulsoryTaskNum'] = $member['learnedCompulsoryTaskNum'] ?? 0;
+            $course['publishedTaskNum'] = $course['compulsoryTaskNum'] ?? 0;
+            $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
+        }
+
+        return $courses;
+    }
+
     /**
      * @return CourseService
      */
@@ -101,5 +126,21 @@ class MeFavoriteCourseSet extends AbstractResource
     protected function getGoodsService()
     {
         return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
+    {
+        return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    private function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 }

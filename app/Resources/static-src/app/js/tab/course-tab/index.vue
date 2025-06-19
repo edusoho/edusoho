@@ -27,7 +27,7 @@
         <CourseList :courseLists="courseLists" :tabValue="tabValue"></CourseList>
       </a-tab-pane>
       <a-tab-pane key="favorite" tab="收藏">
-        <CourseList :courseLists="courseLists"></CourseList>
+        <CourseSetList :courseSets="courseLists"></CourseSetList>
       </a-tab-pane>
     </a-tabs>
     <a-pagination v-if="total>pageSize" :defaultPageSize="pageSize" v-model="current" @change="onChange" :total="total" />
@@ -36,6 +36,7 @@
 </template>
 <script>
 import CourseList from './CourseList.vue';
+import CourseSetList from './CourseSetList.vue';
 import { Me } from 'common/vue/service/index.js';
 
 export default {
@@ -50,8 +51,9 @@ export default {
     }
   },
   components: {
-    CourseList
-        },
+    CourseList,
+    CourseSetList
+  },
   async mounted(){
     const params = this.getParams(window.location.href)
     
