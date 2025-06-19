@@ -408,6 +408,9 @@ class WebExtension extends \Twig_Extension
 
     public function isVipRight($goodsId, $targetType)
     {
+        if (!$this->isPluginInstalled('Vip')) {
+            return 0;
+        }
         $goods = $this->getGoodsService()->getGoods($goodsId);
         $product = $this->getProductService()->getProduct($goods['productId']);
         if ('classroom' == $targetType) {
