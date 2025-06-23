@@ -22,7 +22,7 @@ export default class ExportSecondaryVerification {
 
       try {
         const query = new URLSearchParams(params).toString();
-        const url = `${this.requestUrlBase}?${query}`;
+        const url = `${this.requestUrlBase}&${query}`;
         const verificationResponse = await fetch(url);
 
         if (!verificationResponse.ok) {
