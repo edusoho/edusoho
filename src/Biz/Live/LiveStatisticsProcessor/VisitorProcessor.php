@@ -63,7 +63,7 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
                 }
 
                 $result = $this->handleUserResult($result, $user);
-                $totalLearnTime += ($user['leaveTime'] - $user['joinTime']);
+                $totalLearnTime += ($user['leaveTime'] > $user['joinTime'] ? $user['leaveTime'] - $user['joinTime'] : 0);
             }
         } catch (ServiceException $e) {
             $this->getLogService()->info('course', 'live', 'handle visitor data error: ', json_encode($data));
@@ -117,15 +117,15 @@ class VisitorProcessor extends AbstractLiveStatisticsProcessor
                 'nickname' => $user['nickname'],
                 'firstJoin' => $user['joinTime'],
                 'lastLeave' => $user['leaveTime'],
-                'learnTime' => $user['leaveTime'] - $user['joinTime'],
+                'learnTime' => $user['leaveTime'] > $user['joinTime'] ? $user['leaveTime'] - $user['joinTime'] : 0,
             ];
         } else {
             $result[$userId] = [
                 'userId' => $userId,
                 'nickname' => $user['nickname'],
-                'firstJoin' => $result[$userId]['firstJoin'] > $user['joinTime'] ? $user['joinTime'] : $result[$userId]['firstJoin'],
-                'lastLeave' => $result[$userId]['lastLeave'] > $user['leaveTime'] ? $result[$userId]['lastLeave'] : $user['leaveTime'],
-                'learnTime' => $result[$userId]['learnTime'] + ($user['leaveTime'] - $user['joinTime']),
+                'firstJoin' => min($result[$userId]['firstJoin'], $user['joinTime']),
+                'lastLeave' => max($result[$userId]['lastLeave'], $user['leaveTime']),
+                'learnTime' => $result[$userId]['learnTime'] + ($user['leaveTime'] > $user['joinTime'] ? $user['leaveTime'] - $user['joinTime'] : 0),
             ];
         }
 

@@ -291,7 +291,19 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             return [];
         }
 
-        return $this->getMaterialDao()->batchCreate($materials);
+        $this->getMaterialDao()->batchCreate($materials);
+        $this->dispatchEvent('course.material.batchCreate', new Event($materials));
+
+        return $materials;
+    }
+
+    public function batchDeleteMaterials(array $materials)
+    {
+        if (empty($materials)) {
+            return;
+        }
+        $this->getMaterialDao()->batchDelete(['ids' => array_column($materials, 'id')]);
+        $this->dispatchEvent('course.material.batchDelete', new Event($materials));
     }
 
     private function _getMaterialFields($material)

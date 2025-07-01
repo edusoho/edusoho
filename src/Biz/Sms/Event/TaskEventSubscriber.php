@@ -121,21 +121,17 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 $smsType = 'sms_normal_lesson_publish';
             }
 
-            if ($this->getSmsService()->isOpen($smsType)) {
-                $processor = SmsProcessorFactory::create('task');
-                $returnUrls = $processor->getUrls($task['id'], $smsType);
-                $callbackUrls = $returnUrls['urls'];
-                $count = ceil($returnUrls['count'] / 1000);
-                if (0 == $count) {
-                    return;
-                }
-                try {
-                    $api = CloudAPIFactory::create('root');
-                    $api->post('/sms/sendBatch', ['total' => $count, 'callbackUrls' => $callbackUrls]);
-                } catch (\Exception $e) {
-                    throw SmsException::FAILED_SEND();
-                }
-            }
+            $this->createJob([
+                'name' => 'sendTasksPublishSms_task_'.$task['id'],
+                'expression' => time(),
+                'class' => 'Biz\Sms\Job\SmsSendJob',
+                'misfire_threshold' => 60 * 60,
+                'args' => [
+                    'targetType' => 'task',
+                    'targetId' => $task['id'],
+                    'smsType' => $smsType,
+                ],
+            ]);
         }
     }
 
@@ -149,11 +145,12 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $startJob = [
                 'name' => 'SmsSendOneDayJob_task_'.$task['id'],
                 'expression' => intval($task['startTime'] - 24 * 60 * 60),
-                'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
+                'class' => 'Biz\Sms\Job\SmsSendJob',
                 'misfire_threshold' => 60 * 60,
                 'args' => [
                     'targetType' => 'task',
                     'targetId' => $task['id'],
+                    'smsType' => 'sms_live_play_one_day',
                 ],
             ];
             $this->createJob($startJob);
@@ -164,11 +161,12 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $startJob = [
                 'name' => 'SmsSendOneHourJob_task_'.$task['id'],
                 'expression' => intval($task['startTime'] - 60 * 60),
-                'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
+                'class' => 'Biz\Sms\Job\SmsSendJob',
                 'misfire_threshold' => 60 * 10,
                 'args' => [
                     'targetType' => 'task',
                     'targetId' => $task['id'],
+                    'smsType' => 'sms_live_play_one_hour',
                 ],
             ];
             $this->createJob($startJob);

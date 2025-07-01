@@ -50,11 +50,12 @@ class TaskEventSubscriberTest extends BaseTestCase
                     'withParams' => array(array(
                         'name' => 'SmsSendOneDayJob_task_123',
                         'expression' => intval($lessonStartTime - 24 * 60 * 60),
-                        'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
+                        'class' => 'Biz\Sms\Job\SmsSendJob',
                         'misfire_threshold' => 60 * 60,
                         'args' => array(
                             'targetType' => 'task',
                             'targetId' => 123,
+                            'smsType' => 'sms_live_play_one_day',
                         ),
                     )),
                 ),
@@ -63,11 +64,12 @@ class TaskEventSubscriberTest extends BaseTestCase
                     'withParams' => array(array(
                         'name' => 'SmsSendOneHourJob_task_123',
                         'expression' => intval($lessonStartTime - 60 * 60),
-                        'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
+                        'class' => 'Biz\Sms\Job\SmsSendJob',
                         'misfire_threshold' => 60 * 10,
                         'args' => array(
                             'targetType' => 'task',
                             'targetId' => 123,
+                            'smsType' => 'sms_live_play_one_hour',
                         ),
                     )),
                 ),

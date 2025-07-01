@@ -64,11 +64,12 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
             $job = array(
                 'name' => 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id'],
                 'expression' => intval($lesson['startTime'] - 24 * 60 * 60),
-                'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
+                'class' => 'Biz\Sms\Job\SmsSendJob',
                 'misfire_threshold' => 60 * 60,
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
+                    'smsType' => 'sms_live_play_one_day',
                 ),
             );
             $this->getSchedulerService()->register($job);
@@ -79,11 +80,12 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
             $job = array(
                 'name' => 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id'],
                 'expression' => intval($lesson['startTime'] - 60 * 60),
-                'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
+                'class' => 'Biz\Sms\Job\SmsSendJob',
                 'misfire_threshold' => 60 * 10,
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
+                    'smsType' => 'sms_live_play_one_hour',
                 ),
             );
             $this->getSchedulerService()->register($job);

@@ -3,7 +3,7 @@
 namespace Tests\Unit\Sms\Job;
 
 use Biz\BaseTestCase;
-use Biz\Sms\Job\SmsSendOneDayJob;
+use Biz\Sms\Job\SmsSendJob;
 use AppBundle\Common\ReflectionUtils;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -50,8 +50,8 @@ class SmsSendOneDayJobTest extends BaseTestCase
         ReflectionUtils::setStaticProperty(new SmsProcessorFactory(), 'mockedProcessor', $mockedProcessor);
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockedApi);
 
-        $job = new SmsSendOneDayJob(array(), $this->biz);
-        $job->args = array('targetType' => 'LiveOpenLesson', 'targetId' => 112);
+        $job = new SmsSendJob(array(), $this->biz);
+        $job->args = array('targetType' => 'LiveOpenLesson', 'targetId' => 112, 'smsType' => 'sms_live_play_one_day');
         $job->execute();
 
         $smsService->shouldHaveReceived('isOpen')->times(1);
@@ -86,8 +86,8 @@ class SmsSendOneDayJobTest extends BaseTestCase
             )
         );
 
-        $job = new SmsSendOneDayJob(array(), $this->biz);
-        $job->args = array('targetType' => '', 'targetId' => 112);
+        $job = new SmsSendJob(array(), $this->biz);
+        $job->args = array('targetType' => '', 'targetId' => 112, 'smsType' => 'sms_live_play_one_day');
         $job->execute();
 
         $smsService->shouldHaveReceived('isOpen')->times(1);
