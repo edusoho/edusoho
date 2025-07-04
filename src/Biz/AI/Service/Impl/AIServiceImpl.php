@@ -46,12 +46,16 @@ class AIServiceImpl extends BaseService implements AIService
             }
             $parsed = explode("\n", $buffer);
             $buffer = '';
-            if (substr($parsed[1], 6) == 'workflow.message') {
-                $parsedData = json_decode(substr($parsed[2], 5), true);
-                echo 'data:'.json_encode(['event' => 'message', 'answer' => $parsedData['content']], JSON_UNESCAPED_UNICODE)."\n\n";
-            }
-            if (substr($parsed[1], 6) == 'workflow.finished') {
-                echo 'data:'.json_encode(['event' => 'message_end'])."\n\n";
+            foreach ($parsed as $item) {
+                if ('data:' == substr($item, 0, 5)) {
+                    $parsedData = json_decode(substr($item, 5), true);
+                    if (!empty($parsedData['content'])) {
+                        echo 'data:'.json_encode(['event' => 'message', 'answer' => $parsedData['content']], JSON_UNESCAPED_UNICODE)."\n\n";
+                    }
+                }
+                if ('event:workflow.finished' == $item) {
+                    echo 'data:'.json_encode(['event' => 'message_end'])."\n\n";
+                }
             }
             flush();
         });
