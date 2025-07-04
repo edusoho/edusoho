@@ -11,6 +11,7 @@
 /app/config/sentry.yml
 /app/config/session_redis.yml
 /app/config/proxy.php
+/web/activities/scorm
 /web/themes/*
 /web/assets/libs/js-sdk/
 !/web/themes/autumn
@@ -79,3 +80,4 @@ yarn-error.log
 .env
 docker-compose.yml
 docker/
+.cursor
