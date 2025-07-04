@@ -21,6 +21,9 @@ class MobileMaskServiceImpl extends BaseService implements MobileMaskService
 
     public function encryptMobile($mobile)
     {
+        if (!$this->getCurrentUser()->isLogin()) {
+            return '';
+        }
         $plain = "{$mobile}|{$this->getCurrentUser()->getId()}|{$this->getRequest()->getPathInfo()}";
 
         return base64_encode($this->getCrypt()->encrypt($plain));
