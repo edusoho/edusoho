@@ -106,36 +106,6 @@ class UserPassword extends AbstractResource
         return $user;
     }
 
-    private function resetPasswordByPassword($uuid, $request)
-    {
-        $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, [
-            'oldPassword',
-            'encryptPassword',
-        ])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-
-        $user = $this->getUserService()->getUserByUUID($uuid);
-        if (!$user) {
-            throw UserException::NOTFOUND_USER();
-        }
-
-        if (!$this->getUserService()->verifyPassword($user['id'], $fields['oldPassword'])) {
-            throw UserException::PASSWORD_ERROR();
-        }
-
-        $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encryptPassword']), $request->getHttpRequest()->getHost());
-        if (!SimpleValidator::highPassword($password)) {
-            throw CommonException::ERROR_PARAMETER();
-        }
-
-        $this->getUserService()->changePassword($user['id'], $password);
-        $this->getLogService()->info('user', 'password-reset', "{$user['id']}通过旧密码重置了密码。");
-
-        return $user;
-    }
-
     protected function getHttpHost()
     {
         return $this->getSchema()."://{$_SERVER['HTTP_HOST']}";
