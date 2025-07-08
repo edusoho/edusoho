@@ -73,6 +73,14 @@ class AgentWorkerController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    protected function createJsonResponse($data = null, $status = 200, $headers = [])
+    {
+        $jsonResponse = parent::createJsonResponse($data, $status, $headers);
+        $jsonResponse->setEncodingOptions($jsonResponse->getEncodingOptions() | JSON_UNESCAPED_UNICODE);
+
+        return $jsonResponse;
+    }
+
     /**
      * @param $workflow
      * @return Workflow
