@@ -1,5 +1,7 @@
 <?php
+
 namespace ApiBundle\Api\Resource\UserResetPassword;
+
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -32,7 +34,7 @@ class UserResetPassword extends AbstractResource
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encryptPassword']), $request->getHttpRequest()->getHost());
 
         if (!SimpleValidator::highPassword($password)) {
-            throw CommonException::ERROR_PARAMETER();
+            throw UserException::PASSWORD_REQUIRE_HIGH_LEVEL();
         }
 
         $this->getUserService()->changePassword($user['id'], $password);

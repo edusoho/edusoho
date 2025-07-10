@@ -10732,6 +10732,8 @@ exception.user.user_is_destroyed: 用户已注销
 exception.user.email_password_error: 邮箱密码错误
 exception.user.already_bind: 用户已绑定
 exception.user.password_require_upgrade: 检测到您当前密码等级较低，请重新设置密码
+exception.user.password_require_high_level: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
+exception.user.original_password_error: 您输入的原密码不正确，请重新输入
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在

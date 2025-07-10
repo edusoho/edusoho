@@ -9406,6 +9406,8 @@ exception.user.user_is_destroyed: User is destroyed
 exception.user.email_password_error: The email password is incorrect
 exception.user.already_bind: The user is already bound
 exception.user.password_require_upgrade: 'Your current password level is detected to be lower, please reset the password'
+exception.user.password_require_high_level: 'Please set a password consisting of 8-32 characters, including uppercase and lowercase letters, numbers, and symbols'
+exception.user.original_password_error: 'The original password you entered is incorrect. Please re-enter it'
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
