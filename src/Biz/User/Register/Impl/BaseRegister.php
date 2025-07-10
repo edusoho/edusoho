@@ -91,7 +91,7 @@ abstract class BaseRegister
         }
 
         if (!empty($registration['password']) && !$this->getUserService()->validatePassword($registration['password'])) {
-            throw UserException::PASSWORD_INVALID();
+            throw UserException::PASSWORD_REQUIRE_HIGH_LEVEL();
         }
     }
 
