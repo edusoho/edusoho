@@ -1804,8 +1804,12 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $user = $this->getUserService()->getUser($userId);
         if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || in_array('ROLE_EDUCATIONAL_ADMIN', $user['roles'])) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
+            $teachers = $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
+            usort($teachers, function ($a, $b) {
+                return $a['seq'] <=> $b['seq'];
+            });
+            $teacherIds = array_column($teachers, 'userId');
+            $teacherId = array_shift($teacherIds);
 
             if ($teacherId == $userId) {
                 return 'teacher';
