@@ -63,7 +63,7 @@ class LiveNotificationJob extends AbstractNotificationJob
         $data = [
             'thing2' => ['value' => $this->plainTextByLength($task['title'], 20)],
             'date5' => ['value' => date('Y-m-d H:i', $task['startTime'])],
-            'thing15' => ['value' => empty($teacher['verifiedMobile']) ? $this->plainTextByLength($teacher['nickname'], 20) : $this->plainTextByLength($teacher['nickname'], 9).$teacher['verifiedMobile']],
+            'thing15' => ['value' => $this->plainTextByLength($teacher['nickname'], 20)],
         ];
 
         $list = [];
