@@ -708,7 +708,7 @@ class Testpaper {
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
       this.$testDuration.show();
-      this.$testDuration.text('考试时长： ' + `${diffHours}小时${diffMinutes}分${diffSeconds}秒` + '分钟');
+      this.$testDuration.text('考试时长： ' + `${diffHours}小时${diffMinutes}分${diffSeconds}秒`);
     } else {
       this.$testDuration.hide();
     }
