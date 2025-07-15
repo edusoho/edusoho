@@ -1804,14 +1804,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $user = $this->getUserService()->getUser($userId);
         if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || in_array('ROLE_EDUCATIONAL_ADMIN', $user['roles'])) {
-            $teachers = $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
-            usort($teachers, function ($a, $b) {
-                return $a['seq'] <=> $b['seq'];
-            });
-            $teacherIds = array_column($teachers, 'userId');
-            $teacherId = array_shift($teacherIds);
+            $teacher = $this->searchMembers(
+                ['courseId' => $courseId, 'role' => 'teacher'],
+                ['seq' => 'ASC'],
+                0,
+                1
+            );
 
-            if ($teacherId == $userId) {
+            if ($teacher[0]['userId'] == $userId) {
                 return 'teacher';
             } else {
                 return 'speaker';
