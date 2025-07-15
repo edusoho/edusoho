@@ -86,6 +86,7 @@ class Testpaper {
     this.$scoreItem = this.$element.find('.js-score-form-group');
     this.$rangeStartTime = $('.js-start-range')
     this.$rangeDateInput = $('.js-realTimeRange-data');
+    this.$rangeFixedTime = $('.js-fixedTime-data');
     this._init();
   }
 
@@ -169,7 +170,7 @@ class Testpaper {
       'startDate': validPeriodMode == '1' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
       locale,
     });
-    
+
     this.$rangeDateInput.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
@@ -186,17 +187,34 @@ class Testpaper {
       'startDate': validPeriodMode == '2' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
       locale,
     });
-    
+
     this.$rangeStartTime.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
+
+    this.$rangeFixedTime.daterangepicker({
+      "timePicker": true,
+      "timePicker24Hour": true,
+      "timePickerSeconds": true,
+      'autoUpdateInput':false,
+      'minDate': new Date(),
+      'endDate': validPeriodMode == '3' ? endTime != '0' ? endTime : todayTime : todayTime,
+      'startDate': validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
+      locale,
+    });
+
+    this.$rangeFixedTime.on('apply.daterangepicker', function(ev, picker) {
+      $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
+      $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
     });
   }
 
   initFormItemData() {
     const activityId = $('#activityId').val()
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
-    
+
     if (activityId == 0) return
 
     const startTime = $('[name=startTime]').val()
@@ -289,7 +307,7 @@ class Testpaper {
       $(this).height(scrollHeight);
     });
     $customCommentTable.on('click', '.js-comment-remove', function () {
-      $(this).parent().parent().remove();  
+      $(this).parent().parent().remove();
       if($customCommentTable.find('tr').length == 1) {
         $customCommentTable.addClass('hidden')
       }
@@ -643,18 +661,27 @@ class Testpaper {
     const $this = $(event.currentTarget);
 
     if ($this.val() == 0) {
+      this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
-      $('.js-realTimeRange-data').attr('type', 'hidden');
+      this.$rangeFixedTime.attr('type', 'hidden');
     }
 
     if ($this.val() == 1) {
-      $('.js-realTimeRange-data').attr('type', 'test');
+      this.$rangeDateInput.attr('type', 'test');
       this.$rangeStartTime.attr('type', 'hidden');
+      this.$rangeFixedTime.attr('type', 'hidden');
     }
 
     if ($this.val() == 2) {
+      this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'test');
-      $('.js-realTimeRange-data').attr('type', 'hidden');
+      this.$rangeFixedTime.attr('type', 'hidden');
+    }
+
+    if ($this.val() == 3) {
+      this.$rangeDateInput.attr('type', 'hidden');
+      this.$rangeStartTime.attr('type', 'hidden');
+      this.$rangeFixedTime.attr('type', 'test');
     }
   }
 

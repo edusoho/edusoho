@@ -1959,7 +1959,10 @@ course.plan_task.activity_manage.testpaper.option.out.of.order: Option out of or
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 'Retry Time Interval: Start time after completion of approval. '
 course.plan_task.activity_manage.testpaper.question.disorder: After this is enabled, when students enter the exam, all the small questions within the corresponding big question will be randomly sorted
 course.plan_task.activity_manage.testpaper.option.disorder: When turned on, all multiple choice options will be randomly ordered when students enter the exam
-course.plan_task.activity_manage.testpaper.rangedate: "<div>1. unlimited: no time limit, permanent validity;</div>2. the specified date interval: there is a fixed start and end time, outside this time can not participate in the exam;<div>3. specify the start time: only specify the start time, do not specify the end time, permanently valid, not to the start time can not participate in the test;</div>"
+course.plan_task.activity_manage.testpaper.unlimited: 'Unlimited: No time limit, valid indefinitely;'
+course.plan_task.activity_manage.testpaper.realTimeRange: 'Specified date range: Set the time interval during which one can take the exam. During this interval, one can take the exam; outside of this interval, one cannot take the exam.'
+course.plan_task.activity_manage.testpaper.startTime: 'Specified start time: Only the start time is specified, no end time is specified. It is valid permanently and one cannot participate in the exam after the specified end time.'
+course.plan_task.activity_manage.testpaper.fixedTimeInterval: 'Fixed examination time: There is a fixed start and end time for the examination. One can enter the examination after the start time and automatically submit the exam paper upon the end time. The examination time cannot be changed after it begins.'
 course.plan_task.activity_manage.testpaper.comment_tips: 'Scoring interval setting rules: 1. The scoring interval includes the lower limit and upper limit of the interval. 2. When the student score is greater than or equal to the lower limit of the interval or less than the upper limit of the interval, the comments of the interval will be automatically displayed. 3. If there are overlapping score ranges, the comments ranked at the top in the comment list will be displayed first.'
 course.plan_task.activity_manage.testpaper.time: Time
 course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
@@ -1967,6 +1970,7 @@ course.plan_task.activity_manage.testpaper.mode.always: 'No limitation'
 course.plan_task.activity_manage.testpaper.mode.realTime: Specify
 course.plan_task.activity_manage.testpaper.mode.realTimeRange: Specified date interval
 course.plan_task.activity_manage.testpaper.mode.startTime: Specify start time
+course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval: Fixed time interval
 course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
