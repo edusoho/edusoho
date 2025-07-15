@@ -695,9 +695,6 @@ class Testpaper {
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
-    console.log('startTime', new Date(startTime).getTime() > 0)
-    console.log('endTime', new Date(endTime).getTime() > 0)
-    console.log('validPeriodMode', validPeriodMode == 3)
     if (new Date(startTime).getTime() > 0 && new Date(endTime).getTime() > 0 && validPeriodMode == 3) {
 
       const startDate = new Date(startTime);
