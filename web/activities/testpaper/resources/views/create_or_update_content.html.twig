@@ -238,9 +238,10 @@
           <input type="{% if activity.ext.validPeriodMode|default('0') != 2 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
             size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range testpaperTimeRange" style="width: 160px;" >
         </div>
-        <div class="col-sm-offset-2 col-sm-10 controls">
+        <div class="col-sm-offset-2 col-sm-10 controls" style="display: flex; align-items: center;">
           <input type="{% if activity.ext.validPeriodMode|default('0') != 3 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
                  id="fixedTime" name="fixedTime" size="25" class="form-control js-fixedTime-data testpaperTimeRange" autocomplete="off" style="width: 320px;">
+          <div class="js-test-duration" style="margin-left: 24px"></div>
         </div>
 			</div>
 
