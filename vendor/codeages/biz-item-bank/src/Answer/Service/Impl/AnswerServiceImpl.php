@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\Question\Service\QuestionService;
@@ -732,7 +733,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $submittedQuestions[] = [
                 'questionId' => $questionId,
                 'answer' => $questions[$questionId]['answer'],
-                'analysis' => $questions[$questionId]['analysis'],
+                'analysis' => $this->filterHtml($questions[$questionId]['analysis']),
                 'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
                 'status' => $answerQuestionReports[$questionId]['status'],
                 'response' => $answerQuestionReports[$questionId]['response'],
@@ -1401,6 +1402,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         return $totalQuestions;
+    }
+
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, AssetHelper::uriForPath($url), $text);
+        }
+
+        return $text;
     }
 
     /**
