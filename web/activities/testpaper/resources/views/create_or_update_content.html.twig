@@ -207,23 +207,24 @@
           <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper.validity.period.of.examination'|trans }}</label>
 				</div>
 				<div class="col-sm-10 controls radios">
+{#          {{ radios('validPeriodMode', {'0':'course.plan_task.activity_manage.exercise.default_difficulty'|trans, '1':'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans, '2':'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }, activity.ext.validPeriodMode|default('0') )}}#}
           <label>
-            <input type="radio" name="validPeriodMode" value="0" checked="checked">
+            <input type="radio" name="validPeriodMode" value="0" {% if activity.ext.validPeriodMode|default('0') == 0 %}checked="checked"{% endif %}">
             {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.unlimited'|trans|raw }}"></i>
           </label>
           <label>
-            <input type="radio" name="validPeriodMode" value="1">
+            <input type="radio" name="validPeriodMode" value="1" {% if activity.ext.validPeriodMode|default('0') == 1 %}checked="checked"{% endif %}">
             {{ 'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.realTimeRange'|trans|raw }}"></i>
           </label>
           <label>
-            <input type="radio" name="validPeriodMode" value="2">
+            <input type="radio" name="validPeriodMode" value="2" {% if activity.ext.validPeriodMode|default('0') == 2 %}checked="checked"{% endif %}">
             {{ 'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.startTime'|trans|raw }}"></i>
           </label>
           <label>
-            <input type="radio" name="validPeriodMode" value="3">
+            <input type="radio" name="validPeriodMode" value="3" {% if activity.ext.validPeriodMode|default('0') == 3 %}checked="checked"{% endif %}">
             {{ 'course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.fixedTimeInterval'|trans|raw }}"></i>
           </label>
