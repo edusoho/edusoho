@@ -3138,7 +3138,8 @@ user.register.password_label: 密码
 user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.low: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.register.password_label_placeholder.high: 8-32位英文、数字、符号，同时包含英文大小写、数字符号
+user.register.password_label_placeholder.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
+user.register.enter_password: 请输入密码
 user.register.invite_code_label: 邀请码
 user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
 user.register.i_agree: 我已阅读并同意
