@@ -745,6 +745,7 @@ validate.valid_enter_a_positive.integer: 请输入1至100的正整数
 validate.valid_rangetime.required: 请选择日期区间
 validate.valid_starttime.required: 请选择开始时间
 validate.valid_fixedtime.required: 请选择考试时间
+validate.valid_maxDuration: 固定考试时间不能超过10个小时
 validate.valid_endtime.required: 请选择结束时间
 validate.valid_email_input.message: 请输入有效的电子邮件地址
 validate.valid_idcard_formate.message: 请输入有效的身份证号码

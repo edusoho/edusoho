@@ -267,6 +267,24 @@ class Testpaper {
 
       return true;
     }, $.validator.format(Translator.trans('course.plan_task.activity_manage.testpaper.mock_tips4')));
+
+    $.validator.addMethod("maxDuration", function(value, element) {
+      const startTime = $('[name="startTime"]').val();
+      const endTime = $('[name="endTime"]').val();
+
+      if (!startTime || !endTime) return true;
+
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+      const diffMs = endDate - startDate;
+      const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
+
+      if (diffMs > TEN_HOURS_IN_MS) {
+        $('.js-test-duration').hide();
+      }
+
+      return diffMs <= TEN_HOURS_IN_MS;
+    }, "固定考试时间不能超过10个小时");
   }
 
   initEvent() {
@@ -362,6 +380,7 @@ class Testpaper {
         },
         rangeFixedTime: {
           required: () => $('[name="validPeriodMode"]:checked').val() == 3,
+          maxDuration: true
         },
         redoInterval: {
           required: function () {
@@ -390,7 +409,8 @@ class Testpaper {
           required: Translator.trans('validate.valid_rangetime.required')
         },
         rangeStartTime: {
-          required: Translator.trans('validate.valid_starttime.required')
+          required: Translator.trans('validate.valid_starttime.required'),
+          maxDuration: Translator.trans('validate.valid_maxDuration')
         },
         rangeFixedTime: {
           required: Translator.trans('validate.valid_fixedtime.required')
@@ -673,6 +693,9 @@ class Testpaper {
   showRedoExamination(event) {
     const $this = $(event.currentTarget);
     this.initTestDuration();
+    $('[name=startTime]').val('0')
+    $('[name=endTime]').val('0')
+    $('.redo-interval-form-group').show();
 
     if ($this.val() == 0) {
       this.$rangeDateInput.attr('type', 'hidden');
@@ -696,6 +719,11 @@ class Testpaper {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'test');
+      $('input[type="radio"][name="isLimitDoTimes"][value="0"]').prop('checked', false);
+      $('input[type="radio"][name="isLimitDoTimes"][value="1"]').prop('checked', true);
+      $('.js-examinations-num').attr('type', 'text');
+      $('input[type="text"][name="doTimes"]').val('1');
+      $('.redo-interval-form-group').hide();
     }
   }
 
@@ -703,9 +731,9 @@ class Testpaper {
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
-    console.log(new Date(startTime).getTime())
     if (startTime != 0 && endTime != 0 && validPeriodMode == 3) {
 
+      const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
       const startDate = new Date(startTime);
       const endDate = new Date(endTime);
       const diffMs = endDate - startDate;
@@ -715,7 +743,15 @@ class Testpaper {
 
       this.$testDuration.show();
       this.$testDurationTip.show();
-      this.$testDuration.text('考试时长： ' + `${diffHours}小时${diffMinutes}分${diffSeconds}秒`);
+      if (diffMs > TEN_HOURS_IN_MS) {
+        this.$testDuration
+          .text('固定考试时间不能超过10个小时')
+          .css('color', 'red');
+      } else {
+        this.$testDuration
+          .text('考试时长： ' + `${diffHours}小时${diffMinutes}分${diffSeconds}秒`)
+          .css('color', 'black');
+      }
     } else {
       this.$testDuration.hide();
       this.$testDurationTip.hide();
