@@ -60,7 +60,7 @@
 </style>
 
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
-  
+
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
       {% set testpaper = activity.ext.testpaper|default('') %}
@@ -205,10 +205,29 @@
       <div class="form-group">
 			  <div class="col-sm-2 control-label">
           <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper.validity.period.of.examination'|trans }}</label>
-          <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.rangedate'|trans|raw }}"></i>
 				</div>
 				<div class="col-sm-10 controls radios">
-				  {{ radios('validPeriodMode', {'0':'course.plan_task.activity_manage.exercise.default_difficulty'|trans, '1':'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans, '2':'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }, activity.ext.validPeriodMode|default('0') )}}
+{#          {{ radios('validPeriodMode', {'0':'course.plan_task.activity_manage.exercise.default_difficulty'|trans, '1':'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans, '2':'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }, activity.ext.validPeriodMode|default('0') )}}#}
+          <label>
+            <input type="radio" name="validPeriodMode" value="0" {% if activity.ext.validPeriodMode|default('0') == 0 %}checked="checked"{% endif %}">
+            {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.unlimited'|trans|raw }}"></i>
+          </label>
+          <label>
+            <input type="radio" name="validPeriodMode" value="1" {% if activity.ext.validPeriodMode|default('0') == 1 %}checked="checked"{% endif %}">
+            {{ 'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.realTimeRange'|trans|raw }}"></i>
+          </label>
+          <label>
+            <input type="radio" name="validPeriodMode" value="2" {% if activity.ext.validPeriodMode|default('0') == 2 %}checked="checked"{% endif %}">
+            {{ 'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.startTime'|trans|raw }}"></i>
+          </label>
+          <label>
+            <input type="radio" name="validPeriodMode" value="3" {% if activity.ext.validPeriodMode|default('0') == 3 %}checked="checked"{% endif %}">
+            {{ 'course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.fixedTimeInterval'|trans|raw }}"></i>
+          </label>
         </div>
           <input type="hidden" name="startTime" value="{% if activity.ext.answerScene.start_time|default(0) > 0 %}{{ activity.ext.answerScene.start_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
           <input type="hidden" name="endTime" value="{% if activity.ext.answerScene.end_time|default(0) > 0 %}{{ activity.ext.answerScene.end_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
@@ -219,6 +238,14 @@
         <div class="col-sm-offset-2 col-sm-10 controls">
           <input type="{% if activity.ext.validPeriodMode|default('0') != 2 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
             size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range testpaperTimeRange" style="width: 160px;" >
+        </div>
+        <div class="col-sm-offset-2 col-sm-10 controls" style="display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center;">
+            <input type="{% if activity.ext.validPeriodMode|default('0') != 3 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
+                   id="rangeFixedTime" name="rangeFixedTime" size="25" class="form-control js-fixedTime-data testpaperTimeRange" autocomplete="off" style="width: 320px; margin-right: 12px">
+            <div class="js-test-duration" style="margin-right: 12px; margin-bottom: 10px"></div>
+          </div>
+          <div class="js-test-duration-tip" style="margin-top: 5px; font-size: 14px; font-weight: 400; line-height: 22px; color: #A1A1A1;">模拟考试时长必须 > 0</div>
         </div>
 			</div>
 
@@ -263,7 +290,7 @@
       </div>
 
       <div id="advanced-settings" class="form-group" style="display: none;">
-        <div class="form-group">
+        <div class="form-group redo-interval-form-group">
           <div class="col-sm-2 control-label">
             <label for="lesson-redo-interval-field">{{ 'course.plan_task.activity_manage.testpaper.redo_interval'|trans }}</label>
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.redo_interval_tips'|trans }}"></i>
@@ -300,18 +327,6 @@
           </div>
         </div>
 
-        {# <div class="form-group starttime-check-div" {% if activity.ext.answerScene.do_times|default('0') == 0 %}style="display:none;" {% endif %}>
-          <div class="col-sm-2 control-label">
-            <label for="startTime">{{ 'course.plan_task.activity_manage.testpaper.start_time'|trans }}</label>
-          </div>
-          <div class="col-sm-10 controls radios">
-            {{ radios('testMode', {'normal':'course.plan_task.activity_manage.testpaper.mode.always'|trans, 'realTime':'course.plan_task.activity_manage.testpaper.mode.realTime'|trans}, testMode) }}
-          </div>
-          <div class="col-sm-10 mtm starttime-input pull-right {% if testMode == 'normal' %} hidden {% endif %}">
-            <input class="form-control width-input width-input-large mr0" id="startTime" type="text" name="startTime" autocomplete="off" value="{% if activity|default(null) and activity.startTime|default(0) != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}">
-          </div>
-        </div> #}
-
         {{ slot('course.task.facein.settings', {'activity': activity|default([])}) }}
         {% if is_facein_open() %}
           <div class="form-group js-enable_facein {% if examMode == '1' %}hidden{% endif %}">
@@ -321,7 +336,6 @@
               <input type="checkbox" name="abandonEnable_facein" value="{{ activity.ext.answerScene.enable_facein|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
               <input type="hidden" name="enable_facein" value="{{ activity.ext.answerScene.enable_facein|default(0) }}">
             </label>
-              {# {{ radios('enable_facein', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, activity.ext.answerScene.enable_facein|default(0)) }} #}
             </div>
           </div>
         {% endif %}

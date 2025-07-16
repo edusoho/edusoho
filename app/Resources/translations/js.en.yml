@@ -801,6 +801,8 @@ course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 validate.valid_enter_a_positive.integer: Please enter a positive integer from 1 to 100
 validate.valid_rangetime.required: Please select a date range
 validate.valid_starttime.required: Please select a start time
+validate.valid_fixedtime.required: Please select the fixed examination time
+validate.valid_maxDuration: The fixed examination duration should not exceed 10 hours
 validate.valid_endtime.required: Please select an end time
 validate.valid_email_input.message: Please enter a valid email address.
 validate.valid_idcard_formate.message: Please enter a valid ID card number.
