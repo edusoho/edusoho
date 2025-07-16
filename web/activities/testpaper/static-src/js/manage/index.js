@@ -88,6 +88,7 @@ class Testpaper {
     this.$rangeDateInput = $('.js-realTimeRange-data');
     this.$rangeFixedTime = $('.js-fixedTime-data');
     this.$testDuration = $('.js-test-duration');
+    this.$testDurationTip = $('.js-test-duration-tip');
     this._init();
   }
 
@@ -105,7 +106,7 @@ class Testpaper {
     this.initFormItemData();
     this.initAdvancedSettings();
     this.changeContentHight();
-    this.showTestDuration();
+    this.initTestDuration();
 
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
@@ -210,7 +211,7 @@ class Testpaper {
     this.$rangeFixedTime.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
-      self.showTestDuration();
+      self.initTestDuration();
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
     });
   }
@@ -226,10 +227,12 @@ class Testpaper {
     const defaultStartTime = startTime == '0' ? '' : startTime
     const defaultEndTime = endTime == '0' ? '' : endTime
 
-    if([1, 3].includes(validPeriodMode)) {
+    if(validPeriodMode == 1) {
       defaultStartTime == '' && defaultEndTime == '' ? this.$rangeDateInput.val() : this.$rangeDateInput.val(defaultStartTime + ' - ' + defaultEndTime)
     } else if(validPeriodMode == 2) {
       this.$rangeStartTime.val(defaultStartTime)
+    } else if (validPeriodMode == 3) {
+      defaultStartTime == '' && defaultEndTime == '' ? this.$rangeFixedTime.val() : this.$rangeFixedTime.val(defaultStartTime + ' - ' + defaultEndTime)
     }
   }
 
@@ -357,6 +360,9 @@ class Testpaper {
         rangeStartTime: {
           required: () => $('[name="validPeriodMode"]:checked').val() == 2,
         },
+        rangeFixedTime: {
+          required: () => $('[name="validPeriodMode"]:checked').val() == 3,
+        },
         redoInterval: {
           required: function () {
             return $('[name="isLimitDoTimes"]:checked').val() == 0;
@@ -385,6 +391,9 @@ class Testpaper {
         },
         rangeStartTime: {
           required: Translator.trans('validate.valid_starttime.required')
+        },
+        rangeFixedTime: {
+          required: Translator.trans('validate.valid_fixedtime.required')
         },
       }
     });
@@ -663,26 +672,24 @@ class Testpaper {
 
   showRedoExamination(event) {
     const $this = $(event.currentTarget);
+    this.initTestDuration();
 
     if ($this.val() == 0) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'hidden');
-      this.$testDuration.hide();
     }
 
     if ($this.val() == 1) {
       this.$rangeDateInput.attr('type', 'test');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'hidden');
-      this.$testDuration.hide();
     }
 
     if ($this.val() == 2) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'test');
       this.$rangeFixedTime.attr('type', 'hidden');
-      this.$testDuration.hide();
     }
 
     if ($this.val() == 3) {
@@ -692,11 +699,12 @@ class Testpaper {
     }
   }
 
-  showTestDuration() {
+  initTestDuration() {
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
-    if (new Date(startTime).getTime() > 0 && new Date(endTime).getTime() > 0 && validPeriodMode == 3) {
+    console.log(new Date(startTime).getTime())
+    if (startTime != 0 && endTime != 0 && validPeriodMode == 3) {
 
       const startDate = new Date(startTime);
       const endDate = new Date(endTime);
@@ -706,9 +714,11 @@ class Testpaper {
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
       this.$testDuration.show();
+      this.$testDurationTip.show();
       this.$testDuration.text('考试时长： ' + `${diffHours}小时${diffMinutes}分${diffSeconds}秒`);
     } else {
       this.$testDuration.hide();
+      this.$testDurationTip.hide();
     }
   }
 

@@ -238,10 +238,13 @@
           <input type="{% if activity.ext.validPeriodMode|default('0') != 2 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
             size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range testpaperTimeRange" style="width: 160px;" >
         </div>
-        <div class="col-sm-offset-2 col-sm-10 controls" style="display: flex; align-items: center;">
-          <input type="{% if activity.ext.validPeriodMode|default('0') != 3 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
-                 id="fixedTime" name="fixedTime" size="25" class="form-control js-fixedTime-data testpaperTimeRange" autocomplete="off" style="width: 320px;">
-          <div class="js-test-duration" style="margin-left: 24px"></div>
+        <div class="col-sm-offset-2 col-sm-10 controls" style="display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center;">
+            <input type="{% if activity.ext.validPeriodMode|default('0') != 3 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
+                   id="rangeFixedTime" name="rangeFixedTime" size="25" class="form-control js-fixedTime-data testpaperTimeRange" autocomplete="off" style="width: 320px; margin-right: 12px">
+            <div class="js-test-duration" style="margin-right: 12px; margin-bottom: 10px"></div>
+          </div>
+          <div class="js-test-duration-tip" style="margin-top: 5px; font-size: 14px; font-weight: 400; line-height: 22px; color: #A1A1A1;">模拟考试时长必须 > 0</div>
         </div>
 			</div>
 
@@ -323,18 +326,6 @@
           </div>
         </div>
 
-        {# <div class="form-group starttime-check-div" {% if activity.ext.answerScene.do_times|default('0') == 0 %}style="display:none;" {% endif %}>
-          <div class="col-sm-2 control-label">
-            <label for="startTime">{{ 'course.plan_task.activity_manage.testpaper.start_time'|trans }}</label>
-          </div>
-          <div class="col-sm-10 controls radios">
-            {{ radios('testMode', {'normal':'course.plan_task.activity_manage.testpaper.mode.always'|trans, 'realTime':'course.plan_task.activity_manage.testpaper.mode.realTime'|trans}, testMode) }}
-          </div>
-          <div class="col-sm-10 mtm starttime-input pull-right {% if testMode == 'normal' %} hidden {% endif %}">
-            <input class="form-control width-input width-input-large mr0" id="startTime" type="text" name="startTime" autocomplete="off" value="{% if activity|default(null) and activity.startTime|default(0) != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}">
-          </div>
-        </div> #}
-
         {{ slot('course.task.facein.settings', {'activity': activity|default([])}) }}
         {% if is_facein_open() %}
           <div class="form-group js-enable_facein {% if examMode == '1' %}hidden{% endif %}">
@@ -344,7 +335,6 @@
               <input type="checkbox" name="abandonEnable_facein" value="{{ activity.ext.answerScene.enable_facein|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
               <input type="hidden" name="enable_facein" value="{{ activity.ext.answerScene.enable_facein|default(0) }}">
             </label>
-              {# {{ radios('enable_facein', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, activity.ext.answerScene.enable_facein|default(0)) }} #}
             </div>
           </div>
         {% endif %}
