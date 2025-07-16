@@ -206,10 +206,11 @@ class Testpaper {
       locale,
     });
 
-    this.$rangeFixedTime.on('apply.daterangepicker', (ev, picker) =>{
+    const self = this;
+    this.$rangeFixedTime.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
-      this.showTestDuration();
+      self.showTestDuration();
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
     });
   }
