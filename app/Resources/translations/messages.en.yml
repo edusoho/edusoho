@@ -2772,7 +2772,8 @@ user.oauth.bind_other_account: 'bind other account?'
 user.oauth.bind_existed_account: 'bind existing account?'
 user.oauth.bind_error.bind_by_other: 'The account has been bound'
 user.oauth.register.nickname_placeholder: 'not more than 18 english words or 9 chinese words'
-user.oauth.register.password__placeholder: '5-20 words, number or symbol'
+user.oauth.register.password__placeholder: 'Enter your password'
+user.oauth.register.password_tip: 'Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols'
 user.oauth.register_account_by_ways: 'Use %accountType% to register'
 user.oauth.register_account.binding_account_by_email: Associated with the existing email account
 user.oauth.register_account.binding_account_by_mobile: 绑定手机号
