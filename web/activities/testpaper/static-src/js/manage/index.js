@@ -359,9 +359,9 @@ class Testpaper {
           min: 1,
         },
         length: {
-          required: true,
-          digits: true,
-          examLength: true
+          required: () => $('[name="validPeriodMode"]:checked').val() != 3,
+          digits: () => $('[name="validPeriodMode"]:checked').val() != 3,
+          examLength: () => $('[name="validPeriodMode"]:checked').val() != 3
         },
         doTimes: {
           required: () => $('[name="isLimitDoTimes"]:checked').val() == 1,
@@ -695,7 +695,11 @@ class Testpaper {
     this.initTestDuration();
     $('[name=startTime]').val('0')
     $('[name=endTime]').val('0')
-    $('.redo-interval-form-group').show();
+    $('.js-redo-interval-form-group').show();
+    $('.js-test-duration-form-group').show();
+    $('input[name=rangeTime]').val('');
+    $('input[name=rangeStartTime]').val('');
+    $('input[name=rangeFixedTime]').val('');
 
     if ($this.val() == 0) {
       this.$rangeDateInput.attr('type', 'hidden');
@@ -723,7 +727,9 @@ class Testpaper {
       $('input[type="radio"][name="isLimitDoTimes"][value="1"]').prop('checked', true);
       $('.js-examinations-num').attr('type', 'text');
       $('input[type="text"][name="doTimes"]').val('1');
-      $('.redo-interval-form-group').hide();
+      $('.js-redo-interval-form-group').hide();
+      $('.js-test-duration-form-group').hide();
+      this.initTestDuration();
     }
   }
 
