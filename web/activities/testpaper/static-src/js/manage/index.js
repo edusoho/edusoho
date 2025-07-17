@@ -729,7 +729,6 @@ class Testpaper {
       $('input[type="text"][name="doTimes"]').val('1');
       $('.js-redo-interval-form-group').hide();
       $('.js-test-duration-form-group').hide();
-      this.initTestDuration();
     }
   }
 
@@ -737,6 +736,10 @@ class Testpaper {
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
+    if (validPeriodMode == 3) {
+      $('.js-redo-interval-form-group').hide();
+      $('.js-test-duration-form-group').hide();
+    }
     if (startTime != 0 && endTime != 0 && validPeriodMode == 3) {
 
       const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
