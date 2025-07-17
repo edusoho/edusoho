@@ -44,6 +44,18 @@ class Reset {
         $target.show();
       }
     });
+
+    $('.js-reset-password-open-eye').on('click', function () {
+      $('#reset_password').attr('type', 'password');
+      $('.js-reset-password-open-eye').hide();
+      $('.js-reset-password-close-eye').show();
+    })
+
+    $('.js-reset-password-close-eye').on('click', function () {
+      $('#reset_password').attr('type', 'text');
+      $('.js-reset-password-close-eye').hide();
+      $('.js-reset-password-open-eye').show();
+    })
   }
 
   smsEvent() {
@@ -125,11 +137,11 @@ class Reset {
           smsCode: $('#sms-code').val()
         },
         data: {
-          smsToken: self.smsToken,  
+          smsToken: self.smsToken,
         },
         async: false,
         promise: false,
-      }).success((res) => { 
+      }).success((res) => {
         result = 'sms.code.success' == res ? true : false;
       });
 
