@@ -26,6 +26,7 @@ export default class Create {
     this.submitForm();
     this.removeSmsErrorTip();
     this.dragEvent();
+    this.clickEvent();
     this.initRegisterVisitIdField();
   }
 
@@ -43,10 +44,36 @@ export default class Create {
         self.dragCaptchaToken = data.token;
       });
     }
-    
+
     if (!$('.js-drag-jigsaw').hasClass('hidden')) {
       this.addDragCaptchaRules();
     }
+  }
+
+  clickEvent() {
+    $('.js-password-open-eye').on('click', function () {
+      $('#password').attr('type', 'password');
+      $('.js-password-open-eye').hide();
+      $('.js-password-close-eye').show();
+    })
+
+    $('.js-password-close-eye').on('click', function () {
+      $('#password').attr('type', 'text');
+      $('.js-password-close-eye').hide();
+      $('.js-password-open-eye').show();
+    })
+
+    $('.js-confirm-password-open-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'password');
+      $('.js-confirm-password-open-eye').hide();
+      $('.js-confirm-password-close-eye').show();
+    })
+
+    $('.js-confirm-password-close-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'text');
+      $('.js-confirm-password-close-eye').hide();
+      $('.js-confirm-password-open-eye').show();
+    })
   }
 
   initValidator() {
@@ -85,10 +112,7 @@ export default class Create {
         }
       },
       password: {
-        required: true,
-        minlength: 5,
-        maxlength: 20,
-        spaceNoSupport: true,
+        check_password_high: true,
       },
       confirmPassword: {
         required: true,
@@ -145,7 +169,13 @@ export default class Create {
         agree_policy: {
           required: Translator.trans('validate.valid_policy_input.message'),
         },
-      }
+      },
+      highlight: function(element) {
+        $(element).css('border-bottom', '1px solid red');
+        if (element.name === 'password') {
+          $('.js-password-tip').hide();
+        }
+      },
     });
   }
 
@@ -155,7 +185,7 @@ export default class Create {
     if (!this.$sendBtn.length) {
       return;
     }
-    
+
     this.$sendBtn.click((event) => {
       if (!self.smsSended) {
         //手机发送验证码，第一次时，需要验证码时，不需要提示
