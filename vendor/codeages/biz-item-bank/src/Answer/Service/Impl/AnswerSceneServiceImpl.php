@@ -69,6 +69,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'end_time' => ['integer'],
             'is_items_seq_random' => ['integer', ['in', [0, 1]]],
             'is_options_seq_random' => ['integer', ['in', [0, 1]]],
+            'valid_period_mode' => ['integer', ['in', [0, 1, 2, 3]]],
         ]);
 
         if (isset($answerScene['do_times']) && 1 == $answerScene['do_times']) {

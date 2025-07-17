@@ -71,6 +71,7 @@ class Testpaper extends Activity
                 'redo_interval' => $fields['redoInterval'],
                 'need_score' => 1,
                 'start_time' => $fields['startTime'],
+                'valid_period_mode' => 3 == $fields['validPeriodMode'] ? $fields['validPeriodMode'] : 0,
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
                 'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
                 'exam_mode' => empty($fields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $fields['exam_mode'],
@@ -131,7 +132,7 @@ class Testpaper extends Activity
             'isLimitDoTimes' => $testpaperActivity['isLimitDoTimes'],
             'customComments' => $testpaperActivity['customComments'],
         ];
-        $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
+        $newExt['validPeriodMode'] = $this->preValidPeriodMode($testpaperActivity['answerScene']);
 
         return $this->create($newExt);
     }
@@ -342,6 +343,7 @@ class Testpaper extends Activity
                 'endTime',
                 'isItemsSeqRandom',
                 'isOptionsSeqRandom',
+                'validPeriodMode',
             ]
         );
 
@@ -384,6 +386,9 @@ class Testpaper extends Activity
             $validPeriodMode = self::VALID_PERIOD_MODE_ONLY_START;
         } else {
             $validPeriodMode = self::VALID_PERIOD_MODE_NO_LIMIT;
+        }
+        if (isset($scene['valid_period_mode']) && 3 == $scene['valid_period_mode']) {
+            $validPeriodMode = $scene['valid_period_mode'];
         }
 
         return $validPeriodMode;
