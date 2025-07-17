@@ -11,6 +11,7 @@ export default class Register {
       : null;
     this.setValidateRule();
     this.dragEvent();
+    this.clickEvent();
     this.initValidator();
     this.inEventMobile();
     this.initMobileMsgVeriCodeSendBtn();
@@ -27,6 +28,20 @@ export default class Register {
     }
   }
 
+  clickEvent() {
+    $('.open-eye').on('click', function () {
+      $('#register_password').attr('type', 'password');
+      $('.open-eye').hide();
+      $('.close-eye').show();
+    })
+
+    $('.close-eye').on('click', function () {
+      $('#register_password').attr('type', 'text');
+      $('.close-eye').hide();
+      $('.open-eye').show();
+    })
+  }
+
   setValidateRule() {
     $.validator.addMethod(
       'spaceNoSupport',
@@ -39,7 +54,15 @@ export default class Register {
 
   initValidator() {
     let self = this;
-    $('#register-form').validate(this._validataRules());
+    $('#register-form').validate({
+      ...this._validataRules(),
+      highlight: function(element) {
+        $(element).css('border', '1px solid red');
+        if (element.name === 'password') {
+          $('.register_password-tip').hide();
+        }
+      },
+    });
     $.validator.addMethod(
       'email_or_mobile_check',
       function(value, element, params) {

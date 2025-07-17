@@ -893,7 +893,7 @@ validate.no_number_first_hint: URL path can only contain letters and numbers, pl
 validate.have_spaces: Password can't have spaces
 validate.check_password_low.message: 5-20 letters or numbers, case sensitive
 validate.check_password_middle.message: 8-20 letters or numbers, including at least two, case sensitive
-validate.check_password_high.message: 8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols
+validate.check_password_high.message: Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols
 validate.custom_integer.message: Please enter the correct integer
 validate.int.message: up to 9 integers
 validate.float.message: up to two decimal places, and the integer digits should not exceed 8 digits!

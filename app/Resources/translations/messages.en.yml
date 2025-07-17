@@ -2733,7 +2733,8 @@ user.register.password_label: Password
 user.register.password_label_placeholder: '5-20 letters or numbers, case sensitive'
 user.register.password_label_placeholder.low: '5-20 letters or numbers, case sensitive'
 user.register.password_label_placeholder.middle: '8-20 letters or numbers, including at least two, case sensitive'
-user.register.password_label_placeholder.high: '8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols'
+user.register.password_label_placeholder.high: 'Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols'
+user.register.enter_password: 'Enter your password'
 user.register.invite_code_label: 'Inviation code'
 user.register.invite_code_placeholder: 'If you have invitation code, please type in'
 user.register.i_agree: 'I''ve read and agree.'
@@ -2771,7 +2772,8 @@ user.oauth.bind_other_account: 'bind other account?'
 user.oauth.bind_existed_account: 'bind existing account?'
 user.oauth.bind_error.bind_by_other: 'The account has been bound'
 user.oauth.register.nickname_placeholder: 'not more than 18 english words or 9 chinese words'
-user.oauth.register.password__placeholder: '5-20 words, number or symbol'
+user.oauth.register.password__placeholder: 'Enter your password'
+user.oauth.register.password_tip: 'Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols'
 user.oauth.register_account_by_ways: 'Use %accountType% to register'
 user.oauth.register_account.binding_account_by_email: Associated with the existing email account
 user.oauth.register_account.binding_account_by_mobile: 绑定手机号
@@ -3012,7 +3014,7 @@ user.settings.password_reset.reset_btn: 'Reset Password'
 user.settings.password_reset.find_password_btn: 'Find password'
 user.settings.password_level.low: 5-20 digits in English, numerals, symbols, case sensitive
 user.settings.password_level.middle: 8-20 digits in English, numerals, symbols, including at least two types, case sensitive
-user.settings.password_level.high: 8-32 bits of English, numbers, symbols, including English uppercase, lowercase, numbers and symbols
+user.settings.password_level.high: Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols
 user.account_center: 'Account Center'
 user.menu_heading: 'Account'
 user.account_menu: 'My Bills'
