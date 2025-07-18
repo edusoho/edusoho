@@ -1206,16 +1206,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
 
-        if (empty($answerScene['limited_time'])) {
+        if (empty($answerScene['limited_time']) && $answerScene['valid_period_mode'] != 3) {
             return;
         }
 
         if (self::EXAM_MODE_SIMULATION != $answerRecord['exam_mode']) {
             return;
         }
+        $time = time() + $answerScene['limited_time'] * 60 + 120;
+        if ($answerScene['valid_period_mode'] == 3) {
+            $time = $answerScene['end_time'];
+        }
         $autoSubmitJob = [
             'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
-            'expression' => time() + $answerScene['limited_time'] * 60 + 120,
+            'expression' => $time,
             'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
             'args' => ['answerRecordId' => $answerRecord['id']],
         ];
