@@ -93,6 +93,7 @@ class ActivityController extends BaseController
             ];
         }
 
+        $activity['courseStatus'] = $course['status'];
         $container = $this->get('activity_runtime_container');
 
         return $container->content($activity);
