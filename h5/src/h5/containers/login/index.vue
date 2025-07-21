@@ -166,6 +166,9 @@ export default {
   },
   methods: {
     ...mapActions(['userLogin']),
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
     async getPrivacySetting() {
       await Api.getSettings({
         query: {
@@ -183,11 +186,6 @@ export default {
         .catch(err => {
           Toast.fail(err.message);
         });
-    },
-    showPassword() {
-    },
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
     },
     // 隐私政策
     lookPrivacyPolicy() {
