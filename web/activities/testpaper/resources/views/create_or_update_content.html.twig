@@ -213,7 +213,9 @@
               name="validPeriodMode"
               value="0"
               {% if activity.ext.validPeriodMode|default('0') == 0 %}checked="checked"{% endif %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% if activity.ext.answerScene.start_time|default(0) > 0 %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% endif %}
             >
             {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.unlimited'|trans|raw }}"></i>
@@ -224,7 +226,9 @@
               name="validPeriodMode"
               value="1"
               {% if activity.ext.validPeriodMode|default('0') == 1 %}checked="checked"{% endif %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% if activity.ext.answerScene.start_time|default(0) > 0 %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% endif %}
             >
             {{ 'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.realTimeRange'|trans|raw }}"></i>
@@ -235,7 +239,9 @@
               name="validPeriodMode"
               value="2"
               {% if activity.ext.validPeriodMode|default('0') == 2 %}checked="checked"{% endif %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% if activity.ext.answerScene.start_time|default(0) > 0 %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% endif %}
             >
             {{ 'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.startTime'|trans|raw }}"></i>
@@ -246,7 +252,9 @@
               name="validPeriodMode"
               value="3"
               {% if activity.ext.validPeriodMode|default('0') == 3 %}checked="checked"{% endif %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% if activity.ext.answerScene.start_time|default(0) > 0 %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s') and activity.courseStatus == 'published') %}disabled{% endif %}
+              {% endif %}
             >
             {{ 'course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.fixedTimeInterval'|trans|raw }}"></i>
