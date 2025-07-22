@@ -458,13 +458,15 @@
                 :mode="mode"
                 :limitedTime="Number(answerScene.limited_time)"
                 :beginTime="Number(answerRecord.begin_time)"
+                :endTime="Number(answerScene.end_time)"
                 :assessmentStatus="assessmentStatus"
                 :getCurrentTime="getCurrentTime"
+                :validPeriodMode="answerScene.valid_period_mode"
                 v-if="
-                  answerRecord.exam_mode == '0' &&
-                    Number(answerScene.limited_time) &&
-                    assessmentStatus !== 'preview' &&
-                    mode === 'do'
+                  answerRecord.exam_mode == '0'
+                  && (Number(answerScene.limited_time) || answerScene.valid_period_mode == '3')
+                  && assessmentStatus !== 'preview'
+                  && mode === 'do'
                 "
                 @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
               ></count-down>
