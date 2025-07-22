@@ -272,7 +272,7 @@ class Testpaper {
       const startTime = $('[name="startTime"]').val();
       const endTime = $('[name="endTime"]').val();
 
-      if (!startTime || !endTime) return true;
+      if (!startTime || !endTime || $('[name="validPeriodMode"]:checked').val() != 3) return true;
 
       const startDate = new Date(startTime);
       const endDate = new Date(endTime);
