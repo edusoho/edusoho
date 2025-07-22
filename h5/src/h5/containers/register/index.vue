@@ -18,10 +18,17 @@
       :border="false"
       :error-message="errorMessage.encrypt_password"
       :placeholder="$t(placeHolder[pathName])"
-      type="password"
+      :type="showPassword ? 'text' : 'password'"
       max-length="20"
       @blur="validateMobileOrPsw('encrypt_password')"
-    />
+      style="padding-bottom: 0"
+    >
+      <template #button>
+        <img v-if="!showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
+        <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
+      </template>
+    </van-field>
+    <div v-if="showPasswordTip" class="password-tip">请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
 
     <e-drag
       v-if="dragEnable"
@@ -74,20 +81,6 @@
         <i @click="lookPrivacyPolicy">《{{ $t('btn.privacyAgreemen') }}》</i>
       </span>
     </div>
-
-    <!-- <div class="login-bottom ">
-        请详细阅读 <router-link to="/protocol">《用户服务协议》</router-link>
-      </div> -->
-
-    <!-- 一期不做 -->
-    <!-- <div class="register-social">
-        <span>
-          <i class="iconfont icon-qq"></i>
-          <i class="iconfont icon-weixin1"></i>
-          <i class="iconfont icon-weibo"></i>
-        </span>
-        <div class="line"></div>
-      </div> -->
 
     <van-popup
       v-model="popUpBottom"
@@ -154,6 +147,8 @@ export default {
         smsToken: '',
         type: 'register',
       },
+      showPassword: false,
+      showPasswordTip: true,
       dragEnable: false,
       dragKey: 0,
       errorMessage: {
@@ -199,6 +194,9 @@ export default {
   },
   methods: {
     ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin']),
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
     validateMobileOrPsw(type = 'mobile') {
       const ele = this.registerInfo[type];
       const rule = rulesConfig[type];
@@ -208,10 +206,7 @@ export default {
         return false;
       }
 
-      if (type === 'encrypt_password' && ele.length > 32) {
-        this.errorMessage[type] = this.$t('toast.enterUpTo32Characters');
-        return false;
-      }
+      this.showPasswordTip = type !== 'encrypt_password';
 
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
@@ -412,3 +407,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.password-tip {
+  font-size: 12px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.45);
+  padding: 0 16px;
+}
+</style>

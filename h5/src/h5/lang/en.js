@@ -148,7 +148,7 @@ export default {
     emailMobileNumberUserName: 'Email/Mobile number/User name',
     password: 'Password',
     mobileNumber: 'Mobile number',
-    setPassword: 'Set password(8-32 characters)',
+    setPassword: 'Set password',
     verificationCode: 'Verification code',
     mobileNumberOrEmail: 'Mobile number or email',
     email: 'Email',
