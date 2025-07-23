@@ -547,7 +547,7 @@ class WebExtension extends \Twig_Extension
             $parts[] = "{$hours}小时";
         }
         if ($minutes > 0) {
-            $parts[] = "{$minutes}分钟";
+            $parts[] = "{$minutes}分";
         }
         if ($seconds > 0 || empty($parts)) {
             $parts[] = "{$seconds}秒";
