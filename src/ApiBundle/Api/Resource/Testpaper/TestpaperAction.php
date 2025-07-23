@@ -131,7 +131,6 @@ class TestpaperAction extends AbstractResource
 
     protected function redoTestpaper(ApiRequest $request, $assessment)
     {
-        file_put_contents('/tmp/log', '-------------------', 8);
         $targetType = $request->request->get('targetType'); // => task
         $targetId = $request->request->get('targetId'); // => taskId
 
