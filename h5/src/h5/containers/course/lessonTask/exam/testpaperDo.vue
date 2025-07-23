@@ -137,6 +137,7 @@ export default {
       cardSeq: 0, // 点击题卡要滑动的指定位置的索引
       testpaper: {},
       testpaperResult: {},
+      scene: {},
       info: [], // 试卷信息
       answer: {}, // 答案
       cardShow: false, // 答题卡显示标记
@@ -269,6 +270,7 @@ export default {
       this.testpaper.courseId = res.courseId;
       res.testpaperResult.limitedTime = Number(res.testpaperResult.limitedTime);
       this.testpaperResult = res.testpaperResult;
+      this.scene = res.scene;
 
       // 判断是否做题状态
       if (this.isDoing()) {
@@ -379,19 +381,25 @@ export default {
     },
     // 考试倒计时
     timer(timeStr) {
+      let time = null;
       if (this.testpaper.examMode == '0') {
-        let time = this.testpaperResult.limitedTime * 60 * 1000;
-
-        if (time <= 0) {
-          return;
-        }
-
-        // 如果考试过程中中断，剩余时间=考试限制时间-中断时间
-        if (this.lastTime) {
-          const gotime = Math.ceil(
-            new Date().getTime() - this.testpaperResult.beginTime * 1000,
-          );
-          time = time - gotime;
+        if (this.scene.valid_period_mode == '3') {
+          time = this.scene.end_time * 1000 - new Date().getTime();
+          if (time <= 0) {
+            return;
+          }
+        } else {
+          time = this.testpaperResult.limitedTime * 60 * 1000;
+          if (time <= 0) {
+            return;
+          }
+          // 如果考试过程中中断，剩余时间=考试限制时间-中断时间
+          if (this.lastTime) {
+            const gotime = Math.ceil(
+              new Date().getTime() - this.testpaperResult.beginTime * 1000,
+            );
+            time = time - gotime;
+          }
         }
 
         let i = 0;
