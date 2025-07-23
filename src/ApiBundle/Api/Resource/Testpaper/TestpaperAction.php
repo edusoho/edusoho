@@ -125,11 +125,13 @@ class TestpaperAction extends AbstractResource
             'items' => $items,
             'isShowTestResult' => 1,
             'courseId' => $course['id'],
+            'scene' => $scene,
         ];
     }
 
     protected function redoTestpaper(ApiRequest $request, $assessment)
     {
+        file_put_contents('/tmp/log', '-------------------', 8);
         $targetType = $request->request->get('targetType'); // => task
         $targetId = $request->request->get('targetId'); // => taskId
 
@@ -214,6 +216,7 @@ class TestpaperAction extends AbstractResource
             'items' => $items,
             'isShowTestResult' => 0,
             'courseId' => $course['id'],
+            'scene' => $scene,
         ];
     }
 
