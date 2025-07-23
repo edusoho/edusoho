@@ -122,6 +122,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('s2b2c_file_convert', [$this, 's2b2cFileConvert']),
             new \Twig_SimpleFilter('html_special_chars_decode', [$this, 'getHtmlSpecialCharsDecode']),
             new \Twig_SimpleFilter('json_decode', [$this, 'jsonDecode']),
+            new \Twig_SimpleFilter('format_seconds_to_zh', [$this, 'formatSecondsToZH']),
         ];
     }
 
@@ -532,6 +533,27 @@ class WebExtension extends \Twig_Extension
         $json = json_decode($str, true);
 
         return is_array($json) ? $json : json_decode($json, true);
+    }
+
+    public function formatSecondsToZH($seconds)
+    {
+        $hours = floor($seconds / 3600);
+        $remaining = $seconds % 3600;
+        $minutes = floor($remaining / 60);
+        $seconds = $remaining % 60;
+
+        $parts = [];
+        if ($hours > 0) {
+            $parts[] = "{$hours}小时";
+        }
+        if ($minutes > 0) {
+            $parts[] = "{$minutes}分钟";
+        }
+        if ($seconds > 0 || empty($parts)) {
+            $parts[] = "{$seconds}秒";
+        }
+
+        return implode('', $parts);
     }
 
     public function getDays($days)

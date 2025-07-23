@@ -76,7 +76,11 @@
 														{{ activity.ext.answerScene.limited_time }}
                           	{{ 'course.live_lesson_manage.live_length.minutes'|trans }}
 													{% else %}
-                          	{{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+                            {% if activity.ext.validPeriodMode == '3' %}
+                              {{ (activity.endTime - activity.startTime) | format_seconds_to_zh }}
+                            {% else %}
+                              {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+                            {% endif %}
 													{% endif %}
                         </span>
                       </div>
