@@ -8,7 +8,7 @@ export default {
       settings: [
         {
           name: 'setting.changePassword',
-          routerName: ''
+          routerName: 'changePassword'
         },
         {
           name: 'setting.language',
@@ -35,7 +35,7 @@ export default {
         });
       });
     },
-    goTo(routerName) {
+    goto(routerName) {
       this.$router.push({
         name: routerName,
       });
@@ -50,7 +50,7 @@ export default {
       <div
         v-for="(item, index) in settings"
         class="setting-item"
-        @click="goTo(item.routerName)"
+        @click="goto(item.routerName)"
       >
         <div>{{ $t(item.name) }}</div>
         <img src="static/images/setting/right-arrow.svg" alt=""/>

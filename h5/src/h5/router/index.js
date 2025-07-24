@@ -129,6 +129,18 @@ const routes = [
         ),
   },
   {
+    path: '/setting/changePassword',
+    name: 'changePassword',
+    meta: {
+      i18n: true,
+      title: 'title.changePassword',
+    },
+    component: () =>
+      import(
+        '@/containers/my/setting/changePassword.vue'
+        ),
+  },
+  {
     path: '/setting/nickname',
     name: 'setting_nickname',
     meta: {

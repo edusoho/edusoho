@@ -105,6 +105,7 @@ export default {
     groupFreeLearningCourse: 'Group free learning course',
     productPage: 'Product page',
     preview: 'Preview',
+    changePassword: '修改登录密码',
   },
   btn: {
     view: 'View',
