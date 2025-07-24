@@ -30,6 +30,8 @@ class Testpaper extends Activity
 
     const VALID_PERIOD_MODE_ONLY_START = 2;
 
+    const VALID_PERIOD_MODE_LIMIT = 3;
+
     protected function registerListeners()
     {
         return [

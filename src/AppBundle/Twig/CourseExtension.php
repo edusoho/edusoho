@@ -6,6 +6,8 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DynUrlToolkit;
 use AppBundle\Util\AvatarAlert;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
@@ -18,6 +20,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
@@ -186,6 +189,15 @@ class CourseExtension extends \Twig_Extension
                 ];
                 $item = array_merge($default, $item);
                 $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
+                $testpaperActivity = $this->getTestpaperActivityService()->getActivity($item['activity']['mediaId']);
+                $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+                if (Testpaper::VALID_PERIOD_MODE_LIMIT == $scene['valid_period_mode']) {
+                    $activityLength = $this->getActivityExtension()->lengthFormat($item['activity']['endTime'] - $item['activity']['startTime']);
+                } else {
+                    $activityLength = empty($item['activity']['length'])
+                        ? ''
+                        : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType);
+                }
                 $result = [
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
@@ -203,7 +215,7 @@ class CourseExtension extends \Twig_Extension
                     'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
                     'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
                     'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
-                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType),
+                    'activityLength' => $activityLength,
                     'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
@@ -612,5 +624,21 @@ class CourseExtension extends \Twig_Extension
     protected function createService($alias)
     {
         return $this->biz->service($alias);
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->biz->service('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerSceneService');
     }
 }
