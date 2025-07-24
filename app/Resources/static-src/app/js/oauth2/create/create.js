@@ -176,6 +176,12 @@ export default class Create {
           $('.js-password-tip').hide();
         }
       },
+      success: function (label, element) {
+        $(element).css('border-bottom', '1px solid #e1e1e1');
+        if (element.name === 'password') {
+          $('.js-password-tip').show();
+        }
+      },
     });
   }
 
