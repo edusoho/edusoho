@@ -207,7 +207,8 @@ export default {
   setting: {
     heads: '头像',
     nickname: '用户名',
-    language: '多语言',
+    changePassword: '修改登录密码',
+    language: '语言',
     dropOut: '退出登录',
     dropOutCancelConfirm: '确定要退出登录吗？',
     fileTypeOnlySupportsImageFormat: '文件类型仅支持图片格式',

@@ -1,62 +1,101 @@
 .my_setting {
-  padding: 0 16px;
-  &-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 90px;
-    border-bottom: 1px solid #eee;
-    position: relative;
-  }
-  &-content {
+	padding: 0 16px;
 
-  }
-  &-more {
-    height: vw(14);
-    width: vw(14);
-    margin-left: vw(18);
-  }
-  &-avatar {
-    height: vw(50);
-    width: vw(50);
-    border-radius: 50%;
-    vertical-align: middle;
-  }
-  .van-uploader {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-  }
-  .van-uploader__wrapper{
-	  height: 100%;
-  }
-  .van-uploader__input-wrapper{
-	  height: 100%;
-	  width: 100%;
-  }
+	&-item {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 90px;
+		border-bottom: 1px solid #eee;
+	}
 
-  // 修改昵称
-  &-nickname {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 vw(20);
-    &--input {
-      margin-top: vw(30);
-    }
-    &--btn {
-      margin-top: vw(40);
-    }
-  }
-  .log-out-btn {
-    text-align: center;
-    border: 1px solid $primary-color;
-    border-radius: vw(2);
-    padding: vw(7);
-    margin-top: vw(30);
-    color: $primary-color;
-  }
+	&-more {
+		width: vw(14);
+		height: vw(14);
+		margin-left: vw(18);
+	}
+
+	&-avatar {
+		width: vw(50);
+		height: vw(50);
+		vertical-align: middle;
+		border-radius: 50%;
+	}
+
+	.van-uploader {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+
+	.van-uploader__wrapper {
+		height: 100%;
+	}
+
+	.van-uploader__input-wrapper {
+		width: 100%;
+		height: 100%;
+	}
+	// 修改昵称
+	&-nickname {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		margin: 0 vw(20);
+
+		&--input {
+			margin-top: vw(30);
+		}
+
+		&--btn {
+			margin-top: vw(40);
+		}
+	}
+}
+
+.setting-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	height: calc(100% - 46px);
+	background-color: #f5f5f5;
+	border-top: 1px solid #f5f5f5;
+
+	.log-out-btn {
+		width: 307px;
+		height: 48px;
+		margin-bottom: 26px;
+		color: #165dff;
+		font-size: 16px;
+		line-height: 48px;
+		text-align: center;
+		background-color: white;
+		border: 1px solid #165dff;
+		border-radius: 4px;
+	}
+
+	.setting-item-container {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		width: 100%;
+
+		.setting-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			width: 100%;
+			padding: 20px;
+			color: rgba(0, 0, 0, 0.65);
+			font-weight: 400;
+			font-size: 14px;
+			line-height: 20px;
+			background-color: white;
+		}
+	}
 }

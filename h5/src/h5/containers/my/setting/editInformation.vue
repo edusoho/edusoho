@@ -42,16 +42,12 @@
         </van-uploader>
       </div>
     </div>
-    <div class="log-out-btn title-18" @click="logout">
-      <span>{{ $t('btn.dropOut') }}</span>
-    </div>
   </div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex';
-import { Toast, Dialog } from 'vant';
+import { Toast } from 'vant';
 import Api from '@/api';
-import * as types from '@/store/mutation-types';
 
 import { VueCropper } from 'vue-cropper';
 
@@ -69,10 +65,6 @@ export default {
         {
           name: 'setting.nickname',
           info: '',
-        },
-        {
-          name: 'setting.language',
-          info: ''
         },
       ],
       dialogVisible: false,
@@ -98,7 +90,6 @@ export default {
   created() {
     this.$set(this.settings[0], 'info', this.user.avatar.large);
     this.$set(this.settings[1], 'info', this.user.nickname);
-    this.$set(this.settings[2], 'info', this.$t('lang.language'));
   },
   methods: {
     ...mapActions(['setAvatar']),
@@ -114,31 +105,9 @@ export default {
             },
           });
           break;
-        case 2:
-          this.$router.push({
-            name: 'settingLang',
-          });
-          break;
         default:
           break;
       }
-    },
-    logout() {
-      Dialog.confirm({
-        title: this.$t('setting.dropOut'),
-        message: this.$t('setting.dropOutCancelConfirm'),
-        confirmButtonText: this.$t('btn.confirm'),
-        cancelButtonText: this.$t('btn.cancel')
-      }).then(() => {
-        this.$store.commit(types.USER_LOGIN, {
-          token: '',
-          user: {},
-        });
-        window.localStorage.setItem('mobile_bind_skip', '0');
-        this.$router.push({
-          name: 'my',
-        });
-      });
     },
     stopCropFn() {
       const $cropper = this.$refs.cropper[0];

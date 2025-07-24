@@ -209,6 +209,7 @@ export default {
   setting: {
     heads: 'Heads',
     nickname: 'Nickname',
+    changePassword: 'Change Password',
     language: 'Language',
     dropOut: 'Drop out',
     dropOutCancelConfirm: 'Drop out Cancel Confirm ?',
