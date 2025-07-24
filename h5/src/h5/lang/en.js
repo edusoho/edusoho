@@ -59,6 +59,7 @@ export default {
     myContract: 'My Contract',
     viewContract: 'View Contract',
     setting: 'Setting',
+    editInformation: 'Edit Information',
     nicknameSetting: 'Nickname Setting',
     switchLanguage: 'Switch language',
     coupon: 'Coupon',

@@ -59,6 +59,7 @@ export default {
     myContract: '我的合同',
     viewContract: '查看合同',
     setting: '设置',
+    editInformation: '编辑信息',
     nicknameSetting: '昵称设置',
     switchLanguage: '切换语言',
     coupon: '兑换卡券',
