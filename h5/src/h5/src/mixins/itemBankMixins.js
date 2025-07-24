@@ -18,7 +18,7 @@ export default {
     },
     questionSlideChange(index) {
       this.questionIndex = index;
-      this.aiAgentSdk.hideReminder();
+      this.aiAgentSdk && this.aiAgentSdk.hideReminder();
     },
     slideNextTransitionEnd() {
       this.questionIndex = 0;
@@ -26,7 +26,7 @@ export default {
         return;
       }
       this.itemIndex += 1;
-      this.aiAgentSdk.hideReminder();
+      this.aiAgentSdk && this.aiAgentSdk.hideReminder();
       this.current += 1;
       this.changeRenderItems(this.current);
       this.fastSlide();
@@ -37,7 +37,7 @@ export default {
       }
       this.questionIndex = 0;
       this.itemIndex -= 1;
-      this.aiAgentSdk.hideReminder();
+      this.aiAgentSdk && this.aiAgentSdk.hideReminder();
       this.current -= 1;
       this.changeRenderItems(this.current);
       const item = this.items[this.current];
