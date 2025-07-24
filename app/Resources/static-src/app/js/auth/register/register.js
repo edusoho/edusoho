@@ -62,6 +62,12 @@ export default class Register {
           $('.register_password-tip').hide();
         }
       },
+      success: function (label, element) {
+        $(element).css('border', '1px solid #e1e1e1');
+        if (element.name === 'password') {
+          $('.register_password-tip').show();
+        }
+      },
     });
     $.validator.addMethod(
       'email_or_mobile_check',
