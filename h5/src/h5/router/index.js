@@ -105,16 +105,40 @@ const routes = [
       ),
   },
   {
-    path: '/settings',
-    name: 'my_setting',
+    path: '/editInformation',
+    name: 'edit_information',
+    meta: {
+      i18n: true,
+      title: 'title.editInformation',
+    },
+    component: () =>
+      import(
+        '@/containers/my/setting/editInformation.vue'
+      ),
+  },
+  {
+    path: '/setting',
+    name: 'setting',
     meta: {
       i18n: true,
       title: 'title.setting',
     },
     component: () =>
       import(
-        /* webpackChunkName: "setting" */ '@/containers/my/setting/index.vue'
-      ),
+        '@/containers/my/setting/index.vue'
+        ),
+  },
+  {
+    path: '/setting/changePassword',
+    name: 'changePassword',
+    meta: {
+      i18n: true,
+      title: 'title.changePassword',
+    },
+    component: () =>
+      import(
+        '@/containers/my/setting/changePassword.vue'
+        ),
   },
   {
     path: '/setting/nickname',
