@@ -98,3 +98,28 @@
 		}
 	}
 }
+
+.change-password-container {
+	display: flex;
+	flex-direction: column;
+	padding: 44px 32px;
+
+	.password-tip {
+		margin-bottom: 34px;
+		color: rgba(0, 0, 0, 0.45);
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 20px;
+	}
+
+	.save-button {
+		width: 100%;
+		height: 52px;
+		color: white;
+		font-weight: 400;
+		font-size: 16px;
+		line-height: 52px;
+		background-color: #739eff;
+		border-radius: 4px;
+	}
+}

@@ -155,6 +155,9 @@ export default {
     mobileNumberOrEmail: 'Mobile number or email',
     email: 'Email',
     dragTheSliderToCompleteThePuzzle: 'Drag the slider to complete the puzzle',
+    oldPassword: 'Please enter your current password',
+    newPassword: 'Please enter a new password',
+    confirmPassword: 'Please enter a new password again',
   },
   enter: {
     coupon: 'Coupon',
@@ -206,6 +209,7 @@ export default {
   tips: {
     iHaveReadAndAgreeToThe: 'I have read and agree to the',
     and: 'and',
+    password: 'Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols',
   },
   setting: {
     heads: 'Heads',

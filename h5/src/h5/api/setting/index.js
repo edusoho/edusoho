@@ -106,4 +106,10 @@ export default [
     method: 'GET',
     disableLoading: true,
   },
+  {
+    name: 'resetPassword',
+    url: '/UserResetPassword',
+    method: 'POST',
+    disableLoading: true,
+  },
 ];

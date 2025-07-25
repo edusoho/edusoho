@@ -153,6 +153,9 @@ export default {
     mobileNumberOrEmail: '请输入手机号或邮箱号',
     email: '请输入邮箱',
     dragTheSliderToCompleteThePuzzle: '拖动左边滑块完成上方拼图',
+    oldPassword: '请输入当前密码',
+    newPassword: '请输入新密码',
+    confirmPassword: '请再次输入新密码',
   },
   enter: {
     coupon: '兑换卡券',
@@ -204,6 +207,7 @@ export default {
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
     and: '和',
+    password: '请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码',
   },
   setting: {
     heads: '头像',
