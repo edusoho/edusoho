@@ -5836,7 +5836,7 @@ admin.user.fields.user_email: 'User Email'
 admin.user.fields.password_hint: '5-20 english char, number, symbol'
 admin.user.fields.password_hint.low: '5-20 english char, number, symbol'
 admin.user.fields.password_hint.middle: '8-20 letters or numbers, including at least two, case sensitive'
-admin.user.fields.password_hint.high: '8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols'
+admin.user.fields.password_hint.high: 'Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols'
 admin.user.fields.confirm_password_label: 'Confirm Password'
 admin.user.fields.confirm_password_hint: 'Enter the password again'
 admin.user.fields.password_label: Password
