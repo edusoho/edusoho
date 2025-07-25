@@ -176,6 +176,9 @@ class Reset {
         },
         dragCaptchaToken: {
           required: Translator.trans('site.captcha_code.required'),
+        },
+        reset_password: {
+          required: Translator.trans('validate.check_password_high.message'),
         }
       },
       submitHandler: function(form) {

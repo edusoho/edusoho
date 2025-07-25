@@ -274,9 +274,8 @@ export default class Register {
           required: Translator.trans('auth.register.drag_captcha_tips')
         },
         password: {
-          required: Translator.trans(
-            'auth.register.password_required_error_hint'
-          )
+          required: Translator.trans('validate.check_password_high.message'),
+          check_password_high: Translator.trans('validate.check_password_high.message')
         }
       }
     };

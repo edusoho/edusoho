@@ -112,6 +112,7 @@ export default class Create {
         }
       },
       password: {
+        required: true,
         check_password_high: true,
       },
       confirmPassword: {
@@ -160,16 +161,6 @@ export default class Create {
     };
 
     this.validator = this.$form.validate({
-      rules: this.rules,
-      messages: {
-        sms_code: {
-          required: Translator.trans('site.captcha_code.required'),
-          rangelength: Translator.trans('validate.sms_code.message')
-        },
-        agree_policy: {
-          required: Translator.trans('validate.valid_policy_input.message'),
-        },
-      },
       highlight: function(element) {
         $(element).css('border-bottom', '1px solid red');
         if (element.name === 'password') {
@@ -180,6 +171,19 @@ export default class Create {
         $(element).css('border-bottom', '1px solid #e1e1e1');
         if (element.name === 'password') {
           $('.js-password-tip').show();
+        }
+      },
+      rules: this.rules,
+      messages: {
+        sms_code: {
+          required: Translator.trans('site.captcha_code.required'),
+          rangelength: Translator.trans('validate.sms_code.message')
+        },
+        agree_policy: {
+          required: Translator.trans('validate.valid_policy_input.message'),
+        },
+        password: {
+          required: Translator.trans('validate.check_password_high.message'),
         }
       },
     });
