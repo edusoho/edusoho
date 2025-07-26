@@ -62,4 +62,16 @@ define(function (require, exports, module) {
     });
   };
 
+  $('.js-open-eye').on('click', function () {
+    $('#password').attr('type', 'password');
+    $('.js-open-eye').hide();
+    $('.js-close-eye').show();
+  })
+
+  $('.js-close-eye').on('click', function () {
+    $('#password').attr('type', 'text');
+    $('.js-close-eye').hide();
+    $('.js-open-eye').show();
+  })
+
 });
