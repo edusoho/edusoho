@@ -2417,6 +2417,7 @@ course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
 activity.live.overlap_time_notice: 所选时间已经有直播了，请换个时间
+testpaper.answer.record.existed: 该考试已有学员进行考试，无法修改考试信息
 
 
 
