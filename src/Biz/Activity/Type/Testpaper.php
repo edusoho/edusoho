@@ -46,6 +46,9 @@ class Testpaper extends Activity
             $testpaper = $this->getAssessmentService()->getAssessment($activity['mediaId']);
             $activity['testpaper'] = $testpaper;
             $activity['answerScene'] = $this->getAnswerSceneService()->get($activity['answerSceneId']);
+            if (3 == $activity['answerScene']['valid_period_mode']) {
+                $activity['answerScene']['canUpdate'] = 0 == $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['answerSceneId']]);
+            }
             $activity = $this->filterActivity($activity, $activity['answerScene']);
         }
 
@@ -182,7 +185,10 @@ class Testpaper extends Activity
 
         try {
             $this->getBiz()['db']->beginTransaction();
-
+            $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
+            if (3 == $answerScene['valid_period_mode'] && $this->getAnswerRecordService()->count(['answer_scene_id' => $answerScene['id']]) > 0) {
+                throw ActivityException::TESTPAPER_ANSWER_RECORD_EXISTED();
+            }
             $answerScene = $this->getAnswerSceneService()->update($activity['answerScene']['id'], [
                 'name' => $filterFields['title'],
                 'limited_time' => $filterFields['limitedTime'],
