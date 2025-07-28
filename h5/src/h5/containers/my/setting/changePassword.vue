@@ -1,6 +1,7 @@
 <script>
 import {Toast} from 'vant';
 import Api from '@/api';
+import XXTEA from '@/utils/xxtea.js';
 
 export default {
   data() {
