@@ -28,7 +28,7 @@
         <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
       </template>
     </van-field>
-    <div v-if="showPasswordTip" class="password-tip">请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
+    <div v-if="showPasswordTip" class="password-tip">请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
 
     <e-drag
       v-if="dragEnable"

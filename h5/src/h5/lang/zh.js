@@ -207,7 +207,7 @@ export default {
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
     and: '和',
-    password: '请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码',
+    password: '请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码',
   },
   setting: {
     heads: '头像',
