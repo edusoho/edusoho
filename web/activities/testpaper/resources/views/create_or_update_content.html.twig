@@ -274,7 +274,7 @@
             autocomplete="off"
             style="width: 320px;"
             {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
+              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
             {% endif %}
           >
         </div>
@@ -289,7 +289,7 @@
             class="form-control js-start-range testpaperTimeRange"
             style="width: 160px;"
             {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
+              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
             {% endif %}
           >
         </div>
@@ -306,7 +306,7 @@
               autocomplete="off"
               style="width: 320px; margin-right: 12px"
               {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
               {% endif %}
             >
             <div class="js-fixed-time" style="margin-right: 12px; margin-bottom: 10px"></div>
