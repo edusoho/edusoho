@@ -618,6 +618,8 @@ t.add("course.plan_task.activity_manage.testpaper.time_limit", "\u8003\u8bd5\u65
 t.add("validate.valid_enter_a_positive.integer", "\u8bf7\u8f93\u51651\u81f3100\u7684\u6b63\u6574\u6570", "js", "zh_CN");
 t.add("validate.valid_rangetime.required", "\u8bf7\u9009\u62e9\u65e5\u671f\u533a\u95f4", "js", "zh_CN");
 t.add("validate.valid_starttime.required", "\u8bf7\u9009\u62e9\u5f00\u59cb\u65f6\u95f4", "js", "zh_CN");
+t.add("validate.valid_fixedtime.required", "\u8bf7\u9009\u62e9\u8003\u8bd5\u65f6\u95f4", "js", "zh_CN");
+t.add("validate.valid_maxDuration", "\u56fa\u5b9a\u8003\u8bd5\u65f6\u95f4\u4e0d\u80fd\u8d85\u8fc710\u4e2a\u5c0f\u65f6", "js", "zh_CN");
 t.add("validate.valid_endtime.required", "\u8bf7\u9009\u62e9\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7535\u5b50\u90ae\u4ef6\u5730\u5740", "js", "zh_CN");
 t.add("validate.valid_idcard_formate.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u8eab\u4efd\u8bc1\u53f7\u7801", "js", "zh_CN");
@@ -710,7 +712,7 @@ t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\
 t.add("validate.have_spaces", "\u5bc6\u7801\u4e0d\u80fd\u6709\u7a7a\u683c\u54e6", "js", "zh_CN");
 t.add("validate.check_password_low.message", "5-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
 t.add("validate.check_password_middle.message", "8-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u81f3\u5c11\u5305\u542b\u4e24\u79cd\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
-t.add("validate.check_password_high.message", "8-32\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u540c\u65f6\u5305\u542b\u82f1\u6587\u5927\u5199\u3001\u5c0f\u5199\u3001\u6570\u5b57\u548c\u7b26\u53f7", "js", "zh_CN");
+t.add("validate.check_password_high.message", "\u8bf7\u914d\u7f6e8-32\u4f4d\u5305\u542b\u5b57\u6bcd\u5927\u5c0f\u5199\u3001\u6570\u5b57\u3001\u7b26\u53f7\u56db\u79cd\u5b57\u7b26\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
 t.add("validate.custom_integer.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u6574\u6570", "js", "zh_CN");
 t.add("validate.int.message", "\u6700\u591a9\u4f4d\u6574\u6570", "js", "zh_CN");
 t.add("validate.float.message", "\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
@@ -2008,6 +2010,7 @@ t.add("admin_v2.homepage.school_info.enter.copy_success", "\u94fe\u63a5\u590d\u5
 t.add("admin_v2.homepage.wechat_come", "\u6b22\u8fce\u4f7f\u7528EduSoho\u6559\u57f9\u4ea7\u54c1", "js", "zh_CN");
 t.add("admin_v2.homepage.wechat_code.m", "\u52a0\u5165\u5f00\u6e90\u4ea7\u54c1\u4f7f\u7528\u5b66\u4e60\u4ea4\u6d41\u7fa4\uff0c\u5c0f\u4f19\u4f34\u5728\u7b49\u4f60", "js", "zh_CN");
 t.add("del.role.theater.hover.title", "\u8be5\u7528\u6237\u65e0\u8bb2\u5e08\u6743\u9650\u3002\u79fb\u9664\u540e\u5c06\u4e0d\u5728\u79fb\u52a8\u7aef\u5c55\u793a", "js", "zh_CN");
+t.add("course.teacher.hover.title.live_teacher", "\u8be5\u8001\u5e08\u4e3a\u76f4\u64ad\u4e3b\u8bb2\u8001\u5e08", "js", "zh_CN");
 t.add("upgrade.cloud.capabilities.to.experience", "<p class=\"title cd-dark-major\">\u9898\u76ee\u5bfc\u5165<\/p><div class=\"cd-dark-minor cd-text-md\">\u5347\u7ea7\u4e91\u80fd\u529b\u53ef\u4f53\u9a8c\u66f4\u5f3a\u5927\u7684\u5bfc\u5165\u529f\u80fd<\/div>\n", "js", "zh_CN");
 t.add("next.skip.intro.text", "<p class=\"title cd-dark-major\">\u9898\u76ee\u5bfc\u5165<\/p><div class=\"cd-dark-minor cd-text-md\">\u5347\u7ea7\u4e91\u80fd\u529b\u53ef\u4f53\u9a8c\u66f4\u5f3a\u5927\u7684\u5bfc\u5165\u529f\u80fd\uff0c\u9700\u8054\u7cfb\u8d85\u7ea7\u7ba1\u7406\u5458\u8fdb\u884c\u64cd\u4f5c<\/div>\n", "js", "zh_CN");
 t.add("skip.i.know", "\u6211\u77e5\u9053\u4e86\uff082\/2\uff09", "js", "zh_CN");
