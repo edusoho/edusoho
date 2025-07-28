@@ -168,7 +168,7 @@ class TaskManageController extends BaseController
             return $this->getTaskJsonView($task);
         }
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->render(
@@ -178,6 +178,7 @@ class TaskManageController extends BaseController
                 'customTitle' => $customTitle,
                 'currentType' => $activity['mediaType'],
                 'course' => $course,
+                'activity' => $activity,
                 'courseSet' => $courseSet,
                 'task' => $task,
                 'taskMode' => $taskMode,
