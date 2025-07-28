@@ -52,7 +52,7 @@ define(function (require, exports, module) {
       element: '[name="password"]',
       required: true,
       rule: 'check_password_high spaceNoSupport',
-      display: '8-32位包含字母大小写、数字、符号四种字符组合成的密码',
+      errormessageRequired: '请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码'
     });
 
     validator.addItem({

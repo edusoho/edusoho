@@ -52,6 +52,7 @@ define(function (require, exports, module) {
       element: '[name="password"]',
       required: true,
       rule: 'check_password_high spaceNoSupport',
+      errormessageRequired: '请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码'
     });
 
     validator.addItem({
@@ -60,5 +61,17 @@ define(function (require, exports, module) {
       rule: 'confirmation{target:#password}'
     });
   };
+
+  $('.js-open-eye').on('click', function () {
+    $('#password').attr('type', 'password');
+    $('.js-open-eye').hide();
+    $('.js-close-eye').show();
+  })
+
+  $('.js-close-eye').on('click', function () {
+    $('#password').attr('type', 'text');
+    $('.js-close-eye').hide();
+    $('.js-open-eye').show();
+  })
 
 });
