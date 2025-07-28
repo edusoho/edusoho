@@ -2285,6 +2285,7 @@ admin_v2.homepage.wechat_come: Welcome to EduSoho enterprise products
 admin_v2.homepage.wechat_code.m: Join the open source product use learning exchange group, small partners are waiting for you
 
 del.role.theater.hover.title: This user does not have instructor rights. After removal, it will not be displayed on mobile
+course.teacher.hover.title.live_teacher: 'The teacher is a live teacher'
 upgrade.cloud.capabilities.to.experience: >
   <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">Upgrade cloud capabilities to experience more powerful import capabilities</div>
 next.skip.intro.text: >

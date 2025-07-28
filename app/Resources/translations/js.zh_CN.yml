@@ -2252,6 +2252,7 @@ admin_v2.homepage.wechat_come: 欢迎使用EduSoho教培产品
 admin_v2.homepage.wechat_code.m: 加入开源产品使用学习交流群，小伙伴在等你
 
 del.role.theater.hover.title: 该用户无讲师权限。移除后将不在移动端展示
+course.teacher.hover.title.live_teacher: 该老师为直播主讲老师
 upgrade.cloud.capabilities.to.experience: >
   <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能</div>
 next.skip.intro.text: >

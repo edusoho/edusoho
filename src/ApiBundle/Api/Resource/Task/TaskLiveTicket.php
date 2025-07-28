@@ -32,7 +32,7 @@ class TaskLiveTicket extends AbstractResource
         $params['id'] = $user['id'];
         $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
-        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']);
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($task['courseId'], $user['id'], $activity['id']);
         // android, iphone, mobile
         $params['device'] = $request->request->get('device', DeviceToolkit::isMobileClient() ? 'mobile' : 'desktop');
         $liveGroup = $this->getMultiClassGroupService()->getLiveGroupByUserIdAndCourseId($user['id'], $task['courseId'], $activity['ext']['liveId']);

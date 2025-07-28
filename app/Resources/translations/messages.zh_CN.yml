@@ -1121,7 +1121,7 @@ course.marketing_setup.course_award: 完成教学计划
 course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
-course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
+course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，调整直播间主讲老师请在课时管理中调整直播主讲老师
 
 course.item_bank_manage: 题库练习管理
 
@@ -2215,6 +2215,7 @@ course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过�
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
+course.plan_task.activity_manage.live.teacher: 直播主讲老师
 course.plan_task.activity_manage.live.info: 直播说明
 course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播

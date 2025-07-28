@@ -100,7 +100,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
         $params = [];
         if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id']) || $user->isAdmin()) {
-            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
+            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($courseId, $user['id'], $activityId);
         } else {
             return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
@@ -148,7 +148,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $this->authenticateUser($user);
         $params = [];
         if ($this->getCourseMemberService()->isCourseMember($courseId, $user['id']) || $this->getUser()->isAdmin()) {
-            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($courseId, $user['id']);
+            $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($courseId, $user['id'], $activityId);
         }
         $params['id'] = $user['id'];
         $params['displayName'] = $user['nickname'];

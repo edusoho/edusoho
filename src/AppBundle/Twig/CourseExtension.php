@@ -78,6 +78,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_buy_course', [$this, 'canBuyCourse']),
             new \Twig_SimpleFunction('display_task_title', [$this, 'displayTaskTitle']),
             new \Twig_SimpleFunction('get_video_max_level', [$this, 'getVideoMaxLevel']),
+            new \Twig_SimpleFunction('first_teacher', [$this, 'getFirstTeacher']),
         ];
     }
 
@@ -443,6 +444,13 @@ class CourseExtension extends \Twig_Extension
     public function getVideoMaxLevel($courseId)
     {
         return $this->getCourseService()->getVideoMaxLevel($courseId);
+    }
+
+    public function getFirstTeacher($courseId)
+    {
+        $teachers = $this->getMemberService()->findCourseTeachers($courseId);
+
+        return current($teachers);
     }
 
     protected function isUserAvatarEmpty()

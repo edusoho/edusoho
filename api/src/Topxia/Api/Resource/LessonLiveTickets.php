@@ -31,7 +31,7 @@ class LessonLiveTickets extends BaseResource
         $params['id'] = $user['id'];
         $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
-        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']);
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($task['courseId'], $user['id'], $task['activityId']);
 
         // android, iphone
         if ($request->request->get('device')) {

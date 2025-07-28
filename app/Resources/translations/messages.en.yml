@@ -1904,6 +1904,7 @@ course.plan_task.activity_manage.live.finished_condition_tips: '<p class="gray-d
 course.plan_task.activity_manage.live.start_time: 'Start time'
 course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live class.'
 course.plan_task.activity_manage.live.live_time: 'Duration'
+course.plan_task.activity_manage.live.teacher: 'Teacher'
 course.plan_task.activity_manage.live.info: 'Description'
 course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live %taskName% may lead to later students can not participate, can only watch the playback.'
 course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
