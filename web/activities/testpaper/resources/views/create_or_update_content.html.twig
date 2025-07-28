@@ -214,7 +214,7 @@
               value="0"
               {% if activity.ext.validPeriodMode|default('0') == 0 %}checked="checked"{% endif %}
               {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' %}disabled{% endif %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) or activity.ext.validPeriodMode|default('0') == 3 %}disabled{% endif %}
               {% endif %}
             >
             {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
@@ -227,7 +227,7 @@
               value="1"
               {% if activity.ext.validPeriodMode|default('0') == 1 %}checked="checked"{% endif %}
               {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' %}disabled{% endif %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) or activity.ext.validPeriodMode|default('0') == 3  %}disabled{% endif %}
               {% endif %}
             >
             {{ 'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans }}
@@ -240,7 +240,7 @@
               value="2"
               {% if activity.ext.validPeriodMode|default('0') == 2 %}checked="checked"{% endif %}
               {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' %}disabled{% endif %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) or activity.ext.validPeriodMode|default('0') == 3  %}disabled{% endif %}
               {% endif %}
             >
             {{ 'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }}
@@ -253,7 +253,7 @@
               value="3"
               {% if activity.ext.validPeriodMode|default('0') == 3 %}checked="checked"{% endif %}
               {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' %}disabled{% endif %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) or activity.ext.validPeriodMode|default('0') != 3  %}disabled{% endif %}
               {% endif %}
             >
             {{ 'course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval'|trans }}
@@ -274,7 +274,7 @@
             autocomplete="off"
             style="width: 320px;"
             {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' %}disabled{% endif %}
+              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
             {% endif %}
           >
         </div>
@@ -289,7 +289,7 @@
             class="form-control js-start-range testpaperTimeRange"
             style="width: 160px;"
             {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' %}disabled{% endif %}
+              {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
             {% endif %}
           >
         </div>
@@ -306,7 +306,7 @@
               autocomplete="off"
               style="width: 320px; margin-right: 12px"
               {% if activity.ext.answerScene.start_time|default(0) > 0 %}
-                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' %}disabled{% endif %}
+                {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
               {% endif %}
             >
             <div class="js-fixed-time" style="margin-right: 12px; margin-bottom: 10px"></div>
