@@ -2134,6 +2134,7 @@ item_bank_exercise.continue.back-btn: 'Back to Chapter Table of Contents'
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
+testpaper.answer.record.existed: 'The exam has already been taken by a student and the exam information cannot be modified'
 course.note.save_btn: Save
 course.note.share_btn: Share
 file_chooser.empty: 'No resources'

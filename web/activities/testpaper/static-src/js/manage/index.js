@@ -2,44 +2,12 @@ import { dateFormat, htmlEscape } from 'app/common/unit.js';
 import DateRangePicker from 'app/common/daterangepicker';
 import 'moment';
 
-const locale = {
-  'format': 'YYYY/MM/DD HH:mm:ss',
-  'separator': '-',
-  'applyLabel': '确定',
-  'cancelLabel': '取消',
-  'fromLabel': '起始时间',
-  'toLabel': '结束时间',
-  'customRangeLabel': '自定义',
-  'weekLabel': 'W',
-  'daysOfWeek': [
-    '日',
-    '一',
-    '二',
-    '三',
-    '四',
-    '五',
-    '六'
-  ],
-  'monthNames': [
-    '一月',
-    '二月',
-    '三月',
-    '四月',
-    '五月',
-    '六月',
-    '七月',
-    '八月',
-    '九月',
-    '十月',
-    '十一月',
-    '十二月'
-  ],
-  'firstDay': 1
-};
+let locale = {}
+let fixedTimeLocale = {}
 
 if (app.lang !== 'zh_CN') {
   locale = {
-    'format': 'YYYY/MM/DD HH:mm:ss',
+    'format': 'YYYY/MM/DD HH:mm',
     'separator': '-',
     'applyLabel': 'Apply',
     'cancelLabel': 'Cancel',
@@ -72,8 +40,110 @@ if (app.lang !== 'zh_CN') {
     ],
     'firstDay': 1
   };
+  fixedTimeLocale = {
+    'format': 'YYYY/MM/DD HH:mm',
+    'separator': '-',
+    'applyLabel': 'Apply',
+    'cancelLabel': 'Cancel',
+    'fromLabel': 'From',
+    'toLabel': 'To',
+    'customRangeLabel': 'Custom',
+    'weekLabel': 'W',
+    'daysOfWeek': [
+      'Su',
+      'Mo',
+      'Tu',
+      'We',
+      'Th',
+      'Fr',
+      'Sa'
+    ],
+    'monthNames': [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ],
+    'firstDay': 1
+  };
+} else {
+  locale = {
+    'format': 'YYYY/MM/DD HH:mm',
+    'separator': '-',
+    'applyLabel': '确定',
+    'cancelLabel': '取消',
+    'fromLabel': '起始时间',
+    'toLabel': '结束时间',
+    'customRangeLabel': '自定义',
+    'weekLabel': 'W',
+    'daysOfWeek': [
+      '日',
+      '一',
+      '二',
+      '三',
+      '四',
+      '五',
+      '六'
+    ],
+    'monthNames': [
+      '一月',
+      '二月',
+      '三月',
+      '四月',
+      '五月',
+      '六月',
+      '七月',
+      '八月',
+      '九月',
+      '十月',
+      '十一月',
+      '十二月'
+    ],
+    'firstDay': 1
+  };
+  fixedTimeLocale = {
+    'format': 'YYYY/MM/DD HH:mm',
+    'separator': '-',
+    'applyLabel': '确定',
+    'cancelLabel': '取消',
+    'fromLabel': '起始时间',
+    'toLabel': '结束时间',
+    'customRangeLabel': '自定义',
+    'weekLabel': 'W',
+    'daysOfWeek': [
+      '日',
+      '一',
+      '二',
+      '三',
+      '四',
+      '五',
+      '六'
+    ],
+    'monthNames': [
+      '一月',
+      '二月',
+      '三月',
+      '四月',
+      '五月',
+      '六月',
+      '七月',
+      '八月',
+      '九月',
+      '十月',
+      '十一月',
+      '十二月'
+    ],
+    'firstDay': 1
+  };
 }
-
 
 class Testpaper {
   constructor($element) {
@@ -87,8 +157,8 @@ class Testpaper {
     this.$rangeStartTime = $('.js-start-range')
     this.$rangeDateInput = $('.js-realTimeRange-data');
     this.$rangeFixedTime = $('.js-fixedTime-data');
-    this.$testDuration = $('.js-test-duration');
-    this.$testDurationTip = $('.js-test-duration-tip');
+    this.$testDuration = $('.js-fixed-time');
+    this.$testDurationTip = $('.js-fixed-time-tip');
     this._init();
   }
 
@@ -185,7 +255,6 @@ class Testpaper {
       'singleDatePicker': true,
       "timePicker24Hour": true,
       "timePickerSeconds": true,
-      'autoUpdateInput':false,
       'minDate': new Date(),
       'startDate': validPeriodMode == '2' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
       locale,
@@ -199,20 +268,19 @@ class Testpaper {
     this.$rangeFixedTime.daterangepicker({
       "timePicker": true,
       "timePicker24Hour": true,
-      "timePickerSeconds": true,
       'autoUpdateInput':false,
       'minDate': new Date(),
       'endDate': validPeriodMode == '3' ? endTime != '0' ? endTime : todayTime : todayTime,
-      'startDate': validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
-      locale,
+      'startDate': validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('minute') : moment().startOf('minute'),
+      locale: fixedTimeLocale,
     });
 
     const self = this;
     this.$rangeFixedTime.on('apply.daterangepicker', function(ev, picker) {
-      $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
-      $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
+      $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm'))
+      $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm'))
       self.initTestDuration();
-      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm'));
     });
   }
 
@@ -280,7 +348,7 @@ class Testpaper {
       const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
 
       if (diffMs > TEN_HOURS_IN_MS) {
-        $('.js-test-duration').hide();
+        $('.js-fixed-time').hide();
       }
 
       return diffMs <= TEN_HOURS_IN_MS;
@@ -696,7 +764,7 @@ class Testpaper {
     $('[name=startTime]').val('0')
     $('[name=endTime]').val('0')
     $('.js-redo-interval-form-group').show();
-    $('.js-test-duration-form-group').show();
+    $('.js-fixed-time-form-group').show();
     $('input[name=rangeTime]').val('');
     $('input[name=rangeStartTime]').val('');
     $('input[name=rangeFixedTime]').val('');
@@ -728,7 +796,7 @@ class Testpaper {
       $('.js-examinations-num').attr('type', 'text');
       $('input[type="text"][name="doTimes"]').val('1');
       $('.js-redo-interval-form-group').hide();
-      $('.js-test-duration-form-group').hide();
+      $('.js-fixed-time-form-group').hide();
     }
   }
 
@@ -738,7 +806,7 @@ class Testpaper {
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
     if (validPeriodMode == 3) {
       $('.js-redo-interval-form-group').hide();
-      $('.js-test-duration-form-group').hide();
+      $('.js-fixed-time-form-group').hide();
     }
     if (startTime != 0 && endTime != 0 && validPeriodMode == 3) {
 
@@ -746,7 +814,6 @@ class Testpaper {
       const startDate = new Date(startTime);
       const endDate = new Date(endTime);
       const diffMs = endDate - startDate;
-      const diffSeconds = Math.floor(diffMs / 1000) % 60;
       const diffMinutes = Math.floor(diffMs / (1000 * 60)) % 60;
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
@@ -758,7 +825,7 @@ class Testpaper {
           .css('color', 'red');
       } else {
         this.$testDuration
-          .text('考试时长： ' + `${diffHours}小时${diffMinutes}分${diffSeconds}秒`)
+          .text('考试时长： ' + `${diffHours}小时${diffMinutes}分`)
           .css('color', 'black');
       }
     } else {

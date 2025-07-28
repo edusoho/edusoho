@@ -838,7 +838,7 @@ validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母
 validate.have_spaces: 密码不能有空格哦
 validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
 validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
-validate.check_password_high.message: 请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码
+validate.check_password_high.message: 请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 validate.custom_integer.message: 请输入正确的整数
 validate.int.message: 最多9位整数
 validate.float.message: 最多两位小数，整数位不超过8位！

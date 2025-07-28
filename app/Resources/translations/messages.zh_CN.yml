@@ -2418,6 +2418,7 @@ course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
 activity.live.overlap_time_notice: 所选时间已经有直播了，请换个时间
+testpaper.answer.record.existed: 该考试已有学员进行考试，无法修改考试信息
 
 
 
@@ -3139,7 +3140,7 @@ user.register.password_label: 密码
 user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.low: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.register.password_label_placeholder.high: 请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码
+user.register.password_label_placeholder.high: 请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 user.register.enter_password: 请输入密码
 user.register.invite_code_label: 邀请码
 user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
@@ -3180,7 +3181,7 @@ user.oauth.bind_existed_account: 绑定已有帐号？
 user.oauth.bind_error.bind_by_other: 该帐号已被绑定
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
 user.oauth.register.password__placeholder: 请输入密码
-user.oauth.register.password_tip: 请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码
+user.oauth.register.password_tip: 请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 user.oauth.register_account_by_ways: 使用%accountType%创建帐号
 user.oauth.register_account.binding_account_by_email: 关联已有邮箱帐号
 user.oauth.register_account.binding_account_by_mobile: 绑定手机号
@@ -3457,7 +3458,7 @@ user.settings.password_reset.reset_btn: 重设密码
 user.settings.password_reset.find_password_btn: 找回密码
 user.settings.password_level.low: 5-20位英文、数字、符号，区分大小写
 user.settings.password_level.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.settings.password_level.high: 请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码
+user.settings.password_level.high: 请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 
 
 # 账户中心模块
@@ -6881,7 +6882,7 @@ admin.user.fields.staff_email: 员工邮箱
 admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.low: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-admin.user.fields.password_hint.high: 请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码
+admin.user.fields.password_hint.high: 请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 admin.user.fields.confirm_password_label: 确认密码
 admin.user.fields.confirm_password_hint: 再输入一次密码
 admin.user.fields.password_label: 密码
@@ -10739,7 +10740,7 @@ exception.user.user_is_destroyed: 用户已注销
 exception.user.email_password_error: 邮箱密码错误
 exception.user.already_bind: 用户已绑定
 exception.user.password_require_upgrade: 检测到您当前密码等级较低，请重新设置密码
-exception.user.password_require_high_level: 请输入8-32位包含字母大小写、数字、符号四种字符组合成的密码
+exception.user.password_require_high_level: 请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 exception.user.original_password_error: 您输入的原密码不正确，请重新输入
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
