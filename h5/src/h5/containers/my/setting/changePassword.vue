@@ -59,7 +59,10 @@ export default {
       Api.resetPassword({
         data: {
           oldPassword: this.oldPassword,
-          encryptPassword: btoa(unescape(encodeURIComponent(this.newPassword)))
+          encryptPassword: window.XXTEA.encryptToBase64(
+            this.newPassword,
+            window.location.host,
+          )
         }
       }).then(res => {
         Toast({
