@@ -27,6 +27,7 @@ const teachers = reactive({
   list: [],
   current: defaultTeacher.id,
   search: undefined,
+  searchVersion: 0,
 });
 
 const paging = {};
@@ -46,12 +47,13 @@ const onPopupScroll = _.debounce(e => {
   }
 }, 300);
 
-const onSearch = _.debounce(input => {
-  teachers.list = [];
+const onSearch = input => {
+  teachers.searchVersion++;
   teachers.search = input;
+  teachers.list = [];
   resetPaging();
   fetchTeacher();
-}, 300);
+};
 
 const teacherId = document.getElementById('teacherId');
 
@@ -63,16 +65,19 @@ const fetchTeacher = () => {
   const params = {
     limit: paging.pageSize,
     offset: paging.pageSize * paging.current,
-    excludeIds: [],
+    excludeIds: [defaultTeacher.id],
   };
   if (teachers.search) {
     params.nickname = teachers.search;
   }
   if (teachers.list.length === 0 && (!teachers.search || defaultTeacher.nickname.includes(teachers.search))) {
     teachers.list.push(defaultTeacher);
-    params.excludeIds.push(defaultTeacher.id);
   }
+  const searchVersion = teachers.searchVersion;
   Api.teacher.search(params).then(res => {
+    if (searchVersion !== teachers.searchVersion) {
+      return;
+    }
     teachers.list = _.concat(teachers.list, res.data);
     paging.current++;
     paging.total += res.data.length;
