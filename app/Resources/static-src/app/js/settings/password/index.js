@@ -35,6 +35,14 @@ $('#settings-password-form').validate({
       visible_character: true
     }
   },
+  messages: {
+    newPassword: {
+      required: Translator.trans('validate.check_password_high.message'),
+      visible_character: Translator.trans('validate.check_password_high.message'),
+      spaceNoSupport: Translator.trans('validate.check_password_high.message'),
+      check_password_high: Translator.trans('validate.check_password_high.message'),
+    },
+  },
   submitSuccess(data) {
     notify('success', Translator.trans(data.message));
 
