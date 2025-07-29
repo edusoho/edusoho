@@ -14,7 +14,7 @@ class LiveEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'course.teachers.update' => 'onCourseTeachersUpdate',
+//            'course.teachers.update' => 'onCourseTeachersUpdate',
             'course.task.update' => 'onCourseTaskUpdate',
         ];
     }

@@ -199,7 +199,7 @@ interface MemberService
 
     public function refreshCourseMembersFinishData($courseId);
 
-    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
+    public function getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($courseId, $userId, $activityId);
 
     public function releaseMultiClassMember($courseId, $multiClassId);
 

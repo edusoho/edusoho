@@ -43,6 +43,8 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.lesson.delete' => ['onCourseLessonDelete', -100],
             'course.task.delete' => ['onCourseTaskDelete', -100],
             'course.task.create' => ['onCourseTaskCreate', -100],
+            'live.activity.create' => 'onLiveActivityCreate',
+            'live.activity.update' => 'onLiveActivityUpdate',
         ];
     }
 
@@ -262,6 +264,34 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $task = $event->getSubject();
         $this->getCourseMemberService()->recountLearningDataByCourseId($task['courseId']);
+    }
+
+    public function onLiveActivityCreate(Event $event)
+    {
+        $activity = $event->getArgument('activity');
+        $this->addCourseTeacher($activity['fromCourseId'], $activity['teacherId']);
+    }
+
+    public function onLiveActivityUpdate(Event $event)
+    {
+        $liveActivity = $event->getSubject();
+        $activity = $event->getArgument('activity');
+        $this->addCourseTeacher($activity['fromCourseId'], $liveActivity['teacherId']);
+    }
+
+    private function addCourseTeacher($courseId, $teacherId)
+    {
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $teacherId);
+        if (!empty($member) && 'teacher' == $member['role']) {
+            return;
+        }
+        $teachers = $this->getCourseMemberService()->findCourseTeachers($courseId);
+        $newTeachers = [];
+        foreach ($teachers as $teacher) {
+            $newTeachers[] = ['id' => $teacher['userId'], 'isVisible' => $teacher['isVisible']];
+        }
+        $newTeachers[] = ['id' => $teacherId, 'isVisible' => 0];
+        $this->getCourseMemberService()->setCourseTeachers($courseId, $newTeachers);
     }
 
     protected function getWelcomeMessageBody($user, $course)

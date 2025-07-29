@@ -1,5 +1,5 @@
 {% extends 'activity/activity-layout.html.twig' %}
-{% do script(['libs/ltc-sdk-client.js','libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', cloud_sdk_url('uploader'), 'liveactivity/js/manage/index.js']) %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', cloud_sdk_url('uploader'), 'liveactivity/js/manage/index.js', 'vue3/js/course-manage/teachers/select/index.js']) %}
 
 {% if activity.id|default(false) %}
     {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:activity.fromCourseId, activityId: activity.id}) %}
@@ -11,6 +11,8 @@
 {% set mediaType = activity.mediaType|default('live') %}
 {% set medias = find_materials_by_activity_id_and_source(activity.id|default(0), 'courseactivity') %}
 {% set liveAccount = get_live_account() %}
+{% set defaultTeacher = first_teacher(activity.fromCourseId) %}
+{% set teacher = data('User', {userId: activity.ext.teacherId|default(defaultTeacher.userId) ?: defaultTeacher.userId}) %}
 
 {% block activity_step %}
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
@@ -58,6 +60,16 @@
           <div class="col-sm-10">
               <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ checkUrl }}">{{'site.date.minute'|trans}}
           </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="teacherId" class="control-label-required">{{ 'course.plan_task.activity_manage.live.teacher'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <div id="teacher-select-app" data-teacher="{{ teacher|json_encode }}"></div>
+          <input id="teacherId" type="hidden" name="teacherId" value="{{ activity.ext.teacherId|default(defaultTeacher.userId) ?: defaultTeacher.userId }}">
+        </div>
       </div>
 
       <div class="form-group {% if liveAccount.provider|default() != 'liveCloud' %} hidden {% endif %}">
