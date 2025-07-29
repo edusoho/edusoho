@@ -233,6 +233,7 @@ export default {
         query: {
           targetType: this.$route.params.type,
           id: this.targetId,
+          exerciseMediaType: this.exerciseMediaType,
           ...this.searchParams,
         },
       });
