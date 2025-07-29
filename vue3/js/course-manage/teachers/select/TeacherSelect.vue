@@ -87,6 +87,7 @@ const fetchTeacher = () => {
   });
 };
 
+resetPaging();
 fetchTeacher();
 
 </script>
