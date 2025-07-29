@@ -97,7 +97,7 @@ export default {
       :placeholder="$t('placeholder.oldPassword')"
     >
       <template #button>
-        <img v-if="!showOldPassword" src="static/images/open-eye.svg" alt="" @click="toggleOldPasswordVisibility">
+        <img v-if="showOldPassword" src="static/images/open-eye.svg" alt="" @click="toggleOldPasswordVisibility">
         <img v-else src="static/images/close-eye.svg" alt="" @click="toggleOldPasswordVisibility">
       </template>
     </van-field>
@@ -109,7 +109,7 @@ export default {
       :placeholder="$t('placeholder.newPassword')"
     >
       <template #button>
-        <img v-if="!showNewPassword" src="static/images/open-eye.svg" alt="" @click="toggleNewPasswordVisibility">
+        <img v-if="showNewPassword" src="static/images/open-eye.svg" alt="" @click="toggleNewPasswordVisibility">
         <img v-else src="static/images/close-eye.svg" alt="" @click="toggleNewPasswordVisibility">
       </template>
     </van-field>
@@ -121,7 +121,7 @@ export default {
       :placeholder="$t('placeholder.confirmPassword')"
     >
       <template #button>
-        <img v-if="!showConfirmPassword" src="static/images/open-eye.svg" alt="" @click="toggleConfirmPasswordVisibility">
+        <img v-if="showConfirmPassword" src="static/images/open-eye.svg" alt="" @click="toggleConfirmPasswordVisibility">
         <img v-else src="static/images/close-eye.svg" alt="" @click="toggleConfirmPasswordVisibility">
       </template>
     </van-field>

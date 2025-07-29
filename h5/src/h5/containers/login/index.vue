@@ -20,7 +20,7 @@
       :placeholder="$t('placeholder.password')"
     >
       <template #button>
-        <img v-if="!showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
+        <img v-if="showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
         <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
       </template>
     </van-field>

@@ -24,11 +24,11 @@
       style="padding-bottom: 0"
     >
       <template #button>
-        <img v-if="!showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
+        <img v-if="showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
         <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
       </template>
     </van-field>
-    <div v-if="showPasswordTip" class="password-tip">请配置8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
+    <div v-if="showPasswordTip" class="password-tip">请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
 
     <e-drag
       v-if="dragEnable"
