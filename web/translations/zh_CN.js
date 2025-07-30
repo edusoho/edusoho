@@ -712,7 +712,7 @@ t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\
 t.add("validate.have_spaces", "\u5bc6\u7801\u4e0d\u80fd\u6709\u7a7a\u683c\u54e6", "js", "zh_CN");
 t.add("validate.check_password_low.message", "5-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
 t.add("validate.check_password_middle.message", "8-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u81f3\u5c11\u5305\u542b\u4e24\u79cd\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
-t.add("validate.check_password_high.message", "\u8bf7\u914d\u7f6e8-32\u4f4d\u5305\u542b\u5b57\u6bcd\u5927\u5c0f\u5199\u3001\u6570\u5b57\u3001\u7b26\u53f7\u56db\u79cd\u5b57\u7b26\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
+t.add("validate.check_password_high.message", "\u8bf7\u8bbe\u7f6e8-32\u4f4d\u5305\u542b\u5b57\u6bcd\u5927\u5c0f\u5199\u3001\u6570\u5b57\u3001\u7b26\u53f7\u56db\u79cd\u5b57\u7b26\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
 t.add("validate.custom_integer.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u6574\u6570", "js", "zh_CN");
 t.add("validate.int.message", "\u6700\u591a9\u4f4d\u6574\u6570", "js", "zh_CN");
 t.add("validate.float.message", "\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
