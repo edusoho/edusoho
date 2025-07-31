@@ -28,7 +28,7 @@ class UserResetPassword extends AbstractResource
         }
 
         if (!$this->getUserService()->verifyPassword($user['id'], $fields['oldPassword'])) {
-            throw UserException::PASSWORD_ERROR();
+            throw UserException::ORIGINAL_PASSWORD_ERROR();
         }
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encryptPassword']), $request->getHttpRequest()->getHost());
