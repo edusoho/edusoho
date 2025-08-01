@@ -103,7 +103,7 @@ class ActivityController extends BaseController
     {
         $this->getCourseService()->tryManageCourse($courseId);
         if (!empty($activityId)) {
-            $activity = $this->getActivityService()->getActivity($activityId);
+            $activity = $this->getActivityService()->getActivity($activityId, true);
         } else {
             $activity = [
                 'id' => $activityId,
