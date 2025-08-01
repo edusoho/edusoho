@@ -159,6 +159,8 @@ class Testpaper {
     this.$rangeFixedTime = $('.js-fixedTime-data');
     this.$testDuration = $('.js-fixed-time');
     this.$testDurationTip = $('.js-fixed-time-tip');
+    this.$canUpdate = $('#canUpdate').val();
+    this.$validPeriodMode = $('#validPeriodMode').val();
     this._init();
   }
 
@@ -895,6 +897,11 @@ class Testpaper {
     }
 
     this.scoreSlider = noUiSlider.create(scoreSlider, option);
+
+    if (!this.$canUpdate && this.$validPeriodMode == 3) {
+      scoreSlider.setAttribute('disabled', true);
+    }
+
     scoreSlider.noUiSlider.on('update', function (values, handle) {
       let rate = values[handle] / score;
       let percentage = (rate * 100).toFixed(0);
@@ -924,6 +931,10 @@ class Testpaper {
   }
 
   switchExamMode(event) {
+    if (!this.$canUpdate && this.$validPeriodMode == 3) {
+      return;
+    }
+
     const $this = $(event.currentTarget);
     const examModeValue = $this.data('value');
 
