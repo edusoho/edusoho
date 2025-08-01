@@ -93,7 +93,7 @@ export default {
 <template>
   <div class="change-password-container">
     <van-field
-      v-model="oldPassword"
+      v-model.trim="oldPassword"
       :border="false"
       :type="showOldPassword ? 'text' : 'password'"
       class="login-input"
@@ -106,7 +106,7 @@ export default {
       </template>
     </van-field>
     <van-field
-      v-model="newPassword"
+      v-model.trim="newPassword"
       :border="false"
       :type="showNewPassword ? 'text' : 'password'"
       class="login-input"
@@ -118,7 +118,7 @@ export default {
       </template>
     </van-field>
     <van-field
-      v-model="confirmPassword"
+      v-model.trim="confirmPassword"
       :border="false"
       :type="showConfirmPassword ? 'text' : 'password'"
       class="login-input"
