@@ -68,7 +68,7 @@
       {% set features = get_features() %}
       {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
       {% set examMode = activity.ext.answerScene.exam_mode|default(0) %}
-      {% set canUpdate = activity.ext.answerScene.canUpdate|default(false) %}
+      {% set canUpdate = activity.ext.answerScene.canUpdate|default(true) %}
       {% set validPeriodMode = activity.ext.validPeriodMode|default('0') %}
       <input type="hidden" id="activityId" value="{{ activity.id|default(0) }}" />
       <input type="hidden" name="mediaType" value="testpaper" />

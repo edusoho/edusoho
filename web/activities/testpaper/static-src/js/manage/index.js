@@ -177,7 +177,6 @@ class Testpaper {
     this.initDatePicker();
     this.initFormItemData();
     this.initAdvancedSettings();
-    this.changeContentHight();
     this.initTestDuration();
 
     window.ltc.on('getActivity', (msg) => {
@@ -214,17 +213,6 @@ class Testpaper {
     }
   }
 
-  changeContentHight() {
-    $('.testpaperTimeRange').on('focus', function() {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
-    });
-    $('.testpaperTimeRange').on('blur', function() {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
-    });
-  }
-
   initDatePicker() {
     const todayYear=(new Date()).getFullYear();
     const todayMonth=(new Date()).getMonth();
@@ -252,6 +240,16 @@ class Testpaper {
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
     });
 
+    this.$rangeDateInput.on('show.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
+    })
+
+    this.$rangeDateInput.on('hide.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
+    })
+
     this.$rangeStartTime.daterangepicker({
       "timePicker": true,
       'singleDatePicker': true,
@@ -266,6 +264,16 @@ class Testpaper {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
     });
+
+    this.$rangeStartTime.on('show.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
+    })
+
+    this.$rangeStartTime.on('hide.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
+    })
 
     this.$rangeFixedTime.daterangepicker({
       "timePicker": true,
@@ -284,6 +292,16 @@ class Testpaper {
       self.initTestDuration();
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm'));
     });
+
+    this.$rangeFixedTime.on('show.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height + 240 + 'px';
+    })
+
+    this.$rangeFixedTime.on('hide.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height - 240 + 'px';
+    })
   }
 
   initFormItemData() {
