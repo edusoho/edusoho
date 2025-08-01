@@ -93,8 +93,9 @@ export default {
       v-model="oldPassword"
       :border="false"
       :type="showOldPassword ? 'text' : 'password'"
-      class="login-input e-input"
+      class="login-input"
       :placeholder="$t('placeholder.oldPassword')"
+      style="margin-top: 0; padding-top: 0"
     >
       <template #button>
         <img v-if="showOldPassword" src="static/images/open-eye.svg" alt="" @click="toggleOldPasswordVisibility">
@@ -105,7 +106,7 @@ export default {
       v-model="newPassword"
       :border="false"
       :type="showNewPassword ? 'text' : 'password'"
-      class="login-input e-input"
+      class="login-input"
       :placeholder="$t('placeholder.newPassword')"
     >
       <template #button>
@@ -117,8 +118,9 @@ export default {
       v-model="confirmPassword"
       :border="false"
       :type="showConfirmPassword ? 'text' : 'password'"
-      class="login-input e-input"
+      class="login-input"
       :placeholder="$t('placeholder.confirmPassword')"
+      style="padding-bottom: 18px"
     >
       <template #button>
         <img v-if="showConfirmPassword" src="static/images/open-eye.svg" alt="" @click="toggleConfirmPasswordVisibility">
