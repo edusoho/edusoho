@@ -2271,7 +2271,7 @@ course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间�
 course.plan_task.activity_manage.testpaper.question.disorder: 开启后，学员进入考试时，对应大题内所有小题将随机排序
 course.plan_task.activity_manage.testpaper.option.disorder: 开启后，学员进入考试时，所有选择题选项将随机排序
 course.plan_task.activity_manage.testpaper.unlimited: 不限：没有时间限制，永久有效；
-course.plan_task.activity_manage.testpaper.realTimeRange: 指定日期区间：设置可以参加考试的时间区间，在此区间内可参加考试，再次区间外无法参加考试。
+course.plan_task.activity_manage.testpaper.realTimeRange: 指定日期区间：设置可以参加考试的时间区间，在此区间内可参加考试，在此区间外无法参加考试。
 course.plan_task.activity_manage.testpaper.startTime: 指定开始时间：仅指定开始时间，不指定结束时间，永久有效，末到开始时间无法参加考试；
 course.plan_task.activity_manage.testpaper.fixedTimeInterval: 固定考试时间：有固定考试开始时间和结束时间，考试时间开始后允许进入考试，考试时间结束自动交卷，考试开始后不可修改考试时间。
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制，考试次数设置为1次时，“重考间隔”不生效。

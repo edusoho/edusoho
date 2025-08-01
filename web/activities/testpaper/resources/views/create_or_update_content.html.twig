@@ -304,7 +304,7 @@
               size="25"
               class="form-control js-fixedTime-data testpaperTimeRange"
               autocomplete="off"
-              style="width: 320px; margin-right: 12px"
+              style="width: 320px; margin-right: 24px"
               {% if activity.ext.answerScene.start_time|default(0) > 0 %}
                 {% if date("now") > date(activity.ext.answerScene.start_time|date('Y-m-d H:i:s')) and activity.courseStatus == 'published' and not(activity.ext.answerScene.canUpdate|default(false)) %}disabled{% endif %}
               {% endif %}

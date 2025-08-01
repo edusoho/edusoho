@@ -77,3 +77,15 @@ $('.js-current-password-close-eye').on('click', function () {
   $('.js-current-password-close-eye').hide();
   $('.js-current-password-open-eye').show();
 })
+
+$('.js-confirm-password-open-eye').on('click', function () {
+  $('#form_confirmPassword').attr('type', 'password');
+  $('.js-confirm-password-open-eye').hide();
+  $('.js-confirm-password-close-eye').show();
+})
+
+$('.js-confirm-password-close-eye').on('click', function () {
+  $('#form_confirmPassword').attr('type', 'text');
+  $('.js-confirm-password-close-eye').hide();
+  $('.js-confirm-password-open-eye').show();
+})
