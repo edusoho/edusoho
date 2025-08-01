@@ -54,6 +54,7 @@
                              data-toggle="cd-radio"
                              {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked="checked"{% endif %}
                              style="{% if not(canUpdate) and validPeriodMode == 3 %}cursor: not-allowed{% endif %}"
+                             {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
                       >
                       {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
                     </label>
