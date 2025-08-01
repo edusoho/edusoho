@@ -291,6 +291,9 @@ class Testpaper {
       $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm'))
       self.initTestDuration();
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm'));
+      const diffMs = picker.endDate - picker.startDate;
+      const diffInMinutes = Math.floor(diffMs / (1000 * 60));
+      $('#length').val(diffInMinutes);
     });
 
     this.$rangeFixedTime.on('show.daterangepicker', function () {
@@ -781,6 +784,7 @@ class Testpaper {
   showRedoExamination(event) {
     const $this = $(event.currentTarget);
     this.initTestDuration();
+    $('#length').val(null)
     $('[name=startTime]').val('0')
     $('[name=endTime]').val('0')
     $('.js-redo-interval-form-group').show();
