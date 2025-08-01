@@ -2,7 +2,6 @@
 import {Toast} from 'vant';
 import Api from '@/api';
 import XXTEA from '@/utils/xxtea.js';
-import * as types from '@/store/mutation-types';
 
 export default {
   data() {
