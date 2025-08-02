@@ -4,7 +4,7 @@
     id="item-bank-sdk-message"
     v-if="this.section_responses.length > 0"
   >
-    <div v-viewer class="images">
+    <div id="images">
       <img
         src="/static-dist/app/img/question-bank/testpaperAiIcon.png"
         alt=""
