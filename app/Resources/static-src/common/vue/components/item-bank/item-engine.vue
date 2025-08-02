@@ -4,6 +4,13 @@
     id="item-bank-sdk-message"
     v-if="this.section_responses.length > 0"
   >
+    <div v-viewer class="images">
+      <img
+        src="/static-dist/app/img/question-bank/testpaperAiIcon.png"
+        alt=""
+      />
+    </div>
+
     <!--  -->
     <div
       v-show="!mobileShow"

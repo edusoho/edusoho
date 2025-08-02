@@ -11236,6 +11236,11 @@
     "loader-utils" "^1.1.0"
     "neo-async" "^2.6.0"
 
+"throttle-debounce@^2.0.1":
+  "integrity" "sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ=="
+  "resolved" "https://registry.npmmirror.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz"
+  "version" "2.3.0"
+
 "through@^2.3.6", "through@~2.3", "through@~2.3.1", "through@2":
   "integrity" "sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg=="
   "resolved" "https://registry.npmmirror.com/through/-/through-2.3.8.tgz"
@@ -11743,6 +11748,14 @@
   "resolved" "https://registry.npmmirror.com/v-clipboard/-/v-clipboard-2.2.3.tgz"
   "version" "2.2.3"
 
+"v-viewer@^1.5.1":
+  "integrity" "sha512-Q5ICKzmYQD0qTf+hti2Lhgy6UYY2zgFr+YrN9a3yPgr7pOjYrG405Pz4+6Z6FXlhdhGysCWFJUNCI2tsIyvjWQ=="
+  "resolved" "https://registry.npmmirror.com/v-viewer/-/v-viewer-1.5.1.tgz"
+  "version" "1.5.1"
+  dependencies:
+    "throttle-debounce" "^2.0.1"
+    "viewerjs" "^1.5.0"
+
 "v8flags@^3.1.1":
   "integrity" "sha512-mH8etigqMfiGWdeXpaaqGfs6BndypxusHHcv2qSHyZkGEznCd/qAXCWWRzeowtL54147cktFOC4P5y+kl8d8Jg=="
   "resolved" "https://registry.npmmirror.com/v8flags/-/v8flags-3.2.0.tgz"
@@ -11804,6 +11817,11 @@
   "integrity" "sha512-AObpdjbcyhl1mctj2L9YnSzDVJaR0uuBQtIzKuiz8M+ZTh+wagqIxw+5cNB4pBVEalxz9B7HLtvuq18dHXLUlA=="
   "resolved" "https://registry.npmmirror.com/videojs-swf/-/videojs-swf-4.5.1.tgz"
   "version" "4.5.1"
+
+"viewerjs@^1.11.7", "viewerjs@^1.5.0":
+  "integrity" "sha512-0JuVqOmL5v1jmEAlG5EBDR3XquxY8DWFQbFMprOXgaBB0F7Q/X9xWdEaQc59D8xzwkdUgXEMSSknTpriq95igg=="
+  "resolved" "https://registry.npmmirror.com/viewerjs/-/viewerjs-1.11.7.tgz"
+  "version" "1.11.7"
 
 "vm-browserify@^1.0.1":
   "integrity" "sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ=="

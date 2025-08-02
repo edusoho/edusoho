@@ -3,6 +3,8 @@ import {Popover} from '@codeages/design-vue';
 import ItemEngine from 'common/vue/components/item-bank/item-engine';
 import InspectionControl from 'common/vue/components/item-bank/inspection-control';
 import { isMobileDevice } from 'common/utils';
+import Viewer from 'v-viewer';
+import 'viewerjs/dist/viewer.css';
 
 jQuery.support.cors = true;
 
@@ -15,6 +17,7 @@ Vue.config.productionTip = false;
 Vue.component(ItemEngine.name, ItemEngine);
 Vue.component(InspectionControl.name, InspectionControl);
 Vue.use(Popover);
+Vue.use(Viewer);
 
 new Vue({
   render: createElement => createElement(Answer)
