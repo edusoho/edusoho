@@ -1,11 +1,1 @@
-/*!
- * Viewer.js v1.11.7
- * https://fengyuanchen.github.io/viewerjs
- *
- * Copyright 2015-present Chen Fengyuan
- * Released under the MIT license
- *
- * Date: 2024-11-24T04:32:19.116Z
- */
-
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
