@@ -158,9 +158,10 @@ class Testpaper {
     this.$rangeDateInput = $('.js-realTimeRange-data');
     this.$rangeFixedTime = $('.js-fixedTime-data');
     this.$testDuration = $('.js-fixed-time');
-    this.$testDurationTip = $('.js-fixed-time-tip');
+    this.$fixedTimeTip = $('.js-fixed-time-tip');
     this.$canUpdate = $('#canUpdate').val();
     this.$validPeriodMode = $('#validPeriodMode').val();
+    this.$examMode = $('#examMode').val();
     this._init();
   }
 
@@ -842,7 +843,14 @@ class Testpaper {
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
       this.$testDuration.show();
-      this.$testDurationTip.show();
+
+      if (this.$examMode == 0) {
+        this.$fixedTimeTip.text('模拟考试时长必须 > 0');
+      } else {
+        this.$fixedTimeTip.text('练习考试时长必须 > 0');
+      }
+      this.$fixedTimeTip.show();
+
       if (diffMs > TEN_HOURS_IN_MS) {
         this.$testDuration
           .text('固定考试时间不能超过10个小时')
@@ -854,7 +862,7 @@ class Testpaper {
       }
     } else {
       this.$testDuration.hide();
-      this.$testDurationTip.hide();
+      this.$fixedTimeTip.hide();
     }
   }
 
@@ -959,6 +967,12 @@ class Testpaper {
 
     const $this = $(event.currentTarget);
     const examModeValue = $this.data('value');
+
+    if (examModeValue == 0) {
+      this.$fixedTimeTip.text('模拟考试时长必须 > 0');
+    } else {
+      this.$fixedTimeTip.text('练习考试时长必须 > 0');
+    }
 
     this.$element.find('#examMode').val(examModeValue);
     this.$element.find('.js-testpaper-mode').removeClass('active');
