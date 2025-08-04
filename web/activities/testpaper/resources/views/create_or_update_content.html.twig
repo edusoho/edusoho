@@ -68,7 +68,7 @@
       {% set features = get_features() %}
       {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
       {% set examMode = activity.ext.answerScene.exam_mode|default(0) %}
-      {% set canUpdate = activity.ext.answerScene.canUpdate|default(true) %}
+      {% set canUpdate = activity.ext.answerScene.canUpdate is defined ? activity.ext.answerScene.canUpdate : 'true' %}
       {% set validPeriodMode = activity.ext.validPeriodMode|default('0') %}
       <input type="hidden" id="activityId" value="{{ activity.id|default(0) }}" />
       <input type="hidden" name="mediaType" value="testpaper" />
@@ -326,7 +326,7 @@
             >
             <div class="js-fixed-time" style="margin-right: 12px; margin-bottom: 10px"></div>
           </div>
-          <div class="js-fixed-time-tip" style="margin-top: 5px; font-size: 14px; font-weight: 400; line-height: 22px; color: #A1A1A1;">模拟考试时长必须 > 0</div>
+          <div class="js-fixed-time-tip" style="margin-top: 5px; font-size: 14px; font-weight: 400; line-height: 22px; color: #A1A1A1;"></div>
         </div>
 			</div>
 
