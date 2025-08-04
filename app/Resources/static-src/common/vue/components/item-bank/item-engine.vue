@@ -4,8 +4,9 @@
     id="item-bank-sdk-message"
     v-if="this.section_responses.length > 0"
   >
-    <div id="images">
+    <div>
       <img
+        id="image"
         src="/static-dist/app/img/question-bank/testpaperAiIcon.png"
         alt=""
       />
@@ -574,6 +575,8 @@ import {
   getCountDown
 } from 'common/date-toolkit';
 
+import Viewer from 'viewerjs';
+
 let orderNum = 1;
 const baseCKEditorData = {
   publicPath: `${process.env.BASE_URL}/es-ckeditor/ckeditor.js`,
@@ -879,6 +882,13 @@ export default {
     };
   },
   mounted() {
+    // const viewer = new Viewer(document.getElementById('image'), {
+    //   inline: true,
+    //   viewed() {
+    //     viewer.zoomTo(1);
+    //   },
+    // });
+
     //如果有暂存数据
     if (this.questionFavorites.length > 0) {
       this.collectList = this.questionFavorites;

@@ -100,6 +100,9 @@ module.exports = {
         'js/**',
         'less/**',
       ]
+    },
+    {
+      name: 'viewerjs/dist/viewer.css'
     }
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin,item-bank}',
