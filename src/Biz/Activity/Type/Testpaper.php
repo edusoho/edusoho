@@ -195,6 +195,7 @@ class Testpaper extends Activity
                 'do_times' => $filterFields['doTimes'],
                 'redo_interval' => $filterFields['redoInterval'],
                 'start_time' => $filterFields['startTime'],
+                'valid_period_mode' => 3 == $fields['validPeriodMode'] ? $fields['validPeriodMode'] : 0,
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
                 'exam_mode' => empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode'],
