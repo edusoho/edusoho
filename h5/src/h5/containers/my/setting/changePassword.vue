@@ -74,7 +74,8 @@ export default {
           this.$router.push({
             name: 'login',
             query: {
-              redirect: '/my'
+              redirect: '/my',
+              skipUrl: '/login'
             }
           });
         }, 2000);
@@ -134,7 +135,3 @@ export default {
     <button class="save-button" @click="confirm">{{ $t('btn.confirm') }}</button>
   </div>
 </template>
-
-<style scoped lang="less">
-
-</style>
