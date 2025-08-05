@@ -2,6 +2,7 @@
 import {Toast} from 'vant';
 import Api from '@/api';
 import XXTEA from '@/utils/xxtea.js';
+import * as types from '@/store/mutation-types';
 
 export default {
   data() {
@@ -71,6 +72,11 @@ export default {
           message: '密码修改成功，请重新登录',
         });
         setTimeout(() => {
+          this.$store.commit(types.USER_LOGIN, {
+            token: '',
+            user: {},
+          });
+          window.localStorage.setItem('mobile_bind_skip', '0');
           this.$router.push({
             name: 'login',
             query: {
