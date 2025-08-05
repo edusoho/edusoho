@@ -178,7 +178,7 @@ class Testpaper {
     this.initDatePicker();
     this.initFormItemData();
     this.initAdvancedSettings();
-    this.initTestDuration();
+    this.validatorTestDuration();
 
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
@@ -290,7 +290,7 @@ class Testpaper {
     this.$rangeFixedTime.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm'))
       $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm'))
-      self.initTestDuration();
+      self.validatorTestDuration();
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm'));
       const diffMs = picker.endDate - picker.startDate;
       const diffInMinutes = Math.floor(diffMs / (1000 * 60));
@@ -377,6 +377,23 @@ class Testpaper {
 
       return diffMs <= TEN_HOURS_IN_MS;
     }, "固定考试时间不能超过10个小时");
+
+    $.validator.addMethod("minDuration", function(value, element) {
+      const startTime = $('[name="startTime"]').val();
+      const endTime = $('[name="endTime"]').val();
+
+      if (!startTime || !endTime || $('[name="validPeriodMode"]:checked').val() != 3) return true;
+
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+      const diffMs = endDate - startDate;
+
+      if (diffMs <= 0) {
+        $('.js-fixed-time').hide();
+      }
+
+      return diffMs > 0;
+    }, "考试时间需大于0");
   }
 
   initEvent() {
@@ -472,7 +489,8 @@ class Testpaper {
         },
         rangeFixedTime: {
           required: () => $('[name="validPeriodMode"]:checked').val() == 3,
-          maxDuration: true
+          maxDuration: true,
+          minDuration: true
         },
         redoInterval: {
           required: function () {
@@ -502,7 +520,6 @@ class Testpaper {
         },
         rangeStartTime: {
           required: Translator.trans('validate.valid_starttime.required'),
-          maxDuration: Translator.trans('validate.valid_maxDuration')
         },
         rangeFixedTime: {
           required: Translator.trans('validate.valid_fixedtime.required')
@@ -784,7 +801,6 @@ class Testpaper {
 
   showRedoExamination(event) {
     const $this = $(event.currentTarget);
-    this.initTestDuration();
     $('#length').val(null)
     $('[name=startTime]').val('0')
     $('[name=endTime]').val('0')
@@ -793,6 +809,7 @@ class Testpaper {
     $('input[name=rangeTime]').val('');
     $('input[name=rangeStartTime]').val('');
     $('input[name=rangeFixedTime]').val('');
+    this.validatorTestDuration();
 
     if ($this.val() == 0) {
       this.$rangeDateInput.attr('type', 'hidden');
@@ -825,7 +842,7 @@ class Testpaper {
     }
   }
 
-  initTestDuration() {
+  validatorTestDuration() {
     const startTime = $('[name=startTime]').val()
     const endTime = $('[name=endTime]').val()
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
@@ -842,23 +859,32 @@ class Testpaper {
       const diffMinutes = Math.floor(diffMs / (1000 * 60)) % 60;
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
-      this.$testDuration.show();
-
       if (this.$examMode == 0) {
-        this.$fixedTimeTip.text('模拟考试时长必须 > 0');
+        this.$fixedTimeTip
+          .text('模拟考试时长必须 > 0')
+          .show();
       } else {
-        this.$fixedTimeTip.text('练习考试时长必须 > 0');
+        this.$fixedTimeTip
+          .text('练习考试时长必须 > 0')
+          .show();
       }
-      this.$fixedTimeTip.show();
 
       if (diffMs > TEN_HOURS_IN_MS) {
+        $('#rangeFixedTime-error').hide();
         this.$testDuration
           .text('固定考试时间不能超过10个小时')
-          .css('color', 'red');
-      } else {
+          .css('color', 'red')
+          .show();
+      } else if (diffMs <= 0) {
         this.$testDuration
-          .text('考试时长： ' + `${diffHours}小时${diffMinutes}分`)
-          .css('color', 'black');
+          .text('考试时间需大于0')
+          .css('color', 'red')
+          .show();
+      }else {
+        this.$testDuration
+          .text('考试时长： ' + diffHours > 0 ? `${diffHours}小时${diffMinutes}分钟` : `${diffMinutes}分`)
+          .css('color', 'black')
+          .show();
       }
     } else {
       this.$testDuration.hide();
@@ -876,12 +902,6 @@ class Testpaper {
     if ($this.val() == 0) {
       $('.js-examinations-num').attr('type', 'hidden');
     }
-  }
-
-  changeCondition(event) {
-    let $this = $(event.currentTarget);
-    let value = $this.find('option:selected').val();
-    value != 'score' ? $('.js-score-form-group').addClass('hidden') : $('.js-score-form-group').removeClass('hidden');
   }
 
   getItemsTable(url, testpaperId) {

@@ -676,7 +676,7 @@ t.add("course.plan_task.activity_manage.testpaper.time_limit", "Test duration", 
 t.add("validate.valid_enter_a_positive.integer", "Please enter a positive integer from 1 to 100", "js", "en");
 t.add("validate.valid_rangetime.required", "Please select a date range", "js", "en");
 t.add("validate.valid_starttime.required", "Please select a start time", "js", "en");
-t.add("validate.valid_fixedtime.required", "Please select the fixed examination time", "js", "en");
+t.add("validate.valid_fixedtime.required", "Please select the start and end times of the exam", "js", "en");
 t.add("validate.valid_maxDuration", "The fixed examination duration should not exceed 10 hours", "js", "en");
 t.add("validate.valid_endtime.required", "Please select an end time", "js", "en");
 t.add("validate.valid_email_input.message", "Please enter a valid email address.", "js", "en");
