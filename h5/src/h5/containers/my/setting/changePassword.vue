@@ -75,7 +75,6 @@ export default {
             name: 'login',
             query: {
               redirect: '/my',
-              skipUrl: '/login'
             }
           });
         }, 2000);
