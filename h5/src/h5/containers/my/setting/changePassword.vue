@@ -73,9 +73,6 @@ export default {
         setTimeout(() => {
           this.$router.push({
             name: 'login',
-            query: {
-              redirect: '/my',
-            }
           });
         }, 2000);
       }).catch(err => {
