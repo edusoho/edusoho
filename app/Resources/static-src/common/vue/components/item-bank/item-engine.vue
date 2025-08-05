@@ -861,6 +861,13 @@ export default {
     section_responses: {
       handler: function(val) {
         console.log(val);
+        const viewer = new Viewer(document.getElementById('image'), {
+          inline: true,
+          viewed() {
+            viewer.zoomTo(1);
+          },
+        });
+
       },
       deep: true
     }
@@ -882,12 +889,6 @@ export default {
     };
   },
   mounted() {
-    // const viewer = new Viewer(document.getElementById('image'), {
-    //   inline: true,
-    //   viewed() {
-    //     viewer.zoomTo(1);
-    //   },
-    // });
 
     //如果有暂存数据
     if (this.questionFavorites.length > 0) {
