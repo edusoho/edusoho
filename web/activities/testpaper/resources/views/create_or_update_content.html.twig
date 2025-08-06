@@ -157,6 +157,9 @@
           {% if testpaper|default() %}
             <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
           {% endif %}
+          {% if not(canUpdate) and validPeriodMode == 3 %}
+            <input type="hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}">
+          {% endif %}
         </div>
       </div>
 
