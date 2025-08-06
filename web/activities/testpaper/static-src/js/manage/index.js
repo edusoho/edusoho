@@ -166,6 +166,7 @@ class Testpaper {
 
   _init() {
     dateFormat();
+    this.initDatePicker();
     this.setValidateRule();
     this.initQuestionBankSelector();
     this.initTestPaperTypeSelector();
@@ -174,7 +175,6 @@ class Testpaper {
     this.initEvent();
     this.initStepForm2();
     this.initAddComment();
-    this.initDatePicker();
     this.initFormItemData();
     this.initAdvancedSettings();
     this.validatorTestDuration();
@@ -242,12 +242,12 @@ class Testpaper {
 
     this.$rangeDateInput.on('show.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height + 240.8 + 'px';
     })
 
     this.$rangeDateInput.on('hide.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height - 240 + 'px';
     })
 
     this.$rangeStartTime.daterangepicker({
@@ -267,21 +267,21 @@ class Testpaper {
 
     this.$rangeStartTime.on('show.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height + 240 + 'px';
     })
 
     this.$rangeStartTime.on('hide.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height - 240 + 'px';
     })
 
     this.$rangeFixedTime.daterangepicker({
-      "timePicker": true,
-      "timePicker24Hour": true,
-      'autoUpdateInput':false,
-      'minDate': new Date(),
-      'endDate': validPeriodMode == '3' ? endTime != '0' ? endTime : todayTime : todayTime,
-      'startDate': validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('minute') : moment().startOf('minute'),
+      timePicker: true,
+      timePicker24Hour: true,
+      autoUpdateInput: false,
+      minDate: new Date(),
+      endDate: validPeriodMode == '3' ? endTime != '0' ? endTime : todayTime : todayTime,
+      startDate: validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('minute') : moment().startOf('minute'),
       locale: fixedTimeLocale,
     });
 
@@ -297,13 +297,19 @@ class Testpaper {
     });
 
     this.$rangeFixedTime.on('show.daterangepicker', function () {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 240 + 'px';
+      if ($('#questionItemShowDiv').is(':visible')) {
+        $('#iframe-content').height($('#iframe-content').height() + 500);
+      } else {
+        $('#iframe-content').height($('#iframe-content').height() + 240);
+      }
     })
 
     this.$rangeFixedTime.on('hide.daterangepicker', function () {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 240 + 'px';
+      if ($('#questionItemShowDiv').is(':visible')) {
+        $('#iframe-content').height($('#iframe-content').height() - 500);
+      } else {
+        $('#iframe-content').height($('#iframe-content').height() - 240);
+      }
     })
   }
 
