@@ -81,3 +81,4 @@ yarn-error.log
 docker-compose.yml
 docker/
 .cursor
+TMP.md
