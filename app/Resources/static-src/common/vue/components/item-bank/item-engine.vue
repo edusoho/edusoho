@@ -4,13 +4,11 @@
     id="item-bank-sdk-message"
     v-if="this.section_responses.length > 0"
   >
-    <div>
-      <img
-        id="image"
-        src="/static-dist/app/img/question-bank/testpaperAiIcon.png"
-        alt=""
-      />
-    </div>
+    <img
+      id="image"
+      src="/static-dist/app/img/question-bank/testpaperAiIcon.png"
+      alt=""
+    />
 
     <!--  -->
     <div
