@@ -161,7 +161,6 @@ class Testpaper {
     this.$fixedTimeTip = $('.js-fixed-time-tip');
     this.$canUpdate = $('#canUpdate').val();
     this.$validPeriodMode = $('#validPeriodMode').val();
-    this.$examMode = $('#examMode').val();
     this._init();
   }
 
@@ -859,7 +858,7 @@ class Testpaper {
       const diffMinutes = Math.floor(diffMs / (1000 * 60)) % 60;
       const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
-      if (this.$examMode == 0) {
+      if ($('#examMode').val() == 0) {
         this.$fixedTimeTip
           .text('模拟考试时长必须 > 0')
           .show();
