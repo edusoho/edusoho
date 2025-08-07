@@ -9,6 +9,7 @@
   "packageManager": "npm",
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
+    "@codeages/agent-web-sdk": "^1.1.0",
     "@codeages/math-editor": "^1.4.0",
     "@vueuse/core": "^11.1.0",
     "ant-design-vue": "^4.2.3",
