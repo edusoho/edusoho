@@ -87,10 +87,14 @@ class WrongBookStartAnswer extends AbstractResource
         $prepareConditions = [];
         $prepareConditions['pool_id'] = $poolId;
         $prepareConditions['status'] = 'wrong';
-        $prepareConditions['user_id'] = $this->getCurrentUser()->getId();
 
         if (!in_array($conditions['targetType'], ['course', 'classroom', 'exercise'])) {
             throw WrongBookException::WRONG_QUESTION_TARGET_TYPE_REQUIRE();
+        }
+
+        // 通count逻辑保持一致
+        if ($conditions['targetType'] == 'exercise') {
+            $conditions['exerciseMediaType'] = 'testpaper';
         }
 
         $pool = 'wrong_question.'.$conditions['targetType'].'_pool';
