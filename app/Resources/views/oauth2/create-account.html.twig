@@ -35,7 +35,7 @@
       <div class="form-group cd-form-group">
         <label class="third-party-form__label" for="password">{{ 'user.register.password_label'|trans }}</label>
         <div style="position: relative">
-          <input class="form-control" type="password" id="password" name="password" placeholder="{{ 'user.oauth.register.password__placeholder'|trans }}">
+          <input class="form-control" type="password" id="password" name="password" placeholder="{{ 'user.oauth.register.password__placeholder'|trans }}" style="padding-right: 24px">
           <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-password-open-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: none"/>
           <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-password-close-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: block"/>
         </div>
@@ -45,7 +45,7 @@
       <div class="form-group cd-form-group">
         <label class="third-party-form__label" for="confirmPassword">{{ 'user.oauth.register.confirm_password_label'|trans }}</label>
         <div style="position: relative">
-          <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
+          <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}" style="padding-right: 24px">
           <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-confirm-password-open-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: none"/>
           <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-confirm-password-close-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: block"/>
         </div>
@@ -104,7 +104,11 @@
           <div class="form-group cd-form-group">
             <label class="control-label" for="originalAccountPassword">{{ 'user.oauth.login_by_email'|trans }}{{ 'user.register.password_label'|trans }}</label>
             <div class="controls">
-              <input type="password" name="originalAccountPassword" id="originalAccountPassword" class="form-control input-lg">
+              <div style="position: relative">
+                <input type="password" name="originalAccountPassword" id="originalAccountPassword" class="form-control input-lg" style="padding-right: 24px">
+                <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-original-account-password-open-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: none"/>
+                <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-original-account-password-close-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: block"/>
+              </div>
             </div>
           </div>
         {% endif %}

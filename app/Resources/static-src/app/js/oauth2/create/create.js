@@ -74,6 +74,18 @@ export default class Create {
       $('.js-confirm-password-close-eye').hide();
       $('.js-confirm-password-open-eye').show();
     })
+
+    $('.js-original-account-password-open-eye').on('click', function () {
+      $('#originalAccountPassword').attr('type', 'password');
+      $('.js-original-account-password-open-eye').hide();
+      $('.js-original-account-password-close-eye').show();
+    })
+
+    $('.js-original-account-password-close-eye').on('click', function () {
+      $('#originalAccountPassword').attr('type', 'text');
+      $('.js-original-account-password-close-eye').hide();
+      $('.js-original-account-password-open-eye').show();
+    })
   }
 
   initValidator() {
