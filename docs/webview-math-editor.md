@@ -15,11 +15,3 @@
 ### `getFormula()`
 
 获取编辑器中的公式，Latex 格式。
-
-注意：App 对接的时候要注意，此接口是 `async` 异步的。 Webview 中是这样暴露的接口：
-
-```javascript
-window.getFormula = async () => {
-  //...
-};
-```
