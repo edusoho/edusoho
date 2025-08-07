@@ -21,6 +21,9 @@ class LessonManageController extends BaseController
         $this->getCourseLessonService()->isLessonCountEnough($course['id']);
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
+            if (3 == $formData['validPeriodMode']) {
+                $formData['redoInterval'] = 0; // 固定考试没有重考时间间隔
+            }
             $formData['length'] = $this->prepareLimitedTime($formData['length']);
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
