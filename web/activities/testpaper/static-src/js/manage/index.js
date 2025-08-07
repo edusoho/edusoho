@@ -888,7 +888,7 @@ class Testpaper {
       }else {
         this.$testDuration
           .text(diffHours > 0 ? `考试时长： ${diffHours}小时${diffMinutes}分钟` : `考试时长： ${diffMinutes}分`)
-          .css('color', 'black')
+          .css('color', 'rgba(0, 0, 0, 0.56)')
           .show();
       }
     } else {
