@@ -1030,29 +1030,30 @@ export default {
           && time / 60 == this.answerScene.limited_time
           || this.answerRecord.exam_mode == "1"
           && this.answerScene.valid_period_mode == "3"
-          && Math.floor(Date.now() / 1000) >= this.answerScene.end_time
+          && time == this.answerScene.end_time - Math.floor(Date.now() / 1000)
         ) {
           const timeReach = this.t("itemEngine.timeReach")(
               Math.ceil(time / 60)
           );
 
-          if (!this.isPracticeTestDeadline) {
-            this.$confirm({
-              content: () => this.$createElement('strong', timeReach),
-              icon: "",
-              okText: this.t("itemEngine.goThenDo"),
-              cancelText: this.t("testpaper.submit"),
-              class: "ibs-card-confirm-modal",
-              onOk() {
-                self.forceRemoveModalDom();
-              },
-              onCancel() {
-                self.answerData();
-                self.forceRemoveModalDom();
-              }
-            });
+          if (this.isPracticeTestDeadline) {
+            return
           }
 
+          this.$confirm({
+            content: () => this.$createElement('strong', timeReach),
+            icon: "",
+            okText: this.t("itemEngine.goThenDo"),
+            cancelText: this.t("testpaper.submit"),
+            class: "ibs-card-confirm-modal",
+            onOk() {
+              self.forceRemoveModalDom();
+            },
+            onCancel() {
+              self.answerData();
+              self.forceRemoveModalDom();
+            }
+          });
           this.isPracticeTestDeadline = true;
         }
       }, 1000);
