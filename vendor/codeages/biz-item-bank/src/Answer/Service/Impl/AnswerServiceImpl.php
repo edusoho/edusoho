@@ -1215,6 +1215,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
         $time = time() + $answerScene['limited_time'] * 60 + 120;
         if ($answerScene['valid_period_mode'] == 3) {
+            if ($answerRecord['exam_mode'] == 1) {
+                return ; // 固定考试练习考试不自动提交
+            }
             $time = $answerScene['end_time'];
         }
         $autoSubmitJob = [
