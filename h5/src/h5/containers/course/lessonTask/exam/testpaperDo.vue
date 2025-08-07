@@ -156,7 +156,8 @@ export default {
       backUrl: '',
       slideIndex: 0, // 题库组件当前所在的划片位置
       forceLeave: false, // 强制离开考试
-      interval: null
+      interval: null,
+      loadTime: null,
     };
   },
   watch: {
@@ -171,6 +172,7 @@ export default {
     this.initReport();
     this.getData();
     this.saveAnswerInterval();
+    this.loadTime = new Date().getTime();
   },
   beforeRouteEnter(to, from, next) {
     if (from.fullPath === '/') {
@@ -446,14 +448,26 @@ export default {
 
           this.time = `${hours}:${minutes}:${seconds}`;
 
-          if (this.testpaper.limitedTime > 0 && (time === this.testpaper.limitedTime * 60 * 1000)) {
-            Dialog.confirm({
-              cancelButtonText: this.$t('courseLearning.handInThePaper'),
-              confirmButtonText: this.$t('courseLearning.continueAnswer'),
-              message: this.$t('courseLearning.examTotalTime', { number: parseInt(minutes) }),
-            }).catch(() => {
-              this.submitExam();
-            })
+          if (this.scene.valid_period_mode != '3') {
+            if (this.testpaper.limitedTime > 0 && (time === this.testpaper.limitedTime * 60 * 1000)) {
+              Dialog.confirm({
+                cancelButtonText: this.$t('courseLearning.handInThePaper'),
+                confirmButtonText: this.$t('courseLearning.continueAnswer'),
+                message: this.$t('courseLearning.examTotalTime', { number: parseInt(minutes) }),
+              }).catch(() => {
+                this.submitExam();
+              })
+            }
+          } else {
+            if (time === this.scene.end_time * 1000 - this.loadTime) {
+              Dialog.confirm({
+                cancelButtonText: this.$t('courseLearning.handInThePaper'),
+                confirmButtonText: this.$t('courseLearning.continueAnswer'),
+                message: this.$t('courseLearning.examTotalTime', { number: parseInt(minutes) }),
+              }).catch(() => {
+                this.submitExam();
+              })
+            }
           }
         }, 1000);
       }
