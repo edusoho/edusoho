@@ -157,7 +157,7 @@ class Testpaper {
     this.$rangeStartTime = $('.js-start-range')
     this.$rangeDateInput = $('.js-realTimeRange-data');
     this.$rangeFixedTime = $('.js-fixedTime-data');
-    this.$testDuration = $('.js-fixed-time');
+    this.$testDuration = $('.js-test-duration');
     this.$fixedTimeTip = $('.js-fixed-time-tip');
     this.$canUpdate = $('#canUpdate').val();
     this.$validPeriodMode = $('#validPeriodMode').val();
@@ -377,7 +377,7 @@ class Testpaper {
       const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
 
       if (diffMs > TEN_HOURS_IN_MS) {
-        $('.js-fixed-time').hide();
+        $('.js-test-duration').hide();
       }
 
       return diffMs <= TEN_HOURS_IN_MS;
@@ -394,7 +394,7 @@ class Testpaper {
       const diffMs = endDate - startDate;
 
       if (diffMs <= 0) {
-        $('.js-fixed-time').hide();
+        $('.js-test-duration').hide();
       }
 
       return diffMs > 0;
@@ -815,27 +815,22 @@ class Testpaper {
     $('input[name=rangeTime]').val('');
     $('input[name=rangeStartTime]').val('');
     $('input[name=rangeFixedTime]').val('');
+    this.$testDuration.hide();
     this.validatorTestDuration();
 
     if ($this.val() == 0) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'hidden');
-    }
-
-    if ($this.val() == 1) {
+    } else if ($this.val() == 1) {
       this.$rangeDateInput.attr('type', 'test');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'hidden');
-    }
-
-    if ($this.val() == 2) {
+    } else if ($this.val() == 2) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'test');
       this.$rangeFixedTime.attr('type', 'hidden');
-    }
-
-    if ($this.val() == 3) {
+    } else if ($this.val() == 3) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'test');
@@ -879,7 +874,7 @@ class Testpaper {
         this.validator.element('#rangeFixedTime');
       }
 
-      if (diffMs <= TEN_HOURS_IN_MS) {
+      if (diffMs > 0 && diffMs <= TEN_HOURS_IN_MS) {
         this.$testDuration
           .text(diffHours > 0 ? `考试时长： ${diffHours}小时${diffMinutes}分钟` : `考试时长： ${diffMinutes}分`)
           .css('color', 'rgba(0, 0, 0, 0.56)')
