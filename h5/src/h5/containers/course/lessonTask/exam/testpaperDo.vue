@@ -448,9 +448,6 @@ export default {
 
           this.time = `${hours}:${minutes}:${seconds}`;
 
-          console.log('-----------1-------------',time / 1000)
-          console.log('-----------2-------------', Math.floor((this.scene.end_time * 1000 - this.loadTime) / 1000))
-
           if (this.scene.valid_period_mode != '3') {
             if (this.testpaper.limitedTime > 0 && (time === this.testpaper.limitedTime * 60 * 1000)) {
               Dialog.confirm({
