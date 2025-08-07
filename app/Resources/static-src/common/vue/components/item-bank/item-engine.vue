@@ -624,6 +624,7 @@ export default {
       used_time: "00:00:00",
       clockIcon,
       isPracticeTestDeadline: false,
+      loadTime: null,
     };
   },
   props: {
@@ -904,6 +905,8 @@ export default {
 
     // 是否提示考试时间未到
     this.getStartTime();
+
+    this.loadTime = Math.floor(Date.now() / 1000);
   },
   created() {
     this.$on("previewFile", this.previewAttachment);
@@ -1030,7 +1033,7 @@ export default {
           && time / 60 == this.answerScene.limited_time
           || this.answerRecord.exam_mode == "1"
           && this.answerScene.valid_period_mode == "3"
-          && time == this.answerScene.end_time - Math.floor(Date.now() / 1000)
+          && time == this.answerScene.end_time - this.loadTime
         ) {
           const timeReach = this.t("itemEngine.timeReach")(
               Math.ceil(time / 60)
