@@ -1023,15 +1023,22 @@ export default {
         this.used_time = `${hours}:${minutes}:${seconds}`;
 
         if (
-          this.answerRecord.exam_mode == "1" &&
-          this.answerScene.limited_time > 0 &&
-          time / 60 == this.answerScene.limited_time
+          this.answerRecord.exam_mode == "1"
+          && this.answerScene.limited_time > 0
+          && time / 60 == this.answerScene.limited_time
+          || this.answerRecord.exam_mode == "1"
+          && this.answerScene.valid_period_mode == "3"
+          && Math.floor(Date.now() / 1000) >= this.answerScene.end_time
         ) {
           const timeReach = this.t("itemEngine.timeReach")(
-            Math.floor(time / 60)
-          );
+              Math.ceil(time / 60)
+            );
+
+          clearInterval(this.intervalId);
+          this.intervalId = null;
+
           this.$confirm({
-            content: () => <strong>{timeReach}</strong>,
+            content: () => this.$createElement('strong', timeReach),
             icon: "",
             okText: this.t("itemEngine.goThenDo"),
             cancelText: this.t("testpaper.submit"),
