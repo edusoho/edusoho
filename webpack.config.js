@@ -6,8 +6,6 @@ module.exports = {
   libs: {
     'base': ['libs/base.js'], // 基础类库
     'boot_base': ['libs/boot_base.js'],
-    'html5shiv': ['html5shiv'],
-    'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],
     'jquery-nouislider': ['libs/jquery-nouislider.js'],
     'jquery-sortable': ['es-jquery-sortable'],
@@ -44,9 +42,6 @@ module.exports = {
     'perfect-scrollbar': 'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
     'bootstrap-notify': 'bootstrap-notify/bootstrap-notify.js',
     'store': 'store/store.js',
-    'respond-js': 'respond.js/dest/respond.src.js',
-    'console-polyfill': 'console-polyfill/index.js',
-    'html5shiv': 'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker': 'bootstrap-daterangepicker/daterangepicker.js',
     'bootstrap-datetime-picker': 'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable': 'es-jquery-sortable/source/js/jquery-sortable.js',
@@ -70,12 +65,6 @@ module.exports = {
     },
     {
       name: 'swagger-ui/dist/swagger-ui.css',
-    },
-    {
-      name: 'es5-shim/es5-shim.js',
-    },
-    {
-      name: 'es5-shim/es5-sham.js',
     },
     {
       name: 'easy-pie-chart/dist/jquery.easypiechart.js',
