@@ -622,7 +622,8 @@ export default {
       mobileShow: false,
       reviewType: this.answerScene.reviewType,
       used_time: "00:00:00",
-      clockIcon
+      clockIcon,
+      isPracticeTestDeadline: false,
     };
   },
   props: {
@@ -1024,6 +1025,7 @@ export default {
 
         if (
           this.answerRecord.exam_mode == "1"
+          && this.answerScene.valid_period_mode != "3"
           && this.answerScene.limited_time > 0
           && time / 60 == this.answerScene.limited_time
           || this.answerRecord.exam_mode == "1"
@@ -1032,25 +1034,26 @@ export default {
         ) {
           const timeReach = this.t("itemEngine.timeReach")(
               Math.ceil(time / 60)
-            );
+          );
 
-          clearInterval(this.intervalId);
-          this.intervalId = null;
+          if (!this.isPracticeTestDeadline) {
+            this.$confirm({
+              content: () => this.$createElement('strong', timeReach),
+              icon: "",
+              okText: this.t("itemEngine.goThenDo"),
+              cancelText: this.t("testpaper.submit"),
+              class: "ibs-card-confirm-modal",
+              onOk() {
+                self.forceRemoveModalDom();
+              },
+              onCancel() {
+                self.answerData();
+                self.forceRemoveModalDom();
+              }
+            });
+          }
 
-          this.$confirm({
-            content: () => this.$createElement('strong', timeReach),
-            icon: "",
-            okText: this.t("itemEngine.goThenDo"),
-            cancelText: this.t("testpaper.submit"),
-            class: "ibs-card-confirm-modal",
-            onOk() {
-              self.forceRemoveModalDom();
-            },
-            onCancel() {
-              self.answerData();
-              self.forceRemoveModalDom();
-            }
-          });
+          this.isPracticeTestDeadline = true;
         }
       }, 1000);
     },
