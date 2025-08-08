@@ -15,7 +15,11 @@
 					<div class="form-group">
 						{{ form_label(form.password, 'user.settings.security.password_modify.new_password'|trans, {label_attr:{class:'control-label'}}) }}
 						<div class="controls">
-							{{ form_widget(form.password, {attr:{class:'form-control'}}) }}
+              <div style="position: relative">
+                <input type="password" id="form_password" name="form[password]" required="required" class="form-control" aria-required="true" style="padding-right: 40px">
+                <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-password-open-eye" alt="" style="position: absolute; right: 8px; top: 5px; cursor: pointer; display: none"/>
+                <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-password-close-eye" alt="" style="position: absolute; right: 8px; top: 5px; cursor: pointer; display: block"/>
+              </div>
               <p class="help-block">{{ 'user.settings.password_level.high'|trans }}</p>
 						</div>
 					</div>
@@ -23,13 +27,17 @@
 					<div class="form-group">
 						{{ form_label(form.confirmPassword, 'user.settings.security.password_modify.confirm_password'|trans, {label_attr:{class:'control-label'}}) }}
 						<div class="controls">
-							{{ form_widget(form.confirmPassword, {attr:{class:'form-control'}}) }}
+              <div style="position: relative">
+                <input type="password" id="form_confirmPassword" name="form[confirmPassword]" required="required" class="form-control" aria-required="true" style="padding-right: 40px">
+                <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-confirm-password-open-eye" alt="" style="position: absolute; right: 8px; top: 5px; cursor: pointer; display: none"/>
+                <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-confirm-password-close-eye" alt="" style="position: absolute; right: 8px; top: 5px; cursor: pointer; display: block"/>
+              </div>
 							<p class="help-block">{{ 'user.settings.security.password_modify.input_password_tips'|trans }}</p>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="controls">
-							{{ form_rest(form) }}
+							{{ form_end(form, {'render_rest': false}) }}
 							<button type="submit"
 							        class="btn btn-primary">{{ 'user.settings.password_reset.reset_btn'|trans }}</button>
 						</div>

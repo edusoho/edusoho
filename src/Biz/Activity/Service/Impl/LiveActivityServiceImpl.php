@@ -113,6 +113,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'liveEndTime' => $activity['startTime'] + $activity['length'] * 60,
             'anchorId' => $this->getCurrentUser()->getId(),
             'coursewareIds' => empty($live['coursewareIds']) ? [] : $live['coursewareIds'],
+            'teacherId' => $activity['teacherId'] ?? 0,
         ];
         if ($this->getLiveService()->isESLive($live['provider'])) {
             $liveActivity['roomId'] = $live['roomId'] ?? 0;
@@ -173,7 +174,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             }
         }
 
-        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds', 'replayPublic']);
+        $live = ArrayToolkit::parts($fields, ['replayStatus', 'fileId', 'roomType', 'fileIds', 'replayPublic', 'teacherId']);
 
         if (!empty($live['fileId'])) {
             $live['mediaId'] = $live['fileId'];
@@ -386,9 +387,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
      */
     public function createLiveroom($activity)
     {
-        $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
-        $speakerId = empty($course['teacherIds']) ? $activity['fromUserId'] : $course['teacherIds'][0];
-        $speaker = $this->getUserService()->getUser($speakerId);
+        $speaker = $this->getUserService()->getUser($activity['teacherId']);
         if (empty($speaker)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
@@ -423,7 +422,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             $liveData['pseudoVideoUrl'] = $this->getPseudoLiveVideoUrl($activity);
         }
         $liveAccount = $this->getEdusohoLiveClient()->getLiveAccount();
-        $liveData['teacherId'] = $this->getLiveService()->getLiveProviderTeacherId($speakerId, $liveAccount['provider']);
+        $liveData['teacherId'] = $this->getLiveService()->getLiveProviderTeacherId($speaker['id'], $liveAccount['provider']);
 
         $live = $this->getEdusohoLiveClient()->createLive($liveData);
 

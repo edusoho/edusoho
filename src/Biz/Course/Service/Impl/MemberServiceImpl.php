@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
+use Biz\Activity\Service\ActivityService;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
@@ -1800,14 +1801,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId)
+    public function getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($courseId, $userId, $activityId)
     {
         $user = $this->getUserService()->getUser($userId);
         if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || in_array('ROLE_EDUCATIONAL_ADMIN', $user['roles'])) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
+            $activity = $this->getActivityService()->getActivity($activityId, true);
+            if (!empty($activity['ext']['teacherId']) && $activity['ext']['teacherId'] == $userId) {
+                return 'teacher';
+            }
+            $teacher = $this->searchMembers(
+                ['courseId' => $courseId, 'role' => 'teacher'],
+                ['seq' => 'ASC'],
+                0,
+                1
+            );
 
-            if ($teacherId == $userId) {
+            if (empty($activity['ext']['teacherId']) && $teacher[0]['userId'] == $userId) {
                 return 'teacher';
             } else {
                 return 'speaker';
@@ -2064,5 +2073,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getMultiClassRecordService()
     {
         return $this->createService('MultiClass:MultiClassRecordService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }

@@ -744,6 +744,8 @@ course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 validate.valid_enter_a_positive.integer: 请输入1至100的正整数
 validate.valid_rangetime.required: 请选择日期区间
 validate.valid_starttime.required: 请选择开始时间
+validate.valid_fixedtime.required: 请选择考试开始和结束时间
+validate.valid_maxDuration: 固定考试时间不能超过10个小时
 validate.valid_endtime.required: 请选择结束时间
 validate.valid_email_input.message: 请输入有效的电子邮件地址
 validate.valid_idcard_formate.message: 请输入有效的身份证号码
@@ -836,7 +838,7 @@ validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母
 validate.have_spaces: 密码不能有空格哦
 validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
 validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
-validate.check_password_high.message: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
+validate.check_password_high.message: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 validate.custom_integer.message: 请输入正确的整数
 validate.int.message: 最多9位整数
 validate.float.message: 最多两位小数，整数位不超过8位！
@@ -2250,6 +2252,7 @@ admin_v2.homepage.wechat_come: 欢迎使用EduSoho教培产品
 admin_v2.homepage.wechat_code.m: 加入开源产品使用学习交流群，小伙伴在等你
 
 del.role.theater.hover.title: 该用户无讲师权限。移除后将不在移动端展示
+course.teacher.hover.title.live_teacher: 该老师为直播主讲老师
 upgrade.cloud.capabilities.to.experience: >
   <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能</div>
 next.skip.intro.text: >

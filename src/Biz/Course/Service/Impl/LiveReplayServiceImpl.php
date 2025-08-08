@@ -320,9 +320,10 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
 
         if ($isLoggedIn) {
             if ($isNormalCourse) {
-                $role = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId(
+                $role = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId(
                     $replay['courseId'],
-                    $user['id']
+                    $user['id'],
+                    $replay['lessonId']
                 ) ?? $role; // 防止返回空值
             } else {
                 $member = $this->getOpenCourseService()->getCourseMember(

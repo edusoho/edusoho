@@ -159,6 +159,9 @@ class TaskManageController extends BaseController
             $task = $request->request->all();
             $task['length'] = $this->prepareLimitedTime($task['length']);
             $task['redoInterval'] = empty($task['redoInterval']) ? 0 : $task['redoInterval'] * 60;
+            if (3 == $task['validPeriodMode']) {
+                $task['redoInterval'] = 0; // 固定考试没有重考时间间隔
+            }
             if (!isset($task['fromCourseSetId'])) {
                 $task['fromCourseSetId'] = $course['courseSetId'];
             }
@@ -168,7 +171,7 @@ class TaskManageController extends BaseController
             return $this->getTaskJsonView($task);
         }
 
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         return $this->render(
@@ -178,6 +181,7 @@ class TaskManageController extends BaseController
                 'customTitle' => $customTitle,
                 'currentType' => $activity['mediaType'],
                 'course' => $course,
+                'activity' => $activity,
                 'courseSet' => $courseSet,
                 'task' => $task,
                 'taskMode' => $taskMode,

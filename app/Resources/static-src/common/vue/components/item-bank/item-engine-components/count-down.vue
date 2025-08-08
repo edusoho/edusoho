@@ -41,6 +41,14 @@ export default {
     beginTime: {
       type: Number,
       default: 0
+    },
+    endTime: {
+      type: Number,
+      default: 0
+    },
+    validPeriodMode: {
+      type: String,
+      default: '0'
     }
   },
   mounted() {
@@ -63,7 +71,11 @@ export default {
         : "ibs-assessment-timer";
     },
     isShow: function() {
-      return (this.beginTime + this.limitedTime * 60) * 1000 - Date.now() > 0;
+      if (this.validPeriodMode == '3') {
+        return this.endTime * 1000 - Date.now() > 0;
+      } else {
+        return (this.beginTime + this.limitedTime * 60) * 1000 - Date.now() > 0;
+      }
     }
   },
   methods: {
@@ -74,7 +86,13 @@ export default {
       this.$emit("reachTimeSubmitAnswerData");
     },
     timer() {
-      const time = (this.beginTime + this.limitedTime * 60) * 1000 - Date.now();
+      let time = null;
+
+      if (this.validPeriodMode == '3') {
+        time = this.endTime * 1000 - Date.now();
+      } else {
+        time = (this.beginTime + this.limitedTime * 60) * 1000 - Date.now();
+      }
 
       if (time <= 0) {
         this.arrivalTime();

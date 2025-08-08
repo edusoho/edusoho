@@ -458,13 +458,15 @@
                 :mode="mode"
                 :limitedTime="Number(answerScene.limited_time)"
                 :beginTime="Number(answerRecord.begin_time)"
+                :endTime="Number(answerScene.end_time)"
                 :assessmentStatus="assessmentStatus"
                 :getCurrentTime="getCurrentTime"
+                :validPeriodMode="answerScene.valid_period_mode"
                 v-if="
-                  answerRecord.exam_mode == '0' &&
-                    Number(answerScene.limited_time) &&
-                    assessmentStatus !== 'preview' &&
-                    mode === 'do'
+                  answerRecord.exam_mode == '0'
+                  && (Number(answerScene.limited_time) || answerScene.valid_period_mode == '3')
+                  && assessmentStatus !== 'preview'
+                  && mode === 'do'
                 "
                 @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
               ></count-down>
@@ -620,7 +622,9 @@ export default {
       mobileShow: false,
       reviewType: this.answerScene.reviewType,
       used_time: "00:00:00",
-      clockIcon
+      clockIcon,
+      isPracticeTestDeadline: false,
+      loadTime: null,
     };
   },
   props: {
@@ -901,6 +905,8 @@ export default {
 
     // 是否提示考试时间未到
     this.getStartTime();
+
+    this.loadTime = Math.floor(Date.now() / 1000);
   },
   created() {
     this.$on("previewFile", this.previewAttachment);
@@ -1021,15 +1027,24 @@ export default {
         this.used_time = `${hours}:${minutes}:${seconds}`;
 
         if (
-          this.answerRecord.exam_mode == "1" &&
-          this.answerScene.limited_time > 0 &&
-          time / 60 == this.answerScene.limited_time
+          this.answerRecord.exam_mode == "1"
+          && this.answerScene.valid_period_mode != "3"
+          && this.answerScene.limited_time > 0
+          && time / 60 == this.answerScene.limited_time
+          || this.answerRecord.exam_mode == "1"
+          && this.answerScene.valid_period_mode == "3"
+          && time == this.answerScene.end_time - this.loadTime
         ) {
           const timeReach = this.t("itemEngine.timeReach")(
-            Math.floor(time / 60)
+              Math.ceil(time / 60)
           );
+
+          if (this.isPracticeTestDeadline) {
+            return
+          }
+
           this.$confirm({
-            content: () => <strong>{timeReach}</strong>,
+            content: () => this.$createElement('strong', timeReach),
             icon: "",
             okText: this.t("itemEngine.goThenDo"),
             cancelText: this.t("testpaper.submit"),
@@ -1042,6 +1057,7 @@ export default {
               self.forceRemoveModalDom();
             }
           });
+          this.isPracticeTestDeadline = true;
         }
       }, 1000);
     },

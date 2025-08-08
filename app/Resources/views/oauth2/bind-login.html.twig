@@ -28,7 +28,11 @@
     </div>
     <div class="form-group cd-form-group">
       <label class="third-party-form__label" for="password">{{ 'user.oauth.web_account_password'|trans }}</label>
-      <input class="form-control" type="password" id="password" name="password">
+      <div style="position: relative">
+        <input class="form-control" type="password" id="password" name="password">
+        <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-password-open-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: none"/>
+        <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-password-close-eye" alt="" style="position: absolute; right: 0; top: 3px; cursor: pointer; display: block"/>
+      </div>
     </div>
     <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="submit">{{ 'user.oauth.bind_account_and_go_continue'|trans }}</button>
     <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_other_account'|trans }}</a>

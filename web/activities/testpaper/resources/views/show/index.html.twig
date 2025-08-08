@@ -3,7 +3,7 @@
 
 {% block body %}
   {% set canStartTestpaper = (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime > ('now'|date('U'))) or (activity.startTime and activity.startTime < ('now'|date('U')) and activity.endTime == '0') or (activity.startTime == '0' and activity.endTime == '0') %}
-  
+
   <div class="iframe-parent-content">
     <div class="modal show iframe-modal">
       <div class="modal-dialog">
@@ -76,7 +76,11 @@
 														{{ activity.ext.answerScene.limited_time }}
                           	{{ 'course.live_lesson_manage.live_length.minutes'|trans }}
 													{% else %}
-                          	{{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+                            {% if activity.ext.validPeriodMode == '3' %}
+                              {{ (activity.endTime - activity.startTime) | format_seconds_to_zh }}
+                            {% else %}
+                              {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+                            {% endif %}
 													{% endif %}
                         </span>
                       </div>
@@ -106,7 +110,7 @@
                           {{ activity.startTime|date('Y/m/d H:i:s') }}
                           -
                           {{ 'course.plan_setup.finish_rule.indefinite.duration'|trans }}
-                        {% elseif activity.ext.validPeriodMode == '1' %}
+                        {% elseif activity.ext.validPeriodMode == '1' or activity.ext.validPeriodMode == '3' %}
                           {{ activity.startTime|date('Y/m/d H:i:s') }}
                           -
                           {{ activity.endTime|date('Y/m/d H:i:s') }}

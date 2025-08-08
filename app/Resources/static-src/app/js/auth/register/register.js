@@ -11,6 +11,7 @@ export default class Register {
       : null;
     this.setValidateRule();
     this.dragEvent();
+    this.clickEvent();
     this.initValidator();
     this.inEventMobile();
     this.initMobileMsgVeriCodeSendBtn();
@@ -27,6 +28,20 @@ export default class Register {
     }
   }
 
+  clickEvent() {
+    $('.open-eye').on('click', function () {
+      $('#register_password').attr('type', 'password');
+      $('.open-eye').hide();
+      $('.close-eye').show();
+    })
+
+    $('.close-eye').on('click', function () {
+      $('#register_password').attr('type', 'text');
+      $('.close-eye').hide();
+      $('.open-eye').show();
+    })
+  }
+
   setValidateRule() {
     $.validator.addMethod(
       'spaceNoSupport',
@@ -39,7 +54,21 @@ export default class Register {
 
   initValidator() {
     let self = this;
-    $('#register-form').validate(this._validataRules());
+    $('#register-form').validate({
+      ...this._validataRules(),
+      highlight: function(element) {
+        $(element).css('border', '1px solid red');
+        if (element.name === 'password') {
+          $('.register_password-tip').hide();
+        }
+      },
+      success: function (label, element) {
+        $(element).css('border', '1px solid #e1e1e1');
+        if (element.name === 'password') {
+          $('.register_password-tip').show();
+        }
+      },
+    });
     $.validator.addMethod(
       'email_or_mobile_check',
       function(value, element, params) {
@@ -245,9 +274,8 @@ export default class Register {
           required: Translator.trans('auth.register.drag_captcha_tips')
         },
         password: {
-          required: Translator.trans(
-            'auth.register.password_required_error_hint'
-          )
+          required: Translator.trans('validate.check_password_high.message'),
+          check_password_high: Translator.trans('validate.check_password_high.message')
         }
       }
     };

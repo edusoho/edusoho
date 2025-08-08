@@ -125,6 +125,7 @@ class TestpaperAction extends AbstractResource
             'items' => $items,
             'isShowTestResult' => 1,
             'courseId' => $course['id'],
+            'scene' => $scene,
         ];
     }
 
@@ -214,6 +215,7 @@ class TestpaperAction extends AbstractResource
             'items' => $items,
             'isShowTestResult' => 0,
             'courseId' => $course['id'],
+            'scene' => $scene,
         ];
     }
 

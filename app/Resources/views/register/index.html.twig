@@ -55,9 +55,12 @@
 
 					<div class="form-group mbl">
 						<label class="control-label required" for="register_password">{{'user.register.password_label'|trans}}</label>
-						<div class="controls">
-              <input type="password" id="register_password" name="password" required="required" class="form-control input-lg cd-text-sm" placeholder="{{ 'user.register.password_label_placeholder.high'|trans }}" onkeydown="if(event.keyCode==13) return false;">
+						<div class="controls" style="position: relative;">
+              <input type="password" id="register_password" name="password" required="required" class="form-control input-lg" placeholder="{{ 'user.register.enter_password'|trans }}" onkeydown="if(event.keyCode==13) return false;">
+              <div class="register_password-tip" style="color: rgba(0, 0, 0, 0.56); font-size: 14px; font-weight: 400; line-height: 22px; margin-top: 5px">{{ 'user.register.password_label_placeholder.high'|trans }}</div>
 							<p class="help-block"></p>
+              <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="open-eye" alt="" style="position: absolute; right: 10px; top: 8px; cursor: pointer; display: none"/>
+              <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="close-eye" alt="" style="position: absolute; right: 10px; top: 8px; cursor: pointer; display: block"/>
 						</div>
 					</div>
           {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
@@ -91,7 +94,7 @@
 							</div>
 						</div>
 					{% endif %}
-        
+
 					<div class="form-group mbl">
 						<div class="controls">
 							<button type="button" id="register-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary btn-lg btn-block">{{'form.btn.register'|trans}}</button>

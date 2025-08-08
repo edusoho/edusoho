@@ -30,7 +30,7 @@ class WrongBookBankExercise extends AbstractResource
             $condition['user_id'] = $pool['user_id'];
             $sceneId = $bankPool->prepareSceneIds($poolId, $condition);
             $wrongQuestionByScene = $this->getWrongQuestionService()->findWrongQuestionsByUserIdAndSceneIds($pool['user_id'], $sceneId);
-            $collectIds = array_unique(ArrayToolkit::column($wrongQuestionByScene, 'collect_id'));
+            $collectIds = array_values(array_unique(ArrayToolkit::column($wrongQuestionByScene, 'collect_id')));
             $collectIds = empty($collectIds) ? [-1] : $collectIds;
             $collectCount = $this->getWrongQuestionService()->countWrongQuestionCollect(['ids' => $collectIds, 'status' => 'wrong']);
             if ($collectCount > 0) {
