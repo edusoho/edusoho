@@ -89,7 +89,11 @@ module.exports = {
         'js/**',
         'less/**',
       ]
-    }
+    },
+    {
+      from: 'node_modules/@codeages/math-editor/dist/iframe',
+      to: 'libs/math-editor'
+    },
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin,item-bank}',
   isESlint: false,
