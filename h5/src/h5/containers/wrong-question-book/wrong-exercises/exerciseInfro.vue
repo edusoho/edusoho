@@ -71,6 +71,7 @@ export default {
       questionsNum: 20,
       targetId: this.$route.query.id,
       targetType: this.$route.query.targetType,
+      exerciseMediaType: this.$route.query.exerciseMediaType,
       searchParams: this.$route.query.searchParams,
       wrongNumCount: null,
     };
@@ -103,6 +104,7 @@ export default {
         },
         params: {
           targetType: this.targetType,
+          exerciseMediaType: this.exerciseMediaType,
         }
       }).then(res =>{
         this.wrongNumCount = res.wrongNumCount
