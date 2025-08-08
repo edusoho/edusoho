@@ -1,20 +1,22 @@
 <template>
   <div class="user">
-    <div class="flex items-center px-16 py-24" @click="$router.push('/settings')">
-      <div class="user-img">
-        <img v-if="user.avatar" :src="user.avatar.large" />
-        <img
-          class="user-vip-icon"
-          v-if="user.vip && !vipDated && vipSwitch"
-          :src="user.vip.icon"
-          alt=""
-        />
+    <div class="flex items-center px-16 py-24">
+      <div class="flex items-center" style="flex-grow: 1;" @click="$router.push('/editInformation')" >
+        <div class="user-img" style="width: 68px; height: 68px">
+          <img v-if="user.avatar" :src="user.avatar.large" style="width: 68px; height: 68px"/>
+          <img
+            class="user-vip-icon"
+            v-if="user.vip && !vipDated && vipSwitch"
+            :src="user.vip.icon"
+            alt=""
+          />
+        </div>
+        <div class="pl-20 flex flex-col justify-between" style="flex-grow: 1;">
+          <div class="font-bold text-text-5 text-20">{{ user.nickname }}</div>
+          <div class="w-full mt-4 font-bold text-overflow text-text-3 text-14" style="line-height: 22px;height: 22px;" v-html="user.about || ''"></div>
+        </div>
       </div>
-      <div class="pl-20 flex flex-col justify-between" style='width: 275px;height: 60px'>
-        <div class="font-bold text-text-5 text-20">{{ user.nickname }}</div>
-        <div class="w-full mt-4 font-bold text-overflow text-text-3 text-14" style="line-height: 22px;height: 22px;" v-html="user.about || ''"></div>
-      </div>
-      <i class="van-icon van-icon-arrow"></i>
+      <img src="static/images/settings.svg" alt="" @click="$router.push('/setting')" class="flex-shrink-0"/>
     </div>
 
     <div v-if="vipSwitch" class="mx-16 mb-16" style="background-color: #202212; border-radius: 6px;">

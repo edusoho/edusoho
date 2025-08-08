@@ -26,9 +26,12 @@
         <van-cell v-if="info.doTimes == '1' && startTime" :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
           class="intro-cell" :border="false" :title="$t('courseLearning.openingTime')" :value="formateStartTime(startTime)" />
 
-        <van-cell :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
-          class="intro-cell" :border="false" :title="$t('courseLearning.examinationDuration')"
-          :value="limitTime ? `${limitTime} ${$t('courseLearning.minutes')}` : $t('courseLearning.unlimited')" />
+        <van-cell
+          :class="['intro-panel__content', result || !disabled ? '' : 'intro-tip']"
+          class="intro-cell"
+          :border="false" :title="$t('courseLearning.examinationDuration')"
+          :value="testDuration()"
+        />
 
         <van-cell class="intro-cell" :border="false" :title="$t('courseLearning.fullScoreOfTestPaper')" :value="score + ' ' + $t('courseLearning.branch')" />
 
@@ -120,7 +123,7 @@
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 import { Dialog, Toast } from 'vant';
-import { formatTime, getCountDown } from '@/utils/date-toolkit.js';
+import {formatTime, getCountDown} from '@/utils/date-toolkit.js';
 import examMixin from '@/mixins/lessonTask/exam.js';
 import report from '@/mixins/course/report';
 import OutFocusMask from '@/components/out-focus-mask.vue';
@@ -253,6 +256,17 @@ export default {
         .catch(err => {
           Toast.fail(err.message);
         });
+    },
+    testDuration() {
+      if (this.info.validPeriodMode == 3) {
+        return `${this.timestampToMinutes(this.endTime - this.startTime)} 分`
+      } else {
+        return  this.limitTime ? `${this.limitTime} 分` : '无期限'
+      }
+    },
+    timestampToMinutes(timestamp, isSeconds = false) {
+      const ms = isSeconds ? timestamp * 1000 : timestamp;
+      return Math.floor(ms / 60000);
     },
     submitExam(answer, endTime) {
       endTime = endTime || new Date().getTime();

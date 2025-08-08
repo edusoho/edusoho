@@ -15,10 +15,15 @@
       v-model="password"
       :border="false"
       :error-message="errorMessage.password"
-      type="password"
+      :type="showPassword ? 'text' : 'password'"
       class="login-input e-input"
       :placeholder="$t('placeholder.password')"
-    />
+    >
+      <template #button>
+        <img v-if="showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
+        <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
+      </template>
+    </van-field>
 
     <div class="login-register">
       <router-link to="/setting/password/reset" class="login-account">
@@ -103,6 +108,7 @@ export default {
     return {
       username: '',
       password: '',
+      showPassword: false,
       errorMessage: {
         password: '',
       },
@@ -160,6 +166,9 @@ export default {
   },
   methods: {
     ...mapActions(['userLogin']),
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
     async getPrivacySetting() {
       await Api.getSettings({
         query: {

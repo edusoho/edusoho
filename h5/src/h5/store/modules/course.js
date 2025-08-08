@@ -45,6 +45,9 @@ const mutations = {
     currentState.sourceType = payload.sourceType || 'img';
     currentState.taskId = payload.taskId;
   },
+  [types.SET_TASK_SATUS](currentState, payload) {
+    currentState.taskStatus = payload;
+  },
   [types.UPDATE_PROGRESS](currentState, payload) {
     currentState.details.progress = currentState.details.progress ?? {};
     currentState.details.progress.percent = payload;
