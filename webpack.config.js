@@ -94,6 +94,10 @@ module.exports = {
       from: 'node_modules/@codeages/math-editor/dist/iframe',
       to: 'web/static-dist/libs/math-editor'
     },
+    {
+      from: 'node_modules/@codeages/agent-web-sdk/dist',
+      to: 'web/static-dist/libs/agent-web-sdk'
+    },
   ],
   extryCssName: '{main,header,bootstrap,mobile,admin,item-bank}',
   isESlint: false,
