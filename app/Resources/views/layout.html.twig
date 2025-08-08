@@ -1,14 +1,5 @@
 {% import "macro.html.twig" as web_macro %}
 <!DOCTYPE html>
-<!--[if lt IE 7]>
-<html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>
-<html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>
-<html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html> <!--<![endif]-->
-
 {% set lang = app.request.getLocale() %}
 {% set mobile = is_show_mobile_page() %}
 
@@ -49,11 +40,6 @@
     <link rel="shortcut icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" media="screen"/>
   {% endif %}
 
-  <!--[if lt IE 9]>
-  <script src="{{ asset('static-dist/libs/html5shiv.js') }}"></script>
-  <script src="{{ asset('static-dist/es5-shim/es5-shim.js') }}"></script>
-  <script src="{{ asset('static-dist/es5-shim/es5-sham.js') }}"></script>
-  <![endif]-->
   <script src="{{ asset('static-dist/libs/agent-web-sdk/agent-sdk.iife.js') }}"></script>
 
   {% block stylesheets %}
@@ -64,10 +50,6 @@
   {% block head_scripts %}{% endblock %}
 </head>
 <body class="{% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %}{% endblock %}" {% block bodyStyle %}{% endblock %}>
-<!--[if lt IE 9]>
-<script src="{{ asset('static-dist/libs/fix-ie.js') }}"></script>
-{% include 'default/ie8-alert.html.twig' %}
-<![endif]-->
 
 {% block body %}
   <div class="es-wrap">

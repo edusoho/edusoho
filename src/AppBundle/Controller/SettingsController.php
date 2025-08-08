@@ -214,74 +214,6 @@ class SettingsController extends BaseController
         return $this->render('settings/assistant-qrcode-crop-modal.html.twig');
     }
 
-    public function avatarFetchPartnerAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        if (!$this->getAuthService()->hasPartnerAuth()) {
-            throw $this->createNotFoundException();
-        }
-
-        $url = $this->getAuthService()->getPartnerAvatar($currentUser['id'], 'big');
-
-        if (empty($url)) {
-            $this->setFlashMessage('danger', 'user.settings.avatar.fetch_form_partner_error');
-
-            return $this->createJsonResponse(true);
-        }
-
-        $imgUrl = $request->request->get('imgUrl');
-        $file = new File($this->downloadImg($imgUrl));
-        $groupCode = 'tmp';
-        $imgs = [
-            'large' => ['200', '200'],
-            'medium' => ['120', '120'],
-            'small' => ['48', '48'],
-        ];
-        $options = [
-            'x' => '0',
-            'y' => '0',
-            'x2' => '200',
-            'y2' => '200',
-            'w' => '200',
-            'h' => '200',
-            'width' => '200',
-            'height' => '200',
-            'imgs' => $imgs,
-        ];
-
-        if (empty($options['group'])) {
-            $options['group'] = 'default';
-        }
-
-        $record = $this->getFileService()->uploadFile($groupCode, $file);
-        $parsed = $this->getFileService()->parseFileUri($record['uri']);
-        $filePaths = FileToolKit::cropImages($parsed['fullpath'], $options);
-
-        $fields = [];
-
-        foreach ($filePaths as $key => $value) {
-            $file = $this->getFileService()->uploadFile($options['group'], new File($value));
-            $fields[] = [
-                'type' => $key,
-                'id' => $file['id'],
-            ];
-        }
-
-        if (isset($options['deleteOriginFile']) && 0 == $options['deleteOriginFile']) {
-            $fields[] = [
-                'type' => 'origin',
-                'id' => $record['id'],
-            ];
-        } else {
-            $this->getFileService()->deleteFileByUri($record['uri']);
-        }
-
-        $this->getUserService()->changeAvatar($currentUser['id'], $fields);
-
-        return $this->createJsonResponse(true);
-    }
-
     public function securityAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -1313,28 +1245,5 @@ class SettingsController extends BaseController
     protected function getMultiClassService()
     {
         return $this->getBiz()->service('MultiClass:MultiClassService');
-    }
-
-    protected function downloadImg($url)
-    {
-        $currentUser = $this->getCurrentUser();
-        //        $filename    = md5($url).'_'.time();
-        $filePath = $this->container->getParameter(
-                'topxia.upload.public_directory'
-            ).'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
-
-        $fp = fopen($filePath, 'w');
-        $img = fopen($url, 'r');
-        stream_get_meta_data($img);
-        $result = '';
-        while (!feof($img)) {
-            $result .= fgets($img, 1024);
-        }
-
-        fclose($img);
-        fwrite($fp, $result);
-        fclose($fp);
-
-        return $filePath;
     }
 }

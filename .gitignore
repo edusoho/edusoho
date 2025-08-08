@@ -80,4 +80,5 @@ yarn-error.log
 .env
 docker-compose.yml
 docker/
-.cursor/
+.cursor
+TMP.md

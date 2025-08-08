@@ -486,12 +486,6 @@ settings_assistant_qrcode_crop_modal:
     path: '/settings/assistant/qrcode/crop/modal'
     defaults:
         _controller: 'AppBundle:Settings:assistantQrCodeCropModal'
-settings_avatar_fetch_partner:
-    path: '/settings/avatar/fetch_partner'
-    defaults:
-        _controller: 'AppBundle:Settings:avatarFetchPartner'
-    methods:
-        - POST
 settings_security:
     path: '/settings/security'
     defaults:
@@ -954,14 +948,6 @@ teacher_qualification:
     path: '/teacher/qualification'
     defaults:
         _controller: 'AppBundle:Teacher:qualification'
-partner_login:
-    path: '/partner/login'
-    defaults:
-        _controller: 'AppBundle:Partner:login'
-partner_logout:
-    path: '/partner/logout'
-    defaults:
-        _controller: 'AppBundle:Partner:logout'
 cloud_set_server:
     path: '/cloud/set-server'
     defaults:
@@ -4244,15 +4230,3 @@ secondary_verification:
     path: '/secondary/verification'
     defaults:
         _controller: 'AppBundle:SecondaryVerification/SecondaryVerification:index'
-
-agent_worker:
-  path: '/agent_worker'
-  defaults:
-    _controller: 'AppBundle:AgentWorker:index'
-workflow_callback:
-  path: '/workflow_callback/{workflow}'
-  defaults:
-    _controller: 'AppBundle:WorkflowCallback:index'
-  methods:
-    - POST
-

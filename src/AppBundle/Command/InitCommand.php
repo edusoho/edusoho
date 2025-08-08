@@ -60,7 +60,7 @@ class InitCommand extends BaseCommand
             $adminUser = [
                 'email' => 'test@edusoho.com',
                 'nickname' => '测试管理员',
-                'password' => 'kaifazhe',
+                'password' => 'Admin@123',
             ];
         }
 

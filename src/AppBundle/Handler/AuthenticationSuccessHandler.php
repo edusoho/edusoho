@@ -40,20 +40,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new JsonResponse($content, 200);
         }
 
-        if ($this->getAuthService()->hasPartnerAuth()) {
-            $url = $this->httpUtils->generateUri($request, 'partner_login');
-            $queries = ['goto' => $this->determineTargetUrl($request)];
-            $url = $url.'?'.http_build_query($queries);
-
-            return $this->httpUtils->createRedirectResponse($request, $url);
-        }
-
         return parent::onAuthenticationSuccess($request, $token);
-    }
-
-    private function getAuthService()
-    {
-        return ServiceKernel::instance()->createService('User:AuthService');
     }
 
     /**
@@ -62,11 +49,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User:UserService');
-    }
-
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getServiceKernel()

@@ -41,6 +41,9 @@ marketing_mall:
   resource: "@MarketingMallBundle/Resources/config/marketing_mall_routing.yml"
   prefix:   /
 
+agent:
+  resource: "@AgentBundle/Resources/config/agent_routing.yml"
+  prefix:   /
 # Internal routing configuration to handle ESI
 # _internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

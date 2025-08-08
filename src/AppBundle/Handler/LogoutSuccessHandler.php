@@ -27,20 +27,6 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
         }
 
         setcookie('is_skip_mobile_bind', 0, -1);
-        if ($this->getAuthService()->hasPartnerAuth()) {
-            $user = ServiceKernel::instance()->getCurrentUser();
-            setcookie('REMEMBERME');
-
-            if (!$user->isLogin()) {
-                return parent::onLogoutSuccess($request);
-            }
-
-            $url = $this->httpUtils->generateUri($request, 'partner_logout');
-            $queries = ['userId' => $user['id'], 'goto' => $this->targetUrl];
-            $url = $url.'?'.http_build_query($queries);
-
-            return $this->httpUtils->createRedirectResponse($request, $url);
-        }
 
         setcookie('_last_logout_locale', $request->getSession()->get('_locale'), -1);
         // setcookie("U_LOGIN_TOKEN", '', -1);

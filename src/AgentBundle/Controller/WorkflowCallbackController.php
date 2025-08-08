@@ -1,7 +1,8 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AgentBundle\Controller;
 
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class WorkflowCallbackController extends BaseController

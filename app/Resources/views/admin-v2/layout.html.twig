@@ -9,10 +9,6 @@
 {% set isSafari = (app.request.headers.get('User-Agent') matches '/Safari/') and (not (app.request.headers.get('User-Agent') matches '/Chrome/')) %}
 
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 <html lang="{{ lang }}" class="{% if lang == 'en' %}es-en-admin{% endif %}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -43,19 +39,12 @@
   {% endblock %}
 
   {% block javascripts %}{% endblock %}
-  <!--[if lt IE 9]>
-    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
-    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
-  <![endif]-->
     <script src="{{ asset('assets/libs/jquery/1.11.2/jquery-admin-v2.js') }}"></script>
     <script src="{{ asset('assets/libs/gallery2/bootstrap/bootstrap.js') }}"></script>
     {% do load_script('widget/tooltip-widget') %}
 </head>
 {% block body %}
   <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
-    <!--[if lt IE 9]>
-      {% include 'default/ie8-alert.html.twig' %}
-    <![endif]-->
     <div class="ct-layout-container admin-layout-container">
       <div class="cd-fixed-top">
         <div class="ct-top-logo hidden-xs">

@@ -1,9 +1,10 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AgentBundle\Controller;
 
 use AgentBundle\Workflow\Workflow;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class AgentWorkerController extends BaseController
@@ -70,6 +71,14 @@ class AgentWorkerController extends BaseController
         }
 
         return $this->createJsonResponse($result);
+    }
+
+    protected function createJsonResponse($data = null, $status = 200, $headers = [])
+    {
+        $jsonResponse = parent::createJsonResponse($data, $status, $headers);
+        $jsonResponse->setEncodingOptions($jsonResponse->getEncodingOptions() | JSON_UNESCAPED_UNICODE);
+
+        return $jsonResponse;
     }
 
     /**

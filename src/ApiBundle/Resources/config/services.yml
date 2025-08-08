@@ -68,7 +68,6 @@ services:
                 - '@api_web_lib_listener'
                 - '@api_anonymous_listener'
                 - '@api_marketing_mall_token_header_listener'
-                - '@api_agent_authentication_listener'
     api_resource_kernel:
         class: ApiBundle\Api\ResourceKernel
         arguments:

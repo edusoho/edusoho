@@ -7,10 +7,6 @@
 {% set cloudSmsInfo = isOldSmsUser()|default(false) %}
 {% set lang = app.request.getLocale() %}
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
 <html lang="{{ lang }}" class="{% if lang == 'en' %}es-en-admin{% endif %}">
 <head>
@@ -38,16 +34,9 @@
   {% endblock %}
 
   {% block javascripts %}{% endblock %}
-  <!--[if lt IE 9]>
-    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
-    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
-  <![endif]-->
 </head>
 {% block body %}
   <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
-  <!--[if lt IE 9]>
-      {% include 'default/ie8-alert.html.twig' %}
-    <![endif]-->
 
   <div class="navbar navbar-inverse navbar-fixed-top">
     {% if cloudSmsInfo %}

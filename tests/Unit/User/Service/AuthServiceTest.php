@@ -66,58 +66,6 @@ class AuthServiceTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    public function testSyncLoginWithDefaultAuthProvider()
-    {
-        $this->mockBiz(
-            'User:UserService',
-            [
-                [
-                    'functionName' => 'getUserBindByTypeAndUserId',
-                    'returnValue' => [],
-                    'withParams' => ['default', 2],
-                    'runTimes' => 1,
-                ],
-                [
-                    'functionName' => 'getUserBindByTypeAndUserId',
-                    'returnValue' => ['id' => 2, 'fromId' => 2],
-                    'withParams' => ['default', 2],
-                    'runTimes' => 1,
-                ],
-            ]
-        );
-        $result = $this->getAuthService()->syncLogin(2);
-        $this->assertEquals('', $result);
-
-        $result = $this->getAuthService()->syncLogin(2);
-        $this->assertTrue($result);
-    }
-
-    public function testSyncLogoutWithDefaultAuthProvider()
-    {
-        $this->mockBiz(
-            'User:UserService',
-            [
-                [
-                    'functionName' => 'getUserBindByTypeAndUserId',
-                    'returnValue' => [],
-                    'withParams' => ['default', 2],
-                    'runTimes' => 1,
-                ],
-                [
-                    'functionName' => 'getUserBindByTypeAndUserId',
-                    'returnValue' => ['id' => 2, 'fromId' => 2],
-                    'withParams' => ['default', 2],
-                    'runTimes' => 1,
-                ],
-            ]
-        );
-        $result = $this->getAuthService()->syncLogout(2);
-        $this->assertEquals('', $result);
-
-        $result = $this->getAuthService()->syncLogout(2);
-        $this->assertTrue($result);
-    }
-
     public function testChangeNickname()
     {
         $value = ['register_mode' => 'default'];
@@ -412,89 +360,6 @@ class AuthServiceTest extends BaseTestCase
         $this->assertFalse($result);
     }
 
-    /* 以下的带有partner的都需要访问Discuz等的API，默认default 返回false */
-    public function testCheckPartnerLoginById()
-    {
-        $value = ['register_mode' => 'default'];
-        $this->getSettingService()->set('auth', $value);
-        $user = $this->getAuthService()->register([
-            'email' => 'test@edusoho.com',
-            'nickname' => 'test',
-            'password' => '123456',
-        ]);
-
-        $result = $this->getAuthService()->checkPartnerLoginById($user['id'], '123456');
-        $this->assertFalse($result);
-    }
-
-    public function testCheckPartnerLoginByNickname()
-    {
-        $value = ['register_mode' => 'default'];
-        $this->getSettingService()->set('auth', $value);
-        $user = $this->getAuthService()->register([
-            'email' => 'test@edusoho.com',
-            'nickname' => 'test',
-            'password' => '123456',
-        ]);
-
-        $result = $this->getAuthService()->checkPartnerLoginByNickname($user['id'], 'test');
-        $this->assertFalse($result);
-    }
-
-    public function testCheckPartnerLoginByEmail()
-    {
-        $value = ['register_mode' => 'default'];
-        $this->getSettingService()->set('auth', $value);
-        $user = $this->getAuthService()->register([
-            'email' => 'test@edusoho.com',
-            'nickname' => 'test',
-            'password' => '123456',
-        ]);
-
-        $result = $this->getAuthService()->checkPartnerLoginByEmail($user['id'], 'test@edusoho.com');
-        $this->assertFalse($result);
-    }
-
-    public function testGetPartnerAvatar()
-    {
-        $this->mockBiz(
-            'User:UserService',
-            [
-                [
-                    'functionName' => 'getUserBindByTypeAndUserId',
-                    'returnValue' => [],
-                    'withParams' => ['default', 2],
-                ],
-            ]
-        );
-        $result = $this->getAuthService()->getPartnerAvatar(2);
-        $this->assertNull($result);
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetPartnerAvatarWithBind()
-    {
-        $this->mockBiz(
-            'User:UserService',
-            [
-                [
-                    'functionName' => 'getUserBindByTypeAndUserId',
-                    'returnValue' => ['id' => 2, 'fromId' => 2],
-                    'withParams' => ['default', 2],
-                ],
-            ]
-        );
-        $result = $this->getAuthService()->getPartnerAvatar(2);
-    }
-
-    public function testGetPartnerName()
-    {
-        $result = $this->getAuthService()->getPartnerName();
-        $this->assertEquals('default', $result);
-    }
-
     public function testIsRegisterEnabledWithOtherTypeByTrue()
     {
         $value = ['register_mode' => 'email_or_mobile', 'register_enabled' => 'open'];
@@ -518,18 +383,6 @@ class AuthServiceTest extends BaseTestCase
         $this->getSettingService()->delete('auth');
         $result = $this->getAuthService()->isRegisterEnabled();
         $this->assertTrue($result);
-    }
-
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
-     */
-    public function testGetAuthProviderWithErrorMode()
-    {
-        ReflectionUtils::setProperty($this->getAuthService(), 'partner', null);
-        $value = ['mode' => 'testNotTrue'];
-        $this->getSettingService()->set('user_partner', $value);
-        $this->getAuthService()->getPartnerName();
-        $this->assertFalse(true);
     }
 
     protected function getAuthService()
