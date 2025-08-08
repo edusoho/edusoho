@@ -40,6 +40,10 @@ class UserException extends AbstractException
 
     const PASSWORD_REQUIRE_UPGRADE = 4000147;
 
+    const PASSWORD_REQUIRE_HIGH_LEVEL = 4000148;
+
+    const ORIGINAL_PASSWORD_ERROR = 4000149;
+
     // 抛这个错误app会重新登陆
     const NOTFOUND_TOKEN = 4040117;
 
@@ -163,5 +167,7 @@ class UserException extends AbstractException
         4040121 => 'exception.user.email_password_error',
         4000122 => 'exception.user.already_bind',
         4000147 => 'exception.user.password_require_upgrade',
+        4000148 => 'exception.user.password_require_high_level',
+        4000149 => 'exception.user.original_password_error',
     ];
 }

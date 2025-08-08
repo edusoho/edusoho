@@ -676,6 +676,8 @@ t.add("course.plan_task.activity_manage.testpaper.time_limit", "Test duration", 
 t.add("validate.valid_enter_a_positive.integer", "Please enter a positive integer from 1 to 100", "js", "en");
 t.add("validate.valid_rangetime.required", "Please select a date range", "js", "en");
 t.add("validate.valid_starttime.required", "Please select a start time", "js", "en");
+t.add("validate.valid_fixedtime.required", "Please select the start and end times of the exam", "js", "en");
+t.add("validate.valid_maxDuration", "The fixed examination duration should not exceed 10 hours", "js", "en");
 t.add("validate.valid_endtime.required", "Please select an end time", "js", "en");
 t.add("validate.valid_email_input.message", "Please enter a valid email address.", "js", "en");
 t.add("validate.valid_idcard_formate.message", "Please enter a valid ID card number.", "js", "en");
@@ -765,7 +767,7 @@ t.add("validate.no_number_first_hint", "URL path can only contain letters and nu
 t.add("validate.have_spaces", "Password can't have spaces", "js", "en");
 t.add("validate.check_password_low.message", "5-20 letters or numbers, case sensitive", "js", "en");
 t.add("validate.check_password_middle.message", "8-20 letters or numbers, including at least two, case sensitive", "js", "en");
-t.add("validate.check_password_high.message", "8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols", "js", "en");
+t.add("validate.check_password_high.message", "Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols", "js", "en");
 t.add("validate.custom_integer.message", "Please enter the correct integer", "js", "en");
 t.add("validate.int.message", "up to 9 integers", "js", "en");
 t.add("validate.float.message", "up to two decimal places, and the integer digits should not exceed 8 digits!", "js", "en");
@@ -2047,6 +2049,7 @@ t.add("admin_v2.homepage.school_info.enter.copy_success", "Link copied successfu
 t.add("admin_v2.homepage.wechat_come", "Welcome to EduSoho enterprise products", "js", "en");
 t.add("admin_v2.homepage.wechat_code.m", "Join the open source product use learning exchange group, small partners are waiting for you", "js", "en");
 t.add("del.role.theater.hover.title", "This user does not have instructor rights. After removal, it will not be displayed on mobile", "js", "en");
+t.add("course.teacher.hover.title.live_teacher", "The teacher is a live teacher", "js", "en");
 t.add("upgrade.cloud.capabilities.to.experience", "<p class=\"title cd-dark-major\">Topic introduction<\/p><div class=\"cd-dark-minor cd-text-md\">Upgrade cloud capabilities to experience more powerful import capabilities<\/div>\n", "js", "en");
 t.add("next.skip.intro.text", "<p class=\"title cd-dark-major\">Topic introduction<\/p><div class=\"cd-dark-minor cd-text-md\">To upgrade the cloud capability and experience more powerful import functions, contact the super administrator<\/div>\n", "js", "en");
 t.add("skip.i.know", "I know(2\/2)", "js", "en");

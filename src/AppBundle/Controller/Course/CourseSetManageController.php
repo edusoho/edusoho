@@ -38,7 +38,7 @@ class CourseSetManageController extends BaseController
             return $this->forward($visibleCourseTypes[$type]['saveAction'], ['request' => $request]);
         }
 
-        if (!$this->getCourseSetService()->hasCourseSetManageRole() && !$this->getCurrentUser()->hasPermission('admin_v2_course_add')) {
+        if (!$this->getCourseSetService()->hasCourseSetManageRole() && !$this->getCurrentUser()->hasPermission('admin_v2_course_add') && !$this->getCurrentUser()->hasPermission('admin_v2_open_course_manage')) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 

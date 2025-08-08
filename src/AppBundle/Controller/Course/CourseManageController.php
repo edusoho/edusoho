@@ -874,6 +874,8 @@ class CourseManageController extends BaseController
         $teacherItems = $this->getUserService()->findUsersByIds(array_column($teachers, 'userId'));
         $teacherItemIds = array_column($teacherItems, 'id');
         $indexedTeacherItems = array_combine($teacherItemIds, $teacherItems);
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'live', true);
+        $liveTeacherIds = array_unique(array_column(array_column($activities, 'ext'), 'teacherId'));
         $teacherIds = [];
 
         if (!empty($teachers)) {
@@ -884,6 +886,7 @@ class CourseManageController extends BaseController
                     'nickname' => $teacher['nickname'],
                     'avatar' => $this->get('web.twig.extension')->avatarPath($teacher, 'small'),
                     'isCanceledTeacherRoles' => !in_array('ROLE_TEACHER', $indexedTeacherItems[$teacher['userId']]['roles']),
+                    'isLiveTeacher' => in_array($teacher['userId'], $liveTeacherIds),
                 ];
             }
         }
@@ -903,7 +906,7 @@ class CourseManageController extends BaseController
         $queryField = $request->query->get('q');
 
         $users = $this->getUserService()->searchUsers(
-            ['nickname' => $queryField, 'roles' => '|ROLE_TEACHER|'],
+            ['nickname' => $queryField, 'roles' => '|ROLE_TEACHER|', 'locked' => 0],
             ['createdTime' => 'DESC'],
             0,
             10

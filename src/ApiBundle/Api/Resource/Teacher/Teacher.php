@@ -19,7 +19,7 @@ class Teacher extends AbstractResource
     public function search(ApiRequest $request)
     {
         $user = $this->getCurrentUser();
-        if (!$user->hasPermission('admin_v2')) {
+        if (!$user->hasPermission('admin_v2') && !$user->isTeacher()) {
             throw new AccessDeniedException();
         }
 

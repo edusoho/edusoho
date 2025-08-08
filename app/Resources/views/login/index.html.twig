@@ -30,8 +30,10 @@
         </div>
         <div class="form-group mbl">
           <label class="control-label" for="login_password">{{ 'user.login.password_label'|trans }}</label>
-          <div class="controls">
-            <input class="form-control input-lg" id="login_password" type="password" name="_password" required placeholder='{{ 'user.login.password_placeholder'|trans }}'/>
+          <div class="controls" style="position: relative;">
+            <input class="form-control input-lg" id="login_password" type="password" name="_password" required placeholder='{{ 'user.login.password_placeholder'|trans }}' style="padding-right: 46px"/>
+            <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="open-eye" alt="" style="position: absolute; right: 10px; top: 8px; cursor: pointer; display: none"/>
+            <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="close-eye" alt="" style="position: absolute; right: 10px; top: 8px; cursor: pointer; display: block"/>
           </div>
         </div>
 

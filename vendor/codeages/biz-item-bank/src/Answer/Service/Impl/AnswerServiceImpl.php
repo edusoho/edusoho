@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use ApiBundle\Api\Util\AssetHelper;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
 use Biz\Question\Service\QuestionService;
@@ -732,7 +733,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $submittedQuestions[] = [
                 'questionId' => $questionId,
                 'answer' => $questions[$questionId]['answer'],
-                'analysis' => $questions[$questionId]['analysis'],
+                'analysis' => $this->filterHtml($questions[$questionId]['analysis']),
                 'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
                 'status' => $answerQuestionReports[$questionId]['status'],
                 'response' => $answerQuestionReports[$questionId]['response'],
@@ -1205,16 +1206,23 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
 
-        if (empty($answerScene['limited_time'])) {
+        if (empty($answerScene['limited_time']) && $answerScene['valid_period_mode'] != 3) {
             return;
         }
 
         if (self::EXAM_MODE_SIMULATION != $answerRecord['exam_mode']) {
             return;
         }
+        $time = time() + $answerScene['limited_time'] * 60 + 120;
+        if ($answerScene['valid_period_mode'] == 3) {
+            if ($answerRecord['exam_mode'] == 1) {
+                return ; // 固定考试练习考试不自动提交
+            }
+            $time = $answerScene['end_time'];
+        }
         $autoSubmitJob = [
             'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
-            'expression' => time() + $answerScene['limited_time'] * 60 + 120,
+            'expression' => intval($time),
             'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
             'args' => ['answerRecordId' => $answerRecord['id']],
         ];
@@ -1401,6 +1409,20 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         return $totalQuestions;
+    }
+
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, AssetHelper::uriForPath($url), $text);
+        }
+
+        return $text;
     }
 
     /**

@@ -44,6 +44,7 @@ class ExceptionListener
         return [
             'body' => $request->request->all(),
             'query' => $request->query->all(),
+            'header' => $request->headers->all(),
         ];
     }
 

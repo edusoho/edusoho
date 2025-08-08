@@ -60,7 +60,7 @@
 </style>
 
   <div class="tab-pane js-course-tasks-pane active js-step2-view">
-  
+
     <form class="form-horizontal" id="step2-form">
       {% set course = get_course(activity.fromCourseId) %}
       {% set testpaper = activity.ext.testpaper|default('') %}
@@ -68,20 +68,30 @@
       {% set features = get_features() %}
       {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
       {% set examMode = activity.ext.answerScene.exam_mode|default(0) %}
+      {% set canUpdate = activity.ext.answerScene.canUpdate is defined ? activity.ext.answerScene.canUpdate : 'true' %}
+      {% set validPeriodMode = activity.ext.validPeriodMode|default('0') %}
       <input type="hidden" id="activityId" value="{{ activity.id|default(0) }}" />
       <input type="hidden" name="mediaType" value="testpaper" />
+      <input type="hidden" id="canUpdate" value="{{ canUpdate }}" />
+      <input type="hidden" id="validPeriodMode" value="{{ validPeriodMode }}" />
       <div class="form-group">
         <div class="col-sm-2 control-label">
           <label for="examMode">{{ 'course.plan_task.activity_manage.testpaper.mode'|trans }}</label>
         </div>
         <div class="col-sm-10 clearfix">
           <input id="examMode" class="form-control" type="hidden" name="exam_mode" value="{{ examMode }}">
-          <div class="testpaper-mode  js-testpaper-mode {% if examMode == 0 %}active{% endif %}" data-value="0" style="margin-right: 16px;">
+          <div class="testpaper-mode  js-testpaper-mode {% if examMode == 0 %}active{% endif %}"
+               data-value="0"
+               style="margin-right: 16px; {% if not(canUpdate) and validPeriodMode == 3 %}cursor: not-allowed{% endif %}"
+          >
             <div class="testpaper-mode__title">{{ 'course.plan_task.activity_manage.testpaper.mock_type'|trans }}</div>
             <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.mock_tips1'|trans }}</div>
             <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.mock_tips2'|trans }}</div>
           </div>
-          <div class="testpaper-mode js-testpaper-mode  {% if examMode == 1 %}active{% endif %}" data-value="1">
+          <div class="testpaper-mode js-testpaper-mode  {% if examMode == 1 %}active{% endif %}"
+               data-value="1"
+               style="{% if not(canUpdate) and validPeriodMode == 3 %}cursor: not-allowed{% endif %}"
+          >
             <div class="testpaper-mode__title">{{ 'course.plan_task.activity_manage.testpaper.practise_type'|trans }}</div>
             <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.practise_tips1'|trans }}</div>
             <div class="testpaper-mode__rule">{{ 'course.plan_task.activity_manage.testpaper.practise_tips2'|trans }}</div>
@@ -102,7 +112,12 @@
           <label for="testpaper-media" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper'|trans }}</label>
         </div>
         <div class="col-sm-3 controls">
-          <select id="question-bank" class="form-control" name="questionBankId" data-url="{{ path('question_bank_manage_testpaper_json', {id:0}) }}">
+          <select id="question-bank"
+                  class="form-control"
+                  name="questionBankId"
+                  data-url="{{ path('question_bank_manage_testpaper_json', {id:0}) }}"
+                  {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+          >
             {% if questionBankTree %}
               <option value="0">{{ 'question.select_question_bank'|trans }}</option>
               {% for bank in questionBankTree %}
@@ -119,22 +134,40 @@
           <div class="help-block hidden js-help-block"></div>
         </div>
         <div class="col-sm-3 controls">
-          <input id="testpaper-type" class="form-control hidden" name="type" value="{{ type|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}" >
+          <input id="testpaper-type"
+                 class="form-control hidden"
+                 name="type"
+                 value="{{ type|default(0) }}"
+                 data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}"
+                 {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+          >
           {% if testpaper.type|default() %}
             <input type="hidden" id="testPaperType" value="{{testpaper.type}}">
           {% endif %}
         </div>
         <div class="col-sm-3 controls">
-          <input id="testpaper-media" class="form-control hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+          <input id="testpaper-media"
+                 class="form-control hidden"
+                 name="testpaperId"
+                 value="{{ testpaper.id|default(0) }}"
+                 data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}"
+                 data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}"
+                 {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+          >
           {% if testpaper|default() %}
             <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
+          {% endif %}
+          {% if not(canUpdate) and validPeriodMode == 3 %}
+            <input type="hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}">
           {% endif %}
         </div>
       </div>
 
       <div class="form-group" id="questionItemShowDiv" style="display:none;">
         <div class="col-sm-2 control-label"></div>
-        <div class="col-sm-10 controls" id="questionItemShowTable"></div>
+        <div id="questionItemShowTable"
+             class="col-sm-10 controls"
+        ></div>
       </div>
 
       <div id="js-test-and-comment" class="js-score-form-group" {% if activity.finishData is not defined %}style="display:none;"{% endif %}>
@@ -142,10 +175,9 @@
           <div class="col-sm-2 control-label">
             <label for="testpaper-media" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper.qualified_score'|trans }}</label>
           </div>
-          <div class="col-sm-10 color-gray">
+          <div class="col-sm-10 color-gray" style="{% if not(canUpdate) and validPeriodMode == 3 %}cursor: not-allowed{% endif %}">
             <span>0</span>
-            <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">
-            </div>
+            <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider"></div>
             <span class="js-score-total"></span>{{ 'site.question.attr.score.unit'|trans }}
             <input type="hidden" id="finishData" name="finishData" value="{{ activity.finishData|default('0.6') }}">
             {% if activity.finishType|default('') %}
@@ -205,24 +237,106 @@
       <div class="form-group">
 			  <div class="col-sm-2 control-label">
           <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.testpaper.validity.period.of.examination'|trans }}</label>
-          <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.rangedate'|trans|raw }}"></i>
 				</div>
 				<div class="col-sm-10 controls radios">
-				  {{ radios('validPeriodMode', {'0':'course.plan_task.activity_manage.exercise.default_difficulty'|trans, '1':'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans, '2':'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }, activity.ext.validPeriodMode|default('0') )}}
+          <label>
+            <input
+              type="radio"
+              name="validPeriodMode"
+              value="0"
+              {% if validPeriodMode == 0 %}checked="checked"{% endif %}
+              {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.exercise.default_difficulty'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.unlimited'|trans|raw }}"></i>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="validPeriodMode"
+              value="1"
+              {% if validPeriodMode == 1 %}checked="checked"{% endif %}
+              {% if not(canUpdate) and validPeriodMode == 3  %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.mode.realTimeRange'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.realTimeRange'|trans|raw }}"></i>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="validPeriodMode"
+              value="2"
+              {% if validPeriodMode == 2 %}checked="checked"{% endif %}
+              {% if not(canUpdate) and validPeriodMode == 3  %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.mode.startTime'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.startTime'|trans|raw }}"></i>
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="validPeriodMode"
+              value="3"
+              {% if validPeriodMode == 3 %}checked="checked"{% endif %}
+              {% if not(canUpdate) %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval'|trans }}
+            <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.fixedTimeInterval'|trans|raw }}"></i>
+          </label>
+          {% if not(canUpdate) %}
+            <input type="hidden" name="validPeriodMode" value="{{ validPeriodMode }}">
+          {% endif %}
         </div>
           <input type="hidden" name="startTime" value="{% if activity.ext.answerScene.start_time|default(0) > 0 %}{{ activity.ext.answerScene.start_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
           <input type="hidden" name="endTime" value="{% if activity.ext.answerScene.end_time|default(0) > 0 %}{{ activity.ext.answerScene.end_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
         <div class="col-sm-offset-2 col-sm-10 controls">
-          <input type="{% if activity.ext.validPeriodMode|default('0') != 1 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
-            id="rangeTime" name="rangeTime" size="25" class="form-control js-realTimeRange-data testpaperTimeRange" autocomplete="off" style="width: 320px;">
+          <input
+            type="{% if validPeriodMode != 1 %}hidden{% else %}text{% endif %}"
+            readonly
+            unselectable="on"
+            id="rangeTime"
+            name="rangeTime"
+            size="25"
+            class="form-control js-realTimeRange-data testpaperTimeRange"
+            autocomplete="off"
+            style="width: 320px;"
+            {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+          >
         </div>
         <div class="col-sm-offset-2 col-sm-10 controls">
-          <input type="{% if activity.ext.validPeriodMode|default('0') != 2 %}hidden{% else %}text{% endif %}" readonly  unselectable="on"
-            size="25" id="rangeStartTime" name="rangeStartTime" class="form-control js-start-range testpaperTimeRange" style="width: 160px;" >
+          <input
+            type="{% if validPeriodMode != 2 %}hidden{% else %}text{% endif %}"
+            readonly
+            unselectable="on"
+            size="25"
+            id="rangeStartTime"
+            name="rangeStartTime"
+            class="form-control js-start-range testpaperTimeRange"
+            style="width: 160px;"
+            {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+          >
+        </div>
+        <div class="col-sm-offset-2 col-sm-10 controls" style="display: flex; flex-direction: column;">
+          <div style="display: flex; align-items: center;">
+            <input
+              type="{% if validPeriodMode != 3 %}hidden{% else %}text{% endif %}"
+              readonly
+              unselectable="on"
+              id="rangeFixedTime"
+              name="rangeFixedTime"
+              size="25"
+              class="form-control js-fixedTime-data testpaperTimeRange"
+              autocomplete="off"
+              style="width: 320px; margin-right: 24px"
+              {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+            >
+            <div class="js-test-duration" style="margin-right: 12px; margin-bottom: 10px"></div>
+          </div>
+          <div class="js-fixed-time-tip" style="margin-top: 5px; font-size: 14px; font-weight: 400; line-height: 22px; color: #A1A1A1;"></div>
         </div>
 			</div>
 
-      <div class="form-group">
+      <div class="form-group js-fixed-time-form-group">
         <div class="col-sm-2 control-label">
           <label for="length" {% if examMode == '0' %}class="control-label-required"{% endif %}>{{ 'course.plan_task.activity_manage.testpaper.time_limit'|trans }}</label></div>
         <div class="col-sm-10 controls radios">
@@ -240,18 +354,53 @@
         <div class="col-sm-2 control-label">
           <label>{{ 'course.plan_task.activity_manage.testpaper.times'|trans }}</label></div>
         <div class="col-sm-10 controls radios">
-          {{ radios('isLimitDoTimes', {'0':'course.plan_task.activity_manage.testpaper.times.always'|trans, '1':'course.plan_task.activity_manage.testpaper.times.once'|trans}, activity.ext.isLimitDoTimes|default('0')) }}
+          <label>
+            <input type="radio"
+                   name="isLimitDoTimes"
+                   value="0"
+                   {% if activity.ext.isLimitDoTimes|default('0') == 0 %}checked{% endif %}
+                   {% if not(canUpdate) and validPeriodMode == 3  %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.times.always'|trans }}
+          </label>
+          <label>
+            <input type="radio"
+                   name="isLimitDoTimes"
+                   value="1"
+                   {% if activity.ext.isLimitDoTimes|default('0') == 1 %}checked{% endif %}
+                   {% if not(canUpdate) and validPeriodMode == 3  %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.times.once'|trans }}
+          </label>
+          {% if not(canUpdate) and validPeriodMode == 3 %}
+            <input type="hidden" name="isLimitDoTimes" value="{{ activity.ext.isLimitDoTimes|default('0') }}">
+          {% endif %}
         </div>
 
         <div class="col-sm-offset-2 col-sm-10 controls">
           <input type="{% if activity.ext.isLimitDoTimes|default('0') == '0' %}hidden{% else %}text{% endif %}"
-                 size="25" id="doTimes" name="doTimes" value="{{ activity.ext.answerScene.do_times|default('1') }}" class="form-control inline-block width-150 js-examinations-num" >
+                 size="25"
+                 id="doTimes"
+                 name="doTimes"
+                 value="{{ activity.ext.answerScene.do_times|default('1') }}"
+                 class="form-control inline-block width-150 js-examinations-num"
+                 {% if not(canUpdate) and validPeriodMode == 3 %}doTimes{% endif %}
+          >
         </div>
 
         <div class="col-sm-offset-2 col-sm-10 controls">
           <label class="checkbox-inline" style="color: #a1a1a1 !important;">
-            <input name="answerMode" type="checkbox" value="1" {% if activity.ext.answerMode|default(0) == 1 %} checked=checked {% endif %}>{{ 'course.plan_task.activity_manage.testpaper.show_answer'|trans }}
+            <input name="answerMode"
+                   type="checkbox"
+                   value="1"
+                   {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+                   {% if activity.ext.answerMode|default(0) == 1 %}checked=checked {% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.show_answer'|trans }}
           </label>
+          {% if not(canUpdate) and validPeriodMode == 3 %}
+            <input type="hidden" name="answerMode" value="{{ activity.ext.answerMode|default(0) == 1 ? 1 : 0 }}">
+          {% endif %}
         </div>
       </div>
 
@@ -263,7 +412,7 @@
       </div>
 
       <div id="advanced-settings" class="form-group" style="display: none;">
-        <div class="form-group">
+        <div class="form-group js-redo-interval-form-group">
           <div class="col-sm-2 control-label">
             <label for="lesson-redo-interval-field">{{ 'course.plan_task.activity_manage.testpaper.redo_interval'|trans }}</label>
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.redo_interval_tips'|trans }}"></i>
@@ -280,8 +429,14 @@
               <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.question.disorder'|trans }}"></i>
             </div>
           <div class="col-sm-10 controls switch-content">
-            <label class="form-switch setting-switch {% if activity.ext.answerScene.is_items_seq_random|default(0) %}checked{% endif %}">
-              <input type="checkbox" name="abandonIsItemsSeqRandom" value="{{ activity.ext.answerScene.is_items_seq_random|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
+            <label class="form-switch setting-switch {% if activity.ext.answerScene.is_items_seq_random|default(0) %}checked{% endif %}" style="{% if not(canUpdate) and validPeriodMode == 3 %}cursor: not-allowed{% endif %}">
+              <input id="weixinweb_enabled"
+                     type="checkbox"
+                     name="abandonIsItemsSeqRandom"
+                     value="{{ activity.ext.answerScene.is_items_seq_random|default(0) }}"
+                     data-toggle="switch"
+                     {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+              >
               <input type="hidden" name="isItemsSeqRandom" value="{{ activity.ext.answerScene.is_items_seq_random|default(0) }}">
             </label>
           </div>
@@ -293,24 +448,18 @@
               <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.option.disorder'|trans }}"></i>
             </div>
           <div class="col-sm-10 controls switch-content">
-            <label class="form-switch setting-switch {% if activity.ext.answerScene.is_options_seq_random|default(0) %}checked{% endif %}">
-              <input type="checkbox" name="abandonIsOptionsSeqRandom" value="{{ activity.ext.answerScene.is_options_seq_random|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
+            <label class="form-switch setting-switch {% if activity.ext.answerScene.is_options_seq_random|default(0) %}checked{% endif %}" style="{% if not(canUpdate) and validPeriodMode == 3 %}cursor: not-allowed{% endif %}">
+              <input id="weixinweb_enabled"
+                     type="checkbox"
+                     name="abandonIsOptionsSeqRandom"
+                     value="{{ activity.ext.answerScene.is_options_seq_random|default(0) }}"
+                     data-toggle="switch"
+                     {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+              >
               <input type="hidden" name="isOptionsSeqRandom" value="{{ activity.ext.answerScene.is_options_seq_random|default(0) }}">
             </label>
           </div>
         </div>
-
-        {# <div class="form-group starttime-check-div" {% if activity.ext.answerScene.do_times|default('0') == 0 %}style="display:none;" {% endif %}>
-          <div class="col-sm-2 control-label">
-            <label for="startTime">{{ 'course.plan_task.activity_manage.testpaper.start_time'|trans }}</label>
-          </div>
-          <div class="col-sm-10 controls radios">
-            {{ radios('testMode', {'normal':'course.plan_task.activity_manage.testpaper.mode.always'|trans, 'realTime':'course.plan_task.activity_manage.testpaper.mode.realTime'|trans}, testMode) }}
-          </div>
-          <div class="col-sm-10 mtm starttime-input pull-right {% if testMode == 'normal' %} hidden {% endif %}">
-            <input class="form-control width-input width-input-large mr0" id="startTime" type="text" name="startTime" autocomplete="off" value="{% if activity|default(null) and activity.startTime|default(0) != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}">
-          </div>
-        </div> #}
 
         {{ slot('course.task.facein.settings', {'activity': activity|default([])}) }}
         {% if is_facein_open() %}
@@ -321,7 +470,6 @@
               <input type="checkbox" name="abandonEnable_facein" value="{{ activity.ext.answerScene.enable_facein|default(0) }}" id="weixinweb_enabled" data-toggle="switch">
               <input type="hidden" name="enable_facein" value="{{ activity.ext.answerScene.enable_facein|default(0) }}">
             </label>
-              {# {{ radios('enable_facein', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, activity.ext.answerScene.enable_facein|default(0)) }} #}
             </div>
           </div>
         {% endif %}

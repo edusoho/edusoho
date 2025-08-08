@@ -41,7 +41,8 @@ class PasswordResetController extends BaseController
             return $this->render('password-reset/error.html.twig');
         }
 
-        $form = $this->createFormBuilder()
+        $form = $this->createFormBuilder(null, [
+            'csrf_protection' => false])
             ->add('password', PasswordType::class)
             ->add('confirmPassword', PasswordType::class)
             ->getForm();

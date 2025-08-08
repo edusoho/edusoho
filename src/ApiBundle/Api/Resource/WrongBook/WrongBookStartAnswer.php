@@ -27,6 +27,9 @@ class WrongBookStartAnswer extends AbstractResource
         $pool = $this->getWrongQuestionService()->getPool($poolId);
         $conditions = $request->query->all();
         $conditions['targetType'] = $pool['target_type'];
+        if (empty($conditions['exerciseMediaType']) && !empty($request->request->get('exerciseMediaType'))) {
+            $conditions['exerciseMediaType'] = $request->request->get('exerciseMediaType');
+        }
         $filterConditions = $this->prepareConditions($poolId, $conditions);
         $wrongQuestionsCount = $this->getWrongQuestionService()->countWrongQuestionWithCollect($filterConditions);
 

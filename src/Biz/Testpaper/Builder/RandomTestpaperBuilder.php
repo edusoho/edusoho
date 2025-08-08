@@ -239,7 +239,7 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
                     }
                     if ('material' == $section['conditions']['item_types'][0] && 'regular' != $assessmentType) {
                         $score = $section['score'] / $item['question_num'];
-                        $question['score_rule']['score'] = ceil($score * 100) / 100;
+                        $question['score_rule']['score'] = ceil($score * 10) / 10;
                         $question['score'] = $question['score_rule']['score'];
                     } else {
                         $question['score_rule']['score'] = $question['score'];

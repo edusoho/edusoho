@@ -1121,7 +1121,7 @@ course.marketing_setup.course_award: 完成教学计划
 course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
-course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，排序在第一位老师下的其他老师均为直播间助教身份
+course.teacher_setup.exist_teacher.add_tips_v2: 只能添加有教师权限的用户，调整直播间主讲老师请在课时管理中调整直播主讲老师
 
 course.item_bank_manage: 题库练习管理
 
@@ -2215,6 +2215,7 @@ course.plan_task.activity_manage.live.finished_condition_tips: 进入参加过�
 course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
+course.plan_task.activity_manage.live.teacher: 直播主讲老师
 course.plan_task.activity_manage.live.info: 直播说明
 course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
@@ -2269,7 +2270,10 @@ course.plan_task.activity_manage.testpaper.option.out.of.order: 选项乱序
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
 course.plan_task.activity_manage.testpaper.question.disorder: 开启后，学员进入考试时，对应大题内所有小题将随机排序
 course.plan_task.activity_manage.testpaper.option.disorder: 开启后，学员进入考试时，所有选择题选项将随机排序
-course.plan_task.activity_manage.testpaper.rangedate: "<div>1、不限：没有时间限制，永久有效；</div>2、指定日期区间：有固定开始和结束时间，在此以为外的时间无法参加考试；<div>3、指定开始时间：仅指定开始时间，不指定结束时间，永久有效，未到开始时间无法参加考试；</div>"
+course.plan_task.activity_manage.testpaper.unlimited: 不限：没有时间限制，永久有效；
+course.plan_task.activity_manage.testpaper.realTimeRange: 指定日期区间：设置可以参加考试的时间区间，在此区间内可参加考试，在此区间外无法参加考试。
+course.plan_task.activity_manage.testpaper.startTime: 指定开始时间：仅指定开始时间，不指定结束时间，永久有效，末到开始时间无法参加考试；
+course.plan_task.activity_manage.testpaper.fixedTimeInterval: 固定考试时间：有固定考试开始时间和结束时间，考试时间开始后允许进入考试，考试时间结束自动交卷，考试开始后不可修改考试时间。
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制，考试次数设置为1次时，“重考间隔”不生效。
 course.plan_task.activity_manage.testpaper.time_length_tips: 0分钟，表示无限制
 course.plan_task.activity_manage.testpaper.time: 考试时间
@@ -2277,6 +2281,7 @@ course.plan_task.activity_manage.testpaper.time_tips: 学员只能在时间范�
 course.plan_task.activity_manage.testpaper.mode.always: 不限
 course.plan_task.activity_manage.testpaper.mode.realTime: 指定
 course.plan_task.activity_manage.testpaper.mode.realTimeRange: 指定日期区间
+course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval: 固定考试时间
 course.plan_task.activity_manage.testpaper.mode.startTime: 指定开始时间
 course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
@@ -2413,6 +2418,7 @@ course.liveroom.content_title: 直播教室
 course.liveroom.open_liveroom_tips: 正在打开教室，请稍候......
 activity.live.not_created_notice: 直播教室尚未创建！
 activity.live.overlap_time_notice: 所选时间已经有直播了，请换个时间
+testpaper.answer.record.existed: 该考试已有学员进行考试，无法修改考试信息
 
 
 
@@ -3134,7 +3140,8 @@ user.register.password_label: 密码
 user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.low: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.register.password_label_placeholder.high: 8-32位英文、数字、符号，同时包含英文大小写、数字符号
+user.register.password_label_placeholder.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
+user.register.enter_password: 请输入密码
 user.register.invite_code_label: 邀请码
 user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
 user.register.i_agree: 我已阅读并同意
@@ -3173,7 +3180,8 @@ user.oauth.bind_other_account: 绑定其他帐号？
 user.oauth.bind_existed_account: 绑定已有帐号？
 user.oauth.bind_error.bind_by_other: 该帐号已被绑定
 user.oauth.register.nickname_placeholder: 最长 18 个英文或 9 个汉字
-user.oauth.register.password__placeholder: 5-20 位英文、数字、符号
+user.oauth.register.password__placeholder: 请输入密码
+user.oauth.register.password_tip: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 user.oauth.register_account_by_ways: 使用%accountType%创建帐号
 user.oauth.register_account.binding_account_by_email: 关联已有邮箱帐号
 user.oauth.register_account.binding_account_by_mobile: 绑定手机号
@@ -3450,7 +3458,7 @@ user.settings.password_reset.reset_btn: 重设密码
 user.settings.password_reset.find_password_btn: 找回密码
 user.settings.password_level.low: 5-20位英文、数字、符号，区分大小写
 user.settings.password_level.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.settings.password_level.high: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
+user.settings.password_level.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 
 
 # 账户中心模块
@@ -4374,6 +4382,8 @@ my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购
 my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用
 my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 my.teaching.course_set.select_type.live_open_course.no_permission: 没有创建公开课的权限
+my.teaching.course_set.select_type.normal_course.no_permission: 没有创建普通课程的权限
+my.teaching.course_set.select_type.live_course.no_permission: 没有创建直播课程的权限
 
 #班课
 my.teaching.multi_class.my_students: 我的学员
@@ -6872,7 +6882,7 @@ admin.user.fields.staff_email: 员工邮箱
 admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.low: 5-20位英文、数字、符号，区分大小写
 admin.user.fields.password_hint.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-admin.user.fields.password_hint.high: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
+admin.user.fields.password_hint.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 admin.user.fields.confirm_password_label: 确认密码
 admin.user.fields.confirm_password_hint: 再输入一次密码
 admin.user.fields.password_label: 密码
@@ -10730,6 +10740,8 @@ exception.user.user_is_destroyed: 用户已注销
 exception.user.email_password_error: 邮箱密码错误
 exception.user.already_bind: 用户已绑定
 exception.user.password_require_upgrade: 检测到您当前密码等级较低，请重新设置密码
+exception.user.password_require_high_level: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
+exception.user.original_password_error: 您输入的原密码不正确，请重新输入
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在

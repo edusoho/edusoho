@@ -24,6 +24,8 @@
     {% endif %}
 
     {% set finishType = activity['finishType']|default(defaultCondition['type']) %}
+    {% set canUpdate = activity.ext.answerScene.canUpdate|default(false) %}
+    {% set validPeriodMode = activity.ext.validPeriodMode|default('0') %}
 
     <div class="tab-pane js-course-tasks-pane active">
       <form class="form-horizontal" id="step3-form">
@@ -44,8 +46,15 @@
               {% if activity.mediaType == 'testpaper' %}
                 <div class="cd-radio-group mts">
                   {% for condition in conditions %}
-                    <label class="cd-radio {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked{% endif %}">
-                      <input type="radio" id="finish-type-select" name="finishType" value="{{ condition.type }}" data-toggle="cd-radio" {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked="checked"{% endif %}>
+                    <label class="cd-radio {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked{% endif %}" style="{% if not(canUpdate) and validPeriodMode == 3 %}cursor: not-allowed{% endif %}">
+                      <input id="finish-type-select"
+                             type="radio"
+                             name="finishType"
+                             value="{{ condition.type }}"
+                             data-toggle="cd-radio"
+                             {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked="checked"{% endif %}
+                             {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
+                      >
                       {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
                     </label>
                   {% endfor %}

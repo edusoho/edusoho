@@ -63,9 +63,12 @@
           <label class="control-label required" for="reset_password"
                  aria-required="true">{{ 'user.settings.security.password_modify.new_password'|trans }}</label>
           <div class="controls">
-            <input type="password" id="reset_password" name="reset_password" required="required" class="form-control"
-                   aria-required="true">
-            <p class="help-block">{{ 'user.settings.password_level.high'|trans }}</p>
+            <div style="position: relative">
+              <input type="password" id="reset_password" name="reset_password" required="required" class="form-control" aria-required="true" style="padding-right: 40px">
+              <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-reset-password-open-eye" alt="" style="position: absolute; right: 8px; top: 5px; cursor: pointer; display: none"/>
+              <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-reset-password-close-eye" alt="" style="position: absolute; right: 8px; top: 5px; cursor: pointer; display: block"/>
+            </div>
+            <p class="help-block" style="margin-top: 0">{{ 'user.settings.password_level.high'|trans }}</p>
           </div>
         </div>
 

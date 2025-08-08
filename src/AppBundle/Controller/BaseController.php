@@ -8,6 +8,7 @@ use AppBundle\Common\Exception\ResourceNotFoundException;
 use AppBundle\Common\JWTAuth;
 use Biz\Common\CommonException;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Firebase\JWT\JWT;
@@ -85,7 +86,36 @@ class BaseController extends Controller
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
 
-        return $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+        $currentUser = $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+
+        $this->checkLoginPasswordUpgraded($currentUser, $this->get('request_stack')->getCurrentRequest());
+
+        return $currentUser;
+    }
+
+    protected function checkLoginPasswordUpgraded(CurrentUser $currentUser, Request $request)
+    {
+        if (!$currentUser->isLogin()) {
+            return;
+        }
+        $user = $this->getUserService()->getUser($currentUser->getId());
+        if (empty($user)) {
+            return;
+        }
+        if (1 == $user['passwordUpgraded']) {
+            return;
+        }
+
+        if (1 != count($user['roles'])) {
+            $request->getSession()->set('needUpgradePassword', 1);
+            return;
+        }
+
+        $loginBindSetting = $this->getBiz()->service('System:SettingService')->get('login_bind');
+        if (!($loginBindSetting['login_strong_pwd_enable'] ?? 1)) {
+            return;
+        }
+        $request->getSession()->set('needUpgradePassword', 1);
     }
 
     protected function authByToken(Request $request)
@@ -484,7 +514,7 @@ class BaseController extends Controller
      */
     protected function checkDragCaptchaToken(Request $request, $token)
     {
-        $enableAntiBrushCaptcha = $this->getSettingService()->node('ugc_content_audit.enable_anti_brush_captcha');
+        $enableAntiBrushCaptcha = $this->getBiz()->service('System:SettingService')->node('ugc_content_audit.enable_anti_brush_captcha');
         if (empty($enableAntiBrushCaptcha)) {
             return true;
         }

@@ -40,6 +40,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         $course = $this->getCourseService()->getCourse($courseId);
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
         $items = $this->prepareCourseItems($course['id'], $tasks);
+        file_put_contents('/tmp/log', json_encode($items), 8);
 
         return [
             'data' => [

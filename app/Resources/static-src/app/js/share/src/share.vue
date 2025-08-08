@@ -118,7 +118,7 @@ export default {
       let query = {
         url: this.url,
         title: this.title,
-        summary: this.summary,
+        summary: this.summary ? this.summary.substring(0, 100) : '',
         desc: this.message,
       };
 

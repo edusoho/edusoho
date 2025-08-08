@@ -2,44 +2,12 @@ import { dateFormat, htmlEscape } from 'app/common/unit.js';
 import DateRangePicker from 'app/common/daterangepicker';
 import 'moment';
 
-const locale = {
-  'format': 'YYYY/MM/DD HH:mm:ss',
-  'separator': '-',
-  'applyLabel': '确定',
-  'cancelLabel': '取消',
-  'fromLabel': '起始时间',
-  'toLabel': '结束时间',
-  'customRangeLabel': '自定义',
-  'weekLabel': 'W',
-  'daysOfWeek': [
-    '日',
-    '一',
-    '二',
-    '三',
-    '四',
-    '五',
-    '六'
-  ],
-  'monthNames': [
-    '一月',
-    '二月',
-    '三月',
-    '四月',
-    '五月',
-    '六月',
-    '七月',
-    '八月',
-    '九月',
-    '十月',
-    '十一月',
-    '十二月'
-  ],
-  'firstDay': 1
-};
+let locale = {}
+let fixedTimeLocale = {}
 
 if (app.lang !== 'zh_CN') {
   locale = {
-    'format': 'YYYY/MM/DD HH:mm:ss',
+    'format': 'YYYY/MM/DD HH:mm',
     'separator': '-',
     'applyLabel': 'Apply',
     'cancelLabel': 'Cancel',
@@ -72,8 +40,110 @@ if (app.lang !== 'zh_CN') {
     ],
     'firstDay': 1
   };
+  fixedTimeLocale = {
+    'format': 'YYYY/MM/DD HH:mm',
+    'separator': '-',
+    'applyLabel': 'Apply',
+    'cancelLabel': 'Cancel',
+    'fromLabel': 'From',
+    'toLabel': 'To',
+    'customRangeLabel': 'Custom',
+    'weekLabel': 'W',
+    'daysOfWeek': [
+      'Su',
+      'Mo',
+      'Tu',
+      'We',
+      'Th',
+      'Fr',
+      'Sa'
+    ],
+    'monthNames': [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ],
+    'firstDay': 1
+  };
+} else {
+  locale = {
+    'format': 'YYYY/MM/DD HH:mm',
+    'separator': '-',
+    'applyLabel': '确定',
+    'cancelLabel': '取消',
+    'fromLabel': '起始时间',
+    'toLabel': '结束时间',
+    'customRangeLabel': '自定义',
+    'weekLabel': 'W',
+    'daysOfWeek': [
+      '日',
+      '一',
+      '二',
+      '三',
+      '四',
+      '五',
+      '六'
+    ],
+    'monthNames': [
+      '一月',
+      '二月',
+      '三月',
+      '四月',
+      '五月',
+      '六月',
+      '七月',
+      '八月',
+      '九月',
+      '十月',
+      '十一月',
+      '十二月'
+    ],
+    'firstDay': 1
+  };
+  fixedTimeLocale = {
+    'format': 'YYYY/MM/DD HH:mm',
+    'separator': '-',
+    'applyLabel': '确定',
+    'cancelLabel': '取消',
+    'fromLabel': '起始时间',
+    'toLabel': '结束时间',
+    'customRangeLabel': '自定义',
+    'weekLabel': 'W',
+    'daysOfWeek': [
+      '日',
+      '一',
+      '二',
+      '三',
+      '四',
+      '五',
+      '六'
+    ],
+    'monthNames': [
+      '一月',
+      '二月',
+      '三月',
+      '四月',
+      '五月',
+      '六月',
+      '七月',
+      '八月',
+      '九月',
+      '十月',
+      '十一月',
+      '十二月'
+    ],
+    'firstDay': 1
+  };
 }
-
 
 class Testpaper {
   constructor($element) {
@@ -86,11 +156,17 @@ class Testpaper {
     this.$scoreItem = this.$element.find('.js-score-form-group');
     this.$rangeStartTime = $('.js-start-range')
     this.$rangeDateInput = $('.js-realTimeRange-data');
+    this.$rangeFixedTime = $('.js-fixedTime-data');
+    this.$testDuration = $('.js-test-duration');
+    this.$fixedTimeTip = $('.js-fixed-time-tip');
+    this.$canUpdate = $('#canUpdate').val();
+    this.$validPeriodMode = $('#validPeriodMode').val();
     this._init();
   }
 
   _init() {
     dateFormat();
+    this.initDatePicker();
     this.setValidateRule();
     this.initQuestionBankSelector();
     this.initTestPaperTypeSelector();
@@ -99,10 +175,9 @@ class Testpaper {
     this.initEvent();
     this.initStepForm2();
     this.initAddComment();
-    this.initDatePicker();
     this.initFormItemData();
     this.initAdvancedSettings();
-    this.changeContentHight();
+    this.validatorTestDuration();
 
     window.ltc.on('getActivity', (msg) => {
       window.ltc.emit('returnActivity', {
@@ -138,17 +213,6 @@ class Testpaper {
     }
   }
 
-  changeContentHight() {
-    $('.testpaperTimeRange').on('focus', function() {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
-    });
-    $('.testpaperTimeRange').on('blur', function() {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
-    });
-  }
-
   initDatePicker() {
     const todayYear=(new Date()).getFullYear();
     const todayMonth=(new Date()).getMonth();
@@ -169,34 +233,90 @@ class Testpaper {
       'startDate': validPeriodMode == '1' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
       locale,
     });
-    
+
     this.$rangeDateInput.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'))
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
     });
 
+    this.$rangeDateInput.on('show.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height + 240.8 + 'px';
+    })
+
+    this.$rangeDateInput.on('hide.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height - 240 + 'px';
+    })
+
     this.$rangeStartTime.daterangepicker({
       "timePicker": true,
       'singleDatePicker': true,
       "timePicker24Hour": true,
       "timePickerSeconds": true,
-      'autoUpdateInput':false,
       'minDate': new Date(),
       'startDate': validPeriodMode == '2' ? activityId != '0' ? startTime : moment().startOf('seconds') : moment().startOf('seconds'),
       locale,
     });
-    
+
     this.$rangeStartTime.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'))
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
     });
+
+    this.$rangeStartTime.on('show.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height + 240 + 'px';
+    })
+
+    this.$rangeStartTime.on('hide.daterangepicker', function () {
+      let height = $('#iframe-content').height();
+      document.getElementById('iframe-content').style.height = height - 240 + 'px';
+    })
+
+    this.$rangeFixedTime.daterangepicker({
+      timePicker: true,
+      timePicker24Hour: true,
+      autoUpdateInput: false,
+      minDate: new Date(),
+      endDate: validPeriodMode == '3' ? endTime != '0' ? endTime : todayTime : todayTime,
+      startDate: validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('minute') : moment().startOf('minute'),
+      locale: fixedTimeLocale,
+    });
+
+    const self = this;
+    this.$rangeFixedTime.on('apply.daterangepicker', function(ev, picker) {
+      $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm'))
+      $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm'))
+      $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm'));
+      const diffMs = picker.endDate - picker.startDate;
+      const diffInMinutes = Math.floor(diffMs / (1000 * 60));
+      $('#length').val(diffInMinutes);
+      self.validatorTestDuration();
+    });
+
+    this.$rangeFixedTime.on('show.daterangepicker', function () {
+      if ($('#questionItemShowDiv').is(':visible')) {
+        $('#iframe-content').height($('#iframe-content').height() + 500);
+      } else {
+        $('#iframe-content').height($('#iframe-content').height() + 240);
+      }
+    })
+
+    this.$rangeFixedTime.on('hide.daterangepicker', function () {
+      if ($('#questionItemShowDiv').is(':visible')) {
+        $('#iframe-content').height($('#iframe-content').height() - 500);
+      } else {
+        $('#iframe-content').height($('#iframe-content').height() - 240);
+      }
+    })
   }
 
   initFormItemData() {
     const activityId = $('#activityId').val()
     const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
-    
+
     if (activityId == 0) return
 
     const startTime = $('[name=startTime]').val()
@@ -208,6 +328,8 @@ class Testpaper {
       defaultStartTime == '' && defaultEndTime == '' ? this.$rangeDateInput.val() : this.$rangeDateInput.val(defaultStartTime + ' - ' + defaultEndTime)
     } else if(validPeriodMode == 2) {
       this.$rangeStartTime.val(defaultStartTime)
+    } else if (validPeriodMode == 3) {
+      defaultStartTime == '' && defaultEndTime == '' ? this.$rangeFixedTime.val() : this.$rangeFixedTime.val(defaultStartTime + ' - ' + defaultEndTime)
     }
   }
 
@@ -242,6 +364,41 @@ class Testpaper {
 
       return true;
     }, $.validator.format(Translator.trans('course.plan_task.activity_manage.testpaper.mock_tips4')));
+
+    $.validator.addMethod("maxDuration", function(value, element) {
+      const startTime = $('[name="startTime"]').val();
+      const endTime = $('[name="endTime"]').val();
+
+      if (!startTime || !endTime || $('[name="validPeriodMode"]:checked').val() != 3) return true;
+
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+      const diffMs = endDate - startDate;
+      const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
+
+      if (diffMs > TEN_HOURS_IN_MS) {
+        $('.js-test-duration').hide();
+      }
+
+      return diffMs <= TEN_HOURS_IN_MS;
+    }, "固定考试时间不能超过10个小时");
+
+    $.validator.addMethod("minDuration", function(value, element) {
+      const startTime = $('[name="startTime"]').val();
+      const endTime = $('[name="endTime"]').val();
+
+      if (!startTime || !endTime || $('[name="validPeriodMode"]:checked').val() != 3) return true;
+
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+      const diffMs = endDate - startDate;
+
+      if (diffMs <= 0) {
+        $('.js-test-duration').hide();
+      }
+
+      return diffMs > 0;
+    }, "考试时间需大于0");
   }
 
   initEvent() {
@@ -289,7 +446,7 @@ class Testpaper {
       $(this).height(scrollHeight);
     });
     $customCommentTable.on('click', '.js-comment-remove', function () {
-      $(this).parent().parent().remove();  
+      $(this).parent().parent().remove();
       if($customCommentTable.find('tr').length == 1) {
         $customCommentTable.addClass('hidden')
       }
@@ -316,9 +473,9 @@ class Testpaper {
           min: 1,
         },
         length: {
-          required: true,
-          digits: true,
-          examLength: true
+          required: () => $('[name="validPeriodMode"]:checked').val() != 3,
+          digits: () => $('[name="validPeriodMode"]:checked').val() != 3,
+          examLength: () => $('[name="validPeriodMode"]:checked').val() != 3
         },
         doTimes: {
           required: () => $('[name="isLimitDoTimes"]:checked').val() == 1,
@@ -334,6 +491,11 @@ class Testpaper {
         },
         rangeStartTime: {
           required: () => $('[name="validPeriodMode"]:checked').val() == 2,
+        },
+        rangeFixedTime: {
+          required: () => $('[name="validPeriodMode"]:checked').val() == 3,
+          maxDuration: true,
+          minDuration: true
         },
         redoInterval: {
           required: function () {
@@ -362,7 +524,10 @@ class Testpaper {
           required: Translator.trans('validate.valid_rangetime.required')
         },
         rangeStartTime: {
-          required: Translator.trans('validate.valid_starttime.required')
+          required: Translator.trans('validate.valid_starttime.required'),
+        },
+        rangeFixedTime: {
+          required: Translator.trans('validate.valid_fixedtime.required')
         },
       }
     });
@@ -641,20 +806,82 @@ class Testpaper {
 
   showRedoExamination(event) {
     const $this = $(event.currentTarget);
+    this.validator.resetForm(['rangeFixedTime']);
+    $('#length').val(null)
+    $('[name=startTime]').val('0')
+    $('[name=endTime]').val('0')
+    $('.js-redo-interval-form-group').show();
+    $('.js-fixed-time-form-group').show();
+    $('input[name=rangeTime]').val('');
+    $('input[name=rangeStartTime]').val('');
+    $('input[name=rangeFixedTime]').val('');
+    this.$testDuration.hide();
+    this.validatorTestDuration();
 
     if ($this.val() == 0) {
+      this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
-      $('.js-realTimeRange-data').attr('type', 'hidden');
-    }
-
-    if ($this.val() == 1) {
-      $('.js-realTimeRange-data').attr('type', 'test');
+      this.$rangeFixedTime.attr('type', 'hidden');
+    } else if ($this.val() == 1) {
+      this.$rangeDateInput.attr('type', 'test');
       this.$rangeStartTime.attr('type', 'hidden');
-    }
-
-    if ($this.val() == 2) {
+      this.$rangeFixedTime.attr('type', 'hidden');
+    } else if ($this.val() == 2) {
+      this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'test');
-      $('.js-realTimeRange-data').attr('type', 'hidden');
+      this.$rangeFixedTime.attr('type', 'hidden');
+    } else if ($this.val() == 3) {
+      this.$rangeDateInput.attr('type', 'hidden');
+      this.$rangeStartTime.attr('type', 'hidden');
+      this.$rangeFixedTime.attr('type', 'test');
+      $('input[type="radio"][name="isLimitDoTimes"][value="0"]').prop('checked', false);
+      $('input[type="radio"][name="isLimitDoTimes"][value="1"]').prop('checked', true);
+      $('.js-examinations-num').attr('type', 'text');
+      $('input[type="text"][name="doTimes"]').val('1');
+      $('.js-redo-interval-form-group').hide();
+      $('.js-fixed-time-form-group').hide();
+    }
+  }
+
+  validatorTestDuration() {
+    const startTime = $('[name=startTime]').val()
+    const endTime = $('[name=endTime]').val()
+    const validPeriodMode = $('[name="validPeriodMode"]:checked').val()
+    if (validPeriodMode == 3) {
+      $('.js-redo-interval-form-group').hide();
+      $('.js-fixed-time-form-group').hide();
+    }
+    if (startTime != 0 && endTime != 0 && validPeriodMode == 3) {
+
+      const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
+      const startDate = new Date(startTime);
+      const endDate = new Date(endTime);
+      const diffMs = endDate - startDate;
+      const diffMinutes = Math.floor(diffMs / (1000 * 60)) % 60;
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+      if ($('#examMode').val() == 0) {
+        this.$fixedTimeTip
+          .text('模拟考试时长必须 > 0')
+          .show();
+      } else {
+        this.$fixedTimeTip
+          .text('练习考试时长必须 > 0')
+          .show();
+      }
+
+      if (startTime != 0 && endTime != 0) {
+        this.validator.element('#rangeFixedTime');
+      }
+
+      if (diffMs > 0 && diffMs <= TEN_HOURS_IN_MS) {
+        this.$testDuration
+          .text(diffHours > 0 ? `考试时长： ${diffHours}小时${diffMinutes}分钟` : `考试时长： ${diffMinutes}分`)
+          .css('color', 'rgba(0, 0, 0, 0.56)')
+          .show();
+      }
+    } else {
+      this.$fixedTimeTip.hide();
     }
   }
 
@@ -668,12 +895,6 @@ class Testpaper {
     if ($this.val() == 0) {
       $('.js-examinations-num').attr('type', 'hidden');
     }
-  }
-
-  changeCondition(event) {
-    let $this = $(event.currentTarget);
-    let value = $this.find('option:selected').val();
-    value != 'score' ? $('.js-score-form-group').addClass('hidden') : $('.js-score-form-group').removeClass('hidden');
   }
 
   getItemsTable(url, testpaperId) {
@@ -719,6 +940,11 @@ class Testpaper {
     }
 
     this.scoreSlider = noUiSlider.create(scoreSlider, option);
+
+    if (!this.$canUpdate && this.$validPeriodMode == 3) {
+      scoreSlider.setAttribute('disabled', true);
+    }
+
     scoreSlider.noUiSlider.on('update', function (values, handle) {
       let rate = values[handle] / score;
       let percentage = (rate * 100).toFixed(0);
@@ -748,8 +974,18 @@ class Testpaper {
   }
 
   switchExamMode(event) {
+    if (!this.$canUpdate && this.$validPeriodMode == 3) {
+      return;
+    }
+
     const $this = $(event.currentTarget);
     const examModeValue = $this.data('value');
+
+    if (examModeValue == 0) {
+      this.$fixedTimeTip.text('模拟考试时长必须 > 0');
+    } else {
+      this.$fixedTimeTip.text('练习考试时长必须 > 0');
+    }
 
     this.$element.find('#examMode').val(examModeValue);
     this.$element.find('.js-testpaper-mode').removeClass('active');

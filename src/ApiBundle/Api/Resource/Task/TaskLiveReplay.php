@@ -56,7 +56,7 @@ class TaskLiveReplay extends AbstractResource
             'nickname' => $user['nickname'],
             'device' => $device,
             'protocol' => $protocol,
-            'role' => 'replay' == $task['type'] ? 'student' : $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
+            'role' => 'replay' == $task['type'] ? 'student' : $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($task['courseId'], $user['id'], $activity['id']),
         ];
 
         foreach ($visibleReplays as $index => $visibleReplay) {

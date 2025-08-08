@@ -57,6 +57,9 @@ export default class VideoPlay {
   }
 
   record() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
     this.intervalId = setInterval(() => {
       this.recorder.addVideoPlayerCounter(this.emitter, this.player);
     }, 1000);

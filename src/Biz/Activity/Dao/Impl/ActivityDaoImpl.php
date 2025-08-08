@@ -196,4 +196,9 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
 
         return $this->db()->fetchAll($sql, [$courseId]);
     }
+
+    public function findByCopyId($copyId)
+    {
+        return $this->findByFields(['copyId' => $copyId]);
+    }
 }

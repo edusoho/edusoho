@@ -49,7 +49,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             $this->createNewException(SmsException::FAILED_SEND());
         }
 
-        $message = sprintf('对%s发送用于%s的通知短信', $to, $smsType);
+        $message = sprintf('对用户发送用于%s的通知短信', $smsType);
         $this->getLogService()->info('sms', $smsType, $message, $mobiles);
 
         return true;
@@ -236,6 +236,12 @@ class SmsServiceImpl extends BaseService implements SmsService
                 break;
             case 'sms_coin_buy_notify':
                 $smsTag = SmsScenes::VIRTUAL_COIN_RECEIPT;
+                break;
+            case 'sms_live_play_one_day':
+                $smsTag = SmsScenes::ONE_DAY_LIVE_START;
+                break;
+            case 'sms_live_play_one_hour':
+                $smsTag = SmsScenes::ONE_HOUR_LIVE_START;
                 break;
             default:
                 $smsTag = '';

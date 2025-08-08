@@ -46,7 +46,7 @@ class UserPassword extends AbstractResource
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encrypt_password']), $request->getHttpRequest()->getHost());
         if (!SimpleValidator::highPassword($password)) {
-            throw CommonException::ERROR_PARAMETER();
+            throw UserException::PASSWORD_REQUIRE_HIGH_LEVEL();
         }
 
         $result = $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $fields['smsCode']);

@@ -32,7 +32,11 @@
         <label for="password">{{'admin.user.fields.password_label'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="password" id="password" name="password" class="form-control">
+        <div style="position: relative;">
+          <input type="password" id="password" name="password" class="form-control" style="padding-right: 30px">
+          <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-password-open-eye" alt="" style="position: absolute; right: 6px; top: 5px; cursor: pointer; display: none"/>
+          <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-password-close-eye" alt="" style="position: absolute; right: 6px; top: 5px; cursor: pointer; display: block"/>
+        </div>
         <p class="help-block">{{ 'admin.user.fields.password_hint.high'|trans }}</p>
       </div>
     </div>
@@ -42,7 +46,11 @@
         <label for="confirmPassword">{{'admin.user.fields.confirm_password_label'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+        <div style="position: relative">
+          <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+          <img src="{{ asset('static-dist/app/img/open_eye.svg') }}" class="js-confirm-password-open-eye" alt="" style="position: absolute; right: 6px; top: 5px; cursor: pointer; display: none"/>
+          <img src="{{ asset('static-dist/app/img/close_eye.svg') }}" class="js-confirm-password-close-eye" alt="" style="position: absolute; right: 6px; top: 5px; cursor: pointer; display: block"/>
+        </div>
         <p class="help-block">{{'admin.user.fields.confirm_password_hint'|trans}}</p>
       </div>
     </div>
@@ -59,6 +67,6 @@
           data-toggle="form-submit" data-target="#user-create-form">{{'form.btn.submit'|trans}}
   </button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  
+
   <script>app.load('user/create-modal-mobile');</script>
 {% endblock %}
