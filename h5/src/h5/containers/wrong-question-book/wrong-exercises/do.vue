@@ -130,8 +130,8 @@ export default {
     },
 
     getResourceToken(globalId) {
-      return Api.getItemDetail({ 
-        params: { globalId } 
+      return Api.getItemDetail({
+        params: { globalId }
       })
     },
   },
