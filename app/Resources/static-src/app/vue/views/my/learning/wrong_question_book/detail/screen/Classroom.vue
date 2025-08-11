@@ -50,7 +50,7 @@
         option-filter-prop="children"
         :filter-option="filterOption"
         notFoundContent="暂无数据"
-        style="width: 120px;"
+        style="width: 325px;"
         v-model="form.classroomTaskId"
       >
         <a-select-option value="default">任务名称</a-select-option>
