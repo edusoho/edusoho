@@ -8,6 +8,24 @@
         </div>
       </template>
       <div class="ibs-engine-item">
+        <div class="ibs-tab-container">
+          <a-button
+            size="small"
+            type="primary"
+            ghost
+          >
+            {{ showAnswerModeText(question.answer_mode) }}
+          </a-button>
+          <a-button
+            v-show="showTag"
+            size="small"
+            type="primary"
+            :ghost="this.isTag ? false : true"
+            @click="changeTag"
+          >
+            <i :class="tagClass"></i>{{ tagText }}
+          </a-button>
+        </div>
         <a-row>
           <!-- 序号和分数 -->
           <a-col :sm="2" :xs="3" class="ibs-text-center" v-show="showScoreAndSeq">
@@ -25,16 +43,6 @@
             >
             {{ question.score }}{{ t("itemEngine.score") }}
           </span>
-
-            <a-button
-              v-show="showTag"
-              class="ibs-mt8 ibs-toggle-btn"
-              size="small"
-              type="primary"
-              :ghost="this.isTag ? false : true"
-              @click="changeTag"
-            ><i :class="tagClass"></i>{{ tagText }}</a-button
-            >
             <a-button
               v-show="showCollect"
               class="ibs-mt8 ibs-collect-btn"
@@ -438,6 +446,24 @@ export default {
     changeTag() {
       this.isTag = !this.isTag;
       this.$emit("changeTag", this.isTag);
+    },
+    showAnswerModeText(mode) {
+      switch (mode) {
+      case 'true_false':
+        return '判断题'
+      case 'single_choice':
+        return '单选题'
+      case 'choice':
+        return '多选题'
+      case 'uncertain_choice':
+        return '不定项选择题'
+      case 'text':
+        return '填空题'
+      case 'rich_text':
+        return '问答题'
+      default:
+        return ''
+      }
     },
     changeCollect() {
       this.isCollect = !this.isCollect;
