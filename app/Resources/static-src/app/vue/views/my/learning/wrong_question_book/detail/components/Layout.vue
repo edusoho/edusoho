@@ -89,7 +89,6 @@ export default {
     .choose-answer-content {
       display: table;
       white-space: normal;
-      color: #666;
 
       .choose-answer-text {
         width: 100%;
@@ -163,7 +162,7 @@ export default {
   }
 
   .right-answer {
-    color: #46c37b;
+    color: #46c37b !important;
   }
 }
 
