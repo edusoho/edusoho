@@ -1056,3 +1056,4 @@ admin_v2.cloud.question_bank.attachment.basic_tab: Question Attachment
 admin_v2.cloud.question_bank.attachment_setting.basic_tab: Question Attachment Setting
 
 admin_v2.total_site_export: 'Full site export permission'
+admin_v2.question.tag_manage: Question Tag Management
