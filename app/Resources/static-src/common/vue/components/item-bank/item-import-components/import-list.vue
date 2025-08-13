@@ -180,12 +180,19 @@
         <a-form-item
           v-if="setModal === 'score' && hasUncertainChoiceOrChoice(types)"
           class="missed-selection-score-item"
-          :label="t('otherScore1')"
           :label-col="{ span: 4 }"
           :wrapper-col="{ span: 16 }"
         >
+          <template #label>
+            <a-tooltip placement="topLeft" arrow-point-at-center>
+              <template slot="title">
+                <div class="missed-selection-score-tip-content">漏选得分：当学员选对一个或多个正确答案，但还是有漏选正确答案时的得分（某题满分2分，含3个正确答案，选中1个或2个正确答案得1分，选中全部3个正确答案得2分）</div>
+              </template>
+              <div class="missed-selection-score-item-label">{{ t('otherScore1') }}</div>
+            </a-tooltip>
+          </template>
           <a-input
-            style="width: 200px; margin-right: 12px"
+            style="width: 200px"
             type="number"
             v-decorator="[
               'otherScore1',
@@ -203,12 +210,6 @@
               }
             ]"
           />
-          <a-tooltip>
-            <template slot="title">
-              <div class="missed-selection-score-tip-content">漏选得分：当学员选对一个或多个正确答案，但还是有漏选正确答案时的得分（某题满分2分，含3个正确答案，选中1个或2个正确答案得1分，选中全部3个正确答案得2分）</div>
-            </template>
-            <img src="/static-dist/app/img/question-bank/missed-selection-score-tip-icon.svg" alt="" class="missed-selection-score-tip-icon"/>
-          </a-tooltip>
         </a-form-item>
         <a-form-item
           v-if="setModal === 'diffcult'"
