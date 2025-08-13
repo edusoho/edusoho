@@ -232,7 +232,7 @@ class UserCommonController extends BaseController
         $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
         $userData['type'] = $formData['type'];
-        $userData['passwordInit'] = 0;
+        $userData['passwordInit'] = 1;
 
         if (isset($formData['orgCode'])) {
             $userData['orgCode'] = $formData['orgCode'];

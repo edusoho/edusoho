@@ -49,8 +49,6 @@ class KernelControllerListener
         $this->checkMobileBind($event);
 
         $this->checkPasswordUpgrade($event);
-
-        $this->checkPasswordInit($event);
     }
 
     private function checkMobileBind(FilterControllerEvent $event)
@@ -74,17 +72,6 @@ class KernelControllerListener
         $event->setController(function () use ($url) {
             return new RedirectResponse($url);
         });
-    }
-
-    private function checkPasswordInit(FilterControllerEvent $event)
-    {
-        $currentUser = $this->getCurrentUser();
-        if (empty($currentUser['passwordInit'])) {
-            $url = $this->generateUrl('password_init', ['goto' => $this->getTargetPath($event->getRequest())]);
-            $event->setController(function () use ($url) {
-                return new RedirectResponse($url);
-            });
-        }
     }
 
     private function checkPasswordUpgrade(FilterControllerEvent $event)
