@@ -1232,12 +1232,17 @@ export default {
       document.body.style = "";
     },
     //设置分数
-    setScore(list, score) {
+    setScore(list, score, otherScore1) {
       //只允许更改非材料题
       this.items.forEach(item => {
         list.forEach(ids => {
           if (item.ids === ids) {
             item.questions[0].score = score;
+            if (item.type === 'choice' || item.type === 'uncertain_choice') {
+              item.questions[0].otherScore = otherScore1;
+              item.questions[0].otherScore1 = otherScore1;
+              item.questions[0].scoreType = 'question';
+            }
           }
         });
       });
