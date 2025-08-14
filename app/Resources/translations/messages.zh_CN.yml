@@ -7883,7 +7883,7 @@ admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时�
 admin.login_connect.student_strong_pwd.button: 学员登录时，弱密码检测
 admin.login_connect.student_strong_pwd.help_block: >
   开启后，学员登录时，若发现学员使用的是弱密码，会强制要求用户修改为强密码。<br> 
-  <strong class="text-danger">关闭后，学员可继续使用弱密码登录，有被盗号隐患，不建议关闭！</strong>
+  <strong style="color:red">关闭后，学员可继续使用弱密码登录，有被盗号隐患，不建议关闭！</strong>
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
