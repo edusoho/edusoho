@@ -42,6 +42,10 @@ export default class Register {
     })
   }
 
+  initRegisterModeSwitch() {
+
+  }
+
   setValidateRule() {
     $.validator.addMethod(
       'spaceNoSupport',
