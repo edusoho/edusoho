@@ -137,13 +137,12 @@
             {{ 'admin.login_connect.open'|trans }}
           </label>
           <label>
-            <input type="radio" name="login_strong_pwd_enable" value="0" id="strong_pwd_close_radio" {% if loginConnect.login_strong_pwd_enable|default(1) == 1 %}disabled{% endif %} data-toggle="tooltip" title="{{ 'admin.login_connect.strong_pwd_skip_close_radio.prompt'|trans }}" {% if loginConnect.login_strong_pwd_enable|default(1) == 0 %}checked{% endif %} >
+            <input type="radio" name="login_strong_pwd_enable" value="0" {% if loginConnect.login_strong_pwd_enable|default(1) == 0 %}checked{% endif %} >
             {{ 'admin.login_connect.closed'|trans }}
           </label>
           <p class="help-block">
             <label>
-              <input type="checkbox" name="strong_pwd_skip_checkbox_name" value="1" id="strong_pwd_skip-agreement-checkbox" {% if loginConnect.strong_pwd_skip_checkbox_name|default(0) == 1 and loginConnect.login_strong_pwd_enable|default(1) == 0 %}checked{% endif %}>
-              {{ 'admin.login_connect.strong_pwd_skip.danger'|trans }}
+              {{ 'admin.login_connect.student_strong_pwd.help_block'|trans|raw }}
             </label>
           </p>
         </div>

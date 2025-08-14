@@ -7880,9 +7880,10 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: �
 admin.login_connect.User_login_protection.after: 经过
 admin.login_connect.User_login_captcha: 用户登录验证码设置
 admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验；如果切换为"手机快捷登录"，则一直需要拖动验证码
-admin.login_connect.student_strong_pwd.button: 学员强密码开关
-admin.login_connect.strong_pwd_skip.danger: ⚠️关闭后学员可使用原密码登录，但账号安全风险将显著增加！建议谨慎操作，并同步加强账号监控或引导学员修改密码提升密码强度，以降低盗号隐患。
-admin.login_connect.strong_pwd_skip_close_radio.prompt: 请先勾选下方协议才能关闭
+admin.login_connect.student_strong_pwd.button: 学员登录时，弱密码检测
+admin.login_connect.student_strong_pwd.help_block: >
+  开启后，学员登录时，若发现学员使用的是弱密码，会强制要求用户修改为强密码。<br> 
+  <strong class="text-danger">关闭后，学员可继续使用弱密码登录，有被盗号隐患，不建议关闭！</strong>
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
