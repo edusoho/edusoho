@@ -150,6 +150,7 @@ export default {
     emailMobileNumberUserName: 'Email/Mobile number/User name',
     password: 'Password',
     mobileNumber: 'Mobile number',
+    emailNumber: 'Please enter your email address',
     setPassword: 'Set password',
     verificationCode: 'Verification code',
     mobileNumberOrEmail: 'Mobile number or email',

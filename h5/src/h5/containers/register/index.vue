@@ -3,13 +3,29 @@
     <e-loading v-if="isLoading" />
     <span class="register-title">{{ $t(registerType[pathName]) }}</span>
 
+    <div class="flex justify-center text-16 mt-50">
+      <div class="mr-40 p-10" :class="{'border-b border-blue-500 font-medium': tabType === 'mobile'}" @click="tabType = 'mobile'">手机号注册</div>
+      <div class="p-10" :class="{'border-b border-blue-500 font-medium': tabType === 'email'}" @click="tabType = 'email'">邮箱号注册</div>
+    </div>
+
     <van-field
+      v-if="tabType === 'mobile'"
       v-model="registerInfo.mobile"
       :border="false"
       :error-message="errorMessage.mobile"
       :placeholder="$t('placeholder.mobileNumber')"
       max-length="11"
-      @blur="validateMobileOrPsw('mobile')"
+      @blur="validateMobileOrPswOrEmail('mobile')"
+      @keyup="validatedChecker()"
+    />
+
+    <van-field
+      v-if="tabType === 'email'"
+      v-model="registerInfo.email"
+      :border="false"
+      :error-message="errorMessage.email"
+      :placeholder="$t('placeholder.emailNumber')"
+      @blur="validateMobileOrPswOrEmail('email')"
       @keyup="validatedChecker()"
     />
 
@@ -20,7 +36,7 @@
       :placeholder="$t(placeHolder[pathName])"
       :type="showPassword ? 'text' : 'password'"
       max-length="20"
-      @blur="validateMobileOrPsw('encrypt_password')"
+      @blur="validateMobileOrPswOrEmail('encrypt_password')"
       style="padding-bottom: 0"
     >
       <template #button>
@@ -48,7 +64,7 @@
     >
       <van-button
         slot="button"
-        :disabled="count.codeBtnDisable || !validated.mobile"
+        :disabled="count.codeBtnDisable || !validated.mobile || !validated.email"
         size="small"
         type="primary"
         @click="clickSmsBtn"
@@ -140,6 +156,7 @@ export default {
   data() {
     return {
       registerInfo: {
+        email: '',
         mobile: '',
         dragCaptchaToken: undefined, // 默认不需要滑动验证
         encrypt_password: '',
@@ -152,10 +169,12 @@ export default {
       dragEnable: false,
       dragKey: 0,
       errorMessage: {
+        email: '',
         mobile: '',
         encrypt_password: '',
       },
       validated: {
+        email: false,
         mobile: false,
         encrypt_password: false,
       },
@@ -172,6 +191,7 @@ export default {
       privacyPolicy: false, // 隐私协议
       agreement: false, // 是否勾选
       popUpBottom: false, // 底部弹出层
+      tabType: 'mobile',
     };
   },
   computed: {
@@ -179,11 +199,19 @@ export default {
       isLoading: state => state.isLoading,
     }),
     btnDisable() {
-      return !(
-        this.registerInfo.mobile &&
-        this.registerInfo.encrypt_password &&
-        this.registerInfo.smsCode
-      );
+      if (this.tabType === 'mobile') {
+        return !(
+          this.registerInfo.mobile &&
+          this.registerInfo.encrypt_password &&
+          this.registerInfo.smsCode
+        );
+      } else if (this.tabType === 'email') {
+        return !(
+          this.registerInfo.email &&
+          this.registerInfo.encrypt_password &&
+          this.registerInfo.smsCode
+        );
+      }
     },
   },
   created() {
@@ -197,7 +225,7 @@ export default {
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
-    validateMobileOrPsw(type = 'mobile') {
+    validateMobileOrPswOrEmail(type = 'mobile') {
       const ele = this.registerInfo[type];
       const rule = rulesConfig[type];
 
@@ -210,11 +238,11 @@ export default {
 
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
-    validatedChecker() {
-      const mobile = this.registerInfo.mobile;
-      const rule = rulesConfig.mobile;
+    validatedChecker(type = 'mobile') {
+      const ele = this.registerInfo[type];
+      const rule = rulesConfig[type];
 
-      this.validated.mobile = rule.validator(mobile);
+      this.validated[type] = rule.validator(ele);
     },
     handleSmsSuccess(token) {
       this.registerInfo.dragCaptchaToken = token;
@@ -359,8 +387,9 @@ export default {
       }
       this.$refs.dragComponent.initDragCaptcha();
     },
-    handleSendSms() {
-      this.sendSmsCenter(this.registerInfo)
+    handleSendSms(type = 'mobile') {
+      const {mobile, email, ...reset} = this.registerInfo;
+      this.sendSmsCenter(type === 'mobile' ? {mobile, ...reset} : {email, ...reset})
         .then(res => {
           this.registerInfo.smsToken = res.smsToken;
           this.countDown();

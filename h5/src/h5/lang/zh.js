@@ -148,6 +148,7 @@ export default {
     emailMobileNumberUserName: '邮箱/手机/用户名',
     password: '请输入密码',
     mobileNumber: '请输入手机号',
+    emailNumber: '请输入邮箱号',
     setPassword: '请输入密码',
     verificationCode: '请输入验证码',
     mobileNumberOrEmail: '请输入手机号或邮箱号',
