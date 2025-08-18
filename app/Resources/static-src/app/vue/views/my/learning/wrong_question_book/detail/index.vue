@@ -44,7 +44,7 @@
       ok-text="开始答题"
       cancel-text="取消"
       :visible="visible"
-      @cancel="visible = false"
+      @cancel="popoverVisible = false"
       @ok="goToWrongExercises"
     >
       <div>

@@ -31,7 +31,7 @@ const token = ref({
   "colorFillTertiary": "#F5F5F5",
   "colorFillQuaternary": "#FAFAFA",
   "colorBgSpotlight": "#37393d",
-  "borderRadius": 4
+  "borderRadius": 8
 })
 
 </script>
