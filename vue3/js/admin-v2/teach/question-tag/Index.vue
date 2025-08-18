@@ -1,17 +1,39 @@
 <script setup>
 import Search from './Search.vue';
 import Create from './Create.vue';
-import {ref, watch} from 'vue';
+import {onBeforeUnmount, onMounted, reactive, ref, watch} from 'vue';
 import Api from '../../../../api';
 import {formatDate} from 'vue3/js/common';
 import {DownOutlined} from '@ant-design/icons-vue';
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import TagModal from './TagModal.vue';
+import {createCustomRow} from '../../../customRow';
 
 const loading = ref(false);
-const tagList = ref([]);
+const table = reactive({
+  list: [],
+  sourceId: null,
+  targetId: null,
+})
 
-const tagListColumns = [
+const customRow = createCustomRow(table)
+
+const scrollY = ref(0);
+const calculateScrollY = () => {
+  const windowHeight = window.innerHeight;
+  const otherHeight = 370;
+  scrollY.value = windowHeight - otherHeight;
+};
+onMounted(() => {
+  calculateScrollY();
+  window.addEventListener('resize', calculateScrollY);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', calculateScrollY);
+});
+
+
+const columns = [
   {
     key: 'seq',
     name: '序号',
@@ -59,7 +81,7 @@ watch(modalVisible, async () => {
 
 async function fetchTag(params) {
   loading.value = true;
-  tagList.value = await Api.questionTag.search(params);
+  table.list = await Api.questionTag.search(params);
   loading.value = false;
 }
 fetchTag();
@@ -108,11 +130,13 @@ function editTag(id) {
         @create="onCreate"
       />
       <a-table
-        :columns="tagListColumns"
-        :data-source="tagList"
+        :columns="columns"
+        :data-source="table.list"
         :row-key="record => record.id"
         :pagination="false"
         :loading="loading"
+        :custom-row="customRow"
+        :scroll="{ y: scrollY }"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'createTime'">
@@ -162,3 +186,11 @@ function editTag(id) {
     />
   </AntConfigProvider>
 </template>
+
+<style>
+:deep(.ant-table-tbody > tr.target > td) {
+  border-top: 1px solid #409eff;
+  background-color: #d9ecff;
+}
+</style>
+

@@ -1,10 +1,11 @@
 <script setup>
-import {ref, watch} from 'vue';
+import {reactive, ref, watch} from 'vue';
 import Search from './Search.vue';
 import Create from './Create.vue';
 import Api from '../../../../api';
 import {DownOutlined} from '@ant-design/icons-vue';
 import {formatDate} from 'vue3/js/common';
+import {createCustomRow} from '../../../customRow';
 
 const modalVisible = defineModel('modalVisible', { type: Boolean })
 const needRefresh = defineModel('needRefresh', { type: Boolean })
@@ -19,9 +20,15 @@ watch(modalVisible,async () => {
 })
 
 const loading = ref(false);
-const tagList = ref([]);
+const table = reactive({
+  list: [],
+  sourceId: null,
+  targetId: null,
+})
 
-const tagListColumns = [
+const customRow = createCustomRow(table)
+
+const columns = [
   {
     key: 'seq',
     name: '序号',
@@ -54,7 +61,7 @@ const tagListColumns = [
 
 async function fetchTag(params) {
   loading.value = true;
-  tagList.value = await Api.questionTag.search(params);
+  table.list = await Api.questionTag.search(params);
   loading.value = false;
 }
 
@@ -93,7 +100,7 @@ async function deleteTag(id) {
     :footer="false"
     :maskClosable="false"
   >
-    <div class="flex flex-col">
+    <div class="flex flex-col h-728">
       <Search
         class="mb-24"
         @search="onSearch"
@@ -103,11 +110,13 @@ async function deleteTag(id) {
         @create="onCreate"
       />
       <a-table
-        :columns="tagListColumns"
-        :data-source="tagList"
+        :columns="columns"
+        :data-source="table.list"
         :row-key="record => record.id"
         :pagination="false"
         :loading="loading"
+        :custom-row="customRow"
+        :scroll="{ y: 570 }"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'createTime'">
