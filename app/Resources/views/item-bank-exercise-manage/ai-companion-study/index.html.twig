@@ -1,0 +1,17 @@
+{% extends 'item-bank-exercise-manage/exercise-set/layout.html.twig' %}
+
+{% block title %}{{'AI伴学助手'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
+{% do script(['vue3/js/item-bank-exercise-manage/ai-companion-study/index.js']) %}
+{% set course_side_nav = 'ai-companion-study' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block main %}
+  <div id="ai-companion-study"
+       data-item-bank-id="{{ questionBank.id }}"
+       style="padding: 0; margin-left: 200px"
+  ></div>
+{% endblock %}

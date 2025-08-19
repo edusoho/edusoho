@@ -66,6 +66,16 @@ class StudentManageController extends BaseController
         ]);
     }
 
+    public function aiCompanionStudyAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        return $this->render('item-bank-exercise-manage/ai-companion-study/index.html.twig', [
+            'exercise' => $exercise,
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
+        ]);
+    }
+
     public function studentRecordsAction(Request $request, $exerciseId, $type)
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
