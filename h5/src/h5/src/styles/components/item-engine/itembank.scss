@@ -77,6 +77,7 @@ $common-padding: 35;
 
 	.ibs-question-swiper {
 		position: relative;
+		height: 100%;
 		padding-bottom: vw(60);
 	}
 
@@ -707,11 +708,12 @@ $common-padding: 35;
 	}
 
 	.ibs-submit-footer {
-		bottom: vw(0);
+		position: fixed;
+		bottom: vw(-60);
 		height: vw(55);
 		padding: vw(6) vw(10);
 		background-color: #fff;
-		transform: translateY(50%);
+		//transform: translateY(50%);
 
 		.ibs-submit-footer-btn {
 			height: vw(40);
