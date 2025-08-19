@@ -1719,6 +1719,7 @@ course.question_manage.score: 得分
 course.question_manage.testpaper_score: %testResult.score% 分
 course.question_manage.comment: 评语
 course.question_manage.type: 类型
+course.question_manage.create_time: 创建时间
 course.question_manage.update: 最后更新
 course.question_manage.operation: 操作
 course.question_manage.empty: 一道题都没有，请点击右上角按钮，按不同的题型录入题目
