@@ -134,7 +134,7 @@
             {% endfor %}
           </select>
         </li>
-        <li>{{ 'paginator.jump'|trans }} <input type="text" class="form-control" id="jumpPage" oninput="value=selectedCategory.replace(/[^\d]/g,'')" data-current-page="{{ paginator.currentPage }}" data-last-page="{{ paginator.lastPage }}" value="{{ paginator.currentPage }}"> {{ 'paginator.page'|trans }}</li>
+        <li>{{ 'paginator.jump'|trans }} <input type="text" class="form-control" id="jumpPage" oninput="value=value.replace(/[^\d]/g,'')" data-current-page="{{ paginator.currentPage }}" data-last-page="{{ paginator.lastPage }}" value="{{ paginator.currentPage }}"> {{ 'paginator.page'|trans }}</li>
       </ul>
     </nav>
   {% endif %}
