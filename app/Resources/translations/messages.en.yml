@@ -1461,6 +1461,7 @@ course.question_manage.score: Score
 course.question_manage.testpaper_score: 'Score %testResult.score%'
 course.question_manage.comment: Comment
 course.question_manage.type: Type
+course.question_manage.create_time: 'Created at'
 course.question_manage.update: 'Latest update'
 course.question_manage.operation: Action
 course.question_manage.empty: 'No questions,click the button on the top right，add questions statement according to categories'

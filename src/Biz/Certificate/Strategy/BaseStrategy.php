@@ -7,6 +7,7 @@ use Biz\Certificate\Certificate;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\Certificate\Service\TemplateService;
+use Biz\Content\Service\FileService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 
@@ -69,8 +70,8 @@ abstract class BaseStrategy
             'certificateCode' => $record['certificateCode'],
             'certificateExpiryTime' => empty($record['expiryTime']) ? '长期有效' : date('Y-m-d', $record['expiryTime']),
             'certificateIssueTime' => date('Y-m-d', $record['issueTime']),
-            'certificateStamp' => empty($template['stamp']) ? '' : $this->getWebExtension()->getFurl($template['stamp']),
-            'certificateBasemap' => empty($template['basemap']) ? $this->getAssetUrl("static-dist/app/img/admin-v2/{$template['styleType']}_basemap.jpg") : $this->getWebExtension()->getFurl($template['basemap']),
+            'certificateStamp' => empty($template['stamp']) ? '' : $this->getFileService()->parseFileUri($template['stamp'])['fullpath'],
+            'certificateBasemap' => empty($template['basemap']) ? $this->getAssetUrl("static-dist/app/img/admin-v2/{$template['styleType']}_basemap.jpg") : $this->getFileService()->parseFileUri($template['basemap'])['fullpath'],
         ]);
 
         return $this->getImgBuilder($template['styleType'])->getCertificateImgByBase64($certificate, 0.5);
@@ -185,5 +186,13 @@ abstract class BaseStrategy
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    /**
+     * @return FileService
+     */
+    protected function getFileService()
+    {
+        return $this->createService('Content:FileService');
     }
 }

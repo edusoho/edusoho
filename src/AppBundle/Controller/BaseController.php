@@ -80,7 +80,13 @@ class BaseController extends Controller
         return $limitedTime;
     }
 
-    protected function authenticateUser(array $user)
+    /**
+     * 设置用户登录
+     *
+     * @param array $user
+     * @return CurrentUser
+     */
+    protected function authenticateUser(array $user): CurrentUser
     {
         $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
         $currentUser = new CurrentUser();
@@ -106,6 +112,7 @@ class BaseController extends Controller
             return;
         }
 
+        // 非学员用户
         if (1 != count($user['roles'])) {
             $request->getSession()->set('needUpgradePassword', 1);
             return;
