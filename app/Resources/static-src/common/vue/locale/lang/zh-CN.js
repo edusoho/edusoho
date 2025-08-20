@@ -1,4 +1,5 @@
 const lang = {
+  otherScore1: '漏选得分',
   locale: 'zh-CN',
   single_choice: '单选题',
   fill: '填空题',

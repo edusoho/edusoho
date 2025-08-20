@@ -1,4 +1,5 @@
 const lang = {
+  otherScore1: 'Missed Selection Score',
   locale: 'en-US',
   single_choice: 'Single choice',
   fill: 'Gap filling',
@@ -44,7 +45,7 @@ const lang = {
   RightAnswer: 'Correct answer',
   caseSensitiveShow: 'Case sensitive',
   courseClosed: {
-    learn: 'The course is closed, you cannot continue learning', 
+    learn: 'The course is closed, you cannot continue learning',
     download: 'The course is closed, you cannot download',
     preview: 'The course is closed, you cannot preview'
   },
@@ -191,7 +192,7 @@ const lang = {
       three:
         'Please enter the correct decimals, leaving only ONE decimal places',
       four: 'Please enter score'
-      
+
     },
     reviewRedioRule: 'Please judge the result of the question',
     reviewPlaceholder: 'Please enter',

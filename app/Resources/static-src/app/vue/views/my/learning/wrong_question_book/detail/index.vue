@@ -62,7 +62,7 @@
           </div>
         </div>
       </div>
-      
+
     </a-modal>
 
   </div>
@@ -143,7 +143,7 @@ export default {
       }
       if (this.itemNum > this.wrongNumCount) {
         this.itemNum = this.wrongNumCount;
-      } 
+      }
       if (this.itemNum < 0) {
         this.itemNum = 1
       }
