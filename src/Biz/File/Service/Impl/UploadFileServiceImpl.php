@@ -1431,6 +1431,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->update($file['id'], ['usedCount' => $count]);
     }
 
+    public function batchSetCategoryId($fileIds, $categoryId)
+    {
+        if (empty($fileIds)) {
+            return;
+        }
+        $this->getUploadFileDao()->update(['ids' => $fileIds], ['categoryId' => $categoryId]);
+    }
+
     protected function updateTags($localFile, $fields)
     {
         if (!isset($fields['tags'])) {
