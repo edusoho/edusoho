@@ -23,14 +23,15 @@ const selectedCategory = ref();
 const categoryTreeData = ref([]);
 
 watch(selectedCategory, () => {
-  console.log(selectedCategory.value);
+  const categoryIdInput = document.querySelector('input[name="categoryId"]');
+  categoryIdInput.value = selectedCategory.value ? selectedCategory.value : '';
 });
 
 function transformCategory(res) {
   return res.map(item => {
     const node = {
       label: item.name,
-      value: item.id,   // 或者用 code，看你需要
+      value: item.id,
     }
     if (item.children && item.children.length > 0) {
       node.children = transformCategory(item.children)

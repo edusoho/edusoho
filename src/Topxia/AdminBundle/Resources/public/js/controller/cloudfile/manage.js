@@ -40,7 +40,7 @@ define(function(require, exports, module) {
         this._initHeader();
         this._initSelect2();
         this.initTagForm();
-        
+
       },
       initTagForm: function(event) {
         var $form = $("#tag-form");
@@ -93,7 +93,7 @@ define(function(require, exports, module) {
         });
         for (var i = 0;i < urls.length;i++) {
           var url = urls[i];
-          self.downloadFile(url);   
+          self.downloadFile(url);
         }
       },
 
@@ -105,9 +105,9 @@ define(function(require, exports, module) {
           var solution = $btn.data('solution');
           var status = $btn.data('status');
           $('.js-error-tip').html(
-           '<div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.file_name') +'：</span><span class="pull-left error-content">' + title + 
+           '<div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.file_name') +'：</span><span class="pull-left error-content">' + title +
            '</span></div><div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.transcoding') +'：</span><span class="pull-left error-content">' + status + '</span></div><div class="mbl clearfix"><span class="pull-left error-label">' + Translator.trans('material.common_table.error_reason') + '：</span><span class="color-danger pull-left error-content">' + reason +
-           '</span></div><div class="clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.solution_way') +'：</span><span class="color-info pull-left error-content">' +  solution + 
+           '</span></div><div class="clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.solution_way') +'：</span><span class="color-info pull-left error-content">' +  solution +
            '</span></div>')
         })
       },
