@@ -26,6 +26,7 @@ define(function(require, exports, module) {
         'click .js-search-type option': 'onClickSearchTypeBtn',
         'click .js-refresh-btn': 'onClickRefreshBtn',
         'click .js-manage-batch-btn': 'onClickManageBtn',
+        'click .js-batch-category-btn': 'onClickCategoryBatchBtn',
         'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
         'click .js-batch-share-btn': 'onClickShareBatchBtn',
         'click .js-batch-tag-btn': 'onClickTagBatchBtn',
@@ -314,6 +315,9 @@ define(function(require, exports, module) {
         });
         $('#modal').modal('show');
 
+      },
+      onClickCategoryBatchBtn: function(event) {
+        return 0;
       },
       onClickShareBatchBtn: function(event) {
         if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
