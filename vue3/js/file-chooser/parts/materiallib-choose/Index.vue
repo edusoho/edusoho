@@ -35,7 +35,6 @@ getCategories();
   <AntConfigProvider>
     <a-tree-select
       v-model:value="selectedCategoryId"
-      :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
       placeholder="--选择分类--"
       allow-clear
       tree-default-expand-all
@@ -43,8 +42,6 @@ getCategories();
       show-search
       tree-node-filter-prop="label"
       style="width: 200px"
-      placement="bottomRight"
-      :get-popup-container="triggerNode => triggerNode.parentNode"
     >
     </a-tree-select>
   </AntConfigProvider>
