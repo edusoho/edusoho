@@ -41,7 +41,12 @@ define(function(require, exports, module) {
         this._initHeader();
         this._initSelect2();
         this.initTagForm();
-
+        this.initEmitter();
+      },
+      initEmitter: function() {
+          window.emitter.on('set-category-success', () => {
+              this.submitForm();
+          });
       },
       initTagForm: function(event) {
         var $form = $("#tag-form");
@@ -317,7 +322,17 @@ define(function(require, exports, module) {
 
       },
       onClickCategoryBatchBtn: function(event) {
-        return 0;
+          var self = this;
+          var $target = $(event.currentTarget);
+          var ids = [];
+          this.element.find('[data-role=batch-item]:checked').each(function() {
+              ids.push($(this).data('fileId'));
+          });
+          if (ids == "") {
+              Notify.danger(Translator.trans('meterial_lib.select_resource_operate_hint') + '!');
+              return;
+          }
+          window.emitter.emit('open-category-modal', {ids: ids})
       },
       onClickShareBatchBtn: function(event) {
         if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {

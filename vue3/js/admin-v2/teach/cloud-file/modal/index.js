@@ -2,9 +2,14 @@ import {createApp} from 'vue';
 import {TreeSelect, Modal} from 'ant-design-vue';
 import {createStyleTag, setCurrentPrimaryColor} from 'vue3/js/common';
 import 'vue3/main.less';
-import CategoryTreeSelect from './CategoryTreeSelect.vue';
+import Index from './Index.vue';
+import {emitter} from 'vue3/js/event-bus';
+window.emitter = emitter;
 
-const app = createApp(CategoryTreeSelect);
+
+const app = createApp(Index, {
+    emitter: emitter,
+});
 
 app.use(TreeSelect);
 app.use(Modal);
@@ -12,7 +17,7 @@ app.use(Modal);
 setCurrentPrimaryColor(app);
 
 if (process.env.NODE_ENV === 'production') {
-    createStyleTag(`/static-dist/vue3/js/admin-v2/teach/cloud-file/index.css?${window.app.version}`);
+    createStyleTag(`/static-dist/vue3/js/admin-v2/teach/cloud-file/modal/index.css?${window.app.version}`);
 }
 
-app.mount('#ant-category');
+app.mount('#vue3-modal');
