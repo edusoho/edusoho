@@ -143,6 +143,7 @@ class CloudFileController extends BaseController
             'type' => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials' => $results['data'],
             'createdUsers' => isset($results['createdUsers']) ? $results['createdUsers'] : [],
+            'categories' => $results['categories'] ?? [],
             'paginator' => $paginator,
         ]);
     }
