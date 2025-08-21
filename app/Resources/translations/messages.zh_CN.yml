@@ -1719,6 +1719,7 @@ course.question_manage.score: 得分
 course.question_manage.testpaper_score: %testResult.score% 分
 course.question_manage.comment: 评语
 course.question_manage.type: 类型
+course.question_manage.create_time: 创建时间
 course.question_manage.update: 最后更新
 course.question_manage.operation: 操作
 course.question_manage.empty: 一道题都没有，请点击右上角按钮，按不同的题型录入题目
@@ -3237,6 +3238,7 @@ user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
 user.settings.security.get_sms_code_btn: 获取验证码
 user.settings.security.input_sms_code: 填写短信验证码
+user.settings.security.input_email_code: 填写邮箱验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
 user.settings.security.bind_mobile: 已绑定手机号
@@ -3813,6 +3815,7 @@ cloud_file.use_status.unused: 未使用
 cloud_file.use_status.used: 已使用
 cloud_file.upload_time: 上传时间
 cloud_file.application: 应用
+cloud_file.category: 分类
 
 cloud_file.type.all: 全部
 cloud_file.type.video: 视频
@@ -8906,6 +8909,7 @@ admin.cloud_file.batch_manage_btn: 批量管理
 admin.cloud_file.delete_btn: 删除资料
 admin.cloud_file.select_all: 全选
 admin.cloud_file.add_tag: 添加标签
+admin.cloud_file.set_category: 设置分类
 admin.cloud_file.network_error_hint: 网络问题，无法连接%edusoho%开放云平台
 admin.cloud_file.detail_not_found_tips: 该文件不是云文件，或者对应云文件已经损坏！
 admin.cloud_file.keyword: 关键字：

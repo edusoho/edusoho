@@ -25,6 +25,16 @@
           >
             <i :class="tagClass"></i>{{ tagText }}
           </a-button>
+          <a-button
+            v-show="showCollect"
+            class="ibs-collect-btn"
+            size="small"
+            type="primary"
+            :ghost="this.isCollect ? false : true"
+            @click="changeCollect"
+          >
+            <i :class="collectClass"></i>{{ collectText }}
+          </a-button>
         </div>
         <a-row>
           <!-- 序号和分数 -->
@@ -43,15 +53,6 @@
             >
             {{ question.score }}{{ t("itemEngine.score") }}
           </span>
-            <a-button
-              v-show="showCollect"
-              class="ibs-mt8 ibs-collect-btn"
-              size="small"
-              type="primary"
-              :ghost="this.isCollect ? false : true"
-              @click="changeCollect"
-            ><i :class="collectClass"></i>{{ collectText }}</a-button
-            >
           </a-col>
           <a-col
             :xs="showScoreAndSeq ? 21 : 24"

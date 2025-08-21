@@ -20,6 +20,7 @@ import classroom from './modules/classroom';
 import aiCompanionStudy from './modules/aiCompanionStudy';
 import teacher from './modules/teacher';
 import questionTag from './modules/questionTag';
+import uploadFile from './modules/uploadFile';
 
 const Api = {
   contract,
@@ -43,7 +44,8 @@ const Api = {
   classroom,
   aiCompanionStudy,
   teacher,
-  questionTag
+  questionTag,
+  uploadFile
 };
 
 export default Api;

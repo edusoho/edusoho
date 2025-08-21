@@ -79,6 +79,12 @@
       </td>
     {% endif %}
 
+    {% if pageType == 'file' %}
+      <td class="vertical-middle">
+        <span style="display:block">{{ categories[cloudFile.categoryId].name|default('-') }}</span>
+      </td>
+    {% endif %}
+
     {# 转码进度 #}
     <td class="vertical-middle">
     {% if cloudFile.storage == "cloud" %}

@@ -140,6 +140,7 @@ class UploadFileDaoImpl extends AdvancedDaoImpl implements UploadFileDao
                 'id IN ( :idsOr )',
                 'audioConvertStatus = :audioConvertStatus',
                 'audioConvertStatus IN ( :inAudioConvertStatus )',
+                'categoryId = :categoryId',
                 /*S2B2C-CUSTOM*/
                 'syncId = :syncId',
                 'syncId in (:syncIds)',

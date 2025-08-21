@@ -315,15 +315,18 @@ export default {
         if (err) {
           console.log(err);
         }
-        loadScript(this.showCKEditorData.publicPath, err => {
-          if (err) {
-            console.log(err);
-          }
-          // 答题时的答案输入组件
-          if (this.mode === "do") {
-            this.initEssayAnswer();
-          }
-        });
+
+        if (this.mode !== 'report'){
+          loadScript(this.showCKEditorData.publicPath, err => {
+            if (err) {
+              console.log(err);
+            }
+            // 答题时的答案输入组件
+            if (this.mode === "do") {
+              this.initEssayAnswer();
+            }
+          });
+        }
       });
     });
   },

@@ -1461,6 +1461,7 @@ course.question_manage.score: Score
 course.question_manage.testpaper_score: 'Score %testResult.score%'
 course.question_manage.comment: Comment
 course.question_manage.type: Type
+course.question_manage.create_time: 'Created at'
 course.question_manage.update: 'Latest update'
 course.question_manage.operation: Action
 course.question_manage.empty: 'No questions,click the button on the top right，add questions statement according to categories'
@@ -2825,6 +2826,7 @@ user.settings.security.sms_code: 'SMS verification code'
 user.settings.security.sms_code_tips: 'Input SMS verification code'
 user.settings.security.get_sms_code_btn: 'Get verification code'
 user.settings.security.input_sms_code: 'Input SMS verification code'
+user.settings.security.input_email_code: 'Enter the email verification code'
 user.settings.security.change_captcha_code: 'Not clear？Click to change'
 user.settings.security.mobile: Mobile
 user.settings.security.bind_mobile: 'Bound phone number'
@@ -3302,6 +3304,7 @@ cloud_file.use_status.unused: Unused
 cloud_file.use_status.used: Used
 cloud_file.upload_time: 'Uploaded'
 cloud_file.application: Application
+cloud_file.category: Category
 cloud_file.type.all: All
 cloud_file.type.video: Video
 cloud_file.type.audio: Audio
@@ -7457,6 +7460,7 @@ admin.cloud_file.batch_manage_btn: 'Manage'
 admin.cloud_file.delete_btn: Delete data
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
+admin.cloud_file.set_category: 'Set category'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'
 admin.cloud_file.detail_not_found_tips: 'File is not found.'
 admin.cloud_file.keyword: Keyword
