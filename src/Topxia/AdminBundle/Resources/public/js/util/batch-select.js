@@ -3,10 +3,10 @@ define(function(require, exports, module) {
     module.exports = function($element) {
         $element.on('click', '[data-role=batch-select]', function(){
            if( $(this).is(":checked") == true){
-				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download').attr('disabled', false);
+				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download, .js-batch-category-btn').attr('disabled', false);
                 $element.find('[data-role=batch-select], [data-role=batch-item]').prop('checked', true);
             } else {
-				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download').attr('disabled', true);
+				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download, .js-batch-category-btn').attr('disabled', true);
                 $element.find('[data-role=batch-select], [data-role=batch-item]').prop('checked', false);
             }
         });
@@ -27,11 +27,11 @@ define(function(require, exports, module) {
         		$element.find('[data-role=batch-select]').prop('checked',false);
 			}
 			if (checked_count !== 0) {
-				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download').attr('disabled', false);
+				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download, .js-batch-category-btn').attr('disabled', false);
 			} else {
-				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download').attr('disabled', true);
+				$('.js-batch-tag-btn, .js-batch-delete-btn, .js-batch-download, .js-batch-category-btn').attr('disabled', true);
 			}
-        	
+
         })
 
     };

@@ -19,6 +19,7 @@ import courseSets from './modules/courseSets';
 import classroom from './modules/classroom';
 import aiCompanionStudy from './modules/aiCompanionStudy';
 import teacher from './modules/teacher';
+import uploadFile from './modules/uploadFile';
 
 const Api = {
   contract,
@@ -42,6 +43,7 @@ const Api = {
   classroom,
   aiCompanionStudy,
   teacher,
+  uploadFile
 };
 
 export default Api;
