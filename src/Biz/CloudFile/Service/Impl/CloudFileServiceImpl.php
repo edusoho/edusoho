@@ -11,6 +11,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileTagService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
@@ -41,6 +42,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
         $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
+        $result['categories'] = $this->getCategoryService()->findCategoriesByIds(array_column($result['data'], 'categoryId'));
 
         $result['data'] = array_map(function ($file) {
             $file['no'] = $file['globalId'];
@@ -290,6 +292,14 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         return false;
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**

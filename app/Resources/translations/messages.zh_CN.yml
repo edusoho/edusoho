@@ -3814,6 +3814,7 @@ cloud_file.use_status.unused: 未使用
 cloud_file.use_status.used: 已使用
 cloud_file.upload_time: 上传时间
 cloud_file.application: 应用
+cloud_file.category: 分类
 
 cloud_file.type.all: 全部
 cloud_file.type.video: 视频

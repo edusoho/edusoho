@@ -3303,6 +3303,7 @@ cloud_file.use_status.unused: Unused
 cloud_file.use_status.used: Used
 cloud_file.upload_time: 'Uploaded'
 cloud_file.application: Application
+cloud_file.category: Category
 cloud_file.type.all: All
 cloud_file.type.video: Video
 cloud_file.type.audio: Audio
