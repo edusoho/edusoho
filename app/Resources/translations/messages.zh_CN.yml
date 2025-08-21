@@ -8908,6 +8908,7 @@ admin.cloud_file.batch_manage_btn: 批量管理
 admin.cloud_file.delete_btn: 删除资料
 admin.cloud_file.select_all: 全选
 admin.cloud_file.add_tag: 添加标签
+admin.cloud_file.add_category: 添加标签
 admin.cloud_file.network_error_hint: 网络问题，无法连接%edusoho%开放云平台
 admin.cloud_file.detail_not_found_tips: 该文件不是云文件，或者对应云文件已经损坏！
 admin.cloud_file.keyword: 关键字：

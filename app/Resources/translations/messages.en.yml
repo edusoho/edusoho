@@ -7459,6 +7459,7 @@ admin.cloud_file.batch_manage_btn: 'Manage'
 admin.cloud_file.delete_btn: Delete data
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
+admin.cloud_file.add_category: 'Add category'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'
 admin.cloud_file.detail_not_found_tips: 'File is not found.'
 admin.cloud_file.keyword: Keyword

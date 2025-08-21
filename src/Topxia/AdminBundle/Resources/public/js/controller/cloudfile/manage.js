@@ -45,7 +45,7 @@ define(function(require, exports, module) {
       },
       initEmitter: function() {
           window.emitter.on('set-category-success', () => {
-              this.submitForm();
+              this.renderTable();
           });
       },
       initTagForm: function(event) {
@@ -322,13 +322,11 @@ define(function(require, exports, module) {
 
       },
       onClickCategoryBatchBtn: function(event) {
-          var self = this;
-          var $target = $(event.currentTarget);
           var ids = [];
           this.element.find('[data-role=batch-item]:checked').each(function() {
               ids.push($(this).data('fileId'));
           });
-          if (ids == "") {
+          if (ids.length === 0) {
               Notify.danger(Translator.trans('meterial_lib.select_resource_operate_hint') + '!');
               return;
           }
