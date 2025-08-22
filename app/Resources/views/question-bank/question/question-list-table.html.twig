@@ -6,11 +6,12 @@
   <thead>
   <tr>
     <th><input type="checkbox" autocomplete="off" class="js-select-all"></th>
-    <th width="25%">{{'course.question_manage.stem'|trans}}</th>
-    <th width="15%">{{'course.question_manage.type'|trans}}</th>
-    <th width="15%">{{'course.question_manage.manage.difficulty'|trans}}</th>
-    <th>{{'course.question_manage.update'|trans}}</th>
-    <th width="20%">{{'course.question_manage.operation'|trans}}</th>
+    <th width="35%">{{'course.question_manage.stem'|trans}}</th>
+    <th width="13%">{{'course.question_manage.type'|trans}}</th>
+    <th width="10%">{{'course.question_manage.manage.difficulty'|trans}}</th>
+    <th width="15%">{{'course.question_manage.create_time'|trans}}</th>
+    <th width="15%">{{'course.question_manage.update'|trans}}</th>
+    <th width="12%">{{'course.question_manage.operation'|trans}}</th>
   </tr>
   </thead>
   <tbody>
@@ -50,6 +51,11 @@
           {% else %}
             {{ 'course.question_manage.manage.hard_difficulty'|trans }}
           {% endif %}
+        </td>
+        <td>
+          {{ web_macro.user_link(users[question.created_user_id]) }}
+          <br />
+          <span class="color-gray text-sm">{{ question.created_time | date('Y-n-d H:i:s') }}</span>
         </td>
         <td>
           {{ web_macro.user_link(users[question.updated_user_id]) }}

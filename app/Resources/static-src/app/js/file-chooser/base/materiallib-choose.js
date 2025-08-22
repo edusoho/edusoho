@@ -62,6 +62,7 @@ class MaterialLibChoose extends Chooser {
     $(this.container).on('click', '.js-browser-search', this._filterByFileName.bind(this));
     $(this.container).on('click', '.pagination a', this._paginationList.bind(this));
     $(this.container).on('click', '.file-browser-item', this._onSelectFile.bind(this));
+    $(this.container).on('change', 'input[name="categoryId"]',this._loadList.bind(this));
   }
 
   _loadList() {

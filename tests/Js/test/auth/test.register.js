@@ -48,7 +48,7 @@ describe('register:inEventMobile', function() {
       emSmsCodeValidate: function(){}
     };
     let emSmsCodeValidateStub = sinon.stub(mockObject, 'emSmsCodeValidate');
-    let inEventMobile = Register.prototype.inEventMobile;
+    let inEventMobile = Register.prototype.initCodeValidateEvent;
 
     inEventMobile.apply(mockObject);
     $('#register_mobile').trigger('blur');
@@ -61,7 +61,7 @@ describe('register:inEventMobile', function() {
       emSmsCodeValidate: function(){}
     };
     let emSmsCodeValidateStub = sinon.stub(mockObject, 'emSmsCodeValidate');
-    let inEventMobile = Register.prototype.inEventMobile;
+    let inEventMobile = Register.prototype.initCodeValidateEvent;
 
     inEventMobile.apply(mockObject);
     $('#register_emailOrMobile').trigger('blur');
@@ -103,7 +103,7 @@ describe('register:emSmsCodeValidate', function() {
   });
 
   it('register:emSmsCodeValidate isMobile', function() {
-    let emSmsCodeValidate = Register.prototype.emSmsCodeValidate;
+    let emSmsCodeValidate = Register.prototype.smsCodeValidate;
     let mockObject = {
       initSmsCodeRule: function(){},
     };
@@ -114,7 +114,7 @@ describe('register:emSmsCodeValidate', function() {
   });
 
   it('register:emSmsCodeValidate isNotMobile', function() {
-    let emSmsCodeValidate = Register.prototype.emSmsCodeValidate;
+    let emSmsCodeValidate = Register.prototype.smsCodeValidate;
     let mockObject = {
       initSmsCodeRule: function(){},
       initDragCaptchaCodeRule: function(){},
@@ -140,7 +140,7 @@ describe('register:initSmsCodeRule', function() {
     `);
     $.fn.rules = function() {};
     let stub = sinon.stub($.fn, 'rules');
-    let initSmsCodeRule = Register.prototype.initSmsCodeRule;
+    let initSmsCodeRule = Register.prototype.initCodeRule;
     initSmsCodeRule();
     sinon.assert.calledOnce(stub);
     sinon.assert.calledWithMatch(stub, 'add', {

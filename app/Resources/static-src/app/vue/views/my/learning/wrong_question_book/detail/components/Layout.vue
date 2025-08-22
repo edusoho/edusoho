@@ -1,5 +1,14 @@
 <template>
   <div class="question-layout" :order="order">
+    <a-button
+      size="small"
+      type="primary"
+      class="answer_mode"
+      ghost
+    >
+      {{ showAnswerModeText(questions.answer_mode) }}
+    </a-button>
+
     <stem :order="order" :stem="questions.stem" />
 
     <div class="prevent-click answer-content">
@@ -52,6 +61,27 @@ export default {
     questions() {
       return this.question.questions[0];
     }
+  },
+
+  methods: {
+    showAnswerModeText(mode) {
+      switch (mode) {
+      case 'true_false':
+        return '判断题'
+      case 'single_choice':
+        return '单选题'
+      case 'choice':
+        return '多选题'
+      case 'uncertain_choice':
+        return '不定项选择题'
+      case 'text':
+        return '填空题'
+      case 'rich_text':
+        return '问答题'
+      default:
+        return ''
+      }
+    },
   }
 }
 </script>
@@ -60,6 +90,12 @@ export default {
 .question-layout {
   padding: 16px 0 24px 54px;
   border-bottom: 1px solid #ebebeb;
+
+  .answer_mode {
+    position: relative;
+    left: -30px;
+    margin-bottom: 16px;
+  }
 
   .answer-content {
     margin-top: 16px;
@@ -89,7 +125,6 @@ export default {
     .choose-answer-content {
       display: table;
       white-space: normal;
-      color: #666;
 
       .choose-answer-text {
         width: 100%;
@@ -163,7 +198,7 @@ export default {
   }
 
   .right-answer {
-    color: #46c37b;
+    color: #46c37b !important;
   }
 }
 

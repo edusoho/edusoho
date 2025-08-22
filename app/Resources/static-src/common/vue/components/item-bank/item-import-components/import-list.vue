@@ -158,7 +158,7 @@
           {{ index === Object.keys(types).length - 1 ? "。" : "，" }}
         </div>
       </div>
-      <a-form :form="form">
+      <a-form :form="form" class="ibs-import-modal-form">
         <a-form-item
           v-if="setModal === 'score'"
           :label="t('Score')"
@@ -173,6 +173,40 @@
               {
                 rules: [{ required: true, validator: checkScore }],
                 initialValue: 2
+              }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item
+          v-if="setModal === 'score' && hasUncertainChoiceOrChoice(types)"
+          class="missed-selection-score-item"
+          :label-col="{ span: 4 }"
+          :wrapper-col="{ span: 16 }"
+        >
+          <template #label>
+            <a-tooltip placement="topLeft" arrow-point-at-center>
+              <template slot="title">
+                <div class="missed-selection-score-tip-content">漏选得分：当学员选对一个或多个正确答案，但还是有漏选正确答案时的得分（某题满分2分，含3个正确答案，选中1个或2个正确答案得1分，选中全部3个正确答案得2分）</div>
+              </template>
+              <div class="missed-selection-score-item-label">{{ t('otherScore1') }}</div>
+            </a-tooltip>
+          </template>
+          <a-input
+            style="width: 200px"
+            type="number"
+            v-decorator="[
+              'otherScore1',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入漏选得分',
+                  },
+                  {
+                    validator: checkOtherScore1
+                  }
+                ],
+                initialValue: 0
               }
             ]"
           />
@@ -413,6 +447,23 @@ export default {
           return false;
       }
     },
+    hasUncertainChoiceOrChoice(types) {
+      const keys = Object.keys(types);
+      const hasChoice = keys.includes('choice') && types?.choice.length > 0
+      const hasUncertainChoice = keys.includes('uncertain_choice') && types?.uncertain_choice.length > 0
+      return hasChoice || hasUncertainChoice
+    },
+    checkOtherScore1(rule, value, callback) {
+      const parts = value.toString().split('.');
+      const score = this.form.getFieldValue('score');
+      if (value >= score) {
+        callback('得分不超过全选得分');
+      } else if (parts.length > 1 && parts[1].length > 1) {
+        callback('最多只能输入一位小数');
+      } else {
+        callback();
+      }
+    },
     onChange(e) {
       if (e.length === this.typeIndex.all.length) {
         this.all = true;
@@ -538,10 +589,10 @@ export default {
     },
     handleScore() {
       this.$nextTick(() => {
-        this.form.validateFields(["score"], { force: true }, (err, values) => {
+        this.form.validateFields(["score", "otherScore1"], { force: true }, (err, values) => {
           if (!err) {
             //设置分数
-            this.$emit("setScore", this.checkedList, values.score);
+            this.$emit("setScore", this.checkedList, values.score, values.otherScore1);
             this.showSetModal = false;
           }
         });

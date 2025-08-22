@@ -1721,6 +1721,7 @@ course.question_manage.score: 得分
 course.question_manage.testpaper_score: %testResult.score% 分
 course.question_manage.comment: 评语
 course.question_manage.type: 类型
+course.question_manage.create_time: 创建时间
 course.question_manage.update: 最后更新
 course.question_manage.operation: 操作
 course.question_manage.empty: 一道题都没有，请点击右上角按钮，按不同的题型录入题目
@@ -3240,6 +3241,7 @@ user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
 user.settings.security.get_sms_code_btn: 获取验证码
 user.settings.security.input_sms_code: 填写短信验证码
+user.settings.security.input_email_code: 填写邮箱验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
 user.settings.security.bind_mobile: 已绑定手机号
@@ -3817,6 +3819,7 @@ cloud_file.use_status.unused: 未使用
 cloud_file.use_status.used: 已使用
 cloud_file.upload_time: 上传时间
 cloud_file.application: 应用
+cloud_file.category: 分类
 
 cloud_file.type.all: 全部
 cloud_file.type.video: 视频
@@ -8911,6 +8914,7 @@ admin.cloud_file.batch_manage_btn: 批量管理
 admin.cloud_file.delete_btn: 删除资料
 admin.cloud_file.select_all: 全选
 admin.cloud_file.add_tag: 添加标签
+admin.cloud_file.set_category: 设置分类
 admin.cloud_file.network_error_hint: 网络问题，无法连接%edusoho%开放云平台
 admin.cloud_file.detail_not_found_tips: 该文件不是云文件，或者对应云文件已经损坏！
 admin.cloud_file.keyword: 关键字：
@@ -9565,6 +9569,7 @@ log.module.multi_class: 班课
 log.module.wrong_question: 错题
 log.module.ai: AI
 log.module.contract: 合同
+log.module.question_tag: 题目标签
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -9844,6 +9849,10 @@ log.action.item_bank_exercise.unpublish_exercise_chapter: 取消发布题库练�
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板
+log.action.question_tag.add_tag_group: 添加题目标签类型
+log.action.question_tag.delete_tag_group: 删除题目标签类型
+log.action.question_tag.add_tag: 添加题目标签
+log.action.question_tag.delete_tag: 删除题目标签
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -11242,6 +11251,10 @@ exception.information_collect.closed: 用户信息采集已关闭
 exception.not_continue.look: 无法继续查看
 exception.go_home: 回到首页
 
+exception.question_tag.tag_group_name_duplicate: 标签类型名称重复
+exception.question_tag.tag_group_not_found: 标签类型不存在
+exception.question_tag.tag_name_duplicate: 标签名称重复
+exception.question_tag.tag_not_found: 标签不存在
 
 course.unname_title: 未命名计划
 

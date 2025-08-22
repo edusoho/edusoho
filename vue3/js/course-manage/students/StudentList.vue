@@ -3,7 +3,8 @@
     <div class="flex flex-col grow shrink-0 justify-start items-start self-stretch gap-20 bg-white min-h-800">
       <div class="flex w-full justify-between items-center">
         <span class="text-16 font-medium leading-24 text-black/[.88]">学员管理</span>
-        <div v-if="isNormalCourse && isEnableAddAndRemove && ['published', 'unpublished'].includes(courseStatus)" class="flex items-center gap-20">
+        <div v-if="isNormalCourse && isEnableAddAndRemove && ['published', 'unpublished'].includes(courseStatus)"
+             class="flex items-center gap-20">
           <button class="bulk-import-btn"
                   data-toggle="modal"
                   data-target="#modal"
@@ -28,20 +29,29 @@
       </div>
       <div class="flex flex-col w-full items-start gap-20">
         <div class="flex items-start gap-32 self-stretch border-0 border-b border-solid border-b-[#F0F2F5]">
-          <div v-for="tab in tabs" class="flex px-0 py-12 justify-center items-center cursor-pointer" :class="tab.key === 'students' ? 'border-0 border-b-2 border-solid border-b-[--primary-color]' : ''">
-            <span class="text-[#1E2226] text-14 font-normal leading-22" :class="tab.key === 'students' ? 'text-[--primary-color] font-semibold' : ''" @click="goto(tab.link)">{{ tab.text }}</span>
+          <div v-for="tab in tabs" class="flex px-0 py-12 justify-center items-center cursor-pointer"
+               :class="tab.key === 'students' ? 'border-0 border-b-2 border-solid border-b-[--primary-color]' : ''">
+            <span class="text-[#1E2226] text-14 font-normal leading-22"
+                  :class="tab.key === 'students' ? 'text-[--primary-color] font-semibold' : ''" @click="goto(tab.link)">{{
+                tab.text
+              }}</span>
           </div>
         </div>
         <div class="flex flex-col items-start self-stretch gap-20">
           <div class="flex flex-col items-start self-stretch gap-20 p-20 rounded-6 bg-[#FAFAFA]">
             <div class="flex items-center gap-20 self-stretch">
-            <span class="shrink-0">
-              加入时间：<a-range-picker
-              class="rounded-6 border border-solid border-[#DFE2E6]"
-              @change="onDateChange"
-              :value="formState.joinDate"
-            />
-            </span>
+              <a-input
+                class="h-32 rounded-6 border border-solid border-[#E5E6EB]"
+                placeholder="请输入用户名/邮箱/手机号"
+                v-model:value="formState.userKeyword"
+              />
+              <span class="shrink-0">
+                加入时间：<a-range-picker
+                class="rounded-6 border border-solid border-[#DFE2E6]"
+                @change="onDateChange"
+                :value="formState.joinDate"
+              />
+              </span>
               <a-select
                 allowClear
                 placeholder="加入方式"
@@ -54,17 +64,16 @@
                 :options="learnDeadlineSelectOptions"
                 v-model:value="formState.learnDeadline"
               />
-              <a-input
-                class="h-32 rounded-6 border border-solid border-[#E5E6EB]"
-                placeholder="请输入用户名/邮箱/手机号"
-                v-model:value="formState.userKeyword"
-              />
             </div>
             <div class="flex items-center gap-20 self-stretch">
-              <button class="flex py-0 px-15 justify-center items-center rounded-6 border border-solid border-[--primary-color] bg-white h-32" @click="fetchStudents">
+              <button
+                class="flex py-0 px-15 justify-center items-center rounded-6 border border-solid border-[--primary-color] bg-white h-32"
+                @click="fetchStudents">
                 <span class="text-[--primary-color] text-14 font-normal leading-22">搜索</span>
               </button>
-              <button class="flex py-0 px-15 justify-center items-center rounded-6 border border-solid border-[#E5E6EB] bg-white shadow-[0_2px_0_0_rgba(0, 0, 0, 0.02)] h-32" @click="resetForm">
+              <button
+                class="flex py-0 px-15 justify-center items-center rounded-6 border border-solid border-[#E5E6EB] bg-white shadow-[0_2px_0_0_rgba(0, 0, 0, 0.02)] h-32"
+                @click="resetForm">
                 <span class="text-[#37393D] text-14 font-normal leading-22">重置</span>
               </button>
               <div v-if="exportBtnVisible" class="flex items-center gap-8 cursor-pointer" @click="onExport">
@@ -74,7 +83,8 @@
             </div>
           </div>
           <div v-show="students.length > 0 && isNormalCourse" class="flex items-start gap-20">
-            <button v-show="isEnableAddAndRemove" class="student-operate-button" @click="onBatchRemove">批量移除</button>
+            <button v-show="isEnableAddAndRemove" class="student-operate-button" @click="onBatchRemove">批量移除
+            </button>
             <button class="student-operate-button" @click="onBatchUpdateExpiryDate">批量修改有效期</button>
             <button class="student-operate-button" @click="onUpdateAllExpiryDate">全员修改有效期</button>
           </div>
@@ -102,11 +112,15 @@
             <template #bodyCell="{ column, record }">
               <template v-if="column.key === 'user'">
                 <div class="flex items-center gap-12 shrink-0">
-                  <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt="" @click="open(`/user/${record.user.uuid}`)">
+                  <img :src="record.user.avatar.small" class="w-40 h-40 rounded-40 cursor-pointer" alt=""
+                       @click="open(`/user/${record.user.uuid}`)">
                   <div class="flex flex-col">
                     <a-tooltip placement="top">
                       <template #title>{{ record.user.nickname }}</template>
-                      <div @click="open(`/user/${record.user.uuid}`)" class="w-fit max-w-100 truncate text-14 text-[#1D2129] cursor-pointer hover:text-[--primary-color]">{{ record.user.nickname }}</div>
+                      <div @click="open(`/user/${record.user.uuid}`)"
+                           class="w-fit max-w-100 truncate text-14 text-[#1D2129] cursor-pointer hover:text-[--primary-color]">
+                        {{ record.user.nickname }}
+                      </div>
                     </a-tooltip>
                     <div class="w-100 truncate text-12 text-[#87898F]" v-if="record.remark">{{ record.remark }}</div>
                   </div>
@@ -119,8 +133,11 @@
                     <span class="text-[#37393D] text-14 font-normal leading-22">
                       {{ mobile(record.user.id, record.user.verifiedMobile) }}
                     </span>
-                      <EyeOutlined v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)" class="w-24 text-[#919399]"/>
-                      <EyeInvisibleOutlined v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)" @click="showWholeMobile(record.user.id, record.user.encryptedMobile)" class="w-24 cursor-pointer text-[#919399]"/>
+                      <EyeOutlined v-show="openEyeVisible(record.user.id, record.user.verifiedMobile)"
+                                   class="w-24 text-[#919399]"/>
+                      <EyeInvisibleOutlined v-show="closeEyeVisible(record.user.id, record.user.verifiedMobile)"
+                                            @click="showWholeMobile(record.user.id, record.user.encryptedMobile)"
+                                            class="w-24 cursor-pointer text-[#919399]"/>
                     </div>
                   </div>
                   <div class="w-111 truncate text-12 text-[#87898F]">{{ record.joinedChannelText }}</div>
@@ -129,23 +146,34 @@
               <template v-else-if="column.key === 'joinTime'">
                 <div class="flex flex-col">
                   <div>{{ formatDate(record.createdTime, 'YYYY-MM-DD HH:mm') }}</div>
-                  <div class="text-12 text-[#87898F]">{{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}</div>
+                  <div class="text-12 text-[#87898F]">
+                    {{ record.deadline == 0 ? '长期有效' : formatDate(record.deadline, 'YYYY-MM-DD HH:mm') }}
+                  </div>
                 </div>
               </template>
               <template v-else-if="column.key === 'learnProgress'">
-                <div class="flex gap-8 items-center cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/process`">
+                <div class="flex gap-8 items-center cursor-pointer" data-toggle="modal" data-target="#modal"
+                     :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/process`">
                   <div class="flex flex-col justify-center items-start h-16 w-100 p-2 rounded-99 bg-[#F5F5F5]">
-                    <div class="h-12 rounded-99" :style="`width: ${record.learningProgressPercent}px;`" style="background-image: linear-gradient(90deg, rgba(0, 194, 97, 0.4), rgb(0, 194, 97));"></div>
+                    <div class="h-12 rounded-99" :style="`width: ${record.learningProgressPercent}px;`"
+                         style="background-image: linear-gradient(90deg, rgba(0, 194, 97, 0.4), rgb(0, 194, 97));"></div>
                   </div>
                   <div class="flex items-center gap-4">
-                    <span class="text-[#37393D] hover:text-[--primary-color] text-14 font-normal leading-22">{{ record.learningProgressPercent }}%</span>
+                    <span class="text-[#37393D] hover:text-[--primary-color] text-14 font-normal leading-22">{{
+                        record.learningProgressPercent
+                      }}%</span>
                     <RightOutlined class="w-16 text-[#919399]"/>
                   </div>
                 </div>
               </template>
               <template v-else-if="column.key === 'operation'">
                 <div class="flex items-center gap-16">
-                  <div v-if="isAdmin || isTeacher" class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/student/deadline?ids=${record.user.id}`">修改有效期</div>
+                  <div v-if="isAdmin || isTeacher"
+                       class="text-[--primary-color] text-14 font-normal leading-22 cursor-pointer" data-toggle="modal"
+                       data-target="#modal"
+                       :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/student/deadline?ids=${record.user.id}`">
+                    修改有效期
+                  </div>
                   <div v-else class="text-[#C0C0C2] text-14 font-normal leading-22 cursor-not-allowed">修改有效期</div>
                   <a-dropdown v-if="isNormalCourse" placement="bottomRight" trigger="['click']">
                     <span class="flex items-center cursor-pointer">
@@ -153,13 +181,16 @@
                     </span>
                     <template #overlay>
                       <a-menu>
-                        <a-menu-item v-if="isNormalCourse && record.user.canSendMessage" data-toggle="modal" data-target="#modal" :data-url="`/message/create/${record.user.id}`">
+                        <a-menu-item v-if="isNormalCourse && record.user.canSendMessage" data-toggle="modal"
+                                     data-target="#modal" :data-url="`/message/create/${record.user.id}`">
                           发私信
                         </a-menu-item>
-                        <a-menu-item v-if="isAdmin" data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/show`">
+                        <a-menu-item v-if="isAdmin" data-toggle="modal" data-target="#modal"
+                                     :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/students/${record.user.id}/show`">
                           查看资料
                         </a-menu-item>
-                        <a-menu-item data-toggle="modal" data-target="#modal" :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/student/${record.user.id}/remark`">
+                        <a-menu-item data-toggle="modal" data-target="#modal"
+                                     :data-url="`/course_set/${courseSetId}/manage/course/${courseId}/student/${record.user.id}/remark`">
                           备注
                         </a-menu-item>
                         <a-menu-item @click="followOrUnfollow(record.user.id)">
@@ -184,7 +215,9 @@
                 @change="table.onSelectAllChange">
                 <span class="text-[#37393D] text-14 font-normal leading-22">全选</span>
               </a-checkbox>
-              <span class="text-[#37393D] text-14 font-normal leading-22">选择 {{ table.rowSelection.selectedRowKeys.length }} 项</span>
+              <span class="text-[#37393D] text-14 font-normal leading-22">选择 {{
+                  table.rowSelection.selectedRowKeys.length
+                }} 项</span>
             </div>
             <a-pagination
               show-quick-jumper
@@ -517,9 +550,9 @@ const exportData = async (start, fileName, name) => {
     setTimeout(() => {
       message.success($modal.find('.modal-title').data('success'));
       $modal.modal('hide');
-    },500);
+    }, 500);
   } else {
-    const progress = response.start / totalCount  * 100 + '%';
+    const progress = response.start / totalCount * 100 + '%';
     $modal.find('#progress-bar').width(progress);
     await exportData(response.start, response.fileName, response.name);
   }

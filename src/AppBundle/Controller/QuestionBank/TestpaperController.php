@@ -9,6 +9,7 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\QuestionTag\Service\QuestionTagService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -533,6 +534,11 @@ class TestpaperController extends BaseController
         if (!empty($conditions['exclude_ids'])) {
             $conditions['exclude_ids'] = explode(',', $conditions['exclude_ids']);
         }
+        if (!empty($conditions['tagIds'])) {
+            $tagItems = $this->getQuestionTagService()->findTagItemsByTagIds($conditions['tagIds']);
+            $conditions['ids'] = array_column($tagItems, 'itemId') ?: [-1];
+            unset($conditions['tagIds']);
+        }
         $paginator = new Paginator(
             $request,
             $this->getItemService()->countItems($conditions),
@@ -699,5 +705,13 @@ class TestpaperController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return QuestionTagService
+     */
+    protected function getQuestionTagService()
+    {
+        return $this->createService('QuestionTag:QuestionTagService');
     }
 }
