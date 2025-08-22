@@ -8302,6 +8302,7 @@ log.module.multi_class: Multi class
 log.module.wrong_question: 'Wrong Question'
 log.module.ai: AI
 log.module.contract: Contract
+log.module.question_tag: 'Question Tag'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -8576,6 +8577,10 @@ log.action.item_bank_exercise.unpublish_exercise_chapter: 'Cancel the release of
 log.action.certifiacte.create_certificate: Create Certificate
 log.action.certifiacte.auto_issue: Auto Issue Certificate
 log.action.certifiacte.create_template: Create Template
+log.action.question_tag.add_tag_group: 'Add question tag type'
+log.action.question_tag.delete_tag_group: 'Delete question tag type'
+log.action.question_tag.add_tag: 'Add question tag'
+log.action.question_tag.delete_tag: 'Delete question tag'
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9909,6 +9914,11 @@ exception.certificate.reject.forbidden_audit: Review rejected failure
 
 exception.information_collect.not_found: Collection not found
 exception.information_collect.closed: Collection is closed
+
+exception.question_tag.tag_group_name_duplicate: 'Tag type name is duplicated'
+exception.question_tag.tag_group_not_found: 'Tag type is not exist'
+exception.question_tag.tag_name_duplicate: 'Tag name is duplicated'
+exception.question_tag.tag_not_found: 'Tag is not exist'
 
 course.unname_title: unname course
 
