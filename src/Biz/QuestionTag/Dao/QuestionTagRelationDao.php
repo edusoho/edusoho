@@ -6,4 +6,5 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface QuestionTagRelationDao extends AdvancedDaoInterface
 {
+    public function findByTagIds($tagIds);
 }
