@@ -1,20 +1,21 @@
 <script setup>
-import {ref} from 'vue';
-
-const modalVisible = ref(false);
-
-emitter.on('open-category-modal', (params) => {
-  if (params.ids.length > 0) {
-    ids.value = params.ids;
-    modalVisible.value = true;
-  }
+// const emit = defineEmits(['setCategorySuccess'])
+const modalVisible = defineModel();
+const props = defineProps({
+  id: {
+    type: String,
+    default: '',
+  },
 });
 </script>
 
 <template>
-
+  <a-modal v-model:open="modalVisible"
+           title="Basic Modal"
+           centered
+  >
+    <p>Some contents...</p>
+    <p>Some contents...</p>
+    <p>Some contents...</p>
+  </a-modal>
 </template>
-
-<style scoped lang="less">
-
-</style>
