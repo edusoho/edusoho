@@ -9564,6 +9564,7 @@ log.module.multi_class: 班课
 log.module.wrong_question: 错题
 log.module.ai: AI
 log.module.contract: 合同
+log.module.question_tag: 题目标签
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -9843,6 +9844,10 @@ log.action.item_bank_exercise.unpublish_exercise_chapter: 取消发布题库练�
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板
+log.action.question_tag.add_tag_group: 添加题目标签类型
+log.action.question_tag.delete_tag_group: 删除题目标签类型
+log.action.question_tag.add_tag: 添加题目标签
+log.action.question_tag.delete_tag: 删除题目标签
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -11241,6 +11246,10 @@ exception.information_collect.closed: 用户信息采集已关闭
 exception.not_continue.look: 无法继续查看
 exception.go_home: 回到首页
 
+exception.question_tag.tag_group_name_duplicate: 标签类型名称重复
+exception.question_tag.tag_group_not_found: 标签类型不存在
+exception.question_tag.tag_name_duplicate: 标签名称重复
+exception.question_tag.tag_not_found: 标签不存在
 
 course.unname_title: 未命名计划
 
