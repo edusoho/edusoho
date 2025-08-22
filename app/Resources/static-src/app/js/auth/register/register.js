@@ -33,13 +33,13 @@ export default class Register {
       $('#register_password').attr('type', 'password');
       $('.open-eye').hide();
       $('.close-eye').show();
-    })
+    });
 
     $('.close-eye').on('click', function () {
       $('#register_password').attr('type', 'text');
       $('.close-eye').hide();
       $('.open-eye').show();
-    })
+    });
   }
 
   setValidateRule() {
@@ -56,18 +56,6 @@ export default class Register {
     let self = this;
     $('#register-form').validate({
       ...this._validataRules(),
-      highlight: function(element) {
-        $(element).css('border', '1px solid red');
-        if (element.name === 'password') {
-          $('.register_password-tip').hide();
-        }
-      },
-      success: function (label, element) {
-        $(element).css('border', '1px solid #e1e1e1');
-        if (element.name === 'password') {
-          $('.register_password-tip').show();
-        }
-      },
     });
     $.validator.addMethod(
       'email_or_mobile_check',
@@ -207,7 +195,7 @@ export default class Register {
         },
         password: {
           spaceNoSupport: true,
-          check_password_high: true,
+          password_normal: true,
         },
         email: {
           required: true,
@@ -274,8 +262,7 @@ export default class Register {
           required: Translator.trans('auth.register.drag_captcha_tips')
         },
         password: {
-          required: Translator.trans('validate.check_password_high.message'),
-          check_password_high: Translator.trans('validate.check_password_high.message')
+          required: Translator.trans('password.hint.normal'),
         }
       }
     };

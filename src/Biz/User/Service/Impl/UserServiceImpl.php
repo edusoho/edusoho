@@ -37,6 +37,8 @@ use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\File\File;
@@ -783,18 +785,24 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changePassword($id, $password)
     {
+        $user = $this->getUser($id) ?: $this->getUserByUUID($id);
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
         if (empty($password)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        if (!$this->validatePassword($password)) {
-            $this->createNewException(UserException::PASSWORD_INVALID());
-        }
-
-        $user = $this->getUser($id) ?: $this->getUserByUUID($id);
-
-        if (empty($user)) {
-            $this->createNewException(UserException::NOTFOUND_USER());
+        $needStrongPassword = RoleHelper::nonStudent($user['roles']);
+        if ($needStrongPassword) {
+            if (!PasswordValidator::validateStrong($password)) {
+                $this->createNewException(UserException::PASSWORD_INVALID());
+            }
+        } else {
+            if (!PasswordValidator::validate($password)) {
+                $this->createNewException(UserException::PASSWORD_INVALID());
+            }
         }
 
         $salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
@@ -802,7 +810,7 @@ class UserServiceImpl extends BaseService implements UserService
         $fields = [
             'salt' => $salt,
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
-            'passwordUpgraded' => 1,
+            'passwordUpgraded' => PasswordValidator::getLevel($password),
         ];
 
         $updatePass = $this->getUserDao()->update($id, $fields);
@@ -2466,7 +2474,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function validatePassword($password)
     {
-        return SimpleValidator::highPassword($password);
+        return PasswordValidator::validate($password);
     }
 
     public function setFaceRegistered($id)

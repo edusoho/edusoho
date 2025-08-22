@@ -292,6 +292,8 @@ paginator.lastPage: 上一页
 paginator.jump: 跳至
 paginator.page: 页
 
+password.hint.normal: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
+password.hint.strong: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 
 staff.fields.id: 员工编号
 # 用户通用
@@ -3137,10 +3139,11 @@ user.register.account_with_mobile_or_email_placeholder: 填写你常用的邮箱
 user.register.username_label: 用户名
 user.register.username_label_placeholder: 中、英文均可，最长18个英文或9个汉字
 user.register.password_label: 密码
+user.register.password_hint: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
 user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.low: 5-20位英文、数字、符号，区分大小写
 user.register.password_label_placeholder.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.register.password_label_placeholder.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
+user.register.password_label_placeholder.high: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
 user.register.enter_password: 请输入密码
 user.register.invite_code_label: 邀请码
 user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
@@ -3459,6 +3462,7 @@ user.settings.password_reset.find_password_btn: 找回密码
 user.settings.password_level.low: 5-20位英文、数字、符号，区分大小写
 user.settings.password_level.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
 user.settings.password_level.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
+user.settings.password_hint: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 
 
 # 账户中心模块

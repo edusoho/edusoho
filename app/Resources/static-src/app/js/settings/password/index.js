@@ -23,25 +23,11 @@ $('#settings-password-form').validate({
     'currentPassword': {
       required: true,
     },
-    'newPassword': {
-      required: true,
-      visible_character: true,
-      spaceNoSupport: true,
-      check_password_high: true,
-    },
     'confirmPassword': {
       required: true,
       equalTo: '#form_newPassword',
       visible_character: true
     }
-  },
-  messages: {
-    newPassword: {
-      required: Translator.trans('validate.check_password_high.message'),
-      visible_character: Translator.trans('validate.check_password_high.message'),
-      spaceNoSupport: Translator.trans('validate.check_password_high.message'),
-      check_password_high: Translator.trans('validate.check_password_high.message'),
-    },
   },
   submitSuccess(data) {
     notify('success', Translator.trans(data.message));
@@ -54,38 +40,56 @@ $('#settings-password-form').validate({
   }
 });
 
+const needStrongPassword = $('#form_newPassword').data('strong');
+if (needStrongPassword) {
+  $('#form_newPassword').rules('add', {
+    required: true,
+    visible_character: true,
+    spaceNoSupport: true,
+    password_strong: true,
+  });
+} else {
+  $('#form_newPassword').rules('add', {
+    required: true,
+    visible_character: true,
+    spaceNoSupport: true,
+    password_normal: true,
+  });
+}
+
+
 $('.js-new-password-open-eye').on('click', function () {
   $('#form_newPassword').attr('type', 'password');
   $('.js-new-password-open-eye').hide();
   $('.js-new-password-close-eye').show();
-})
+});
 
 $('.js-new-password-close-eye').on('click', function () {
   $('#form_newPassword').attr('type', 'text');
   $('.js-new-password-close-eye').hide();
   $('.js-new-password-open-eye').show();
-})
+});
 
 $('.js-current-password-open-eye').on('click', function () {
   $('#form_currentPassword').attr('type', 'password');
   $('.js-current-password-open-eye').hide();
   $('.js-current-password-close-eye').show();
-})
+});
 
 $('.js-current-password-close-eye').on('click', function () {
   $('#form_currentPassword').attr('type', 'text');
   $('.js-current-password-close-eye').hide();
   $('.js-current-password-open-eye').show();
-})
+});
 
 $('.js-confirm-password-open-eye').on('click', function () {
   $('#form_confirmPassword').attr('type', 'password');
   $('.js-confirm-password-open-eye').hide();
   $('.js-confirm-password-close-eye').show();
-})
+});
 
 $('.js-confirm-password-close-eye').on('click', function () {
   $('#form_confirmPassword').attr('type', 'text');
   $('.js-confirm-password-close-eye').hide();
   $('.js-confirm-password-open-eye').show();
-})
+});

@@ -6,6 +6,7 @@ use AppBundle\Common\SmsToolkit;
 use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
+use Biz\User\Support\RoleHelper;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,8 +37,12 @@ class PasswordResetController extends BaseController
     public function updateAction(Request $request)
     {
         $token = $this->getUserService()->getToken('password-reset', $request->query->get('token') ?: $request->request->get('token'));
-
         if (empty($token)) {
+            return $this->render('password-reset/error.html.twig');
+        }
+
+        $user = $this->getUserService()->getUser($token['userId']);
+        if (empty($user)) {
             return $this->render('password-reset/error.html.twig');
         }
 
@@ -53,7 +58,7 @@ class PasswordResetController extends BaseController
             if ($form->isValid()) {
                 $data = $form->getData();
 
-                $this->getAuthService()->changePassword($token['userId'], null, $data['password']);
+                $this->getUserService()->changePassword($token['userId'], $data['password']);
 
                 $this->getUserService()->deleteToken('password-reset', $token['token']);
 
@@ -63,6 +68,7 @@ class PasswordResetController extends BaseController
 
         return $this->render('password-reset/update.html.twig', [
             'form' => $form->createView(),
+            'needStrongPassword' => RoleHelper::nonStudent($user['roles']),
         ]);
     }
 
