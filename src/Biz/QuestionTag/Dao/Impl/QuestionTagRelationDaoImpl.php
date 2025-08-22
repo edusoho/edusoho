@@ -9,6 +9,11 @@ class QuestionTagRelationDaoImpl extends AdvancedDaoImpl implements QuestionTagR
 {
     protected $table = 'question_tag_relation';
 
+    public function findByTagIds($tagIds)
+    {
+        return $this->findInField('tagId', $tagIds);
+    }
+
     public function declares()
     {
         return [
@@ -18,6 +23,7 @@ class QuestionTagRelationDaoImpl extends AdvancedDaoImpl implements QuestionTagR
                 'tagId = :tagId',
                 'tagId in (:tagIds)',
                 'itemId = :itemId',
+                'itemId in (:itemIds)',
             ],
         ];
     }

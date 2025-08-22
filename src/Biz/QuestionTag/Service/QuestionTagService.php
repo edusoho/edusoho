@@ -27,4 +27,8 @@ interface QuestionTagService
     public function searchTags($conditions);
 
     public function sortTags($groupId, $ids);
+
+    public function tagQuestions($itemIds, $tagIds);
+
+    public function findTagItemsByTagIds($tagIds);
 }

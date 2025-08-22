@@ -179,6 +179,29 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
         $this->getQuestionTagDao()->batchUpdate($ids, $seqs);
     }
 
+    public function tagQuestions($itemIds, $tagIds)
+    {
+        if (empty($itemIds)) {
+            return;
+        }
+        $this->getQuestionTagRelationDao()->batchDelete(['itemIds' => $itemIds]);
+        $relations = [];
+        foreach ($itemIds as $itemId) {
+            foreach ($tagIds as $tagId) {
+                $relations[] = [
+                    'itemId' => $itemId,
+                    'tagId' => $tagId,
+                ];
+            }
+        }
+        $this->getQuestionTagRelationDao()->batchCreate($relations);
+    }
+
+    public function findTagItemsByTagIds($tagIds)
+    {
+        return $this->getQuestionTagRelationDao()->findByTagIds($tagIds);
+    }
+
     /**
      * @return LogService
      */
