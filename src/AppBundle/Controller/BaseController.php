@@ -90,6 +90,7 @@ class BaseController extends Controller
      */
     protected function authenticateUser(array $user): CurrentUser
     {
+        file_put_contents('/tmp/debug.log', "authenticateUser" . print_r($user, true), FILE_APPEND);
         $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
@@ -106,22 +107,17 @@ class BaseController extends Controller
         if (!$currentUser->isLogin()) {
             return;
         }
-        // @TODO 要消除这一次的调用
-        $user = $this->getUserService()->getUser($currentUser->getId());
-        if (empty($user)) {
-            return;
-        }
 
-        if (RoleHelper::isStudent($user['roles'])) {
+        if (RoleHelper::isStudent($currentUser['roles'])) {
             $loginBindSetting = $this->getBiz()->service('System:SettingService')->get('login_bind');
             if (!($loginBindSetting['student_weak_password_check'] ?? 0)) {
                 return;
             }
-            if (PasswordValidator::isValidLevel($user['passwordUpgraded'])) {
+            if (PasswordValidator::isValidLevel($currentUser['passwordUpgraded'])) {
                 return ;
             }
         } else {
-            if (PasswordValidator::isStrongLevel($user['passwordUpgraded'])) {
+            if (PasswordValidator::isStrongLevel($currentUser['passwordUpgraded'])) {
                 return ;
             }
         }
