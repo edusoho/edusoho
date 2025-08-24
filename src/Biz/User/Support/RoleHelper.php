@@ -5,7 +5,7 @@ namespace Biz\User\Support;
 class RoleHelper
 {
     /**
-     * 是否为学员
+     * 是否只有学员角色
      * @param array $roles
      * @return bool
      */
@@ -18,11 +18,11 @@ class RoleHelper
     }
 
     /**
-     * 是否为非学员（管理员、教师...等赋予的各种角色）
+     * 是否含员工角色（管理员、教师...等赋予的各种角色）
      * @param array $roles
      * @return bool
      */
-    public static function nonStudent(array $roles): bool
+    public static function isStaff(array $roles): bool
     {
         return !self::isStudent($roles);
     }

@@ -3,6 +3,8 @@
 namespace ApiBundle\Security\Firewall;
 
 use Biz\System\Service\SettingService;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,12 +35,20 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
         if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
             throw UserException::PASSWORD_ERROR();
         }
-        $loginBind = $this->getSettingService()->get('login_bind');
-        $skipPasswordUpdate = $user['roles'] === ['ROLE_USER'] && isset($loginBind['login_strong_pwd_enable']) && 0 == $loginBind['login_strong_pwd_enable'];
-        if (!$skipPasswordUpdate) {
-            if ($this->getUserService()->validatePassword($password)) {
-                $this->getUserService()->updateUser($user['id'], ['passwordUpgraded' => 1]);
-            } else {
+
+        $passwordLevel = PasswordValidator::getLevel($password);
+        if ($user['passwordUpgraded'] != $passwordLevel) {
+            $this->getUserService()->updateUser($user['id'], ['passwordUpgraded' => $passwordLevel]);
+            $user['passwordUpgraded'] = $passwordLevel;
+        }
+
+        if (RoleHelper::isStudent($user['roles'])) {
+            $loginBindSetting = $this->getSettingService()->get('login_bind');
+            if (($loginBindSetting['student_weak_password_check'] ?? 0) && !PasswordValidator::isValidLevel($user['passwordUpgraded'])) {
+                throw UserException::PASSWORD_REQUIRE_UPGRADE();
+            }
+        } else {
+            if (!PasswordValidator::isStrongLevel($user['passwordUpgraded'])) {
                 throw UserException::PASSWORD_REQUIRE_UPGRADE();
             }
         }

@@ -169,6 +169,9 @@ site.cloud.file.convert_failed_tips: Transcoding failed, please contact the admi
 site.cloud.file.converting_tips: Course content preparation, please wait a moment.
 site.cloud.file.not_find_tips: File not exist.
 
+password.hint.normal: A password of 8–32 characters, consisting of a combination of at least two types among letters, numbers, and symbols.
+password.hint.strong: A password of 8–32 characters, consisting of a combination of uppercase letters, lowercase letters, numbers, and symbols.
+
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_change: "Dear %nickname%,\nYour requirement of email address reset is received. Please click the link below to verify your account：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -6580,8 +6583,8 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: '
 admin.login_connect.User_login_protection.after: After
 admin.login_connect.User_login_captcha: 'User login captcha'
 admin.login_connect.User_login_captcha.help_block: 'After opening, users need to drag the verification code to check when they log in; If you switch to "mobile quick login", you always need to drag the verification code'
-admin.login_connect.student_strong_pwd.button: 'Weak Password Detection During Student Login'
-admin.login_connect.student_strong_pwd.help_block: >
+admin.login_connect.student_weak_password_check.button: 'Weak Password Detection During Student Login'
+admin.login_connect.student_weak_password_check.help_block: >
   After enabling this feature, when a student logs in, if a weak password is detected, they will be required to change it to a strong password. <br />
   <strong style="color:red">After disabling this feature, students can continue logging in with weak passwords, which poses an account theft risk. Disabling is not recommended!</strong>
 admin.login_connect.User_login_protection.after.unblock: 'Minutes, unblock user /IP'
@@ -9410,6 +9413,7 @@ exception.user.already_bind: The user is already bound
 exception.user.password_require_upgrade: 'Your current password level is detected to be lower, please reset the password'
 exception.user.password_require_high_level: 'Please set a password consisting of 8-32 characters, including uppercase and lowercase letters, numbers, and symbols'
 exception.user.original_password_error: 'The original password you entered is incorrect. Please re-enter it'
+exception.user.staff_password_require_strong: The employee account password must be 8–32 characters long and include a combination of uppercase letters, lowercase letters, numbers, and symbols.
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist

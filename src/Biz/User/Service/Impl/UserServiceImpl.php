@@ -794,10 +794,10 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $needStrongPassword = RoleHelper::nonStudent($user['roles']);
+        $needStrongPassword = RoleHelper::isStaff($user['roles']);
         if ($needStrongPassword) {
             if (!PasswordValidator::validateStrong($password)) {
-                $this->createNewException(UserException::PASSWORD_INVALID());
+                $this->createNewException(UserException::STAFF_PASSWORD_REQUIRE_STRONG());
             }
         } else {
             if (!PasswordValidator::validate($password)) {

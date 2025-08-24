@@ -9,20 +9,55 @@ namespace Biz\User\Support;
  */
 class PasswordValidator
 {
+    const LEVEL_STRONG = 1;
+    const LEVEL_NORMAL = 2;
+
+    const LEVEL_NONE = 0;
+
     /**
      * 获得密码等级
      * @param string $password
-     * @return int 1: 强密码（适用于管理员） 2: 普通密码（适用于非管理员） 0: 密码不符合要求
+     * @return int 1: 强密码（适用于管理员） 2: 普通密码（适用于非管理员） 0: 密码级别未知或不达标
      */
     public static function getLevel(string $password): int
     {
         if (self::validateStrong($password)) {
-            return 1;
+            return self::LEVEL_STRONG;
         } elseif (self::validate($password)) {
-            return 2;
+            return self::LEVEL_NORMAL;
         } else {
-            return 0;
+            return self::LEVEL_NONE;
         }
+    }
+
+    /**
+     * 是否为有效的密码级别
+     *
+     * @param int $level
+     * @return bool
+     */
+    public static function isValidLevel(int $level): bool {
+        return in_array($level, [self::LEVEL_STRONG, self::LEVEL_NORMAL]);
+    }
+
+    /**
+     * 是否为强密码级别
+     *
+     * @param int $level
+     * @return bool
+     */
+    public static function isStrongLevel(int $level): bool {
+        return $level === self::LEVEL_STRONG;
+    }
+
+    /**
+     * 是否为普通密码级别
+     *
+     * @param int $level
+     * @return bool
+     */
+    public static function isNormalLevel(int $level): bool {
+        return $level === self::LEVEL_NORMAL;
     }
 
     /**

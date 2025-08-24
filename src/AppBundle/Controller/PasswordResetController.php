@@ -68,7 +68,7 @@ class PasswordResetController extends BaseController
 
         return $this->render('password-reset/update.html.twig', [
             'form' => $form->createView(),
-            'needStrongPassword' => RoleHelper::nonStudent($user['roles']),
+            'needStrongPassword' => RoleHelper::isStaff($user['roles']),
         ]);
     }
 

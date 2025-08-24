@@ -766,7 +766,7 @@ class SettingsController extends BaseController
         }
 
         return $this->render('settings/password.html.twig', [
-            'needStrongPassword' => RoleHelper::nonStudent($user['roles']),
+            'needStrongPassword' => RoleHelper::isStaff($user['roles']),
         ]);
     }
 

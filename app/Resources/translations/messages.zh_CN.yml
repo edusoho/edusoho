@@ -293,7 +293,7 @@ paginator.jump: 跳至
 paginator.page: 页
 
 password.hint.normal: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
-password.hint.strong: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
+password.hint.strong: 8-32位字符，包含字母大小写、数字、符号四种字符组合成的密码
 
 staff.fields.id: 员工编号
 # 用户通用
@@ -7867,8 +7867,8 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: �
 admin.login_connect.User_login_protection.after: 经过
 admin.login_connect.User_login_captcha: 用户登录验证码设置
 admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验；如果切换为"手机快捷登录"，则一直需要拖动验证码
-admin.login_connect.student_strong_pwd.button: 学员登录时，弱密码检测
-admin.login_connect.student_strong_pwd.help_block: >
+admin.login_connect.student_weak_password_check.button: 学员登录时，弱密码检测
+admin.login_connect.student_weak_password_check.help_block: >
   开启后，学员登录时，若发现学员使用的是弱密码，会强制要求用户修改为强密码。<br> 
   <strong style="color:red">关闭后，学员可继续使用弱密码登录，有被盗号隐患，不建议关闭！</strong>
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
@@ -10737,6 +10737,7 @@ exception.user.already_bind: 用户已绑定
 exception.user.password_require_upgrade: 检测到您当前密码等级较低，请重新设置密码
 exception.user.password_require_high_level: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 exception.user.original_password_error: 您输入的原密码不正确，请重新输入
+exception.user.staff_password_require_strong: 员工帐号密码需满足：8-32位字符，包含字母大小写、数字、符号四种字符组合成的密码
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在

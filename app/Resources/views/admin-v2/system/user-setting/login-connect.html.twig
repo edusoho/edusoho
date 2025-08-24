@@ -129,20 +129,20 @@
     <fieldset>
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label>{{ 'admin.login_connect.student_strong_pwd.button'|trans }}</label>
+          <label>{{ 'admin.login_connect.student_weak_password_check.button'|trans }}</label>
         </div>
         <div class="controls col-md-8 radios">
           <label>
-            <input type="radio" name="login_strong_pwd_enable" value="1" {% if loginConnect.login_strong_pwd_enable|default(1) == 1 %}checked{% endif %} >
+            <input type="radio" name="student_weak_password_check" value="1" {% if loginConnect.student_weak_password_check|default(0) == 1 %}checked{% endif %} >
             {{ 'admin.login_connect.open'|trans }}
           </label>
           <label>
-            <input type="radio" name="login_strong_pwd_enable" value="0" {% if loginConnect.login_strong_pwd_enable|default(1) == 0 %}checked{% endif %} >
+            <input type="radio" name="student_weak_password_check" value="0" {% if loginConnect.student_weak_password_check|default(0) == 0 %}checked{% endif %} >
             {{ 'admin.login_connect.closed'|trans }}
           </label>
           <p class="help-block">
             <label>
-              {{ 'admin.login_connect.student_strong_pwd.help_block'|trans|raw }}
+              {{ 'admin.login_connect.student_weak_password_check.help_block'|trans|raw }}
             </label>
           </p>
         </div>
