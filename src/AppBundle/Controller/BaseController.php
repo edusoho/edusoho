@@ -90,7 +90,6 @@ class BaseController extends Controller
      */
     protected function authenticateUser(array $user): CurrentUser
     {
-        file_put_contents('/tmp/debug.log', "authenticateUser" . print_r($user, true), FILE_APPEND);
         $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
