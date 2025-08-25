@@ -5,7 +5,7 @@ import Create from './Create.vue';
 import Api from '../../../../api';
 import {DownOutlined} from '@ant-design/icons-vue';
 import {formatDate} from 'vue3/js/common';
-import {createCustomRow} from '../../../customRow';
+import {createCustomRow} from '../../../custom-row';
 
 const modalVisible = defineModel('modalVisible', { type: Boolean })
 const emit = defineEmits(['needRefresh']);

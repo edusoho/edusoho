@@ -4,10 +4,11 @@ import Create from './Create.vue';
 import {onBeforeUnmount, onMounted, reactive, ref} from 'vue';
 import Api from '../../../../api';
 import {formatDate} from 'vue3/js/common';
-import {DownOutlined} from '@ant-design/icons-vue';
+import {DownOutlined, EditOutlined} from '@ant-design/icons-vue';
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import TagModal from './TagModal.vue';
-import {createCustomRow} from '../../../customRow';
+import {createCustomRow} from '../../../custom-row';
+import {cloneDeep} from 'lodash';
 
 const loading = ref(false);
 const table = reactive({
@@ -118,9 +119,18 @@ async function deleteTagGroup(id) {
   await searchTagGroup(searchParams);
 }
 
-function editTagGroup(id) {
-  editId.value = id;
+function openCreateModal() {
   modalVisible.value = true;
+}
+
+function reviewTagGroup(id) {
+  editId.value = id;
+  openCreateModal();
+}
+
+const editableData = reactive({});
+function edit(id) {
+  editableData[id] = cloneDeep(table.list.filter(item => id === item.id)[0]);
 }
 </script>
 
@@ -149,6 +159,14 @@ function editTagGroup(id) {
         :scroll="{ y: scrollY }"
       >
         <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'name'">
+            <div class="flex items-center justify-between group">
+              <div class="truncate">{{ record.name }}</div>
+              <div class="group-hover:inline-block hidden">
+                <EditOutlined  @click="edit(record.id)"/>
+              </div>
+            </div>
+          </template>
           <template v-if="column.key === 'createdTime'">
             {{ formatDate(record.createdTime) }}
           </template>
@@ -172,7 +190,7 @@ function editTagGroup(id) {
           </template>
           <template v-if="column.key === 'operation'">
             <div class="gap-16 flex">
-              <div class="cursor-pointer text-[--primary-color]" @click="editTagGroup(record.id)">管理</div>
+              <div class="cursor-pointer text-[--primary-color]" @click="reviewTagGroup(record.id)">管理</div>
               <a-popconfirm
                 placement="bottomRight"
                 ok-text="确定"
@@ -196,11 +214,3 @@ function editTagGroup(id) {
     />
   </AntConfigProvider>
 </template>
-
-<style>
-:deep(.ant-table-tbody > tr.target > td) {
-  border-top: 1px solid #409eff;
-  background-color: #d9ecff;
-}
-</style>
-
