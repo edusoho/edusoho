@@ -7,6 +7,7 @@ use AppBundle\Common\TimeMachine;
 use Biz\BaseService;
 use Biz\Sensitive\SensitiveException;
 use Biz\User\Service\AuthService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\RateLimiter\RateLimiter;
 use Topxia\Service\Common\ServiceKernel;
@@ -240,6 +241,9 @@ class AuthServiceImpl extends BaseService implements AuthService
         return $this->createService('Sensitive:SensitiveService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');

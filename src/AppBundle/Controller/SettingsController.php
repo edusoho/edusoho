@@ -16,6 +16,8 @@ use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\UserFieldService;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -757,13 +759,15 @@ class SettingsController extends BaseController
                     403
                 );
             } else {
-                $this->getUserService()->initPassword($user['id'], $passwords['newPassword']);
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
 
                 return $this->createJsonResponse(['message' => 'site.modify.success']);
             }
         }
 
-        return $this->render('settings/password.html.twig');
+        return $this->render('settings/password.html.twig', [
+            'needStrongPassword' => RoleHelper::isStaff($user['roles']),
+        ]);
     }
 
     public function emailAction(Request $request)

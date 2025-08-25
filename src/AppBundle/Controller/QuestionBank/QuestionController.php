@@ -61,7 +61,7 @@ class QuestionController extends BaseController
         return $this->render('question-bank/question/index.html.twig', [
             'questions' => $items,
             'paginator' => $paginator,
-            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($items, 'updated_user_id')),
+            'users' => $this->getUserService()->findUsersByIds(array_merge(array_column($items, 'created_user_id'), array_column($items, 'updated_user_id'))),
             'questionBank' => $questionBank,
             'categoryTree' => $categoryTree,
             'categoryTreeArray' => $this->convertCategoryTreeToArray($categoryTree),
@@ -251,7 +251,7 @@ class QuestionController extends BaseController
         return $this->render('question-bank/question/question-list-table.html.twig', [
             'questions' => $questions,
             'paginator' => $paginator,
-            'users' => $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updated_user_id')),
+            'users' => $this->getUserService()->findUsersByIds(array_merge(array_column($questions, 'created_user_id'), array_column($questions, 'updated_user_id'))),
             'questionBank' => $questionBank,
             'categoryId' => $categoryId,
             'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),

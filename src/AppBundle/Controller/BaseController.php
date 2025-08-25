@@ -10,6 +10,8 @@ use Biz\Common\CommonException;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
 use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -104,23 +106,19 @@ class BaseController extends Controller
         if (!$currentUser->isLogin()) {
             return;
         }
-        $user = $this->getUserService()->getUser($currentUser->getId());
-        if (empty($user)) {
-            return;
-        }
-        if (1 == $user['passwordUpgraded']) {
-            return;
-        }
 
-        // 非学员用户
-        if (1 != count($user['roles'])) {
-            $request->getSession()->set('needUpgradePassword', 1);
-            return;
-        }
-
-        $loginBindSetting = $this->getBiz()->service('System:SettingService')->get('login_bind');
-        if (!($loginBindSetting['login_strong_pwd_enable'] ?? 1)) {
-            return;
+        if (RoleHelper::isStudent($currentUser['roles'])) {
+            $loginBindSetting = $this->getBiz()->service('System:SettingService')->get('login_bind');
+            if (!($loginBindSetting['student_weak_password_check'] ?? 0)) {
+                return;
+            }
+            if (PasswordValidator::isValidLevel($currentUser['passwordUpgraded'])) {
+                return ;
+            }
+        } else {
+            if (PasswordValidator::isStrongLevel($currentUser['passwordUpgraded'])) {
+                return ;
+            }
         }
         $request->getSession()->set('needUpgradePassword', 1);
     }
