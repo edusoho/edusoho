@@ -13,12 +13,14 @@ const props = defineProps({
   editId: String,
 })
 
+const needReset = ref(false);
+
 watch(modalVisible,async () => {
   if (modalVisible.value) {
-    const params = {
-      groupId: props.editId
-    }
-    await searchTag(params)
+    searchParams.groupId = props.editId;
+    await searchTag(searchParams)
+  } else {
+    needReset.value = true;
   }
 })
 
@@ -29,6 +31,7 @@ const table = reactive({
   targetId: null,
 })
 const searchParams = reactive({
+  groupId: null,
   name: null,
   status: null,
 });
@@ -78,22 +81,24 @@ async function searchTag(params) {
   loading.value = false;
 }
 
-async function onCreate() {
+async function onCreate(params) {
+  await Api.questionTag.createTag({
+    groupId: props.editId,
+    ...params
+  })
   await searchTag(searchParams)
   emit('needRefresh')
 }
 
-async function enableTag(id) {
-  await Api.questionTag.enableTag(id);
-  await searchTag(searchParams);
-}
-async function disableTag(id) {
-  await Api.questionTag.disableTag(id);
+async function updateTagStatus(id, status) {
+  const params = {
+    status: status
+  }
+  await Api.questionTag.updateTag(id, params);
   await searchTag(searchParams);
 }
 
 async function deleteTag(id) {
-  await Api.questionTag.deleteTag(id);
   await searchTag(searchParams);
   emit('needRefresh')
 }
@@ -112,6 +117,7 @@ async function deleteTag(id) {
       <Search
         class="mb-24"
         :is-group="false"
+        v-model:need-reset="needReset"
         @search="onSearch"
       />
       <Create
@@ -137,15 +143,15 @@ async function deleteTag(id) {
             <a-dropdown placement="bottom" class="w-fit">
               <div class="flex items-center gap-12 cursor-pointer">
                 <a-badge :color="record.status == true ? '#00B42A' : '#FF4D4F'" :text="record.status == true ? '启用' : '禁用'" />
-                <DownOutlined />
+                <DownOutlined class="text-[rgba(0,0,0,0.25)]"/>
               </div>
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <div @click="enableTag(record.id)">启用</div>
+                    <div @click="updateTagStatus(record.id, 1)">启用</div>
                   </a-menu-item>
                   <a-menu-item>
-                    <div @click="disableTag(record.id)">禁用</div>
+                    <div @click="updateTagStatus(record.id, 0)">禁用</div>
                   </a-menu-item>
                 </a-menu>
               </template>

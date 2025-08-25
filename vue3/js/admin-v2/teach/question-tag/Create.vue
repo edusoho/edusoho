@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref} from 'vue';
+import {reactive, ref, watch} from 'vue';
 import Api from '../../../../api';
 
 const popoverVisible = ref(false);
@@ -59,19 +59,7 @@ function closePopover() {
 }
 
 async function onConfirm(values) {
-  if (props.isGroup) {
-    const params = {
-      name: values.name,
-    }
-    await Api.questionTag.createTagGroup(params)
-  } else {
-    const params = {
-      groupId: props.groupId,
-      name: values.name,
-    }
-    await Api.questionTag.createTag(params)
-  }
-  emit('create', formState)
+  emit('create', values)
   closePopover();
 }
 </script>

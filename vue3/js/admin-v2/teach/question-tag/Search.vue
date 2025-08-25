@@ -1,36 +1,44 @@
 <script setup>
 import {ref, watch} from 'vue';
 
+const needReset = defineModel('needReset', { type: Boolean })
 const emit = defineEmits(['search']);
 const props = defineProps({
   isGroup: Boolean,
 })
 
-  const statusOptions = [
-    {
-      label: '启用',
-      value: '1'
-    },
-    {
-      label: '禁用',
-      value: '0'
-    },
-  ];
-
-  const name = ref();
-  const status = ref();
-
-  function onReset() {
-    name.value = null;
-    status.value = null;
+watch(needReset, () => {
+  if (needReset) {
+    onReset()
+    needReset.value = false;
   }
+})
 
-  watch([name, status], () => {
-    emit('search', {
-      name: name.value,
-      status: status.value
-    })
+const statusOptions = [
+  {
+    label: '启用',
+    value: '1'
+  },
+  {
+    label: '禁用',
+    value: '0'
+  },
+];
+
+const name = ref();
+const status = ref();
+
+function onReset() {
+  name.value = null;
+  status.value = null;
+}
+
+watch([name, status], () => {
+  emit('search', {
+    name: name.value,
+    status: status.value
   })
+})
 </script>
 
 <template>

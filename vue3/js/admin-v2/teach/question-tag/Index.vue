@@ -1,7 +1,7 @@
 <script setup>
 import Search from './Search.vue';
 import Create from './Create.vue';
-import {onBeforeUnmount, onMounted, reactive, ref, watch} from 'vue';
+import {onBeforeUnmount, onMounted, reactive, ref} from 'vue';
 import Api from '../../../../api';
 import {formatDate} from 'vue3/js/common';
 import {DownOutlined} from '@ant-design/icons-vue';
@@ -82,28 +82,31 @@ async function onSearch(params) {
   await searchTagGroup(searchParams)
 }
 
+async function onCreate(params) {
+  await Api.questionTag.createTagGroup(params)
+  await searchTagGroup(searchParams)
+}
+
 async function searchTagGroup(params) {
   loading.value = true;
   table.list = await Api.questionTag.searchTagGroup(params);
   loading.value = false;
 }
-searchTagGroup();
+searchTagGroup(searchParams);
 
-async function enableTag(id) {
-  await Api.questionTag.enableTag(id);
-  await searchTagGroup(searchParams);
-}
-async function disableTag(id) {
-  await Api.questionTag.disableTag(id);
-  await searchTagGroup(searchParams);
-}
-
-async function deleteTag(id) {
-  await Api.questionTag.deleteTag(id);
+async function updateTagGroupStatus(id, status) {
+  const params = {
+    status: status
+  }
+  await Api.questionTag.updateTagGroup(id, params);
   await searchTagGroup(searchParams);
 }
 
-function editTag(id) {
+async function deleteTagGroup(id) {
+  await searchTagGroup(searchParams);
+}
+
+function editTagGroup(id) {
   editId.value = id;
   modalVisible.value = true;
 }
@@ -122,7 +125,7 @@ function editTag(id) {
       <Create
         class="mb-12"
         :is-group="true"
-        @create="searchTagGroup"
+        @create="onCreate"
       />
       <a-table
         :columns="columns"
@@ -146,10 +149,10 @@ function editTag(id) {
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <div @click="enableTag(record.id)">启用</div>
+                    <div @click="updateTagGroupStatus(record.id, 1)">启用</div>
                   </a-menu-item>
                   <a-menu-item>
-                    <div @click="disableTag(record.id)">禁用</div>
+                    <div @click="updateTagGroupStatus(record.id, 0)">禁用</div>
                   </a-menu-item>
                 </a-menu>
               </template>
@@ -157,12 +160,12 @@ function editTag(id) {
           </template>
           <template v-if="column.key === 'operation'">
             <div class="gap-16 flex">
-              <div class="cursor-pointer text-[--primary-color]" @click="editTag(record.id)">管理</div>
+              <div class="cursor-pointer text-[--primary-color]" @click="editTagGroup(record.id)">管理</div>
               <a-popconfirm
                 placement="bottom"
                 ok-text="确定"
                 cancel-text="取消"
-                @confirm="deleteTag(record.id)"
+                @confirm="deleteTagGroup(record.id)"
               >
                 <template #title>
                   <div class="w-240">删除后该标签将被删除，相关题目将不再带有这个标签</div>
@@ -175,7 +178,7 @@ function editTag(id) {
       </a-table>
     </div>
     <tag-modal
-      v-model:modalVisible="modalVisible"
+      v-model:modal-visible="modalVisible"
       :edit-id="editId"
       @need-refresh="searchTagGroup(searchParams)"
     />

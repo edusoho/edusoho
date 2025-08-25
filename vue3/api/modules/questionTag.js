@@ -19,13 +19,10 @@ export default {
   async searchTag(params) {
     return apiClient.get('/question_tag', {params});
   },
-  async enableTag(params) {
-
+  async updateTagGroup(id, params) {
+    return apiClient.patch(`/question_tag_group/${id}`, params);
   },
-  async disableTag(params) {
-
-  },
-  async deleteTag(params) {
-
+  async updateTag(id, params) {
+    return apiClient.patch(`/question_tag/${id}`, params);
   },
 };
