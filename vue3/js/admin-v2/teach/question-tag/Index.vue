@@ -20,7 +20,18 @@ const searchParams = reactive({
   status: null,
 });
 
-const customRow = createCustomRow(table)
+async function onSorted(list) {
+  const ids = list.map(item => {
+    return item.id
+  })
+  const params = {
+    ids: ids
+  }
+  await Api.questionTag.sortTagGroup(params)
+  await searchTagGroup(searchParams)
+}
+
+const customRow = createCustomRow(table, onSorted)
 
 const scrollY = ref(0);
 const calculateScrollY = () => {

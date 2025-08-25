@@ -31,4 +31,10 @@ export default {
   async deleteTag(id) {
     return apiClient.delete(`/question_tag/${id}`);
   },
+  async sortTagGroup(params) {
+    return apiClient.post('/question_tag_group_sort', params);
+  },
+  async sortTag(params) {
+    return apiClient.post('/question_tag_sort', params);
+  },
 };

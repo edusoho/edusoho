@@ -36,7 +36,19 @@ const searchParams = reactive({
   status: null,
 });
 
-const customRow = createCustomRow(table)
+async function onSorted(list) {
+  const ids = list.map(item => {
+    return item.id
+  })
+  const params = {
+    groupId: props.editId,
+    ids: ids
+  }
+  await Api.questionTag.sortTag(params)
+  await searchTag(searchParams)
+}
+
+const customRow = createCustomRow(table, onSorted)
 
 const columns = [
   {

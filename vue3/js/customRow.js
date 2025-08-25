@@ -1,4 +1,4 @@
-export function createCustomRow(table) {
+export function createCustomRow(table, onSorted) {
   return function customRow(record) {
     return {
       props: { draggable: true },
@@ -34,6 +34,10 @@ export function createCustomRow(table) {
         const [movedItem] = list.splice(sourceIndex, 1)
         list.splice(targetIndex, 0, movedItem)
         table.list = list
+
+        if (typeof onSorted === 'function') {
+          onSorted(list, { movedItem, sourceIndex, targetIndex })
+        }
       },
     }
   }
