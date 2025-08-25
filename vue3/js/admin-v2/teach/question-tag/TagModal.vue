@@ -3,9 +3,10 @@ import {reactive, ref, watch} from 'vue';
 import Search from './Search.vue';
 import Create from './Create.vue';
 import Api from '../../../../api';
-import {DownOutlined} from '@ant-design/icons-vue';
+import {CheckOutlined, DownOutlined, EditOutlined} from '@ant-design/icons-vue';
 import {formatDate} from 'vue3/js/common';
 import {createCustomRow} from '../../../custom-row';
+import {cloneDeep} from 'lodash';
 
 const modalVisible = defineModel('modalVisible', { type: Boolean })
 const emit = defineEmits(['needRefresh']);
@@ -102,9 +103,13 @@ async function onCreate(params) {
   emit('needRefresh')
 }
 
-async function updateTagStatus(id, status) {
-  const params = {
-    status: status
+async function updateTag(id, {name, status}) {
+  const params = {};
+  if (status !== undefined) {
+    params.status = status;
+  }
+  if (name !== undefined) {
+    params.name = name;
   }
   await Api.questionTag.updateTag(id, params);
   await searchTag(searchParams);
@@ -114,6 +119,16 @@ async function deleteTag(id) {
   await Api.questionTag.deleteTag(id);
   await searchTag(searchParams);
   emit('needRefresh')
+}
+
+const editableData = reactive({});
+function edit(id) {
+  editableData[id] = cloneDeep(table.list.filter(item => id === item.id)[0]);
+}
+async function save(id) {
+  await updateTag(id, {name: editableData[id].name})
+  delete editableData[id];
+  await searchTag(searchParams);
 }
 </script>
 
@@ -149,6 +164,22 @@ async function deleteTag(id) {
         :scroll="{ y: 570 }"
       >
         <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'name'">
+            <div v-if="editableData[record.id]" class="flex items-center justify-between gap-12">
+              <a-input
+                v-model:value="editableData[record.id].name"
+                :maxlength="50"
+                show-count
+              />
+              <CheckOutlined @click="save(record.id)"/>
+            </div>
+            <div v-else class="flex items-center justify-between group">
+              <div class="truncate">{{ record.name }}</div>
+              <div class="group-hover:inline-block tw-hidden">
+                <EditOutlined @click="edit(record.id)"/>
+              </div>
+            </div>
+          </template>
           <template v-if="column.key === 'createdTime'">
             {{ formatDate(record.createdTime) }}
           </template>
@@ -161,10 +192,10 @@ async function deleteTag(id) {
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <div @click="updateTagStatus(record.id, 1)">启用</div>
+                    <div @click="updateTag(record.id, {status: 1})">启用</div>
                   </a-menu-item>
                   <a-menu-item>
-                    <div @click="updateTagStatus(record.id, 0)">禁用</div>
+                    <div @click="updateTag(record.id, {status: 0})">禁用</div>
                   </a-menu-item>
                 </a-menu>
               </template>

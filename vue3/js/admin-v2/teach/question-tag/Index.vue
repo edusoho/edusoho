@@ -4,7 +4,7 @@ import Create from './Create.vue';
 import {onBeforeUnmount, onMounted, reactive, ref} from 'vue';
 import Api from '../../../../api';
 import {formatDate} from 'vue3/js/common';
-import {DownOutlined, EditOutlined} from '@ant-design/icons-vue';
+import {DownOutlined, EditOutlined, CheckOutlined} from '@ant-design/icons-vue';
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import TagModal from './TagModal.vue';
 import {createCustomRow} from '../../../custom-row';
@@ -106,9 +106,13 @@ async function searchTagGroup(params) {
 }
 searchTagGroup(searchParams);
 
-async function updateTagGroupStatus(id, status) {
-  const params = {
-    status: status
+async function updateTagGroup(id, {name, status}) {
+  const params = {};
+  if (status !== undefined) {
+    params.status = status;
+  }
+  if (name !== undefined) {
+    params.name = name;
   }
   await Api.questionTag.updateTagGroup(id, params);
   await searchTagGroup(searchParams);
@@ -131,6 +135,11 @@ function reviewTagGroup(id) {
 const editableData = reactive({});
 function edit(id) {
   editableData[id] = cloneDeep(table.list.filter(item => id === item.id)[0]);
+}
+async function save(id) {
+  await updateTagGroup(id, {name: editableData[id].name})
+  delete editableData[id];
+  await searchTagGroup(searchParams);
 }
 </script>
 
@@ -160,10 +169,18 @@ function edit(id) {
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'name'">
-            <div class="flex items-center justify-between group">
+            <div v-if="editableData[record.id]" class="flex items-center justify-between gap-12">
+              <a-input
+                v-model:value="editableData[record.id].name"
+                :maxlength="50"
+                show-count
+              />
+              <CheckOutlined @click="save(record.id)"/>
+            </div>
+            <div v-else class="flex items-center justify-between group">
               <div class="truncate">{{ record.name }}</div>
-              <div class="group-hover:inline-block hidden">
-                <EditOutlined  @click="edit(record.id)"/>
+              <div class="group-hover:inline-block tw-hidden">
+                <EditOutlined @click="edit(record.id)"/>
               </div>
             </div>
           </template>
@@ -179,10 +196,10 @@ function edit(id) {
               <template #overlay>
                 <a-menu>
                   <a-menu-item>
-                    <div @click="updateTagGroupStatus(record.id, 1)">启用</div>
+                    <div @click="updateTagGroup(record.id, {status: 1})">启用</div>
                   </a-menu-item>
                   <a-menu-item>
-                    <div @click="updateTagGroupStatus(record.id, 0)">禁用</div>
+                    <div @click="updateTagGroup(record.id, {status: 0})">禁用</div>
                   </a-menu-item>
                 </a-menu>
               </template>
