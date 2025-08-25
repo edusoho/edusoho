@@ -60,6 +60,10 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
         try {
             $this->beginTransaction();
             $this->getQuestionTagGroupDao()->delete($id);
+            $tagGroups = $this->searchTagGroups([]);
+            if (!empty($tagGroups)) {
+                $this->sortTagGroups(array_column($tagGroups, 'id'));
+            }
             $tags = $this->searchTags(['groupId' => $id]);
             if (!empty($tags)) {
                 $this->getQuestionTagDao()->batchDelete(['groupId' => $id]);
@@ -147,6 +151,10 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
         try {
             $this->beginTransaction();
             $this->getQuestionTagDao()->delete($id);
+            $tags = $this->searchTags(['groupId' => $tag['groupId']]);
+            if (!empty($tags)) {
+                $this->sortTags($tag['groupId'], array_column($tags, 'id'));
+            }
             $this->getQuestionTagRelationDao()->batchDelete(['tagId' => $id]);
             $this->getQuestionTagGroupDao()->update($tag['groupId'], ['tagNum' => $this->getQuestionTagDao()->count(['groupId' => $tag['groupId']])]);
             $this->getLogService()->info('question_tag', 'delete_tag', "删除题目标签：{$tag['name']}");
