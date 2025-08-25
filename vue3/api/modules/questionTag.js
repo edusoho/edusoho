@@ -1,14 +1,23 @@
 import {apiClient} from '../api-client';
 
 export default {
-    async isGroupNameExists(params) {
-        return apiClient.post('/question_tag_group_name_check', params);
-    },
-    async isNameExists(params) {
-        return apiClient.post('/question_tag_name_check', params);
-    },
-  async isTagExists(params) {
-    return false;
+  async isGroupNameExists(params) {
+    return apiClient.post('/question_tag_group_name_check', params);
+  },
+  async isNameExists(params) {
+    return apiClient.post('/question_tag_name_check', params);
+  },
+  async createTagGroup(params) {
+    return apiClient.post('/question_tag_group', params);
+  },
+  async createTag(params) {
+    return apiClient.post('/question_tag', params);
+  },
+  async searchTagGroup(params) {
+    return apiClient.get('/question_tag_group', {params});
+  },
+  async searchTag(params) {
+    return apiClient.get('/question_tag', {params});
   },
   async search(params) {
     return [
@@ -132,10 +141,7 @@ export default {
         createTime: '1730447913',
         state: 'enable',
       },
-    ]
-  },
-  async createTag(params) {
-
+    ];
   },
   async enableTag(params) {
 
@@ -146,4 +152,4 @@ export default {
   async deleteTag(params) {
 
   },
-}
+};

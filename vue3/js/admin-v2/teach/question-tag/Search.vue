@@ -1,7 +1,10 @@
 <script setup>
 import {ref, watch} from 'vue';
 
-  const emit = defineEmits(['search']);
+const emit = defineEmits(['search']);
+const props = defineProps({
+  isGroup: Boolean,
+})
 
   const stateOptions = [
     {
@@ -32,8 +35,17 @@ import {ref, watch} from 'vue';
 
 <template>
   <div class="flex gap-9">
-    <a-input v-model:value="name" placeholder="标签名称" style="width: 200px"/>
-    <a-select v-model:value="state" :options="stateOptions" placeholder="状态" style="width: 200px"/>
+    <a-input
+      v-model:value="name"
+      :placeholder="isGroup ? '标签类型名称' : '标签名称'"
+      style="width: 200px"
+    />
+    <a-select
+      v-model:value="state"
+      :options="stateOptions"
+      placeholder="全部状态"
+      style="width: 200px"
+    />
     <a-button @click="onReset">重置</a-button>
   </div>
 </template>

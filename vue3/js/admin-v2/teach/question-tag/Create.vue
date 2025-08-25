@@ -7,6 +7,7 @@ const popoverVisible = ref(false);
 const emit = defineEmits(['create']);
 const props = defineProps({
   isGroup: Boolean,
+  groupId: String
 })
 
 const onOpenChange = (visible) => {
@@ -26,22 +27,26 @@ const rules = {
       validator: async (_, value) => {
         if (!value) return Promise.resolve();
 
-        let isExists = null;
-        if (props.isGroup) {
-          isExists = await Api.questionTag.isTagExists(value);
-        } else {
-          isExists = await Api.questionTag.isTagExists(value);
+        const params = {
+          name: value,
         }
 
-        if (isExists && props.isGroup) {
+        let res;
+        if (props.isGroup) {
+          res = await Api.questionTag.isGroupNameExists(params);
+        } else {
+          res = await Api.questionTag.isNameExists(params);
+        }
+
+        if (!res.ok && props.isGroup) {
           return Promise.reject("标签类型名称不得重复");
-        } else if(isExists && !props.isGroup) {
+        } else if(!res.ok && !props.isGroup) {
           return Promise.reject("标签名称不得重复");
         }
 
         return Promise.resolve();
       },
-      trigger: "blur"
+      trigger: "blur",
     }
   ],
 };
@@ -50,16 +55,21 @@ function closePopover() {
   popoverVisible.value = false;
 }
 
-function onConfirm() {
-  formRef.value
-    .validate()
-    .then(() => {
-      emit('create', formState)
-      closePopover();
-    })
-    .catch((err) => {
-
-    });
+async function onConfirm(values) {
+  if (props.isGroup) {
+    const params = {
+      name: values.name,
+    }
+    await Api.questionTag.createTagGroup(params)
+  } else {
+    const params = {
+      groupId: props.groupId,
+      name: values.name,
+    }
+    await Api.questionTag.createTag(params)
+  }
+  emit('create', formState)
+  closePopover();
 }
 </script>
 
@@ -76,6 +86,7 @@ function onConfirm() {
         :model="formState"
         :rules="rules"
         ref="formRef"
+        @finish="onConfirm"
       >
         <a-form-item name="name" class="mb-0">
           <a-input
@@ -88,7 +99,7 @@ function onConfirm() {
         </a-form-item>
         <a-form-item class="mb-0">
           <div class="flex flex-row-reverse mt-8">
-            <a-button type="primary" size="small" :disabled="!formState.name" @click="onConfirm">确定</a-button>
+            <a-button type="primary" size="small" :disabled="!formState.name" html-type="submit">确定</a-button>
           </div>
         </a-form-item>
       </a-form>

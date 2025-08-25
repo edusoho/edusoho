@@ -75,37 +75,29 @@ const needRefresh = ref(false);
 
 watch(modalVisible, async () => {
   if (!modalVisible && needRefresh) {
-    await fetchTag();
+    await searchTagGroup();
   }
 })
 
-async function fetchTag(params) {
+async function searchTagGroup(params) {
   loading.value = true;
-  table.list = await Api.questionTag.search(params);
+  table.list = await Api.questionTag.searchTagGroup(params);
   loading.value = false;
 }
-fetchTag();
-
-async function onSearch(params) {
-  await fetchTag(params)
-}
-
-async function onCreate(params) {
-  await fetchTag(params)
-}
+searchTagGroup();
 
 async function enableTag(id) {
   await Api.questionTag.enableTag(id);
-  await fetchTag();
+  await searchTagGroup();
 }
 async function disableTag(id) {
   await Api.questionTag.disableTag(id);
-  await fetchTag();
+  await searchTagGroup();
 }
 
 async function deleteTag(id) {
   await Api.questionTag.deleteTag(id);
-  await fetchTag();
+  await searchTagGroup();
 }
 
 function editTag(id) {
@@ -122,12 +114,13 @@ function editTag(id) {
       <a-divider class="mt-12 mb-20 border-2" />
       <Search
         class="mb-24"
-        @search="onSearch"
+        :is-group="true"
+        @search="searchTagGroup"
       />
       <Create
         class="mb-12"
         :is-group="true"
-        @create="onCreate"
+        @create="searchTagGroup"
       />
       <a-table
         :columns="columns"
