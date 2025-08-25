@@ -6,29 +6,29 @@ const props = defineProps({
   isGroup: Boolean,
 })
 
-  const stateOptions = [
+  const statusOptions = [
     {
       label: '启用',
-      value: 'enable'
+      value: '1'
     },
     {
       label: '禁用',
-      value: 'disable'
+      value: '0'
     },
   ];
 
   const name = ref();
-  const state = ref();
+  const status = ref();
 
   function onReset() {
     name.value = null;
-    state.value = null;
+    status.value = null;
   }
 
-  watch([name, state], () => {
+  watch([name, status], () => {
     emit('search', {
       name: name.value,
-      state: state.value
+      status: status.value
     })
   })
 </script>
@@ -41,8 +41,8 @@ const props = defineProps({
       style="width: 200px"
     />
     <a-select
-      v-model:value="state"
-      :options="stateOptions"
+      v-model:value="status"
+      :options="statusOptions"
       placeholder="全部状态"
       style="width: 200px"
     />

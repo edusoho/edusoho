@@ -27,14 +27,17 @@ const rules = {
       validator: async (_, value) => {
         if (!value) return Promise.resolve();
 
-        const params = {
-          name: value,
-        }
-
         let res;
         if (props.isGroup) {
+          const params = {
+            name: value,
+          }
           res = await Api.questionTag.isGroupNameExists(params);
         } else {
+          const params = {
+            groupId: props.groupId,
+            name: value,
+          }
           res = await Api.questionTag.isNameExists(params);
         }
 

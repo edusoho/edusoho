@@ -8,14 +8,17 @@ import {formatDate} from 'vue3/js/common';
 import {createCustomRow} from '../../../customRow';
 
 const modalVisible = defineModel('modalVisible', { type: Boolean })
-const needRefresh = defineModel('needRefresh', { type: Boolean })
+const emit = defineEmits(['needRefresh']);
 const props = defineProps({
   editId: String,
 })
 
 watch(modalVisible,async () => {
   if (modalVisible.value) {
-    await fetchTag(props.editId)
+    const params = {
+      groupId: props.editId
+    }
+    await searchTag(params)
   }
 })
 
@@ -25,33 +28,37 @@ const table = reactive({
   sourceId: null,
   targetId: null,
 })
+const searchParams = reactive({
+  name: null,
+  status: null,
+});
 
 const customRow = createCustomRow(table)
 
 const columns = [
   {
     key: 'seq',
-    name: '序号',
+    title: '序号',
     dataIndex: 'seq',
     width: 80
   },
   {
     key: 'name',
-    title: '标签类型',
+    title: '标签名称',
     dataIndex: 'name',
     width: '35%',
     ellipsis: true,
   },
   {
-    key: 'createTime',
+    key: 'createdTime',
     title: '创建时间',
-    dataIndex: 'createTime',
+    dataIndex: 'createdTime',
 
   },
   {
-    key: 'state',
+    key: 'status',
     title: '状态',
-    dataIndex: 'state',
+    dataIndex: 'status',
   },
   {
     key: 'operation',
@@ -59,35 +66,36 @@ const columns = [
   },
 ]
 
-async function fetchTag(params) {
+async function onSearch(params) {
+  searchParams.name = params.name;
+  searchParams.status = params.status;
+  await searchTag(searchParams)
+}
+
+async function searchTag(params) {
   loading.value = true;
-  table.list = await Api.questionTag.search(params);
+  table.list = await Api.questionTag.searchTag(params);
   loading.value = false;
 }
 
-async function onSearch(params) {
-  await fetchTag(params)
-}
-
-async function onCreate(params) {
-  needRefresh.value = true;
-  await Api.questionTag.createTag(params);
-  await fetchTag(params)
+async function onCreate() {
+  await searchTag(searchParams)
+  emit('needRefresh')
 }
 
 async function enableTag(id) {
   await Api.questionTag.enableTag(id);
-  await fetchTag();
+  await searchTag(searchParams);
 }
 async function disableTag(id) {
   await Api.questionTag.disableTag(id);
-  await fetchTag();
+  await searchTag(searchParams);
 }
 
 async function deleteTag(id) {
-  needRefresh.value = true;
   await Api.questionTag.deleteTag(id);
-  await fetchTag();
+  await searchTag(searchParams);
+  emit('needRefresh')
 }
 </script>
 
@@ -103,10 +111,13 @@ async function deleteTag(id) {
     <div class="flex flex-col h-728">
       <Search
         class="mb-24"
+        :is-group="false"
         @search="onSearch"
       />
       <Create
         class="mb-12"
+        :is-group="false"
+        :group-id="editId"
         @create="onCreate"
       />
       <a-table
@@ -119,13 +130,13 @@ async function deleteTag(id) {
         :scroll="{ y: 570 }"
       >
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'createTime'">
-            {{ formatDate(record.createTime) }}
+          <template v-if="column.key === 'createdTime'">
+            {{ formatDate(record.createdTime) }}
           </template>
-          <template v-if="column.key === 'state'">
+          <template v-if="column.key === 'status'">
             <a-dropdown placement="bottom" class="w-fit">
               <div class="flex items-center gap-12 cursor-pointer">
-                <a-badge :color="record.state === 'enable' ? '#00B42A' : '#FF4D4F'" :text="record.state === 'enable' ? '启用' : '禁用'" />
+                <a-badge :color="record.status == true ? '#00B42A' : '#FF4D4F'" :text="record.status == true ? '启用' : '禁用'" />
                 <DownOutlined />
               </div>
               <template #overlay>

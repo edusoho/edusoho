@@ -15,6 +15,10 @@ const table = reactive({
   sourceId: null,
   targetId: null,
 })
+const searchParams = reactive({
+  name: null,
+  status: null,
+});
 
 const customRow = createCustomRow(table)
 
@@ -36,32 +40,32 @@ onBeforeUnmount(() => {
 const columns = [
   {
     key: 'seq',
-    name: '序号',
+    title: '序号',
     dataIndex: 'seq',
     width: 80
   },
   {
     key: 'name',
-    title: '标签类型',
+    title: '标签类型名称',
     dataIndex: 'name',
     width: '35%',
     ellipsis: true,
   },
   {
-    key: 'num',
+    key: 'tagNum',
     title: '数量',
-    dataIndex: 'num',
+    dataIndex: 'tagNum',
   },
   {
-    key: 'createTime',
+    key: 'createdTime',
     title: '创建时间',
-    dataIndex: 'createTime',
+    dataIndex: 'createdTime',
 
   },
   {
-    key: 'state',
+    key: 'status',
     title: '状态',
-    dataIndex: 'state',
+    dataIndex: 'status',
   },
   {
     key: 'operation',
@@ -71,13 +75,12 @@ const columns = [
 
 const modalVisible = ref(false);
 const editId = ref();
-const needRefresh = ref(false);
 
-watch(modalVisible, async () => {
-  if (!modalVisible && needRefresh) {
-    await searchTagGroup();
-  }
-})
+async function onSearch(params) {
+  searchParams.name = params.name;
+  searchParams.status = params.status;
+  await searchTagGroup(searchParams)
+}
 
 async function searchTagGroup(params) {
   loading.value = true;
@@ -88,20 +91,19 @@ searchTagGroup();
 
 async function enableTag(id) {
   await Api.questionTag.enableTag(id);
-  await searchTagGroup();
+  await searchTagGroup(searchParams);
 }
 async function disableTag(id) {
   await Api.questionTag.disableTag(id);
-  await searchTagGroup();
+  await searchTagGroup(searchParams);
 }
 
 async function deleteTag(id) {
   await Api.questionTag.deleteTag(id);
-  await searchTagGroup();
+  await searchTagGroup(searchParams);
 }
 
 function editTag(id) {
-  needRefresh.value = false;
   editId.value = id;
   modalVisible.value = true;
 }
@@ -115,7 +117,7 @@ function editTag(id) {
       <Search
         class="mb-24"
         :is-group="true"
-        @search="searchTagGroup"
+        @search="onSearch"
       />
       <Create
         class="mb-12"
@@ -132,14 +134,14 @@ function editTag(id) {
         :scroll="{ y: scrollY }"
       >
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'createTime'">
-            {{ formatDate(record.createTime) }}
+          <template v-if="column.key === 'createdTime'">
+            {{ formatDate(record.createdTime) }}
           </template>
-          <template v-if="column.key === 'state'">
+          <template v-if="column.key === 'status'">
             <a-dropdown placement="bottom" class="w-fit">
               <div class="flex items-center gap-12 cursor-pointer">
-                <a-badge :color="record.state === 'enable' ? '#00B42A' : '#FF4D4F'" :text="record.state === 'enable' ? '启用' : '禁用'" />
-                <DownOutlined />
+                <a-badge :color="record.status == true ? '#00B42A' : '#FF4D4F'" :text="record.status == true ? '启用' : '禁用'" />
+                <DownOutlined class="text-[rgba(0,0,0,0.25)]"/>
               </div>
               <template #overlay>
                 <a-menu>
@@ -174,8 +176,8 @@ function editTag(id) {
     </div>
     <tag-modal
       v-model:modalVisible="modalVisible"
-      v-model:needRefresh="needRefresh"
-      :editId="editId"
+      :edit-id="editId"
+      @need-refresh="searchTagGroup(searchParams)"
     />
   </AntConfigProvider>
 </template>
