@@ -1,6 +1,12 @@
 import {apiClient} from '../api-client';
 
 export default {
+    async isGroupNameExists(params) {
+        return apiClient.post('/question_tag_group_name_check', params);
+    },
+    async isNameExists(params) {
+        return apiClient.post('/question_tag_name_check', params);
+    },
   async isTagExists(params) {
     return false;
   },

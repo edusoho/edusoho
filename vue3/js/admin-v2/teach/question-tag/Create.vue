@@ -5,6 +5,9 @@ import Api from '../../../../api';
 const popoverVisible = ref(false);
 
 const emit = defineEmits(['create']);
+const props = defineProps({
+  isGroup: Boolean,
+})
 
 const onOpenChange = (visible) => {
   if (!visible) {
@@ -23,10 +26,19 @@ const rules = {
       validator: async (_, value) => {
         if (!value) return Promise.resolve();
 
-        const exists = await Api.questionTag.isTagExists(value);
-        if (exists) {
+        let isExists = null;
+        if (props.isGroup) {
+          isExists = await Api.questionTag.isTagExists(value);
+        } else {
+          isExists = await Api.questionTag.isTagExists(value);
+        }
+
+        if (isExists && props.isGroup) {
+          return Promise.reject("标签类型名称不得重复");
+        } else if(isExists && !props.isGroup) {
           return Promise.reject("标签名称不得重复");
         }
+
         return Promise.resolve();
       },
       trigger: "blur"
@@ -34,12 +46,16 @@ const rules = {
   ],
 };
 
+function closePopover() {
+  popoverVisible.value = false;
+}
+
 function onConfirm() {
   formRef.value
     .validate()
     .then(() => {
       emit('create', formState)
-      popoverVisible.value = false;
+      closePopover();
     })
     .catch((err) => {
 
@@ -64,7 +80,7 @@ function onConfirm() {
         <a-form-item name="name" class="mb-0">
           <a-input
             v-model:value="formState.name"
-            placeholder="请输入标签名称"
+            :placeholder="isGroup ? '请输入标签类型名称' : '请输入标签名称'"
             show-count
             :maxlength="50"
             style="width: 264px"

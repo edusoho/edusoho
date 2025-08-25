@@ -91,7 +91,6 @@ async function onSearch(params) {
 }
 
 async function onCreate(params) {
-  await Api.questionTag.createTag(params);
   await fetchTag(params)
 }
 
@@ -127,6 +126,7 @@ function editTag(id) {
       />
       <Create
         class="mb-12"
+        :is-group="true"
         @create="onCreate"
       />
       <a-table
