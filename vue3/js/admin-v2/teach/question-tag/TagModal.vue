@@ -99,6 +99,7 @@ async function updateTagStatus(id, status) {
 }
 
 async function deleteTag(id) {
+  await Api.questionTag.deleteTag(id);
   await searchTag(searchParams);
   emit('needRefresh')
 }
@@ -165,7 +166,7 @@ async function deleteTag(id) {
               @confirm="deleteTag(record.id)"
             >
               <template #title>
-                <div class="w-240">删除后该标签将被删除，相关题目将不再带有这个标签</div>
+                <div class="w-240">删除后相关题目将不再带有这个标签</div>
               </template>
               <div class="cursor-pointer text-[--primary-color] w-fit">删除</div>
             </a-popconfirm>

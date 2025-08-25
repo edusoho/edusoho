@@ -25,4 +25,10 @@ export default {
   async updateTag(id, params) {
     return apiClient.patch(`/question_tag/${id}`, params);
   },
+  async deleteTagGroup(id) {
+    return apiClient.delete(`/question_tag_group/${id}`);
+  },
+  async deleteTag(id) {
+    return apiClient.delete(`/question_tag/${id}`);
+  },
 };

@@ -103,6 +103,7 @@ async function updateTagGroupStatus(id, status) {
 }
 
 async function deleteTagGroup(id) {
+  Api.questionTag.deleteTagGroup(id);
   await searchTagGroup(searchParams);
 }
 
@@ -162,13 +163,13 @@ function editTagGroup(id) {
             <div class="gap-16 flex">
               <div class="cursor-pointer text-[--primary-color]" @click="editTagGroup(record.id)">管理</div>
               <a-popconfirm
-                placement="bottom"
+                placement="bottomRight"
                 ok-text="确定"
                 cancel-text="取消"
                 @confirm="deleteTagGroup(record.id)"
               >
                 <template #title>
-                  <div class="w-240">删除后该标签将被删除，相关题目将不再带有这个标签</div>
+                  <div class="w-240">删除后相关题目将不再带有这个标签类型下的标签</div>
                 </template>
                 <div class="cursor-pointer text-[--primary-color]">删除</div>
               </a-popconfirm>
