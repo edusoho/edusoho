@@ -160,6 +160,10 @@ const lang = {
     confirmSave_tip:
       'After exiting the test, the test will still be counted normally. Please complete the test before the countdown is over. After the countdown is over, the system will automatically hand in the test.',
     confirmSave_title: 'Need to save the current quiz progress and exit?',
+    formulaInputPlaceholder: 'Click to enter the formula',
+    mathEditor: 'Math Formula Editor',
+    formulaSaved: 'Formula saved successfully',
+    cancel: 'Cancel',
     confirm: 'Confirm',
     exit: 'exit',
     goThenDo: 'Continue to do',
