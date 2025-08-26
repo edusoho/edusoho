@@ -186,11 +186,11 @@ watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
     v-model:open="modalVisible"
     title="题目标签"
     centered
-    width="1216px"
+    width="1000px"
     :footer="false"
     :maskClosable="false"
   >
-    <div class="flex flex-col h-728">
+    <div class="flex flex-col h-528">
       <Search
         class="mb-24"
         :is-group="false"
@@ -201,6 +201,7 @@ watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
         class="mb-12"
         :is-group="false"
         :group-id="editId"
+        :tag-num="table.list.length"
         @create="onCreate"
       />
       <a-table
@@ -210,7 +211,7 @@ watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
         :pagination="false"
         :loading="loading"
         :custom-row="customRow"
-        :scroll="{ y: 570 }"
+        :scroll="{ y: 370 }"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'name'">
