@@ -77,7 +77,10 @@ const columns = [
 const modalVisible = ref(false);
 const editId = ref();
 
-async function onSorted(list) {
+async function onSorted(list, { movedItem, sourceIndex, targetIndex }) {
+  if (sourceIndex === targetIndex) {
+    return;
+  }
   const ids = list.map(item => {
     return item.id
   })

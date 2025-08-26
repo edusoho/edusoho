@@ -39,7 +39,10 @@ const searchParams = reactive({
 const customRow = ref();
 customRow.value = createCustomRow(table, onSorted, { draggable: true })
 
-async function onSorted(list) {
+async function onSorted(list, { movedItem, sourceIndex, targetIndex }) {
+  if (sourceIndex === targetIndex) {
+    return;
+  }
   const ids = list.map(item => {
     return item.id
   })
