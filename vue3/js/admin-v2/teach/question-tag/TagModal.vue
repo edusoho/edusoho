@@ -134,9 +134,43 @@ function edit(id) {
   editableData[id] = cloneDeep(table.list.filter(item => id === item.id)[0]);
 }
 async function save(id) {
+  const originalName = table.list.find(item => item.id === id)?.name;
+  const newName = editableData[id].name;
+  if (newName === originalName) {
+    delete editableData[id];
+    return;
+  }
   await updateTag(id, {name: editableData[id].name})
   delete editableData[id];
   await searchTag(searchParams);
+}
+
+function genRules(record) {
+  return {
+    name: [
+      {
+        validator: async (_, value) => {
+          const originalName = record.name;
+          if (!value) {
+            return Promise.reject("标签名称不能为空");
+          }
+          if (value === originalName) {
+            return Promise.resolve();
+          }
+          const params = {
+            groupId: props.editId,
+            name: value,
+          }
+          const res = await Api.questionTag.isNameExists(params);
+          if (!res.ok) {
+            return Promise.reject("标签名称不得重复");
+          }
+          return Promise.resolve();
+        },
+        trigger: "blur",
+      }
+    ]
+  };
 }
 </script>
 
@@ -173,19 +207,31 @@ async function save(id) {
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'name'">
-            <div v-if="editableData[record.id]" class="flex items-center justify-between gap-12">
-              <a-input
-                v-model:value="editableData[record.id].name"
-                :maxlength="50"
-                show-count
-              />
-              <CheckOutlined @click="save(record.id)"/>
+            <div v-if="editableData[record.id]">
+              <a-form
+                :model="editableData[record.id]"
+                :rules="genRules(record)"
+                @finish="save(record.id)"
+              >
+                <a-form-item name="name" class="mb-0">
+                  <div class="flex items-center justify-between gap-12">
+                    <a-input
+                      v-model:value="editableData[record.id].name"
+                      :maxlength="50"
+                      show-count
+                    />
+                    <a-button type="text" html-type="submit" size="small" class="!h-22 !p-0">
+                      <CheckOutlined />
+                    </a-button>
+                  </div>
+                </a-form-item>
+              </a-form>
             </div>
             <div v-else class="flex items-center justify-between group">
               <div class="truncate">{{ record.name }}</div>
-              <div class="group-hover:inline-block tw-hidden">
+              <a-button type="text" size="small" class="group-hover:inline-block tw-hidden !h-22 !p-0">
                 <EditOutlined @click="edit(record.id)"/>
-              </div>
+              </a-button>
             </div>
           </template>
           <template v-if="column.key === 'createdTime'">

@@ -16,7 +16,6 @@ const onOpenChange = (visible) => {
   }
 };
 
-const formRef = ref(null);
 const formState = reactive({
   name: null
 })
@@ -76,7 +75,6 @@ async function onConfirm(values) {
       <a-form
         :model="formState"
         :rules="rules"
-        ref="formRef"
         @finish="onConfirm"
       >
         <a-form-item name="name" class="mb-0">
