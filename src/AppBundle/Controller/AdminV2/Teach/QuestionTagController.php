@@ -8,7 +8,6 @@ class QuestionTagController extends BaseController
 {
     public function indexAction()
     {
-        return $this->render('admin-v2/teach/question-tag/index.html.twig', [
-        ]);
+        return $this->render('admin-v2/teach/question-tag/index.html.twig');
     }
 }

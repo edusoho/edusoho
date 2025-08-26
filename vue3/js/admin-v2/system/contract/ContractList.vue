@@ -204,7 +204,7 @@ const toUpdateContract = (id) => {
           {{ formatDate(record.updatedTime) }}
         </template>
       </template>
-    </a-table>niu
+    </a-table>
     <div class="flex flex-row-reverse">
       <a-pagination
         show-quick-jumper
