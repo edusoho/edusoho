@@ -36,6 +36,8 @@ const searchParams = reactive({
   name: null,
   status: null,
 });
+const customRow = ref();
+customRow.value = createCustomRow(table, onSorted, { draggable: true })
 
 async function onSorted(list) {
   const ids = list.map(item => {
@@ -48,8 +50,6 @@ async function onSorted(list) {
   await Api.questionTag.sortTag(params)
   await searchTag(searchParams)
 }
-
-const customRow = createCustomRow(table, onSorted)
 
 const columns = [
   {
@@ -86,6 +86,11 @@ async function onSearch(params) {
   searchParams.name = params.name;
   searchParams.status = params.status;
   await searchTag(searchParams)
+  if (!searchParams.name && !searchParams.status) {
+    customRow.value = createCustomRow(table, onSorted, { draggable: true })
+  } else {
+    customRow.value = createCustomRow(table, onSorted, { draggable: false })
+  }
 }
 
 async function searchTag(params) {

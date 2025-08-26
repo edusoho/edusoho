@@ -20,19 +20,8 @@ const searchParams = reactive({
   name: null,
   status: null,
 });
-
-async function onSorted(list) {
-  const ids = list.map(item => {
-    return item.id
-  })
-  const params = {
-    ids: ids
-  }
-  await Api.questionTag.sortTagGroup(params)
-  await searchTagGroup(searchParams)
-}
-
-const customRow = createCustomRow(table, onSorted)
+const customRow = ref();
+customRow.value = createCustomRow(table, onSorted, { draggable: true });
 
 const scrollY = ref(0);
 const calculateScrollY = () => {
@@ -88,10 +77,26 @@ const columns = [
 const modalVisible = ref(false);
 const editId = ref();
 
+async function onSorted(list) {
+  const ids = list.map(item => {
+    return item.id
+  })
+  const params = {
+    ids: ids
+  }
+  await Api.questionTag.sortTagGroup(params)
+  await searchTagGroup(searchParams)
+}
+
 async function onSearch(params) {
   searchParams.name = params.name;
   searchParams.status = params.status;
   await searchTagGroup(searchParams)
+  if (!searchParams.name && !searchParams.status) {
+    customRow.value = createCustomRow(table, onSorted, { draggable: true })
+  } else {
+    customRow.value = createCustomRow(table, onSorted, { draggable: false })
+  }
 }
 
 async function onCreate(params) {
