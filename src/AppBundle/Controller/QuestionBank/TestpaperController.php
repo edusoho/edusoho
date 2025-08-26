@@ -535,7 +535,7 @@ class TestpaperController extends BaseController
             $conditions['exclude_ids'] = explode(',', $conditions['exclude_ids']);
         }
         if (!empty($conditions['tagIds'])) {
-            $tagItems = $this->getQuestionTagService()->findTagItemsByTagIds($conditions['tagIds']);
+            $tagItems = $this->getQuestionTagService()->findTagRelationsByTagIds($conditions['tagIds']);
             $conditions['ids'] = array_column($tagItems, 'itemId') ?: [-1];
             unset($conditions['tagIds']);
         }

@@ -78,9 +78,9 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
         }
     }
 
-    public function searchTagGroups($conditions)
+    public function searchTagGroups($conditions, $columns = [])
     {
-        return $this->getQuestionTagGroupDao()->search($conditions, ['seq' => 'ASC'], 0, PHP_INT_MAX);
+        return $this->getQuestionTagGroupDao()->search($conditions, ['seq' => 'ASC'], 0, PHP_INT_MAX, $columns);
     }
 
     public function sortTagGroups($ids)
@@ -166,9 +166,9 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
         }
     }
 
-    public function searchTags($conditions)
+    public function searchTags($conditions, $columns = [])
     {
-        return $this->getQuestionTagDao()->search($conditions, ['seq' => 'ASC'], 0, PHP_INT_MAX);
+        return $this->getQuestionTagDao()->search($conditions, ['seq' => 'ASC'], 0, PHP_INT_MAX, $columns);
     }
 
     public function sortTags($groupId, $ids)
@@ -205,9 +205,14 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
         $this->getQuestionTagRelationDao()->batchCreate($relations);
     }
 
-    public function findTagItemsByTagIds($tagIds)
+    public function findTagRelationsByTagIds($tagIds)
     {
         return $this->getQuestionTagRelationDao()->findByTagIds($tagIds);
+    }
+
+    public function findTagRelationsByItemIds($itemIds)
+    {
+        return $this->getQuestionTagRelationDao()->findByItemIds($itemIds);
     }
 
     /**

@@ -14,6 +14,11 @@ class QuestionTagRelationDaoImpl extends AdvancedDaoImpl implements QuestionTagR
         return $this->findInField('tagId', $tagIds);
     }
 
+    public function findByItemIds($itemIds)
+    {
+        return $this->findInField('itemId', $itemIds);
+    }
+
     public function declares()
     {
         return [
