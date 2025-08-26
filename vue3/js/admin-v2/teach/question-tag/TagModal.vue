@@ -243,7 +243,7 @@ watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
             </div>
           </template>
           <template v-if="column.key === 'createdTime'">
-            {{ formatDate(record.createdTime) }}
+            <div class="text-nowrap">{{ formatDate(record.createdTime) }}</div>
           </template>
           <template v-if="column.key === 'status'">
             <a-dropdown placement="bottom" class="w-fit">
