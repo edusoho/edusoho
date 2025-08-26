@@ -37,4 +37,14 @@ module.exports = {
       }, {}),
     },
   },
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        //为了规避bootstrap的hidden类
+        '.tw-hidden': {
+          display: 'none',
+        },
+      });
+    },
+  ],
 };

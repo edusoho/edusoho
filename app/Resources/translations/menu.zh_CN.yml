@@ -1088,3 +1088,4 @@ admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件
 admin_v2.cloud.question_bank.attachment_setting.basic_tab: 题库附件设置
 
 admin_v2.total_site_export: 全站导出权限
+admin_v2.question.tag_manage: 题目标签管理
