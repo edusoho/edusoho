@@ -5,7 +5,7 @@
         v-for="tab in tabList"
         :key="tab.code"
         :class="{ active: activeTab === tab.code }"
-        @click="tabType = tab.code"
+        @click="activeTab = tab.code"
       >
         <span>
           <img :src="tab.img" alt="" v-if="tab.img">
@@ -104,7 +104,7 @@ export default {
           img: '/static-dist/app/img/question-bank/testpaperAi.png',
         },
       ],
-      tabType: 'all',
+      activeTab: 'all',
       typeList: [
         {
           code: 'fixed-manual',
@@ -155,9 +155,9 @@ export default {
     },
     handleOk() {
       this.modalVisible = false;
-      if (this.tabType === 'all') {
+      if (this.activeTab === 'all') {
         this.routeByChooseType();
-      } else if (this.tabType === 'aiPersonality') {
+      } else if (this.activeTab === 'aiPersonality') {
         this.$router.push({
           name: 'create',
           query: {type: 'aiPersonality', name: this.testpaperName}
