@@ -20,7 +20,9 @@ class QuestionTagDaoImpl extends AdvancedDaoImpl implements QuestionTagDao
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['seq'],
             'conditions' => [
+                'id in (:ids)',
                 'groupId = :groupId',
+                'groupId in (:groupIds)',
                 'name like :name',
                 'status = :status',
             ],

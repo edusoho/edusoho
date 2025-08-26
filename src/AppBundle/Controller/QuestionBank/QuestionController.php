@@ -6,11 +6,11 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\Question\QuestionException;
-use Biz\Question\QuestionParseClient;
 use Biz\Question\Traits\QuestionAIAnalysisTrait;
 use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\QuestionTag\Service\QuestionTagService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Ramsey\Uuid\Uuid;
@@ -66,6 +66,7 @@ class QuestionController extends BaseController
             'categoryTree' => $categoryTree,
             'categoryTreeArray' => $this->convertCategoryTreeToArray($categoryTree),
             'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
+            'questionTags' => $this->findQuestionTagsGroupByItemId(array_column($items, 'id')),
         ]);
     }
 
@@ -232,6 +233,11 @@ class QuestionController extends BaseController
             $conditions['category_ids'] = $childrenIds;
             unset($conditions['category_id']);
         }
+        if (!empty($conditions['tagIds'])) {
+            $tagItems = $this->getQuestionTagService()->findTagRelationsByTagIds($conditions['tagIds']);
+            $conditions['ids'] = array_column($tagItems, 'itemId') ?: [-1];
+            unset($conditions['tagIds']);
+        }
 
         $paginator = new Paginator(
             $request,
@@ -255,6 +261,7 @@ class QuestionController extends BaseController
             'questionBank' => $questionBank,
             'categoryId' => $categoryId,
             'questionCategories' => ArrayToolkit::index($questionCategories, 'id'),
+            'questionTags' => $this->findQuestionTagsGroupByItemId(array_column($questions, 'id')),
         ]);
     }
 
@@ -546,9 +553,24 @@ class QuestionController extends BaseController
         return $categoryTreeArray;
     }
 
-    private function getQuestionParseClient()
+    private function findQuestionTagsGroupByItemId($itemIds)
     {
-        return new QuestionParseClient();
+        $questionTagRelations = $this->getQuestionTagService()->findTagRelationsByItemIds($itemIds);
+        if (empty($questionTagRelations)) {
+            return [];
+        }
+        $questionTags = $this->getQuestionTagService()->searchTags(['ids' => array_column($questionTagRelations, 'tagId')], ['id', 'name']);
+        $questionTags = array_column($questionTags, null, 'id');
+        $questionTagRelations = ArrayToolkit::group($questionTagRelations, 'itemId');
+        $tags = [];
+        foreach ($questionTagRelations as $itemId => $relations) {
+            $tags[$itemId] = [];
+            foreach ($relations as $relation) {
+                $tags[$itemId][] = $questionTags[$relation['tagId']];
+            }
+        }
+
+        return $tags;
     }
 
     /**
@@ -573,5 +595,13 @@ class QuestionController extends BaseController
     protected function getItemCategoryService()
     {
         return $this->createService('ItemBank:Item:ItemCategoryService');
+    }
+
+    /**
+     * @return QuestionTagService
+     */
+    protected function getQuestionTagService()
+    {
+        return $this->createService('QuestionTag:QuestionTagService');
     }
 }

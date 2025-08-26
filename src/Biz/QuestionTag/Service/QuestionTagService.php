@@ -12,7 +12,7 @@ interface QuestionTagService
 
     public function deleteTagGroup($id);
 
-    public function searchTagGroups($conditions);
+    public function searchTagGroups($conditions, $columns = []);
 
     public function sortTagGroups($ids);
 
@@ -24,11 +24,13 @@ interface QuestionTagService
 
     public function deleteTag($id);
 
-    public function searchTags($conditions);
+    public function searchTags($conditions, $columns = []);
 
     public function sortTags($groupId, $ids);
 
     public function tagQuestions($itemIds, $tagIds);
 
-    public function findTagItemsByTagIds($tagIds);
+    public function findTagRelationsByTagIds($tagIds);
+
+    public function findTagRelationsByItemIds($itemIds);
 }
