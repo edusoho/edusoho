@@ -224,7 +224,7 @@ watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
                 <a-form-item name="name" class="mb-0">
                   <div class="flex items-center justify-between gap-12">
                     <a-input
-                      v-model:value="editableData[record.id].name"
+                      v-model:value.trim="editableData[record.id].name"
                       :maxlength="50"
                       show-count
                     />
