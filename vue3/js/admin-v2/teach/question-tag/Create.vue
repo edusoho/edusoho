@@ -11,11 +11,11 @@ const props = defineProps({
   tagNum: Number,
 })
 
-const TAG_NUM_LIMIT = 200
+const TAG_NUM_LIMIT = 200;
 
 const onOpenChange = (visible) => {
-  if (!visible) {
-    formState.name = null;
+  if (props.tagNum >= TAG_NUM_LIMIT) {
+    popoverVisible.value = false;
   }
 };
 
@@ -76,8 +76,8 @@ async function onConfirm(values) {
     v-model:open="popoverVisible"
     title="添加类型"
     placement="rightTop"
-    trigger="manual"
-    @onOpenChange="onOpenChange"
+    trigger="click"
+    @openChange="onOpenChange"
   >
     <template #content>
       <a-form
@@ -87,7 +87,7 @@ async function onConfirm(values) {
       >
         <a-form-item name="name" class="mb-0">
           <a-input
-            v-model:value="formState.name"
+            v-model:value.trim="formState.name"
             :placeholder="isGroup ? '请输入标签类型名称' : '请输入标签名称'"
             show-count
             :maxlength="50"
