@@ -4,7 +4,7 @@ export function createCustomRow(table, onSorted, options = {}) {
   return function customRow(record) {
     return {
       props: { draggable },
-      style: { cursor: draggable ? 'pointer' : 'default' },
+      style: { cursor: draggable ? 'move' : 'default' },
 
       onMouseenter(event) {
         event.target.draggable = draggable;

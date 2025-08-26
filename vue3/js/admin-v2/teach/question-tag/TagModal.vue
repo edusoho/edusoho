@@ -37,7 +37,6 @@ const searchParams = reactive({
   status: null,
 });
 const customRow = ref();
-customRow.value = createCustomRow(table, onSorted, { draggable: true })
 
 async function onSorted(list, { movedItem, sourceIndex, targetIndex }) {
   if (sourceIndex === targetIndex) {
@@ -172,6 +171,14 @@ function genRules(record) {
     ]
   };
 }
+
+watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
+  if (!newSearchParams.name && !newSearchParams.status && Object.keys(newEditableData).length === 0) {
+    customRow.value = createCustomRow(table, onSorted, { draggable: true })
+  } else {
+    customRow.value = createCustomRow(table, onSorted, { draggable: false })
+  }
+}, {immediate: true});
 </script>
 
 <template>

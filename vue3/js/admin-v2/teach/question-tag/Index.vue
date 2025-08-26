@@ -1,7 +1,7 @@
 <script setup>
 import Search from './Search.vue';
 import Create from './Create.vue';
-import {onBeforeUnmount, onMounted, reactive, ref} from 'vue';
+import {onBeforeUnmount, onMounted, reactive, ref, watch} from 'vue';
 import Api from '../../../../api';
 import {formatDate} from 'vue3/js/common';
 import {DownOutlined, EditOutlined, CheckOutlined} from '@ant-design/icons-vue';
@@ -21,7 +21,6 @@ const searchParams = reactive({
   status: null,
 });
 const customRow = ref();
-customRow.value = createCustomRow(table, onSorted, { draggable: true });
 
 const scrollY = ref(0);
 const calculateScrollY = () => {
@@ -95,11 +94,6 @@ async function onSearch(params) {
   searchParams.name = params.name;
   searchParams.status = params.status;
   await searchTagGroup(searchParams)
-  if (!searchParams.name && !searchParams.status) {
-    customRow.value = createCustomRow(table, onSorted, { draggable: true })
-  } else {
-    customRow.value = createCustomRow(table, onSorted, { draggable: false })
-  }
 }
 
 async function onCreate(params) {
@@ -179,6 +173,14 @@ function genRules(record) {
     ]
   };
 }
+
+watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
+  if (!newSearchParams.name && !newSearchParams.status && Object.keys(newEditableData).length === 0) {
+    customRow.value = createCustomRow(table, onSorted, { draggable: true })
+  } else {
+    customRow.value = createCustomRow(table, onSorted, { draggable: false })
+  }
+}, {immediate: true});
 </script>
 
 <template>
