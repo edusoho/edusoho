@@ -196,6 +196,7 @@ watch([searchParams, editableData], ([newSearchParams, newEditableData]) => {
       <Create
         class="mb-12"
         :is-group="true"
+        :tag-num="table.list.length"
         @create="onCreate"
       />
       <a-table

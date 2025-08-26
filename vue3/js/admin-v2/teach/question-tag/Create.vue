@@ -1,5 +1,5 @@
 <script setup>
-import {reactive, ref, watch} from 'vue';
+import {reactive, ref} from 'vue';
 import Api from '../../../../api';
 
 const popoverVisible = ref(false);
@@ -7,8 +7,11 @@ const popoverVisible = ref(false);
 const emit = defineEmits(['create']);
 const props = defineProps({
   isGroup: Boolean,
-  groupId: String
+  groupId: String,
+  tagNum: Number,
 })
+
+const TAG_NUM_LIMIT = 200
 
 const onOpenChange = (visible) => {
   if (!visible) {
@@ -53,12 +56,17 @@ const rules = {
   ],
 };
 
+function openPopover() {
+  popoverVisible.value = true;
+}
+
 function closePopover() {
   popoverVisible.value = false;
 }
 
 async function onConfirm(values) {
   emit('create', values)
+  formState.name = null;
   closePopover();
 }
 </script>
@@ -67,8 +75,8 @@ async function onConfirm(values) {
   <a-popover
     v-model:open="popoverVisible"
     title="添加类型"
-    trigger="click"
     placement="rightTop"
+    trigger="manual"
     @onOpenChange="onOpenChange"
   >
     <template #content>
@@ -93,6 +101,6 @@ async function onConfirm(values) {
         </a-form-item>
       </a-form>
     </template>
-    <a-button type="primary" class="w-fit">添加</a-button>
+    <a-button type="primary" class="w-fit" @click="openPopover" :disabled="tagNum >= TAG_NUM_LIMIT">添加</a-button>
   </a-popover>
 </template>
