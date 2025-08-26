@@ -45,7 +45,10 @@
           </div>
           <div v-for="(answer, index) in answers" :key="index">
             <span class="font-medium">{{ `答案[${index + 1}]:` }} </span>
-            <span style="color: #999">{{ answer }}</span
+            <span style="color: #999">
+              <span v-if="isAnswerIncludeFormula(answer)" v-html="displayAsFormula(answer)"></span>
+              <span v-else>{{ answer }}</span>
+            </span
             ><br />
           </div>
         </a-form-item>
@@ -167,6 +170,7 @@ export default {
             console.log(err);
           }
           this.initBaseStem();
+          this.renderFormula();
         });
       });
       this.initMessage();
@@ -199,6 +203,7 @@ export default {
       this.stemEditor.on("change", () => {
         const data = this.stemEditor.getData();
         this.answers = this.getFillAnswer(data);
+        this.renderFormula();
         if (this.errorList.length == 0) {
           this.$emit("changeEditor", data);
         }
@@ -282,39 +287,31 @@ export default {
       if (question.errors) {
         delete question.errors;
       }
+      let data = {};
       if (this.isSubItem) {
-        let data = {};
         question = Object.assign(question, values.questions);
-        question.answer = this.getFillAnswer(question.stem);
-        const temp = {
-          text: []
-        };
-        const response_points = [];
-        question.answer.forEach(function() {
-          response_points.push(temp);
-        });
-        question.response_points = response_points;
-        data.questions = [question];
-        this.$emit("patchData", data);
       } else {
-        let data = JSON.parse(JSON.stringify(this.subject));
+        data = JSON.parse(JSON.stringify(this.subject));
         data = Object.assign(data, values.base);
         question = Object.assign(question, values.questions);
-        question.answer = this.getFillAnswer(question.stem);
-        question.answer_mode = "text";
-        const temp = {
-          text: []
-        };
-        const response_points = [];
-        question.answer.forEach(function() {
-          response_points.push(temp);
-        });
-        question.response_points = response_points;
-        data.questions = [question];
-        console.log(data);
-        this.$emit("patchData", data);
+        question.answer_mode = 'text';
       }
-      // window.location.reload();
+      question.answer = this.getFillAnswer(question.stem);
+      const response_points = [];
+      question.answer.forEach(answer => {
+        if (this.isAnswerIncludeFormula(answer)) {
+          response_points.push({
+            math: []
+          });
+        } else {
+          response_points.push({
+            text: []
+          });
+        }
+      });
+      question.response_points = response_points;
+      data.questions = [question];
+      this.$emit("patchData", data);
     },
     changeEditor(data) {
       this.$emit("changeEditor", data);
@@ -342,6 +339,12 @@ export default {
           }
         }
       });
+    },
+    isAnswerIncludeFormula(str) {
+      return /\$\$([^$]+)\$\$/.test(str);
+    },
+    displayAsFormula(str) {
+      return str.replace(/\$\$([^$]+)\$\$/g, '<span data-tex="$1"></span>');
     }
   }
 };

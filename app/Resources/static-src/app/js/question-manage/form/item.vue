@@ -21,6 +21,7 @@
       @deleteAttachment="deleteAttachment"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
+      @renderFormula="renderFormula"
     ></item-manage>
     <item-manage
       v-if="mode === 'edit'"
@@ -44,11 +45,14 @@
       @deleteAttachment="deleteAttachment"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
+      @renderFormula="renderFormula"
     ></item-manage>
   </div>
 </template>
 
 <script>
+import { renderKatex } from 'app/common/katex-render';
+
 export default {
   data() {
     let mode = $("[name=mode]").val();
@@ -263,6 +267,11 @@ export default {
           resolve(resp);
           self.fileId = 0;
         })
+      });
+    },
+    renderFormula() {
+      this.$nextTick(() => {
+        renderKatex();
       });
     },
   },

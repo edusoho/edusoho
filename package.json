@@ -32,7 +32,7 @@
     "@babel/runtime-corejs2": "^7.7.7",
     "@codeages/agent-web-sdk": "^1.2.0",
     "@codeages/design-vue": "^1.0.3",
-    "@codeages/math-editor": "^1.4.0",
+    "@codeages/math-editor": "^1.6.0",
     "@codeages/styles": "1.0.7",
     "@codeages/utils": "^1.0.2",
     "@edusoho-live/eslive-web-sdk": "^1.2.3",
