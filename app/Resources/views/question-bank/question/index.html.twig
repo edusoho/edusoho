@@ -1,6 +1,6 @@
 {% extends 'question-bank/question/layout.html.twig' %}
-{% do script(['libs/select2.js', 'libs/jquery-intro.js' , 'app/js/question-bank/question/index.js' , 'app/js/question-bank/list-header/index.js', 'vue3/js/question-bank/question/modal/index.js'])  %}
-{% do css(['app/css/main-ant.css']) %}
+{% do script(['libs/select2.js', 'libs/jquery-intro.js' , 'app/js/question-bank/question/index.js' , 'app/js/question-bank/list-header/index.js', 'vue3/js/question-bank/question/modal/index.js', 'vue3/js/question-bank/list-header/index.js'])  %}
+{#{% do css(['app/css/main-ant.css']) %}#}
 
 {% block container %}
   <div class="panel panel-default panel-col">
@@ -9,6 +9,7 @@
         {% include 'question-bank/question/category-list.html.twig' %}
       </div>
       <div class="mtl question-list-content">
+        <div id="vue3-app"></div>
         <div id="app">
         </div>
         {% include 'question-bank/question/question-list.html.twig' %}

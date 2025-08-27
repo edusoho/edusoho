@@ -1,7 +1,7 @@
 <script setup>
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import {emitter} from 'vue3/js/event-bus';
-import TagSelect from '../../../admin-v2/teach/cloud-file/modal/tagSelect.vue';
+import TagSelect from '../../components/tagSelect.vue';
 import {ref} from 'vue';
 
 const id = ref()

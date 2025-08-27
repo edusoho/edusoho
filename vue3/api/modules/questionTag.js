@@ -37,4 +37,7 @@ export default {
   async sortTag(params) {
     return apiClient.post('/question_tag_sort', params);
   },
+  async getTagGroupTag() {
+    return apiClient.get('/question_tag_group_tag');
+  },
 };
