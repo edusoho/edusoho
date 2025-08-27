@@ -1,5 +1,5 @@
 {% extends 'question-bank/question/layout.html.twig' %}
-{% do script(['libs/select2.js', 'libs/jquery-intro.js' , 'app/js/question-bank/question/index.js' , 'app/js/question-bank/list-header/index.js'])  %}
+{% do script(['libs/select2.js', 'libs/jquery-intro.js' , 'app/js/question-bank/question/index.js' , 'app/js/question-bank/list-header/index.js', 'vue3/js/question-bank/question/modal/index.js'])  %}
 {% do css(['app/css/main-ant.css']) %}
 
 {% block container %}
@@ -21,6 +21,7 @@
     </div>
     <a class="js-skip-btn hidden" target="_blank" href="{{ path('admin_v2_app_center') }}">{{ 'item_bank.access_cloud'|trans }}</a>
   </div>
+  <div id="vue3-modal"></div>
 {% endblock %}
 
 {% block question_category_modal %}

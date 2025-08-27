@@ -55,6 +55,10 @@ class QuestionsShow {
       this.onUpdateQuestion(event);
     });
 
+    this.element.on('click', '.js-tag-btn', (event) => {
+      this.setTag(event);
+    });
+
     $('.js-item-create').click(event => {
       let categoryId = $('#select_category').val();
       let importUrl = $(event.currentTarget).data('url');
@@ -190,6 +194,12 @@ class QuestionsShow {
     }).error(function (error) {
       cd.message({type: 'danger', message: Translator.trans('site.save_error_hint')});
     });
+  }
+
+  setTag(event) {
+    let $target = $(event.currentTarget);
+    let id = $target.data('id');
+    window.emitter.emit('open-tag-modal', {id: id, mode: 'set'})
   }
 
   onDeleteQuestions(event) {

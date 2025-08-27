@@ -6,12 +6,12 @@
   <thead>
   <tr>
     <th><input type="checkbox" autocomplete="off" class="js-select-all"></th>
-    <th width="35%">{{'course.question_manage.stem'|trans}}</th>
+    <th width="43%">{{'course.question_manage.stem'|trans}}</th>
     <th width="13%">{{'course.question_manage.type'|trans}}</th>
-    <th width="10%">{{'course.question_manage.manage.difficulty'|trans}}</th>
+    <th width="7%">{{'course.question_manage.manage.difficulty'|trans}}</th>
     <th width="15%">{{'course.question_manage.create_time'|trans}}</th>
     <th width="15%">{{'course.question_manage.update'|trans}}</th>
-    <th width="12%">{{'course.question_manage.operation'|trans}}</th>
+    <th width="7%">{{'course.question_manage.operation'|trans}}</th>
   </tr>
   </thead>
   <tbody>
@@ -31,6 +31,16 @@
               {% endif %}
             </span>
           </a>
+          <div class="color-gray text-sm">{{ 'tag'|trans }}：
+              {% if questionTags[question.id]|default([])|length > 0 %}
+                {{ '+' }}
+              {% else %}
+                {{ '-' }}
+              {% endif %}
+            <a class="js-tag-btn" data-id="{{question.id}}">
+              <img src="{{ asset('static-dist/app/img/admin-v2/question-bank/tag-edit-icon.svg') }}" alt=""/>
+            </a>
+            </div>
           <div>
             {% if question.type == 'material' and not question.question_num %}
               <span class="label label-danger">{{'course.question_manage.question.unfinished'|trans}}</span>
@@ -65,6 +75,7 @@
         <td>
           <div class="btn-group">
             <a  href="javascript:" class="color-info js-update-btn" data-url="{{ path('question_bank_manage_question_update', {id:questionBank.id, questionId:question.id, goto: paginator.getPageUrl(paginator.currentPage)}) }}"  class="color-info"> {{'course.question_manage.question.edit_btn'|trans}}</a>
+            <br />
             <a href="javascript:" class="color-info js-delete-btn" data-name='{{'course.question_manage.question'|trans}}'
             data-url="{{ path('question_bank_manage_question_delete', {id: questionBank.id, itemId: question.id}) }}">
               {{'course.question_manage.question.delete_btn'|trans}}
