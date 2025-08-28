@@ -56,7 +56,6 @@
   -moz-box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
   box-shadow: #8bd 0 0 1px 2px, inset #6ae 0 0 2px 0;
   border-color: #709AC0;
-  aria-hidden: true;
 }
 .mq-math-mode .mq-editable-field {
   margin: 1px;
@@ -231,7 +230,7 @@
   margin: 0;
 }
 .mq-math-mode big {
-  font-size: 150%;
+  font-size: 200%;
 }
 .mq-math-mode .mq-int > big {
   display: inline-block;
@@ -521,9 +520,7 @@ html body .mq-editable-field .mq-selection .mq-nthroot-container * {
   user-select: text;
 }
 .mq-editable-field .mq-textarea *,
-.mq-math-mode .mq-textarea *,
-.mq-editable-field .mq-selectable,
-.mq-math-mode .mq-selectable {
+.mq-math-mode .mq-textarea * {
   -webkit-user-select: text;
   -moz-user-select: text;
   user-select: text;
