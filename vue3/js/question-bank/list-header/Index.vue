@@ -248,7 +248,7 @@ onMounted(() => {
     </div>
     <TagSelect
       v-model="tagSelectModalVisible"
-      :mode="'search'"
+      :params="{mode: 'filter'}"
       @ok="onConfirm"
     />
   </AntConfigProvider>

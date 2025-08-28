@@ -4,13 +4,12 @@ import {emitter} from 'vue3/js/event-bus';
 import TagSelect from '../../components/tagSelect.vue';
 import {ref} from 'vue';
 
-const id = ref()
-const ids = ref([])
+const params = ref({})
 
 const tagSelectModalVisible = ref(false);
 emitter.on('open-tag-modal', (params) => {
   tagSelectModalVisible.value = true;
-  id.value = params.id;
+  params.value = params;
 });
 </script>
 
@@ -18,7 +17,7 @@ emitter.on('open-tag-modal', (params) => {
   <AntConfigProvider>
     <TagSelect
       v-model="tagSelectModalVisible"
-      :id="id"
+      :params="params"
     />
   </AntConfigProvider>
 </template>

@@ -5,10 +5,9 @@ import Api from '../../../api';
 
 const modalVisible = defineModel();
 const props = defineProps({
-  id: {type: Number},
-  mode: {
-    type: String,
-    default: 'search'
+  params: {
+    type: Object,
+    default: {}
   }
 });
 
@@ -56,7 +55,7 @@ function onCancel() {
 
 <template>
   <a-modal v-model:open="modalVisible"
-           :title="mode === 'search' ? '筛选标签' : '设置标签'"
+           :title="params.mode === 'filter' ? '筛选标签' : '设置标签'"
            width="800px"
            centered
            :okText="`确定${selectedTagIds.length > 0 ? ` (${selectedTagIds.length}) ` : ''}`"
