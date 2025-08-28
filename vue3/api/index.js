@@ -21,7 +21,7 @@ import aiCompanionStudy from './modules/aiCompanionStudy';
 import teacher from './modules/teacher';
 import questionTag from './modules/questionTag';
 import uploadFile from './modules/uploadFile';
-import repeat from './modules/repeat'
+import questionBank from './modules/questionBank'
 
 const Api = {
   contract,
@@ -47,7 +47,7 @@ const Api = {
   teacher,
   questionTag,
   uploadFile,
-  repeat
+  questionBank
 };
 
 export default Api;

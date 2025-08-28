@@ -6,6 +6,7 @@ import {nextTick, onMounted, ref} from 'vue';
 import Selector from 'app/js/question-bank/common/selector';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import TagSelect from '../components/tagSelect.vue';
+import questionBank from '../../../api/modules/questionBank';
 
 const categoryId = ref()
 const difficulty = ref('default')
@@ -54,7 +55,7 @@ async function duplicateChecking() {
   }
   const hide = message.loading('正在查重...', 0);
   try {
-    const res = await Api.repeat.getRepeatQuestion($("[name=questionBankId]").val(), $("[name=category_id]").val())
+    const res = await Api.questionBank.getRepeatQuestion($("[name=questionBankId]").val(), $("[name=category_id]").val())
     hide();
     if (res.length > 0) {
       goto(`/question_bank/${$('.js-questionBank-id').val()}/check_duplicative_questions?categoryId=${categoryId.value ? categoryId.value : ''}`)
