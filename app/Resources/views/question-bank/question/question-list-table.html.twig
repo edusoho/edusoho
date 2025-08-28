@@ -41,17 +41,17 @@
                 <div class="tag">{{ tag.name }}</div>
               {% endfor %}
             {% else %}
-              {{ '-' }}
+              <span class="color-gray">{{ '-' }}</span>
             {% endif %}
             <a class="js-tag-btn" data-id="{{ question.id }}">
               <img src="{{ asset('static-dist/app/img/admin-v2/question-bank/tag-edit-icon.svg') }}" alt=""/>
             </a>
           </div>
-          <div>
-            {% if question.type == 'material' and not question.question_num %}
-              <span class="label label-danger">{{ 'course.question_manage.question.unfinished'|trans }}</span>
-            {% endif %}
-          </div>
+        </div>
+        <div>
+          {% if question.type == 'material' and not question.question_num %}
+            <span class="label label-danger">{{ 'course.question_manage.question.unfinished'|trans }}</span>
+          {% endif %}
         </div>
       </td>
       <td>
