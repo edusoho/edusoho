@@ -250,7 +250,7 @@ onMounted(() => {
     <input type="hidden" class="js-list-header-tagIds" :value=tagIds>
     <TagSelect
       v-model="tagSelectModalVisible"
-      :params="{mode: 'filter'}"
+      :params="{mode: 'filter' ,tagIds: tagIds}"
       @ok="onOk"
     />
   </AntConfigProvider>
