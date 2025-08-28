@@ -17,7 +17,7 @@ class QuestionTagGroupTag extends AbstractResource
         $tags = $this->getQuestionTagService()->searchTags(['groupIds' => array_column($tagGroups, 'id'), 'status' => 1], ['id', 'groupId', 'name']);
         $tags = ArrayToolkit::group($tags, 'groupId');
         foreach ($tagGroups as &$tagGroup) {
-            $tagGroup['tags'] = ArrayToolkit::thin($tags[$tagGroup['id']], ['id', 'name']);
+            $tagGroup['tags'] = empty($tags[$tagGroup['id']]) ? [] : ArrayToolkit::thin($tags[$tagGroup['id']], ['id', 'name']);
         }
 
         return $tagGroups;

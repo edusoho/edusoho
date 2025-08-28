@@ -490,10 +490,12 @@ export function useEditor(mathField, MQ) {
 	// degree
 	const degreeButton = $('#option #degree')[0];
 	degreeButton.addEventListener('click', function(){
-		mathField.cmd('\\degree').focus();
+        mathField.typedText('^\\circ');
+        mathField.keystroke('Tab');
+        mathField.moveToRightEnd().focus();
 	});
 	const degreeMQ = MQ.StaticMath(degreeButton);
-	degreeMQ.latex('\\degree');
+	degreeMQ.latex('\\circ');
 
 	// infty
 	const inftyButton = $('#option #infty')[0];
