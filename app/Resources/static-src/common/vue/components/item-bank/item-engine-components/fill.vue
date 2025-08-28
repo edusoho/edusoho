@@ -346,25 +346,14 @@ export default {
       return newStr;
     },
     getFillAnswer(value) {
-      let result = [];
-      let message = value;
+      const result = [];
+      const regex = /\[\[(?:[^[\]]+|\[[^[\]]+\])+\]\]/g;
+      let match;
 
-      do {
-        let reverseStrs = this.reverseStr(message);
-
-        const start = message.indexOf("[[");
-        if (start === -1) break;
-
-        const end = reverseStrs.lastIndexOf("]]");
-        if (end === -1) break;
-
-        const content = message.substring(
-          start + 2,
-          message.length - end - (end % 2 === 1 ? 2 : 1)
-        );
-        message = message.substring(message.length - end + 1);
-        result.push(content);
-      } while (message.length > 0);
+      while ((match = regex.exec(value)) !== null) {
+        let content = match[0];
+        result.push(content.substring(2, content.length - 2));
+      }
 
       return result;
     },
@@ -486,10 +475,12 @@ export default {
       this.renderFormula();
       this.mathEditorVisible = false;
       this.currentFormulaIndex = -1;
+      this.mathEditor.close();
     },
     cancelFormula() {
       this.mathEditorVisible = false;
       this.currentFormulaIndex = -1;
+      this.mathEditor.close();
     },
   }
 };
