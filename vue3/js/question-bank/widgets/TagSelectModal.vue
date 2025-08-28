@@ -27,6 +27,8 @@ watch(modalVisible, async () => {
       })
     })
     selectedTagIds.value = [...relationTagIds.value];
+  } else if (modalVisible.value && props.params.mode === 'filter' && props.params.tagIds) {
+    selectedTagIds.value = [...props.params.tagIds];
   }
 })
 

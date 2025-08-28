@@ -92,7 +92,7 @@ function onSearch() {
     </div>
     <TagSelect
       v-model="tagSelectModalVisible"
-      :params="{mode: 'filter'}"
+      :params="{mode: 'filter', tagIds: tagIds}"
       @ok="onConfirm"
     />
   </AntConfigProvider>
