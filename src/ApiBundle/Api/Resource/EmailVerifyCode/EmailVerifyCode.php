@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\EmailVerifyCode;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\SimpleValidator;
@@ -14,8 +15,12 @@ use Biz\User\UserException;
 
 class EmailVerifyCode extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function add(ApiRequest $request)
     {
+        $this->biz['biz_drag_captcha']->check($request->request->get('dragCaptchaToken'));
         $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
         $mailer = $this->getSettingService()->get('mailer', []);
         $mailEnable = (isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled']);
