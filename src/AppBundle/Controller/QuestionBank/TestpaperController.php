@@ -518,6 +518,7 @@ class TestpaperController extends BaseController
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
             'itemCategories' => $itemCategories,
             'excludeIds' => empty($conditions['exclude_ids']) ? '' : $conditions['exclude_ids'],
+            'questionTags' => $this->findQuestionTagsGroupByItemId(array_column($items, 'id')),
         ]);
     }
 
@@ -592,6 +593,7 @@ class TestpaperController extends BaseController
                 'questionBank' => $questionBank,
                 'itemCategories' => $itemCategories,
                 'type' => $type,
+                'questionTags' => $this->findQuestionTagsGroupByItemId(array_keys($items)),
             ]);
         }
 
@@ -657,6 +659,26 @@ class TestpaperController extends BaseController
         }
 
         return $types;
+    }
+
+    private function findQuestionTagsGroupByItemId($itemIds)
+    {
+        $questionTagRelations = $this->getQuestionTagService()->findTagRelationsByItemIds($itemIds);
+        if (empty($questionTagRelations)) {
+            return [];
+        }
+        $questionTags = $this->getQuestionTagService()->searchTags(['ids' => array_column($questionTagRelations, 'tagId')], ['id', 'name']);
+        $questionTags = array_column($questionTags, null, 'id');
+        $questionTagRelations = ArrayToolkit::group($questionTagRelations, 'itemId');
+        $tags = [];
+        foreach ($questionTagRelations as $itemId => $relations) {
+            $tags[$itemId] = [];
+            foreach ($relations as $relation) {
+                $tags[$itemId][] = $questionTags[$relation['tagId']];
+            }
+        }
+
+        return $tags;
     }
 
     /**
