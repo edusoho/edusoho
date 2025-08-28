@@ -22,14 +22,22 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 (function () {
     var L = -1;
     var R = 1;
-    var jQuery = window.jQuery;
     var min = Math.min;
     var max = Math.max;
-    if (!jQuery)
-        throw 'MathQuill requires jQuery 1.5.2+ to be loaded first';
     function noop() { }
     /**
      * a development-only debug method.  This definition and all
@@ -48,15 +56,218 @@ var __extends = (this && this.__extends) || (function () {
     function prayDirection(dir) {
         pray('a direction was passed', dir === L || dir === R);
     }
+    var urlParams = new URLSearchParams(window.location.search);
+    function parseHTML(s) {
+        // https://youmightnotneedjquery.com/#parse_html
+        var tmp = document.implementation.createHTMLDocument('');
+        tmp.body.innerHTML = s;
+        if (tmp.body.children.length === 1)
+            return tmp.body.children[0];
+        var frag = document.createDocumentFragment();
+        while (tmp.body.firstChild) {
+            frag.appendChild(tmp.body.firstChild);
+        }
+        return frag;
+    }
+    var h = function h(type, attributes, children) {
+        var el;
+        switch (type) {
+            case 'svg':
+            case 'path':
+                el = document.createElementNS('http://www.w3.org/2000/svg', type);
+                break;
+            default:
+                el = document.createElement(type);
+        }
+        for (var key_1 in attributes) {
+            var value = attributes[key_1];
+            if (value === undefined)
+                continue;
+            el.setAttribute(key_1, typeof value === 'string' ? value : String(value));
+        }
+        if (children) {
+            for (var i = 0; i < children.length; i++) {
+                el.appendChild(children[i]);
+            }
+        }
+        return el;
+    };
+    h.text = function (s) { return document.createTextNode(s); };
+    h.block = function (type, attributes, block) {
+        var out = h(type, attributes, [block.html()]);
+        block.setDOM(out);
+        NodeBase.linkElementByBlockNode(out, block);
+        return out;
+    };
+    h.entityText = function (s) {
+        // TODO: replace with h.text(U_BLAHBLAH) or maybe a named entity->unicode lookup
+        var val = parseHTML(s);
+        pray('entity parses to a single text node', val instanceof DocumentFragment &&
+            val.childNodes.length === 1 &&
+            val.childNodes[0] instanceof Text);
+        return val.childNodes[0];
+    };
+    function closest(el, s) {
+        var _a, _b, _c;
+        if (typeof ((_a = el) === null || _a === void 0 ? void 0 : _a.closest) === 'function') {
+            return el.closest(s);
+        }
+        if (!(el instanceof HTMLElement))
+            return null;
+        // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#polyfill
+        var matches = Element.prototype.matches ||
+            Element.prototype.msMatchesSelector ||
+            Element.prototype.webkitMatchesSelector;
+        var match = el;
+        do {
+            if (matches.call(match, s))
+                return match;
+            match = (_c = (_b = match === null || match === void 0 ? void 0 : match.parentElement) !== null && _b !== void 0 ? _b : match === null || match === void 0 ? void 0 : match.parentNode) !== null && _c !== void 0 ? _c : null;
+        } while (match !== null && match.nodeType === 1);
+        return null;
+    }
+    var U_NO_BREAK_SPACE = '\u00A0';
+    var U_ZERO_WIDTH_SPACE = '\u200B';
+    var U_DOT_ABOVE = '\u02D9';
+    var U_NARY_SUMMATION = '\u2211';
+    var U_NARY_PRODUCT = '\u220F';
+    var U_NARY_COPRODUCT = '\u2210';
+    var U_INTEGRAL = '\u222B';
+    /**
+     * Like `el.getBoundingClientRect()` but avoids throwing for
+     * disconnected and hidden elements in IE <= 11.
+     * */
+    function getBoundingClientRect(el) {
+        // Return zeros for disconnected and hidden (display: none) elements
+        // Running getBoundingClientRect on a disconnected node in IE <=11 throws an error
+        // https://github.com/jquery/jquery/blob/a684e6ba836f7c553968d7d026ed7941e1a612d8/src/offset.js#L83-L86
+        if (!el.getClientRects().length) {
+            return {
+                top: 0,
+                left: 0,
+                height: 0,
+                width: 0,
+                x: 0,
+                y: 0,
+                bottom: 0,
+                right: 0,
+            };
+        }
+        return el.getBoundingClientRect();
+    }
+    /**
+     * Returns the number of pixels that the document is currently scrolled
+     * horizontally -- `window.scrollX` in modern browsers.
+     * */
+    function getScrollX() {
+        // In IE9, scrollX was called pageXOffset
+        // Previous versions of IE had neither property and use scrollLeft instead
+        //
+        // https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollX#notes
+        return window.pageXOffset !== undefined
+            ? window.pageXOffset
+            : (document.documentElement || document.body.parentNode || document.body)
+                .scrollLeft;
+    }
+    /**
+     * Returns the number of pixels that the document is currently scrolled
+     * vertically -- `window.scrollY` in modern browsers.
+     * */
+    function getScrollY() {
+        // In IE9, scrollY was called pageYOffset
+        // Previous versions of IE had neither property and use scrollTop instead
+        //
+        // https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollX#notes
+        return window.pageYOffset !== undefined
+            ? window.pageYOffset
+            : (document.documentElement || document.body.parentNode || document.body)
+                .scrollTop;
+    }
+    /**
+     * Given `duration` in ms and callback `cb`, immediately calls `cb(progress, scheduleNext, cancel)` with:
+     * - `progress` set to `0` if duration > 0, or 1 if duration <= 0
+     * - `scheduleNext` a function that schedules a future call to `cb`
+     * - `cancel` a function that cancels any pending `scheduleNext` call.
+     *
+     * `scheduleNext` schedules a call to `cb` with `progress` set to the
+     * ratio of currently elapsed time and `duration`.
+     *
+     * To continue running the animation, `cb` should call `scheduleNext`.
+     *
+     * To stop the animation, it is the responsibility of `cb` to check
+     * whether progress is greater than or equal to 1, in which case `cb`
+     * should not call `scheduleNext`.
+     *
+     * `scheduleNext` uses `requestAnimationFrame` if available and falls
+     * back to `setTimeout(..., 13)` otherwise. Times are always based on
+     * `Date.now()` for compatibility between `requestAnimationFrame` and
+     * the `setTimeout` fallback. `cb` will only be called with strictly
+     * monotonic `progress` values.
+     *
+     * Note: `animate` purposely puts a lot of responsibility on the caller
+     * to keep its implementation simple because it isn't used very widely
+     * in the project.
+     */
+    var animate = (function () {
+        // IIFE exists just to hang on to configured rafShim and cancelShim
+        // functions
+        var rafShim, cancelShim;
+        if (typeof requestAnimationFrame === 'function' &&
+            typeof cancelAnimationFrame === 'function') {
+            rafShim = requestAnimationFrame;
+            cancelShim = cancelAnimationFrame;
+        }
+        else {
+            rafShim = function (cb) { return setTimeout(cb, 13); };
+            cancelShim = clearTimeout;
+        }
+        return function (duration, cb) {
+            var start = Date.now();
+            var cancelToken;
+            var progress = 0;
+            function step() {
+                var proposedProgress = (Date.now() - start) / duration;
+                // Enforce that progress is strictly monotonic
+                if (proposedProgress <= progress) {
+                    scheduleNext();
+                }
+                else {
+                    progress = proposedProgress;
+                }
+                cb(progress, scheduleNext, cancel);
+            }
+            function cancel() {
+                if (cancelToken !== undefined)
+                    cancelShim(cancelToken);
+                cancelToken = undefined;
+            }
+            function scheduleNext() {
+                // Calling cancel here ensures that there are never multiple
+                // concurrent callbacks scheduled for a single animation, even if
+                // the caller calls `scheduleNext` multiple times in a single
+                // event loop (which is always a mistake)
+                cancel();
+                cancelToken = rafShim(step);
+            }
+            cb(duration <= 0 ? 1 : 0, scheduleNext, cancel);
+        };
+    })();
     var Aria = /** @class */ (function () {
         function Aria(controller) {
-            this.jQ = jQuery('<span class="mq-aria-alert" aria-live="assertive" aria-atomic="true"></span>');
+            this.span = h('span', {
+                class: 'mq-aria-alert',
+                'aria-live': 'assertive',
+                'aria-atomic': 'true',
+            });
             this.msg = '';
             this.items = [];
             this.controller = controller;
         }
-        Aria.prototype.setContainer = function (el) {
-            this.jQ.appendTo(el);
+        Aria.prototype.attach = function () {
+            var container = this.controller.container;
+            if (this.span.parentNode !== container) {
+                domFrag(container).prepend(domFrag(this.span));
+            }
         };
         Aria.prototype.queue = function (item, shouldDescribe) {
             if (shouldDescribe === void 0) { shouldDescribe = false; }
@@ -96,6 +307,7 @@ var __extends = (this && this.__extends) || (function () {
             return this.queue(dir === L ? 'beginning of' : 'end of');
         };
         Aria.prototype.alert = function (t) {
+            this.attach();
             if (t)
                 this.queue(t);
             if (this.items.length) {
@@ -108,7 +320,7 @@ var __extends = (this && this.__extends) || (function () {
                     .replace(/ +(?= )/g, '')
                     .trim();
                 if (this.controller.containerHasFocus()) {
-                    this.jQ.empty().text(this.msg);
+                    this.span.textContent = this.msg;
                 }
             }
             return this.clear();
@@ -119,6 +331,701 @@ var __extends = (this && this.__extends) || (function () {
         };
         return Aria;
     }());
+    /**
+     * A `DOMFragment` represents a contiguous span of sibling DOM Nodes,
+     * which may include both Element nodes and other nodes like Text and
+     * Comment nodes. A `DOMFragment` may represent zero or more nodes.
+     *
+     * `DOMFragments` are created using the `DOMFragment.create` factory
+     * function, which is also aliased as `domFrag` for convenience.
+     *
+     * A `DOMFragment` simply holds references to nodes. It doesn't move or
+     * mutate them in the way that the native `DocumentFragment` does.
+     *
+     * `DOMFragment` implements many of the same methods for manipulating a
+     * collection of DOM elements that jQuery does, but it has some notable
+     * differences:
+     *
+     * 1.  A jQuery collection can hold an arbitrary ordered set of DOM
+     *     elements, but a `DOMFragment` can only hold a contiguous span of
+     *     sibling nodes.
+     * 2.  Some jQuery DOM manipulation methods like `insert{Before,After}`,
+     *     `append`, `prepend`, `appendTo`, `prependTo`, etc. may insert
+     *     several clones of a collection into different places in the DOM.
+     *     `DOMFragment` never makes clones of DOM nodes--instead, when
+     *     targeting multi-element fragments, it moves source nodes before
+     *     or after the targeted fragment as appropriate without ever making
+     *     more copies.
+     * 3.  For methods like `.children()`, where it's likely to be a mistake
+     *     to call the method on a fragment that doesn't contain exactly one
+     *     node or element, `DOMFragment` will throw whereas jQuery will
+     *     silently do something possibly unintended. Methods that assert
+     *     are commented with the properties that they assert.
+     *
+     * Internally, `DOMFragment` holds immutable references to the left and
+     * right end nodes (if the fragment is not empty). The other nodes are
+     * represented implicitly through the sibling pointers of the DOM nodes
+     * themselves. This means that it is possible to invalidate a
+     * `DOMFragment` by moving one of its ends without moving the other in
+     * such a way that they are no longer siblings. It is also possible to
+     * change the contents of a `DOMFragment` by adding or removing DOM
+     * nodes between its ends.
+     */
+    var DOMFragment = /** @class */ (function () {
+        /**
+         * Constructor is private to enforce that the invariant checks in
+         * `create` are applied to outside callers. Internal methods are
+         * allowed to use this constructor when they can guarantee they're
+         * passing sibling nodes (such as children of a parent node).
+         */
+        function DOMFragment(first, last) {
+            var _a;
+            if (arguments.length === 1)
+                last = first;
+            if (!first || !last)
+                return;
+            this.ends = (_a = {}, _a[L] = first, _a[R] = last, _a);
+        }
+        /**
+         * Returns a `DOMFragment` representing the contiguous span of sibling
+         * DOM nodes betewen `first` and `last`. If only one element is
+         * passed, creates a `DOMFragment` representing that single element.
+         * If no elements are passed, creates and empty `DOMFragment`.
+         *
+         * If two elements are passed, asserts that the second element is a
+         * forward sibling of the first element. Checking this invariant is
+         * O(n) in the total number of nodes in the fragment
+         */
+        DOMFragment.create = function (first, last) {
+            if (arguments.length === 1)
+                last = first;
+            pray('No half-empty DOMFragments', !!first === !!last);
+            var out = new DOMFragment(first, last);
+            pray('last is a forward sibling of first', out.isValid());
+            return out;
+        };
+        DOMFragment.prototype.isEmpty = function () {
+            return this.ends === undefined;
+        };
+        DOMFragment.prototype.isOneNode = function () {
+            return !!(this.ends && this.ends[L] === this.ends[R]);
+        };
+        /**
+         * Returns true if the fragment is empty or if its last node is equal
+         * to its first node or is a forward sibling of its first node.
+         *
+         * DOMFragments may be invalidated if any of the nodes they contain
+         * are moved or removed independently of the other nodes they contain.
+         *
+         * Note that this check visits each node in the fragment, so it is
+         * O(n).
+         */
+        DOMFragment.prototype.isValid = function () {
+            if (!this.ends)
+                return true;
+            if (this.ends[L] === this.ends[R])
+                return true;
+            var maybeLast;
+            this.eachNode(function (el) { return (maybeLast = el); });
+            return maybeLast === this.ends[R];
+        };
+        /**
+         * Return the first Node of this fragment. May be a a Node that is not
+         * an Element such as a Text or Comment node.
+         *
+         * Asserts fragment is not empty.
+         */
+        DOMFragment.prototype.firstNode = function () {
+            pray('Fragment is not empty', this.ends);
+            return this.ends[L];
+        };
+        /**
+         * Return the last Node of this fragment. May be a a Node that is not
+         * an Element such as a Text or Comment node.
+         *
+         * Asserts fragment is not empty.
+         */
+        DOMFragment.prototype.lastNode = function () {
+            pray('Fragment is not empty', this.ends);
+            return this.ends[R];
+        };
+        /**
+         * Return a fragment representing the children (including Text and
+         * Comment nodes) of the node represented by this fragment.
+         *
+         * Asserts that this fragment contains exactly one Node.
+         *
+         * Note, because this includes text and comment nodes, this is more
+         * like jQuery's .contents() than jQuery's .children()
+         */
+        DOMFragment.prototype.children = function () {
+            var el = this.oneNode();
+            var first = el.firstChild;
+            var last = el.lastChild;
+            return first && last ? new DOMFragment(first, last) : new DOMFragment();
+        };
+        /**
+         * Return a new `DOMFragment` spanning this fragment and `sibling`
+         * fragment. Does not perform any DOM operations.
+         *
+         * Asserts that `sibling` is either empty or a forward sibling of
+         * this fragment that may share its first node with the last node of
+         * this fragment
+         */
+        DOMFragment.prototype.join = function (sibling) {
+            if (!this.ends)
+                return sibling;
+            if (!sibling.ends)
+                return this;
+            // Check if sibling is actually a sibling of this span
+            var found = false;
+            var current = this.ends[R].nextSibling;
+            while (current) {
+                if (current === sibling.ends[L]) {
+                    found = true;
+                    break;
+                }
+                current = current.nextSibling;
+            }
+            pray('sibling must be a forward DOM sibling of this fragment', found);
+            return new DOMFragment(this.ends[L], sibling.ends[R]);
+        };
+        /**
+         * Return the single DOM Node represented by this fragment.
+         *
+         * Asserts that this fragment contains exactly one Node.
+         */
+        DOMFragment.prototype.oneNode = function () {
+            pray('Fragment has a single node', this.ends && this.ends[L] === this.ends[R]);
+            return this.ends[L];
+        };
+        /**
+         * Return the single DOM Element represented by this fragment.
+         *
+         * Asserts that this fragment contains exactly one Node, and that node
+         * is an Element node.
+         */
+        DOMFragment.prototype.oneElement = function () {
+            var el = this.oneNode();
+            pray('Node is an Element', el.nodeType === Node.ELEMENT_NODE);
+            return el;
+        };
+        /**
+         * Return the single DOM Text node represented by this fragment.
+         *
+         * Asserts that this fragment contains exactly one Node, and that node
+         * is a Text node.
+         */
+        DOMFragment.prototype.oneText = function () {
+            var el = this.oneNode();
+            pray('Node is Text', el.nodeType === Node.TEXT_NODE);
+            return el;
+        };
+        /**
+         * Calls callback sequentially with each node in this fragment.
+         * Includes nodes that are not Elements, such as Text and Comment
+         * nodes.
+         */
+        DOMFragment.prototype.eachNode = function (cb) {
+            if (!this.ends)
+                return this;
+            var stop = this.ends[R];
+            for (var node = this.ends[L], next = void 0; node; node = next) {
+                // Note, this loop is organized in a slightly tricky way in order
+                // cache "next" before calling the callback. This is done because
+                // the callback could mutate node.nextSibling (e.g. by moving the
+                // node to a documentFragment, like toDocumentFragment does).
+                //
+                // It's still possible to break this iteration by messing with
+                // forward siblings of node in the callback, although it's
+                // probably rare to want to do that. Perhaps this means "each" is
+                // too dangerous to have as a public method.
+                next = node.nextSibling;
+                cb(node);
+                if (node === stop)
+                    break;
+            }
+            return this;
+        };
+        /**
+         * Calls callback sequentially with each Element node in this
+         * fragment. Skips nodes that are not Elements, such as Text and
+         * Comment nodes.
+         */
+        DOMFragment.prototype.eachElement = function (cb) {
+            this.eachNode(function (el) {
+                if (el.nodeType === Node.ELEMENT_NODE)
+                    cb(el);
+            });
+            return this;
+        };
+        /**
+         * Returns the concatenated text content of all of the nodes in the
+         * fragment.
+         */
+        DOMFragment.prototype.text = function () {
+            var accum = '';
+            this.eachNode(function (node) {
+                accum += node.textContent || '';
+            });
+            return accum;
+        };
+        /**
+         * Returns an array of all the Nodes in this fragment, including nodes
+         * that are not Element nodes such as Text and Comment nodes;
+         */
+        DOMFragment.prototype.toNodeArray = function () {
+            var accum = [];
+            this.eachNode(function (el) { return accum.push(el); });
+            return accum;
+        };
+        /**
+         * Returns an array of all the Element nodes in this fragment. The
+         * result does not include nodes that are not Elements, such as Text
+         * and Comment nodes.
+         */
+        DOMFragment.prototype.toElementArray = function () {
+            var accum = [];
+            this.eachElement(function (el) { return accum.push(el); });
+            return accum;
+        };
+        /**
+         * Moves all of the nodes in this fragment into a new DocumentFragment
+         * and returns it. This includes Nodes that are not Elements such as
+         * Text and Comment nodes.
+         */
+        DOMFragment.prototype.toDocumentFragment = function () {
+            var frag = document.createDocumentFragment();
+            this.eachNode(function (el) { return frag.appendChild(el); });
+            return frag;
+        };
+        /**
+         * Insert all the nodes in this fragment into the DOM directly before
+         * the first node of `sibling` fragment. If `sibling` is empty or does
+         * not have a parent node, detaches this fragment from the document.
+         *
+         * Note that this behavior differs from jQuery if `sibling` is a
+         * collection with multiple nodes. In that case, jQuery inserts this
+         * collection before the first node in `sibling`, and then inserts a
+         * clone of this collection before each additional node in the
+         * `sibling` collection. DOMFragment only ever inserts this collection
+         * before the first node of the sibling fragment, and never inserts
+         * additional clones.
+         */
+        DOMFragment.prototype.insertBefore = function (sibling) {
+            return this.insDirOf(L, sibling);
+        };
+        /**
+         * Insert all the nodes in this fragment into the DOM directly after
+         * the last node of `sibling` fragment. If `sibling` is empty or does
+         * not have a parent node, detaches this fragment from the document.
+         *
+         * Note that this behavior differs from jQuery if `sibling` is a
+         * collection with multiple nodes. In that case, jQuery inserts this
+         * collection before the first node in `sibling`, and then inserts a
+         * clone of this collection before each additional node in the
+         * `sibling` collection. DOMFragment only ever inserts this collection
+         * before the first node of the sibling fragment, and never inserts
+         * additional clones.
+         */
+        DOMFragment.prototype.insertAfter = function (sibling) {
+            return this.insDirOf(R, sibling);
+        };
+        /**
+         * Append children to the node represented by this fragment.
+         *
+         * Asserts that this fragment contains exactly one Element.
+         */
+        DOMFragment.prototype.append = function (children) {
+            children.appendTo(this.oneElement());
+            return this;
+        };
+        /**
+         * Prepend children to the node represented by this fragment.
+         *
+         * Asserts that this fragment contains exactly one Element.
+         */
+        DOMFragment.prototype.prepend = function (children) {
+            children.prependTo(this.oneElement());
+            return this;
+        };
+        /**
+         * Append all the nodes in this fragment to the children of `el`.
+         */
+        DOMFragment.prototype.appendTo = function (el) {
+            return this.insAtDirEnd(R, el);
+        };
+        /**
+         * Prepend all the nodes in this fragment to the children of `el`.
+         */
+        DOMFragment.prototype.prependTo = function (el) {
+            return this.insAtDirEnd(L, el);
+        };
+        /**
+         * Return a fragment containing the parent node of the nodes in this
+         * fragment. Returns an empty fragment if this fragment is empty or
+         * does not have a parent node.
+         */
+        DOMFragment.prototype.parent = function () {
+            if (!this.ends)
+                return this;
+            var parent = this.ends[L].parentNode;
+            if (!parent)
+                return new DOMFragment();
+            return new DOMFragment(parent);
+        };
+        /**
+         * Replace the children of `el` with the contents of this fragment,
+         * and place `el` into the DOM at the previous location of this
+         * fragment.
+         */
+        DOMFragment.prototype.wrapAll = function (el) {
+            el.textContent = ''; // First empty the wrapping element
+            if (!this.ends)
+                return this;
+            var parent = this.ends[L].parentNode;
+            var next = this.ends[R].nextSibling;
+            this.appendTo(el);
+            if (parent) {
+                parent.insertBefore(el, next);
+            }
+            return this;
+        };
+        /**
+         * Replace this fragment with the fragment given by `children`. If
+         * this fragment is empty or does not have a parent node, detaches
+         * `children` from the document.
+         *
+         * Note that this behavior differs from jQuery if this is a collection
+         * with multiple nodes. In that case, jQuery replaces the first
+         * element of this collection with `children`, and then replaces each
+         * additional element in this collection with a clone of `children`.
+         * DOMFragment replaces this entire fragment with `children` and never
+         * makes additional clones of `children`.
+         */
+        DOMFragment.prototype.replaceWith = function (children) {
+            var _a;
+            var rightEnd = (_a = this.ends) === null || _a === void 0 ? void 0 : _a[R];
+            // Note: important to cache parent and nextSibling (if they exist)
+            // before detaching this fragment from the document (which will
+            // mutate its parent and sibling references)
+            var parent = rightEnd === null || rightEnd === void 0 ? void 0 : rightEnd.parentNode;
+            var nextSibling = rightEnd === null || rightEnd === void 0 ? void 0 : rightEnd.nextSibling;
+            this.detach();
+            // Note, this purposely detaches children from the document, even if
+            // they can't be reinserted because this fragment is empty or has no
+            // parent
+            var childDocumentFragment = children.toDocumentFragment();
+            if (!rightEnd || !parent)
+                return this;
+            parent.insertBefore(childDocumentFragment, nextSibling || null);
+            return this;
+        };
+        /**
+         * Return the nth Element node of this collection, or undefined if
+         * there is no nth Element. Skips Nodes that are not Elements (e.g.
+         * Text and Comment nodes).
+         *
+         * Analogous to jQuery's array indexing syntax, or jQuery's .get()
+         * with positive arguments.
+         */
+        DOMFragment.prototype.nthElement = function (n) {
+            if (!this.ends)
+                return undefined;
+            if (n < 0 || n !== Math.floor(n))
+                return undefined;
+            var current = this.ends[L];
+            while (current) {
+                // Only count element nodes
+                if (current.nodeType === Node.ELEMENT_NODE) {
+                    if (n <= 0)
+                        return current;
+                    n -= 1;
+                }
+                if (current === this.ends[R])
+                    return undefined;
+                current = current.nextSibling;
+            }
+            return undefined;
+        };
+        /**
+         * Return the first Element node of this fragment, or undefined if
+         * the fragment is empty. Skips Nodes that are not Elements (e.g.
+         * Text and Comment nodes).
+         */
+        DOMFragment.prototype.firstElement = function () {
+            return this.nthElement(0);
+        };
+        /**
+         * Return the first Element node of this fragment, or undefined if
+         * the fragment is empty. Skips Nodes that are not Elements (e.g.
+         * Text and Comment nodes).
+         */
+        DOMFragment.prototype.lastElement = function () {
+            if (!this.ends)
+                return undefined;
+            var current = this.ends[R];
+            while (current) {
+                // Only count element nodes
+                if (current.nodeType === Node.ELEMENT_NODE) {
+                    return current;
+                }
+                if (current === this.ends[L])
+                    return undefined;
+                current = current.previousSibling;
+            }
+            return undefined;
+        };
+        /**
+         * Return a new fragment holding the first Element node of this
+         * fragment, or an empty fragment if this fragment is empty. Skips
+         * Nodes that are not Elements (e.g. Text and Comment nodes).
+         */
+        DOMFragment.prototype.first = function () {
+            return new DOMFragment(this.firstElement());
+        };
+        /**
+         * Return a new fragment holding the last Element node of this
+         * fragment, or an empty fragment if this fragment is empty. Skips
+         * Nodes that are not Elements (e.g. Text and Comment nodes).
+         */
+        DOMFragment.prototype.last = function () {
+            return new DOMFragment(this.lastElement());
+        };
+        /**
+         * Return a new fragment holding the nth Element node of this
+         * fragment, or an empty fragment if there is no nth node of this
+         * fragment. Skips Nodes that are not Elements (e.g. Text and Comment
+         * nodes).
+         */
+        DOMFragment.prototype.eq = function (n) {
+            return new DOMFragment(this.nthElement(n));
+        };
+        /**
+         * Return a new fragment beginning with the nth Element node of this
+         * fragment, and ending with the same end as this fragment, or an
+         * empty fragment if there is no nth node in this fragment. Skips
+         * Nodes that are not Elements (e.g. Text and Comment nodes).
+         */
+        DOMFragment.prototype.slice = function (n) {
+            // Note, would be reasonable to extend this to take a second
+            // argument if we ever find we need this
+            if (!this.ends)
+                return this;
+            var el = this.nthElement(n);
+            if (!el)
+                return new DOMFragment();
+            return new DOMFragment(el, this.ends[R]);
+        };
+        /**
+         * Return a new fragment containing the next Element after the Node
+         * represented by this fragment, or an empty fragment if there is no
+         * next Element. Skips Nodes that are not Elements (e.g. Text and
+         * Comment nodes).
+         *
+         * Asserts that this fragment contains exactly one Node.
+         */
+        DOMFragment.prototype.next = function () {
+            var current = this.oneNode();
+            while (current) {
+                current = current.nextSibling;
+                if (current && current.nodeType === Node.ELEMENT_NODE)
+                    return new DOMFragment(current);
+            }
+            return new DOMFragment();
+        };
+        /**
+         * Return a new fragment containing the previousElement after the Node
+         * represented by this fragment, or an empty fragment if there is no
+         * previous Element. Skips Nodes that are not Elements (e.g. Text and
+         * Comment nodes).
+         *
+         * Asserts that this fragment contains exactly one Node.
+         */
+        DOMFragment.prototype.prev = function () {
+            var current = this.oneNode();
+            while (current) {
+                current = current.previousSibling;
+                if (current && current.nodeType === Node.ELEMENT_NODE)
+                    return new DOMFragment(current);
+            }
+            return new DOMFragment();
+        };
+        /**
+         * Remove all children of every Element Node in the fragment. Skips
+         * Nodes that are not Elements (e.g. Text and Comment nodes).
+         */
+        DOMFragment.prototype.empty = function () {
+            // TODO the corresponding jQuery methods clean up some internal
+            // references before removing elements from the DOM. That won't
+            // matter once jQuery is totally gone, but until then, this may
+            // introduce memory leaks
+            this.eachElement(function (el) {
+                el.textContent = '';
+            });
+            return this;
+        };
+        /**
+         * Remove every node in the fragment from the DOM.
+         *
+         * Implemented by moving every node in the fragment into a new
+         * document fragment in order to preserve the sibling relationships
+         * of the removed element. If you want to get access to this document
+         * fragment, use `.toDocumentFragment()` instead.
+         */
+        DOMFragment.prototype.remove = function () {
+            // TODO the corresponding jQuery methods clean up some internal
+            // references before removing elements from the DOM. That won't
+            // matter once jQuery is totally gone, but until then, this may
+            // introduce memory leaks
+            // Note, removing the elements by moving them to a document fragment
+            // because this way their sibling references stay intact. This is
+            // important if we want to reattach them somewhere else later
+            this.toDocumentFragment();
+            return this;
+        };
+        /**
+         * Remove every node in the fragment from the DOM. Alias of remove.
+         *
+         * Implemented by moving every node in the fragment into a new
+         * document fragment in order to preserve the sibling relationships
+         * of the removed element. If you want to get access to this document
+         * fragment, use `.toDocumentFragment()` instead.
+         *
+         * Note: jQuery makes a distinction between detach() and remove().
+         * remove() cleans up internal references, and detach() does not.
+         */
+        DOMFragment.prototype.detach = function () {
+            // In jQuery, detach() is similar to remove() but it does not clean
+            // up internal references. Here they're aliases, but I'm leaving
+            // this as a separate method for the moment to keep track of where
+            // mathquill did one vs the other.
+            return this.remove();
+        };
+        /**
+         * Insert this fragment either just before or just after `sibling`
+         * fragment according to the direction specified by `dir`. If
+         * `sibling` is empty or does not have a parent node, detaches this
+         * fragment from the document.
+         */
+        DOMFragment.prototype.insDirOf = function (dir, sibling) {
+            var _a;
+            if (!this.ends)
+                return this;
+            var el = (_a = sibling.ends) === null || _a === void 0 ? void 0 : _a[dir];
+            if (!el || !el.parentNode)
+                return this.detach();
+            _insDirOf(dir, el.parentNode, this.toDocumentFragment(), el);
+            return this;
+        };
+        /**
+         * Insert this fragment into `el` either at the beginning or end of
+         * its children, according to the direction specified by `dir`.
+         */
+        DOMFragment.prototype.insAtDirEnd = function (dir, el) {
+            if (!this.ends)
+                return this;
+            _insAtDirEnd(dir, this.toDocumentFragment(), el);
+            return this;
+        };
+        /**
+         * Return true if any element in this fragment has class `className`
+         * and false otherwise.
+         */
+        DOMFragment.prototype.hasClass = function (className) {
+            var out = false;
+            this.eachElement(function (el) {
+                if (el.classList.contains(className))
+                    out = true;
+            });
+            return out;
+        };
+        /**
+         * Add each class in space separated list of classes given by
+         * `classNames` to each element in this fragment.
+         */
+        DOMFragment.prototype.addClass = function (classNames) {
+            var _loop_1 = function (className) {
+                if (!className)
+                    return "continue";
+                this_1.eachElement(function (el) {
+                    el.classList.add(className);
+                });
+            };
+            var this_1 = this;
+            for (var _i = 0, _a = classNames.split(/\s+/); _i < _a.length; _i++) {
+                var className = _a[_i];
+                _loop_1(className);
+            }
+            return this;
+        };
+        /**
+         * Remove each class in space separated list of classes given by
+         * `classNames` from each element in this fragment.
+         */
+        DOMFragment.prototype.removeClass = function (classNames) {
+            var _loop_2 = function (className) {
+                if (!className)
+                    return "continue";
+                this_2.eachElement(function (el) {
+                    el.classList.remove(className);
+                });
+            };
+            var this_2 = this;
+            for (var _i = 0, _a = classNames.split(/\s+/); _i < _a.length; _i++) {
+                var className = _a[_i];
+                _loop_2(className);
+            }
+            return this;
+        };
+        /**
+         * Toggle each class in space separated list of classes given by
+         * `classNames` on each element in this fragment.
+         *
+         * If second arg `on` is given as `true`, always toggle classes on.
+         * If second arg `on` is passed as `false`, always toggle classes off.
+         */
+        DOMFragment.prototype.toggleClass = function (classNames, on) {
+            if (on === true)
+                return this.addClass(classNames);
+            if (on === false)
+                return this.removeClass(classNames);
+            var _loop_3 = function (className) {
+                if (!className)
+                    return "continue";
+                this_3.eachElement(function (el) {
+                    el.classList.toggle(className);
+                });
+            };
+            var this_3 = this;
+            for (var _i = 0, _a = classNames.split(/\s+/); _i < _a.length; _i++) {
+                var className = _a[_i];
+                _loop_3(className);
+            }
+            return this;
+        };
+        return DOMFragment;
+    }());
+    var domFrag = DOMFragment.create;
+    /**
+     * Insert `source` before or after `target` child of `parent` denending
+     * on `dir`. Only intended to be used internally as a helper in this module
+     */
+    function _insDirOf(dir, parent, source, target) {
+        parent.insertBefore(source, dir === L ? target : target.nextSibling);
+    }
+    /**
+     * Insert `source` before or after `target` child of `parent` denending
+     * on `dir`. Only intended to be used internally as a helper in this module
+     */
+    function _insAtDirEnd(dir, source, parent) {
+        if (dir === L) {
+            parent.insertBefore(source, parent.firstChild);
+        }
+        else {
+            parent.appendChild(source);
+        }
+    }
     /*************************************************
      * Base classes of edit tree-related objects
      *
@@ -126,18 +1033,6 @@ var __extends = (this && this.__extends) || (function () {
      * adopt/ disown methods guarantees well-formedness
      * of the tree.
      ************************************************/
-    /**
-     * Tiny extension of jQuery adding directionalized DOM manipulation methods.
-     */
-    var $ = jQuery;
-    $.fn.insDirOf = function (dir, el) {
-        return dir === L
-            ? this.insertBefore(el.first())
-            : this.insertAfter(el.last());
-    };
-    $.fn.insAtDirEnd = function (dir, el) {
-        return dir === L ? this.prependTo(el) : this.appendTo(el);
-    };
     /** A cursor-like location in an mq node tree. */
     var Point = /** @class */ (function () {
         function Point(parent, leftward, rightward) {
@@ -154,43 +1049,6 @@ var __extends = (this && this.__extends) || (function () {
         };
         return Point;
     }());
-    /*
-      Mathquill used to create a global dictionary that held onto
-      all nodes ever created. It was up to the mathquill instances
-      to call .dispose() on all of the nodes they created. That .dispose()
-      method would remove the node from the global dictionary. That
-      leaked memory for these reasons:
-      1) mathField.revert() didn't actually call the .dispose() method
-         on ANY of the nodes.
-      2) parts of the code create temporary nodes that never get linked
-         to anything. So they definitely didn't get their dispose() method
-         called.
-      3) even if everything above worked it's really common for users of
-         mathquill to forget to tear it down correctly.
-    
-      It turns out mathquill always uses the Node and the Element as pairs. So we
-      can store the Node on the Element and the Element on the Node. That makes it
-      possible to get one from the other. This also has the added benefit of meaning
-      the Node isn't stored in a global dictionary. If you lose all references to
-      the Element, then you'll also lose all references to the Node. This means the
-      browser can garbage collect all of mathquill's internals when the DOM is destroyed.
-    
-      There's only 1 small gotcha. The linking between Element and Node is a little clumsy.
-      1) All of the Nodes will be created.
-      2) Then all of the Elements will be created.
-      3) Then the two will be linked
-    
-      The problem is that the linking step only has access to the elements. It doesn't have
-      access to the nodes. That means we need to store the id of the node we want on the element
-      at creation time. Then we need to lookup that Node by id during the linking step. This
-      means we still need a dictionary. But at least it can be a temporary dictionary.
-      Steps 1 - 3 happen synchronously. So after those steps we can simply clean out the
-      temporary dictionary and remove all hard references to the Nodes.
-    
-      Any time we create a Node we schedule a task to clean all Nodes out of the dictionary
-      on the next frame. That's safe because there's no opportunity for nodes to be created
-      and NOT linked between the time we schedule the cleaning step and actually do it.
-    */
     function eachNode(ends, yield_) {
         var el = ends[L];
         if (!el)
@@ -226,10 +1084,6 @@ var __extends = (this && this.__extends) || (function () {
         }
         return fold;
     }
-    /**
-     * MathQuill virtual-DOM tree-node abstract base class
-     */
-    var defaultJQ = $();
     var NodeBase = /** @class */ (function () {
         function NodeBase() {
             var _c;
@@ -239,26 +1093,36 @@ var __extends = (this && this.__extends) || (function () {
             this[_b] = 0;
             // TODO - can this ever actually stay 0? if so we need to add null checks
             this.parent = 0;
-            /** The (doubly-linked) list of this node's children. */
+            /**
+             * The (doubly-linked) list of this node's children.
+             *
+             * NOTE child classes may specify a narrower type for ends e.g. to
+             * enforce that children are not empty, or that they have a certain
+             * type. In those cases, this initializer may still run at
+             * construction time, but this is expected to be followed by a call
+             * to adopt that sets non-empty ends of the necessary types.
+             *
+             * Similarly, `Fragment::disown` may temporarily break non-empty
+             * invariants, which are expected to be restored by a subsequent call
+             * to `Fragment::adopt`.
+             * */
             this.ends = (_c = {}, _c[L] = 0, _c[R] = 0, _c);
-            this.jQ = defaultJQ;
             this.id = NodeBase.uniqueNodeId();
-            NodeBase.TempByIdDict[this.id] = this;
-            NodeBase.scheduleDictionaryCleaning();
         }
         NodeBase.uniqueNodeId = function () {
             return (NodeBase.idCounter += 1);
         };
+        // The mqBlockNode and mqCmdNode custom properties link back from the
+        // DOM nodes generated by MathQuill to the MQNodes that generated
+        // them. This is useful for looking up MQNodes in event handlers and
+        // in the mq(elt) public API method
         NodeBase.getNodeOfElement = function (el) {
             if (!el)
                 return;
             if (!el.nodeType)
-                throw new Error('must pass an HTMLElement to NodeBase.getNodeOfElement');
+                throw new Error('must pass an Element to NodeBase.getNodeOfElement');
             var elTrackingNode = el;
             return elTrackingNode.mqBlockNode || elTrackingNode.mqCmdNode;
-        };
-        NodeBase.linkElementByBlockId = function (elm, id) {
-            NodeBase.linkElementByBlockNode(elm, NodeBase.TempByIdDict[id]);
         };
         NodeBase.linkElementByBlockNode = function (elm, blockNode) {
             elm.mqBlockNode = blockNode;
@@ -266,60 +1130,31 @@ var __extends = (this && this.__extends) || (function () {
         NodeBase.linkElementByCmdNode = function (elm, cmdNode) {
             elm.mqCmdNode = cmdNode;
         };
-        NodeBase.scheduleDictionaryCleaning = function () {
-            if (!NodeBase.cleaningScheduled) {
-                NodeBase.cleaningScheduled = true;
-                setTimeout(NodeBase.cleanDictionary);
-            }
+        NodeBase.prototype.setEnds = function (ends) {
+            this.ends = ends;
+            pray('No half-empty node ends', !!this.ends[L] === !!this.ends[R]);
         };
-        NodeBase.cleanDictionary = function () {
-            NodeBase.cleaningScheduled = false;
-            NodeBase.TempByIdDict = {};
+        NodeBase.prototype.getEnd = function (dir) {
+            return this.ends[dir];
         };
         NodeBase.prototype.toString = function () {
             return '{{ MathQuill Node #' + this.id + ' }}';
         };
-        NodeBase.prototype.jQadd = function (jQ) {
-            return (this.jQ = this.jQ.add(jQ));
-        };
-        /** Generate a DOM representation of this node and attach references to the corresponding MQ nodes to each DOM node.
-         *
-         * TODO: The only part of this method that depends on `this` is generating the DOM, so maybe pull out the rest into
-         * a static function (and remove the `el` parameter from this method).
-         */
-        NodeBase.prototype.jQize = function (el) {
-            // jQuery-ifies this.html() and links up the .jQ of all corresponding Nodes
-            var jQ = $(el || this.html());
-            function jQadd(el) {
-                if ('getAttribute' in el) {
-                    var cmdId = el.getAttribute('mathquill-command-id');
-                    if (cmdId) {
-                        el.removeAttribute('mathquill-command-id');
-                        var cmdNode = NodeBase.TempByIdDict[cmdId];
-                        cmdNode.jQadd(el);
-                        NodeBase.linkElementByCmdNode(el, cmdNode);
-                    }
-                    var blockId = el.getAttribute('mathquill-block-id');
-                    if (blockId) {
-                        el.removeAttribute('mathquill-block-id');
-                        var blockNode = NodeBase.TempByIdDict[blockId];
-                        blockNode.jQadd(el);
-                        NodeBase.linkElementByBlockNode(el, blockNode);
-                    }
-                }
-                for (var child = el.firstChild; child; child = child.nextSibling) {
-                    jQadd(child);
-                }
+        NodeBase.prototype.setDOM = function (el) {
+            if (el) {
+                pray('DOM is an element or a text node', el.nodeType === Node.ELEMENT_NODE || el.nodeType === Node.TEXT_NODE);
             }
-            for (var i = 0; i < jQ.length; i += 1)
-                jQadd(jQ[i]);
-            return jQ;
+            this._el = el;
+            return this;
+        };
+        NodeBase.prototype.domFrag = function () {
+            return domFrag(this._el);
         };
         NodeBase.prototype.createDir = function (dir, cursor) {
             prayDirection(dir);
             var node = this;
-            node.jQize();
-            node.jQ.insDirOf(dir, cursor.jQ);
+            node.html();
+            node.domFrag().insDirOf(dir, cursor.domFrag());
             cursor[dir] = node.adopt(cursor.parent, cursor[L], cursor[R]); // TODO - assuming not undefined, could be 0
             return node;
         };
@@ -370,7 +1205,7 @@ var __extends = (this && this.__extends) || (function () {
             return false;
         };
         NodeBase.prototype.children = function () {
-            return new Fragment(this.ends[L], this.ends[R]);
+            return new Fragment(this.getEnd(L), this.getEnd(R));
         };
         NodeBase.prototype.eachChild = function (yield_) {
             eachNode(this.ends, yield_);
@@ -400,7 +1235,7 @@ var __extends = (this && this.__extends) || (function () {
             return this;
         };
         NodeBase.prototype.remove = function () {
-            this.jQ.remove();
+            this.domFrag().remove();
             return this.disown();
         };
         NodeBase.prototype.shouldIgnoreSubstitutionInSimpleSubscript = function (options) {
@@ -419,7 +1254,7 @@ var __extends = (this && this.__extends) || (function () {
             // but that check doesn't always work. This seems to be the only
             // check that always works. I'd rather live with this than try
             // to change the init order of things.
-            if (!this.parent.jQ.hasClass('mq-sub'))
+            if (!this.parent.domFrag().hasClass('mq-sub'))
                 return false;
             return true;
         };
@@ -429,11 +1264,11 @@ var __extends = (this && this.__extends) || (function () {
         };
         // Overridden by child classes
         NodeBase.prototype.parser = function () {
-            return undefined;
+            pray('Abstract parser() method is never called', false);
         };
-        /** Render this node to an HTML string */
+        /** Render this node to DOM */
         NodeBase.prototype.html = function () {
-            return '';
+            throw new Error('html() unimplemented in NodeBase');
         };
         NodeBase.prototype.text = function () {
             return '';
@@ -449,12 +1284,12 @@ var __extends = (this && this.__extends) || (function () {
         NodeBase.prototype.reflow = function () { };
         NodeBase.prototype.registerInnerField = function (_innerFields, _mathField) { };
         NodeBase.prototype.chToCmd = function (_ch, _options) {
-            return undefined;
+            pray('Abstract chToCmd() method is never called', false);
         };
         NodeBase.prototype.mathspeak = function (_options) {
             return '';
         };
-        NodeBase.prototype.seek = function (_pageX, _cursor) { };
+        NodeBase.prototype.seek = function (_clientX, _cursor) { };
         NodeBase.prototype.siblingDeleted = function (_options, _dir) { };
         NodeBase.prototype.siblingCreated = function (_options, _dir) { };
         NodeBase.prototype.finalizeInsert = function (_options, _cursor) { };
@@ -464,8 +1299,6 @@ var __extends = (this && this.__extends) || (function () {
         var _a, _b;
         _a = L, _b = R;
         NodeBase.idCounter = 0;
-        NodeBase.TempByIdDict = {};
-        NodeBase.cleaningScheduled = false;
         return NodeBase;
     }());
     function prayWellFormed(parent, leftward, rightward) {
@@ -473,14 +1306,14 @@ var __extends = (this && this.__extends) || (function () {
         pray('leftward is properly set up', (function () {
             // either it's empty and `rightward` is the left end child (possibly empty)
             if (!leftward)
-                return parent.ends[L] === rightward;
+                return parent.getEnd(L) === rightward;
             // or it's there and its [R] and .parent are properly set up
             return leftward[R] === rightward && leftward.parent === parent;
         })());
         pray('rightward is properly set up', (function () {
             // either it's empty and `leftward` is the right end child (possibly empty)
             if (!rightward)
-                return parent.ends[R] === leftward;
+                return parent.getEnd(R) === leftward;
             // or it's there and its [L] and .parent are properly set up
             return rightward[L] === leftward && rightward.parent === parent;
         })());
@@ -499,33 +1332,59 @@ var __extends = (this && this.__extends) || (function () {
      */
     var Fragment = /** @class */ (function () {
         function Fragment(withDir, oppDir, dir) {
-            this.jQ = defaultJQ;
+            var _c, _d;
             this.disowned = false;
             if (dir === undefined)
                 dir = L;
             prayDirection(dir);
             pray('no half-empty fragments', !withDir === !oppDir);
-            this.ends = {};
-            if (!withDir || !oppDir)
+            if (!withDir || !oppDir) {
+                this.setEnds((_c = {}, _c[L] = 0, _c[R] = 0, _c));
                 return;
+            }
             pray('withDir is passed to Fragment', withDir instanceof MQNode);
             pray('oppDir is passed to Fragment', oppDir instanceof MQNode);
             pray('withDir and oppDir have the same parent', withDir.parent === oppDir.parent);
-            this.ends[dir] = withDir;
-            this.ends[-dir] = oppDir;
-            // To build the jquery collection for a fragment, accumulate elements
-            // into an array and then call jQ.add once on the result. jQ.add sorts the
-            // collection according to document order each time it is called, so
-            // building a collection by folding jQ.add directly takes more than
-            // quadratic time in the number of elements.
-            //
-            // https://github.com/jquery/jquery/blob/2.1.4/src/traversing.js#L112
-            var accum = this.fold([], function (accum, el) {
-                accum.push.apply(accum, el.jQ.get());
-                return accum;
+            var ends = (_d = {},
+                _d[dir] = withDir,
+                _d[-dir] = oppDir,
+                _d);
+            this.setEnds(ends);
+            var maybeRightEnd = 0;
+            this.each(function (el) {
+                maybeRightEnd = el;
             });
-            this.jQ = this.jQ.add(accum);
+            pray('following direction siblings from start reaches end', maybeRightEnd === ends[R]);
         }
+        Fragment.prototype.getDOMFragFromEnds = function () {
+            var left = this.ends[L];
+            var right = this.ends[R];
+            if (left === 0 || right === 0) {
+                return domFrag();
+            }
+            else if (left === right) {
+                // Note, joining a DOMFragment to itself is not allowed, so
+                // don't attempt to join the end fragments if the ends are equal
+                return left.domFrag();
+            }
+            else {
+                return left.domFrag().join(right.domFrag());
+            }
+        };
+        /**
+         * Note, children may override this to enforce extra invariants,
+         * (e.g. that ends are always defined). Ends should only be set
+         * through this function.
+         */
+        Fragment.prototype.setEnds = function (ends) {
+            this.ends = ends;
+        };
+        Fragment.prototype.getEnd = function (dir) {
+            return this.ends ? this.ends[dir] : 0;
+        };
+        Fragment.prototype.domFrag = function () {
+            return this.getDOMFragFromEnds();
+        };
         // like Cursor::withDirInsertAt(dir, parent, withDir, oppDir)
         Fragment.prototype.withDirAdopt = function (dir, parent, withDir, oppDir) {
             return dir === L
@@ -539,6 +1398,7 @@ var __extends = (this && this.__extends) || (function () {
          * TODO: why do we need both leftward and rightward? It seems to me that `rightward` is always expected to be `leftward ? leftward[R] : parent.ends[L]`.
          */
         Fragment.prototype.adopt = function (parent, leftward, rightward) {
+            var _c;
             prayWellFormed(parent, leftward, rightward);
             var self = this;
             this.disowned = false;
@@ -548,19 +1408,21 @@ var __extends = (this && this.__extends) || (function () {
             var rightEnd = self.ends[R];
             if (!rightEnd)
                 return this;
+            var ends = (_c = {}, _c[L] = parent.getEnd(L), _c[R] = parent.getEnd(R), _c);
             if (leftward) {
                 // NB: this is handled in the ::each() block
                 // leftward[R] = leftEnd
             }
             else {
-                parent.ends[L] = leftEnd;
+                ends[L] = leftEnd;
             }
             if (rightward) {
                 rightward[L] = rightEnd;
             }
             else {
-                parent.ends[R] = rightEnd;
+                ends[R] = rightEnd;
             }
+            parent.setEnds(ends);
             rightEnd[R] = rightward;
             self.each(function (el) {
                 el[L] = leftward;
@@ -576,6 +1438,7 @@ var __extends = (this && this.__extends) || (function () {
          * Remove the nodes in this fragment from their parent.
          */
         Fragment.prototype.disown = function () {
+            var _c;
             var self = this;
             var leftEnd = self.ends[L];
             // guard for empty and already-disowned fragments
@@ -588,32 +1451,47 @@ var __extends = (this && this.__extends) || (function () {
             var parent = leftEnd.parent;
             prayWellFormed(parent, leftEnd[L], leftEnd);
             prayWellFormed(parent, rightEnd, rightEnd[R]);
+            var ends = (_c = {}, _c[L] = parent.getEnd(L), _c[R] = parent.getEnd(R), _c);
             if (leftEnd[L]) {
                 var leftLeftEnd = leftEnd[L];
                 leftLeftEnd[R] = rightEnd[R];
             }
             else {
-                parent.ends[L] = rightEnd[R];
+                ends[L] = rightEnd[R];
             }
             if (rightEnd[R]) {
                 var rightRightEnd = rightEnd[R];
                 rightRightEnd[L] = leftEnd[L];
             }
             else {
-                parent.ends[R] = leftEnd[L];
+                ends[R] = leftEnd[L];
+            }
+            if (ends[L] && ends[R]) {
+                parent.setEnds(ends);
+            }
+            else {
+                // some child classes of MQNode try to enforce that their ends
+                // are never empty through the type system. However, disown may
+                // temporarily break this invariant in which case it's expected
+                // that adopt will later be called to fix the invariant.
+                //
+                // Cast away the protected status of the ends property and write
+                // to it directly to get around runtime assertions in setEnds that
+                // enforce non-emptyness.
+                parent.ends = ends;
             }
             return self;
         };
         Fragment.prototype.remove = function () {
-            this.jQ.remove();
+            this.domFrag().remove();
             return this.disown();
         };
         Fragment.prototype.each = function (yield_) {
-            eachNode(this.ends, yield_); // TODO - the types of Ends are not compatible
+            eachNode(this.ends, yield_);
             return this;
         };
         Fragment.prototype.fold = function (fold, yield_) {
-            return foldNodes(this.ends, fold, yield_); // TODO - the types of Ends are not compatible
+            return foldNodes(this.ends, fold, yield_);
         };
         return Fragment;
     }());
@@ -639,10 +1517,10 @@ var __extends = (this && this.__extends) || (function () {
     //A fake cursor in the fake textbox that the math is rendered in.
     var Anticursor = /** @class */ (function (_super) {
         __extends(Anticursor, _super);
-        function Anticursor(parent, leftward, rightward) {
-            var _this = _super.call(this, parent, leftward, rightward) || this;
-            _this.ancestors = {};
-            return _this;
+        function Anticursor() {
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ancestors = {};
+            return _this_1;
         }
         Anticursor.fromCursor = function (cursor) {
             return new Anticursor(cursor.parent, cursor[L], cursor[R]);
@@ -652,36 +1530,47 @@ var __extends = (this && this.__extends) || (function () {
     var Cursor = /** @class */ (function (_super) {
         __extends(Cursor, _super);
         function Cursor(initParent, options, controller) {
-            var _this = _super.call(this, initParent) || this;
+            var _this_1 = _super.call(this, initParent, 0, 0) || this;
+            _this_1.options = options;
+            _this_1.controller = controller;
             /** Slightly more than just a "cache", this remembers the cursor's position in each block node, so that we can return to the right
              * point in that node when moving up and down among blocks.
              */
-            _this.upDownCache = {};
-            _this.controller = controller;
-            _this.options = options;
-            var jQ = (_this.jQ = _this._jQ = $('<span class="mq-cursor">&#8203;</span>'));
+            _this_1.upDownCache = {};
+            _this_1.cursorElement = h('span', { class: 'mq-cursor' }, [h.text(U_ZERO_WIDTH_SPACE)]);
+            _this_1._domFrag = domFrag();
+            _this_1.setDOMFrag(domFrag(_this_1.cursorElement));
             //closured for setInterval
-            _this.blink = function () {
-                jQ.toggleClass('mq-blink');
+            _this_1.blink = function () {
+                domFrag(_this_1.cursorElement).toggleClass('mq-blink');
             };
-            return _this;
+            return _this_1;
         }
+        Cursor.prototype.setDOMFrag = function (frag) {
+            this._domFrag = frag;
+            return this;
+        };
+        Cursor.prototype.domFrag = function () {
+            return this._domFrag;
+        };
         Cursor.prototype.show = function () {
-            this.jQ = this._jQ.removeClass('mq-blink');
+            domFrag(this.cursorElement).removeClass('mq-blink');
+            this.setDOMFrag(domFrag(this.cursorElement));
             if (this.intervalId)
                 //already was shown, just restart interval
                 clearInterval(this.intervalId);
             else {
                 //was hidden and detached, insert this.jQ back into HTML DOM
-                if (this[R]) {
+                var right = this[R];
+                if (right) {
                     var selection = this.selection;
-                    if (selection && selection.ends[L][L] === this[L])
-                        this.jQ.insertBefore(selection.jQ);
+                    if (selection && selection.getEnd(L)[L] === this[L])
+                        this.domFrag().insertBefore(selection.domFrag());
                     else
-                        this.jQ.insertBefore(this[R].jQ.first());
+                        this.domFrag().insertBefore(right.domFrag());
                 }
                 else
-                    this.jQ.appendTo(this.parent.jQ);
+                    this.domFrag().appendTo(this.parent.domFrag().oneElement());
                 this.parent.focus();
             }
             this.intervalId = setInterval(this.blink, 500);
@@ -691,8 +1580,8 @@ var __extends = (this && this.__extends) || (function () {
             if (this.intervalId)
                 clearInterval(this.intervalId);
             this.intervalId = 0;
-            this.jQ.detach();
-            this.jQ = $();
+            this.domFrag().detach();
+            this.setDOMFrag(domFrag());
             return this;
         };
         Cursor.prototype.withDirInsertAt = function (dir, parent, withDir, oppDir) {
@@ -709,9 +1598,9 @@ var __extends = (this && this.__extends) || (function () {
         /** Place the cursor before or after `el`, according the side specified by `dir`. */
         Cursor.prototype.insDirOf = function (dir, el) {
             prayDirection(dir);
-            this.jQ.insDirOf(dir, el.jQ);
+            this.domFrag().insDirOf(dir, el.domFrag());
             this.withDirInsertAt(dir, el.parent, el[dir], el);
-            this.parent.jQ.addClass('mq-hasCursor');
+            this.parent.domFrag().addClass('mq-hasCursor');
             return this;
         };
         Cursor.prototype.insLeftOf = function (el) {
@@ -723,8 +1612,8 @@ var __extends = (this && this.__extends) || (function () {
         /** Place the cursor inside `el` at either the left or right end, according the side specified by `dir`. */
         Cursor.prototype.insAtDirEnd = function (dir, el) {
             prayDirection(dir);
-            this.jQ.insAtDirEnd(dir, el.jQ);
-            this.withDirInsertAt(dir, el, 0, el.ends[dir]);
+            this.domFrag().insAtDirEnd(dir, el.domFrag().oneElement());
+            this.withDirInsertAt(dir, el, 0, el.getEnd(dir));
             el.focus();
             return this;
         };
@@ -756,12 +1645,12 @@ var __extends = (this && this.__extends) || (function () {
                 }
             }
             else {
-                var pageX = self.offset().left;
-                to.seek(pageX, self);
+                var clientX = self.getBoundingClientRectWithoutMargin().left;
+                to.seek(clientX, self);
             }
             self.controller.aria.queue(to, true);
         };
-        Cursor.prototype.offset = function () {
+        Cursor.prototype.getBoundingClientRectWithoutMargin = function () {
             //in Opera 11.62, .getBoundingClientRect() and hence jQuery::offset()
             //returns all 0's on inline elements with negative margin-right (like
             //the cursor) at the end of their parent, so temporarily remove the
@@ -769,9 +1658,14 @@ var __extends = (this && this.__extends) || (function () {
             //Opera bug DSK-360043
             //http://bugs.jquery.com/ticket/11523
             //https://github.com/jquery/jquery/pull/717
-            var self = this, offset = self.jQ.removeClass('mq-cursor').offset();
-            self.jQ.addClass('mq-cursor');
-            return offset;
+            var frag = this.domFrag();
+            frag.removeClass('mq-cursor');
+            var _c = getBoundingClientRect(frag.oneElement()), left = _c.left, right = _c.right;
+            frag.addClass('mq-cursor');
+            return {
+                left: left,
+                right: right,
+            };
         };
         Cursor.prototype.unwrapGramp = function () {
             var gramp = this.parent.parent;
@@ -786,10 +1680,10 @@ var __extends = (this && this.__extends) || (function () {
                     .children()
                     .adopt(greatgramp, leftward, rightward)
                     .each(function (cousin) {
-                    cousin.jQ.insertBefore(gramp.jQ.first());
+                    cousin.domFrag().insertBefore(gramp.domFrag());
                     return true;
                 });
-                leftward = uncle.ends[R];
+                leftward = uncle.getEnd(R);
                 return true;
             });
             if (!this[R]) {
@@ -802,7 +1696,7 @@ var __extends = (this && this.__extends) || (function () {
                         var newParent = this.parent[R];
                         if (newParent) {
                             this.parent = newParent;
-                            this[R] = newParent.ends[L];
+                            this[R] = newParent.getEnd(L);
                         }
                         else {
                             this[R] = gramp[R];
@@ -817,7 +1711,7 @@ var __extends = (this && this.__extends) || (function () {
                 this.insLeftOf(thisR);
             else
                 this.insAtRightEnd(greatgramp);
-            gramp.jQ.remove();
+            gramp.domFrag().remove();
             var grampL = gramp[L];
             var grampR = gramp[R];
             if (grampL)
@@ -893,7 +1787,7 @@ var __extends = (this && this.__extends) || (function () {
             if (rightEnd instanceof Point)
                 rightEnd = rightEnd[L];
             this.hide().selection = lca.selectChildren(leftEnd, rightEnd);
-            var insEl = this.selection.ends[dir];
+            var insEl = this.selection.getEnd(dir);
             this.insDirOf(dir, insEl);
             this.selectionChanged();
             return true;
@@ -902,7 +1796,7 @@ var __extends = (this && this.__extends) || (function () {
             this.clearSelection();
             var root = controller.root;
             this[R] = 0;
-            this[L] = root.ends[R];
+            this[L] = root.getEnd(R);
             this.parent = root;
         };
         Cursor.prototype.clearSelection = function () {
@@ -917,8 +1811,8 @@ var __extends = (this && this.__extends) || (function () {
             var selection = this.selection;
             if (!selection)
                 return;
-            this[L] = selection.ends[L][L];
-            this[R] = selection.ends[R][R];
+            this[L] = selection.getEnd(L)[L];
+            this[R] = selection.getEnd(R)[R];
             selection.remove();
             this.selectionChanged();
             delete this.selection;
@@ -926,8 +1820,8 @@ var __extends = (this && this.__extends) || (function () {
         Cursor.prototype.replaceSelection = function () {
             var seln = this.selection;
             if (seln) {
-                this[L] = seln.ends[L][L];
-                this[R] = seln.ends[R][R];
+                this[L] = seln.getEnd(L)[L];
+                this[R] = seln.getEnd(R)[R];
                 delete this.selection;
             }
             return seln;
@@ -955,19 +1849,36 @@ var __extends = (this && this.__extends) || (function () {
     var MQSelection = /** @class */ (function (_super) {
         __extends(MQSelection, _super);
         function MQSelection(withDir, oppDir, dir) {
-            var _this = _super.call(this, withDir, oppDir, dir) || this;
-            _this.jQ = _this.jQ.wrapAll('<span class="mq-selection"></span>').parent();
-            return _this;
-            //can't do wrapAll(this.jQ = $(...)) because wrapAll will clone it
+            var _this_1 = _super.call(this, withDir, oppDir, dir) || this;
+            _this_1._el = h('span', { class: 'mq-selection' });
+            _this_1.getDOMFragFromEnds().wrapAll(_this_1._el);
+            return _this_1;
         }
+        MQSelection.prototype.isCleared = function () {
+            return this._el === undefined;
+        };
+        MQSelection.prototype.domFrag = function () {
+            return this.isCleared() ? this.getDOMFragFromEnds() : domFrag(this._el);
+        };
+        MQSelection.prototype.setEnds = function (ends) {
+            pray('Selection ends are never empty', ends[L] && ends[R]);
+            this.ends = ends;
+        };
+        MQSelection.prototype.getEnd = function (dir) {
+            return this.ends[dir];
+        };
         MQSelection.prototype.adopt = function (parent, leftward, rightward) {
-            this.jQ.replaceWith((this.jQ = this.jQ.children()));
+            this.clear();
             return _super.prototype.adopt.call(this, parent, leftward, rightward);
         };
         MQSelection.prototype.clear = function () {
-            // using the browser's native .childNodes property so that we
-            // don't discard text nodes.
-            this.jQ.replaceWith(this.jQ[0].childNodes);
+            // NOTE it's important here that DOMFragment::children includes all
+            // child nodes (including Text nodes), and not just Element nodes.
+            // This makes it more similar to the native DOM childNodes property
+            // and jQuery's .collection() method than jQuery's .children() method
+            var childFrag = this.getDOMFragFromEnds();
+            this.domFrag().replaceWith(childFrag);
+            this._el = undefined;
             return this;
         };
         MQSelection.prototype.join = function (methodName, separator) {
@@ -978,16 +1889,14 @@ var __extends = (this && this.__extends) || (function () {
         };
         return MQSelection;
     }(Fragment));
-    /*********************************************
-     * Controller for a MathQuill instance
-     ********************************************/
     var ControllerBase = /** @class */ (function () {
         function ControllerBase(root, container, options) {
-            this.id = root.id;
-            this.data = {};
             this.root = root;
             this.container = container;
             this.options = options;
+            this.textareaEventListeners = {};
+            this.id = root.id;
+            this.data = {};
             this.aria = new Aria(this.getControllerSelf());
             this.ariaLabel = 'Math Input';
             this.ariaPostLabel = '';
@@ -1000,13 +1909,17 @@ var __extends = (this && this.__extends) || (function () {
             return this;
         };
         ControllerBase.prototype.handle = function (name, dir) {
+            var _c;
             var handlers = this.options.handlers;
-            if (handlers && handlers.fns[name]) {
-                var mq = new handlers.APIClasses[this.KIND_OF_MQ](this);
+            var handler = (_c = this.options.handlers) === null || _c === void 0 ? void 0 : _c.fns[name];
+            if (handler) {
+                var APIClass = handlers === null || handlers === void 0 ? void 0 : handlers.APIClasses[this.KIND_OF_MQ];
+                pray('APIClass is defined', APIClass);
+                var mq = new APIClass(this); // cast to any bedcause APIClass needs the final Controller subclass.
                 if (dir === L || dir === R)
-                    handlers.fns[name](dir, mq);
+                    handler(dir, mq);
                 else
-                    handlers.fns[name](mq);
+                    handler(mq);
             }
         };
         ControllerBase.onNotify = function (f) {
@@ -1050,7 +1963,7 @@ var __extends = (this && this.__extends) || (function () {
             }
         };
         ControllerBase.prototype.setAriaPostLabel = function (ariaPostLabel, timeout) {
-            var _this = this;
+            var _this_1 = this;
             if (ariaPostLabel &&
                 typeof ariaPostLabel === 'string' &&
                 ariaPostLabel !== '') {
@@ -1058,13 +1971,13 @@ var __extends = (this && this.__extends) || (function () {
                     if (this._ariaAlertTimeout)
                         clearTimeout(this._ariaAlertTimeout);
                     this._ariaAlertTimeout = setTimeout(function () {
-                        if (_this.containerHasFocus()) {
+                        if (_this_1.containerHasFocus()) {
                             // Voice the new label, but do not update content mathspeak to prevent double-speech.
-                            _this.aria.alert(_this.root.mathspeak().trim() + ' ' + ariaPostLabel.trim());
+                            _this_1.aria.alert(_this_1.root.mathspeak().trim() + ' ' + ariaPostLabel.trim());
                         }
                         else {
                             // This mathquill does not have focus, so update its mathspeak.
-                            _this.updateMathspeak();
+                            _this_1.updateMathspeak();
                         }
                     }, timeout);
                 }
@@ -1081,10 +1994,7 @@ var __extends = (this && this.__extends) || (function () {
             return this.ariaPostLabel || '';
         };
         ControllerBase.prototype.containerHasFocus = function () {
-            return (document.activeElement &&
-                this.container &&
-                this.container[0] &&
-                this.container[0].contains(document.activeElement));
+            return (document.activeElement && this.container.contains(document.activeElement));
         };
         ControllerBase.prototype.getTextareaOrThrow = function () {
             var textarea = this.textarea;
@@ -1097,6 +2007,24 @@ var __extends = (this && this.__extends) || (function () {
             if (!textareaSpan)
                 throw new Error('expected a textareaSpan');
             return textareaSpan;
+        };
+        /** Add the given event listeners on this.textarea, replacing the existing listener for that event if it exists. */
+        ControllerBase.prototype.addTextareaEventListeners = function (listeners) {
+            if (!this.textarea)
+                return;
+            for (var key_2 in listeners) {
+                var event = key_2;
+                this.removeTextareaEventListener(event);
+                this.textarea.addEventListener(event, listeners[event]);
+            }
+        };
+        ControllerBase.prototype.removeTextareaEventListener = function (event) {
+            if (!this.textarea)
+                return;
+            var listener = this.textareaEventListeners[event];
+            if (!listener)
+                return;
+            this.textarea.removeEventListener(event, listener);
         };
         // based on http://www.gh-mathspeak.com/examples/quick-tutorial/
         // and http://www.gh-mathspeak.com/examples/grammar-rules/
@@ -1111,20 +2039,27 @@ var __extends = (this && this.__extends) || (function () {
         ControllerBase.notifyees = [];
         return ControllerBase;
     }());
-    /*********************************************************
-     * The publicly exposed MathQuill API.
-     ********************************************************/
     var API = {};
     var EMBEDS = {};
-    var OptionProcessors = /** @class */ (function () {
-        function OptionProcessors() {
-        }
-        return OptionProcessors;
-    }());
-    var optionProcessors = new OptionProcessors();
+    var processedOptions = {
+        handlers: true,
+        autoCommands: true,
+        quietEmptyDelimiters: true,
+        autoParenthesizedFunctions: true,
+        autoOperatorNames: true,
+        leftRightIntoCmdGoes: true,
+        maxDepth: true,
+    };
+    var baseOptionProcessors = {};
     var Options = /** @class */ (function () {
-        function Options() {
+        function Options(version) {
+            this.version = version;
         }
+        Options.prototype.assertJquery = function () {
+            pray('Interface versions > 2 do not depend on JQuery', this.version <= 2);
+            pray('JQuery is set for interface v < 3', this.jQuery);
+            return this.jQuery;
+        };
         return Options;
     }());
     var Progenote = /** @class */ (function () {
@@ -1153,8 +2088,12 @@ var __extends = (this && this.__extends) || (function () {
                 '  https://github.com/mathquill/mathquill/wiki/%60dev%60-branch-(2014%E2%80%932015)-%E2%86%92-v0.10.0-Migration-Guide');
     };
     // globally exported API object
+    var MQ1;
     function MathQuill(el) {
         insistOnInterVer();
+        if (!MQ1) {
+            MQ1 = getInterface(1);
+        }
         return MQ1(el);
     }
     MathQuill.prototype = Progenote.prototype;
@@ -1179,90 +2118,91 @@ var __extends = (this && this.__extends) || (function () {
         return MathQuill;
     };
     MathQuill.getInterface = getInterface;
-    var MIN = (getInterface.MIN = 1), MAX = (getInterface.MAX = 2);
+    var MIN = (getInterface.MIN = 1), MAX = (getInterface.MAX = 3);
     function getInterface(v) {
-        if (!(MIN <= v && v <= MAX))
+        if (v !== 1 && v !== 2 && v !== 3)
             throw ('Only interface versions between ' +
                 MIN +
                 ' and ' +
                 MAX +
                 ' supported. You specified: ' +
                 v);
-        /**
-         * Function that takes an HTML element and, if it's the root HTML element of a
-         * static math or math or text field, returns an API object for it (else, null).
-         *
-         *   var mathfield = MQ.MathField(mathFieldSpan);
-         *   assert(MQ(mathFieldSpan).id === mathfield.id);
-         *   assert(MQ(mathFieldSpan).id === MQ(mathFieldSpan).id);
-         *
-         */
-        var MQ = function (el) {
-            if (!el || !el.nodeType)
-                return null; // check that `el` is a HTML element, using the
-            // same technique as jQuery: https://github.com/jquery/jquery/blob/679536ee4b7a92ae64a5f58d90e9cc38c001e807/src/core/init.js#L92
-            var blockNode = NodeBase.getNodeOfElement($(el).children('.mq-root-block')[0]); // TODO - assumng it's a MathBlock
-            var ctrlr = blockNode && blockNode.controller;
-            return ctrlr ? new APIClasses[ctrlr.KIND_OF_MQ](ctrlr) : null;
-        };
-        MQ.L = L;
-        MQ.R = R;
-        MQ.saneKeyboardEvents = saneKeyboardEvents;
+        var version = v;
+        if (version < 3) {
+            var jQuery = window.jQuery;
+            if (!jQuery)
+                throw "MathQuill interface version ".concat(version, " requires jQuery 1.5.2+ to be loaded first");
+            Options.prototype.jQuery = jQuery;
+        }
+        var optionProcessors = __assign(__assign({}, baseOptionProcessors), { handlers: function (handlers) { return ({
+                // casting to the v3 version of this type
+                fns: handlers || {},
+                APIClasses: APIClasses,
+            }); } });
         function config(currentOptions, newOptions) {
-            if (newOptions && newOptions.handlers) {
-                newOptions.handlers = {
-                    fns: newOptions.handlers,
-                    APIClasses: APIClasses,
-                };
-            }
-            for (var name in newOptions)
+            for (var name in newOptions) {
                 if (newOptions.hasOwnProperty(name)) {
+                    if (name === 'substituteKeyboardEvents' && version >= 3) {
+                        throw new Error([
+                            "As of interface version 3, the 'substituteKeyboardEvents'",
+                            "option is no longer supported. Use 'overrideTypedText' and",
+                            "'overrideKeystroke' instead.",
+                        ].join(' '));
+                    }
                     var value = newOptions[name]; // TODO - think about typing this better
                     var processor = optionProcessors[name]; // TODO - validate option processors better
                     currentOptions[name] = processor ? processor(value) : value; // TODO - think about typing better
                 }
-        }
-        MQ.config = function (opts) {
-            config(Options.prototype, opts);
-            return this;
-        };
-        MQ.registerEmbed = function (name, options) {
-            if (!/^[a-z][a-z0-9]*$/i.test(name)) {
-                throw 'Embed name must start with letter and be only letters and digits';
             }
-            EMBEDS[name] = options;
-        };
+        }
+        var BaseOptions = version < 3 ? Options : /** @class */ (function (_super) {
+            __extends(BaseOptions, _super);
+            function BaseOptions() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            return BaseOptions;
+        }(Options));
         var AbstractMathQuill = /** @class */ (function (_super) {
             __extends(AbstractMathQuill, _super);
             function AbstractMathQuill(ctrlr) {
-                var _this = _super.call(this) || this;
-                _this.__controller = ctrlr;
-                _this.__options = ctrlr.options;
-                _this.id = ctrlr.id;
-                _this.data = ctrlr.data;
-                return _this;
+                var _this_1 = _super.call(this) || this;
+                _this_1.__controller = ctrlr;
+                _this_1.__options = ctrlr.options;
+                _this_1.id = ctrlr.id;
+                _this_1.data = ctrlr.data;
+                return _this_1;
             }
-            AbstractMathQuill.prototype.__mathquillify = function (classNames) {
+            AbstractMathQuill.prototype.mathquillify = function (classNames) {
                 var ctrlr = this.__controller, root = ctrlr.root, el = ctrlr.container;
                 ctrlr.createTextarea();
-                var contents = el.addClass(classNames).contents().detach();
-                root.jQ = $('<span class="mq-root-block"/>').appendTo(el);
-                NodeBase.linkElementByBlockId(root.jQ[0], root.id);
+                var contents = domFrag(el).addClass(classNames).children().detach();
+                root.setDOM(domFrag(h('span', { class: 'mq-root-block', 'aria-hidden': true }))
+                    .appendTo(el)
+                    .oneElement());
+                NodeBase.linkElementByBlockNode(root.domFrag().oneElement(), root);
                 this.latex(contents.text());
                 this.revert = function () {
-                    return el
-                        .empty()
-                        .unbind('.mathquill')
+                    ctrlr.removeMouseEventListener();
+                    domFrag(el)
                         .removeClass('mq-editable-field mq-math-mode mq-text-mode')
+                        .empty()
                         .append(contents);
+                    return version < 3 ? this.__options.assertJquery()(el) : el;
                 };
+            };
+            AbstractMathQuill.prototype.setAriaLabel = function (ariaLabel) {
+                this.__controller.setAriaLabel(ariaLabel);
+                return this;
+            };
+            AbstractMathQuill.prototype.getAriaLabel = function () {
+                return this.__controller.getAriaLabel();
             };
             AbstractMathQuill.prototype.config = function (opts) {
                 config(this.__options, opts);
                 return this;
             };
             AbstractMathQuill.prototype.el = function () {
-                return this.__controller.container[0];
+                return this.__controller.container;
             };
             AbstractMathQuill.prototype.text = function () {
                 return this.__controller.exportText();
@@ -1281,8 +2221,10 @@ var __extends = (this && this.__extends) || (function () {
                 return this.__controller.exportLatex();
             };
             AbstractMathQuill.prototype.html = function () {
-                return this.__controller.root.jQ
-                    .html()
+                return this.__controller.root
+                    .domFrag()
+                    .oneElement()
+                    .innerHTML.replace(/ jQuery\d+="(?:\d+|null)"/g, '') // TODO remove when jQuery is completely gone
                     .replace(/ mathquill-(?:command|block)-id="?\d+"?/g, '')
                     .replace(/<span class="?mq-cursor( mq-blink)?"?>.?<\/span>/i, '')
                     .replace(/ mq-hasCursor|mq-hasCursor ?/, '')
@@ -1296,21 +2238,20 @@ var __extends = (this && this.__extends) || (function () {
             };
             return AbstractMathQuill;
         }(Progenote));
-        MQ.prototype = AbstractMathQuill.prototype;
         var EditableField = /** @class */ (function (_super) {
             __extends(EditableField, _super);
             function EditableField() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
-            EditableField.prototype.__mathquillify = function (classNames) {
-                _super.prototype.__mathquillify.call(this, classNames);
+            EditableField.prototype.mathquillify = function (classNames) {
+                _super.prototype.mathquillify.call(this, classNames);
                 this.__controller.editable = true;
-                this.__controller.delegateMouseEvents();
+                this.__controller.addMouseEventListener();
                 this.__controller.editablesTextareaEvents();
                 return this;
             };
             EditableField.prototype.focus = function () {
-                this.__controller.getTextareaOrThrow()[0].focus();
+                this.__controller.getTextareaOrThrow().focus();
                 this.__controller.scrollHoriz();
                 return this;
             };
@@ -1327,9 +2268,10 @@ var __extends = (this && this.__extends) || (function () {
                 return this;
             };
             EditableField.prototype.empty = function () {
+                var _c;
                 var root = this.__controller.root, cursor = this.__controller.cursor;
-                root.ends[L] = root.ends[R] = 0;
-                root.jQ.empty();
+                root.setEnds((_c = {}, _c[L] = 0, _c[R] = 0, _c));
+                root.domFrag().empty();
                 delete cursor.selection;
                 cursor.insAtRightEnd(root);
                 return this;
@@ -1384,7 +2326,7 @@ var __extends = (this && this.__extends) || (function () {
             EditableField.prototype.keystroke = function (keysString, evt) {
                 var keys = keysString.replace(/^\s+|\s+$/g, '').split(/\s+/);
                 for (var i = 0; i < keys.length; i += 1) {
-                    this.__controller.keystroke(keys[i], evt || { preventDefault: noop });
+                    this.__controller.keystroke(keys[i], evt);
                 }
                 return this;
             };
@@ -1394,19 +2336,12 @@ var __extends = (this && this.__extends) || (function () {
                 return this;
             };
             EditableField.prototype.dropEmbedded = function (pageX, pageY, options) {
-                var clientX = pageX - $(window).scrollLeft();
-                var clientY = pageY - $(window).scrollTop();
+                var clientX = pageX - getScrollX();
+                var clientY = pageY - getScrollY();
                 var el = document.elementFromPoint(clientX, clientY);
-                this.__controller.seek($(el), pageX, pageY);
+                this.__controller.seek(el, clientX, clientY);
                 var cmd = new EmbedNode().setOptions(options);
                 cmd.createLeftOf(this.__controller.cursor);
-            };
-            EditableField.prototype.setAriaLabel = function (ariaLabel) {
-                this.__controller.setAriaLabel(ariaLabel);
-                return this;
-            };
-            EditableField.prototype.getAriaLabel = function () {
-                return this.__controller.getAriaLabel();
             };
             EditableField.prototype.setAriaPostLabel = function (ariaPostLabel, timeout) {
                 this.__controller.setAriaPostLabel(ariaPostLabel, timeout);
@@ -1418,9 +2353,10 @@ var __extends = (this && this.__extends) || (function () {
             EditableField.prototype.clickAt = function (clientX, clientY, target) {
                 target = target || document.elementFromPoint(clientX, clientY);
                 var ctrlr = this.__controller, root = ctrlr.root;
-                if (!jQuery.contains(root.jQ[0], target))
-                    target = root.jQ[0];
-                ctrlr.seek($(target), clientX + pageXOffset, clientY + pageYOffset);
+                var rootElement = root.domFrag().oneElement();
+                if (!rootElement.contains(target))
+                    target = rootElement;
+                ctrlr.seek(target, clientX, clientY);
                 if (ctrlr.blurred)
                     this.focus();
                 return this;
@@ -1431,32 +2367,92 @@ var __extends = (this && this.__extends) || (function () {
             };
             return EditableField;
         }(AbstractMathQuill));
-        MQ.EditableField = function () {
-            throw "wtf don't call me, I'm 'abstract'";
-        };
-        MQ.EditableField.prototype = EditableField.prototype;
         var APIClasses = {
             AbstractMathQuill: AbstractMathQuill,
             EditableField: EditableField,
         };
+        pray('API.StaticMath defined', API.StaticMath);
+        APIClasses.StaticMath = API.StaticMath(APIClasses);
+        pray('API.MathField defined', API.MathField);
+        APIClasses.MathField = API.MathField(APIClasses);
+        pray('API.InnerMathField defined', API.InnerMathField);
+        APIClasses.InnerMathField = API.InnerMathField(APIClasses);
+        if (API.TextField) {
+            APIClasses.TextField = API.TextField(APIClasses);
+        }
         /**
+         * Function that takes an HTML element and, if it's the root HTML element of a
+         * static math or math or text field, returns an API object for it (else, null).
+         *
+         *   var mathfield = MQ.MathField(mathFieldSpan);
+         *   assert(MQ(mathFieldSpan).id === mathfield.id);
+         *   assert(MQ(mathFieldSpan).id === MQ(mathFieldSpan).id);
+         *
+         */
+        var MQ = function (el) {
+            if (!el || !el.nodeType)
+                return null; // check that `el` is a HTML element, using the
+            // same technique as jQuery: https://github.com/jquery/jquery/blob/679536ee4b7a92ae64a5f58d90e9cc38c001e807/src/core/init.js#L92
+            var blockElement;
+            var childArray = domFrag(el).children().toElementArray();
+            for (var _i = 0, childArray_1 = childArray; _i < childArray_1.length; _i++) {
+                var child = childArray_1[_i];
+                if (child.classList.contains('mq-root-block')) {
+                    blockElement = child;
+                    break;
+                }
+            }
+            var blockNode = NodeBase.getNodeOfElement(blockElement); // TODO - assumng it's a MathBlock
+            var ctrlr = blockNode && blockNode.controller;
+            var APIClass = ctrlr && APIClasses[ctrlr.KIND_OF_MQ];
+            return ctrlr && APIClass ? new APIClass(ctrlr) : null;
+        };
+        MQ.L = L;
+        MQ.R = R;
+        MQ.config = function (opts) {
+            config(BaseOptions.prototype, opts);
+            return this;
+        };
+        MQ.registerEmbed = function (name, options) {
+            if (!/^[a-z][a-z0-9]*$/i.test(name)) {
+                throw 'Embed name must start with letter and be only letters and digits';
+            }
+            EMBEDS[name] = options;
+        };
+        /*
          * Export the API functions that MathQuill-ify an HTML element into API objects
          * of each class. If the element had already been MathQuill-ified but into a
          * different kind (or it's not an HTML element), return null.
          */
-        for (var kind in API)
-            (function (kind, defAPIClass) {
-                var APIClass = (APIClasses[kind] = defAPIClass(APIClasses));
-                MQ[kind] = function (el, opts) {
-                    var mq = MQ(el);
-                    if (mq instanceof APIClass || !el || !el.nodeType)
-                        return mq;
-                    var ctrlr = new Controller(new APIClass.RootBlock(), $(el), new Options());
-                    ctrlr.KIND_OF_MQ = kind;
-                    return new APIClass(ctrlr).__mathquillify(opts, v);
-                };
-                MQ[kind].prototype = APIClass.prototype;
-            })(kind, API[kind]);
+        MQ.StaticMath = createEntrypoint('StaticMath', APIClasses.StaticMath);
+        MQ.MathField = createEntrypoint('MathField', APIClasses.MathField);
+        MQ.InnerMathField = createEntrypoint('InnerMathField', APIClasses.InnerMathField);
+        if (APIClasses.TextField) {
+            MQ.TextField = createEntrypoint('TextField', APIClasses.TextField);
+        }
+        MQ.prototype = AbstractMathQuill.prototype;
+        MQ.EditableField = function () {
+            throw "wtf don't call me, I'm 'abstract'";
+        };
+        MQ.EditableField.prototype = EditableField.prototype;
+        if (version < 3) {
+            MQ.saneKeyboardEvents = defaultSubstituteKeyboardEvents;
+        }
+        function createEntrypoint(kind, APIClass) {
+            pray(kind + ' is defined', APIClass);
+            function mqEntrypoint(el, opts) {
+                if (!el || !el.nodeType)
+                    return null;
+                var mq = MQ(el);
+                if (mq instanceof APIClass)
+                    return mq;
+                var ctrlr = new Controller(new APIClass.RootBlock(), el, new BaseOptions(version));
+                ctrlr.KIND_OF_MQ = kind;
+                return new APIClass(ctrlr).__mathquillify(opts || {}, version);
+            }
+            mqEntrypoint.prototype = APIClass.prototype;
+            return mqEntrypoint;
+        }
         return MQ;
     }
     MathQuill.noConflict = function () {
@@ -1467,21 +2463,29 @@ var __extends = (this && this.__extends) || (function () {
     window.MathQuill = MathQuill;
     function RootBlockMixin(_) {
         _.moveOutOf = function (dir) {
+            pray('controller is defined', this.controller);
             this.controller.handle('moveOutOf', dir);
         };
         _.deleteOutOf = function (dir) {
+            pray('controller is defined', this.controller);
             this.controller.handle('deleteOutOf', dir);
         };
         _.selectOutOf = function (dir) {
+            pray('controller is defined', this.controller);
             this.controller.handle('selectOutOf', dir);
         };
-        _.upOutOf = function (dir) {
-            this.controller.handle('upOutOf', dir);
+        _.upOutOf = function () {
+            pray('controller is defined', this.controller);
+            this.controller.handle('upOutOf');
+            return undefined;
         };
-        _.downOutOf = function (dir) {
-            this.controller.handle('downOutOf', dir);
+        _.downOutOf = function () {
+            pray('controller is defined', this.controller);
+            this.controller.handle('downOutOf');
+            return undefined;
         };
         _.reflow = function () {
+            pray('controller is defined', this.controller);
             this.controller.handle('reflow');
             this.controller.handle('edited');
             this.controller.handle('edit');
@@ -1670,6 +2674,54 @@ var __extends = (this && this.__extends) || (function () {
         });
         return Parser;
     }());
+    /** Poller that fires once every tick. */
+    var EveryTick = /** @class */ (function () {
+        function EveryTick() {
+            this.fn = noop;
+        }
+        EveryTick.prototype.listen = function (fn) {
+            this.fn = fn;
+            clearTimeout(this.timeoutId);
+            this.timeoutId = setTimeout(this.fn);
+        };
+        EveryTick.prototype.listenOnce = function (fn) {
+            var _this_1 = this;
+            this.listen(function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                _this_1.clearListener();
+                fn.apply(void 0, args);
+            });
+        };
+        EveryTick.prototype.clearListener = function () {
+            this.fn = noop;
+            clearTimeout(this.timeoutId);
+        };
+        EveryTick.prototype.trigger = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            this.fn.apply(this, args);
+        };
+        return EveryTick;
+    }());
+    /*************************************************
+     * Sane Keyboard Events Shim
+     *
+     * An abstraction layer over the raw browser browser events
+     * on the textarea that hides all the nasty cross-
+     * browser incompatibilities behind a uniform API.
+     *
+     * Design goal: This is a *HARD* internal
+     * abstraction barrier. Cross-browser
+     * inconsistencies are not allowed to leak through
+     * and be dealt with by event handlers. All future
+     * cross-browser issues that arise must be dealt
+     * with here, and if necessary, the API updated.
+     ************************************************/
     var saneKeyboardEvents = (function () {
         // The following [key values][1] map was compiled from the
         // [DOM3 Events appendix section on key codes][2] and
@@ -1680,7 +2732,7 @@ var __extends = (this && this.__extends) || (function () {
         // [1]: http://www.w3.org/TR/2012/WD-DOM-Level-3-Events-20120614/#keys-keyvalues
         // [2]: http://www.w3.org/TR/2012/WD-DOM-Level-3-Events-20120614/#fixed-virtual-key-codes
         // [3]: http://unixpapa.com/js/key.html
-        var KEY_VALUES = {
+        var WHICH_TO_MQ_KEY_STEM = {
             8: 'Backspace',
             9: 'Tab',
             10: 'Enter',
@@ -1703,35 +2755,67 @@ var __extends = (this && this.__extends) || (function () {
             46: 'Del',
             144: 'NumLock',
         };
-        // To the extent possible, create a normalized string representation
-        // of the key combo (i.e., key code and modifier keys).
-        function stringify(evt) {
-            var which = evt.which || evt.keyCode;
-            var keyVal = KEY_VALUES[which];
-            var key;
+        var KEY_TO_MQ_KEY_STEM = {
+            ArrowRight: 'Right',
+            ArrowLeft: 'Left',
+            ArrowDown: 'Down',
+            ArrowUp: 'Up',
+            Delete: 'Del',
+            Escape: 'Esc',
+            ' ': 'Spacebar',
+        };
+        function isArrowKey(e) {
+            // The keyPress event in FF reports which=0 for some reason. The new
+            // .key property seems to report reasonable results, so we're using that
+            switch (getMQKeyStem(e)) {
+                case 'Right':
+                case 'Left':
+                case 'Down':
+                case 'Up':
+                    return true;
+            }
+            return false;
+        }
+        function isLowercaseAlphaCharacter(s) {
+            return s.length === 1 && s >= 'a' && s <= 'z';
+        }
+        function getMQKeyStem(evt) {
+            var _c;
+            // Translate browser key names to MQ's internal naming system
+            //
+            // Ref: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+            if (evt.key === undefined) {
+                var which = evt.which || evt.keyCode;
+                return WHICH_TO_MQ_KEY_STEM[which] || String.fromCharCode(which);
+            }
+            if (isLowercaseAlphaCharacter(evt.key))
+                return evt.key.toUpperCase();
+            return (_c = KEY_TO_MQ_KEY_STEM[evt.key]) !== null && _c !== void 0 ? _c : evt.key;
+        }
+        /** To the extent possible, create a normalized string representation
+         * of the key combo (i.e., key code and modifier keys). */
+        function getMQKeyName(evt) {
+            var key = getMQKeyStem(evt);
             var modifiers = [];
             if (evt.ctrlKey)
                 modifiers.push('Ctrl');
-            if (evt.originalEvent && evt.originalEvent.metaKey)
+            if (evt.metaKey)
                 modifiers.push('Meta');
             if (evt.altKey)
                 modifiers.push('Alt');
             if (evt.shiftKey)
                 modifiers.push('Shift');
-            key = keyVal || String.fromCharCode(which);
-            if (!modifiers.length && !keyVal)
+            if (!modifiers.length)
                 return key;
             modifiers.push(key);
             return modifiers.join('-');
         }
-        // create a keyboard events shim that calls callbacks at useful times
-        // and exports useful public methods
-        return function saneKeyboardEvents(el, controller) {
+        return function saneKeyboardEvents(
+        /** Usually the textarea associated with a MQ instance, but can be another kind of element if `substituteTextarea` was used to replace it with something else. */
+        textarea, controller) {
             var keydown = null;
             var keypress = null;
-            var textarea = jQuery(el);
-            var target = jQuery(controller.container || textarea);
-            // checkTextareaFor() is called after key or clipboard events to
+            // everyTick.listen() is called after key or clipboard events to
             // say "Hey, I think something was just typed" or "pasted" etc,
             // so that at all subsequent opportune times (next event or timeout),
             // will check for expected typed or pasted text.
@@ -1739,23 +2823,7 @@ var __extends = (this && this.__extends) || (function () {
             // after selecting something and then typing, the textarea is
             // incorrectly reported as selected during the input event (but not
             // subsequently).
-            var checkTextarea = noop;
-            var timeoutId;
-            function checkTextareaFor(checker) {
-                checkTextarea = checker;
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(checker);
-            }
-            function checkTextareaOnce(checker) {
-                checkTextareaFor(function (e) {
-                    checkTextarea = noop;
-                    clearTimeout(timeoutId);
-                    checker(e);
-                });
-            }
-            target.bind('keydown keypress input keyup paste', function (e) {
-                checkTextarea(e);
-            });
+            var everyTick = new EveryTick();
             function guardedTextareaSelect() {
                 try {
                     // IE can throw an 'Incorrect Function' error if you
@@ -1763,7 +2831,8 @@ var __extends = (this && this.__extends) || (function () {
                     // likely that we don't really care if the selection
                     // fails to happen in this case. Why would the textarea
                     // be hidden? And who would even be able to tell?
-                    textarea[0].select();
+                    if (textarea instanceof HTMLTextAreaElement)
+                        textarea.select();
                 }
                 catch (e) { }
             }
@@ -1772,10 +2841,10 @@ var __extends = (this && this.__extends) || (function () {
                 // check textarea at least once/one last time before munging (so
                 // no race condition if selection happens after keypress/paste but
                 // before checkTextarea), then never again ('cos it's been munged)
-                checkTextarea();
-                checkTextarea = noop;
-                clearTimeout(timeoutId);
-                textarea.val(text);
+                everyTick.trigger();
+                everyTick.clearListener();
+                if (textarea instanceof HTMLTextAreaElement)
+                    textarea.value = text;
                 if (text)
                     guardedTextareaSelect();
                 shouldBeSelected = !!text;
@@ -1786,27 +2855,29 @@ var __extends = (this && this.__extends) || (function () {
             // This will always return false in IE < 9, which don't support
             // HTMLTextareaElement::selection{Start,End}.
             function hasSelection() {
-                var dom = textarea[0];
-                if (!('selectionStart' in dom))
+                if (!('selectionStart' in textarea))
                     return false;
-                return dom.selectionStart !== dom.selectionEnd;
+                if (!(textarea instanceof HTMLTextAreaElement))
+                    return false;
+                return textarea.selectionStart !== textarea.selectionEnd;
             }
             function handleKey() {
                 if (controller.options && controller.options.overrideKeystroke) {
-                    controller.options.overrideKeystroke(stringify(keydown), keydown);
+                    controller.options.overrideKeystroke(getMQKeyName(keydown), keydown);
                 }
                 else {
-                    controller.keystroke(stringify(keydown), keydown);
+                    controller.keystroke(getMQKeyName(keydown), keydown);
                 }
             }
             // -*- event handlers -*- //
             function onKeydown(e) {
-                if (e.target !== textarea[0])
+                everyTick.trigger(e);
+                if (e.target !== textarea)
                     return;
                 keydown = e;
                 keypress = null;
                 if (shouldBeSelected)
-                    checkTextareaOnce(function (e) {
+                    everyTick.listenOnce(function (e) {
                         if (!(e && e.type === 'focusout')) {
                             // re-select textarea in case it's an unrecognized key that clears
                             // the selection, then never again, 'cos next thing might be blur
@@ -1815,22 +2886,9 @@ var __extends = (this && this.__extends) || (function () {
                     });
                 handleKey();
             }
-            function isArrowKey(e) {
-                if (!e || !e.originalEvent)
-                    return false;
-                // The keyPress event in FF reports which=0 for some reason. The new
-                // .key property seems to report reasonable results, so we're using that
-                switch (e.originalEvent.key) {
-                    case 'ArrowRight':
-                    case 'ArrowLeft':
-                    case 'ArrowDown':
-                    case 'ArrowUp':
-                        return true;
-                }
-                return false;
-            }
             function onKeypress(e) {
-                if (e.target !== textarea[0])
+                everyTick.trigger(e);
+                if (e.target !== textarea)
                     return;
                 // call the key handler for repeated keypresses.
                 // This excludes keypresses that happen directly
@@ -1844,11 +2902,15 @@ var __extends = (this && this.__extends) || (function () {
                 // use the mq.keystroke('Right') command while a single character
                 // is selected. Only detected in FF.
                 if (!isArrowKey(e)) {
-                    checkTextareaFor(typedText);
+                    everyTick.listen(typedText);
+                }
+                else {
+                    everyTick.listenOnce(maybeReselect);
                 }
             }
             function onKeyup(e) {
-                if (e.target !== textarea[0])
+                everyTick.trigger(e);
+                if (e.target !== textarea)
                     return;
                 // Handle case of no keypress event being sent
                 if (!!keydown && !keypress) {
@@ -1857,7 +2919,10 @@ var __extends = (this && this.__extends) || (function () {
                     // use the mq.keystroke('Right') command while a single character
                     // is selected. Only detected in FF.
                     if (!isArrowKey(e)) {
-                        checkTextareaFor(typedText);
+                        everyTick.listen(typedText);
+                    }
+                    else {
+                        everyTick.listenOnce(maybeReselect);
                     }
                 }
             }
@@ -1881,9 +2946,11 @@ var __extends = (this && this.__extends) || (function () {
                 // b1318e5349160b665003e36d4eedd64101ceacd8
                 if (hasSelection())
                     return;
-                var text = textarea.val();
+                if (!(textarea instanceof HTMLTextAreaElement))
+                    return;
+                var text = textarea.value;
                 if (text.length === 1) {
-                    textarea.val('');
+                    textarea.value = '';
                     if (controller.options && controller.options.overrideTypedText) {
                         controller.options.overrideTypedText(text);
                     }
@@ -1892,18 +2959,26 @@ var __extends = (this && this.__extends) || (function () {
                     }
                 } // in Firefox, keys that don't type text, just clear seln, fire keypress
                 // https://github.com/mathquill/mathquill/issues/293#issuecomment-40997668
-                else if (text)
-                    guardedTextareaSelect(); // re-select if that's why we're here
+                else
+                    maybeReselect(); // re-select if that's why we're here
+            }
+            function maybeReselect() {
+                if (!(textarea instanceof HTMLTextAreaElement))
+                    return;
+                if (textarea.value.length > 1) {
+                    guardedTextareaSelect();
+                }
             }
             function onBlur() {
                 keydown = null;
                 keypress = null;
-                checkTextarea = noop;
-                clearTimeout(timeoutId);
-                textarea.val('');
+                everyTick.clearListener();
+                if (textarea instanceof HTMLTextAreaElement)
+                    textarea.value = '';
             }
             function onPaste(e) {
-                if (e.target !== textarea[0])
+                everyTick.trigger();
+                if (e.target !== textarea)
                     return;
                 // browsers are dumb.
                 //
@@ -1917,20 +2992,23 @@ var __extends = (this && this.__extends) || (function () {
                 // on keydown too, FWIW).
                 //
                 // And by nifty, we mean dumb (but useful sometimes).
-                if (document.activeElement !== textarea[0]) {
-                    textarea[0].focus();
+                if (document.activeElement !== textarea) {
+                    textarea.focus();
                 }
-                checkTextareaFor(pastedText);
+                everyTick.listen(function pastedText() {
+                    if (!(textarea instanceof HTMLTextAreaElement))
+                        return;
+                    var text = textarea.value;
+                    textarea.value = '';
+                    if (text)
+                        controller.paste(text);
+                });
             }
-            function pastedText() {
-                var text = textarea.val();
-                textarea.val('');
-                if (text)
-                    controller.paste(text);
+            function onInput(e) {
+                everyTick.trigger(e);
             }
-            // -*- attach event handlers -*- //
             if (controller.options && controller.options.disableCopyPaste) {
-                target.bind({
+                controller.addTextareaEventListeners({
                     keydown: onKeydown,
                     keypress: onKeypress,
                     keyup: onKeyup,
@@ -1942,33 +3020,34 @@ var __extends = (this && this.__extends) || (function () {
                         e.preventDefault();
                     },
                     paste: function (e) {
+                        everyTick.trigger();
                         e.preventDefault();
                     },
+                    input: onInput,
                 });
             }
             else {
-                target.bind({
+                controller.addTextareaEventListeners({
                     keydown: onKeydown,
                     keypress: onKeypress,
                     keyup: onKeyup,
                     focusout: onBlur,
                     cut: function () {
-                        checkTextareaOnce(function () {
+                        everyTick.listenOnce(function () {
                             controller.cut();
                         });
                     },
                     copy: function () {
-                        checkTextareaOnce(function () {
+                        everyTick.listenOnce(function () {
                             controller.copy();
                         });
                     },
                     paste: onPaste,
+                    input: onInput,
                 });
             }
             // -*- export public methods -*- //
-            return {
-                select: select,
-            };
+            return { select: select };
         };
     })();
     /***********************************************
@@ -2007,84 +3086,102 @@ var __extends = (this && this.__extends) || (function () {
     var Controller_focusBlur = /** @class */ (function (_super) {
         __extends(Controller_focusBlur, _super);
         function Controller_focusBlur() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Controller_focusBlur.prototype.disableGroupingForSeconds = function (seconds) {
-            clearTimeout(this.__disableGroupingTimeout);
-            var jQ = this.root.jQ;
-            if (seconds === 0) {
-                jQ.removeClass('mq-suppress-grouping');
-            }
-            else {
-                jQ.addClass('mq-suppress-grouping');
-                this.__disableGroupingTimeout = setTimeout(function () {
-                    jQ.removeClass('mq-suppress-grouping');
-                }, seconds * 1000);
-            }
-        };
-        Controller_focusBlur.prototype.focusBlurEvents = function () {
-            var ctrlr = this, root = ctrlr.root, cursor = ctrlr.cursor;
-            var blurTimeout;
-            var textarea = ctrlr.getTextareaOrThrow();
-            textarea
-                .focus(function () {
-                ctrlr.updateMathspeak();
-                ctrlr.blurred = false;
-                clearTimeout(blurTimeout);
-                ctrlr.container.addClass('mq-focused');
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.handleTextareaFocusEditable = function () {
+                var cursor = _this_1.cursor;
+                _this_1.updateMathspeak();
+                _this_1.blurred = false;
+                clearTimeout(_this_1.blurTimeout);
+                domFrag(_this_1.container).addClass('mq-focused');
                 if (!cursor.parent)
-                    cursor.insAtRightEnd(root);
+                    cursor.insAtRightEnd(_this_1.root);
                 if (cursor.selection) {
-                    cursor.selection.jQ.removeClass('mq-blur');
-                    ctrlr.selectionChanged(); //re-select textarea contents after tabbing away and back
+                    cursor.selection.domFrag().removeClass('mq-blur');
+                    _this_1.selectionChanged(); //re-select textarea contents after tabbing away and back
                 }
                 else {
                     cursor.show();
                 }
-                ctrlr.setOverflowClasses();
-            })
-                .blur(function () {
-                if (ctrlr.textareaSelectionTimeout) {
-                    clearTimeout(ctrlr.textareaSelectionTimeout);
-                    ctrlr.textareaSelectionTimeout = 0;
+                _this_1.setOverflowClasses();
+            };
+            _this_1.handleTextareaBlurEditable = function () {
+                if (_this_1.textareaSelectionTimeout) {
+                    clearTimeout(_this_1.textareaSelectionTimeout);
+                    _this_1.textareaSelectionTimeout = 0;
                 }
-                ctrlr.disableGroupingForSeconds(0);
-                ctrlr.blurred = true;
-                blurTimeout = setTimeout(function () {
+                _this_1.disableGroupingForSeconds(0);
+                _this_1.blurred = true;
+                _this_1.blurTimeout = setTimeout(function () {
                     // wait for blur on window; if
-                    root.postOrder(function (node) {
+                    _this_1.root.postOrder(function (node) {
                         node.intentionalBlur();
                     }); // none, intentional blur: #264
-                    cursor.clearSelection().endSelection();
-                    blur();
-                    ctrlr.updateMathspeak();
-                    ctrlr.scrollHoriz();
+                    _this_1.cursor.clearSelection().endSelection();
+                    _this_1.blur();
+                    _this_1.updateMathspeak();
+                    _this_1.scrollHoriz();
                 });
-                $(window).bind('blur', windowBlur);
-            });
-            function windowBlur() {
-                // blur event also fired on window, just switching
-                clearTimeout(blurTimeout); // tabs/windows, not intentional blur
-                if (cursor.selection)
-                    cursor.selection.jQ.addClass('mq-blur');
-                blur();
-                ctrlr.updateMathspeak();
-            }
-            function blur() {
-                // not directly in the textarea blur handler so as to be
-                cursor.hide().parent.blur(cursor); // synchronous with/in the same frame as
-                ctrlr.container.removeClass('mq-focused'); // clearing/blurring selection
-                $(window).unbind('blur', windowBlur);
-                if (ctrlr.options && ctrlr.options.resetCursorOnBlur) {
-                    cursor.resetToEnd(ctrlr);
+                window.addEventListener('blur', _this_1.handleWindowBlur);
+            };
+            _this_1.handleTextareaFocusStatic = function () {
+                _this_1.blurred = false;
+            };
+            _this_1.handleTextareaBlurStatic = function () {
+                if (_this_1.cursor.selection) {
+                    _this_1.cursor.selection.clear();
                 }
+                //detaching during blur explodes in WebKit
+                setTimeout(function () {
+                    domFrag(_this_1.getTextareaSpanOrThrow()).detach();
+                    _this_1.blurred = true;
+                });
+            };
+            _this_1.handleWindowBlur = function () {
+                // blur event also fired on window, just switching
+                clearTimeout(_this_1.blurTimeout); // tabs/windows, not intentional blur
+                if (_this_1.cursor.selection)
+                    _this_1.cursor.selection.domFrag().addClass('mq-blur');
+                _this_1.blur();
+                _this_1.updateMathspeak();
+            };
+            return _this_1;
+        }
+        Controller_focusBlur.prototype.disableGroupingForSeconds = function (seconds) {
+            var _this_1 = this;
+            clearTimeout(this.__disableGroupingTimeout);
+            if (seconds === 0) {
+                this.root.domFrag().removeClass('mq-suppress-grouping');
             }
+            else {
+                this.root.domFrag().addClass('mq-suppress-grouping');
+                this.__disableGroupingTimeout = setTimeout(function () {
+                    _this_1.root.domFrag().removeClass('mq-suppress-grouping');
+                }, seconds * 1000);
+            }
+        };
+        Controller_focusBlur.prototype.blur = function () {
+            // not directly in the textarea blur handler so as to be
+            this.cursor.hide().parent.blur(this.cursor); // synchronous with/in the same frame as
+            domFrag(this.container).removeClass('mq-focused'); // clearing/blurring selection
+            window.removeEventListener('blur', this.handleWindowBlur);
+            if (this.options && this.options.resetCursorOnBlur) {
+                this.cursor.resetToEnd(this);
+            }
+        };
+        Controller_focusBlur.prototype.addEditableFocusBlurListeners = function () {
+            var ctrlr = this, cursor = ctrlr.cursor;
+            this.addTextareaEventListeners({
+                focus: this.handleTextareaFocusEditable,
+                blur: this.handleTextareaBlurEditable,
+            });
             ctrlr.blurred = true;
             cursor.hide().parent.blur(cursor);
         };
-        Controller_focusBlur.prototype.unbindFocusBlurEvents = function () {
-            var textarea = this.getTextareaOrThrow();
-            textarea.unbind('focus blur');
+        Controller_focusBlur.prototype.addStaticFocusBlurListeners = function () {
+            this.addTextareaEventListeners({
+                focus: this.handleTextareaFocusStatic,
+                blur: this.handleTextareaBlurStatic,
+            });
         };
         return Controller_focusBlur;
     }(Controller_exportText));
@@ -2256,22 +3353,16 @@ var __extends = (this && this.__extends) || (function () {
                         ctrlr.aria.queue('block is empty');
                     break;
                 case 'Ctrl-Alt-Left': // speak left-adjacent block
-                    if (cursor.parent.parent &&
-                        cursor.parent.parent.ends &&
-                        cursor.parent.parent.ends[L] &&
-                        cursor.parent.parent.ends[L] instanceof MQNode) {
-                        ctrlr.aria.queue(cursor.parent.parent.ends[L]);
+                    if (cursor.parent.parent && cursor.parent.parent.getEnd(L)) {
+                        ctrlr.aria.queue(cursor.parent.parent.getEnd(L));
                     }
                     else {
                         ctrlr.aria.queue('nothing to the left');
                     }
                     break;
                 case 'Ctrl-Alt-Right': // speak right-adjacent block
-                    if (cursor.parent.parent &&
-                        cursor.parent.parent.ends &&
-                        cursor.parent.parent.ends[R] &&
-                        cursor.parent.parent.ends[R] instanceof MQNode) {
-                        ctrlr.aria.queue(cursor.parent.parent.ends[R]);
+                    if (cursor.parent.parent && cursor.parent.parent.getEnd(R)) {
+                        ctrlr.aria.queue(cursor.parent.parent.getEnd(R));
                     }
                     else {
                         ctrlr.aria.queue('nothing to the right');
@@ -2294,29 +3385,29 @@ var __extends = (this && this.__extends) || (function () {
                     return;
             }
             ctrlr.aria.alert();
-            e.preventDefault();
+            e === null || e === void 0 ? void 0 : e.preventDefault();
             ctrlr.scrollHoriz();
         };
         MQNode.prototype.moveOutOf = function (_dir, _cursor, _updown) {
-            pray('overridden or never called on this node');
+            pray('overridden or never called on this node', false);
         }; // called by Controller::escapeDir, moveDir
         MQNode.prototype.moveTowards = function (_dir, _cursor, _updown) {
-            pray('overridden or never called on this node');
+            pray('overridden or never called on this node', false);
         }; // called by Controller::moveDir
         MQNode.prototype.deleteOutOf = function (_dir, _cursor) {
-            pray('overridden or never called on this node');
+            pray('overridden or never called on this node', false);
         }; // called by Controller::deleteDir
         MQNode.prototype.deleteTowards = function (_dir, _cursor) {
-            pray('overridden or never called on this node');
+            pray('overridden or never called on this node', false);
         }; // called by Controller::deleteDir
         MQNode.prototype.unselectInto = function (_dir, _cursor) {
-            pray('overridden or never called on this node');
+            pray('overridden or never called on this node', false);
         }; // called by Controller::selectDir
         MQNode.prototype.selectOutOf = function (_dir, _cursor) {
-            pray('overridden or never called on this node');
+            pray('overridden or never called on this node', false);
         }; // called by Controller::selectDir
         MQNode.prototype.selectTowards = function (_dir, _cursor) {
-            pray('overridden or never called on this node');
+            pray('overridden or never called on this node', false);
         }; // called by Controller::selectDir
         return MQNode;
     }(NodeBase));
@@ -2324,7 +3415,7 @@ var __extends = (this && this.__extends) || (function () {
         if (e === 'move' || e === 'upDown')
             cursor.show().clearSelection();
     });
-    optionProcessors.leftRightIntoCmdGoes = function (updown) {
+    baseOptionProcessors.leftRightIntoCmdGoes = function (updown) {
         if (updown && updown !== 'up' && updown !== 'down') {
             throw ('"up" or "down" required for leftRightIntoCmdGoes option, ' +
                 'got "' +
@@ -2358,11 +3449,12 @@ var __extends = (this && this.__extends) || (function () {
             var cursor = this.cursor;
             // only prevent default of Tab if not in the root editable
             if (cursor.parent !== this.root)
-                e.preventDefault();
+                e === null || e === void 0 ? void 0 : e.preventDefault();
             // want to be a noop if in the root editable (in fact, Tab has an unrelated
             // default browser action if so)
             if (cursor.parent === this.root)
                 return;
+            cursor.clearSelection();
             cursor.parent.moveOutOf(dir, cursor);
             cursor.controller.aria.alert();
             return this.notify('move');
@@ -2372,7 +3464,7 @@ var __extends = (this && this.__extends) || (function () {
             var cursor = this.cursor, updown = cursor.options.leftRightIntoCmdGoes;
             var cursorDir = cursor[dir];
             if (cursor.selection) {
-                cursor.insDirOf(dir, cursor.selection.ends[dir]);
+                cursor.insDirOf(dir, cursor.selection.getEnd(dir));
             }
             else if (cursorDir)
                 cursorDir.moveTowards(dir, cursor, updown);
@@ -2511,10 +3603,10 @@ var __extends = (this && this.__extends) || (function () {
             this.notify('edit');
             var fragRemoved;
             if (dir === L) {
-                fragRemoved = new Fragment(cursor.parent.ends[L], cursor[L]);
+                fragRemoved = new Fragment(cursor.parent.getEnd(L), cursor[L]);
             }
             else {
-                fragRemoved = new Fragment(cursor[R], cursor.parent.ends[R]);
+                fragRemoved = new Fragment(cursor[R], cursor.parent.getEnd(R));
             }
             cursor.controller.aria.queue(fragRemoved);
             fragRemoved.remove();
@@ -2569,7 +3661,7 @@ var __extends = (this && this.__extends) || (function () {
                 // and is on the *far side* of the selection (hence is only node selected)
                 // and the anticursor is *inside* that node, not just on the other side"
                 if (seln &&
-                    seln.ends[dir] === node &&
+                    seln.getEnd(dir) === node &&
                     cursor.anticursor[-dir] !== node) {
                     node.unselectInto(dir, cursor);
                 }
@@ -2614,11 +3706,11 @@ var __extends = (this && this.__extends) || (function () {
          * with extra error handling and invariant enforcement
          */
         Controller_keystroke.prototype.withIncrementalSelection = function (cb) {
-            var _this = this;
+            var _this_1 = this;
             try {
                 this.startIncrementalSelection();
                 try {
-                    cb(function (dir) { return _this.selectDirIncremental(dir); });
+                    cb(function (dir) { return _this_1.selectDirIncremental(dir); });
                 }
                 finally {
                     // Since we have started a selection, attempt to finish it even
@@ -2665,10 +3757,10 @@ var __extends = (this && this.__extends) || (function () {
             });
         };
         Controller_keystroke.prototype.selectToRootEndInDir = function (dir) {
-            var _this = this;
+            var _this_1 = this;
             var cursor = this.cursor;
             this.withIncrementalSelection(function (selectDir) {
-                while (cursor[dir] || cursor.parent !== _this.root) {
+                while (cursor[dir] || cursor.parent !== _this_1.root) {
                     selectDir(dir);
                 }
             });
@@ -2693,7 +3785,7 @@ var __extends = (this && this.__extends) || (function () {
         function joinBlocks(blocks) {
             var firstBlock = blocks[0] || new MathBlock();
             for (var i = 1; i < blocks.length; i += 1) {
-                blocks[i].children().adopt(firstBlock, firstBlock.ends[R], 0);
+                blocks[i].children().adopt(firstBlock, firstBlock.getEnd(R), 0);
             }
             return firstBlock;
         }
@@ -2760,7 +3852,7 @@ var __extends = (this && this.__extends) || (function () {
         latexMath.optBlock = optMathBlock;
         return latexMath;
     })();
-    optionProcessors.maxDepth = function (depth) {
+    baseOptionProcessors.maxDepth = function (depth) {
         return typeof depth === 'number' ? depth : undefined;
     };
     var Controller_latex = /** @class */ (function (_super) {
@@ -2793,12 +3885,11 @@ var __extends = (this && this.__extends) || (function () {
             }
             return;
         };
-        Controller_latex.prototype.renderLatexMathEfficiently = function (latex) {
+        Controller_latex.prototype.updateLatexMathEfficiently = function (latex, oldLatex) {
+            var _c, _d, _e, _f;
+            // Note, benchmark/update.html is useful for measuring the
+            // performance of renderLatexMathEfficiently
             var root = this.root;
-            var oldLatex = this.exportLatex();
-            if (root.ends[L] && root.ends[R] && oldLatex === latex) {
-                return true;
-            }
             var oldClassification;
             var classification = this.classifyLatexForEfficientUpdate(latex);
             if (classification) {
@@ -2825,7 +3916,7 @@ var __extends = (this && this.__extends) || (function () {
                 newDigits = newDigits.substr(1);
             }
             // start at the very end
-            var charNode = this.root.ends[R];
+            var charNode = this.root.getEnd(R);
             var oldCharNodes = [];
             for (var i = oldDigits.length - 1; i >= 0; i--) {
                 // the tree does not match what we expect
@@ -2858,29 +3949,31 @@ var __extends = (this && this.__extends) || (function () {
                 if (oldMinusNodeL && oldMinusNodeL.parent !== root)
                     return false;
                 oldCharNodes[0][L] = oldMinusNode[L];
-                if (root.ends[L] === oldMinusNode)
-                    root.ends[L] = oldCharNodes[0];
+                if (root.getEnd(L) === oldMinusNode) {
+                    root.setEnds((_c = {}, _c[L] = oldCharNodes[0], _c[R] = root.getEnd(R), _c));
+                }
                 if (oldMinusNodeL)
                     oldMinusNodeL[R] = oldCharNodes[0];
-                oldMinusNode.jQ.remove();
+                oldMinusNode.domFrag().remove();
             }
             // add a minus sign
             if (!oldMinusSign && newMinusSign) {
                 var newMinusNode = new PlusMinus('-');
                 var minusSpan = document.createElement('span');
                 minusSpan.textContent = '-';
-                newMinusNode.jQ = $(minusSpan);
+                newMinusNode.setDOM(minusSpan);
                 var oldCharNodes0L = oldCharNodes[0][L];
                 if (oldCharNodes0L)
                     oldCharNodes0L[R] = newMinusNode;
-                if (root.ends[L] === oldCharNodes[0])
-                    root.ends[L] = newMinusNode;
+                if (root.getEnd(L) === oldCharNodes[0]) {
+                    root.setEnds((_d = {}, _d[L] = newMinusNode, _d[R] = root.getEnd(R), _d));
+                }
                 newMinusNode.parent = root;
                 newMinusNode[L] = oldCharNodes[0][L];
                 newMinusNode[R] = oldCharNodes[0];
                 oldCharNodes[0][L] = newMinusNode;
                 newMinusNode.contactWeld(this.cursor); // decide if binary operator
-                newMinusNode.jQ.insertBefore(oldCharNodes[0].jQ);
+                newMinusNode.domFrag().insertBefore(oldCharNodes[0].domFrag());
             }
             // update the text of the current nodes
             var commonLength = Math.min(oldDigits.length, newDigits.length);
@@ -2889,17 +3982,17 @@ var __extends = (this && this.__extends) || (function () {
                 charNode = oldCharNodes[i];
                 if (charNode.ctrlSeq !== newText) {
                     charNode.ctrlSeq = newText;
-                    charNode.jQ[0].textContent = newText;
+                    charNode.domFrag().oneElement().textContent = newText;
                     charNode.mathspeakName = newText;
                 }
             }
             // remove the extra digits at the end
             if (oldDigits.length > newDigits.length) {
                 charNode = oldCharNodes[newDigits.length - 1];
-                root.ends[R] = charNode;
+                root.setEnds((_e = {}, _e[L] = root.getEnd(L), _e[R] = charNode, _e));
                 charNode[R] = 0;
                 for (i = oldDigits.length - 1; i >= commonLength; i--) {
-                    oldCharNodes[i].jQ.remove();
+                    oldCharNodes[i].domFrag().remove();
                 }
             }
             // add new digits after the existing ones
@@ -2911,16 +4004,16 @@ var __extends = (this && this.__extends) || (function () {
                     span.textContent = newDigits[i];
                     var newNode = new Digit(newDigits[i]);
                     newNode.parent = root;
-                    newNode.jQ = $(span);
+                    newNode.setDOM(span);
                     frag.appendChild(span);
                     // splice this node in
-                    newNode[L] = root.ends[R];
+                    newNode[L] = root.getEnd(R);
                     newNode[R] = 0;
                     var newNodeL = newNode[L];
                     newNodeL[R] = newNode;
-                    root.ends[R] = newNode;
+                    root.setEnds((_f = {}, _f[L] = root.getEnd(L), _f[R] = newNode, _f));
                 }
-                root.jQ[0].appendChild(frag);
+                root.domFrag().oneElement().appendChild(frag);
             }
             var currentLatex = this.exportLatex();
             if (currentLatex !== latex) {
@@ -2930,14 +4023,14 @@ var __extends = (this && this.__extends) || (function () {
                     currentLatex);
                 return false;
             }
-            this.cursor.resetToEnd(this);
-            var rightMost = root.ends[R];
+            var rightMost = root.getEnd(R);
             if (rightMost) {
                 rightMost.fixDigitGrouping(this.cursor.options);
             }
             return true;
         };
         Controller_latex.prototype.renderLatexMathFromScratch = function (latex) {
+            var _c;
             var root = this.root, cursor = this.cursor;
             var all = Parser.all;
             var eof = Parser.eof;
@@ -2945,34 +4038,38 @@ var __extends = (this && this.__extends) || (function () {
                 .skip(eof)
                 .or(all.result(false))
                 .parse(latex);
-            root.ends[L] = root.ends[R] = 0;
+            root.setEnds((_c = {}, _c[L] = 0, _c[R] = 0, _c));
             if (block) {
                 block.children().adopt(root, 0, 0);
             }
-            var jQ = root.jQ;
             if (block) {
-                var html = block.join('html');
-                jQ.html(html);
-                root.jQize(jQ.children());
+                var frag = root.domFrag();
+                frag.children().remove();
+                frag.oneElement().appendChild(block.html());
                 root.finalizeInsert(cursor.options, cursor);
             }
             else {
-                jQ.empty();
+                root.domFrag().empty();
             }
-            this.updateMathspeak();
-            delete cursor.selection;
-            cursor.insAtRightEnd(root);
         };
         Controller_latex.prototype.renderLatexMath = function (latex) {
+            var cursor = this.cursor;
+            var root = this.root;
             this.notify('replace');
-            if (this.renderLatexMathEfficiently(latex))
-                return;
-            this.renderLatexMathFromScratch(latex);
+            cursor.clearSelection();
+            var oldLatex = this.exportLatex();
+            if (!root.getEnd(L) || !root.getEnd(R) || oldLatex !== latex) {
+                this.updateLatexMathEfficiently(latex, oldLatex) ||
+                    this.renderLatexMathFromScratch(latex);
+                this.updateMathspeak();
+            }
+            cursor.insAtRightEnd(root);
         };
         Controller_latex.prototype.renderLatexText = function (latex) {
+            var _c;
             var root = this.root, cursor = this.cursor;
-            root.jQ.children().slice(1).remove();
-            root.ends[L] = root.ends[R] = 0;
+            root.domFrag().children().slice(1).remove();
+            root.setEnds((_c = {}, _c[L] = 0, _c[R] = 0, _c));
             delete cursor.selection;
             cursor.show().insAtRightEnd(root);
             var regex = Parser.regex;
@@ -2990,7 +4087,7 @@ var __extends = (this && this.__extends) || (function () {
                 // HACK FIXME: this shouldn't have to have access to cursor
                 var rootMathCommand = new RootMathCommand(cursor);
                 rootMathCommand.createBlocks();
-                var rootMathBlock = rootMathCommand.ends[L];
+                var rootMathBlock = rootMathCommand.getEnd(L);
                 block.children().adopt(rootMathBlock, 0, 0);
                 return rootMathCommand;
             });
@@ -3005,9 +4102,9 @@ var __extends = (this && this.__extends) || (function () {
                 .parse(latex);
             if (commands) {
                 for (var i = 0; i < commands.length; i += 1) {
-                    commands[i].adopt(root, root.ends[R], 0);
+                    commands[i].adopt(root, root.getEnd(R), 0);
                 }
-                root.jQize().appendTo(root.jQ);
+                domFrag(root.html()).appendTo(root.domFrag().oneElement());
                 root.finalizeInsert(cursor.options, cursor);
             }
         };
@@ -3040,16 +4137,12 @@ var __extends = (this && this.__extends) || (function () {
     var Controller_mouse = /** @class */ (function (_super) {
         __extends(Controller_mouse, _super);
         function Controller_mouse() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Controller_mouse.prototype.delegateMouseEvents = function () {
-            var ultimateRootjQ = this.root.jQ;
-            //drag-to-select event handling
-            this.container.bind('mousedown.mathquill', function (_e) {
-                var e = _e;
-                var rootjQ = $(e.target).closest('.mq-root-block');
-                var root = (NodeBase.getNodeOfElement(rootjQ[0]) ||
-                    NodeBase.getNodeOfElement(ultimateRootjQ[0]));
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.handleMouseDown = function (e) {
+                var rootElement = closest(e.target, '.mq-root-block');
+                var root = ((rootElement && NodeBase.getNodeOfElement(rootElement)) ||
+                    NodeBase.getNodeOfElement(_this_1.root.domFrag().oneElement()));
+                var ownerDocument = root.domFrag().firstNode().ownerDocument;
                 var ctrlr = root.controller, cursor = ctrlr.cursor, blink = cursor.blink;
                 var textareaSpan = ctrlr.getTextareaSpanOrThrow();
                 var textarea = ctrlr.getTextareaOrThrow();
@@ -3059,30 +4152,28 @@ var __extends = (this && this.__extends) || (function () {
                     return;
                 else
                     cursor.options.ignoreNextMousedown = ignoreNextMouseDownNoop;
-                var target;
+                var lastMousemoveTarget = null;
                 function mousemove(e) {
-                    target = $(e.target);
+                    lastMousemoveTarget = e.target;
                 }
-                function docmousemove(e) {
+                function onDocumentMouseMove(e) {
                     if (!cursor.anticursor)
                         cursor.startSelection();
-                    ctrlr.seek(target, e.pageX, e.pageY).cursor.select();
+                    ctrlr.seek(lastMousemoveTarget, e.clientX, e.clientY).cursor.select();
                     if (cursor.selection)
                         cursor.controller.aria
                             .clear()
                             .queue(cursor.selection.join('mathspeak') + ' selected')
                             .alert();
-                    target = undefined;
+                    lastMousemoveTarget = null;
                 }
-                // outside rootjQ, the MathQuill node corresponding to the target (if any)
+                // outside rootElement, the MathQuill node corresponding to the target (if any)
                 // won't be inside this root, so don't mislead Controller::seek with it
-                function unbindListeners(e) {
+                function unbindListeners() {
                     // delete the mouse handlers now that we're not dragging anymore
-                    rootjQ.unbind('mousemove', mousemove);
-                    var anyTarget = e.target; // TODO - why do we need to cast to any?
-                    $(anyTarget.ownerDocument)
-                        .unbind('mousemove', docmousemove)
-                        .unbind('mouseup', mouseup);
+                    rootElement === null || rootElement === void 0 ? void 0 : rootElement.removeEventListener('mousemove', mousemove);
+                    ownerDocument === null || ownerDocument === void 0 ? void 0 : ownerDocument.removeEventListener('mousemove', onDocumentMouseMove);
+                    ownerDocument === null || ownerDocument === void 0 ? void 0 : ownerDocument.removeEventListener('mouseup', onDocumentMouseUp);
                     cancelSelectionOnEdit = undefined;
                 }
                 function updateCursor() {
@@ -3091,14 +4182,14 @@ var __extends = (this && this.__extends) || (function () {
                         cursor.controller.aria.queue(cursor.parent).alert();
                     }
                     else {
-                        textareaSpan.detach();
+                        domFrag(textareaSpan).detach();
                     }
                 }
-                function mouseup(e) {
+                function onDocumentMouseUp() {
                     cursor.blink = blink;
                     if (!cursor.selection)
                         updateCursor();
-                    unbindListeners(e);
+                    unbindListeners();
                 }
                 var wasEdited;
                 cancelSelectionOnEdit = {
@@ -3111,13 +4202,14 @@ var __extends = (this && this.__extends) || (function () {
                         cursor.blink = blink;
                         cursor.clearSelection();
                         updateCursor();
-                        unbindListeners(e);
+                        unbindListeners();
                     },
                 };
                 if (ctrlr.blurred) {
-                    if (!ctrlr.editable)
-                        rootjQ.prepend(textareaSpan);
-                    textarea[0].focus();
+                    if (rootElement && !ctrlr.editable) {
+                        domFrag(rootElement).prepend(domFrag(textareaSpan));
+                    }
+                    textarea.focus();
                     // focus call may bubble to clients, who may then write to
                     // mathquill, triggering cancelSelectionOnEdit. If that happens, we
                     // don't want to stop the cursor blink or bind listeners,
@@ -3126,18 +4218,27 @@ var __extends = (this && this.__extends) || (function () {
                         return;
                 }
                 cursor.blink = noop;
-                ctrlr.seek($(e.target), e.pageX, e.pageY).cursor.startSelection();
-                rootjQ.mousemove(mousemove);
-                var anyTarget = e.target; // TODO - why do we need to cast to any?
-                $(anyTarget.ownerDocument).mousemove(docmousemove).mouseup(mouseup);
+                ctrlr
+                    .seek(e.target, e.clientX, e.clientY)
+                    .cursor.startSelection();
+                rootElement === null || rootElement === void 0 ? void 0 : rootElement.addEventListener('mousemove', mousemove);
+                ownerDocument === null || ownerDocument === void 0 ? void 0 : ownerDocument.addEventListener('mousemove', onDocumentMouseMove);
+                ownerDocument === null || ownerDocument === void 0 ? void 0 : ownerDocument.addEventListener('mouseup', onDocumentMouseUp);
                 // listen on document not just body to not only hear about mousemove and
                 // mouseup on page outside field, but even outside page, except iframes: https://github.com/mathquill/mathquill/commit/8c50028afcffcace655d8ae2049f6e02482346c5#commitcomment-6175800
-            });
+            };
+            return _this_1;
+        }
+        Controller_mouse.prototype.addMouseEventListener = function () {
+            //drag-to-select event handling
+            this.container.addEventListener('mousedown', this.handleMouseDown);
         };
-        Controller_mouse.prototype.seek = function ($target, pageX, _pageY) {
+        Controller_mouse.prototype.removeMouseEventListener = function () {
+            this.container.removeEventListener('mousedown', this.handleMouseDown);
+        };
+        Controller_mouse.prototype.seek = function (targetElm, clientX, _clientY) {
             var cursor = this.notify('select').cursor;
             var node;
-            var targetElm = $target && $target[0];
             // we can click on an element that is deeply nested past the point
             // that mathquill knows about. We need to traverse up to the first
             // node that mathquill is aware of
@@ -3157,7 +4258,7 @@ var __extends = (this && this.__extends) || (function () {
             // target was selection span, otherwise target will have no parent and will
             // seek from root, which is less accurate (e.g. fraction)
             cursor.clearSelection().show();
-            node.seek(pageX, cursor);
+            node.seek(clientX, cursor);
             this.scrollHoriz(); // before .selectFrom when mouse-selecting, so
             // always hits no-selection case in scrollHoriz and scrolls slower
             return this;
@@ -3174,11 +4275,11 @@ var __extends = (this && this.__extends) || (function () {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         Controller_scrollHoriz.prototype.setOverflowClasses = function () {
-            var root = this.root.jQ[0];
+            var root = this.root.domFrag().oneElement();
             var shouldHaveOverflowRight = false;
             var shouldHaveOverflowLeft = false;
             if (!this.blurred) {
-                var width = root.getBoundingClientRect().width;
+                var width = getBoundingClientRect(root).width;
                 var scrollWidth = root.scrollWidth;
                 var scroll = root.scrollLeft;
                 shouldHaveOverflowRight = scrollWidth > width + scroll;
@@ -3192,17 +4293,32 @@ var __extends = (this && this.__extends) || (function () {
                 root.classList.toggle('mq-editing-overflow-left');
         };
         Controller_scrollHoriz.prototype.scrollHoriz = function () {
-            var _this = this;
+            var _this_1 = this;
             var cursor = this.cursor, seln = cursor.selection;
-            var rootRect = this.root.jQ[0].getBoundingClientRect();
-            if (!cursor.jQ[0] && !seln) {
-                this.root.jQ.stop().animate({ scrollLeft: 0 }, 100, function () {
-                    _this.setOverflowClasses();
+            var rootRect = getBoundingClientRect(this.root.domFrag().oneElement());
+            if (cursor.domFrag().isEmpty() && !seln) {
+                if (this.cancelScrollHoriz) {
+                    this.cancelScrollHoriz();
+                    this.cancelScrollHoriz = undefined;
+                }
+                var rootElt_1 = this.root.domFrag().oneElement();
+                var start_1 = rootElt_1.scrollLeft;
+                animate(this.getScrollAnimationDuration(), function (progress, scheduleNext, cancel) {
+                    if (progress >= 1) {
+                        _this_1.cancelScrollHoriz = undefined;
+                        rootElt_1.scrollLeft = 0;
+                        _this_1.setOverflowClasses();
+                    }
+                    else {
+                        _this_1.cancelScrollHoriz = cancel;
+                        scheduleNext();
+                        rootElt_1.scrollLeft = Math.round((1 - progress) * start_1);
+                    }
                 });
                 return;
             }
             else if (!seln) {
-                var x = cursor.jQ[0].getBoundingClientRect().left;
+                var x = getBoundingClientRect(cursor.domFrag().oneElement()).left;
                 if (x > rootRect.right - 20)
                     var scrollBy = x - (rootRect.right - 20);
                 else if (x < rootRect.left + 20)
@@ -3211,10 +4327,10 @@ var __extends = (this && this.__extends) || (function () {
                     return;
             }
             else {
-                var rect = seln.jQ[0].getBoundingClientRect();
+                var rect = getBoundingClientRect(seln.domFrag().oneElement());
                 var overLeft = rect.left - (rootRect.left + 20);
                 var overRight = rect.right - (rootRect.right - 20);
-                if (seln.ends[L] === cursor[R]) {
+                if (seln.getEnd(L) === cursor[R]) {
                     if (overLeft < 0)
                         var scrollBy = overLeft;
                     else if (overRight > 0) {
@@ -3239,14 +4355,33 @@ var __extends = (this && this.__extends) || (function () {
                         return;
                 }
             }
-            var root = this.root.jQ[0];
+            var root = this.root.domFrag().oneElement();
             if (scrollBy < 0 && root.scrollLeft === 0)
                 return;
             if (scrollBy > 0 && root.scrollWidth <= root.scrollLeft + rootRect.width)
                 return;
-            this.root.jQ.stop().animate({ scrollLeft: '+=' + scrollBy }, 100, function () {
-                _this.setOverflowClasses();
+            if (this.cancelScrollHoriz) {
+                this.cancelScrollHoriz();
+                this.cancelScrollHoriz = undefined;
+            }
+            var rootElt = this.root.domFrag().oneElement();
+            var start = rootElt.scrollLeft;
+            animate(this.getScrollAnimationDuration(), function (progress, scheduleNext, cancel) {
+                if (progress >= 1) {
+                    _this_1.cancelScrollHoriz = undefined;
+                    rootElt.scrollLeft = Math.round(start + scrollBy);
+                    _this_1.setOverflowClasses();
+                }
+                else {
+                    _this_1.cancelScrollHoriz = cancel;
+                    scheduleNext();
+                    rootElt.scrollLeft = Math.round(start + progress * scrollBy);
+                }
             });
+        };
+        Controller_scrollHoriz.prototype.getScrollAnimationDuration = function () {
+            var _c;
+            return (_c = this.options.scrollAnimationDuration) !== null && _c !== void 0 ? _c : 100;
         };
         return Controller_scrollHoriz;
     }(Controller_mouse));
@@ -3255,22 +4390,34 @@ var __extends = (this && this.__extends) || (function () {
      * (as owned by the Controller)
      ********************************************/
     Options.prototype.substituteTextarea = function () {
-        return $('<textarea autocapitalize=off autocomplete=off autocorrect=off ' +
-            'spellcheck=false x-palm-disable-ste-all=true/>')[0];
+        return h('textarea', {
+            autocapitalize: 'off',
+            autocomplete: 'off',
+            autocorrect: 'off',
+            spellcheck: false,
+            'x-palm-disable-ste-all': true,
+        });
     };
-    Options.prototype.substituteKeyboardEvents = saneKeyboardEvents;
+    function defaultSubstituteKeyboardEvents(jq, controller) {
+        return saneKeyboardEvents(jq[0], controller);
+    }
+    Options.prototype.substituteKeyboardEvents = defaultSubstituteKeyboardEvents;
     var Controller = /** @class */ (function (_super) {
         __extends(Controller, _super);
         function Controller() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.selectFn = noop;
+            return _this_1;
         }
         Controller.prototype.createTextarea = function () {
-            var textareaSpan = (this.textareaSpan = $('<span class="mq-textarea"></span>')), textarea = this.options.substituteTextarea();
+            this.textareaSpan = h('span', { class: 'mq-textarea' });
+            var textarea = this.options.substituteTextarea();
             if (!textarea.nodeType) {
                 throw 'substituteTextarea() must return a DOM element, got ' + textarea;
             }
-            this.textarea = $(textarea).appendTo(textareaSpan);
-            this.aria.setContainer(this.textareaSpan);
+            this.textarea = domFrag(textarea)
+                .appendTo(this.textareaSpan)
+                .oneElement();
             var ctrlr = this;
             ctrlr.cursor.selectionChanged = function () {
                 ctrlr.selectionChanged();
@@ -3304,52 +4451,45 @@ var __extends = (this && this.__extends) || (function () {
         };
         Controller.prototype.staticMathTextareaEvents = function () {
             var ctrlr = this;
-            var cursor = ctrlr.cursor;
-            var textarea = ctrlr.getTextareaOrThrow();
-            var textareaSpan = ctrlr.getTextareaSpanOrThrow();
-            this.container.prepend(jQuery('<span aria-hidden="true" class="mq-selectable">').text('$' + ctrlr.exportLatex() + '$'));
-            this.mathspeakSpan = $('<span class="mq-mathspeak"></span>');
-            this.container.prepend(this.mathspeakSpan);
-            ctrlr.blurred = true;
-            textarea.bind('cut paste', false);
+            this.removeTextareaEventListener('cut');
+            this.removeTextareaEventListener('paste');
             if (ctrlr.options.disableCopyPaste) {
-                textarea.bind('copy', false);
+                this.removeTextareaEventListener('copy');
             }
             else {
-                textarea.bind('copy', function () {
-                    ctrlr.setTextareaSelection();
+                this.addTextareaEventListeners({
+                    copy: function () {
+                        ctrlr.setTextareaSelection();
+                    },
                 });
             }
-            textarea
-                .focus(function () {
-                ctrlr.blurred = false;
-            })
-                .blur(function () {
-                if (cursor.selection)
-                    cursor.selection.clear();
-                setTimeout(detach); //detaching during blur explodes in WebKit
-            });
-            function detach() {
-                textareaSpan.detach();
-                ctrlr.blurred = true;
-            }
+            this.addStaticFocusBlurListeners();
             ctrlr.selectFn = function (text) {
-                textarea.val(text);
+                var textarea = ctrlr.getTextareaOrThrow();
+                if (!(textarea instanceof HTMLTextAreaElement))
+                    return;
+                textarea.value = text;
                 if (text)
                     textarea.select();
             };
-            this.updateMathspeak();
         };
         Controller.prototype.editablesTextareaEvents = function () {
             var ctrlr = this;
             var textarea = ctrlr.getTextareaOrThrow();
             var textareaSpan = ctrlr.getTextareaSpanOrThrow();
-            var keyboardEventsShim = this.options.substituteKeyboardEvents(textarea, this);
-            this.selectFn = function (text) {
-                keyboardEventsShim.select(text);
-            };
-            this.container.prepend(textareaSpan);
-            this.focusBlurEvents();
+            if (this.options.version < 3) {
+                var $ = this.options.assertJquery();
+                var keyboardEventsShim = this.options.substituteKeyboardEvents($(textarea), this);
+                this.selectFn = function (text) {
+                    keyboardEventsShim.select(text);
+                };
+            }
+            else {
+                var select = saneKeyboardEvents(textarea, this).select;
+                this.selectFn = select;
+            }
+            domFrag(this.container).prepend(domFrag(textareaSpan));
+            this.addEditableFocusBlurListeners();
             this.updateMathspeak();
         };
         Controller.prototype.unbindEditablesEvents = function () {
@@ -3357,14 +4497,18 @@ var __extends = (this && this.__extends) || (function () {
             var textarea = ctrlr.getTextareaOrThrow();
             var textareaSpan = ctrlr.getTextareaSpanOrThrow();
             this.selectFn = function (text) {
-                textarea.val(text);
+                if (!(textarea instanceof HTMLTextAreaElement))
+                    return;
+                textarea.value = text;
                 if (text)
                     textarea.select();
             };
-            textareaSpan.remove();
-            this.unbindFocusBlurEvents();
+            domFrag(textareaSpan).remove();
+            this.removeTextareaEventListener('focus');
+            this.removeTextareaEventListener('blur');
             ctrlr.blurred = true;
-            textarea.bind('cut paste', false);
+            this.removeTextareaEventListener('cut');
+            this.removeTextareaEventListener('paste');
         };
         Controller.prototype.typedText = function (ch) {
             if (ch === '\n')
@@ -3412,6 +4556,14 @@ var __extends = (this && this.__extends) || (function () {
                 this.options.onPaste();
             }
         };
+        /** Set up for a static MQ field (i.e., create and attach the mathspeak element and initialize the focus state to blurred) */
+        Controller.prototype.setupStaticField = function () {
+            this.mathspeakSpan = h('span', { class: 'mq-mathspeak' });
+            domFrag(this.container).prepend(domFrag(this.mathspeakSpan));
+            this.updateMathspeak();
+            this.blurred = true;
+            this.cursor.hide().parent.blur(this.cursor);
+        };
         Controller.prototype.updateMathspeak = function () {
             var ctrlr = this;
             // If the controller's ARIA label doesn't end with a punctuation mark, add a colon by default to better separate it from mathspeak.
@@ -3429,11 +4581,13 @@ var __extends = (this && this.__extends) || (function () {
             // so it is not included for static math mathspeak calculations.
             // The mathspeakSpan should exist only for static math, so we use its presence to decide which approach to take.
             if (!!ctrlr.mathspeakSpan) {
-                textarea.attr('aria-label', '');
-                ctrlr.mathspeakSpan.text((labelWithSuffix + ' ' + mathspeak).trim());
+                textarea.setAttribute('aria-label', '');
+                ctrlr.mathspeakSpan.textContent = (labelWithSuffix +
+                    ' ' +
+                    mathspeak).trim();
             }
             else {
-                textarea.attr('aria-label', (labelWithSuffix + ' ' + mathspeak + ' ' + ctrlr.ariaPostLabel).trim());
+                textarea.setAttribute('aria-label', (labelWithSuffix + ' ' + mathspeak + ' ' + ctrlr.ariaPostLabel).trim());
             }
         };
         return Controller;
@@ -3519,24 +4673,38 @@ var __extends = (this && this.__extends) || (function () {
         };
         return MathElement;
     }(MQNode));
+    var DOMView = /** @class */ (function () {
+        function DOMView(childCount, render) {
+            this.childCount = childCount;
+            this.render = render;
+        }
+        return DOMView;
+    }());
     /**
      * Commands and operators, like subscripts, exponents, or fractions.
      * Descendant commands are organized into blocks.
      */
     var MathCommand = /** @class */ (function (_super) {
         __extends(MathCommand, _super);
-        function MathCommand(ctrlSeq, htmlTemplate, textTemplate) {
-            var _this = _super.call(this) || this;
-            _this.textTemplate = [''];
-            _this.mathspeakTemplate = [''];
-            _this.setCtrlSeqHtmlAndText(ctrlSeq, htmlTemplate, textTemplate);
-            return _this;
+        function MathCommand(ctrlSeq, domView, textTemplate) {
+            var _this_1 = _super.call(this) || this;
+            _this_1.textTemplate = [''];
+            _this_1.mathspeakTemplate = [''];
+            _this_1.setCtrlSeqHtmlAndText(ctrlSeq, domView, textTemplate);
+            return _this_1;
         }
-        MathCommand.prototype.setCtrlSeqHtmlAndText = function (ctrlSeq, htmlTemplate, textTemplate) {
+        MathCommand.prototype.setEnds = function (ends) {
+            pray('MathCommand ends are never empty', ends[L] && ends[R]);
+            this.ends = ends;
+        };
+        MathCommand.prototype.getEnd = function (dir) {
+            return this.ends[dir];
+        };
+        MathCommand.prototype.setCtrlSeqHtmlAndText = function (ctrlSeq, domView, textTemplate) {
             if (!this.ctrlSeq)
                 this.ctrlSeq = ctrlSeq;
-            if (htmlTemplate)
-                this.htmlTemplate = htmlTemplate;
+            if (domView)
+                this.domView = domView;
             if (textTemplate)
                 this.textTemplate = textTemplate;
         };
@@ -3551,14 +4719,14 @@ var __extends = (this && this.__extends) || (function () {
             });
         };
         MathCommand.prototype.parser = function () {
-            var _this = this;
+            var _this_1 = this;
             var block = latexMathParser.block;
             return block.times(this.numBlocks()).map(function (blocks) {
-                _this.blocks = blocks;
+                _this_1.blocks = blocks;
                 for (var i = 0; i < blocks.length; i += 1) {
-                    blocks[i].adopt(_this, _this.ends[R], 0);
+                    blocks[i].adopt(_this_1, _this_1.getEnd(R), 0);
                 }
-                return _this;
+                return _this_1;
             });
         };
         // createLeftOf(cursor) and the methods it calls
@@ -3568,9 +4736,9 @@ var __extends = (this && this.__extends) || (function () {
             cmd.createBlocks();
             _super.prototype.createLeftOf.call(this, cursor);
             if (replacedFragment) {
-                var cmdEndsL = cmd.ends[L];
+                var cmdEndsL = cmd.getEnd(L);
                 replacedFragment.adopt(cmdEndsL, 0, 0);
-                replacedFragment.jQ.appendTo(cmdEndsL.jQ);
+                replacedFragment.domFrag().appendTo(cmdEndsL.domFrag().oneElement());
                 cmd.placeCursor(cursor);
                 cmd.prepareInsertionAt(cursor);
             }
@@ -3581,13 +4749,13 @@ var __extends = (this && this.__extends) || (function () {
             var cmd = this, numBlocks = cmd.numBlocks(), blocks = (cmd.blocks = Array(numBlocks));
             for (var i = 0; i < numBlocks; i += 1) {
                 var newBlock = (blocks[i] = new MathBlock());
-                newBlock.adopt(cmd, cmd.ends[R], 0);
+                newBlock.adopt(cmd, cmd.getEnd(R), 0);
             }
         };
         MathCommand.prototype.placeCursor = function (cursor) {
             //insert the cursor at the right end of the first empty child, searching
             //left-to-right, or if none empty, the right end child
-            cursor.insAtRightEnd(this.foldChildren(this.ends[L], function (leftward, child) {
+            cursor.insAtRightEnd(this.foldChildren(this.getEnd(L), function (leftward, child) {
                 return leftward.isEmpty() ? leftward : child;
             }));
         };
@@ -3602,7 +4770,7 @@ var __extends = (this && this.__extends) || (function () {
             else if (updown === 'down') {
                 updownInto = this.downInto;
             }
-            var el = (updownInto || this.ends[-dir]);
+            var el = updownInto || this.getEnd(-dir);
             cursor.insAtDirEnd(-dir, el);
             cursor.controller.aria
                 .queueDirEndOf(-dir)
@@ -3626,11 +4794,12 @@ var __extends = (this && this.__extends) || (function () {
             var ancestor = antiCursor.ancestors[this.id];
             cursor.insAtDirEnd(-dir, ancestor);
         };
-        MathCommand.prototype.seek = function (pageX, cursor) {
+        MathCommand.prototype.seek = function (clientX, cursor) {
             function getBounds(node) {
                 var _c;
-                var l = node.jQ.offset().left;
-                var r = l + node.jQ.outerWidth();
+                var el = node.domFrag().oneElement();
+                var l = getBoundingClientRect(el).left;
+                var r = l + el.offsetWidth;
                 return _c = {},
                     _c[L] = l,
                     _c[R] = r,
@@ -3638,16 +4807,16 @@ var __extends = (this && this.__extends) || (function () {
             }
             var cmd = this;
             var cmdBounds = getBounds(cmd);
-            if (pageX < cmdBounds[L])
+            if (clientX < cmdBounds[L])
                 return cursor.insLeftOf(cmd);
-            if (pageX > cmdBounds[R])
+            if (clientX > cmdBounds[R])
                 return cursor.insRightOf(cmd);
             var leftLeftBound = cmdBounds[L];
             cmd.eachChild(function (block) {
                 var blockBounds = getBounds(block);
-                if (pageX < blockBounds[L]) {
+                if (clientX < blockBounds[L]) {
                     // closer to this block's left bound, or the bound left of that?
-                    if (pageX - leftLeftBound < blockBounds[L] - pageX) {
+                    if (clientX - leftLeftBound < blockBounds[L] - clientX) {
                         if (block[L])
                             cursor.insAtRightEnd(block[L]);
                         else
@@ -3657,14 +4826,14 @@ var __extends = (this && this.__extends) || (function () {
                         cursor.insAtLeftEnd(block);
                     return false;
                 }
-                else if (pageX > blockBounds[R]) {
+                else if (clientX > blockBounds[R]) {
                     if (block[R])
                         leftLeftBound = blockBounds[R];
                     // continue to next block
                     else {
                         // last (rightmost) block
                         // closer to this block's right bound, or the cmd's right bound?
-                        if (cmdBounds[R] - pageX < pageX - blockBounds[R]) {
+                        if (cmdBounds[R] - clientX < clientX - blockBounds[R]) {
                             cursor.insRightOf(cmd);
                         }
                         else
@@ -3673,119 +4842,28 @@ var __extends = (this && this.__extends) || (function () {
                     return undefined;
                 }
                 else {
-                    block.seek(pageX, cursor);
+                    block.seek(clientX, cursor);
                     return false;
                 }
             });
             return undefined;
         };
-        // methods involved in creating and cross-linking with HTML DOM nodes
-        /*
-          They all expect an .htmlTemplate like
-            '<span>&0</span>'
-          or
-            '<span><span>&0</span><span>&1</span></span>'
-      
-          See html.test.js for more examples.
-      
-          Requirements:
-          - For each block of the command, there must be exactly one "block content
-            marker" of the form '&<number>' where <number> is the 0-based index of the
-            block. (Like the LaTeX \newcommand syntax, but with a 0-based rather than
-            1-based index, because JavaScript because C because Dijkstra.)
-          - The block content marker must be the sole contents of the containing
-            element, there can't even be surrounding whitespace, or else we can't
-            guarantee sticking to within the bounds of the block content marker when
-            mucking with the HTML DOM.
-          - The HTML not only must be well-formed HTML (of course), but also must
-            conform to the XHTML requirements on tags, specifically all tags must
-            either be self-closing (like '<br/>') or come in matching pairs.
-            Close tags are never optional.
-      
-          Note that &<number> isn't well-formed HTML; if you wanted a literal '&123',
-          your HTML template would have to have '&amp;123'.
-        */
         MathCommand.prototype.numBlocks = function () {
-            var matches = this.htmlTemplate.match(/&\d+/g);
-            return matches ? matches.length : 0;
+            return this.domView.childCount;
         };
+        /**
+         * Render the entire math subtree rooted at this command to a DOM node. Assumes `this.domView` is defined.
+         *
+         * See dom.test.js for example templates and intended outputs.
+         */
         MathCommand.prototype.html = function () {
-            // Render the entire math subtree rooted at this command, as HTML.
-            // Expects .createBlocks() to have been called already, since it uses the
-            // .blocks array of child blocks.
-            //
-            // See html.test.js for example templates and intended outputs.
-            //
-            // Given an .htmlTemplate as described above,
-            // - insert the mathquill-command-id attribute into all top-level tags,
-            //   which will be used to set this.jQ in .jQize().
-            //   This is straightforward:
-            //     * tokenize into tags and non-tags
-            //     * loop through top-level tokens:
-            //         * add #cmdId attribute macro to top-level self-closing tags
-            //         * else add #cmdId attribute macro to top-level open tags
-            //             * skip the matching top-level close tag and all tag pairs
-            //               in between
-            // - for each block content marker,
-            //     + replace it with the contents of the corresponding block,
-            //       rendered as HTML
-            //     + insert the mathquill-block-id attribute into the containing tag
-            //   This is even easier, a quick regex replace, since block tags cannot
-            //   contain anything besides the block content marker.
-            //
-            // Two notes:
-            // - The outermost loop through top-level tokens should never encounter any
-            //   top-level close tags, because we should have first encountered a
-            //   matching top-level open tag, all inner tags should have appeared in
-            //   matching pairs and been skipped, and then we should have skipped the
-            //   close tag in question.
-            // - All open tags should have matching close tags, which means our inner
-            //   loop should always encounter a close tag and drop nesting to 0. If
-            //   a close tag is missing, the loop will continue until i >= tokens.length
-            //   and token becomes undefined. This will not infinite loop, even in
-            //   production without pray(), because it will then TypeError on .slice().
-            var cmd = this;
-            var blocks = cmd.blocks;
-            var cmdId = ' mathquill-command-id=' + cmd.id;
-            var tokens = cmd.htmlTemplate.match(/<[^<>]+>|[^<>]+/g);
-            pray('no unmatched angle brackets', tokens.join('') === this.htmlTemplate);
-            // add cmdId and aria-hidden (for screen reader users) to all top-level tags
-            // Note: with the RegExp search/replace approach, it's possible that an element which is both a command and block may contain redundant aria-hidden attributes.
-            // In practice this doesn't appear to cause problems for screen readers.
-            for (var i = 0, token = tokens[0]; token; i += 1, token = tokens[i]) {
-                // top-level self-closing tags
-                if (token.slice(-2) === '/>') {
-                    tokens[i] = token.slice(0, -2) + cmdId + ' aria-hidden="true"/>';
-                }
-                // top-level open tags
-                else if (token.charAt(0) === '<') {
-                    pray('not an unmatched top-level close tag', token.charAt(1) !== '/');
-                    tokens[i] = token.slice(0, -1) + cmdId + ' aria-hidden="true">';
-                    // skip matching top-level close tag and all tag pairs in between
-                    var nesting = 1;
-                    do {
-                        (i += 1), (token = tokens[i]);
-                        pray('no missing close tags', token);
-                        // close tags
-                        if (token.slice(0, 2) === '</') {
-                            nesting -= 1;
-                        }
-                        // non-self-closing open tags
-                        else if (token.charAt(0) === '<' && token.slice(-2) !== '/>') {
-                            nesting += 1;
-                        }
-                    } while (nesting > 0);
-                }
-            }
-            return tokens
-                .join('')
-                .replace(/>&(\d+)/g, function (_$0, $1) {
-                var num1 = parseInt($1, 10);
-                return (' mathquill-block-id=' +
-                    blocks[num1].id +
-                    ' aria-hidden="true">' +
-                    blocks[num1].join('html'));
-            });
+            var blocks = this.blocks;
+            pray('domView is defined', this.domView);
+            var template = this.domView;
+            var dom = template.render(blocks || []);
+            this.setDOM(dom);
+            NodeBase.linkElementByCmdNode(dom, this);
+            return dom;
         };
         // methods to export a string representation of the math tree
         MathCommand.prototype.latex = function () {
@@ -3825,9 +4903,11 @@ var __extends = (this && this.__extends) || (function () {
     var MQSymbol = /** @class */ (function (_super) {
         __extends(MQSymbol, _super);
         function MQSymbol(ctrlSeq, html, text, mathspeak) {
-            var _this = _super.call(this) || this;
-            _this.setCtrlSeqHtmlTextAndMathspeak(ctrlSeq, html, text, mathspeak);
-            return _this;
+            var _this_1 = _super.call(this) || this;
+            _this_1.setCtrlSeqHtmlTextAndMathspeak(ctrlSeq, html
+                ? new DOMView(0, function () { return html.cloneNode(true); })
+                : undefined, text, mathspeak);
+            return _this_1;
         }
         MQSymbol.prototype.setCtrlSeqHtmlTextAndMathspeak = function (ctrlSeq, html, text, mathspeak) {
             if (!text && !!ctrlSeq) {
@@ -3847,7 +4927,7 @@ var __extends = (this && this.__extends) || (function () {
         };
         MQSymbol.prototype.createBlocks = function () { };
         MQSymbol.prototype.moveTowards = function (dir, cursor) {
-            cursor.jQ.insDirOf(dir, this.jQ);
+            cursor.domFrag().insDirOf(dir, this.domFrag());
             cursor[-dir] = this;
             cursor[dir] = this[dir];
             cursor.controller.aria.queue(this);
@@ -3855,9 +4935,11 @@ var __extends = (this && this.__extends) || (function () {
         MQSymbol.prototype.deleteTowards = function (dir, cursor) {
             cursor[dir] = this.remove()[dir];
         };
-        MQSymbol.prototype.seek = function (pageX, cursor) {
+        MQSymbol.prototype.seek = function (clientX, cursor) {
             // insert at whichever side the click was closer to
-            if (pageX - this.jQ.offset().left < this.jQ.outerWidth() / 2)
+            var el = this.domFrag().oneElement();
+            var left = getBoundingClientRect(el).left;
+            if (clientX - left < el.offsetWidth / 2)
                 cursor.insLeftOf(this);
             else
                 cursor.insRightOf(this);
@@ -3881,29 +4963,33 @@ var __extends = (this && this.__extends) || (function () {
     var VanillaSymbol = /** @class */ (function (_super) {
         __extends(VanillaSymbol, _super);
         function VanillaSymbol(ch, html, mathspeak) {
-            return _super.call(this, ch, '<span>' + (html || ch) + '</span>', undefined, mathspeak) || this;
+            return _super.call(this, ch, h('span', {}, [html || h.text(ch)]), undefined, mathspeak) || this;
         }
         return VanillaSymbol;
     }(MQSymbol));
-    function bindVanillaSymbol(ch, html, mathspeak) {
-        return function () { return new VanillaSymbol(ch, html, mathspeak); };
+    function bindVanillaSymbol(ch, htmlEntity, mathspeak) {
+        return function () {
+            return new VanillaSymbol(ch, htmlEntity ? h.entityText(htmlEntity) : undefined, mathspeak);
+        };
     }
     var BinaryOperator = /** @class */ (function (_super) {
         __extends(BinaryOperator, _super);
         function BinaryOperator(ctrlSeq, html, text, mathspeak, treatLikeSymbol) {
-            var _this = this;
+            var _this_1 = this;
             if (treatLikeSymbol) {
-                _this = _super.call(this, ctrlSeq, '<span>' + (html || ctrlSeq) + '</span>', undefined, mathspeak) || this;
+                _this_1 = _super.call(this, ctrlSeq, h('span', {}, [html || h.text(ctrlSeq || '')]), undefined, mathspeak) || this;
             }
             else {
-                _this = _super.call(this, ctrlSeq, '<span class="mq-binary-operator">' + html + '</span>', text, mathspeak) || this;
+                _this_1 = _super.call(this, ctrlSeq, h('span', { class: 'mq-binary-operator' }, html ? [html] : []), text, mathspeak) || this;
             }
-            return _this;
+            return _this_1;
         }
         return BinaryOperator;
     }(MQSymbol));
-    function bindBinaryOperator(ctrlSeq, html, text, mathspeak) {
-        return function () { return new BinaryOperator(ctrlSeq, html, text, mathspeak); };
+    function bindBinaryOperator(ctrlSeq, htmlEntity, text, mathspeak) {
+        return function () {
+            return new BinaryOperator(ctrlSeq, htmlEntity ? h.entityText(htmlEntity) : undefined, text, mathspeak);
+        };
     }
     /**
      * Children and parent of MathCommand's. Basically partitions all the
@@ -3913,9 +4999,9 @@ var __extends = (this && this.__extends) || (function () {
     var MathBlock = /** @class */ (function (_super) {
         __extends(MathBlock, _super);
         function MathBlock() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ariaLabel = 'block';
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ariaLabel = 'block';
+            return _this_1;
         }
         MathBlock.prototype.join = function (methodName) {
             return this.foldChildren('', function (fold, child) {
@@ -3923,14 +5009,20 @@ var __extends = (this && this.__extends) || (function () {
             });
         };
         MathBlock.prototype.html = function () {
-            return this.join('html');
+            var fragment = document.createDocumentFragment();
+            this.eachChild(function (el) {
+                var childHtml = el.html();
+                fragment.appendChild(childHtml);
+                return undefined;
+            });
+            return fragment;
         };
         MathBlock.prototype.latex = function () {
             return this.join('latex');
         };
         MathBlock.prototype.text = function () {
-            var endsL = this.ends[L];
-            var endsR = this.ends[R];
+            var endsL = this.getEnd(L);
+            var endsR = this.getEnd(R);
             return endsL === endsR && endsL !== 0 ? endsL.text() : this.join('text');
         };
         MathBlock.prototype.mathspeak = function () {
@@ -3977,7 +5069,7 @@ var __extends = (this && this.__extends) || (function () {
         MathBlock.prototype.keystroke = function (key, e, ctrlr) {
             if (ctrlr.options.spaceBehavesLikeTab &&
                 (key === 'Spacebar' || key === 'Shift-Spacebar')) {
-                e.preventDefault();
+                e === null || e === void 0 ? void 0 : e.preventDefault();
                 ctrlr.escapeDir(key === 'Shift-Spacebar' ? L : R, key, e);
                 return;
             }
@@ -4010,17 +5102,21 @@ var __extends = (this && this.__extends) || (function () {
         MathBlock.prototype.deleteOutOf = function (_dir, cursor) {
             cursor.unwrapGramp();
         };
-        MathBlock.prototype.seek = function (pageX, cursor) {
-            var node = this.ends[R];
-            if (!node || node.jQ.offset().left + node.jQ.outerWidth() < pageX) {
+        MathBlock.prototype.seek = function (clientX, cursor) {
+            var node = this.getEnd(R);
+            if (!node)
+                return cursor.insAtRightEnd(this);
+            var el = node.domFrag().oneElement();
+            var left = getBoundingClientRect(el).left;
+            if (left + el.offsetWidth < clientX) {
                 return cursor.insAtRightEnd(this);
             }
-            var endsL = this.ends[L];
-            if (pageX < endsL.jQ.offset().left)
+            var endsL = this.getEnd(L);
+            if (clientX < getBoundingClientRect(endsL.domFrag().oneElement()).left)
                 return cursor.insAtLeftEnd(this);
-            while (pageX < node.jQ.offset().left)
+            while (clientX < getBoundingClientRect(node.domFrag().oneElement()).left)
                 node = node[L];
-            return node.seek(pageX, cursor);
+            return node.seek(clientX, cursor);
         };
         MathBlock.prototype.chToCmd = function (ch, options) {
             var cons;
@@ -4072,12 +5168,11 @@ var __extends = (this && this.__extends) || (function () {
                 block
                     .children()
                     .adopt(cursor.parent, cursor[L], cursor[R]); // TODO - masking undefined. should be 0
-                var jQ = block.jQize();
-                jQ.insertBefore(cursor.jQ);
-                cursor[L] = block.ends[R];
+                domFrag(block.html()).insertBefore(cursor.domFrag());
+                cursor[L] = block.getEnd(R);
                 block.finalizeInsert(cursor.options, cursor);
-                var blockEndsR = block.ends[R];
-                var blockEndsL = block.ends[L];
+                var blockEndsR = block.getEnd(R);
+                var blockEndsL = block.getEnd(L);
                 var blockEndsRR = blockEndsR[R];
                 var blockEndsLL = blockEndsL[L];
                 if (blockEndsRR)
@@ -4091,17 +5186,17 @@ var __extends = (this && this.__extends) || (function () {
             }
         };
         MathBlock.prototype.focus = function () {
-            this.jQ.addClass('mq-hasCursor');
-            this.jQ.removeClass('mq-empty');
+            this.domFrag().addClass('mq-hasCursor');
+            this.domFrag().removeClass('mq-empty');
             return this;
         };
         MathBlock.prototype.blur = function (cursor) {
-            this.jQ.removeClass('mq-hasCursor');
+            this.domFrag().removeClass('mq-hasCursor');
             if (this.isEmpty()) {
-                this.jQ.addClass('mq-empty');
+                this.domFrag().addClass('mq-empty');
                 if (cursor &&
                     this.isQuietEmptyDelimiter(cursor.options.quietEmptyDelimiters)) {
-                    this.jQ.addClass('mq-quiet-delimiter');
+                    this.domFrag().addClass('mq-quiet-delimiter');
                 }
             }
             return this;
@@ -4114,23 +5209,24 @@ var __extends = (this && this.__extends) || (function () {
         return _c = /** @class */ (function (_super) {
                 __extends(StaticMath, _super);
                 function StaticMath(el) {
-                    var _this = _super.call(this, el) || this;
-                    var innerFields = (_this.innerFields = []);
-                    _this.__controller.root.postOrder(function (node) {
+                    var _this_1 = _super.call(this, el) || this;
+                    var innerFields = (_this_1.innerFields = []);
+                    _this_1.__controller.root.postOrder(function (node) {
                         node.registerInnerField(innerFields, APIClasses.InnerMathField);
                     });
-                    return _this;
+                    return _this_1;
                 }
                 StaticMath.prototype.__mathquillify = function (opts, _interfaceVersion) {
                     this.config(opts);
-                    _super.prototype.__mathquillify.call(this, 'mq-math-mode');
+                    _super.prototype.mathquillify.call(this, 'mq-math-mode');
+                    this.__controller.setupStaticField();
                     if (this.__options.mouseEvents) {
-                        this.__controller.delegateMouseEvents();
+                        this.__controller.addMouseEventListener();
                         this.__controller.staticMathTextareaEvents();
                     }
                     return this;
                 };
-                StaticMath.prototype.latex = function () {
+                StaticMath.prototype.latex = function (_latex) {
                     var returned = _super.prototype.latex.apply(this, arguments);
                     if (arguments.length > 0) {
                         var innerFields = (this.innerFields = []);
@@ -4173,7 +5269,8 @@ var __extends = (this && this.__extends) || (function () {
                     this.config(opts);
                     if (interfaceVersion > 1)
                         this.__controller.root.reflow = noop;
-                    _super.prototype.__mathquillify.call(this, 'mq-editable-field mq-math-mode');
+                    _super.prototype.mathquillify.call(this, 'mq-editable-field mq-math-mode');
+                    // TODO: Why does this need to be deleted (contrary to the type definition)? Could we set it to `noop` instead?
                     delete this.__controller.root.reflow;
                     return this;
                 };
@@ -4183,6 +5280,7 @@ var __extends = (this && this.__extends) || (function () {
             _c;
     };
     API.InnerMathField = function (APIClasses) {
+        pray('MathField class is defined', APIClasses.MathField);
         return /** @class */ (function (_super) {
             __extends(class_1, _super);
             function class_1() {
@@ -4192,13 +5290,13 @@ var __extends = (this && this.__extends) || (function () {
                 this.__controller.editable = false;
                 this.__controller.root.blur();
                 this.__controller.unbindEditablesEvents();
-                this.__controller.container.removeClass('mq-editable-field');
+                domFrag(this.__controller.container).removeClass('mq-editable-field');
             };
             class_1.prototype.makeEditable = function () {
                 this.__controller.editable = true;
                 this.__controller.editablesTextareaEvents();
                 this.__controller.cursor.insAtRightEnd(this.__controller.root);
-                this.__controller.container.addClass('mq-editable-field');
+                domFrag(this.__controller.container).addClass('mq-editable-field');
             };
             return class_1;
         }(APIClasses.MathField));
@@ -4215,28 +5313,29 @@ var __extends = (this && this.__extends) || (function () {
     var TextBlock = /** @class */ (function (_super) {
         __extends(TextBlock, _super);
         function TextBlock() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ctrlSeq = '\\text';
-            _this.ariaLabel = 'Text';
-            _this.mathspeakTemplate = ['StartText', 'EndText'];
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ctrlSeq = '\\text';
+            _this_1.ariaLabel = 'Text';
+            _this_1.mathspeakTemplate = ['StartText', 'EndText'];
+            return _this_1;
         }
         TextBlock.prototype.replaces = function (replacedText) {
-            if (replacedText instanceof Fragment)
-                this.replacedText = replacedText.remove().jQ.text();
+            if (replacedText instanceof Fragment) {
+                this.replacedText = replacedText.remove().domFrag().text();
+            }
             else if (typeof replacedText === 'string')
                 this.replacedText = replacedText;
         };
-        TextBlock.prototype.jQadd = function (jQ) {
-            _super.prototype.jQadd.call(this, jQ);
-            var endsL = this.ends[L];
+        TextBlock.prototype.setDOMFrag = function (el) {
+            _super.prototype.setDOM.call(this, el);
+            var endsL = this.getEnd(L);
             if (endsL) {
-                var child = this.jQ[0].firstChild;
-                if (child) {
-                    endsL.jQadd(child);
+                var children = this.domFrag().children();
+                if (!children.isEmpty()) {
+                    endsL.setDOM(children.oneText());
                 }
             }
-            return this.jQ;
+            return this;
         };
         TextBlock.prototype.createLeftOf = function (cursor) {
             var textBlock = this;
@@ -4268,7 +5367,7 @@ var __extends = (this && this.__extends) || (function () {
                 .skip(string('}'))
                 .map(function (text) {
                 if (text.length === 0)
-                    return new Fragment();
+                    return new Fragment(0, 0);
                 new TextPiece(text).adopt(textBlock, 0, 0);
                 return textBlock;
             });
@@ -4291,11 +5390,12 @@ var __extends = (this && this.__extends) || (function () {
                 '}');
         };
         TextBlock.prototype.html = function () {
-            return ('<span class="mq-text-mode" mathquill-command-id=' +
-                this.id +
-                '>' +
-                this.textContents() +
-                '</span>');
+            var out = h('span', { class: 'mq-text-mode' }, [
+                h.text(this.textContents()),
+            ]);
+            this.setDOM(out);
+            NodeBase.linkElementByCmdNode(out, this);
+            return out;
         };
         TextBlock.prototype.mathspeak = function (opts) {
             if (opts && opts.ignoreShorthand) {
@@ -4354,7 +5454,7 @@ var __extends = (this && this.__extends) || (function () {
             }
             else if (this.isEmpty()) {
                 cursor.insRightOf(this);
-                new VanillaSymbol('\\$', '$').createLeftOf(cursor);
+                new VanillaSymbol('\\$', h.text('$')).createLeftOf(cursor);
             }
             else if (!cursor[R])
                 cursor.insRightOf(this);
@@ -4363,9 +5463,9 @@ var __extends = (this && this.__extends) || (function () {
             else {
                 // split apart
                 var leftBlock = new TextBlock();
-                var leftPc = this.ends[L];
+                var leftPc = this.getEnd(L);
                 if (leftPc) {
-                    leftPc.disown().jQ.detach();
+                    leftPc.disown().domFrag().detach();
                     leftPc.adopt(leftBlock, 0, 0);
                 }
                 cursor.insLeftOf(this);
@@ -4389,29 +5489,42 @@ var __extends = (this && this.__extends) || (function () {
                 return undefined;
             });
         };
-        TextBlock.prototype.seek = function (pageX, cursor) {
+        TextBlock.prototype.seek = function (clientX, cursor) {
             cursor.hide();
             var textPc = TextBlockFuseChildren(this);
             if (!textPc)
                 return;
             // insert cursor at approx position in DOMTextNode
-            var avgChWidth = this.jQ.width() / this.text.length;
-            var approxPosition = Math.round((pageX - this.jQ.offset().left) / avgChWidth);
-            if (approxPosition <= 0)
+            var textNode = this.domFrag().children().oneText();
+            var range = document.createRange();
+            range.selectNodeContents(textNode);
+            var rects = range.getClientRects();
+            if (rects.length === 1) {
+                var _c = rects[0], width = _c.width, left = _c.left;
+                var avgChWidth = width / this.textContents().length;
+                var approxPosition = Math.round((clientX - left) / avgChWidth);
+                if (approxPosition <= 0) {
+                    cursor.insAtLeftEnd(this);
+                }
+                else if (approxPosition >= textPc.textStr.length) {
+                    cursor.insAtRightEnd(this);
+                }
+                else {
+                    cursor.insLeftOf(textPc.splitRight(approxPosition));
+                }
+            }
+            else {
                 cursor.insAtLeftEnd(this);
-            else if (approxPosition >= textPc.textStr.length)
-                cursor.insAtRightEnd(this);
-            else
-                cursor.insLeftOf(textPc.splitRight(approxPosition));
-            // move towards mousedown (pageX)
-            var displ = pageX - cursor.show().offset().left; // displacement
+            }
+            // move towards mousedown (clientX)
+            var displ = clientX - cursor.show().getBoundingClientRectWithoutMargin().left; // displacement
             var dir = displ && displ < 0 ? L : R;
             var prevDispl = dir;
             // displ * prevDispl > 0 iff displacement direction === previous direction
             while (cursor[dir] && displ * prevDispl > 0) {
                 cursor[dir].moveTowards(dir, cursor);
                 prevDispl = displ;
-                displ = pageX - cursor.offset().left;
+                displ = clientX - cursor.getBoundingClientRectWithoutMargin().left;
             }
             if (dir * displ < -dir * prevDispl)
                 cursor[-dir].moveTowards(-dir, cursor);
@@ -4462,15 +5575,16 @@ var __extends = (this && this.__extends) || (function () {
         return TextBlock;
     }(MQNode));
     function TextBlockFuseChildren(self) {
-        self.jQ[0].normalize();
-        var textPcDom = self.jQ[0].firstChild;
-        if (!textPcDom)
+        self.domFrag().oneElement().normalize();
+        var children = self.domFrag().children();
+        if (children.isEmpty())
             return;
+        var textPcDom = children.oneText();
         pray('only node in TextBlock span is Text node', textPcDom.nodeType === 3);
         // nodeType === 3 has meant a Text node since ancient times:
         //   http://reference.sitepoint.com/javascript/Node/nodeType
         var textPc = new TextPiece(textPcDom.data);
-        textPc.jQadd(textPcDom);
+        textPc.setDOM(textPcDom);
         self.children().disown();
         textPc.adopt(self, 0, 0);
         return textPc;
@@ -4485,25 +5599,22 @@ var __extends = (this && this.__extends) || (function () {
     var TextPiece = /** @class */ (function (_super) {
         __extends(TextPiece, _super);
         function TextPiece(text) {
-            var _this = _super.call(this) || this;
-            _this.textStr = text;
-            return _this;
+            var _this_1 = _super.call(this) || this;
+            _this_1.textStr = text;
+            return _this_1;
         }
-        TextPiece.prototype.jQadd = function (dom) {
-            this.dom = dom;
-            this.jQ = $(dom);
-            return this.jQ;
-        };
-        TextPiece.prototype.jQize = function () {
-            return this.jQadd(document.createTextNode(this.textStr));
+        TextPiece.prototype.html = function () {
+            var out = h.text(this.textStr);
+            this.setDOM(out);
+            return out;
         };
         TextPiece.prototype.appendText = function (text) {
             this.textStr += text;
-            this.dom.appendData(text);
+            this.domFrag().oneText().appendData(text);
         };
         TextPiece.prototype.prependText = function (text) {
             this.textStr = text + this.textStr;
-            this.dom.insertData(0, text);
+            this.domFrag().oneText().insertData(0, text);
         };
         TextPiece.prototype.insTextAtDirEnd = function (text, dir) {
             prayDirection(dir);
@@ -4514,7 +5625,7 @@ var __extends = (this && this.__extends) || (function () {
         };
         TextPiece.prototype.splitRight = function (i) {
             var newPc = new TextPiece(this.textStr.slice(i)).adopt(this.parent, this, this[R]);
-            newPc.jQadd(this.dom.splitText(i));
+            newPc.setDOM(this.domFrag().oneText().splitText(i));
             this.textStr = this.textStr.slice(0, i);
             return newPc;
         };
@@ -4541,14 +5652,16 @@ var __extends = (this && this.__extends) || (function () {
             if (this.textStr.length > 1) {
                 var deletedChar;
                 if (dir === R) {
-                    this.dom.deleteData(0, 1);
+                    this.domFrag().oneText().deleteData(0, 1);
                     deletedChar = this.textStr[0];
                     this.textStr = this.textStr.slice(1);
                 }
                 else {
                     // note that the order of these 2 lines is annoyingly important
                     // (the second line mutates this.textStr.length)
-                    this.dom.deleteData(-1 + this.textStr.length, 1);
+                    this.domFrag()
+                        .oneText()
+                        .deleteData(-1 + this.textStr.length, 1);
                     deletedChar = this.textStr[this.textStr.length - 1];
                     this.textStr = this.textStr.slice(0, -1);
                 }
@@ -4556,7 +5669,6 @@ var __extends = (this && this.__extends) || (function () {
             }
             else {
                 this.remove();
-                this.jQ.remove();
                 cursor[dir] = this[dir];
                 cursor.controller.aria.queue(this.textStr);
             }
@@ -4580,7 +5692,7 @@ var __extends = (this && this.__extends) || (function () {
                     var newPc = new TextPiece(ch).createDir(-dir, cursor);
                     var selection = cursor.selection;
                     if (selection) {
-                        newPc.jQ.insDirOf(-dir, selection.jQ);
+                        newPc.domFrag().insDirOf(-dir, selection.domFrag());
                     }
                 }
                 if (this.textStr.length === 1 && anticursor[-dir] === this) {
@@ -4601,25 +5713,17 @@ var __extends = (this && this.__extends) || (function () {
         return /** @class */ (function (_super) {
             __extends(class_2, _super);
             function class_2() {
-                var _this = _super !== null && _super.apply(this, arguments) || this;
-                _this.ctrlSeq = latex;
-                _this.mathspeakTemplate = ['Start' + ariaLabel, 'End' + ariaLabel];
-                _this.ariaLabel = ariaLabel;
-                return _this;
+                var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+                _this_1.ctrlSeq = latex;
+                _this_1.mathspeakTemplate = ['Start' + ariaLabel, 'End' + ariaLabel];
+                _this_1.ariaLabel = ariaLabel;
+                return _this_1;
             }
             class_2.prototype.html = function () {
-                var cmdId = 'mathquill-command-id=' + this.id;
-                return ('<' +
-                    tagName +
-                    ' ' +
-                    attrs +
-                    ' ' +
-                    cmdId +
-                    '>' +
-                    this.textContents() +
-                    '</' +
-                    tagName +
-                    '>');
+                var out = h(tagName, attrs, [h.text(this.textContents())]);
+                this.setDOM(out);
+                NodeBase.linkElementByCmdNode(out, this);
+                return out;
             };
             return class_2;
         }(TextBlock));
@@ -4630,27 +5734,38 @@ var __extends = (this && this.__extends) || (function () {
                 LatexCmds.emph =
                     LatexCmds.textit =
                         LatexCmds.textsl =
-                            makeTextBlock('\\textit', 'Italic', 'i', 'class="mq-text-mode"');
+                            makeTextBlock('\\textit', 'Italic', 'i', { class: 'mq-text-mode' });
     LatexCmds.strong =
         LatexCmds.bold =
             LatexCmds.textbf =
-                makeTextBlock('\\textbf', 'Bold', 'b', 'class="mq-text-mode"');
-    LatexCmds.sf = LatexCmds.textsf = makeTextBlock('\\textsf', 'Sans serif font', 'span', 'class="mq-sans-serif mq-text-mode"');
-    LatexCmds.tt = LatexCmds.texttt = makeTextBlock('\\texttt', 'Mono space font', 'span', 'class="mq-monospace mq-text-mode"');
-    LatexCmds.textsc = makeTextBlock('\\textsc', 'Variable font', 'span', 'style="font-variant:small-caps" class="mq-text-mode"');
-    LatexCmds.uppercase = makeTextBlock('\\uppercase', 'Uppercase', 'span', 'style="text-transform:uppercase" class="mq-text-mode"');
-    LatexCmds.lowercase = makeTextBlock('\\lowercase', 'Lowercase', 'span', 'style="text-transform:lowercase" class="mq-text-mode"');
+                makeTextBlock('\\textbf', 'Bold', 'b', { class: 'mq-text-mode' });
+    LatexCmds.sf = LatexCmds.textsf = makeTextBlock('\\textsf', 'Sans serif font', 'span', { class: 'mq-sans-serif mq-text-mode' });
+    LatexCmds.tt = LatexCmds.texttt = makeTextBlock('\\texttt', 'Mono space font', 'span', { class: 'mq-monospace mq-text-mode' });
+    LatexCmds.textsc = makeTextBlock('\\textsc', 'Variable font', 'span', {
+        style: 'font-variant:small-caps',
+        class: 'mq-text-mode',
+    });
+    LatexCmds.uppercase = makeTextBlock('\\uppercase', 'Uppercase', 'span', {
+        style: 'text-transform:uppercase',
+        class: 'mq-text-mode',
+    });
+    LatexCmds.lowercase = makeTextBlock('\\lowercase', 'Lowercase', 'span', {
+        style: 'text-transform:lowercase',
+        class: 'mq-text-mode',
+    });
     var RootMathCommand = /** @class */ (function (_super) {
         __extends(RootMathCommand, _super);
         function RootMathCommand(cursor) {
-            var _this = _super.call(this, '$') || this;
-            _this.htmlTemplate = '<span class="mq-math-mode">&0</span>';
-            _this.cursor = cursor;
-            return _this;
+            var _this_1 = _super.call(this, '$') || this;
+            _this_1.domView = new DOMView(1, function (blocks) {
+                return h.block('span', { class: 'mq-math-mode' }, blocks[0]);
+            });
+            _this_1.cursor = cursor;
+            return _this_1;
         }
         RootMathCommand.prototype.createBlocks = function () {
             _super.prototype.createBlocks.call(this);
-            var endsL = this.ends[L]; // TODO - how do we know this is a RootMathCommand?
+            var endsL = this.getEnd(L); // TODO - how do we know this is a RootMathCommand?
             endsL.cursor = this.cursor;
             endsL.write = function (cursor, ch) {
                 if (ch !== '$')
@@ -4658,7 +5773,7 @@ var __extends = (this && this.__extends) || (function () {
                 else if (this.isEmpty()) {
                     cursor.insRightOf(this.parent);
                     this.parent.deleteTowards(undefined, cursor);
-                    new VanillaSymbol('\\$', '$').createLeftOf(cursor.show());
+                    new VanillaSymbol('\\$', h.text('$')).createLeftOf(cursor.show());
                 }
                 else if (!cursor[R])
                     cursor.insRightOf(this.parent);
@@ -4669,7 +5784,7 @@ var __extends = (this && this.__extends) || (function () {
             };
         };
         RootMathCommand.prototype.latex = function () {
-            return '$' + this.ends[L].latex() + '$';
+            return '$' + this.getEnd(L).latex() + '$';
         };
         return RootMathCommand;
     }(MathCommand));
@@ -4690,9 +5805,9 @@ var __extends = (this && this.__extends) || (function () {
             else {
                 var html;
                 if (ch === '<')
-                    html = '&lt;';
+                    html = h.entityText('&lt;');
                 else if (ch === '>')
-                    html = '&gt;';
+                    html = h.entityText('&gt;');
                 new VanillaSymbol(ch, html).createLeftOf(cursor);
             }
         };
@@ -4701,23 +5816,25 @@ var __extends = (this && this.__extends) || (function () {
     API.TextField = function (APIClasses) {
         var _c;
         return _c = /** @class */ (function (_super) {
-                __extends(class_3, _super);
-                function class_3() {
+                __extends(TextField, _super);
+                function TextField() {
                     return _super !== null && _super.apply(this, arguments) || this;
                 }
-                class_3.prototype.__mathquillify = function () {
-                    return _super.prototype.__mathquillify.call(this, 'mq-editable-field mq-text-mode');
+                TextField.prototype.__mathquillify = function () {
+                    _super.prototype.mathquillify.call(this, 'mq-editable-field mq-text-mode');
+                    return this;
                 };
-                class_3.prototype.latex = function (latex) {
-                    if (arguments.length > 0) {
+                TextField.prototype.latex = function (latex) {
+                    if (latex) {
                         this.__controller.renderLatexText(latex);
                         if (this.__controller.blurred)
                             this.__controller.cursor.hide().parent.blur();
-                        return this;
+                        var _this = this; // just to help help TS out
+                        return _this;
                     }
                     return this.__controller.exportLatex();
                 };
-                return class_3;
+                return TextField;
             }(APIClasses.EditableField)),
             _c.RootBlock = RootTextBlock,
             _c;
@@ -4731,7 +5848,7 @@ var __extends = (this && this.__extends) || (function () {
                 LatexCmds.oplus =
                     LatexCmds.otimes =
                         function (latex) {
-                            return new BinaryOperator('\\' + latex + ' ', '&' + latex + ';');
+                            return new BinaryOperator('\\' + latex + ' ', h.entityText('&' + latex + ';'));
                         };
     LatexCmds['\u2217'] =
         LatexCmds.ast =
@@ -4808,15 +5925,15 @@ var __extends = (this && this.__extends) || (function () {
                                                     bindBinaryOperator('\\not\\supseteq ', '&#8841;', 'not superset or equal to');
     //the canonical sets of numbers
     LatexCmds.mathbb = /** @class */ (function (_super) {
-        __extends(class_4, _super);
-        function class_4() {
+        __extends(class_3, _super);
+        function class_3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_4.prototype.createLeftOf = function (_cursor) { };
-        class_4.prototype.numBlocks = function () {
+        class_3.prototype.createLeftOf = function (_cursor) { };
+        class_3.prototype.numBlocks = function () {
             return 1;
         };
-        class_4.prototype.parser = function () {
+        class_3.prototype.parser = function () {
             var string = Parser.string;
             var regex = Parser.regex;
             var optWhitespace = Parser.optWhitespace;
@@ -4837,7 +5954,7 @@ var __extends = (this && this.__extends) || (function () {
                 }
             });
         };
-        return class_4;
+        return class_3;
     }(MathCommand));
     LatexCmds.N =
         LatexCmds.naturals =
@@ -4990,8 +6107,8 @@ var __extends = (this && this.__extends) || (function () {
     LatexCmds.rceil = bindVanillaSymbol('\\rceil ', '&#8969;', 'right ceiling');
     LatexCmds.opencurlybrace = LatexCmds.lbrace = bindVanillaSymbol('\\lbrace ', '{', 'left brace');
     LatexCmds.closecurlybrace = LatexCmds.rbrace = bindVanillaSymbol('\\rbrace ', '}', 'right brace');
-    LatexCmds.lbrack = bindVanillaSymbol('\\lbrack', '[');
-    LatexCmds.rbrack = bindVanillaSymbol('\\rbrack', ']');
+    LatexCmds.lbrack = bindVanillaSymbol('[', 'left bracket');
+    LatexCmds.rbrack = bindVanillaSymbol(']', 'right bracket');
     //various symbols
     LatexCmds.slash = bindVanillaSymbol('/', 'slash');
     LatexCmds.vert = bindVanillaSymbol('|', 'vertical bar');
@@ -5010,8 +6127,8 @@ var __extends = (this && this.__extends) || (function () {
     LatexCmds.setminus = LatexCmds.smallsetminus = bindVanillaSymbol('\\setminus ', '&#8726;', 'set minus');
     LatexCmds.not = //bind(MQSymbol,'\\not ','<span class="not">/</span>', 'not');
         LatexCmds['\u00ac'] =
-            LatexCmds.not =
-                bindVanillaSymbol('\\not ', '&not;', 'not');
+            LatexCmds.neg =
+                bindVanillaSymbol('\\neg ', '&not;', 'not');
     LatexCmds['\u2026'] =
         LatexCmds.dots =
             LatexCmds.ellip =
@@ -5255,10 +6372,10 @@ var __extends = (this && this.__extends) || (function () {
                 return;
             // remove existing class
             if (this._groupingClass)
-                this.jQ.removeClass(this._groupingClass);
+                this.domFrag().removeClass(this._groupingClass);
             // add new class
             if (cls)
-                this.jQ.addClass(cls);
+                this.domFrag().addClass(cls);
             // cache the groupingClass
             this._groupingClass = cls;
         };
@@ -5266,8 +6383,8 @@ var __extends = (this && this.__extends) || (function () {
     }(MQSymbol));
     var Digit = /** @class */ (function (_super) {
         __extends(Digit, _super);
-        function Digit(ch, html, mathspeak) {
-            return _super.call(this, ch, '<span class="mq-digit">' + (html || ch) + '</span>', undefined, mathspeak) || this;
+        function Digit(ch, mathspeak) {
+            return _super.call(this, ch, h('span', { class: 'mq-digit' }, [h.text(ch)]), undefined, mathspeak) || this;
         }
         Digit.prototype.createLeftOf = function (cursor) {
             var cursorL = cursor[L];
@@ -5311,8 +6428,8 @@ var __extends = (this && this.__extends) || (function () {
     }(DigitGroupingChar));
     var Variable = /** @class */ (function (_super) {
         __extends(Variable, _super);
-        function Variable(ch, html) {
-            return _super.call(this, ch, '<var>' + (html || ch) + '</var>') || this;
+        function Variable(chOrCtrlSeq, html) {
+            return _super.call(this, chOrCtrlSeq, h('var', {}, [html || h.text(chOrCtrlSeq)])) || this;
         }
         Variable.prototype.text = function () {
             var text = this.ctrlSeq || '';
@@ -5355,12 +6472,14 @@ var __extends = (this && this.__extends) || (function () {
         };
         return Variable;
     }(MQSymbol));
-    function bindVariable(ch, html, _unusedMathspeak) {
-        return function () { return new Variable(ch, html); };
+    function bindVariable(ch, htmlEntity, _unusedMathspeak) {
+        return function () { return new Variable(ch, h.entityText(htmlEntity)); };
     }
-    Options.prototype.autoCommands = { _maxLength: 0 };
-    optionProcessors.autoCommands = function (cmds) {
-        if (!/^[a-z]+(?: [a-z]+)*$/i.test(cmds)) {
+    Options.prototype.autoCommands = {
+        _maxLength: 0,
+    };
+    baseOptionProcessors.autoCommands = function (cmds) {
+        if (typeof cmds !== 'string' || !/^[a-z]+(?: [a-z]+)*$/i.test(cmds)) {
             throw '"' + cmds + '" not a space-delimited list of only letters';
         }
         var list = cmds.split(' ');
@@ -5381,7 +6500,8 @@ var __extends = (this && this.__extends) || (function () {
         return dict;
     };
     Options.prototype.quietEmptyDelimiters = {};
-    optionProcessors.quietEmptyDelimiters = function (dlms) {
+    baseOptionProcessors.quietEmptyDelimiters = function (dlms) {
+        if (dlms === void 0) { dlms = ''; }
         var list = dlms.split(' ');
         var dict = {};
         for (var i = 0; i < list.length; i += 1) {
@@ -5391,8 +6511,8 @@ var __extends = (this && this.__extends) || (function () {
         return dict;
     };
     Options.prototype.autoParenthesizedFunctions = { _maxLength: 0 };
-    optionProcessors.autoParenthesizedFunctions = function (cmds) {
-        if (!/^[a-z]+(?: [a-z]+)*$/i.test(cmds)) {
+    baseOptionProcessors.autoParenthesizedFunctions = function (cmds) {
+        if (typeof cmds !== 'string' || !/^[a-z]+(?: [a-z]+)*$/i.test(cmds)) {
             throw '"' + cmds + '" not a space-delimited list of only letters';
         }
         var list = cmds.split(' ');
@@ -5412,9 +6532,9 @@ var __extends = (this && this.__extends) || (function () {
     var Letter = /** @class */ (function (_super) {
         __extends(Letter, _super);
         function Letter(ch) {
-            var _this = _super.call(this, ch) || this;
-            _this.letter = ch;
-            return _this;
+            var _this_1 = _super.call(this, ch) || this;
+            _this_1.letter = ch;
+            return _this_1;
         }
         Letter.prototype.checkAutoCmds = function (cursor) {
             //exit early if in simple subscript and disableAutoSubstitutionInSubscripts is set.
@@ -5460,7 +6580,7 @@ var __extends = (this && this.__extends) || (function () {
         };
         Letter.prototype.autoParenthesize = function (cursor) {
             //exit early if already parenthesized
-            var right = cursor.parent.ends[R];
+            var right = cursor.parent.getEnd(R);
             if (right && right instanceof Bracket && right.ctrlSeq === '\\left(') {
                 return;
             }
@@ -5496,7 +6616,7 @@ var __extends = (this && this.__extends) || (function () {
         Letter.prototype.italicize = function (bool) {
             this.isItalic = bool;
             this.isPartOfOperator = !bool;
-            this.jQ.toggleClass('mq-operator-name', !bool);
+            this.domFrag().toggleClass('mq-operator-name', !bool);
             return this;
         };
         Letter.prototype.finalizeTree = function (opts, dir) {
@@ -5534,9 +6654,11 @@ var __extends = (this && this.__extends) || (function () {
             // which, if any, are part of an operator name
             var lR = l && l[R];
             var rL = r && r[L];
-            new Fragment(lR || this.parent.ends[L], rL || this.parent.ends[R]).each(function (el) {
+            new Fragment(lR || this.parent.getEnd(L), rL || this.parent.getEnd(R)).each(function (el) {
                 if (el instanceof Letter) {
-                    el.italicize(true).jQ.removeClass('mq-first mq-last mq-followed-by-supsub');
+                    el.italicize(true)
+                        .domFrag()
+                        .removeClass('mq-first mq-last mq-followed-by-supsub');
                     el.ctrlSeq = el.letter;
                 }
                 return undefined;
@@ -5544,7 +6666,7 @@ var __extends = (this && this.__extends) || (function () {
             var autoOpsLength = autoOps._maxLength || 0;
             // check for operator names: at each position from left to right, check
             // substrings from longest to shortest
-            outer: for (var i = 0, first = l[R] || this.parent.ends[L]; first && i < str.length; i += 1, first = first[R]) {
+            outer: for (var i = 0, first = l[R] || this.parent.getEnd(L); first && i < str.length; i += 1, first = first[R]) {
                 for (var len = min(autoOpsLength, str.length - i); len > 0; len -= 1) {
                     var word = str.slice(i, i + len);
                     var last = undefined; // TODO - TS complaining that we use last before assigning to it
@@ -5563,10 +6685,10 @@ var __extends = (this && this.__extends) || (function () {
                             var lastL = last[L];
                             var lastLL = lastL && lastL[L];
                             var lastLLL = (lastLL && lastLL[L]);
-                            lastLLL.jQ.addClass('mq-last');
+                            lastLLL.domFrag().addClass('mq-last');
                         }
                         if (!this.shouldOmitPadding(first[L]))
-                            first.jQ.addClass('mq-first');
+                            first.domFrag().addClass('mq-first');
                         if (!this.shouldOmitPadding(last[R])) {
                             if (last[R] instanceof SupSub) {
                                 var supsub = last[R]; // XXX monkey-patching, but what's the right thing here?
@@ -5575,12 +6697,16 @@ var __extends = (this && this.__extends) || (function () {
                                 var respace = (supsub.siblingCreated =
                                     supsub.siblingDeleted =
                                         function () {
-                                            supsub.jQ.toggleClass('mq-after-operator-name', !(supsub[R] instanceof Bracket));
+                                            supsub
+                                                .domFrag()
+                                                .toggleClass('mq-after-operator-name', !(supsub[R] instanceof Bracket));
                                         });
                                 respace();
                             }
                             else {
-                                last.jQ.toggleClass('mq-last', !(last[R] instanceof Bracket));
+                                last
+                                    .domFrag()
+                                    .toggleClass('mq-last', !(last[R] instanceof Bracket));
                             }
                         }
                         i += len - 1;
@@ -5613,12 +6739,13 @@ var __extends = (this && this.__extends) || (function () {
     // and 'arsinh', which must be exported as \operatorname{hcf} and
     // \operatorname{arsinh}. Note: over/under line/arrow \lim variants like
     // \varlimsup are not supported
-    var AutoOpNames = (Options.prototype.autoOperatorNames = {
-        _maxLength: 9,
-    }); // the set
-    // of operator names that MathQuill auto-unitalicizes by default; overridable
+    // the set of operator names that MathQuill auto-unitalicizes by default; overridable
+    Options.prototype.autoOperatorNames = defaultAutoOpNames();
     var TwoWordOpNames = { limsup: 1, liminf: 1, projlim: 1, injlim: 1 };
-    (function () {
+    function defaultAutoOpNames() {
+        var AutoOpNames = {
+            _maxLength: 9,
+        };
         var mostOps = ('arg deg det dim exp gcd hom inf ker lg lim ln log max min sup' +
             ' limsup liminf injlim projlim Pr').split(' ');
         for (var i = 0; i < mostOps.length; i += 1) {
@@ -5645,8 +6772,9 @@ var __extends = (this && this.__extends) || (function () {
         for (var i = 0; i < moreNonstandardOps.length; i += 1) {
             AutoOpNames[moreNonstandardOps[i]] = 1;
         }
-    })();
-    optionProcessors.autoOperatorNames = function (cmds) {
+        return AutoOpNames;
+    }
+    baseOptionProcessors.autoOperatorNames = function (cmds) {
         if (typeof cmds !== 'string') {
             throw '"' + cmds + '" not a space-delimited list';
         }
@@ -5697,26 +6825,26 @@ var __extends = (this && this.__extends) || (function () {
             var fn = this.ctrlSeq;
             var block = new MathBlock();
             for (var i = 0; i < fn.length; i += 1) {
-                new Letter(fn.charAt(i)).adopt(block, block.ends[R], 0);
+                new Letter(fn.charAt(i)).adopt(block, block.getEnd(R), 0);
             }
             return Parser.succeed(block.children());
         };
         return OperatorName;
     }(MQSymbol));
-    for (var fn in AutoOpNames)
-        if (AutoOpNames.hasOwnProperty(fn)) {
+    for (var fn in Options.prototype.autoOperatorNames)
+        if (Options.prototype.autoOperatorNames.hasOwnProperty(fn)) {
             LatexCmds[fn] = OperatorName;
         }
     LatexCmds.operatorname = /** @class */ (function (_super) {
-        __extends(class_5, _super);
-        function class_5() {
+        __extends(class_4, _super);
+        function class_4() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_5.prototype.createLeftOf = function () { };
-        class_5.prototype.numBlocks = function () {
+        class_4.prototype.createLeftOf = function () { };
+        class_4.prototype.numBlocks = function () {
             return 1;
         };
-        class_5.prototype.parser = function () {
+        class_4.prototype.parser = function () {
             return latexMathParser.block.map(function (b) {
                 // Check for the special case of \operatorname{ans}, which has
                 // a special html representation
@@ -5739,30 +6867,35 @@ var __extends = (this && this.__extends) || (function () {
                 return children;
             });
         };
-        return class_5;
+        return class_4;
     }(MathCommand));
     LatexCmds.f = /** @class */ (function (_super) {
-        __extends(class_6, _super);
-        function class_6() {
-            var _this = this;
+        __extends(class_5, _super);
+        function class_5() {
+            var _this_1 = this;
             var letter = 'f';
-            _this = _super.call(this, letter) || this;
-            _this.letter = letter;
-            _this.htmlTemplate = '<var class="mq-f">f</var>';
-            return _this;
+            _this_1 = _super.call(this, letter) || this;
+            _this_1.letter = letter;
+            _this_1.domView = new DOMView(0, function () {
+                return h('var', { class: 'mq-f' }, [h.text('f')]);
+            });
+            return _this_1;
         }
-        class_6.prototype.italicize = function (bool) {
-            this.jQ.html('f').toggleClass('mq-f', bool);
+        class_5.prototype.italicize = function (bool) {
+            // Why is this necesssary? Does someone replace the `f` at some
+            // point?
+            this.domFrag().eachElement(function (el) { return (el.textContent = 'f'); });
+            this.domFrag().toggleClass('mq-f', bool);
             return _super.prototype.italicize.call(this, bool);
         };
-        return class_6;
+        return class_5;
     }(Letter));
     // VanillaSymbol's
     LatexCmds[' '] = LatexCmds.space = function () {
-        return new DigitGroupingChar('\\ ', '<span>&nbsp;</span>', ' ');
+        return new DigitGroupingChar('\\ ', h('span', {}, [h.text(U_NO_BREAK_SPACE)]), ' ');
     };
     LatexCmds['.'] = function () {
-        return new DigitGroupingChar('.', '<span class="mq-digit">.</span>', '.');
+        return new DigitGroupingChar('.', h('span', { class: 'mq-digit' }, [h.text('.')]), '.');
     };
     LatexCmds["'"] = LatexCmds.prime = bindVanillaSymbol("'", '&prime;', 'prime');
     LatexCmds['\u2033'] = LatexCmds.dprime = bindVanillaSymbol('\u2033', '&Prime;', 'double prime');
@@ -5776,18 +6909,20 @@ var __extends = (this && this.__extends) || (function () {
     var NonSymbolaSymbol = /** @class */ (function (_super) {
         __extends(NonSymbolaSymbol, _super);
         function NonSymbolaSymbol(ch, html, _unusedMathspeak) {
-            return _super.call(this, ch, '<span class="mq-nonSymbola">' + (html || ch) + '</span>') || this;
+            return _super.call(this, ch, h('span', { class: 'mq-nonSymbola' }, [html || h.text(ch)])) || this;
         }
         return NonSymbolaSymbol;
     }(MQSymbol));
     LatexCmds['@'] = function () { return new NonSymbolaSymbol('@'); };
-    LatexCmds['&'] = function () { return new NonSymbolaSymbol('\\&', '&amp;', 'and'); };
+    LatexCmds['&'] = function () {
+        return new NonSymbolaSymbol('\\&', h.entityText('&amp;'), 'and');
+    };
     LatexCmds['%'] = /** @class */ (function (_super) {
-        __extends(class_7, _super);
-        function class_7() {
-            return _super.call(this, '\\%', '%', 'percent') || this;
+        __extends(class_6, _super);
+        function class_6() {
+            return _super.call(this, '\\%', h.text('%'), 'percent') || this;
         }
-        class_7.prototype.parser = function () {
+        class_6.prototype.parser = function () {
             var optWhitespace = Parser.optWhitespace;
             var string = Parser.string;
             // Parse `\%\operatorname{of}` as special `percentof` node so that
@@ -5798,7 +6933,7 @@ var __extends = (this && this.__extends) || (function () {
             }))
                 .or(_super.prototype.parser.call(this));
         };
-        return class_7;
+        return class_6;
     }(NonSymbolaSymbol));
     LatexCmds['\u2225'] = LatexCmds.parallel = bindVanillaSymbol('\\parallel ', '&#x2225;', 'parallel');
     LatexCmds['\u2226'] = LatexCmds.nparallel = bindVanillaSymbol('\\nparallel ', '&#x2226;', 'not parallel');
@@ -5823,7 +6958,9 @@ var __extends = (this && this.__extends) || (function () {
                                                                 LatexCmds.chi =
                                                                     LatexCmds.psi =
                                                                         LatexCmds.omega =
-                                                                            function (latex) { return new Variable('\\' + latex + ' ', '&' + latex + ';'); };
+                                                                            function (latex) {
+                                                                                return new Variable('\\' + latex + ' ', h.entityText('&' + latex + ';'));
+                                                                            };
     //why can't anybody FUCKING agree on these
     LatexCmds.phi = bindVariable('\\phi ', '&#981;', 'phi'); //W3C or Unicode?
     LatexCmds.phiv = LatexCmds.varphi = bindVariable('\\varphi ', '&phi;', 'phi'); //Elsevier and 9573-13 //AMS and LaTeX
@@ -5854,10 +6991,10 @@ var __extends = (this && this.__extends) || (function () {
     LatexCmds.rhov = LatexCmds.varrho = bindVariable('\\varrho ', '&#1009;', 'rho'); //Elsevier and 9573-13 //AMS and LaTeX
     //Greek constants, look best in non-italicized Times New Roman
     LatexCmds.pi = LatexCmds['\u03c0'] = function () {
-        return new NonSymbolaSymbol('\\pi ', '&pi;', 'pi');
+        return new NonSymbolaSymbol('\\pi ', h.entityText('&pi;'), 'pi');
     };
     LatexCmds.lambda = function () {
-        return new NonSymbolaSymbol('\\lambda ', '&lambda;', 'lambda');
+        return new NonSymbolaSymbol('\\lambda ', h.entityText('&lambda;'), 'lambda');
     };
     //uppercase greek letters
     LatexCmds.Upsilon = //LaTeX
@@ -5865,7 +7002,7 @@ var __extends = (this && this.__extends) || (function () {
             LatexCmds.upsih = //W3C/Unicode "upsilon with hook"
                 LatexCmds.Upsih = //'cos it makes sense to me
                     function () {
-                        return new MQSymbol('\\Upsilon ', '<var style="font-family: serif">&upsih;</var>', 'capital upsilon');
+                        return new MQSymbol('\\Upsilon ', h('var', { style: 'font-family: serif' }, [h.entityText('&upsih;')]), 'capital upsilon');
                     }; //Symbola's 'upsilon with a hook' is a capital Y without hooks :(
     //other symbols with the same LaTeX command and HTML character entity reference
     LatexCmds.Gamma =
@@ -5879,29 +7016,31 @@ var __extends = (this && this.__extends) || (function () {
                                     LatexCmds.Psi =
                                         LatexCmds.Omega =
                                             LatexCmds.forall =
-                                                function (latex) { return new VanillaSymbol('\\' + latex + ' ', '&' + latex + ';'); };
+                                                function (latex) {
+                                                    return new VanillaSymbol('\\' + latex + ' ', h.entityText('&' + latex + ';'));
+                                                };
     // symbols that aren't a single MathCommand, but are instead a whole
     // Fragment. Creates the Fragment from a LaTeX string
     var LatexFragment = /** @class */ (function (_super) {
         __extends(LatexFragment, _super);
         function LatexFragment(latex) {
-            var _this = _super.call(this) || this;
-            _this.latexStr = latex;
-            return _this;
+            var _this_1 = _super.call(this) || this;
+            _this_1.latexStr = latex;
+            return _this_1;
         }
         LatexFragment.prototype.createLeftOf = function (cursor) {
             var block = latexMathParser.parse(this.latexStr);
             block
                 .children()
                 .adopt(cursor.parent, cursor[L], cursor[R]);
-            cursor[L] = block.ends[R];
-            block.jQize().insertBefore(cursor.jQ);
+            cursor[L] = block.getEnd(R);
+            domFrag(block.html()).insertBefore(cursor.domFrag());
             block.finalizeInsert(cursor.options, cursor);
-            var blockEndsR = block.ends[R];
+            var blockEndsR = block.getEnd(R);
             var blockEndsRR = blockEndsR && blockEndsR[R];
             if (blockEndsRR)
                 blockEndsRR.siblingCreated(cursor.options, L);
-            var blockEndsL = block.ends[L];
+            var blockEndsL = block.getEnd(L);
             var blockEndsLL = blockEndsL && blockEndsL[L];
             if (blockEndsLL)
                 blockEndsLL.siblingCreated(cursor.options, R);
@@ -6008,42 +7147,44 @@ var __extends = (this && this.__extends) || (function () {
         return true;
     }
     var PlusMinus = /** @class */ (function (_super) {
-        __extends(class_8, _super);
-        function class_8(ch, html, mathspeak) {
+        __extends(class_7, _super);
+        function class_7(ch, html, mathspeak) {
             return _super.call(this, ch, html, undefined, mathspeak, true) || this;
         }
-        class_8.prototype.contactWeld = function (cursor, dir) {
+        class_7.prototype.contactWeld = function (cursor, dir) {
             this.sharedSiblingMethod(cursor.options, dir);
         };
-        class_8.prototype.siblingCreated = function (opts, dir) {
+        class_7.prototype.siblingCreated = function (opts, dir) {
             this.sharedSiblingMethod(opts, dir);
         };
-        class_8.prototype.siblingDeleted = function (opts, dir) {
+        class_7.prototype.siblingDeleted = function (opts, dir) {
             this.sharedSiblingMethod(opts, dir);
         };
-        class_8.prototype.sharedSiblingMethod = function (_opts, dir) {
+        class_7.prototype.sharedSiblingMethod = function (_opts, dir) {
             if (dir === R)
                 return; // ignore if sibling only changed on the right
-            this.jQ[0].className = isBinaryOperator(this) ? 'mq-binary-operator' : '';
+            this.domFrag().oneElement().className = isBinaryOperator(this)
+                ? 'mq-binary-operator'
+                : '';
             return this;
         };
-        return class_8;
+        return class_7;
     }(BinaryOperator));
     LatexCmds['+'] = /** @class */ (function (_super) {
-        __extends(class_9, _super);
-        function class_9() {
-            return _super.call(this, '+', '+') || this;
+        __extends(class_8, _super);
+        function class_8() {
+            return _super.call(this, '+', h.text('+')) || this;
         }
-        class_9.prototype.mathspeak = function () {
+        class_8.prototype.mathspeak = function () {
             return isBinaryOperator(this) ? 'plus' : 'positive';
         };
-        return class_9;
+        return class_8;
     }(PlusMinus));
     //yes, these are different dashes, en-dash, em-dash, unicode minus, actual dash
     var MinusNode = /** @class */ (function (_super) {
         __extends(MinusNode, _super);
         function MinusNode() {
-            return _super.call(this, '-', '&minus;') || this;
+            return _super.call(this, '-', h.entityText('&minus;')) || this;
         }
         MinusNode.prototype.mathspeak = function () {
             return isBinaryOperator(this) ? 'minus' : 'negative';
@@ -6055,11 +7196,11 @@ var __extends = (this && this.__extends) || (function () {
         LatexCmds.pm =
             LatexCmds.plusmn =
                 LatexCmds.plusminus =
-                    function () { return new PlusMinus('\\pm ', '&plusmn;', 'plus-or-minus'); };
+                    function () { return new PlusMinus('\\pm ', h.entityText('&plusmn;'), 'plus-or-minus'); };
     LatexCmds.mp =
         LatexCmds.mnplus =
             LatexCmds.minusplus =
-                function () { return new PlusMinus('\\mp ', '&#8723;', 'minus-or-plus'); };
+                function () { return new PlusMinus('\\mp ', h.entityText('&#8723;'), 'minus-or-plus'); };
     CharCmds['*'] =
         LatexCmds.sdot =
             LatexCmds.cdot =
@@ -6067,7 +7208,7 @@ var __extends = (this && this.__extends) || (function () {
     var To = /** @class */ (function (_super) {
         __extends(To, _super);
         function To() {
-            return _super.call(this, '\\to ', '&rarr;', 'to') || this;
+            return _super.call(this, '\\to ', h.entityText('&rarr;'), 'to') || this;
         }
         To.prototype.deleteTowards = function (dir, cursor) {
             if (dir === L) {
@@ -6089,18 +7230,20 @@ var __extends = (this && this.__extends) || (function () {
     var Inequality = /** @class */ (function (_super) {
         __extends(Inequality, _super);
         function Inequality(data, strict) {
-            var _this = this;
+            var _this_1 = this;
             var strictness = strict ? 'Strict' : '';
-            _this = _super.call(this, data["ctrlSeq".concat(strictness)], data["html".concat(strictness)], data["text".concat(strictness)], data["mathspeak".concat(strictness)]) || this;
-            _this.data = data;
-            _this.strict = strict;
-            return _this;
+            _this_1 = _super.call(this, data["ctrlSeq".concat(strictness)], h.entityText(data["htmlEntity".concat(strictness)]), data["text".concat(strictness)], data["mathspeak".concat(strictness)]) || this;
+            _this_1.data = data;
+            _this_1.strict = strict;
+            return _this_1;
         }
         Inequality.prototype.swap = function (strict) {
             this.strict = strict;
             var strictness = strict ? 'Strict' : '';
             this.ctrlSeq = this.data["ctrlSeq".concat(strictness)];
-            this.jQ.html(this.data["html".concat(strictness)]);
+            this.domFrag()
+                .children()
+                .replaceWith(domFrag(h.entityText(this.data["htmlEntity".concat(strictness)])));
             this.textTemplate = [this.data["text".concat(strictness)]];
             this.mathspeakName = this.data["mathspeak".concat(strictness)];
         };
@@ -6119,21 +7262,21 @@ var __extends = (this && this.__extends) || (function () {
     }(BinaryOperator));
     var less = {
         ctrlSeq: '\\le ',
-        html: '&le;',
+        htmlEntity: '&le;',
         text: '\u2264',
         mathspeak: 'less than or equal to',
         ctrlSeqStrict: '<',
-        htmlStrict: '&lt;',
+        htmlEntityStrict: '&lt;',
         textStrict: '<',
         mathspeakStrict: 'less than',
     };
     var greater = {
         ctrlSeq: '\\ge ',
-        html: '&ge;',
+        htmlEntity: '&ge;',
         text: '\u2265',
         mathspeak: 'greater than or equal to',
         ctrlSeqStrict: '>',
-        htmlStrict: '&gt;',
+        htmlEntityStrict: '&gt;',
         textStrict: '>',
         mathspeakStrict: 'greater than',
     };
@@ -6180,7 +7323,7 @@ var __extends = (this && this.__extends) || (function () {
     var Equality = /** @class */ (function (_super) {
         __extends(Equality, _super);
         function Equality() {
-            return _super.call(this, '=', '=', '=', 'equals') || this;
+            return _super.call(this, '=', h.text('='), '=', 'equals') || this;
         }
         Equality.prototype.createLeftOf = function (cursor) {
             var cursorL = cursor[L];
@@ -6206,7 +7349,7 @@ var __extends = (this && this.__extends) || (function () {
     var Sim = /** @class */ (function (_super) {
         __extends(Sim, _super);
         function Sim() {
-            return _super.call(this, '\\sim ', '~', '~', 'tilde') || this;
+            return _super.call(this, '\\sim ', h.text('~'), '~', 'tilde') || this;
         }
         Sim.prototype.createLeftOf = function (cursor) {
             if (cursor[L] instanceof Sim) {
@@ -6227,7 +7370,7 @@ var __extends = (this && this.__extends) || (function () {
     var Approx = /** @class */ (function (_super) {
         __extends(Approx, _super);
         function Approx() {
-            return _super.call(this, '\\approx ', '&approx;', '\u2248', 'approximately equal') || this;
+            return _super.call(this, '\\approx ', h.entityText('&approx;'), '\u2248', 'approximately equal') || this;
         }
         Approx.prototype.deleteTowards = function (dir, cursor) {
             if (dir === L) {
@@ -6253,84 +7396,116 @@ var __extends = (this && this.__extends) || (function () {
     var SVG_SYMBOLS = {
         sqrt: {
             width: '',
-            html: '<svg preserveAspectRatio="none" viewBox="0 0 32 54">' +
-                '<path d="M0 33 L7 27 L12.5 47 L13 47 L30 0 L32 0 L13 54 L11 54 L4.5 31 L0 33" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '0 0 32 54' }, [
+                    h('path', {
+                        d: 'M0 33 L7 27 L12.5 47 L13 47 L30 0 L32 0 L13 54 L11 54 L4.5 31 L0 33',
+                    }),
+                ]);
+            },
         },
         '|': {
             width: '.4em',
-            html: '<svg preserveAspectRatio="none" viewBox="0 0 10 54">' +
-                '<path d="M4.4 0 L4.4 54 L5.6 54 L5.6 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '0 0 10 54' }, [
+                    h('path', { d: 'M4.4 0 L4.4 54 L5.6 54 L5.6 0' }),
+                ]);
+            },
         },
         '[': {
             width: '.55em',
-            html: '<svg preserveAspectRatio="none" viewBox="0 0 11 24">' +
-                '<path d="M8 0 L3 0 L3 24 L8 24 L8 23 L4 23 L4 1 L8 1" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '0 0 11 24' }, [
+                    h('path', { d: 'M8 0 L3 0 L3 24 L8 24 L8 23 L4 23 L4 1 L8 1' }),
+                ]);
+            },
         },
         ']': {
             width: '.55em',
-            html: '<svg preserveAspectRatio="none" viewBox="0 0 11 24">' +
-                '<path d="M3 0 L8 0 L8 24 L3 24 L3 23 L7 23 L7 1 L3 1" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '0 0 11 24' }, [
+                    h('path', { d: 'M3 0 L8 0 L8 24 L3 24 L3 23 L7 23 L7 1 L3 1' }),
+                ]);
+            },
         },
         '(': {
             width: '.55em',
-            html: '<svg preserveAspectRatio="none" viewBox="3 0 106 186">' +
-                '<path d="M85 0 A61 101 0 0 0 85 186 L75 186 A75 101 0 0 1 75 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '3 0 106 186' }, [
+                    h('path', {
+                        d: 'M85 0 A61 101 0 0 0 85 186 L75 186 A75 101 0 0 1 75 0',
+                    }),
+                ]);
+            },
         },
         ')': {
             width: '.55em',
-            html: '<svg preserveAspectRatio="none" viewBox="3 0 106 186">' +
-                '<path d="M24 0 A61 101 0 0 1 24 186 L34 186 A75 101 0 0 0 34 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '3 0 106 186' }, [
+                    h('path', {
+                        d: 'M24 0 A61 101 0 0 1 24 186 L34 186 A75 101 0 0 0 34 0',
+                    }),
+                ]);
+            },
         },
         '{': {
             width: '.7em',
-            html: '<svg preserveAspectRatio="none" viewBox="10 0 210 350">' +
-                '<path d="M170 0 L170 6 A47 52 0 0 0 123 60 L123 127 A35 48 0 0 1 88 175 A35 48 0 0 1 123 223 L123 290 A47 52 0 0 0 170 344 L170 350 L160 350 A58 49 0 0 1 102 301 L103 220 A45 40 0 0 0 58 180 L58 170 A45 40 0 0 0 103 130 L103 49 A58 49 0 0 1 161 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '10 0 210 350' }, [
+                    h('path', {
+                        d: 'M170 0 L170 6 A47 52 0 0 0 123 60 L123 127 A35 48 0 0 1 88 175 A35 48 0 0 1 123 223 L123 290 A47 52 0 0 0 170 344 L170 350 L160 350 A58 49 0 0 1 102 301 L103 220 A45 40 0 0 0 58 180 L58 170 A45 40 0 0 0 103 130 L103 49 A58 49 0 0 1 161 0',
+                    }),
+                ]);
+            },
         },
         '}': {
             width: '.7em',
-            html: '<svg preserveAspectRatio="none" viewBox="10 0 210 350">' +
-                '<path d="M60 0 L60 6 A47 52 0 0 1 107 60 L107 127 A35 48 0 0 0 142 175 A35 48 0 0 0 107 223 L107 290 A47 52 0 0 1 60 344 L60 350 L70 350 A58 49 0 0 0 128 301 L127 220 A45 40 0 0 1 172 180 L172 170 A45 40 0 0 1 127 130 L127 49 A58 49 0 0 0 70 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '10 0 210 350' }, [
+                    h('path', {
+                        d: 'M60 0 L60 6 A47 52 0 0 1 107 60 L107 127 A35 48 0 0 0 142 175 A35 48 0 0 0 107 223 L107 290 A47 52 0 0 1 60 344 L60 350 L70 350 A58 49 0 0 0 128 301 L127 220 A45 40 0 0 1 172 180 L172 170 A45 40 0 0 1 127 130 L127 49 A58 49 0 0 0 70 0',
+                    }),
+                ]);
+            },
         },
         '&#8741;': {
             width: '.7em',
-            html: '<svg preserveAspectRatio="none" viewBox="0 0 10 54">' +
-                '<path d="M3.2 0 L3.2 54 L4 54 L4 0 M6.8 0 L6.8 54 L6 54 L6 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '0 0 10 54' }, [
+                    h('path', { d: 'M3.2 0 L3.2 54 L4 54 L4 0 M6.8 0 L6.8 54 L6 54 L6 0' }),
+                ]);
+            },
         },
         '&lang;': {
             width: '.55em',
-            html: '<svg preserveAspectRatio="none" viewBox="0 0 10 54">' +
-                '<path d="M6.8 0 L3.2 27 L6.8 54 L7.8 54 L4.2 27 L7.8 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '0 0 10 54' }, [
+                    h('path', { d: 'M6.8 0 L3.2 27 L6.8 54 L7.8 54 L4.2 27 L7.8 0' }),
+                ]);
+            },
         },
         '&rang;': {
             width: '.55em',
-            html: '<svg preserveAspectRatio="none" viewBox="0 0 10 54">' +
-                '<path d="M3.2 0 L6.8 27 L3.2 54 L2.2 54 L5.8 27 L2.2 0" />' +
-                '</svg>',
+            html: function () {
+                return h('svg', { preserveAspectRatio: 'none', viewBox: '0 0 10 54' }, [
+                    h('path', { d: 'M3.2 0 L6.8 27 L3.2 54 L2.2 54 L5.8 27 L2.2 0' }),
+                ]);
+            },
         },
     };
     var Style = /** @class */ (function (_super) {
         __extends(Style, _super);
         function Style(ctrlSeq, tagName, attrs, ariaLabel, opts) {
-            var _this = _super.call(this, ctrlSeq, '<' + tagName + ' ' + attrs + '>&0</' + tagName + '>') || this;
-            _this.ariaLabel = ariaLabel || ctrlSeq.replace(/^\\/, '');
-            _this.mathspeakTemplate = [
-                'Start' + _this.ariaLabel + ',',
-                'End' + _this.ariaLabel,
+            var _this_1 = _super.call(this, ctrlSeq, new DOMView(1, function (blocks) { return h.block(tagName, attrs, blocks[0]); })) || this;
+            _this_1.ariaLabel = ariaLabel || ctrlSeq.replace(/^\\/, '');
+            _this_1.mathspeakTemplate = [
+                'Start' + _this_1.ariaLabel + ',',
+                'End' + _this_1.ariaLabel,
             ];
             // In most cases, mathspeak should announce the start and end of style blocks.
             // There is one exception currently (mathrm).
-            _this.shouldNotSpeakDelimiters = opts && opts.shouldNotSpeakDelimiters;
-            return _this;
+            _this_1.shouldNotSpeakDelimiters = opts && opts.shouldNotSpeakDelimiters;
+            return _this_1;
         }
         Style.prototype.mathspeak = function (opts) {
             if (!this.shouldNotSpeakDelimiters || (opts && opts.ignoreShorthand)) {
@@ -6346,7 +7521,7 @@ var __extends = (this && this.__extends) || (function () {
     LatexCmds.mathrm = /** @class */ (function (_super) {
         __extends(mathrm, _super);
         function mathrm() {
-            return _super.call(this, '\\mathrm', 'span', 'class="mq-roman mq-font"', 'Roman Font', {
+            return _super.call(this, '\\mathrm', 'span', { class: 'mq-roman mq-font' }, 'Roman Font', {
                 shouldNotSpeakDelimiters: true,
             }) || this;
         }
@@ -6356,41 +7531,45 @@ var __extends = (this && this.__extends) || (function () {
         return mathrm;
     }(Style));
     LatexCmds.mathit = function () {
-        return new Style('\\mathit', 'i', 'class="mq-font"', 'Italic Font');
+        return new Style('\\mathit', 'i', { class: 'mq-font' }, 'Italic Font');
     };
     LatexCmds.mathbf = function () {
-        return new Style('\\mathbf', 'b', 'class="mq-font"', 'Bold Font');
+        return new Style('\\mathbf', 'b', { class: 'mq-font' }, 'Bold Font');
     };
     LatexCmds.mathsf = function () {
-        return new Style('\\mathsf', 'span', 'class="mq-sans-serif mq-font"', 'Serif Font');
+        return new Style('\\mathsf', 'span', { class: 'mq-sans-serif mq-font' }, 'Serif Font');
     };
     LatexCmds.mathtt = function () {
-        return new Style('\\mathtt', 'span', 'class="mq-monospace mq-font"', 'Math Text');
+        return new Style('\\mathtt', 'span', { class: 'mq-monospace mq-font' }, 'Math Text');
     };
     //text-decoration
     LatexCmds.underline = function () {
-        return new Style('\\underline', 'span', 'class="mq-non-leaf mq-underline"', 'Underline');
+        return new Style('\\underline', 'span', { class: 'mq-non-leaf mq-underline' }, 'Underline');
     };
     LatexCmds.overline = LatexCmds.bar = function () {
-        return new Style('\\overline', 'span', 'class="mq-non-leaf mq-overline"', 'Overline');
+        return new Style('\\overline', 'span', { class: 'mq-non-leaf mq-overline' }, 'Overline');
     };
     LatexCmds.overrightarrow = function () {
-        return new Style('\\overrightarrow', 'span', 'class="mq-non-leaf mq-overarrow mq-arrow-right"', 'Over Right Arrow');
+        return new Style('\\overrightarrow', 'span', { class: 'mq-non-leaf mq-overarrow mq-arrow-right' }, 'Over Right Arrow');
     };
     LatexCmds.overleftarrow = function () {
-        return new Style('\\overleftarrow', 'span', 'class="mq-non-leaf mq-overarrow mq-arrow-left"', 'Over Left Arrow');
+        return new Style('\\overleftarrow', 'span', { class: 'mq-non-leaf mq-overarrow mq-arrow-left' }, 'Over Left Arrow');
     };
     LatexCmds.overleftrightarrow = function () {
-        return new Style('\\overleftrightarrow ', 'span', 'class="mq-non-leaf mq-overarrow mq-arrow-leftright"', 'Over Left and Right Arrow');
+        return new Style('\\overleftrightarrow ', 'span', { class: 'mq-non-leaf mq-overarrow mq-arrow-leftright' }, 'Over Left and Right Arrow');
     };
     LatexCmds.overarc = function () {
-        return new Style('\\overarc', 'span', 'class="mq-non-leaf mq-overarc"', 'Over Arc');
+        return new Style('\\overarc', 'span', { class: 'mq-non-leaf mq-overarc' }, 'Over Arc');
     };
     LatexCmds.dot = function () {
-        return new MathCommand('\\dot', '<span class="mq-non-leaf"><span class="mq-dot-recurring-inner">' +
-            '<span class="mq-dot-recurring">&#x2d9;</span>' +
-            '<span class="mq-empty-box">&0</span>' +
-            '</span></span>');
+        return new MathCommand('\\dot', new DOMView(1, function (blocks) {
+            return h('span', { class: 'mq-non-leaf' }, [
+                h('span', { class: 'mq-dot-recurring-inner' }, [
+                    h('span', { class: 'mq-dot-recurring' }, [h.text(U_DOT_ABOVE)]),
+                    h.block('span', { class: 'mq-empty-box' }, blocks[0]),
+                ]),
+            ]);
+        }));
     };
     // `\textcolor{color}{math}` will apply a color to the given math content, where
     // `color` is any valid CSS Color Value (see [SitePoint docs][] (recommended),
@@ -6400,26 +7579,27 @@ var __extends = (this && this.__extends) || (function () {
     // [Mozilla docs]: https://developer.mozilla.org/en-US/docs/CSS/color_value#Values
     // [W3C spec]: http://dev.w3.org/csswg/css3-color/#colorunits
     LatexCmds.textcolor = /** @class */ (function (_super) {
-        __extends(class_10, _super);
-        function class_10() {
+        __extends(class_9, _super);
+        function class_9() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_10.prototype.setColor = function (color) {
+        class_9.prototype.setColor = function (color) {
             this.color = color;
-            this.htmlTemplate =
-                '<span class="mq-textcolor" style="color:' + color + '">&0</span>';
+            this.domView = new DOMView(1, function (blocks) {
+                return h.block('span', { class: 'mq-textcolor', style: 'color:' + color }, blocks[0]);
+            });
             this.ariaLabel = color.replace(/^\\/, '');
             this.mathspeakTemplate = [
                 'Start ' + this.ariaLabel + ',',
                 'End ' + this.ariaLabel,
             ];
         };
-        class_10.prototype.latex = function () {
+        class_9.prototype.latex = function () {
             var blocks0 = this.blocks[0];
             return '\\textcolor{' + this.color + '}{' + blocks0.latex() + '}';
         };
-        class_10.prototype.parser = function () {
-            var _this = this;
+        class_9.prototype.parser = function () {
+            var _this_1 = this;
             var optWhitespace = Parser.optWhitespace;
             var string = Parser.string;
             var regex = Parser.regex;
@@ -6428,50 +7608,52 @@ var __extends = (this && this.__extends) || (function () {
                 .then(regex(/^[#\w\s.,()%-]*/))
                 .skip(string('}'))
                 .then(function (color) {
-                _this.setColor(color);
-                return _super.prototype.parser.call(_this);
+                _this_1.setColor(color);
+                return _super.prototype.parser.call(_this_1);
             });
         };
-        class_10.prototype.isStyleBlock = function () {
+        class_9.prototype.isStyleBlock = function () {
             return true;
         };
-        return class_10;
+        return class_9;
     }(MathCommand));
     // Very similar to the \textcolor command, but will add the given CSS class.
     // Usage: \class{classname}{math}
     // Note regex that whitelists valid CSS classname characters:
     // https://github.com/mathquill/mathquill/pull/191#discussion_r4327442
     var Class = (LatexCmds['class'] = /** @class */ (function (_super) {
-        __extends(class_11, _super);
-        function class_11() {
+        __extends(class_10, _super);
+        function class_10() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_11.prototype.parser = function () {
-            var _this = this;
+        class_10.prototype.parser = function () {
+            var _this_1 = this;
             var string = Parser.string, regex = Parser.regex;
             return Parser.optWhitespace
                 .then(string('{'))
                 .then(regex(/^[-\w\s\\\xA0-\xFF]*/))
                 .skip(string('}'))
                 .then(function (cls) {
-                _this.cls = cls || '';
-                _this.htmlTemplate = '<span class="mq-class ' + cls + '">&0</span>';
-                _this.ariaLabel = cls + ' class';
-                _this.mathspeakTemplate = [
-                    'Start ' + _this.ariaLabel + ',',
-                    'End ' + _this.ariaLabel,
+                _this_1.cls = cls || '';
+                _this_1.domView = new DOMView(1, function (blocks) {
+                    return h.block('span', { class: "mq-class ".concat(cls) }, blocks[0]);
+                });
+                _this_1.ariaLabel = cls + ' class';
+                _this_1.mathspeakTemplate = [
+                    'Start ' + _this_1.ariaLabel + ',',
+                    'End ' + _this_1.ariaLabel,
                 ];
-                return _super.prototype.parser.call(_this);
+                return _super.prototype.parser.call(_this_1);
             });
         };
-        class_11.prototype.latex = function () {
+        class_10.prototype.latex = function () {
             var blocks0 = this.blocks[0];
             return '\\class{' + this.cls + '}{' + blocks0.latex() + '}';
         };
-        class_11.prototype.isStyleBlock = function () {
+        class_10.prototype.isStyleBlock = function () {
             return true;
         };
-        return class_11;
+        return class_10;
     }(MathCommand)));
     // This test is used to determine whether an item may be treated as a whole number
     // for shortening the verbalized (mathspeak) forms of some fractions and superscripts.
@@ -6482,24 +7664,28 @@ var __extends = (this && this.__extends) || (function () {
     function getCtrlSeqsFromBlock(block) {
         if (!block)
             return '';
-        var children = block.children();
-        if (!children || !children.ends[L])
-            return '';
         var chars = '';
-        for (var sibling = children.ends[L]; sibling && sibling[R] !== undefined; sibling = sibling[R]) {
-            if (sibling.ctrlSeq !== undefined)
-                chars += sibling.ctrlSeq;
-        }
+        block.eachChild(function (child) {
+            if (child.ctrlSeq !== undefined)
+                chars += child.ctrlSeq;
+        });
         return chars;
     }
     Options.prototype.charsThatBreakOutOfSupSub = '';
     var SupSub = /** @class */ (function (_super) {
         __extends(SupSub, _super);
         function SupSub() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ctrlSeq = '_{...}^{...}';
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ctrlSeq = '_{...}^{...}';
+            return _this_1;
         }
+        SupSub.prototype.setEnds = function (ends) {
+            pray('SupSub ends must be MathBlocks', ends[L] instanceof MathBlock && ends[R] instanceof MathBlock);
+            this.ends = ends;
+        };
+        SupSub.prototype.getEnd = function (dir) {
+            return this.ends[dir];
+        };
         SupSub.prototype.createLeftOf = function (cursor) {
             if (!this.replacedFragment &&
                 !cursor[L] &&
@@ -6530,16 +7716,19 @@ var __extends = (this && this.__extends) || (function () {
                             thisDir.addBlock(src.disown());
                         else if (!src.isEmpty()) {
                             // ins src children at -dir end of dest
-                            src.jQ.children().insAtDirEnd(-dir, dest.jQ);
+                            src
+                                .domFrag()
+                                .children()
+                                .insAtDirEnd(-dir, dest.domFrag().oneElement());
                             var children = src.children().disown();
-                            pt = new Point(dest, children.ends[R], dest.ends[L]);
+                            pt = new Point(dest, children.getEnd(R), dest.getEnd(L));
                             if (dir === L)
-                                children.adopt(dest, dest.ends[R], 0);
+                                children.adopt(dest, dest.getEnd(R), 0);
                             else
-                                children.adopt(dest, 0, dest.ends[L]);
+                                children.adopt(dest, 0, dest.getEnd(L));
                         }
                         else {
-                            pt = new Point(dest, 0, dest.ends[L]);
+                            pt = new Point(dest, 0, dest.getEnd(L));
                         }
                         this.placeCursor = (function (dest, src) {
                             // TODO: don't monkey-patch
@@ -6566,7 +7755,7 @@ var __extends = (this && this.__extends) || (function () {
             }
         };
         SupSub.prototype.finalizeTree = function () {
-            var endsL = this.ends[L];
+            var endsL = this.getEnd(L);
             endsL.write = function (cursor, ch) {
                 if (cursor.options.autoSubscriptNumerals &&
                     this === this.parent.sub) {
@@ -6602,7 +7791,7 @@ var __extends = (this && this.__extends) || (function () {
         };
         SupSub.prototype.deleteTowards = function (dir, cursor) {
             if (cursor.options.autoSubscriptNumerals && this.sub) {
-                var cmd = this.sub.ends[-dir];
+                var cmd = this.sub.getEnd(-dir);
                 if (cmd instanceof MQSymbol)
                     cmd.remove();
                 else if (cmd)
@@ -6640,19 +7829,24 @@ var __extends = (this && this.__extends) || (function () {
             if (this.supsub === 'sub') {
                 this.sup = this.upInto = this.sub.upOutOf = block;
                 block.adopt(this, this.sub, 0).downOutOf = this.sub;
-                block.jQ = $('<span class="mq-sup"/>')
-                    .append(block.jQ.children())
-                    .prependTo(this.jQ);
-                NodeBase.linkElementByBlockNode(block.jQ[0], block);
+                block.setDOM(domFrag(h('span', { class: 'mq-sup' }))
+                    .append(block.domFrag().children())
+                    .prependTo(this.domFrag().oneElement())
+                    .oneElement());
+                NodeBase.linkElementByBlockNode(block.domFrag().oneElement(), block);
             }
             else {
                 this.sub = this.downInto = this.sup.downOutOf = block;
                 block.adopt(this, 0, this.sup).upOutOf = this.sup;
-                block.jQ = $('<span class="mq-sub"></span>')
-                    .append(block.jQ.children())
-                    .appendTo(this.jQ.removeClass('mq-sup-only'));
-                NodeBase.linkElementByBlockNode(block.jQ[0], block);
-                this.jQ.append('<span style="display:inline-block;width:0">&#8203;</span>');
+                this.domFrag().removeClass('mq-sup-only');
+                block.setDOM(domFrag(h('span', { class: 'mq-sub' }))
+                    .append(block.domFrag().children())
+                    .appendTo(this.domFrag().oneElement())
+                    .oneElement());
+                NodeBase.linkElementByBlockNode(block.domFrag().oneElement(), block);
+                this.domFrag().append(domFrag(h('span', { style: 'display:inline-block;width:0' }, [
+                    h.text(U_ZERO_WIDTH_SPACE),
+                ])));
             }
             // like 'sub sup'.split(' ').forEach(function(supsub) { ... });
             for (var i = 0; i < 2; i += 1)
@@ -6661,11 +7855,12 @@ var __extends = (this && this.__extends) || (function () {
                     cmdSubSub.deleteOutOf = function (dir, cursor) {
                         cursor.insDirOf(this[dir] ? -dir : dir, this.parent);
                         if (!this.isEmpty()) {
-                            var end = this.ends[dir];
+                            var end = this.getEnd(dir);
                             this.children()
                                 .disown()
                                 .withDirAdopt(dir, cursor.parent, cursor[dir], cursor[-dir])
-                                .jQ.insDirOf(-dir, cursor.jQ);
+                                .domFrag()
+                                .insDirOf(-dir, cursor.domFrag());
                             cursor[-dir] = end;
                         }
                         cmd.supsub = oppositeSupsub;
@@ -6674,8 +7869,9 @@ var __extends = (this && this.__extends) || (function () {
                         var cmdOppositeSupsub = cmd[oppositeSupsub];
                         cmdOppositeSupsub["".concat(updown, "OutOf")] = insLeftOfMeUnlessAtEnd;
                         delete cmdOppositeSupsub.deleteOutOf; // TODO - refactor so this method can be optional
-                        if (supsub === 'sub')
-                            $(cmd.jQ.addClass('mq-sup-only')[0].lastChild).remove();
+                        if (supsub === 'sub') {
+                            cmd.domFrag().addClass('mq-sup-only').children().last().remove();
+                        }
                         this.remove();
                     };
                 })(this, 'sub sup'.split(' ')[i], 'sup sub'.split(' ')[i], 'down up'.split(' ')[i]);
@@ -6698,19 +7894,23 @@ var __extends = (this && this.__extends) || (function () {
     var SubscriptCommand = /** @class */ (function (_super) {
         __extends(SubscriptCommand, _super);
         function SubscriptCommand() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.supsub = 'sub';
-            _this.htmlTemplate = '<span class="mq-supsub mq-non-leaf">' +
-                '<span class="mq-sub">&0</span>' +
-                '<span style="display:inline-block;width:0">&#8203;</span>' +
-                '</span>';
-            _this.textTemplate = ['_'];
-            _this.mathspeakTemplate = ['Subscript,', ', Baseline'];
-            _this.ariaLabel = 'subscript';
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.supsub = 'sub';
+            _this_1.domView = new DOMView(1, function (blocks) {
+                return h('span', { class: 'mq-supsub mq-non-leaf' }, [
+                    h.block('span', { class: 'mq-sub' }, blocks[0]),
+                    h('span', { style: 'display:inline-block;width:0' }, [
+                        h.text(U_ZERO_WIDTH_SPACE),
+                    ]),
+                ]);
+            });
+            _this_1.textTemplate = ['_'];
+            _this_1.mathspeakTemplate = ['Subscript,', ', Baseline'];
+            _this_1.ariaLabel = 'subscript';
+            return _this_1;
         }
         SubscriptCommand.prototype.finalizeTree = function () {
-            this.downInto = this.sub = this.ends[L];
+            this.downInto = this.sub = this.getEnd(L);
             this.sub.upOutOf = insLeftOfMeUnlessAtEnd;
             _super.prototype.finalizeTree.call(this);
         };
@@ -6722,15 +7922,17 @@ var __extends = (this && this.__extends) || (function () {
             LatexCmds['^'] = /** @class */ (function (_super) {
                 __extends(SuperscriptCommand, _super);
                 function SuperscriptCommand() {
-                    var _this = _super !== null && _super.apply(this, arguments) || this;
-                    _this.supsub = 'sup';
-                    _this.htmlTemplate = '<span class="mq-supsub mq-non-leaf mq-sup-only">' +
-                        '<span class="mq-sup">&0</span>' +
-                        '</span>';
-                    _this.textTemplate = ['^(', ')'];
-                    _this.ariaLabel = 'superscript';
-                    _this.mathspeakTemplate = ['Superscript,', ', Baseline'];
-                    return _this;
+                    var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+                    _this_1.supsub = 'sup';
+                    _this_1.domView = new DOMView(1, function (blocks) {
+                        return h('span', { class: 'mq-supsub mq-non-leaf mq-sup-only' }, [
+                            h.block('span', { class: 'mq-sup' }, blocks[0]),
+                        ]);
+                    });
+                    _this_1.textTemplate = ['^(', ')'];
+                    _this_1.ariaLabel = 'superscript';
+                    _this_1.mathspeakTemplate = ['Superscript,', ', Baseline'];
+                    return _this_1;
                 }
                 SuperscriptCommand.prototype.mathspeak = function (opts) {
                     // Simplify basic exponent speech for common whole numbers.
@@ -6776,7 +7978,7 @@ var __extends = (this && this.__extends) || (function () {
                     return _super.prototype.mathspeak.call(this);
                 };
                 SuperscriptCommand.prototype.finalizeTree = function () {
-                    this.upInto = this.sup = this.ends[R];
+                    this.upInto = this.sup = this.getEnd(R);
                     this.sup.downOutOf = insLeftOfMeUnlessAtEnd;
                     _super.prototype.finalizeTree.call(this);
                 };
@@ -6784,18 +7986,18 @@ var __extends = (this && this.__extends) || (function () {
             }(SupSub));
     var SummationNotation = /** @class */ (function (_super) {
         __extends(SummationNotation, _super);
-        function SummationNotation(ch, html, ariaLabel) {
-            var _this = _super.call(this) || this;
-            _this.ariaLabel = ariaLabel || ch.replace(/^\\/, '');
-            var htmlTemplate = '<span class="mq-large-operator mq-non-leaf">' +
-                '<span class="mq-to"><span>&1</span></span>' +
-                '<big>' +
-                html +
-                '</big>' +
-                '<span class="mq-from"><span>&0</span></span>' +
-                '</span>';
-            MQSymbol.prototype.setCtrlSeqHtmlTextAndMathspeak.call(_this, ch, htmlTemplate);
-            return _this;
+        function SummationNotation(ch, symbol, ariaLabel) {
+            var _this_1 = _super.call(this) || this;
+            _this_1.ariaLabel = ariaLabel || ch.replace(/^\\/, '');
+            var domView = new DOMView(2, function (blocks) {
+                return h('span', { class: 'mq-large-operator mq-non-leaf' }, [
+                    h('span', { class: 'mq-to' }, [h.block('span', {}, blocks[1])]),
+                    h('big', {}, [h.text(symbol)]),
+                    h('span', { class: 'mq-from' }, [h.block('span', {}, blocks[0])]),
+                ]);
+            });
+            MQSymbol.prototype.setCtrlSeqHtmlTextAndMathspeak.call(_this_1, ch, domView);
+            return _this_1;
         }
         SummationNotation.prototype.createLeftOf = function (cursor) {
             _super.prototype.createLeftOf.call(this, cursor);
@@ -6810,17 +8012,17 @@ var __extends = (this && this.__extends) || (function () {
             }
             return (this.ctrlSeq +
                 '_' +
-                simplify(this.ends[L].latex()) +
+                simplify(this.getEnd(L).latex()) +
                 '^' +
-                simplify(this.ends[R].latex()));
+                simplify(this.getEnd(R).latex()));
         };
         SummationNotation.prototype.mathspeak = function () {
             return ('Start ' +
                 this.ariaLabel +
                 ' from ' +
-                this.ends[L].mathspeak() +
+                this.getEnd(L).mathspeak() +
                 ' to ' +
-                this.ends[R].mathspeak() +
+                this.getEnd(R).mathspeak() +
                 ', end ' +
                 this.ariaLabel +
                 ', ');
@@ -6833,14 +8035,14 @@ var __extends = (this && this.__extends) || (function () {
             var self = this;
             var blocks = (self.blocks = [new MathBlock(), new MathBlock()]);
             for (var i = 0; i < blocks.length; i += 1) {
-                blocks[i].adopt(self, self.ends[R], 0);
+                blocks[i].adopt(self, self.getEnd(R), 0);
             }
             return optWhitespace
                 .then(string('_').or(string('^')))
                 .then(function (supOrSub) {
                 var child = blocks[supOrSub === '_' ? 0 : 1];
                 return block.then(function (block) {
-                    block.children().adopt(child, child.ends[R], 0);
+                    block.children().adopt(child, child.getEnd(R), 0);
                     return succeed(self);
                 });
             })
@@ -6848,8 +8050,8 @@ var __extends = (this && this.__extends) || (function () {
                 .result(self);
         };
         SummationNotation.prototype.finalizeTree = function () {
-            var endsL = this.ends[L];
-            var endsR = this.ends[R];
+            var endsL = this.getEnd(L);
+            var endsR = this.getEnd(R);
             endsL.ariaLabel = 'lower bound';
             endsR.ariaLabel = 'upper bound';
             this.downInto = endsL;
@@ -6862,38 +8064,42 @@ var __extends = (this && this.__extends) || (function () {
     LatexCmds['\u2211'] =
         LatexCmds.sum =
             LatexCmds.summation =
-                function () { return new SummationNotation('\\sum ', '&sum;', 'sum'); };
+                function () { return new SummationNotation('\\sum ', U_NARY_SUMMATION, 'sum'); };
     LatexCmds['\u220f'] =
         LatexCmds.prod =
             LatexCmds.product =
-                function () { return new SummationNotation('\\prod ', '&prod;', 'product'); };
+                function () { return new SummationNotation('\\prod ', U_NARY_PRODUCT, 'product'); };
     LatexCmds.coprod = LatexCmds.coproduct = function () {
-        return new SummationNotation('\\coprod ', '&#8720;', 'co product');
+        return new SummationNotation('\\coprod ', U_NARY_COPRODUCT, 'co product');
     };
     LatexCmds['\u222b'] =
         LatexCmds['int'] =
             LatexCmds.integral = /** @class */ (function (_super) {
-                __extends(class_12, _super);
-                function class_12() {
-                    var _this = this;
-                    var htmlTemplate = '<span class="mq-int mq-non-leaf">' +
-                        '<big>&int;</big>' +
-                        '<span class="mq-supsub mq-non-leaf">' +
-                        '<span class="mq-sup"><span class="mq-sup-inner">&1</span></span>' +
-                        '<span class="mq-sub">&0</span>' +
-                        '<span style="display:inline-block;width:0">&#8203</span>' +
-                        '</span>' +
-                        '</span>';
-                    _this = _super.call(this, '\\int ', '', 'integral') || this;
-                    _this.ariaLabel = 'integral';
-                    _this.htmlTemplate = htmlTemplate;
-                    return _this;
+                __extends(class_11, _super);
+                function class_11() {
+                    var _this_1 = _super.call(this, '\\int ', '', 'integral') || this;
+                    _this_1.ariaLabel = 'integral';
+                    _this_1.domView = new DOMView(2, function (blocks) {
+                        return h('span', { class: 'mq-int mq-non-leaf' }, [
+                            h('big', {}, [h.text(U_INTEGRAL)]),
+                            h('span', { class: 'mq-supsub mq-non-leaf' }, [
+                                h('span', { class: 'mq-sup' }, [
+                                    h.block('span', { class: 'mq-sup-inner' }, blocks[1]),
+                                ]),
+                                h.block('span', { class: 'mq-sub' }, blocks[0]),
+                                h('span', { style: 'display:inline-block;width:0' }, [
+                                    h.text(U_ZERO_WIDTH_SPACE),
+                                ]),
+                            ]),
+                        ]);
+                    });
+                    return _this_1;
                 }
-                class_12.prototype.createLeftOf = function (cursor) {
+                class_11.prototype.createLeftOf = function (cursor) {
                     // FIXME: refactor rather than overriding
                     MathCommand.prototype.createLeftOf.call(this, cursor);
                 };
-                return class_12;
+                return class_11;
             }(SummationNotation));
     var Fraction = (LatexCmds.frac =
         LatexCmds.dfrac =
@@ -6901,19 +8107,23 @@ var __extends = (this && this.__extends) || (function () {
                 LatexCmds.fraction = /** @class */ (function (_super) {
                     __extends(FracNode, _super);
                     function FracNode() {
-                        var _this = _super !== null && _super.apply(this, arguments) || this;
-                        _this.ctrlSeq = '\\frac';
-                        _this.htmlTemplate = '<span class="mq-fraction mq-non-leaf">' +
-                            '<span class="mq-numerator">&0</span>' +
-                            '<span class="mq-denominator">&1</span>' +
-                            '<span style="display:inline-block;width:0">&#8203;</span>' +
-                            '</span>';
-                        _this.textTemplate = ['(', ')/(', ')'];
-                        return _this;
+                        var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+                        _this_1.ctrlSeq = '\\frac';
+                        _this_1.domView = new DOMView(2, function (blocks) {
+                            return h('span', { class: 'mq-fraction mq-non-leaf' }, [
+                                h.block('span', { class: 'mq-numerator' }, blocks[0]),
+                                h.block('span', { class: 'mq-denominator' }, blocks[1]),
+                                h('span', { style: 'display:inline-block;width:0' }, [
+                                    h.text(U_ZERO_WIDTH_SPACE),
+                                ]),
+                            ]);
+                        });
+                        _this_1.textTemplate = ['(', ')/(', ')'];
+                        return _this_1;
                     }
                     FracNode.prototype.finalizeTree = function () {
-                        var endsL = this.ends[L];
-                        var endsR = this.ends[R];
+                        var endsL = this.getEnd(L);
+                        var endsR = this.getEnd(R);
                         this.upInto = endsR.upOutOf = endsL;
                         this.downInto = endsL.downOutOf = endsR;
                         endsL.ariaLabel = 'numerator';
@@ -6934,8 +8144,8 @@ var __extends = (this && this.__extends) || (function () {
                             var cursor = opts.createdLeftOf;
                             return cursor.parent.mathspeak();
                         }
-                        var numText = getCtrlSeqsFromBlock(this.ends[L]);
-                        var denText = getCtrlSeqsFromBlock(this.ends[R]);
+                        var numText = getCtrlSeqsFromBlock(this.getEnd(L));
+                        var denText = getCtrlSeqsFromBlock(this.getEnd(R));
                         // Shorten mathspeak value for whole number fractions whose denominator is less than 10.
                         if ((!opts || !opts.ignoreShorthand) &&
                             intRgx.test(numText) &&
@@ -6988,7 +8198,7 @@ var __extends = (this && this.__extends) || (function () {
                                 if (precededByInteger) {
                                     output += 'and ';
                                 }
-                                output += this.ends[L].mathspeak() + ' ' + newDenSpeech;
+                                output += this.getEnd(L).mathspeak() + ' ' + newDenSpeech;
                                 return output;
                             }
                         }
@@ -7012,11 +8222,11 @@ var __extends = (this && this.__extends) || (function () {
                 }(MathCommand)));
     var LiveFraction = (LatexCmds.over =
         CharCmds['/'] = /** @class */ (function (_super) {
-            __extends(class_13, _super);
-            function class_13() {
+            __extends(class_12, _super);
+            function class_12() {
                 return _super !== null && _super.apply(this, arguments) || this;
             }
-            class_13.prototype.createLeftOf = function (cursor) {
+            class_12.prototype.createLeftOf = function (cursor) {
                 if (!this.replacedFragment) {
                     var leftward = cursor[L];
                     if (!cursor.options.typingSlashCreatesNewFraction) {
@@ -7040,37 +8250,39 @@ var __extends = (this && this.__extends) || (function () {
                     if (leftward !== cursor[L] && !cursor.isTooDeep(1)) {
                         var leftwardR = leftward[R];
                         var cursorL = cursor[L];
-                        this.replaces(new Fragment(leftwardR || cursor.parent.ends[L], cursorL));
+                        this.replaces(new Fragment(leftwardR || cursor.parent.getEnd(L), cursorL));
                         cursor[L] = leftward;
                     }
                 }
                 _super.prototype.createLeftOf.call(this, cursor);
             };
-            return class_13;
+            return class_12;
         }(Fraction)));
     var AnsBuilder = function () {
-        return new MQSymbol('\\operatorname{ans}', '<span class="mq-ans">ans</span>', 'ans');
+        return new MQSymbol('\\operatorname{ans}', h('span', { class: 'mq-ans' }, [h.text('ans')]), 'ans');
     };
     LatexCmds.ans = AnsBuilder;
     var PercentOfBuilder = function () {
-        return new MQSymbol('\\%\\operatorname{of}', '<span class="mq-nonSymbola mq-operator-name">% of </span>', 'percent of');
+        return new MQSymbol('\\%\\operatorname{of}', h('span', { class: 'mq-nonSymbola mq-operator-name' }, [h.text('% of ')]), 'percent of');
     };
     LatexCmds.percent = LatexCmds.percentof = PercentOfBuilder;
     var SquareRoot = /** @class */ (function (_super) {
         __extends(SquareRoot, _super);
         function SquareRoot() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ctrlSeq = '\\sqrt';
-            _this.htmlTemplate = '<span class="mq-non-leaf mq-sqrt-container">' +
-                '<span class="mq-scaled mq-sqrt-prefix">' +
-                SVG_SYMBOLS.sqrt.html +
-                '</span>' +
-                '<span class="mq-non-leaf mq-sqrt-stem">&0</span>' +
-                '</span>';
-            _this.textTemplate = ['sqrt(', ')'];
-            _this.mathspeakTemplate = ['StartRoot,', ', EndRoot'];
-            _this.ariaLabel = 'root';
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ctrlSeq = '\\sqrt';
+            _this_1.domView = new DOMView(1, function (blocks) {
+                return h('span', { class: 'mq-non-leaf mq-sqrt-container' }, [
+                    h('span', { class: 'mq-scaled mq-sqrt-prefix' }, [
+                        SVG_SYMBOLS.sqrt.html(),
+                    ]),
+                    h.block('span', { class: 'mq-non-leaf mq-sqrt-stem' }, blocks[0]),
+                ]);
+            });
+            _this_1.textTemplate = ['sqrt(', ')'];
+            _this_1.mathspeakTemplate = ['StartRoot,', ', EndRoot'];
+            _this_1.ariaLabel = 'root';
+            return _this_1;
         }
         SquareRoot.prototype.parser = function () {
             return latexMathParser.optBlock
@@ -7091,45 +8303,45 @@ var __extends = (this && this.__extends) || (function () {
     LatexCmds.hat = /** @class */ (function (_super) {
         __extends(Hat, _super);
         function Hat() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ctrlSeq = '\\hat';
-            _this.htmlTemplate = '<span class="mq-non-leaf">' +
-                '<span class="mq-hat-prefix">^</span>' +
-                '<span class="mq-hat-stem">&0</span>' +
-                '</span>';
-            _this.textTemplate = ['hat(', ')'];
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ctrlSeq = '\\hat';
+            _this_1.domView = new DOMView(1, function (blocks) {
+                return h('span', { class: 'mq-non-leaf' }, [
+                    h('span', { class: 'mq-hat-prefix' }, [h.text('^')]),
+                    h.block('span', { class: 'mq-hat-stem' }, blocks[0]),
+                ]);
+            });
+            _this_1.textTemplate = ['hat(', ')'];
+            return _this_1;
         }
         return Hat;
     }(MathCommand));
     var NthRoot = /** @class */ (function (_super) {
         __extends(NthRoot, _super);
         function NthRoot() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.htmlTemplate = '<span class="mq-nthroot-container mq-non-leaf">' +
-                '<sup class="mq-nthroot mq-non-leaf">&0</sup>' +
-                '<span class="mq-scaled mq-sqrt-container">' +
-                '<span class="mq-sqrt-prefix mq-scaled">' +
-                SVG_SYMBOLS.sqrt.html +
-                '</span>' +
-                '<span class="mq-sqrt-stem mq-non-leaf">&1</span>' +
-                '</span>' +
-                '</span>';
-            _this.textTemplate = ['sqrt[', '](', ')'];
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.domView = new DOMView(2, function (blocks) {
+                return h('span', { class: 'mq-nthroot-container mq-non-leaf' }, [
+                    h.block('sup', { class: 'mq-nthroot mq-non-leaf' }, blocks[0]),
+                    h('span', { class: 'mq-scaled mq-sqrt-container' }, [
+                        h('span', { class: 'mq-sqrt-prefix mq-scaled' }, [
+                            SVG_SYMBOLS.sqrt.html(),
+                        ]),
+                        h.block('span', { class: 'mq-sqrt-stem mq-non-leaf' }, blocks[1]),
+                    ]),
+                ]);
+            });
+            _this_1.textTemplate = ['sqrt[', '](', ')'];
+            return _this_1;
         }
         NthRoot.prototype.latex = function () {
-            return ('\\sqrt[' +
-                this.ends[L].latex() +
-                ']{' +
-                this.ends[R].latex() +
-                '}');
+            return ('\\sqrt[' + this.getEnd(L).latex() + ']{' + this.getEnd(R).latex() + '}');
         };
         NthRoot.prototype.mathspeak = function () {
-            var indexMathspeak = this.ends[L].mathspeak();
-            var radicandMathspeak = this.ends[R].mathspeak();
-            this.ends[L].ariaLabel = 'Index';
-            this.ends[R].ariaLabel = 'Radicand';
+            var indexMathspeak = this.getEnd(L).mathspeak();
+            var radicandMathspeak = this.getEnd(R).mathspeak();
+            this.getEnd(L).ariaLabel = 'Index';
+            this.getEnd(R).ariaLabel = 'Radicand';
             if (indexMathspeak === '3') {
                 // cube root
                 return 'Start Cube Root, ' + radicandMathspeak + ', End Cube Root';
@@ -7146,42 +8358,54 @@ var __extends = (this && this.__extends) || (function () {
     }(SquareRoot));
     LatexCmds.nthroot = NthRoot;
     LatexCmds.cbrt = /** @class */ (function (_super) {
-        __extends(class_14, _super);
-        function class_14() {
+        __extends(class_13, _super);
+        function class_13() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_14.prototype.createLeftOf = function (cursor) {
+        class_13.prototype.createLeftOf = function (cursor) {
             _super.prototype.createLeftOf.call(this, cursor);
             new Digit('3').createLeftOf(cursor);
             cursor.controller.moveRight();
         };
-        return class_14;
+        return class_13;
     }(NthRoot));
     var DiacriticAbove = /** @class */ (function (_super) {
         __extends(DiacriticAbove, _super);
-        function DiacriticAbove(ctrlSeq, symbol, textTemplate) {
-            var htmlTemplate = '<span class="mq-non-leaf">' +
-                '<span class="mq-diacritic-above">' +
-                symbol +
-                '</span>' +
-                '<span class="mq-diacritic-stem">&0</span>' +
-                '</span>';
-            return _super.call(this, ctrlSeq, htmlTemplate, textTemplate) || this;
+        function DiacriticAbove(ctrlSeq, html, textTemplate) {
+            var _this_1 = this;
+            var domView = new DOMView(1, function (blocks) {
+                return h('span', { class: 'mq-non-leaf' }, [
+                    h('span', { class: 'mq-diacritic-above' }, [html]),
+                    h.block('span', { class: 'mq-diacritic-stem' }, blocks[0]),
+                ]);
+            });
+            _this_1 = _super.call(this, ctrlSeq, domView, textTemplate) || this;
+            return _this_1;
         }
         return DiacriticAbove;
     }(MathCommand));
-    LatexCmds.vec = function () { return new DiacriticAbove('\\vec', '&rarr;', ['vec(', ')']); };
-    LatexCmds.tilde = function () { return new DiacriticAbove('\\tilde', '~', ['tilde(', ')']); };
+    LatexCmds.vec = function () {
+        return new DiacriticAbove('\\vec', h.entityText('&rarr;'), ['vec(', ')']);
+    };
+    LatexCmds.tilde = function () {
+        return new DiacriticAbove('\\tilde', h.text('~'), ['tilde(', ')']);
+    };
     var DelimsNode = /** @class */ (function (_super) {
         __extends(DelimsNode, _super);
         function DelimsNode() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        DelimsNode.prototype.jQadd = function (el) {
-            _super.prototype.jQadd.call(this, el);
-            this.delimjQs = this.jQ.children(':first').add(this.jQ.children(':last'));
-            this.contentjQ = this.jQ.children(':eq(1)');
-            return this.jQ;
+        DelimsNode.prototype.setDOM = function (el) {
+            var _c;
+            _super.prototype.setDOM.call(this, el);
+            var children = this.domFrag().children();
+            if (!children.isEmpty()) {
+                this.delimFrags = (_c = {},
+                    _c[L] = children.first(),
+                    _c[R] = children.last(),
+                    _c);
+            }
+            return this;
         };
         return DelimsNode;
     }(MathCommand));
@@ -7192,43 +8416,45 @@ var __extends = (this && this.__extends) || (function () {
         __extends(Bracket, _super);
         function Bracket(side, open, close, ctrlSeq, end) {
             var _c;
-            var _this = _super.call(this, '\\left' + ctrlSeq, undefined, [open, close]) || this;
-            _this.side = side;
-            _this.sides = (_c = {},
+            var _this_1 = _super.call(this, '\\left' + ctrlSeq, undefined, [open, close]) || this;
+            _this_1.side = side;
+            _this_1.sides = (_c = {},
                 _c[L] = { ch: open, ctrlSeq: ctrlSeq },
                 _c[R] = { ch: close, ctrlSeq: end },
                 _c);
-            return _this;
+            return _this_1;
         }
         Bracket.prototype.numBlocks = function () {
             return 1;
         };
         Bracket.prototype.html = function () {
+            var _this_1 = this;
             var leftSymbol = this.getSymbol(L);
             var rightSymbol = this.getSymbol(R);
             // wait until now so that .side may
-            this.htmlTemplate = // be set by createLeftOf or parser
-                '<span class="mq-non-leaf mq-bracket-container">' +
-                    '<span style="width:' +
-                    leftSymbol.width +
-                    '" class="mq-scaled mq-bracket-l mq-paren' +
-                    (this.side === R ? ' mq-ghost' : '') +
-                    '">' +
-                    leftSymbol.html +
-                    '</span>' +
-                    '<span style="margin-left:' +
-                    leftSymbol.width +
-                    ';margin-right:' +
-                    rightSymbol.width +
-                    '" class="mq-bracket-middle mq-non-leaf">&0</span>' +
-                    '<span style="width:' +
-                    rightSymbol.width +
-                    '" class="mq-scaled mq-bracket-r mq-paren' +
-                    (this.side === L ? ' mq-ghost' : '') +
-                    '">' +
-                    rightSymbol.html +
-                    '</span>' +
-                    '</span>';
+            this.domView = new DOMView(1, function (blocks) {
+                return h(
+                // be set by createLeftOf or parser
+                'span', { class: 'mq-non-leaf mq-bracket-container' }, [
+                    h('span', {
+                        style: 'width:' + leftSymbol.width,
+                        class: 'mq-scaled mq-bracket-l mq-paren' +
+                            (_this_1.side === R ? ' mq-ghost' : ''),
+                    }, [leftSymbol.html()]),
+                    h.block('span', {
+                        style: 'margin-left:' +
+                            leftSymbol.width +
+                            ';margin-right:' +
+                            rightSymbol.width,
+                        class: 'mq-bracket-middle mq-non-leaf',
+                    }, blocks[0]),
+                    h('span', {
+                        style: 'width:' + rightSymbol.width,
+                        class: 'mq-scaled mq-bracket-r mq-paren' +
+                            (_this_1.side === L ? ' mq-ghost' : ''),
+                    }, [rightSymbol.html()]),
+                ]);
+            });
             return _super.prototype.html.call(this);
         };
         Bracket.prototype.getSymbol = function (side) {
@@ -7238,7 +8464,7 @@ var __extends = (this && this.__extends) || (function () {
         Bracket.prototype.latex = function () {
             return ('\\left' +
                 this.sides[L].ctrlSeq +
-                this.ends[L].latex() +
+                this.getEnd(L).latex() +
                 '\\right' +
                 this.sides[R].ctrlSeq);
         };
@@ -7280,10 +8506,9 @@ var __extends = (this && this.__extends) || (function () {
         Bracket.prototype.closeOpposing = function (brack) {
             brack.side = 0;
             brack.sides[this.side] = this.sides[this.side]; // copy over my info (may be
-            var $brack = brack.delimjQs
-                .eq(this.side === L ? 0 : 1) // mismatched, like [a, b))
+            var brackFrag = brack.delimFrags[this.side === L ? L : R] // mismatched, like [a, b))
                 .removeClass('mq-ghost');
-            this.replaceBracket($brack, this.side);
+            this.replaceBracket(brackFrag, this.side);
         };
         Bracket.prototype.createLeftOf = function (cursor) {
             var brack;
@@ -7309,10 +8534,11 @@ var __extends = (this && this.__extends) || (function () {
                 this.closeOpposing(brack);
                 if (brack === cursor.parent.parent && cursor[side]) {
                     // move the stuff between
-                    new Fragment(cursor[side], cursor.parent.ends[side], -side) // me and ghost outside
+                    new Fragment(cursor[side], cursor.parent.getEnd(side), -side) // me and ghost outside
                         .disown()
                         .withDirAdopt(-side, brack.parent, brack, brack[side])
-                        .jQ.insDirOf(side, brack.jQ);
+                        .domFrag()
+                        .insDirOf(side, brack.domFrag());
                 }
                 brack.bubble(function (node) {
                     node.reflow();
@@ -7326,27 +8552,28 @@ var __extends = (this && this.__extends) || (function () {
                 // wrapping seln, don't be one-sided
                 else if (cursor[-side]) {
                     // elsewise, auto-expand so ghost is at far end
-                    brack.replaces(new Fragment(cursor[-side], cursor.parent.ends[-side], side));
+                    brack.replaces(new Fragment(cursor[-side], cursor.parent.getEnd(-side), side));
                     cursor[-side] = 0;
                 }
                 _super.prototype.createLeftOf.call(this, cursor);
             }
             if (side === L)
-                cursor.insAtLeftEnd(brack.ends[L]);
+                cursor.insAtLeftEnd(brack.getEnd(L));
             else
                 cursor.insRightOf(brack);
         };
         Bracket.prototype.placeCursor = function () { };
         Bracket.prototype.unwrap = function () {
-            this.ends[L]
+            this.getEnd(L)
                 .children()
                 .disown()
                 .adopt(this.parent, this, this[R])
-                .jQ.insertAfter(this.jQ);
+                .domFrag()
+                .insertAfter(this.domFrag());
             this.remove();
         };
         Bracket.prototype.deleteSide = function (side, outward, cursor) {
-            var parent = this.parent, sib = this[side], farEnd = parent.ends[side];
+            var parent = this.parent, sib = this[side], farEnd = parent.getEnd(side);
             if (side === this.side) {
                 // deleting non-ghost of one-sided bracket, unwrap
                 this.unwrap();
@@ -7358,10 +8585,10 @@ var __extends = (this && this.__extends) || (function () {
             var opts = cursor.options, wasSolid = !this.side;
             this.side = -side;
             // if deleting like, outer close-brace of [(1+2)+3} where inner open-paren
-            if (this.matchBrack(opts, side, this.ends[L].ends[this.side])) {
+            if (this.matchBrack(opts, side, this.getEnd(L).getEnd(this.side))) {
                 // is ghost,
-                this.closeOpposing(this.ends[L].ends[this.side]); // then become [1+2)+3
-                var origEnd = this.ends[L].ends[side];
+                this.closeOpposing(this.getEnd(L).getEnd(this.side)); // then become [1+2)+3
+                var origEnd = this.getEnd(L).getEnd(side);
                 this.unwrap();
                 if (origEnd)
                     origEnd.siblingCreated(cursor.options, side);
@@ -7389,19 +8616,21 @@ var __extends = (this && this.__extends) || (function () {
                 else {
                     // else deleting just one of a pair of brackets, become one-sided
                     this.sides[side] = getOppBracketSide(this);
-                    var $brack = this.delimjQs
-                        .removeClass('mq-ghost')
-                        .eq(side === L ? 0 : 1)
-                        .addClass('mq-ghost');
-                    this.replaceBracket($brack, side);
+                    this.delimFrags[L].removeClass('mq-ghost');
+                    this.delimFrags[R].removeClass('mq-ghost');
+                    var brackFrag = this.delimFrags[side].addClass('mq-ghost');
+                    this.replaceBracket(brackFrag, side);
                 }
                 if (sib) {
                     // auto-expand so ghost is at far end
-                    var origEnd = this.ends[L].ends[side];
+                    var leftEnd = this.getEnd(L);
+                    var origEnd = leftEnd.getEnd(side);
+                    leftEnd.domFrag().removeClass('mq-empty');
                     new Fragment(sib, farEnd, -side)
                         .disown()
-                        .withDirAdopt(-side, this.ends[L], origEnd, 0)
-                        .jQ.insAtDirEnd(side, this.ends[L].jQ.removeClass('mq-empty'));
+                        .withDirAdopt(-side, leftEnd, origEnd, 0)
+                        .domFrag()
+                        .insAtDirEnd(side, leftEnd.domFrag().oneElement());
                     if (origEnd)
                         origEnd.siblingCreated(cursor.options, side);
                     cursor.insDirOf(-side, sib);
@@ -7409,30 +8638,37 @@ var __extends = (this && this.__extends) || (function () {
                 else
                     outward
                         ? cursor.insDirOf(side, this)
-                        : cursor.insAtDirEnd(side, this.ends[L]);
+                        : cursor.insAtDirEnd(side, this.getEnd(L));
             }
         };
-        Bracket.prototype.replaceBracket = function ($brack, side) {
+        Bracket.prototype.replaceBracket = function (brackFrag, side) {
             var symbol = this.getSymbol(side);
-            $brack.html(symbol.html).css('width', symbol.width);
+            brackFrag.children().replaceWith(domFrag(symbol.html()));
+            brackFrag.oneElement().style.width = symbol.width;
             if (side === L) {
-                $brack.next().css('margin-left', symbol.width);
+                var next = brackFrag.next();
+                if (!next.isEmpty()) {
+                    next.oneElement().style.marginLeft = symbol.width;
+                }
             }
             else {
-                $brack.prev().css('margin-right', symbol.width);
+                var prev = brackFrag.prev();
+                if (!prev.isEmpty()) {
+                    prev.oneElement().style.marginRight = symbol.width;
+                }
             }
         };
         Bracket.prototype.deleteTowards = function (dir, cursor) {
             this.deleteSide(-dir, false, cursor);
         };
         Bracket.prototype.finalizeTree = function () {
-            this.ends[L].deleteOutOf = function (dir, cursor) {
+            this.getEnd(L).deleteOutOf = function (dir, cursor) {
                 this.parent.deleteSide(dir, true, cursor);
             };
             // FIXME HACK: after initial creation/insertion, finalizeTree would only be
             // called if the paren is selected and replaced, e.g. by LiveFraction
             this.finalizeTree = this.intentionalBlur = function () {
-                this.delimjQs.eq(this.side === L ? 1 : 0).removeClass('mq-ghost');
+                this.delimFrags[this.side === L ? R : L].removeClass('mq-ghost');
                 this.side = 0;
             };
         };
@@ -7557,57 +8793,61 @@ var __extends = (this && this.__extends) || (function () {
     var Binomial = /** @class */ (function (_super) {
         __extends(Binomial, _super);
         function Binomial() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ctrlSeq = '\\binom';
-            _this.htmlTemplate = '<span class="mq-non-leaf mq-bracket-container">' +
-                '<span style="width:' +
-                leftBinomialSymbol.width +
-                '" class="mq-paren mq-bracket-l mq-scaled">' +
-                leftBinomialSymbol.html +
-                '</span>' +
-                '<span style="margin-left:' +
-                leftBinomialSymbol.width +
-                '; margin-right:' +
-                rightBinomialSymbol.width +
-                ';" class="mq-non-leaf mq-bracket-middle">' +
-                '<span class="mq-array mq-non-leaf">' +
-                '<span>&0</span>' +
-                '<span>&1</span>' +
-                '</span>' +
-                '</span>' +
-                '<span style="width:' +
-                rightBinomialSymbol.width +
-                '" class="mq-paren mq-bracket-r mq-scaled">' +
-                rightBinomialSymbol.html +
-                '</span>' +
-                '</span>';
-            _this.textTemplate = ['choose(', ',', ')'];
-            _this.mathspeakTemplate = ['StartBinomial,', 'Choose', ', EndBinomial'];
-            _this.ariaLabel = 'binomial';
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ctrlSeq = '\\binom';
+            _this_1.domView = new DOMView(2, function (blocks) {
+                return h('span', { class: 'mq-non-leaf mq-bracket-container' }, [
+                    h('span', {
+                        style: 'width:' + leftBinomialSymbol.width,
+                        class: 'mq-paren mq-bracket-l mq-scaled',
+                    }, [leftBinomialSymbol.html()]),
+                    h('span', {
+                        style: 'margin-left:' +
+                            leftBinomialSymbol.width +
+                            '; margin-right:' +
+                            rightBinomialSymbol.width,
+                        class: 'mq-non-leaf mq-bracket-middle',
+                    }, [
+                        h('span', { class: 'mq-array mq-non-leaf' }, [
+                            h.block('span', {}, blocks[0]),
+                            h.block('span', {}, blocks[1]),
+                        ]),
+                    ]),
+                    h('span', {
+                        style: 'width:' + rightBinomialSymbol.width,
+                        class: 'mq-paren mq-bracket-r mq-scaled',
+                    }, [rightBinomialSymbol.html()]),
+                ]);
+            });
+            _this_1.textTemplate = ['choose(', ',', ')'];
+            _this_1.mathspeakTemplate = ['StartBinomial,', 'Choose', ', EndBinomial'];
+            _this_1.ariaLabel = 'binomial';
+            return _this_1;
         }
         return Binomial;
     }(DelimsNode));
     LatexCmds.binom = LatexCmds.binomial = Binomial;
     LatexCmds.choose = /** @class */ (function (_super) {
-        __extends(class_15, _super);
-        function class_15() {
+        __extends(class_14, _super);
+        function class_14() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_15.prototype.createLeftOf = function (cursor) {
+        class_14.prototype.createLeftOf = function (cursor) {
             LiveFraction.prototype.createLeftOf(cursor);
         };
-        return class_15;
+        return class_14;
     }(Binomial));
     var MathFieldNode = /** @class */ (function (_super) {
         __extends(MathFieldNode, _super);
         function MathFieldNode() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ctrlSeq = '\\MathQuillMathField';
-            _this.htmlTemplate = '<span class="mq-editable-field">' +
-                '<span class="mq-root-block">&0</span>' +
-                '</span>';
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ctrlSeq = '\\MathQuillMathField';
+            _this_1.domView = new DOMView(1, function (blocks) {
+                return h('span', { class: 'mq-editable-field' }, [
+                    h.block('span', { class: 'mq-root-block', 'aria-hidden': 'true' }, blocks[0]),
+                ]);
+            });
+            return _this_1;
         }
         MathFieldNode.prototype.parser = function () {
             var self = this, string = Parser.string, regex = Parser.regex, succeed = Parser.succeed;
@@ -7621,25 +8861,62 @@ var __extends = (this && this.__extends) || (function () {
                 .then(_super.prototype.parser.call(this));
         };
         MathFieldNode.prototype.finalizeTree = function (options) {
-            var ctrlr = new Controller(this.ends[L], this.jQ, options);
+            var ctrlr = new Controller(this.getEnd(L), this.domFrag().oneElement(), options);
             ctrlr.KIND_OF_MQ = 'MathField';
             ctrlr.editable = true;
             ctrlr.createTextarea();
             ctrlr.editablesTextareaEvents();
             ctrlr.cursor.insAtRightEnd(ctrlr.root);
             RootBlockMixin(ctrlr.root);
+            // MathQuill applies aria-hidden to .mq-root-block containers
+            // because these contain math notation that screen readers can't
+            // interpret directly. MathQuill use an aria-live region as a
+            // sibling of these block containers to provide an alternative
+            // representation for screen readers
+            //
+            // MathFieldNodes have their own focusable text aria and aria live
+            // region, so it is incorrect for any parent of the editable field
+            // to have an aria-hidden property
+            //
+            // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-hidden
+            //
+            // Handle this by recursively walking the parents of this element
+            // until we hit a root block, and if we hit any parent with
+            // aria-hidden="true", removing the property from the parent and
+            // pushing it down to each of the parents children. This should
+            // result in no parent of this node having aria-hidden="true", but
+            // should keep as much of what was previously hidden hidden as
+            // possible while obeying this constraint
+            function pushDownAriaHidden(node) {
+                if (node.parentNode && !domFrag(node).hasClass('mq-root-block')) {
+                    pushDownAriaHidden(node.parentNode);
+                }
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    var element = node;
+                    if (element.getAttribute('aria-hidden') === 'true') {
+                        element.removeAttribute('aria-hidden');
+                        domFrag(node)
+                            .children()
+                            .eachElement(function (child) {
+                            child.setAttribute('aria-hidden', 'true');
+                        });
+                    }
+                }
+            }
+            pushDownAriaHidden(this.domFrag().parent().oneElement());
+            this.domFrag().oneElement().removeAttribute('aria-hidden');
         };
         MathFieldNode.prototype.registerInnerField = function (innerFields, MathField) {
-            var controller = this.ends[L].controller;
+            var controller = this.getEnd(L).controller;
             var newField = new MathField(controller);
             innerFields[this.name] = newField;
             innerFields.push(newField);
         };
         MathFieldNode.prototype.latex = function () {
-            return this.ends[L].latex();
+            return this.getEnd(L).latex();
         };
         MathFieldNode.prototype.text = function () {
-            return this.ends[L].text();
+            return this.getEnd(L).text();
         };
         return MathFieldNode;
     }(MathCommand));
@@ -7661,7 +8938,9 @@ var __extends = (this && this.__extends) || (function () {
                 return '';
             }
             this.text = options.text || noop;
-            this.htmlTemplate = options.htmlString || '';
+            this.domView = new DOMView(0, function () {
+                return h('span', {}, [parseHTML(options.htmlString || '')]);
+            });
             this.latex = options.latex || noop;
             return this;
         };
@@ -7691,11 +8970,18 @@ var __extends = (this && this.__extends) || (function () {
     CharCmds['\\'] = /** @class */ (function (_super) {
         __extends(LatexCommandInput, _super);
         function LatexCommandInput() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.ctrlSeq = '\\';
-            _this.htmlTemplate = '<span class="mq-latex-command-input mq-non-leaf">\\<span>&0</span></span>';
-            _this.textTemplate = ['\\'];
-            return _this;
+            var _this_1 = _super !== null && _super.apply(this, arguments) || this;
+            _this_1.ctrlSeq = '\\';
+            _this_1.domView = new DOMView(1, function (blocks) {
+                return h('span', { class: 'mq-latex-command-input-wrapper mq-non-leaf' }, [
+                    h('span', { class: 'mq-latex-command-input mq-non-leaf' }, [
+                        h.text('\\'),
+                        h.block('span', {}, blocks[0]),
+                    ]),
+                ]);
+            });
+            _this_1.textTemplate = ['\\'];
+            return _this_1;
         }
         LatexCommandInput.prototype.replaces = function (replacedFragment) {
             this._replacedFragment = replacedFragment.disown();
@@ -7705,17 +8991,17 @@ var __extends = (this && this.__extends) || (function () {
         };
         LatexCommandInput.prototype.createBlocks = function () {
             _super.prototype.createBlocks.call(this);
-            var endsL = this.ends[L];
+            var endsL = this.getEnd(L);
             endsL.focus = function () {
-                this.parent.jQ.addClass('mq-hasCursor');
+                this.parent.domFrag().addClass('mq-hasCursor');
                 if (this.isEmpty())
-                    this.parent.jQ.removeClass('mq-empty');
+                    this.parent.domFrag().removeClass('mq-empty');
                 return this;
             };
             endsL.blur = function () {
-                this.parent.jQ.removeClass('mq-hasCursor');
+                this.parent.domFrag().removeClass('mq-hasCursor');
                 if (this.isEmpty())
-                    this.parent.jQ.addClass('mq-empty');
+                    this.parent.domFrag().addClass('mq-empty');
                 return this;
             };
             endsL.write = function (cursor, ch) {
@@ -7741,7 +9027,7 @@ var __extends = (this && this.__extends) || (function () {
                     var cmd = this.parent.renderCommand(ctrlr.cursor);
                     // TODO needs tests
                     ctrlr.aria.alert(cmd.mathspeak({ createdLeftOf: ctrlr.cursor }));
-                    e.preventDefault();
+                    e === null || e === void 0 ? void 0 : e.preventDefault();
                     return;
                 }
                 return originalKeystroke.call(this, key, e, ctrlr);
@@ -7750,25 +9036,28 @@ var __extends = (this && this.__extends) || (function () {
         LatexCommandInput.prototype.createLeftOf = function (cursor) {
             _super.prototype.createLeftOf.call(this, cursor);
             if (this._replacedFragment) {
-                var el = this.jQ[0];
-                this.jQ = this._replacedFragment.jQ
-                    .addClass('mq-blur')
-                    .bind('mousedown mousemove', //FIXME: is monkey-patching the mousedown and mousemove handlers the right way to do this?
-                function (e) {
-                    // TODO - overwritting e.target
-                    e.target = el;
-                    $(el).trigger(e);
-                    return false;
-                })
-                    .insertBefore(this.jQ)
-                    .add(this.jQ);
+                var frag = this.domFrag();
+                var el_1 = frag.oneElement();
+                this._replacedFragment.domFrag().addClass('mq-blur');
+                //FIXME: is monkey-patching the mousedown and mousemove handlers the right way to do this?
+                var rewriteMousedownEventTarget = function (e) {
+                    {
+                        // TODO - overwritting e.target
+                        e.target = el_1;
+                        el_1.dispatchEvent(e);
+                        return false;
+                    }
+                };
+                el_1.addEventListener('mousedown', rewriteMousedownEventTarget);
+                el_1.addEventListener('mouseup', rewriteMousedownEventTarget);
+                this._replacedFragment.domFrag().insertBefore(frag.children().first());
             }
         };
         LatexCommandInput.prototype.latex = function () {
-            return '\\' + this.ends[L].latex() + ' ';
+            return '\\' + this.getEnd(L).latex() + ' ';
         };
         LatexCommandInput.prototype.renderCommand = function (cursor) {
-            this.jQ = this.jQ.last();
+            this.setDOM(this.domFrag().children().lastElement());
             this.remove();
             if (this[R]) {
                 cursor.insLeftOf(this[R]);
@@ -7776,7 +9065,7 @@ var __extends = (this && this.__extends) || (function () {
             else {
                 cursor.insAtRightEnd(this.parent);
             }
-            var latex = this.ends[L].latex();
+            var latex = this.getEnd(L).latex();
             if (!latex)
                 latex = ' ';
             var cmd = LatexCmds[latex];
@@ -7806,18 +9095,21 @@ var __extends = (this && this.__extends) || (function () {
         };
         return LatexCommandInput;
     }(MathCommand));
-    var MQ1 = getInterface(1);
-    for (var key in MQ1)
-        (function (key, val) {
-            if (typeof val === 'function') {
-                MathQuill[key] = function () {
-                    insistOnInterVer();
-                    return val.apply(this, arguments);
-                };
-                MathQuill[key].prototype = val.prototype;
-            }
-            else
-                MathQuill[key] = val;
-        }(key, MQ1[key]));
+    // For backwards compatibility, set up the global MathQuill object as an instance of API interface v1
+    if (window.jQuery) {
+        MQ1 = getInterface(1);
+        for (var key in MQ1)
+            (function (key, val) {
+                if (typeof val === 'function') {
+                    MathQuill[key] = function () {
+                        insistOnInterVer();
+                        return val.apply(this, arguments);
+                    };
+                    MathQuill[key].prototype = val.prototype;
+                }
+                else
+                    MathQuill[key] = val;
+            })(key, MQ1[key]);
+    }
 }());
 
