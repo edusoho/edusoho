@@ -5,8 +5,7 @@ import {goto} from '../../common';
 import {nextTick, onMounted, ref} from 'vue';
 import Selector from 'app/js/question-bank/common/selector';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
-import TagSelect from '../components/tagSelect.vue';
-import questionBank from '../../../api/modules/questionBank';
+import TagSelect from '../widgets/TagSelect.vue';
 
 const categoryId = ref()
 const difficulty = ref('default')
