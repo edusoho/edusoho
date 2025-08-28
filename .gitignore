@@ -29,7 +29,7 @@
 node_modules
 npm-debug.log
 /build/
-/scripts/
+/upgradescripts
 .vscode
 .idea
 .DS_Store

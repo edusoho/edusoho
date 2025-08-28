@@ -234,6 +234,7 @@ class QuestionController extends BaseController
             unset($conditions['category_id']);
         }
         if (!empty($conditions['tagIds'])) {
+            $conditions['tagIds'] = is_string($conditions['tagIds']) ? explode(',', $conditions['tagIds']) : $conditions['tagIds'];
             $tagItems = $this->getQuestionTagService()->findTagRelationsByTagIds($conditions['tagIds']);
             $conditions['ids'] = array_column($tagItems, 'itemId') ?: [-1];
             unset($conditions['tagIds']);
