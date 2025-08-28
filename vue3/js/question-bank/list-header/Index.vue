@@ -1,8 +1,8 @@
 <script setup>
-import { message } from 'ant-design-vue';
+import {message} from 'ant-design-vue';
 import Api from '../../../api';
 import {goto} from '../../common';
-import {ref} from 'vue';
+import {nextTick, onMounted, ref} from 'vue';
 import Selector from 'app/js/question-bank/common/selector';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import TagSelect from '../components/tagSelect.vue';
@@ -10,13 +10,17 @@ import TagSelect from '../components/tagSelect.vue';
 const categoryId = ref()
 const difficulty = ref('default')
 const type = ref('default')
-const keyword = ref('')
+const keyword = ref()
 const tagIds = ref([])
-const exportUrl = ref($('.js-export-value').val())
 
+const exportUrl = $('.js-export-value').val()
 const selector = new Selector($('.js-question-html'))
 const modal = $('#modal')
 const importModalUrl = $('.js-list-header-import').val()
+const element = $('.js-question-container')
+const renderUrl = $('.js-question-html').data('url')
+const table = $('.js-question-html')
+const categoryContainer = $('.js-category-content')
 
 const addQuestion = [
   {label: '单选题', value: `/question_bank/${$('.js-questionBank-id').val()}/question/single_choice/create?goto=/question_bank/${$('.js-questionBank-id').val()}/questions&categoryId=`},
@@ -69,7 +73,7 @@ function exportQuestion() {
   const currentCategoryId = $('.js-category-choose').val()
 
   const a = document.createElement('a')
-  a.href =  exportUrl.value + '?category_id=' + currentCategoryId + '&ids=' + selector.toJson() + '&difficulty=' + currentDifficulty + '&type=' + currentType + '&keyword=' + keyword.value
+  a.href =  exportUrl + '?category_id=' + currentCategoryId + '&ids=' + selector.toJson() + '&difficulty=' + currentDifficulty + '&type=' + currentType + '&keyword=' + keyword.value
   a.click()
 }
 
@@ -85,7 +89,117 @@ function openTagSelectModal() {
 
 function onConfirm(ids) {
   tagIds.value = ids;
+  console.log(ids)
 }
+
+function onReset() {
+  difficulty.value = 'default';
+  type.value = 'default';
+  keyword.value = null;
+  tagIds.value = [];
+  resetPage();
+  const params = {
+    category_id: $('.js-category-choose').val(),
+    difficulty: difficulty.value === 'default' ? '' : difficulty.value,
+    type: type.value === 'default' ? '' : type.value,
+    keyword: keyword.value,
+    tagIds: tagIds.value,
+    perpage: $('.js-current-perpage-count').children('option:selected').val(),
+    page: element.find('.js-page').val()
+  }
+
+  $.ajax({
+    type: 'GET',
+    url: renderUrl,
+    data: params
+  }).done(
+    function(resp) {
+      nextTick(() => {
+        table.html(resp);
+        selector.updateTable();
+      })
+    }
+  ).fail(
+    function() {}
+  );
+}
+
+function resetPage() {
+  element.find('.js-page').val(1);
+}
+
+function onSearch(isPaginator, defaultPages) {
+  isPaginator || resetPage();
+  categoryId.value = $('.js-category-choose').val();
+  const params = {
+    category_id: categoryId.value,
+    difficulty: difficulty.value === 'default' ? '' : difficulty.value,
+    type: type.value === 'default' ? '' : type.value,
+    keyword: keyword.value,
+    tagIds: tagIds.value,
+    perpage: defaultPages ? defaultPages : $('.js-current-perpage-count').children('option:selected').val(),
+    page: element.find('.js-page').val()
+  }
+
+  $.ajax({
+    type: 'GET',
+    url: renderUrl,
+    data: params
+  }).done(
+    function(resp) {
+      nextTick(() => {
+        table.html(resp);
+        selector.updateTable();
+      })
+    }
+  ).fail(
+    function() {}
+  );
+}
+
+function onClickPagination(event) {
+  const target = $(event.currentTarget);
+  element.find('.js-page').val(target.data('page'));
+  onSearch(true);
+  event.preventDefault();
+}
+
+function onChangePagination(event) {
+  onSearch();
+}
+
+function onClickCategorySearch(event) {
+  const target = $(event.currentTarget);
+  categoryContainer.find('.js-active-set.active').removeClass('active');
+  target.addClass('active');
+  $('.js-category-choose').val(target.data('id'));
+  const defaultPages = 10
+  onSearch(false, defaultPages);
+}
+
+function onClickAllCategorySearch(event) {
+  const target = $(event.currentTarget);
+  categoryContainer.find('.js-active-set.active').removeClass('active');
+  target.addClass('active');
+  $('.js-category-choose').val('');
+  const defaultPages = 10
+  onSearch(false, defaultPages);
+}
+
+onMounted(() => {
+  element.on('click', '.pagination li', (event) => {
+    onClickPagination(event)
+  })
+  element.on('change', '.js-current-perpage-count', (event) => {
+    onChangePagination(event)
+  })
+  element.on('click', '.js-category-search', (event) => {
+    onClickCategorySearch(event)
+  })
+  element.on('click', '.js-all-category-search', (event) => {
+    onClickAllCategorySearch(event)
+  })
+})
 </script>
 
 <template>
@@ -127,8 +241,8 @@ function onConfirm(ids) {
           <a-button type="primary" ghost @click="openTagSelectModal">{{ `筛选标签${tagIds.length > 0 ? ` (${tagIds.length}) ` : ''}` }}</a-button>
         </div>
         <div class="flex gap-10">
-          <a-button>重置</a-button>
-          <a-button type="primary">搜索</a-button>
+          <a-button @click="onReset">重置</a-button>
+          <a-button type="primary" @click="onSearch">搜索</a-button>
         </div>
       </div>
     </div>

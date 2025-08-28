@@ -171,10 +171,10 @@ export default {
       const categoryId = $('.js-category-choose').val()
 
       const a = document.createElement('a')
-      a.href =  this.exportUrl + '?category_id=' + categoryId + '&ids=' + this.selector.toJson() + '&difficulty=' + difficulty + '&type=' + type + '&keyword=' + this.keyword     
+      a.href =  this.exportUrl + '?category_id=' + categoryId + '&ids=' + this.selector.toJson() + '&difficulty=' + difficulty + '&type=' + type + '&keyword=' + this.keyword
       a.click()
     },
-    
+
     importQuestion() {
       this.modal.load(this.importModalUrl)
       this.modal.modal('show')
