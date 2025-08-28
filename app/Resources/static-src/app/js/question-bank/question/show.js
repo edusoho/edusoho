@@ -39,8 +39,12 @@ class QuestionsShow {
       this.onDeleteSingle(event);
     });
 
-    this.element.on('click', '.js-batch-set', (event) => {
+    this.element.on('click', '.js-batch-set-category', (event) => {
       this.showCategoryModal(event);
+    });
+
+    this.element.on('click', '.js-batch-set-tag', (event) => {
+      this.onSetQuestionsTags(event);
     });
 
     this.element.on('click', '.js-export-btn', (event) => {
@@ -56,7 +60,7 @@ class QuestionsShow {
     });
 
     this.element.on('click', '.js-tag-btn', (event) => {
-      this.setTag(event);
+      this.setTags(event);
     });
 
     $('.js-item-create').click(event => {
@@ -196,11 +200,21 @@ class QuestionsShow {
     });
   }
 
-  setTag(event) {
+  setTags(event) {
     let self = this;
     let $target = $(event.currentTarget);
     let id = $target.data('id');
     window.emitter.emit('open-tag-modal', {id: id, mode: 'set'})
+    window.emitter.on('set-tag-success', () => {
+      self.selector.resetItems();
+      self.renderTable(true);
+    })
+  }
+
+  onSetQuestionsTags(event) {
+    let self = this;
+    let ids = this.selector.toJson();
+    window.emitter.emit('open-tag-modal', {ids: ids, mode: 'set'})
     window.emitter.on('set-tag-success', () => {
       self.selector.resetItems();
       self.renderTable(true);

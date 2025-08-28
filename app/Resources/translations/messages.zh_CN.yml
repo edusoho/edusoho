@@ -4645,6 +4645,7 @@ my.teaching.question_bank.question_category.name_label: 分类名称
 my.teaching.question_bank.question.no_category: 未分类
 my.teaching.question_bank.question.all: 全部题目
 my.teaching.question_bank.question.set_category: 设置分类
+my.teaching.question_bank.question.set_tag: 设置标签
 my.teaching.question_bank.question.selected: 已选
 my.teaching.question_bank.question.set_score: 设置分值
 my.teaching.question_bank.question.add: 添加题目
