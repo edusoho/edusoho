@@ -29,7 +29,6 @@
 node_modules
 npm-debug.log
 /build/
-/scripts/
 .vscode
 .idea
 .DS_Store
