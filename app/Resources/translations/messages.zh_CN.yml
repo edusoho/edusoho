@@ -10768,6 +10768,7 @@ exception.sms.error_mobile: 手机号错误
 exception.sms.need_wait: 您的操作过于频繁，请在119s后申请发送验证码!
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
+exception.setting.forbidden_email_register: 系统未开启邮箱注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
 exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
 exception.setting.forbidden_setting_nickname: 修改昵称未开启，请联系管理员
@@ -11236,6 +11237,8 @@ exception.question_tag.tag_group_name_duplicate: 标签类型名称重复
 exception.question_tag.tag_group_not_found: 标签类型不存在
 exception.question_tag.tag_name_duplicate: 标签名称重复
 exception.question_tag.tag_not_found: 标签不存在
+
+exception.email.code_invalid: 验证码错误
 
 course.unname_title: 未命名计划
 

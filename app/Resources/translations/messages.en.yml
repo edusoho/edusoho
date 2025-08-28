@@ -9444,6 +9444,7 @@ exception.sms.error_mobile: Mobile number error
 exception.sms.need_wait: Please wait 120 seconds to apply!
 
 exception.setting.forbidden_mobile_register: The mobile registration is not enabled, please contact the administrator.
+exception.setting.forbidden_email_register: The email registration is not enabled, please contact the administrator.
 exception.setting.forbidden_sms_send: Cloud SMS is not enabled, please contact the administrator.
 exception.user.reset_password_email_send: 'Failed to send email. Contact site administrator for help.'
 exception.setting.forbidden_setting_nickname: The modified nickname is not open, please contact the administrator
@@ -9907,6 +9908,8 @@ exception.question_tag.tag_group_name_duplicate: 'Tag type name is duplicated'
 exception.question_tag.tag_group_not_found: 'Tag type is not exist'
 exception.question_tag.tag_name_duplicate: 'Tag name is duplicated'
 exception.question_tag.tag_not_found: 'Tag is not exist'
+
+exception.email.code_invalid: 'Verify code invalid'
 
 course.unname_title: unname course
 
