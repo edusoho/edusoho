@@ -204,7 +204,7 @@ onMounted(() => {
 
 <template>
   <AntConfigProvider>
-    <div class="flex flex-col gap-18">
+    <div class="flex flex-col gap-18 mb-36">
       <div class="flex items-center justify-between">
         <div class="text-[16px] text-[#37393D] font-medium">题库名称</div>
         <div class="flex gap-10">

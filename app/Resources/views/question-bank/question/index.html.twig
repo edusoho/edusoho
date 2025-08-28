@@ -1,6 +1,5 @@
 {% extends 'question-bank/question/layout.html.twig' %}
-{% do script(['libs/select2.js', 'libs/jquery-intro.js', 'app/js/question-bank/question/index.js', 'vue3/js/question-bank/question/modal/index.js', 'vue3/js/question-bank/list-header/index.js'])  %}
-{#{% do css(['app/css/main-ant.css']) %}#}
+{% do script(['libs/select2.js', 'libs/jquery-intro.js' , 'app/js/question-bank/question/index.js', 'vue3/js/question-bank/question/modal/index.js', 'vue3/js/question-bank/list-header/index.js'])  %}
 
 {% block container %}
   <div class="panel panel-default panel-col">
@@ -10,7 +9,6 @@
       </div>
       <div class="mtl question-list-content">
         <div id="vue3-app"></div>
-        </div>
         {% include 'question-bank/question/question-list.html.twig' %}
       </div>
       <input type="hidden" name="questionBankId" value="{{ questionBank.id }}">
