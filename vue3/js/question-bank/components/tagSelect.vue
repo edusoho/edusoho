@@ -63,15 +63,16 @@ function onCancel() {
            :onOk="onOk"
            :onCancel="onCancel"
   >
-    <div class="py-16 flex flex-col gap-24 max-h-484 overflow-y-scroll">
-      <div class="flex gap-8">
+    <div class="flex flex-col">
+      <div class="flex gap-8 py-16">
         <a-button type="primary" @click="selectAllTag">一键全选</a-button>
         <a-button @click="clearAllTag">一键清除</a-button>
       </div>
-      <div class="flex flex-col gap-32" v-for="(item, index) in tagGroupTag" :key="index">
-        <div class="flex gap-28">
-          <div class="text-[16px] leading-[28px] font-normal text-right w-100 truncate shrink-0">{{ item.name }}</div>
-          <div class="flex flex-wrap gap-16">
+      <div class="flex flex-col gap-32 max-h-420 overflow-y-scroll">
+        <div class="flex flex-col gap-32" v-for="(item, index) in tagGroupTag" :key="index">
+          <div class="flex flex-col gap-8">
+            <div class="text-[16px] leading-[28px] font-normal">{{ item.name }}</div>
+            <div class="flex flex-wrap gap-16">
             <span
               v-for="(tag, index) in item.tags"
               :key="index"
@@ -81,6 +82,7 @@ function onCancel() {
             >
               {{ tag.name }}
             </span>
+            </div>
           </div>
         </div>
       </div>
