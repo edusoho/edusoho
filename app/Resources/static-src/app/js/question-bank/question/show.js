@@ -337,12 +337,14 @@ class QuestionsShow {
     const difficulty = $('.js-list-header-difficulty').val() === 'default' ? '' : $('.js-list-header-difficulty').val()
     const type = $('.js-list-header-type').val() === 'default' ? '' : $('.js-list-header-type').val()
     const keyword = $('.js-list-header-keyword').val() === 'default' ? '' : $('.js-list-header-keyword').val()
+    const tagIds = $('.js-list-header-tagIds').val() ? $('.js-list-header-tagIds').val().split(',') : null
 
     const data = {
       category_id,
       difficulty,
       type,
       keyword,
+      tagIds,
       perpage,
       page
     };

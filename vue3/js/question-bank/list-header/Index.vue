@@ -246,6 +246,10 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <input type="hidden" class="js-list-header-difficulty" :value=difficulty>
+    <input type="hidden" class="js-list-header-type" :value=type>
+    <input type="hidden" class="js-list-header-keyword" :value=keyword>
+    <input type="hidden" class="js-list-header-tagIds" :value=tagIds>
     <TagSelect
       v-model="tagSelectModalVisible"
       :params="{mode: 'filter'}"
