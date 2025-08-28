@@ -59,8 +59,8 @@ class InitCommand extends BaseCommand
         } else {
             $adminUser = [
                 'email' => 'test@edusoho.com',
-                'nickname' => '测试管理员',
-                'password' => 'Admin@123',
+                'nickname' => '管理员',
+                'password' => 'EduSoho@' . (string)random_int(100000, 999999),
             ];
         }
 
