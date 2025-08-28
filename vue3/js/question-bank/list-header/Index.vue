@@ -5,8 +5,7 @@ import {goto} from '../../common';
 import {nextTick, onMounted, ref} from 'vue';
 import Selector from 'app/js/question-bank/common/selector';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
-import TagSelect from '../components/tagSelect.vue';
-import questionBank from '../../../api/modules/questionBank';
+import TagSelect from '../widgets/TagSelectModal.vue';
 
 const categoryId = ref()
 const difficulty = ref('default')
@@ -88,9 +87,8 @@ function openTagSelectModal() {
   tagSelectModalVisible.value = true
 }
 
-function onConfirm(ids) {
+function onOk(ids) {
   tagIds.value = ids;
-  console.log(ids)
 }
 
 function onReset() {
@@ -133,7 +131,6 @@ function onSearch(isPaginator, defaultPages) {
   isPaginator || resetPage();
   categoryId.value = $('.js-category-choose').val();
   const params = {
-    category_id: categoryId.value,
     difficulty: difficulty.value === 'default' ? '' : difficulty.value,
     type: type.value === 'default' ? '' : type.value,
     keyword: keyword.value,
@@ -247,10 +244,14 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <input type="hidden" class="js-list-header-difficulty" :value=difficulty>
+    <input type="hidden" class="js-list-header-type" :value=type>
+    <input type="hidden" class="js-list-header-keyword" :value=keyword>
+    <input type="hidden" class="js-list-header-tagIds" :value=tagIds>
     <TagSelect
       v-model="tagSelectModalVisible"
-      :params="{mode: 'filter'}"
-      @ok="onConfirm"
+      :params="{mode: 'filter' ,tagIds: tagIds}"
+      @ok="onOk"
     />
   </AntConfigProvider>
 </template>

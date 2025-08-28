@@ -4,7 +4,7 @@
 
 {% block title %}{{'my.teaching.question_bank.question.add'|trans}}{% endblock %}
 
-{% do script(['libs/select2.js', 'app/js/question-bank/widgets/index.js']) %}
+{% do script(['libs/select2.js', 'app/js/question-bank/widgets/index.js', 'vue3/js/question-bank/question-pick/modal/index.js']) %}
 
 {% set questionTypes = getQuestionTypes() %}
 
@@ -32,7 +32,8 @@
         {% include 'question-bank/question/category-list.html.twig' %}
       </div>
       <div class="question-add__right">
-        {% include 'question-bank/widgets/search-form.html.twig' %}
+        <div id="vue3-app"></div>
+{#        {% include 'question-bank/widgets/search-form.html.twig' %}#}
         <input class="js-excludeIds" type="hidden" name="exclude_ids" value="{{ excludeIds|join(',')|default() }}">
         <div class="js-select-table" data-url="{{ path('question_bank_manage_question_search', {id: questionBank.id}) }}">
           {% include 'question-bank/widgets/question-pick-body.html.twig' %}

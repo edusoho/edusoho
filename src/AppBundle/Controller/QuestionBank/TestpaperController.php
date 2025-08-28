@@ -266,6 +266,10 @@ class TestpaperController extends BaseController
         $assessmentDetail = $this->getAssessmentService()->showAssessment($assessment['id']);
         $itemCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
         $itemCategories = ArrayToolkit::index($itemCategories, 'id');
+        $itemIds = [];
+        foreach ($assessmentDetail['sections'] as $section) {
+            $itemIds = array_merge($itemIds, array_column($section['items'], 'id'));
+        }
 
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
             'questionBank' => $questionBank,
@@ -274,6 +278,7 @@ class TestpaperController extends BaseController
             'sections' => $this->setSectionsTypeAndQuestionCount($assessmentDetail['sections']),
             'itemCategories' => $itemCategories,
             'showBaseInfo' => $request->query->get('showBaseInfo', '1'),
+            'questionTags' => $this->findQuestionTagsGroupByItemId($itemIds),
         ]);
     }
 
@@ -569,6 +574,7 @@ class TestpaperController extends BaseController
             'paginator' => $paginator,
             'questionBank' => $questionBank,
             'itemCategories' => $itemCategories,
+            'questionTags' => $this->findQuestionTagsGroupByItemId(array_column($items, 'id')),
         ]);
     }
 
@@ -596,6 +602,7 @@ class TestpaperController extends BaseController
                 'type' => $type,
                 'questionTags' => $this->findQuestionTagsGroupByItemId(array_keys($items)),
             ]);
+            var_dump($this->findQuestionTagsGroupByItemId(array_keys($items)));
         }
 
         return $this->createJsonResponse($typeHtml);

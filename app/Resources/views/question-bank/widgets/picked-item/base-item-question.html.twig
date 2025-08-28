@@ -24,6 +24,19 @@
         {{ 'site.data.empty'|trans }}
       {% endif %}
     </span>
+    <br/>
+    <div class="item-tag-list">
+      <div class="color-gray text-sm tag-label">{{ 'tag'|trans }}：</div>
+      <div class="item-tag-container">
+        {% if questionTags[item.id]|default([])|length > 0 %}
+          {% for tag in questionTags[item.id] %}
+            <div class="tag">{{ tag.name }}</div>
+          {% endfor %}
+        {% else %}
+          <apan class="color-gray">{{ '-' }}</apan>
+        {% endif %}
+      </div>
+    </div>
   </td>
   <td class="js-question-score js-question-item" data-score="{{ question.score|default(0)|score_text }}">
     {% if item.type != 'material' and not (question.answer_mode == 'text') %}

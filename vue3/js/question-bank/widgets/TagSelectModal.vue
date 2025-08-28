@@ -27,6 +27,8 @@ watch(modalVisible, async () => {
       })
     })
     selectedTagIds.value = [...relationTagIds.value];
+  } else if (modalVisible.value && props.params.mode === 'filter' && props.params.tagIds) {
+    selectedTagIds.value = [...props.params.tagIds];
   }
 })
 
@@ -95,6 +97,7 @@ function onCancel() {
            :okText="`确定${selectedTagIds.length > 0 ? ` (${selectedTagIds.length}) ` : ''}`"
            :onOk="onOk"
            :onCancel="onCancel"
+           :z-index="1060"
   >
     <div class="flex flex-col">
       <div class="flex gap-8 py-16">
