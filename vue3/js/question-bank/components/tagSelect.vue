@@ -1,21 +1,33 @@
 <script setup>
 const emit = defineEmits(['ok'])
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import Api from '../../../api';
 
 const modalVisible = defineModel();
 const props = defineProps({
   params: {
     type: Object,
-    default: {}
   }
 });
 
 const tagGroupTag = ref([])
+const relationTagIds = ref([]);
 const selectedTagIds = ref([]);
 
 onMounted(async () => {
   tagGroupTag.value = await Api.questionTag.getTagGroupTag();
+})
+
+watch(modalVisible, async () => {
+  if (modalVisible.value && props.params.mode === 'set' && props.params.id) {
+    const relationTags = await Api.questionTag.getTagRelationTags(props.params.id)
+    relationTags.forEach(item => {
+      item.tags.forEach(tag => {
+        relationTagIds.value.push(tag.id);
+      })
+    })
+    selectedTagIds.value = [...relationTagIds.value];
+  }
 })
 
 function selectAllTag() {
@@ -39,17 +51,39 @@ function toggleTag(id) {
   }
 }
 
+function compareWithSort(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+  const sorted1 = [...arr1].sort();
+  const sorted2 = [...arr2].sort();
+  return sorted1.every((value, index) => value === sorted2[index]);
+}
+
 function closeModal() {
+  selectedTagIds.value = [];
+  relationTagIds.value = [];
   modalVisible.value = false;
 }
 
-function onOk() {
-  emit('ok', selectedTagIds.value);
+async function onOk() {
+  if (props.params.mode === 'filter') {
+    emit('ok', selectedTagIds.value);
+  } else if (props.params.mode === 'set') {
+    if (compareWithSort(selectedTagIds.value, relationTagIds.value)) {
+      closeModal();
+      return;
+    }
+    const params = {
+      itemIds: props.params.ids ? props.params.ids : [props.params.id],
+      tagIds: selectedTagIds.value
+    }
+    await Api.questionTag.setTagRelation(params)
+    window.emitter.emit('set-tag-success')
+  }
   closeModal();
 }
 
 function onCancel() {
-  selectedTagIds.value = [];
+  closeModal();
 }
 </script>
 

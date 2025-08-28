@@ -7,9 +7,9 @@ import {ref} from 'vue';
 const params = ref({})
 
 const tagSelectModalVisible = ref(false);
-emitter.on('open-tag-modal', (params) => {
+emitter.on('open-tag-modal', (val) => {
   tagSelectModalVisible.value = true;
-  params.value = params;
+  params.value = val;
 });
 </script>
 

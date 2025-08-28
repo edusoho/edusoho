@@ -40,4 +40,10 @@ export default {
   async getTagGroupTag() {
     return apiClient.get('/question_tag_group_tag');
   },
+  async getTagRelationTags(itemId) {
+    return apiClient.get(`/question_tag_relation/${itemId}/tags`);
+  },
+  async setTagRelation(params) {
+    return apiClient.post('/question_tag_relation', params);
+  },
 };

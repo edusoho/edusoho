@@ -197,9 +197,14 @@ class QuestionsShow {
   }
 
   setTag(event) {
+    let self = this;
     let $target = $(event.currentTarget);
     let id = $target.data('id');
     window.emitter.emit('open-tag-modal', {id: id, mode: 'set'})
+    window.emitter.on('set-tag-success', () => {
+      self.selector.resetItems();
+      self.renderTable(true);
+    })
   }
 
   onDeleteQuestions(event) {
