@@ -9494,7 +9494,7 @@ exception.user.email_invalid: Email address format error
 exception.user.email_existed: Email address has been registered
 exception.user.mobile_invalid: Mobile phone number invalid
 exception.user.mobile_existed: The phone number has been registered
-exception.user.password_invalid: Password verification failed
+exception.user.password_invalid: 'Please set a password of 8–32 characters, containing a combination of at least two of the following: letters, numbers, and symbols.'
 exception.user.mobile_or_email_invalid: Invalid mobile phone number or email address
 exception.user.gender_invalid: Gender invalid
 exception.user.birthday_invalid: Birthday format invalid

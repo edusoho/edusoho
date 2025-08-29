@@ -10814,7 +10814,7 @@ exception.user.email_invalid: 邮箱地址格式错误
 exception.user.email_existed: 邮箱地址已被注册
 exception.user.mobile_invalid: 非法的手机号
 exception.user.mobile_existed: 手机号已被注册
-exception.user.password_invalid: 密码校验失败
+exception.user.password_invalid: 请设置8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
 exception.user.mobile_or_email_invalid: 非法的手机号或邮箱地址
 exception.user.gender_invalid: 性别不正确
 exception.user.birthday_invalid: 生日格式错误
