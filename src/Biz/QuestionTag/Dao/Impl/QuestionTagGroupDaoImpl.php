@@ -20,6 +20,7 @@ class QuestionTagGroupDaoImpl extends AdvancedDaoImpl implements QuestionTagGrou
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['seq'],
             'conditions' => [
+                'id in (:ids)',
                 'name like :name',
                 'status = :status',
             ],
