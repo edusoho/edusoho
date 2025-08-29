@@ -31,10 +31,6 @@ class QuestionSelect {
       this.onChangeQuestionBank(event);
     });
 
-    this.element.on('click', '.js-search-btn', (event) => {
-      this.onClickSearchBtn(event);
-    });
-
     this.element.on('click', '.pagination li', (event) => {
       this.onClickPagination(event);
     });
@@ -157,11 +153,6 @@ class QuestionSelect {
     }
 
     return 0;
-  }
-
-  onClickSearchBtn(event) {
-    this.renderTable();
-    event.preventDefault();
   }
 
   onClickPagination(event) {
