@@ -70,18 +70,35 @@ export default class Register {
     const register_mode = $('input[name="register_mode"]').val();
 
     if (register_mode === 'email') {
-      $('#sms_code').attr('placeholder', '填写邮箱验证码')
+      $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
+      $('.js-email_mobile_msg-input').attr('name', 'email_code')
+      $('.js-email_mobile_msg-input').attr('id', 'email_code')
+
       $('.js-email_mobile_msg-label').text('邮箱验证码')
+      $('.js-email_mobile_msg-label').attr('for', 'email_code')
     } else if (register_mode === 'mobile') {
-      $('#sms_code').attr('placeholder', '填写短信验证码')
+      $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
+      $('.js-email_mobile_msg-input').attr('name', 'sms_code')
+      $('.js-email_mobile_msg-input').attr('id', 'sms_code')
+
       $('.js-email_mobile_msg-label').text('短信验证码')
+      $('.js-email_mobile_msg-label').attr('for', 'sms_code')
     } else {
       if ($('#register_mode_switch').attr('mode') === 'email') {
-        $('#sms_code').attr('placeholder', '填写邮箱验证码')
+        $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
+        $('.js-email_mobile_msg-input').attr('name', 'email_code')
+        $('.js-email_mobile_msg-input').attr('id', 'email_code')
+
         $('.js-email_mobile_msg-label').text('邮箱验证码')
+        $('.js-email_mobile_msg-label').attr('for', 'email_code')
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
-        $('#sms_code').attr('placeholder', '填写短信验证码')
+        $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
+        $('.js-email_mobile_msg-input').attr('name', 'sms_code')
+        $('.js-email_mobile_msg-input').attr('id', 'sms_code')
+
         $('.js-email_mobile_msg-label').text('短信验证码')
+        $('.js-email_mobile_msg-label').attr('for', 'sms_code')
+
       }
     }
   }
