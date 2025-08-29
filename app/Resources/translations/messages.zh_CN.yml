@@ -3810,6 +3810,7 @@ cloud_file.use_status.used: 已使用
 cloud_file.upload_time: 上传时间
 cloud_file.application: 应用
 cloud_file.category: 分类
+cloud_file.refer_course: 引用课程
 
 cloud_file.type.all: 全部
 cloud_file.type.video: 视频
@@ -10814,7 +10815,7 @@ exception.user.email_invalid: 邮箱地址格式错误
 exception.user.email_existed: 邮箱地址已被注册
 exception.user.mobile_invalid: 非法的手机号
 exception.user.mobile_existed: 手机号已被注册
-exception.user.password_invalid: 密码校验失败
+exception.user.password_invalid: 请设置8-32位字符，包含字母大小写、数字、符号任意两种及以上组合成的密码
 exception.user.mobile_or_email_invalid: 非法的手机号或邮箱地址
 exception.user.gender_invalid: 性别不正确
 exception.user.birthday_invalid: 生日格式错误
@@ -11239,7 +11240,7 @@ exception.question_tag.tag_group_not_found: 标签类型不存在
 exception.question_tag.tag_name_duplicate: 标签名称重复
 exception.question_tag.tag_not_found: 标签不存在
 
-exception.email.code_invalid: 验证码错误
+exception.email.code_invalid: 邮箱验证码错误
 
 course.unname_title: 未命名计划
 

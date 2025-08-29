@@ -3301,6 +3301,7 @@ cloud_file.use_status.used: Used
 cloud_file.upload_time: 'Uploaded'
 cloud_file.application: Application
 cloud_file.category: Category
+cloud_file.refer_course: 'Reference courses'
 cloud_file.type.all: All
 cloud_file.type.video: Video
 cloud_file.type.audio: Audio
@@ -9494,7 +9495,7 @@ exception.user.email_invalid: Email address format error
 exception.user.email_existed: Email address has been registered
 exception.user.mobile_invalid: Mobile phone number invalid
 exception.user.mobile_existed: The phone number has been registered
-exception.user.password_invalid: Password verification failed
+exception.user.password_invalid: 'Please set a password of 8–32 characters, containing a combination of at least two of the following: letters, numbers, and symbols.'
 exception.user.mobile_or_email_invalid: Invalid mobile phone number or email address
 exception.user.gender_invalid: Gender invalid
 exception.user.birthday_invalid: Birthday format invalid
@@ -9910,7 +9911,7 @@ exception.question_tag.tag_group_not_found: 'Tag type is not exist'
 exception.question_tag.tag_name_duplicate: 'Tag name is duplicated'
 exception.question_tag.tag_not_found: 'Tag is not exist'
 
-exception.email.code_invalid: 'Verify code invalid'
+exception.email.code_invalid: 'Email verify code invalid'
 
 course.unname_title: unname course
 
