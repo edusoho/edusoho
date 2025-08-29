@@ -243,7 +243,7 @@ export default class Register {
         });
       } else if (register_mode === 'email' || $('#register_mode_switch').length > 0 && $('#register_mode_switch').attr('mode') === 'email') {
         let params = {
-          email: $('#register_emailOrMobile').val(),
+          email: register_mode === 'email' ? $('#register_email').val() : $('#register_emailOrMobile').val(),
           dragCaptchaToken: $('[name="dragCaptchaToken"]').val()
         }
         Api.user.sendEmailCode({
