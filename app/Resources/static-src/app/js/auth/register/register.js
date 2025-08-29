@@ -153,8 +153,22 @@ export default class Register {
       .attr('disabled', false);
   }
 
-  initCodeRule() {
+  initSmsCodeRule() {
     $('[name="sms_code"]').rules('add', {
+      required: true,
+      unsigned_integer: true,
+      rangelength: [6, 6],
+      es_remote: {
+        type: 'get'
+      },
+      messages: {
+        rangelength: Translator.trans('validate.sms_code.message')
+      }
+    });
+  }
+
+  initEmailCodeRule() {
+    $('[name="email_code"]').rules('add', {
       required: true,
       unsigned_integer: true,
       rangelength: [6, 6],
@@ -327,7 +341,7 @@ export default class Register {
     let reg_mobile = /^1\d{10}$/;
     let isMobile = reg_mobile.test(mobile);
     if (isMobile) {
-      this.initCodeRule();
+      this.initSmsCodeRule();
       $('[name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initDragCaptchaCodeRule();
@@ -339,11 +353,11 @@ export default class Register {
     let reg_email = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     let isEmail = reg_email.test(email);
     if (isEmail) {
-      this.initCodeRule();
+      this.initEmailCodeRule();
       $('[name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initDragCaptchaCodeRule();
-      $('[name="sms_code"]').rules('remove');
+      $('[name="email_code"]').rules('remove');
     }
   }
 
