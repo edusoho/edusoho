@@ -44,6 +44,7 @@ class LogController extends BaseController
         );
 
         $logs = $this->logsSetUrlParamsJson($logs);
+        $logs = $this->mask($logs);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $users = $this->setSystemUserName($users);
@@ -207,6 +208,32 @@ class LogController extends BaseController
             }
 
             $log['urlParamsJson'] = $transJsonData;
+        }
+
+        return $logs;
+    }
+
+    private function mask($logs)
+    {
+        foreach ($logs as &$log) {
+            if ('user' == $log['module'] && 'email_verify_code' == $log['action']) {
+                $log['message'] = preg_replace_callback(
+                    '/验证码(\d{6})/',
+                    function($matches) {
+                        return '验证码' . substr($matches[1], 0, 3) . '***';
+                    },
+                    $log['message']
+                );
+            }
+            if ('sms' == $log['module']) {
+                $log['message'] = preg_replace_callback(
+                    '/\b(1[3-9]\d)(\d{4})(\d{4})\b(.*?)验证短信(\d{6})/',
+                    function($matches) {
+                        return "{$matches[1]}****{$matches[3]}{$matches[4]}验证短信" . substr($matches[5], 0, 3) . '***';
+                    },
+                    $log['message']
+                );
+            }
         }
 
         return $logs;
