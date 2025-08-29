@@ -1,6 +1,7 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import Drag from 'app/common/drag';
 import Coordinate from 'app/common/coordinate';
+import Api from 'common/api';
 
 export default class Register {
   constructor() {
@@ -97,7 +98,7 @@ export default class Register {
 
   initValidator() {
     $('#register-form').validate({
-      ...this._validataRules(),
+      ...this._validateRules(),
     });
   }
 
@@ -149,6 +150,23 @@ export default class Register {
     });
   }
 
+  startCountdown($button, seconds) {
+    let remaining = seconds;
+    let originalText = $button.text();
+    this._codeBtnDisable();
+    $button.text(remaining + '秒后重新获取');
+    let countdown = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(countdown);
+        this._codeBtnEnable();
+        $button.text(originalText);
+      } else {
+        $button.text(remaining + '秒后重新获取');
+      }
+    }, 1000);
+  }
+
   initCodeSendBtn() {
     let $codeSendBtn = $('.js-code-send-btn');
     let self = this;
@@ -192,11 +210,21 @@ export default class Register {
             return false;
           }
         });
+      } else if (register_mode === 'email' || $('#register_mode_switch').length > 0 && $('#register_mode_switch').attr('mode') === 'email') {
+        let params = {
+          email: $('#register_emailOrMobile').val(),
+          dragCaptchaToken: $('[name="dragCaptchaToken"]').val()
+        }
+        Api.user.sendEmailCode({
+          data: params
+        }).then((res) => {
+          self.startCountdown($codeSendBtn, 120);
+        });
       }
     });
   }
 
-  _validataRules() {
+  _validateRules() {
     let self = this;
     return {
       rules: {
@@ -275,7 +303,6 @@ export default class Register {
           required: Translator.trans('password.hint.normal'),
         }
       },
-      ignore: ":hidden",
     };
   }
 
@@ -319,22 +346,7 @@ export default class Register {
       const validator = $registerFrom.validate();
       const inputCheckbox = $('input[name="agree_policy"]').prop('checked');
 
-      if (!validator.form()) {
-        const invalidFields = validator.invalid;
-        console.log('验证失败的字段:', invalidFields);
-
-        for (const fieldName in invalidFields) {
-          if (invalidFields.hasOwnProperty(fieldName)) {
-            const errorMessage = invalidFields[fieldName];
-            console.log(`字段 ${fieldName} 失败原因: ${errorMessage}`);
-
-            const $field = $registerFrom.find(`[name="${fieldName}"]`);
-            console.log('失败的元素:', $field);
-          }
-        }
-
-        return;
-      }
+      if (!validator.form()) return;
 
       if (inputCheckbox || inputCheckbox == undefined) {
         $registerFrom.submit();
