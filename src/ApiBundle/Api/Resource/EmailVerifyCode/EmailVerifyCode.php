@@ -8,6 +8,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\TimeMachine;
 use Biz\Common\CommonException;
+use Biz\System\Service\LogService;
 use Biz\System\SettingException;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
@@ -56,6 +57,7 @@ class EmailVerifyCode extends AbstractResource
                 'email' => $email,
             ],
         ]);
+        $this->getLogService()->info('user', 'email_verify_code', "发送邮箱验证码{$verifyCode}给邮箱：{$email}");
 
         return ['emailToken' => $token['token']];
     }
@@ -85,5 +87,13 @@ class EmailVerifyCode extends AbstractResource
     private function getTokenService()
     {
         return $this->service('User:TokenService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 }

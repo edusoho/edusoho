@@ -3301,6 +3301,7 @@ cloud_file.use_status.used: Used
 cloud_file.upload_time: 'Uploaded'
 cloud_file.application: Application
 cloud_file.category: Category
+cloud_file.refer_course: 'Reference courses'
 cloud_file.type.all: All
 cloud_file.type.video: Video
 cloud_file.type.audio: Audio
@@ -9910,7 +9911,7 @@ exception.question_tag.tag_group_not_found: 'Tag type is not exist'
 exception.question_tag.tag_name_duplicate: 'Tag name is duplicated'
 exception.question_tag.tag_not_found: 'Tag is not exist'
 
-exception.email.code_invalid: 'Verify code invalid'
+exception.email.code_invalid: 'Email verify code invalid'
 
 course.unname_title: unname course
 
