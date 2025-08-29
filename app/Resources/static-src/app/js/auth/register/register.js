@@ -48,17 +48,18 @@ export default class Register {
     if ($('#register_mode_switch').length === 0) return;
 
     $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-    $('.js-register_email_mode').hide();
+    $('label[for="register_emailOrMobile"]').text('手机号码');
+    $('#register_emailOrMobile').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
 
     $('#register_mode_switch').on('click', () => {
       if ($('#register_mode_switch').attr('mode') === 'email') {
         $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-        $('.js-register_email_mode').hide();
-        $('.js-register_mobile_mode').show();
+        $('label[for="register_emailOrMobile"]').text('手机号码');
+        $('#register_emailOrMobile').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
         $('#register_mode_switch').text('切换手机号注册 >>').attr('mode', 'email')
-        $('.js-register_email_mode').show();
-        $('.js-register_mobile_mode').hide();
+        $('label[for="register_emailOrMobile"]').text('邮箱地址');
+        $('#register_emailOrMobile').attr('placeholder', '请填写你常用的邮箱地址作为登陆账号');
       }
       this.initEmailMobileMsg();
     })
@@ -273,7 +274,8 @@ export default class Register {
         password: {
           required: Translator.trans('password.hint.normal'),
         }
-      }
+      },
+      ignore: ":hidden",
     };
   }
 
@@ -317,7 +319,22 @@ export default class Register {
       const validator = $registerFrom.validate();
       const inputCheckbox = $('input[name="agree_policy"]').prop('checked');
 
-      if (!validator.form()) return;
+      if (!validator.form()) {
+        const invalidFields = validator.invalid;
+        console.log('验证失败的字段:', invalidFields);
+
+        for (const fieldName in invalidFields) {
+          if (invalidFields.hasOwnProperty(fieldName)) {
+            const errorMessage = invalidFields[fieldName];
+            console.log(`字段 ${fieldName} 失败原因: ${errorMessage}`);
+
+            const $field = $registerFrom.find(`[name="${fieldName}"]`);
+            console.log('失败的元素:', $field);
+          }
+        }
+
+        return;
+      }
 
       if (inputCheckbox || inputCheckbox == undefined) {
         $registerFrom.submit();
