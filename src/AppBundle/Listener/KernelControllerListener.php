@@ -74,15 +74,11 @@ class KernelControllerListener
         });
     }
 
+    /**
+     * 检查是否要升级密码强度
+     */
     private function checkPasswordUpgrade(FilterControllerEvent $event)
     {
-        $currentUser = $this->getCurrentUser();
-        $loginBind = $this->getSettingService()->get('login_bind');
-        $hasUpgradedPassword = !empty($currentUser['passwordUpgraded']);
-        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && isset($loginBind['login_strong_pwd_enable']) && 0 == $loginBind['login_strong_pwd_enable'];
-        if ($hasUpgradedPassword || $skipPasswordUpdate) {
-            return;
-        }
         $request = $event->getRequest();
         if (empty($request->getSession()->get('needUpgradePassword'))) {
             return;

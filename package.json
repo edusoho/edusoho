@@ -32,7 +32,7 @@
     "@babel/runtime-corejs2": "^7.7.7",
     "@codeages/agent-web-sdk": "^1.2.0",
     "@codeages/design-vue": "^1.0.3",
-    "@codeages/math-editor": "^1.4.0",
+    "@codeages/math-editor": "^1.7.0",
     "@codeages/styles": "1.0.7",
     "@codeages/utils": "^1.0.2",
     "@edusoho-live/eslive-web-sdk": "^1.2.3",
@@ -116,6 +116,7 @@
   },
   "scripts": {
     "dev": "node webpack-build/dev.js",
+    "dev:lite": "npm run serve ignore:theme,plugin,bundle",
     "compile": "npm run build && cd vue3 && npm run build",
     "serve": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
     "build": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",

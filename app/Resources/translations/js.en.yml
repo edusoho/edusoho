@@ -2389,6 +2389,3 @@ course.market_setting.contract.model.handSignature: Hand signature
 course.market_setting.contract.model.partyBName: Party B's name
 course.market_setting.contract.model.iDNumber: ID number
 course.market_setting.contract.model.contactInformation: Contact information
-
-admin.login_connect.strong_pwd_skip_close_radio.prompt: Please check the agreement below before closing it
-

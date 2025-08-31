@@ -50,7 +50,7 @@ define(function (require, exports, module) {
     validator.addItem({
       element: '[name="password"]',
       required: true,
-      rule: 'check_password_high spaceNoSupport',
+      rule: 'password_strong spaceNoSupport',
     });
 
     validator.addItem({

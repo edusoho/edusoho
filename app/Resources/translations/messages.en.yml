@@ -169,6 +169,9 @@ site.cloud.file.convert_failed_tips: Transcoding failed, please contact the admi
 site.cloud.file.converting_tips: Course content preparation, please wait a moment.
 site.cloud.file.not_find_tips: File not exist.
 
+password.hint.normal: A password of 8–32 characters, consisting of a combination of at least two types among letters, numbers, and symbols.
+password.hint.strong: A password of 8–32 characters, consisting of a combination of uppercase letters, lowercase letters, numbers, and symbols.
+
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_change: "Dear %nickname%,\nYour requirement of email address reset is received. Please click the link below to verify your account：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -2733,10 +2736,6 @@ user.register.account_with_mobile_or_email_placeholder: 'Use email or phone as a
 user.register.username_label: Username
 user.register.username_label_placeholder: 'No more than 18 letters'
 user.register.password_label: Password
-user.register.password_label_placeholder: '5-20 letters or numbers, case sensitive'
-user.register.password_label_placeholder.low: '5-20 letters or numbers, case sensitive'
-user.register.password_label_placeholder.middle: '8-20 letters or numbers, including at least two, case sensitive'
-user.register.password_label_placeholder.high: 'Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols'
 user.register.enter_password: 'Enter your password'
 user.register.invite_code_label: 'Inviation code'
 user.register.invite_code_placeholder: 'If you have invitation code, please type in'
@@ -3016,9 +3015,6 @@ user.settings.password_reset.success_tips: 'Reset password succeed'
 user.settings.password_reset.login_btn: 'Login now'
 user.settings.password_reset.reset_btn: 'Reset Password'
 user.settings.password_reset.find_password_btn: 'Find password'
-user.settings.password_level.low: 5-20 digits in English, numerals, symbols, case sensitive
-user.settings.password_level.middle: 8-20 digits in English, numerals, symbols, including at least two types, case sensitive
-user.settings.password_level.high: Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols
 user.account_center: 'Account Center'
 user.menu_heading: 'Account'
 user.account_menu: 'My Bills'
@@ -3305,7 +3301,7 @@ cloud_file.use_status.used: Used
 cloud_file.upload_time: 'Uploaded'
 cloud_file.application: Application
 cloud_file.category: Category
-cloud_file.referenced_course: Referenced course
+cloud_file.refer_course: 'Reference courses'
 cloud_file.type.all: All
 cloud_file.type.video: Video
 cloud_file.type.audio: Audio
@@ -3991,6 +3987,7 @@ my.teaching.question_bank.question_category.name_label: Category Name
 my.teaching.question_bank.question.no_category: uncategorized
 my.teaching.question_bank.question.all: All Questions
 my.teaching.question_bank.question.set_category: Set Category
+my.teaching.question_bank.question.set_tag: Set Tag
 my.teaching.question_bank.question.selected: selected Number
 my.teaching.question_bank.question.set_score: Set Score
 my.teaching.question_bank.question.add: Add title
@@ -5839,10 +5836,6 @@ admin.user.fields.signature_label: 'Personal Signature'
 admin.user.fields.about_label: About Me
 admin.user.fields.personal_menu_label: Home
 admin.user.fields.user_email: 'User Email'
-admin.user.fields.password_hint: '5-20 english char, number, symbol'
-admin.user.fields.password_hint.low: '5-20 english char, number, symbol'
-admin.user.fields.password_hint.middle: '8-20 letters or numbers, including at least two, case sensitive'
-admin.user.fields.password_hint.high: 'Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols'
 admin.user.fields.confirm_password_label: 'Confirm Password'
 admin.user.fields.confirm_password_hint: 'Enter the password again'
 admin.user.fields.password_label: Password
@@ -6535,12 +6528,6 @@ admin.user_auth.Protection.middle.30_times: '30 register times allowed with the 
 admin.user_auth.Protection.high.10_times: '10 register times allowed with the same IP in 24 hours.'
 admin.user_auth.Protection.high.sign_up_count: '1 register time allowed with the same IP in a hour.'
 admin.user_auth.Protection.high.Verification_code.mobile: 'Graphic verification code is needed while mobile registration obtein the SMS verification code.'
-admin.user_auth.Password_level: 'Password level setting'
-admin.user_auth.Password_level.low.explaination: 'The password is 5-20 digits in English, numbers, and symbols, and at least 5 characters are required.'
-admin.user_auth.Password_level.middle.explaination: 'The password is 8-20 digits in English, numbers, symbols, and at least 8 characters are required.'
-admin.user_auth.Password_level.middle.explaination_2: 'Contain at least any two of letters, numbers, and symbols.'
-admin.user_auth.Password_level.high.explaination: 'The password is 8-32 English, numbers, symbols, and at least 8 characters are required.'
-admin.user_auth.Password_level.high.explaination_2: 'Contains four types of English uppercase, lowercase, numbers, and symbols.'
 
 admin.user_auth.Setup_welcome_message: 'Welcome message settings'
 admin.user_auth.Setup_welcome_message.send: 'Send a welcome message'
@@ -6598,9 +6585,10 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: '
 admin.login_connect.User_login_protection.after: After
 admin.login_connect.User_login_captcha: 'User login captcha'
 admin.login_connect.User_login_captcha.help_block: 'After opening, users need to drag the verification code to check when they log in; If you switch to "mobile quick login", you always need to drag the verification code'
-admin.login_connect.student_strong_pwd.button: 'Student Strong Password Switch'
-admin.login_connect.strong_pwd_skip.danger: '⚠️After closing, students can log in with their original password, but the account security risk will significantly increase! It is recommended to operate cautiously and strengthen account monitoring or guide students to change passwords to enhance password strength, in order to reduce the risk of account theft'
-admin.login_connect.strong_pwd_skip_close_radio.prompt: 'Please check the agreement below before closing it'
+admin.login_connect.student_weak_password_check.button: 'Weak Password Detection During Student Login'
+admin.login_connect.student_weak_password_check.help_block: >
+  After enabling this feature, when a student logs in, if a weak password is detected, they will be required to change it to a strong password. <br />
+  <strong style="color:red">After disabling this feature, students can continue logging in with weak passwords, which poses an account theft risk. Disabling is not recommended!</strong>
 admin.login_connect.User_login_protection.after.unblock: 'Minutes, unblock user /IP'
 admin.login_connect.weixinmob.frist.help_block: 'If turned on, users can register or login the site with wechat id in wechat app.'
 admin.login_connect.weixinmob.help_block: 'How to access:1. You need a certified <a target= "_blank" HREF = "https://MP.weixin.QQ.com" > wechat service account, </a>;2. A certified <a target= "_blank" HREF = "https://open.weixin.QQ.com" > wechat open platform </a> account;3. Bind the wechat service account with <a target=, "_blank" HREF = "https://open.weixin.QQ.com" > the open platform </a>.'
@@ -8303,6 +8291,7 @@ log.module.multi_class: Multi class
 log.module.wrong_question: 'Wrong Question'
 log.module.ai: AI
 log.module.contract: Contract
+log.module.question_tag: 'Question Tag'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -8577,6 +8566,10 @@ log.action.item_bank_exercise.unpublish_exercise_chapter: 'Cancel the release of
 log.action.certifiacte.create_certificate: Create Certificate
 log.action.certifiacte.auto_issue: Auto Issue Certificate
 log.action.certifiacte.create_template: Create Template
+log.action.question_tag.add_tag_group: 'Add question tag type'
+log.action.question_tag.delete_tag_group: 'Delete question tag type'
+log.action.question_tag.add_tag: 'Add question tag'
+log.action.question_tag.delete_tag: 'Delete question tag'
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9422,6 +9415,7 @@ exception.user.already_bind: The user is already bound
 exception.user.password_require_upgrade: 'Your current password level is detected to be lower, please reset the password'
 exception.user.password_require_high_level: 'Please set a password consisting of 8-32 characters, including uppercase and lowercase letters, numbers, and symbols'
 exception.user.original_password_error: 'The original password you entered is incorrect. Please re-enter it'
+exception.user.staff_password_require_strong: The employee account password must be 8–32 characters long and include a combination of uppercase letters, lowercase letters, numbers, and symbols.
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist
@@ -9452,6 +9446,7 @@ exception.sms.error_mobile: Mobile number error
 exception.sms.need_wait: Please wait 120 seconds to apply!
 
 exception.setting.forbidden_mobile_register: The mobile registration is not enabled, please contact the administrator.
+exception.setting.forbidden_email_register: The email registration is not enabled, please contact the administrator.
 exception.setting.forbidden_sms_send: Cloud SMS is not enabled, please contact the administrator.
 exception.user.reset_password_email_send: 'Failed to send email. Contact site administrator for help.'
 exception.setting.forbidden_setting_nickname: The modified nickname is not open, please contact the administrator
@@ -9500,7 +9495,7 @@ exception.user.email_invalid: Email address format error
 exception.user.email_existed: Email address has been registered
 exception.user.mobile_invalid: Mobile phone number invalid
 exception.user.mobile_existed: The phone number has been registered
-exception.user.password_invalid: Password verification failed
+exception.user.password_invalid: 'Please set a password of 8–32 characters, containing a combination of at least two of the following: letters, numbers, and symbols.'
 exception.user.mobile_or_email_invalid: Invalid mobile phone number or email address
 exception.user.gender_invalid: Gender invalid
 exception.user.birthday_invalid: Birthday format invalid
@@ -9910,6 +9905,13 @@ exception.certificate.reject.forbidden_audit: Review rejected failure
 
 exception.information_collect.not_found: Collection not found
 exception.information_collect.closed: Collection is closed
+
+exception.question_tag.tag_group_name_duplicate: 'Tag type name is duplicated'
+exception.question_tag.tag_group_not_found: 'Tag type is not exist'
+exception.question_tag.tag_name_duplicate: 'Tag name is duplicated'
+exception.question_tag.tag_not_found: 'Tag is not exist'
+
+exception.email.code_invalid: 'Email verify code invalid'
 
 course.unname_title: unname course
 

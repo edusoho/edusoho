@@ -5,6 +5,9 @@ namespace Biz\User\Register\Impl;
 use Biz\User\UserException;
 use AppBundle\Common\SimpleValidator;
 
+/**
+ * 邮箱注册类
+ */
 class EmailRegistDecoderImpl extends RegistDecoder
 {
     protected function validateBeforeSave($registration)

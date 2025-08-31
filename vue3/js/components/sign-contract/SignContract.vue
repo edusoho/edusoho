@@ -193,7 +193,7 @@ const bgClass = computed(() => {
       </template>
       <div class="p-24 flex">
         <div class="flex flex-1 border border-solid border-[#DCDEE0] rounded-8 relative min-h-380 max-h-414">
-          <div class="flex flex-col overflow-y-auto overscroll-auto pt-20 w-full rounded-8 px-32"
+          <div class="flex flex-col overflow-auto overscroll-auto pt-20 w-425 rounded-8 px-32"
                style="height: calc(100% - 53px);">
             <div v-html="contractTemplate.content" class="text-12 text-[#626973] font-normal leading-20 mb-32 contract-content"></div>
           </div>
@@ -311,7 +311,9 @@ const bgClass = computed(() => {
           <div class="text-14 text-[#1E2226] font-normal mr-16">{{ t('label.contractParticular') }}</div>
         </div>
       </template>
-      <div v-html="contractTemplate.content" class="text-12 mt-24 text-[#626973] font-normal w-900 leading-20 contract-content"></div>
+      <div class="flex w-full justify-center">
+        <div v-html="contractTemplate.content" class="text-12 mt-24 text-[#626973] font-normal w-900 leading-20 contract-content"></div>
+      </div>
     </a-modal>
 
     <!--合同签字-->
@@ -398,10 +400,9 @@ const bgClass = computed(() => {
       border-radius: 0;
       top: 0;
       .ant-modal-body {
+        width: 100%;
+        background-color: white;
         padding-bottom: 120px;
-        margin-left: auto;
-        margin-right: auto;
-        width: 960px;
       }
       .ant-modal-header {
         margin-bottom: 0;

@@ -387,7 +387,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
      */
     public function createLiveroom($activity)
     {
-        $speaker = $this->getUserService()->getUser($activity['teacherId']);
+        $speakerId = empty($activity['teacherId']) ? $this->getCurrentUser()->getId() : $activity['teacherId'];
+        $speaker = $this->getUserService()->getUser($speakerId);
         if (empty($speaker)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }

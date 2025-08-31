@@ -5,6 +5,9 @@ namespace Biz\User\Register\Impl;
 use AppBundle\Common\SimpleValidator;
 use Biz\User\UserException;
 
+/**
+ * 手机注册类
+ */
 class MobileRegistDecoderImpl extends RegistDecoder
 {
     protected function validateBeforeSave($registration)

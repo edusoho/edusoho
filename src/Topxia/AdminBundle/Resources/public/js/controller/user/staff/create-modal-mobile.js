@@ -32,7 +32,7 @@ define(function (require, exports, module) {
       }
     });
 
-    Validator.addRule("spaceNoSupport", function (options) {
+    Validator.addRule('spaceNoSupport', function (options) {
       let value = $(options.element).val();
       return value.indexOf(' ') < 0;
     }, Translator.trans('validate.have_spaces'));
@@ -51,7 +51,7 @@ define(function (require, exports, module) {
     validator.addItem({
       element: '[name="password"]',
       required: true,
-      rule: 'check_password_high spaceNoSupport',
+      rule: 'password_strong spaceNoSupport',
       errormessageRequired: '请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码'
     });
 

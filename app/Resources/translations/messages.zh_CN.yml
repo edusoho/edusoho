@@ -292,6 +292,8 @@ paginator.lastPage: 上一页
 paginator.jump: 跳至
 paginator.page: 页
 
+password.hint.normal: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
+password.hint.strong: 8-32位字符，包含字母大小写、数字、符号四种字符组合成的密码
 
 staff.fields.id: 员工编号
 # 用户通用
@@ -3138,10 +3140,6 @@ user.register.account_with_mobile_or_email_placeholder: 填写你常用的邮箱
 user.register.username_label: 用户名
 user.register.username_label_placeholder: 中、英文均可，最长18个英文或9个汉字
 user.register.password_label: 密码
-user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
-user.register.password_label_placeholder.low: 5-20位英文、数字、符号，区分大小写
-user.register.password_label_placeholder.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.register.password_label_placeholder.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 user.register.enter_password: 请输入密码
 user.register.invite_code_label: 邀请码
 user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
@@ -3458,10 +3456,6 @@ user.settings.password_reset.success_tips: 重置密码成功
 user.settings.password_reset.login_btn: 立即登录
 user.settings.password_reset.reset_btn: 重设密码
 user.settings.password_reset.find_password_btn: 找回密码
-user.settings.password_level.low: 5-20位英文、数字、符号，区分大小写
-user.settings.password_level.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-user.settings.password_level.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
-
 
 # 账户中心模块
 user.account_center: 账户中心
@@ -3816,7 +3810,7 @@ cloud_file.use_status.used: 已使用
 cloud_file.upload_time: 上传时间
 cloud_file.application: 应用
 cloud_file.category: 分类
-cloud_file.referenced_course: 引用课程
+cloud_file.refer_course: 引用课程
 
 cloud_file.type.all: 全部
 cloud_file.type.video: 视频
@@ -4652,6 +4646,7 @@ my.teaching.question_bank.question_category.name_label: 分类名称
 my.teaching.question_bank.question.no_category: 未分类
 my.teaching.question_bank.question.all: 全部题目
 my.teaching.question_bank.question.set_category: 设置分类
+my.teaching.question_bank.question.set_tag: 设置标签
 my.teaching.question_bank.question.selected: 已选
 my.teaching.question_bank.question.set_score: 设置分值
 my.teaching.question_bank.question.add: 添加题目
@@ -6883,10 +6878,6 @@ admin.user.fields.personal_menu_label: 个人主页
 admin.user.fields.user_email: 用户邮箱
 admin.user.fields.student_email: 学员邮箱
 admin.user.fields.staff_email: 员工邮箱
-admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
-admin.user.fields.password_hint.low: 5-20位英文、数字、符号，区分大小写
-admin.user.fields.password_hint.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
-admin.user.fields.password_hint.high: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 admin.user.fields.confirm_password_label: 确认密码
 admin.user.fields.confirm_password_hint: 再输入一次密码
 admin.user.fields.password_label: 密码
@@ -7820,12 +7811,6 @@ admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
 admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
-admin.user_auth.Password_level: 密码等级设置
-admin.user_auth.Password_level.low.explaination: 密码为5-20位英文、数字、符号，最少需输入5个字符。
-admin.user_auth.Password_level.middle.explaination: 密码为8-20位英文、数字、符号，最少需输入8个字符。
-admin.user_auth.Password_level.middle.explaination_2: 至少包含字母、数字、符号中任意两种。
-admin.user_auth.Password_level.high.explaination: 密码为8-32位英文、数字、符号，最少需输入8个字符。
-admin.user_auth.Password_level.high.explaination_2: 同时包含英文大写、英文小写、数字、符号四种。
 
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
@@ -7884,9 +7869,10 @@ admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: �
 admin.login_connect.User_login_protection.after: 经过
 admin.login_connect.User_login_captcha: 用户登录验证码设置
 admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验；如果切换为"手机快捷登录"，则一直需要拖动验证码
-admin.login_connect.student_strong_pwd.button: 学员强密码开关
-admin.login_connect.strong_pwd_skip.danger: ⚠️关闭后学员可使用原密码登录，但账号安全风险将显著增加！建议谨慎操作，并同步加强账号监控或引导学员修改密码提升密码强度，以降低盗号隐患。
-admin.login_connect.strong_pwd_skip_close_radio.prompt: 请先勾选下方协议才能关闭
+admin.login_connect.student_weak_password_check.button: 学员登录时，弱密码检测
+admin.login_connect.student_weak_password_check.help_block: >
+  开启后，学员登录时，若发现学员使用的是弱密码，会强制要求用户修改为强密码。<br> 
+  <strong style="color:red">关闭后，学员可继续使用弱密码登录，有被盗号隐患，不建议关闭！</strong>
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
@@ -9565,6 +9551,7 @@ log.module.multi_class: 班课
 log.module.wrong_question: 错题
 log.module.ai: AI
 log.module.contract: 合同
+log.module.question_tag: 题目标签
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -9844,6 +9831,10 @@ log.action.item_bank_exercise.unpublish_exercise_chapter: 取消发布题库练�
 log.action.certifiacte.create_certificate: 创建证书
 log.action.certifiacte.auto_issue: 自动发放证书
 log.action.certifiacte.create_template: 创建证书模板
+log.action.question_tag.add_tag_group: 添加题目标签类型
+log.action.question_tag.delete_tag_group: 删除题目标签类型
+log.action.question_tag.add_tag: 添加题目标签
+log.action.question_tag.delete_tag: 删除题目标签
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -10748,6 +10739,7 @@ exception.user.already_bind: 用户已绑定
 exception.user.password_require_upgrade: 检测到您当前密码等级较低，请重新设置密码
 exception.user.password_require_high_level: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 exception.user.original_password_error: 您输入的原密码不正确，请重新输入
+exception.user.staff_password_require_strong: 员工帐号密码需满足：8-32位字符，包含字母大小写、数字、符号四种字符组合成的密码
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10778,6 +10770,7 @@ exception.sms.error_mobile: 手机号错误
 exception.sms.need_wait: 您的操作过于频繁，请在119s后申请发送验证码!
 
 exception.setting.forbidden_mobile_register: 系统未开启手机注册，请联系管理员
+exception.setting.forbidden_email_register: 系统未开启邮箱注册，请联系管理员
 exception.setting.forbidden_sms_send: 系统未开启云短信，请联系管理员
 exception.user.reset_password_email_send: 重设密码邮件发送失败，请联系管理员。
 exception.setting.forbidden_setting_nickname: 修改昵称未开启，请联系管理员
@@ -10822,7 +10815,7 @@ exception.user.email_invalid: 邮箱地址格式错误
 exception.user.email_existed: 邮箱地址已被注册
 exception.user.mobile_invalid: 非法的手机号
 exception.user.mobile_existed: 手机号已被注册
-exception.user.password_invalid: 密码校验失败
+exception.user.password_invalid: 请设置8-32位字符，包含字母大小写、数字、符号任意两种及以上组合成的密码
 exception.user.mobile_or_email_invalid: 非法的手机号或邮箱地址
 exception.user.gender_invalid: 性别不正确
 exception.user.birthday_invalid: 生日格式错误
@@ -11242,6 +11235,12 @@ exception.information_collect.closed: 用户信息采集已关闭
 exception.not_continue.look: 无法继续查看
 exception.go_home: 回到首页
 
+exception.question_tag.tag_group_name_duplicate: 标签类型名称重复
+exception.question_tag.tag_group_not_found: 标签类型不存在
+exception.question_tag.tag_name_duplicate: 标签名称重复
+exception.question_tag.tag_not_found: 标签不存在
+
+exception.email.code_invalid: 邮箱验证码错误
 
 course.unname_title: 未命名计划
 
