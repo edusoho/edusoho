@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue';
-import Api from '../../../../../api';
+import Api from '../../../../../../api';
 
 const selectedId = ref();
 const treeData = ref([]);

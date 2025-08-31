@@ -1,8 +1,9 @@
 <script setup>
 import {emitter} from 'vue3/js/event-bus';
-import CategorySelect from './CategorySelect.vue';
-import ReferencedCourse from './ReferencedCourse.vue';
+import CategorySelect from './category-select/CategorySelect.vue';
+import ReferCourse from './refer-course/ReferCourse.vue';
 import {ref} from 'vue';
+import AntConfigProvider from '../../../../components/AntConfigProvider.vue';
 
 const params = ref({});
 
@@ -14,11 +15,11 @@ emitter.on('open-category-modal', (params) => {
   }
 });
 
-const referencedCourseModalVisible = ref(false);
+const referCourseModalVisible = ref(false);
 emitter.on('open-refer-course-modal', (params) => {
   if (Number(params.referCourse) > 0) {
     params.value = params;
-    referencedCourseModalVisible.value = true;
+    referCourseModalVisible.value = true;
   }
 });
 
@@ -28,14 +29,16 @@ function clearParams() {
 </script>
 
 <template>
-  <CategorySelect
-    v-model="categorySelectModalVisible"
-    :ids="params.ids"
-    @set-category-success="clearParams"
-  />
-  <ReferencedCourse
-    v-model="referencedCourseModalVisible"
-    :id="params.id"
-  />
+  <AntConfigProvider>
+    <CategorySelect
+      v-model="categorySelectModalVisible"
+      :ids="params.ids"
+      @set-category-success="clearParams"
+    />
+    <ReferCourse
+      v-model="referCourseModalVisible"
+      :id="params.id"
+    />
+  </AntConfigProvider>
 </template>
 
