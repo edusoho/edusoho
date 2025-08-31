@@ -15,13 +15,20 @@ class QuestionTagRelationTag extends AbstractResource
         if (empty($relations)) {
             return [];
         }
-        $tags = $this->getQuestionTagService()->searchTags(['ids' => array_column($relations, 'tagId')], ['id', 'groupId', 'name']);
+        $tags = $this->getQuestionTagService()->searchTags(['ids' => array_column($relations, 'tagId'), 'status' => 1], ['id', 'groupId', 'name']);
+        if (empty($tags)) {
+            return [];
+        }
+        $tagGroups = $this->getQuestionTagService()->searchTagGroups(['ids' => array_column($tags, 'groupId'), 'status' => 1], ['id']);
+        if (empty($tagGroups)) {
+            return [];
+        }
         $groupTags = ArrayToolkit::group($tags, 'groupId');
         $finalTags = [];
-        foreach ($groupTags as $groupId => $tags) {
+        foreach ($tagGroups as $tagGroup) {
             $finalTags[] = [
-                'groupId' => $groupId,
-                'tags' => ArrayToolkit::thin($tags, ['id', 'name']),
+                'groupId' => $tagGroup['id'],
+                'tags' => ArrayToolkit::thin($groupTags[$tagGroup['id']], ['id', 'name']),
             ];
         }
 

@@ -192,6 +192,10 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
         if (empty($itemIds)) {
             return;
         }
+        if (!empty($tagIds)) {
+            $tags = $this->searchTags(['ids' => $tagIds, 'status' => 1], ['id']);
+            $tagIds = array_column($tags, 'id');
+        }
         $this->getQuestionTagRelationDao()->batchDelete(['itemIds' => $itemIds]);
         $relations = [];
         foreach ($itemIds as $itemId) {
