@@ -2,12 +2,12 @@
 // const emit = defineEmits(['setCategorySuccess'])
 import {onMounted, reactive, ref} from 'vue';
 import Api from '../../../../../../api';
+import ResourceSubstitution from './ResourceSubstitution.vue';
 
 const modalVisible = defineModel();
 const props = defineProps({
   id: {
-    type: String,
-    default: '',
+    type: Number,
   },
 });
 
@@ -17,6 +17,17 @@ const state = reactive({
   selectedIds: [],
   loading: false,
 });
+
+const resourceSubstitutionModalVisible = ref(false)
+function openResourceSubstitutionModal() {
+  resourceSubstitutionModalVisible.value = true
+}
+function closeReferCourseModal() {
+  modalVisible.value = false;
+}
+function openReferCourseModal() {
+  modalVisible.value = false;
+}
 
 const columns = [
   {
@@ -34,6 +45,12 @@ const columns = [
   },
 ]
 
+const pagination = reactive({
+  current: 1,
+  total: 0,
+  pageSize: 10,
+});
+
 async function onSearch() {
   state.loading = true
   referCourse.value = await Api.cloudResources.searchReferCourse();
@@ -41,7 +58,16 @@ async function onSearch() {
 }
 
 function onBatchReplace() {
+  closeReferCourseModal();
+  openResourceSubstitutionModal();
+}
 
+function onSelectChange(selectedIds) {
+  state.selectedIds = selectedIds;
+}
+
+function onShowSizeChange(current, pageSize) {
+  console.log(current, pageSize);
 }
 
 onMounted(async () => {
@@ -53,6 +79,7 @@ onMounted(async () => {
   <a-modal v-model:open="modalVisible"
            title="引用详情"
            :width="900"
+           :footer="null"
            centered
   >
     <div class="flex flex-col">
@@ -67,21 +94,34 @@ onMounted(async () => {
           />
           <div v-if="state.selectedIds.length > 0">{{ `已选: ${state.selectedIds.length}` }}</div>
         </div>
-        <a-button type="primary" @click="onBatchReplace">批量替换</a-button>
+        <a-button type="primary" @click="onBatchReplace" :disabled="state.selectedIds.length === 0">批量替换</a-button>
       </div>
       <a-table
+        class="mb-16"
         :columns="columns"
         :data-source="referCourse"
         :row-key="record => record.id"
         :pagination="false"
         :loading="state.loading"
+        :row-selection="{ selectedRowKeys: state.selectedIds, onChange: onSelectChange }"
         :scroll="{ y: 500 }"
       >
 
       </a-table>
       <div class="flex flex-row-reverse">
-        <div>111111</div>
+        <a-pagination
+          v-model:current="pagination.current"
+          v-model:pageSize="pagination.pageSize"
+          :total="pagination.total"
+          show-size-changer
+          :show-total="total => `共 ${total} 条数据`"
+          @showSizeChange="onShowSizeChange"
+        />
       </div>
     </div>
   </a-modal>
+  <ResourceSubstitution
+    v-model="resourceSubstitutionModalVisible"
+    :ids="state.selectedIds"
+  />
 </template>

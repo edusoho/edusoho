@@ -8,17 +8,17 @@ import AntConfigProvider from '../../../../components/AntConfigProvider.vue';
 const params = ref({});
 
 const categorySelectModalVisible = ref(false);
-emitter.on('open-category-modal', (params) => {
-  if (params.ids.length > 0) {
-    params.value = params
+emitter.on('open-category-modal', (val) => {
+  if (val.ids.length > 0) {
+    params.value = val
     categorySelectModalVisible.value = true;
   }
 });
 
 const referCourseModalVisible = ref(false);
-emitter.on('open-refer-course-modal', (params) => {
-  if (Number(params.referCourse) > 0) {
-    params.value = params;
+emitter.on('open-refer-course-modal', (val) => {
+  if (Number(val.referCourse) > 0) {
+    params.value = val;
     referCourseModalVisible.value = true;
   }
 });
