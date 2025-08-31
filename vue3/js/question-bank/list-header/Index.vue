@@ -206,7 +206,7 @@ onMounted(() => {
       <div class="flex items-center justify-between">
         <div class="text-[16px] text-[#37393D] font-medium">题库名称</div>
         <div class="flex gap-10">
-          <a-button @click="duplicateChecking">试卷查重</a-button>
+          <a-button @click="duplicateChecking">试题查重</a-button>
           <a-button @click="exportQuestion">导出题目</a-button>
           <a-dropdown>
             <a-button>添加题目</a-button>
