@@ -107,7 +107,7 @@ export default {
         case 'determine':
           return i18n.t('courseLearning.determine');
         case 'fill':
-          return 'courseLearning.fill';
+          return i18n.t('courseLearning.fill');
         case 'material':
           return i18n.t('courseLearning.material');
       }
