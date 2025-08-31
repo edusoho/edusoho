@@ -92,6 +92,14 @@ class Video extends Activity
         return $videoActivity;
     }
 
+    public function updateByIds($ids, $fields)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getVideoActivityDao()->update(['ids' => $ids], $fields);
+    }
+
     public function get($id)
     {
         $videoActivity = $this->getVideoActivityDao()->get($id);

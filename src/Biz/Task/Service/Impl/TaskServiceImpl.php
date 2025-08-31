@@ -1420,6 +1420,18 @@ class TaskServiceImpl extends BaseService implements TaskService
         return false;
     }
 
+    public function batchUpdateMediaByActivityIds($activityIds, $media)
+    {
+        if (empty($activityIds)) {
+            return;
+        }
+        $tasks = $this->searchTasks(['activityIds' => $activityIds, 'types' => ['audio', 'video']], [], 0, count($activityIds), ['id']);
+        if (!empty($tasks)) {
+            $this->getTaskDao()->update(['ids' => array_column($tasks, 'id')], ['length' => $media['length']]);
+        }
+        $this->getActivityService()->batchUpdateMedia($activityIds, $media);
+    }
+
     /**
      * @return TaskDao
      */
