@@ -92,6 +92,18 @@ export const sendSmsCenter = ({ commit }, data) =>
       .catch(err => reject(err));
   });
 
+export const sendEmailCenter = ({ commit }, data) =>
+  new Promise((resolve, reject) => {
+    Api.getEmailCenter({
+      data,
+    })
+      .then(res => {
+        resolve(res);
+        return res;
+      })
+      .catch(err => reject(err));
+  });
+
 export const setNickname = ({ commit }, { nickname }) =>
   new Promise((resolve, reject) => {
     Api.setNickname({

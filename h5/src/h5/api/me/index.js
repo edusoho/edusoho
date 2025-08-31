@@ -50,6 +50,13 @@ export default [
     disableLoading: true,
   },
   {
+    // 新增用户邮箱验证码
+    name: 'getEmailCenter',
+    url: '/email_verify_code',
+    method: 'POST',
+    disableLoading: true,
+  },
+  {
     // 新增用户
     name: 'addUser',
     url: '/user',
