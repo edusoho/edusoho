@@ -818,6 +818,22 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $this->getActivityDao()->findByCopyId($copyId);
     }
 
+    public function batchUpdateMedia($ids, $media)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getActivityDao()->update(['ids' => $ids, 'mediaTypes' => ['audio', 'video']], ['length' => $media['length'], 'content' => $media]);
+        $activities = $this->getActivityDao()->findByIds($ids);
+        if (empty($activities)) {
+            return;
+        }
+        $activityGroups = ArrayToolkit::group($activities, 'mediaType');
+        foreach ($activityGroups as $mediaType => $activityGroup) {
+            $this->getActivityConfig($mediaType)->updateByIds(array_column($activityGroup, 'mediaId'), ['mediaId' => $media['id']]);
+        }
+    }
+
     /**
      * @return AnswerRecordService
      */
