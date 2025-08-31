@@ -4,42 +4,38 @@ import CategorySelect from './CategorySelect.vue';
 import ReferencedCourse from './ReferencedCourse.vue';
 import {ref} from 'vue';
 
-const id = ref()
-const ids = ref([])
+const params = ref({});
 
 const categorySelectModalVisible = ref(false);
 emitter.on('open-category-modal', (params) => {
   if (params.ids.length > 0) {
-    ids.value = params.ids;
+    params.value = params
     categorySelectModalVisible.value = true;
   }
 });
 
 const referencedCourseModalVisible = ref(false);
-emitter.on('open-referenced-course-modal', (params) => {
-  if (Number(params.referencedCourse) > 0) {
-    id.value = params.id;
+emitter.on('open-refer-course-modal', (params) => {
+  if (Number(params.referCourse) > 0) {
+    params.value = params;
     referencedCourseModalVisible.value = true;
   }
 });
 
-function clearIds() {
-  ids.value = [];
-}
-function clearId() {
-  id.value = null;
+function clearParams() {
+  params.value = {};
 }
 </script>
 
 <template>
   <CategorySelect
     v-model="categorySelectModalVisible"
-    :ids="ids"
-    @set-category-success="clearIds"
+    :ids="params.ids"
+    @set-category-success="clearParams"
   />
   <ReferencedCourse
     v-model="referencedCourseModalVisible"
-    :id="id"
+    :id="params.id"
   />
 </template>
 
