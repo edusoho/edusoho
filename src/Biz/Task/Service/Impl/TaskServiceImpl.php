@@ -473,6 +473,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $user = $this->getCurrentUser();
         $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
+        $member = $this->getMemberService()->getCourseMember($courseId, $user->getId());
 
         $course = $this->getCourseService()->getCourse($courseId);
         $isLock = false;
@@ -506,6 +507,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             } else {
                 $task['tryLookable'] = 0;
             }
+            $task['isLastLearn'] = $task['id'] == $member['lastLearnTaskId'];
         }
 
         return $tasks;
