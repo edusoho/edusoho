@@ -23,7 +23,7 @@ class EmailVerifyCode extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        if (!ArrayToolkit::requireds($params, ['email', 'dragCaptchaToken'], true)) {
+        if (!ArrayToolkit::requireds($params, ['email'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $this->biz['biz_drag_captcha']->check($params['dragCaptchaToken']);
