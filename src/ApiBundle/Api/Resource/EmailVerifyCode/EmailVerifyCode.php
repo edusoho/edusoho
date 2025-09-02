@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\EmailVerifyCode;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\TimeMachine;
 use Biz\Common\CommonException;
@@ -21,16 +22,20 @@ class EmailVerifyCode extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
-        $this->biz['biz_drag_captcha']->check($request->request->get('dragCaptchaToken'));
+        $params = $request->request->all();
+        if (!ArrayToolkit::requireds($params, ['email'], true)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $this->biz['biz_drag_captcha']->check($params['dragCaptchaToken']);
         $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
         $mailer = $this->getSettingService()->get('mailer', []);
         $mailEnable = (isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled']);
         if (empty($mailEnable)) {
             throw SettingException::MAIL_DISABLE();
         }
-        $email = $request->request->get('email');
+        $email = $params['email'];
         if (!SimpleValidator::email($email)) {
-            throw CommonException::ERROR_PARAMETER();
+            throw UserException::EMAIL_INVALID();
         }
         $user = $this->getUserService()->getUserByEmail($email);
         if ($user) {

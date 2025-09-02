@@ -83,6 +83,9 @@
       <td class="vertical-middle">
         <span style="display:block">{{ categories[cloudFile.categoryId].name|default('-') }}</span>
       </td>
+      <td class="vertical-middle">
+        <span style="display:block">{{ cloudFile.usedCount }}</span>
+      </td>
     {% endif %}
 
     {# 转码进度 #}

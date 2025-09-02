@@ -8,6 +8,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Visualization\Service\DataCollectService;
@@ -27,6 +28,7 @@ class CourseTaskEventV2 extends AbstractResource
     {
         $this->checkCourseCanLearn($courseId);
         $this->checkEvents($request, $event, $taskId, $courseId);
+        $this->markLearnTask($courseId, $taskId);
         $data = $request->request->all();
 
         if (self::EVENT_START === $event) {
@@ -361,9 +363,18 @@ class CourseTaskEventV2 extends AbstractResource
         return (int) $watchTime;
     }
 
-    protected function getKickOutStatus($userId, $sign)
+    private function markLearnTask($courseId, $taskId)
     {
-        $this->getLearnControlService()->checkActive($userId, $sign);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        $this->getCourseMemberService()->updateMember($member, ['lastLearnTaskId' => $taskId]);
+    }
+
+    /**
+     * @return MemberService
+     */
+    private function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
     }
 
     /**

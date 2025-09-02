@@ -3,9 +3,9 @@
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\DownloadActivityDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class DownloadActivityDaoImpl extends GeneralDaoImpl implements DownloadActivityDao
+class DownloadActivityDaoImpl extends AdvancedDaoImpl implements DownloadActivityDao
 {
     protected $table = 'activity_download';
 

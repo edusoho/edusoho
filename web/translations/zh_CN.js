@@ -67,6 +67,8 @@ t.add("user.settings.security.mobile_bind.success", "\u624b\u673a\u7ed1\u5b9a\u6
 t.add("user.settings.security.mobile_bind.fail", "\u624b\u673a\u7ed1\u5b9a\u5931\u8d25", "js", "zh_CN");
 t.add("site.modify.success", "\u4fee\u6539\u6210\u529f", "js", "zh_CN");
 t.add("user.settings.security.password_modify.incorrect_password", "\u5f53\u524d\u5bc6\u7801\u4e0d\u6b63\u786e\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
+t.add("password.hint.normal", "8-32\u4f4d\u5b57\u7b26\uff0c\u5305\u542b\u5b57\u6bcd\u3001\u6570\u5b57\u3001\u7b26\u53f7\u4efb\u610f\u4e24\u79cd\u53ca\u4ee5\u4e0a\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
+t.add("password.hint.strong", "\u8bf7\u8bbe\u7f6e8-32\u4f4d\u5305\u542b\u5b57\u6bcd\u5927\u5c0f\u5199\u3001\u6570\u5b57\u3001\u7b26\u53f7\u56db\u79cd\u5b57\u7b26\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
 t.add("site.audio.quality.quota", "\u97f3\u8d28", "js", "zh_CN");
 t.add("site.audio.quality.low", "\u6d41\u7545", "js", "zh_CN");
 t.add("site.audio.quality.normal", "\u6807\u51c6", "js", "zh_CN");
@@ -710,6 +712,9 @@ t.add("validate.expiry_days_required_hint", "\u8bf7\u8f93\u5165\u6709\u6548\u671
 t.add("validate.empty_content_hint", "\u8bf7\u8f93\u5165\u5185\u5bb9!", "js", "zh_CN");
 t.add("validate.no_number_first_hint", "URL\u8def\u5f84\u53ea\u80fd\u5305\u542b\u5b57\u6bcd\u548c\u6570\u5b57,\u8bf7\u4ee5\u5b57\u6bcd\u5f00\u5934!\u957f\u5ea6\u5927\u4e8e2\u4f4d", "js", "zh_CN");
 t.add("validate.have_spaces", "\u5bc6\u7801\u4e0d\u80fd\u6709\u7a7a\u683c\u54e6", "js", "zh_CN");
+t.add("validate.password", "8-32\u4f4d\u5b57\u7b26\uff0c\u5305\u542b\u5b57\u6bcd\u3001\u6570\u5b57\u3001\u7b26\u53f7\u4efb\u610f\u4e24\u79cd\u53ca\u4ee5\u4e0a\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
+t.add("validate.password.strong", "8-32\u4f4d\u5b57\u7b26\uff0c\u5305\u542b\u5b57\u6bcd\u5927\u5c0f\u5199\u3001\u6570\u5b57\u3001\u7b26\u53f7\u56db\u79cd\u5b57\u7b26\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
+t.add("validate.check_password.message", "8-32\u4f4d\u5b57\u7b26\uff0c\u5305\u542b\u5b57\u6bcd\u3001\u6570\u5b57\u3001\u7b26\u53f7\u4efb\u610f\u4e24\u79cd\u53ca\u4ee5\u4e0a\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
 t.add("validate.check_password_low.message", "5-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
 t.add("validate.check_password_middle.message", "8-20\u4f4d\u82f1\u6587\u3001\u6570\u5b57\u3001\u7b26\u53f7\uff0c\u81f3\u5c11\u5305\u542b\u4e24\u79cd\uff0c\u533a\u5206\u5927\u5c0f\u5199", "js", "zh_CN");
 t.add("validate.check_password_high.message", "\u8bf7\u8bbe\u7f6e8-32\u4f4d\u5305\u542b\u5b57\u6bcd\u5927\u5c0f\u5199\u3001\u6570\u5b57\u3001\u7b26\u53f7\u56db\u79cd\u5b57\u7b26\u7ec4\u5408\u6210\u7684\u5bc6\u7801", "js", "zh_CN");
@@ -2108,5 +2113,4 @@ t.add("course.market_setting.contract.model.handSignature", "\u624b\u5199\u7b7e\
 t.add("course.market_setting.contract.model.partyBName", "\u4e59\u65b9\u59d3\u540d", "js", "zh_CN");
 t.add("course.market_setting.contract.model.iDNumber", "\u8eab\u4efd\u8bc1\u53f7", "js", "zh_CN");
 t.add("course.market_setting.contract.model.contactInformation", "\u8054\u7cfb\u65b9\u5f0f", "js", "zh_CN");
-t.add("admin.login_connect.strong_pwd_skip_close_radio.prompt", "\u8bf7\u5148\u52fe\u9009\u4e0b\u65b9\u534f\u8bae\u624d\u80fd\u5173\u95ed", "js", "zh_CN");
 })(Translator);
