@@ -243,6 +243,7 @@ export default class Register {
         Api.user.sendEmailCode({
           data: params
         }).then((res) => {
+          $('[name="emailToken"]').val(res.emailToken);
           self.startCountdown($codeSendBtn, 120);
         });
       }
