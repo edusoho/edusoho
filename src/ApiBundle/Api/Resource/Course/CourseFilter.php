@@ -29,7 +29,7 @@ class CourseFilter extends Filter
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish',
         'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom', 'assistants', 'assistant', 'liveStatus', 'drainage',
-        'contract', 'videoMaxLevel', 'lastLearnTask',
+        'contract', 'videoMaxLevel', 'lastLearnTask', 'hidePrice',
     ];
 
     protected function publicFields(&$data)
