@@ -12,6 +12,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
+use Biz\User\Service\TokenService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
 use Gregwar\Captcha\CaptchaBuilder;
@@ -42,6 +43,9 @@ class RegisterController extends BaseController
                 if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
                     $registration['verifiedMobile'] = $registration['emailOrMobile'];
                 }
+                if (isset($registration['emailOrMobile']) && SimpleValidator::email($registration['emailOrMobile'])) {
+                    $registration['email'] = $registration['emailOrMobile'];
+                }
 
                 $isUserTermsOpened = 'opened' === $this->getSettingService()->node('auth.user_terms') ? true : false;
                 $isPrivacyPolicyOpened = 'opened' === $this->getSettingService()->node('auth.privacy_policy') ? true : false;
@@ -68,6 +72,9 @@ class RegisterController extends BaseController
                     } else {
                         return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
                     }
+                }
+                if ($this->emailCodeValidator($authSettings, $registration) && !$this->checkEmailVerifyCode($registration)) {
+                    return $this->createMessageResponse('info', '邮箱和验证码不匹配，请重新注册');
                 }
 
                 //获取POST参数验证码
@@ -582,7 +589,7 @@ class RegisterController extends BaseController
 
     protected function dragCaptchaValidator($registration, $authSettings)
     {
-        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile'])) {
+        if (array_key_exists('captcha_enabled', $authSettings) && (1 == $authSettings['captcha_enabled']) && empty($registration['mobile']) && empty($registration['email'])) {
             $biz = $this->getBiz();
             $bizDragCaptcha = $biz['biz_drag_captcha'];
 
@@ -624,6 +631,27 @@ class RegisterController extends BaseController
         ) {
             return true;
         }
+    }
+
+    protected function emailCodeValidator($authSettings, $registration)
+    {
+        return in_array($authSettings['register_mode'], ['email', 'email_or_mobile']) && !empty($registration['email']);
+    }
+
+    private function checkEmailVerifyCode($registration)
+    {
+        $token = $this->getTokenService()->verifyToken('email_verify_code', $registration['emailToken']);
+        if (empty($token)) {
+            return false;
+        }
+        if (0 == $token['remainedTimes']) {
+            return false;
+        }
+        if ($token['data']['code'] !== $registration['email_code'] || $token['data']['email'] !== $registration['email']) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -680,5 +708,13 @@ class RegisterController extends BaseController
     protected function getDistributorService()
     {
         return $this->getBiz()->service('Distributor:DistributorService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->getBiz()->service('User:TokenService');
     }
 }
