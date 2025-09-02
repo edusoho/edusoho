@@ -19,43 +19,45 @@
           </div>
           <div class="body-item__content">
             <p class="content-title text-overflow">{{ goods.title }}</p>
-            <p
-              class="content-price text-overflow"
-              :class="{
+            <template v-if="goods.hidePrice === '1'">
+              <p
+                class="content-price text-overflow"
+                :class="{
                 'is-free': Number(goods.minDisplayPriceObj.amount) == 0,
               }"
-              v-if="
+                v-if="
                 goods.minDisplayPriceObj.amount ==
                   goods.maxDisplayPriceObj.amount
               "
-            >
-              {{
-                Number(goods.maxDisplayPriceObj.amount) == 0
-                  ? $t('goods.free')
-                  : goods.minDisplayPriceObj.currency === 'RMB'
-                  ? `${goods.maxDisplayPriceObj.amount}${$t('goods.cny')}`
-                  : goods.minDisplayPriceObj.coinAmount +
-                    goods.minDisplayPriceObj.coinName
-              }}
-            </p>
-            <p class="content-price text-overflow" v-else>
+              >
+                {{
+                  Number(goods.maxDisplayPriceObj.amount) == 0
+                    ? $t('goods.free')
+                    : goods.minDisplayPriceObj.currency === 'RMB'
+                      ? `${goods.maxDisplayPriceObj.amount}${$t('goods.cny')}`
+                      : goods.minDisplayPriceObj.coinAmount +
+                      goods.minDisplayPriceObj.coinName
+                }}
+              </p>
+              <p class="content-price text-overflow" v-else>
               <span
                 v-if="goods.minDisplayPriceObj.currency === 'RMB'"
                 class="price"
-                >{{ goods.minDisplayPriceObj.amount | formatPrice }}{{ $t('goods.cny') }}</span
+              >{{ goods.minDisplayPriceObj.amount | formatPrice }}{{ $t('goods.cny') }}</span
               >
-              <span
-                v-if="goods.minDisplayPriceObj.currency === 'coin'"
-                class="price"
+                <span
+                  v-if="goods.minDisplayPriceObj.currency === 'coin'"
+                  class="price"
                 >{{ goods.minDisplayPriceObj.coinAmount | formatPrice }}
               </span>
-              <span
-                v-if="goods.minDisplayPriceObj.currency === 'coin'"
-                class="detail-right__price__unit"
-              >
+                <span
+                  v-if="goods.minDisplayPriceObj.currency === 'coin'"
+                  class="detail-right__price__unit"
+                >
                 {{ goods.minDisplayPriceObj.coinName }}
               </span>
-            </p>
+              </p>
+            </template>
           </div>
         </div>
       </template>

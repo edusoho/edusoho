@@ -15,14 +15,14 @@
         <div class="flex flex-col justify-between p-8" style="height: 62px;">
           <div class="font-bold text-14 text-overflow" style="width: 124px;">{{ currentItem.title }}</div>
           <div class="flex items-end justify-between">
-            <div class="font-bold text-14" style="color: #FF7A34;">￥{{ currentItem.price }}</div>
+            <div class="font-bold text-14" style="color: #FF7A34;"><span v-if="currentItem.hidePrice === '1'">￥{{ currentItem.price }}</span></div>
             <div class="text-text-3 text-12">{{ $t('e.personStudying', { number: currentItem.studentNum }) }}</div>
           </div>
         </div>
       </div>
       <div class="flex flex-col justify-between flex-1 ml-8" style="width: 50%;height: 162px;">
         <div
-          v-for="(item, index) in itembank.items.slice(0, 3)" 
+          v-for="(item, index) in itembank.items.slice(0, 3)"
           :key="item.id"
           class="p-12 text-overflow text-14"
           style="height: 46px;border-radius: 6px;"
@@ -66,7 +66,7 @@ export default {
     },
     jumpToCurrentItem() {
       if (this.showMode === 'admin') return
-      
+
       this.$router.push({
         path: `/item_bank_exercise/${this.currentItem.id}`,
         query: {

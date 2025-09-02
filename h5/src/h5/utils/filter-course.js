@@ -86,12 +86,17 @@ const getPriceDisplay = (data, platform) => {
     h5: '#408FFB',
   };
   let price;
-  if (dataPrice > 0 && currency === 'coin') {
-    price = `<span class="font-bold" style="color: #FF7A34">${coinAmount} ${coinName}</span>`;
-  } else if (dataPrice > 0 && currency === 'RMB') {
-    price = `<span class="text-14 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
+
+  if (data.hidePrice === '1') {
+    if (dataPrice > 0 && currency === 'coin') {
+      price = `<span class="font-bold" style="color: #FF7A34">${coinAmount} ${coinName}</span>`;
+    } else if (dataPrice > 0 && currency === 'RMB') {
+      price = `<span class="text-14 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
+    } else {
+      price = `<span class="font-bold text-14" style="color: #FF7A34">${i18n.t('filters.free')}</span>`;
+    }
   } else {
-    price = `<span class="font-bold text-14" style="color: #FF7A34">${i18n.t('filters.free')}</span>`;
+    price = ``
   }
   return price;
 };
