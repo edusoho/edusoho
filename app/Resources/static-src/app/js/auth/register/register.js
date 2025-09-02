@@ -1,6 +1,7 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import Drag from 'app/common/drag';
 import Coordinate from 'app/common/coordinate';
+import Api from 'common/api';
 
 export default class Register {
   constructor() {
@@ -48,17 +49,18 @@ export default class Register {
     if ($('#register_mode_switch').length === 0) return;
 
     $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-    $('.js-register_email_mode').hide();
+    $('label[for="register_emailOrMobile"]').text('手机号码');
+    $('#register_emailOrMobile').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
 
     $('#register_mode_switch').on('click', () => {
       if ($('#register_mode_switch').attr('mode') === 'email') {
         $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-        $('.js-register_email_mode').hide();
-        $('.js-register_mobile_mode').show();
+        $('label[for="register_emailOrMobile"]').text('手机号码');
+        $('#register_emailOrMobile').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
         $('#register_mode_switch').text('切换手机号注册 >>').attr('mode', 'email')
-        $('.js-register_email_mode').show();
-        $('.js-register_mobile_mode').hide();
+        $('label[for="register_emailOrMobile"]').text('邮箱地址');
+        $('#register_emailOrMobile').attr('placeholder', '请填写你常用的邮箱地址作为登陆账号');
       }
       this.initEmailMobileMsg();
     })
@@ -68,18 +70,35 @@ export default class Register {
     const register_mode = $('input[name="register_mode"]').val();
 
     if (register_mode === 'email') {
-      $('#sms_code').attr('placeholder', '填写邮箱验证码')
+      $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
+      $('.js-email_mobile_msg-input').attr('name', 'email_code')
+      $('.js-email_mobile_msg-input').attr('id', 'email_code')
+
       $('.js-email_mobile_msg-label').text('邮箱验证码')
+      $('.js-email_mobile_msg-label').attr('for', 'email_code')
     } else if (register_mode === 'mobile') {
-      $('#sms_code').attr('placeholder', '填写短信验证码')
+      $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
+      $('.js-email_mobile_msg-input').attr('name', 'sms_code')
+      $('.js-email_mobile_msg-input').attr('id', 'sms_code')
+
       $('.js-email_mobile_msg-label').text('短信验证码')
+      $('.js-email_mobile_msg-label').attr('for', 'sms_code')
     } else {
       if ($('#register_mode_switch').attr('mode') === 'email') {
-        $('#sms_code').attr('placeholder', '填写邮箱验证码')
+        $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
+        $('.js-email_mobile_msg-input').attr('name', 'email_code')
+        $('.js-email_mobile_msg-input').attr('id', 'email_code')
+
         $('.js-email_mobile_msg-label').text('邮箱验证码')
+        $('.js-email_mobile_msg-label').attr('for', 'email_code')
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
-        $('#sms_code').attr('placeholder', '填写短信验证码')
+        $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
+        $('.js-email_mobile_msg-input').attr('name', 'sms_code')
+        $('.js-email_mobile_msg-input').attr('id', 'sms_code')
+
         $('.js-email_mobile_msg-label').text('短信验证码')
+        $('.js-email_mobile_msg-label').attr('for', 'sms_code')
+
       }
     }
   }
@@ -96,7 +115,7 @@ export default class Register {
 
   initValidator() {
     $('#register-form').validate({
-      ...this._validataRules(),
+      ...this._validateRules(),
     });
   }
 
@@ -134,18 +153,43 @@ export default class Register {
       .attr('disabled', false);
   }
 
-  initCodeRule() {
+  initSmsCodeRule() {
     $('[name="sms_code"]').rules('add', {
       required: true,
       unsigned_integer: true,
       rangelength: [6, 6],
-      es_remote: {
-        type: 'get'
-      },
       messages: {
         rangelength: Translator.trans('validate.sms_code.message')
       }
     });
+  }
+
+  initEmailCodeRule() {
+    $('[name="email_code"]').rules('add', {
+      required: true,
+      unsigned_integer: true,
+      rangelength: [6, 6],
+      messages: {
+        rangelength: Translator.trans('validate.sms_code.message')
+      }
+    });
+  }
+
+  startCountdown($button, seconds) {
+    let remaining = seconds;
+    let originalText = $button.text();
+    this._codeBtnDisable();
+    $button.text(remaining + '秒后重新获取');
+    let countdown = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(countdown);
+        this._codeBtnEnable();
+        $button.text(originalText);
+      } else {
+        $button.text(remaining + '秒后重新获取');
+      }
+    }, 1000);
   }
 
   initCodeSendBtn() {
@@ -191,11 +235,22 @@ export default class Register {
             return false;
           }
         });
+      } else if (register_mode === 'email' || $('#register_mode_switch').length > 0 && $('#register_mode_switch').attr('mode') === 'email') {
+        let params = {
+          email: register_mode === 'email' ? $('#register_email').val() : $('#register_emailOrMobile').val(),
+          dragCaptchaToken: $('[name="dragCaptchaToken"]').val()
+        }
+        Api.user.sendEmailCode({
+          data: params
+        }).then((res) => {
+          $('[name="emailToken"]').val(res.emailToken);
+          self.startCountdown($codeSendBtn, 120);
+        });
       }
     });
   }
 
-  _validataRules() {
+  _validateRules() {
     let self = this;
     return {
       rules: {
@@ -273,7 +328,7 @@ export default class Register {
         password: {
           required: Translator.trans('password.hint.normal'),
         }
-      }
+      },
     };
   }
 
@@ -281,7 +336,7 @@ export default class Register {
     let reg_mobile = /^1\d{10}$/;
     let isMobile = reg_mobile.test(mobile);
     if (isMobile) {
-      this.initCodeRule();
+      this.initSmsCodeRule();
       $('[name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initDragCaptchaCodeRule();
@@ -293,11 +348,11 @@ export default class Register {
     let reg_email = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     let isEmail = reg_email.test(email);
     if (isEmail) {
-      this.initCodeRule();
+      this.initEmailCodeRule();
       $('[name="dragCaptchaToken"]').rules('remove');
     } else {
       this.initDragCaptchaCodeRule();
-      $('[name="sms_code"]').rules('remove');
+      $('[name="email_code"]').rules('remove');
     }
   }
 

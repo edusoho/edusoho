@@ -12,16 +12,13 @@
     </div>
     <div class="login-main">
       {% if isRegisterEnabled %}
+        <input type="hidden" name="register_mode" value="{{ setting('auth.register_mode') }}"/>
         <form id="register-form" method="post" action="">
-          <input type="hidden" name="register_mode" value="{{ setting('auth.register_mode') }}"/>
-
           {{ web_macro.flash_messages() }}
-
           {% if inviteUser %}
             <div
               class="alert alert-info alert-sm">{{ 'user.register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw }}</div>
           {% endif %}
-
           {% if setting('auth.register_mode') == 'email' %}
             <div class="form-group mbl">
               <label class="control-label required"
@@ -48,27 +45,13 @@
             </div>
           {% else %}
             <div id="register_mode_switch"
-                 class="color-success"
-                 style="font-size: 16px; font-weight: 500; line-height: 22px; margin-bottom: 16px; cursor: pointer;"
+                 class="color-success register_mode_switch"
             ></div>
-            <div class="form-group mbl js-register_mobile_mode">
-              <label class="control-label required"
-                     for="register_mobile">{{ 'user.settings.security.password_reset.mobile'|trans }}</label>
+            <div class="form-group mbl js-register_email_or_mobile_mode">
+              <label class="control-label required" for="register_emailOrMobile"></label>
               <div class="controls">
-                <input type="tel" id="register_mobile" name="verifiedMobile" class="form-control input-lg"
-                       data-url="{{ path('register_mobile_check') }}"
-                       placeholder="{{ 'user.register.account_with_mobile_placeholder'|trans }}"
-                       onkeydown="if(event.keyCode==13) return false;">
-                <p class="help-block"></p>
-              </div>
-            </div>
-            <div class="form-group mbl js-register_email_mode">
-              <label class="control-label required"
-                     for="register_email">{{ 'user.settings.security.password_reset.email'|trans }}</label>
-              <div class="controls">
-                <input type="email" id="register_email" name="email" class="form-control input-lg"
-                       data-url="{{ path('register_email_check') }}"
-                       placeholder="{{ 'user.register.account_with_email_placeholder'|trans }}"
+                <input type="tel" id="register_emailOrMobile" name="emailOrMobile" class="form-control input-lg"
+                       data-url="{{ path('register_email_or_mobile_check') }}"
                        onkeydown="if(event.keyCode==13) return false;">
                 <p class="help-block"></p>
               </div>
@@ -113,7 +96,7 @@
             <label class="control-label required js-email_mobile_msg-label" for="sms_code">{{ 'user.settings.security.sms_code'|trans }}</label>
             <div class="controls cd-row">
               <div class="col-xs-6">
-                <input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code"
+                <input type="text" maxlength="6" class="form-control input-lg js-email_mobile_msg-input" id="sms_code" name="sms_code"
                        data-url="{{ path('edu_cloud_sms_check',{type:'sms_registration'}) }}"
                        onkeydown="if(event.keyCode==13) return false;">
                 <p class="help-block"></p>
@@ -175,6 +158,7 @@
             </div>
           {% endif %}
 
+          <input type="hidden" name="emailToken" value="">
           <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input type="hidden" name="registerVisitId" value="">
