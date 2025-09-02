@@ -131,6 +131,7 @@ function onSearch(isPaginator, defaultPages) {
   isPaginator || resetPage();
   categoryId.value = $('.js-category-choose').val();
   const params = {
+    category_id: categoryId.value,
     difficulty: difficulty.value === 'default' ? '' : difficulty.value,
     type: type.value === 'default' ? '' : type.value,
     keyword: keyword.value,
