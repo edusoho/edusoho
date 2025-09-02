@@ -126,7 +126,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
 };
 
 const getCourseDisplay = (data, listObj, price) => {
-  if (data.originPrice !== data.price) {
+  if (data.hidePrice === '1' && (data.originPrice !== data.price)) {
     price = `
       <div class="text-14" style="color: #FF7A34;">¥ ${data.price}</div>
       <s style="font-size: 12px;margin: 3px 0 0 -2px;color: #86909C;transform: scale(0.83);">¥ ${data.originPrice}</s>

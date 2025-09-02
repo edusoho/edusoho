@@ -3,7 +3,7 @@
     <div :class="errImgUrl ? 'afterBack' : ''"></div>
     <div class="relative" style="width: 170px;height: 100%;border-radius: 6px 0 0 6px;">
       <img class="h-full w-full course-img" v-lazy="course.imgSrc.url" style="border-radius: 6px 0 0 6px;" />
-      <div v-if="Number(isVip)" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-bottom-left-radius: 6px; border-top-right-radius: 12px; z-index: 10;">会员免费</div>
+      <div v-if="course.hidePrice === '1' && Number(isVip)" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-bottom-left-radius: 6px; border-top-right-radius: 12px; z-index: 10;">会员免费</div>
       <div v-if="course.videoMaxLevel === '2k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-bottom-left-radius: 6px; border-top-right-radius: 12px; z-index: 10;">2K 优享</div>
       <div v-if="course.videoMaxLevel === '4k' && !Number(isVip)" class="absolute left-0 bottom-0 px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE]" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-bottom-left-radius: 6px; border-top-right-radius: 12px; z-index: 10;">4K 臻享</div>
       <div v-if="courseType === 'live'" class="absolute bottom-0 w-full text-white font-medium text-12 bg-black bg-opacity-40 rounded-bl-6 text-right flex items-center flex-row-reverse" style="padding: 4px 6px;line-height: 12px;">直播<span class="inline-block w-4 h-4 bg-[#60F1A3] mr-4 text-right" style="border-radius: 9999px;"></span></div>
@@ -11,7 +11,7 @@
     <div class="flex flex-col justify-between flex-1 p-12 relative" style="width: calc(100% - 170px);border-radius: 0 6px 6px 0;">
       <img v-if="isShowErrImg" class="err-img" :src="errImgUrl" />
       <div class="flex font-bold text-text-5">
-        <div v-if="discountNum" style="width: 14px;height:14px;margin:3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #ff900e;border-radius: 2px;">
+        <div v-if="course.hidePrice === '1' && discountNum" style="width: 14px;height:14px;margin:3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #ff900e;border-radius: 2px;">
           <div style="font-size: 12px; transform: scale(0.75); color: #FF900E;">{{ $t('e.discount') }}</div>
         </div>
         <div v-if="course.hasCertificate" style="width: 14px;height:14px;margin:3px 4px 0 0;text-align: center;line-height: 14px;border: 1px solid #3DCD7F;border-radius: 2px;">
