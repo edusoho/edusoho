@@ -46,6 +46,13 @@ export default class Register {
     });
   }
 
+  resetDragCaptchaAndCodeBtn() {
+    let self = this;
+    this._codeBtnDisable();
+    self.drag.initDragCaptcha();
+    $('input[name="dragCaptchaToken"]').val('')
+  }
+
   initRegisterModeSwitch() {
     if ($('#register_mode_switch').length === 0) return;
 
@@ -58,7 +65,7 @@ export default class Register {
 
     $('#register_mode_switch').on('click', () => {
       this.resetValidation();
-      this._codeBtnDisable();
+      this.resetDragCaptchaAndCodeBtn()
       $('#register_emailOrMobile-input').val('');
       if ($('#register_mode_switch').attr('mode') === 'email') {
         $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
