@@ -3,7 +3,7 @@
     <e-loading v-if="isLoading" />
     <span class="register-title">{{ $t('title.registerAccount') }}</span>
 
-    <div class="flex justify-center text-16 mt-50">
+    <div class="flex justify-center text-16 mt-40">
       <div v-if="showRegisterModeTabs" class="p-10 mr-40" :class="{'border-b border-blue-500 font-medium': registerType === 'mobile'}" @click="registerType = 'mobile'">手机号注册</div>
       <div v-if="showRegisterModeTabs" class="p-10" :class="{'border-b border-blue-500 font-medium': registerType === 'email'}" @click="registerType = 'email'">邮箱号注册</div>
     </div>
@@ -16,7 +16,7 @@
       :placeholder="$t('placeholder.mobileNumber')"
       max-length="11"
       @blur="validateMobileOrPswOrEmail('mobile')"
-      @keyup="validatedChecker()"
+      @keyup="validatedChecker('mobile')"
     />
 
     <van-field
@@ -26,7 +26,7 @@
       :error-message="errorMessage.email"
       :placeholder="$t('placeholder.emailNumber')"
       @blur="validateMobileOrPswOrEmail('email')"
-      @keyup="validatedChecker()"
+      @keyup="validatedChecker('email')"
     />
 
     <van-field
@@ -63,7 +63,7 @@
     >
       <van-button
         slot="button"
-        :disabled="registerInfo.dragCaptchaToken || count.codeBtnDisable || !validated.mobile && !validated.email"
+        :disabled="!registerInfo.dragCaptchaToken || count.codeBtnDisable || !validated.mobile && !validated.email"
         size="small"
         type="primary"
         @click="clickCodeBtn"
@@ -132,6 +132,7 @@ import {mapActions, mapState} from 'vuex';
 import {Toast} from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
 import Api from '@/api';
+import XXTEA from '@/utils/xxtea.js';
 
 export default {
   components: {
@@ -147,6 +148,7 @@ export default {
         encrypt_password: '',
         code: '',
         smsToken: '',
+        emailToken: '',
         type: 'register',
       },
       showPassword: false,
@@ -206,7 +208,7 @@ export default {
     this.getRegisterSettings();
   },
   methods: {
-    ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin']),
+    ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin', 'sendEmailCenter']),
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
@@ -277,7 +279,7 @@ export default {
     },
     handleSubmit() {
       if (this.registerType === 'mobile') {
-        const {email, mobile, code, ...reset} = this.registerInfo;
+        const {email, mobile, code, dragCaptchaToken, ...reset} = this.registerInfo;
         const registerInfo = Object.assign({}, { ...reset, mobile, smsCode: code});
         const password = registerInfo.encrypt_password;
         registerInfo.encrypt_password = window.XXTEA.encryptToBase64(
@@ -307,7 +309,33 @@ export default {
         }
         this.popUpBottom = true;
       } else if (this.registerType === 'email') {
-
+        const {email, mobile, code, emailToken, ...reset} = this.registerInfo;
+        const registerInfo = Object.assign({}, { ...reset});
+        const password = registerInfo.encrypt_password;
+        registerInfo.encrypt_password = window.XXTEA.encryptToBase64(
+          password,
+          window.location.host,
+        );
+        Api.register({
+          data: {
+            email,
+            emailToken,
+            emailCode: code,
+            encrypt_password: registerInfo.encrypt_password
+          }
+        }).then(res => {
+          Toast.success({
+            duration: 2000,
+            message: this.$t('toast.registrationSuccess'),
+          });
+        }).then(res => {
+          this.userLogin({
+            password,
+            username: email,
+          });
+        }).catch(err => {
+          Toast.fail(err.message);
+        });
       }
     },
     registerSign() {
@@ -352,14 +380,14 @@ export default {
         this.handleSendEmail();
       }
       // 验证码组件更新数据
-      // if (!this.$refs.dragComponent.dragToEnd) {
-      //   Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
-      //   return;
-      // }
-      // this.$refs.dragComponent.initDragCaptcha();
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
+        return;
+      }
+      this.$refs.dragComponent.initDragCaptcha();
     },
     handleSendSms() {
-      const {mobile, email, code, ...reset} = this.registerInfo;
+      const {mobile, email, code, emailToken, ...reset} = this.registerInfo;
       this.sendSmsCenter({smsCode: code, mobile, ...reset})
         .then(res => {
           this.registerInfo.smsToken = res.smsToken;
@@ -391,6 +419,7 @@ export default {
       }
       this.sendEmailCenter(params)
         .then(res => {
+          this.registerInfo.emailToken = res.emailToken;
           this.countDown();
         })
         .catch(err => {

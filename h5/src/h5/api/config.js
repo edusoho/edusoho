@@ -21,6 +21,7 @@ import wrongQuestionBook from './wrong-question-book/index';
 import contract from './contract/index';
 import watermark from './watermark';
 import exercise from './exercise';
+import user from './user'
 
 const config = [
   ...openCourse,
@@ -46,6 +47,7 @@ const config = [
   ...contract,
   ...watermark,
   ...exercise,
+  ...user,
 ];
 
 export default config;
