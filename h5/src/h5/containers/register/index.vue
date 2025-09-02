@@ -244,8 +244,11 @@ export default {
       this.registerInfo.dragCaptchaToken = token;
     },
     async getRegisterSettings() {
-      await Api.settingsRegister({})
-        .then(res => {
+      await Api.getSettings({
+        query: {
+          type: 'register',
+        },
+      }).then(res => {
           this.registerMode = res.mode;
           if (this.registerMode === 'mobile') {
             this.registerType = 'mobile'

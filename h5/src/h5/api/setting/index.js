@@ -112,9 +112,4 @@ export default [
     method: 'POST',
     disableLoading: true,
   },
-  {
-    name: 'settingsRegister',
-    url: '/settings/register',
-    method: 'GET',
-  },
 ];
