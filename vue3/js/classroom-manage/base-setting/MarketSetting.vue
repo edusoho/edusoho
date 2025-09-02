@@ -19,6 +19,7 @@ const formState = reactive({
   expiryMode: props.manage.classroom.expiryMode,
   expiryValue: props.manage.classroom.expiryMode === 'date' ? dayjs(Number(props.manage.classroom.expiryValue) * 1000) : props.manage.classroom.expiryValue,
   service: props.manage.classroom.service,
+  hidePrice: props.manage.classroom.hidePrice,
 });
 if (props.manage.vipInstalled && props.manage.vipEnabled === 1) {
   Object.assign(formState, {vipLevelId: props.manage.classroom.vipLevelId});
@@ -128,8 +129,13 @@ defineExpose({
           { pattern: /^(\d{1,8}(\.\d{1,2})?)?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' },
         ]"
       >
-        <a-input v-model:value="formState.price"
-                 suffix="元" style="width: 150px"></a-input>
+        <div class="flex items-center gap-24">
+          <a-input v-model:value="formState.price" suffix="元" style="width: 150px"></a-input>
+          <a-radio-group v-model:value="formState.hidePrice">
+            <a-radio value="0">显示价格</a-radio>
+            <a-radio value="1">不显示价格</a-radio>
+          </a-radio-group>
+        </div>
         <div class="mt-5 text-[#a1a1a1] text-14 font-normal">当前共有 {{ props.manage.courseNum }} 个课程，原价共计
           {{ props.manage.coursePrice }} 元。
         </div>

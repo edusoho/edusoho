@@ -564,6 +564,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'expiryMode',
             'expiryValue',
             'tagIds',
+            'hidePrice',
         ]);
 
         if (isset($fields['expiryMode']) && 'date' === $fields['expiryMode']) {
