@@ -15,6 +15,7 @@ export default class Register {
     this.initPasswordEyeClickEvent();
     this.initValidator();
     this.initCodeValidateEvent();
+    this.initEmailOrMobileEvent();
     this.initCodeSendBtn();
     this.initFieldVisitId();
     this.submitFrom();
@@ -49,21 +50,38 @@ export default class Register {
     if ($('#register_mode_switch').length === 0) return;
 
     $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-    $('label[for="register_emailOrMobile"]').text('手机号码');
-    $('#register_emailOrMobile').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
+    $('#register_emailOrMobile-label').text('手机号码');
+    $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
+    $('#register_emailOrMobile-label').attr('for', 'verifiedMobile')
+    $('#register_emailOrMobile-input').attr('name', 'verifiedMobile')
 
     $('#register_mode_switch').on('click', () => {
+      this.resetValidation();
+      $('#register_emailOrMobile-input').val('');
       if ($('#register_mode_switch').attr('mode') === 'email') {
         $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-        $('label[for="register_emailOrMobile"]').text('手机号码');
-        $('#register_emailOrMobile').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
+        $('#register_emailOrMobile-label').text('手机号码');
+        $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
+        $('#register_emailOrMobile-label').attr('for', 'verifiedMobile')
+        $('#register_emailOrMobile-input').attr('name', 'verifiedMobile')
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
         $('#register_mode_switch').text('切换手机号注册 >>').attr('mode', 'email')
-        $('label[for="register_emailOrMobile"]').text('邮箱地址');
-        $('#register_emailOrMobile').attr('placeholder', '请填写你常用的邮箱地址作为登陆账号');
+        $('#register_emailOrMobile-label').text('邮箱地址');
+        $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的邮箱地址作为登陆账号');
+        $('#register_emailOrMobile-label').attr('for', 'email')
+        $('#register_emailOrMobile-input').attr('name', 'email')
       }
       this.initEmailMobileMsg();
     })
+  }
+
+  resetValidation() {
+    const $form = $('#register-form');
+    const validator = $form.validate();
+    validator.resetForm();
+    $('.error').removeClass('error');
+    $('.error-message').remove();
+    this._codeBtnDisable();
   }
 
   initEmailMobileMsg() {
@@ -127,6 +145,12 @@ export default class Register {
     $('#register_email').blur(() => {
       let email = $('#register_email').val();
       this.emailCodeValidate(email);
+    });
+  }
+
+  initEmailOrMobileEvent() {
+    $('#register_emailOrMobile-input').blur(() => {
+      $('input[name="emailOrMobile"]').val($('#register_emailOrMobile-input').val());
     });
   }
 
@@ -197,13 +221,13 @@ export default class Register {
     let self = this;
     const register_mode = $('input[name="register_mode"]').val();
     $codeSendBtn.click(function(event) {
+      self._codeBtnDisable();
       if (register_mode === 'mobile' || $('#register_mode_switch').length > 0 && $('#register_mode_switch').attr('mode') === 'mobile') {
         let coordinate = new Coordinate();
         const encryptedPoint = coordinate.getCoordinate(
           event,
           $('meta[name=csrf-token]').attr('content')
         );
-        self._codeBtnDisable();
         let fieldName = $('[name="verifiedMobile"]').length
           ? 'verifiedMobile'
           : 'emailOrMobile';
@@ -237,7 +261,7 @@ export default class Register {
         });
       } else if (register_mode === 'email' || $('#register_mode_switch').length > 0 && $('#register_mode_switch').attr('mode') === 'email') {
         let params = {
-          email: register_mode === 'email' ? $('#register_email').val() : $('#register_emailOrMobile').val(),
+          email: register_mode === 'email' ? $('#register_email').val() : $('#register_emailOrMobile-input').val(),
           dragCaptchaToken: $('[name="dragCaptchaToken"]').val()
         }
         Api.user.sendEmailCode({
@@ -316,11 +340,8 @@ export default class Register {
         verifiedMobile: {
           required: Translator.trans('validate.phone.message')
         },
-        emailOrMobile: {
-          required: Translator.trans('validate.phone_and_email_input.message')
-        },
         email: {
-          required: Translator.trans('validate.valid_email_input.message')
+          required: Translator.trans('validate.valid_email_input.message'),
         },
         dragCaptchaToken: {
           required: Translator.trans('auth.register.drag_captcha_tips')
