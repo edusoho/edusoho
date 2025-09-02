@@ -217,6 +217,7 @@ export default class Register {
   }
 
   initCodeSendBtn() {
+    if(!$('input[name="dragCaptchaToken"]').val()) return;
     let $codeSendBtn = $('.js-code-send-btn');
     let self = this;
     const register_mode = $('input[name="register_mode"]').val();
