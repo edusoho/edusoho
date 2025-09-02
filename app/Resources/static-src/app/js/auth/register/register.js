@@ -158,9 +158,6 @@ export default class Register {
       required: true,
       unsigned_integer: true,
       rangelength: [6, 6],
-      es_remote: {
-        type: 'get'
-      },
       messages: {
         rangelength: Translator.trans('validate.sms_code.message')
       }
@@ -172,9 +169,6 @@ export default class Register {
       required: true,
       unsigned_integer: true,
       rangelength: [6, 6],
-      es_remote: {
-        type: 'get'
-      },
       messages: {
         rangelength: Translator.trans('validate.sms_code.message')
       }
