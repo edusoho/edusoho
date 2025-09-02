@@ -57,30 +57,29 @@ define(function (require, exports, module) {
       rule: 'confirmation{target:#newPassword}'
     });
 
+    $('.js-new-password-open-eye').on('click', function () {
+      $('#newPassword').attr('type', 'password');
+      $('.js-new-password-open-eye').hide();
+      $('.js-new-password-close-eye').show();
+    });
+
+    $('.js-new-password-close-eye').on('click', function () {
+      $('#newPassword').attr('type', 'text');
+      $('.js-new-password-close-eye').hide();
+      $('.js-new-password-open-eye').show();
+    });
+
+    $('.js-confirm-password-open-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'password');
+      $('.js-confirm-password-open-eye').hide();
+      $('.js-confirm-password-close-eye').show();
+    });
+
+    $('.js-confirm-password-close-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'text');
+      $('.js-confirm-password-close-eye').hide();
+      $('.js-confirm-password-open-eye').show();
+    });
+
   };
-
-  $('.js-new-password-open-eye').on('click', function () {
-    $('#newPassword').attr('type', 'password');
-    $('.js-new-password-open-eye').hide();
-    $('.js-new-password-close-eye').show();
-  });
-
-  $('.js-new-password-close-eye').on('click', function () {
-    $('#newPassword').attr('type', 'text');
-    $('.js-new-password-close-eye').hide();
-    $('.js-new-password-open-eye').show();
-  });
-
-  $('.js-confirm-password-open-eye').on('click', function () {
-    $('#confirmPassword').attr('type', 'password');
-    $('.js-confirm-password-open-eye').hide();
-    $('.js-confirm-password-close-eye').show();
-  });
-
-  $('.js-confirm-password-close-eye').on('click', function () {
-    $('#confirmPassword').attr('type', 'text');
-    $('.js-confirm-password-close-eye').hide();
-    $('.js-confirm-password-open-eye').show();
-  });
-
 });
