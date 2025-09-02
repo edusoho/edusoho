@@ -22,7 +22,14 @@
       max-length="32"
       :placeholder="$t('placeholder.setPassword')"
       @blur="validateAccountOrPsw('encrypt_password')"
-    />
+      style="padding-bottom: 0"
+    >
+      <template #button>
+        <img v-if="showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
+        <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
+      </template>
+    </van-field>
+    <div v-if="showPasswordTip" class="password-tip">请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
 
     <van-field
       v-show="accountType === 'mobile'"
@@ -80,6 +87,8 @@ export default {
         smsToken: '',
         type: 'register',
       },
+      showPassword: false,
+      showPasswordTip: true,
       dragKey: 0,
       errorMessage: {
         account: '',
@@ -135,6 +144,9 @@ export default {
     }
   },
   methods: {
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
     validateAccountOrPsw(type = 'account') {
       const ele = this.resetInfo[type];
       const rule =
@@ -145,10 +157,7 @@ export default {
         return false;
       }
 
-      if (type === 'encrypt_password' && ele.length > 32) {
-        this.errorMessage[type] = this.$t('toast.enterUpTo32Characters');
-        return false;
-      }
+      this.showPasswordTip = type !== 'encrypt_password';
 
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
@@ -298,3 +307,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.password-tip {
+  font-size: 12px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.45);
+  padding: 0 16px;
+}
+</style>
