@@ -48,9 +48,9 @@
                  class="color-success register_mode_switch"
             ></div>
             <div class="form-group mbl js-register_email_or_mobile_mode">
-              <label class="control-label required" for="register_emailOrMobile"></label>
+              <label class="control-label required" id="register_emailOrMobile-label"></label>
               <div class="controls">
-                <input type="tel" id="register_emailOrMobile" name="emailOrMobile" class="form-control input-lg"
+                <input type="tel" id="register_emailOrMobile-input" class="form-control input-lg"
                        data-url="{{ path('register_email_or_mobile_check') }}"
                        onkeydown="if(event.keyCode==13) return false;">
                 <p class="help-block"></p>
@@ -162,6 +162,7 @@
           <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input type="hidden" name="registerVisitId" value="">
+          <input type="hidden" name="emailOrMobile" value="">
         </form>
 
         {% if setting('login_bind.enabled') %}
