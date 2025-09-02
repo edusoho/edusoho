@@ -302,7 +302,6 @@ export default {
     initReport() {
       this.finishDialog = false;
       this.getFinishCondition();
-      this.IsLivePlayback();
     },
     getFinishCondition() {
       this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
@@ -312,7 +311,7 @@ export default {
     },
     // 直播视频回放刚进入课程就算学习完成
     IsLivePlayback() {
-      if (this.allTask[this.taskId].type === 'live') {
+      if (this.allTask[this.taskId].type === 'live' && this.finishCondition.type === 'join') {
         this.reprtData({eventName: 'finish'});
       }
     },
@@ -659,6 +658,7 @@ export default {
             this.sourceType,
             this.playKey,
           );
+          this.IsLivePlayback();
         });
         player.on('playing', () => {
           this.isPlaying = true;

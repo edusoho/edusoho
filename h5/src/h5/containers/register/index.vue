@@ -1,27 +1,42 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading" />
-    <span class="register-title">{{ $t(registerType[pathName]) }}</span>
+    <span class="register-title">{{ $t('title.registerAccount') }}</span>
+
+    <div class="flex justify-center text-16 mt-40">
+      <div v-if="showRegisterModeTabs" class="p-10 mr-40" :class="{'border-b border-blue-500 font-medium': registerType === 'mobile'}" @click="toggleRegisterType('mobile')">手机号注册</div>
+      <div v-if="showRegisterModeTabs" class="p-10" :class="{'border-b border-blue-500 font-medium': registerType === 'email'}" @click="toggleRegisterType('email')">邮箱号注册</div>
+    </div>
 
     <van-field
+      v-if="registerType === 'mobile'"
       v-model="registerInfo.mobile"
       :border="false"
       :error-message="errorMessage.mobile"
       :placeholder="$t('placeholder.mobileNumber')"
       max-length="11"
-      @blur="validateMobileOrPsw('mobile')"
-      @keyup="validatedChecker()"
+      @blur="validateMobileOrPswOrEmail('mobile')"
+      @keyup="validatedChecker('mobile')"
+    />
+
+    <van-field
+      v-if="registerType === 'email'"
+      v-model="registerInfo.email"
+      :border="false"
+      :error-message="errorMessage.email"
+      :placeholder="$t('placeholder.emailNumber')"
+      @blur="validateMobileOrPswOrEmail('email')"
+      @keyup="validatedChecker('email')"
     />
 
     <van-field
       v-model="registerInfo.encrypt_password"
       :border="false"
       :error-message="errorMessage.encrypt_password"
-      :placeholder="$t(placeHolder[pathName])"
+      :placeholder="$t('placeholder.setPassword')"
       :type="showPassword ? 'text' : 'password'"
       max-length="20"
-      @blur="validateMobileOrPsw('encrypt_password')"
-      style="padding-bottom: 0"
+      @blur="validateMobileOrPswOrEmail('encrypt_password')"
     >
       <template #button>
         <img v-if="showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
@@ -31,27 +46,27 @@
     <div v-if="showPasswordTip" class="password-tip">请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
 
     <e-drag
-      v-if="dragEnable"
       ref="dragComponent"
       :key="dragKey"
-      @success="handleSmsSuccess"
+      @success="handleDragSuccess"
     />
 
     <van-field
-      v-model="registerInfo.smsCode"
+      v-model="registerInfo.code"
       :border="false"
       type="text"
       center
       clearable
       max-length="6"
       :placeholder="$t('placeholder.verificationCode')"
+      style="margin-top: 0"
     >
       <van-button
         slot="button"
-        :disabled="count.codeBtnDisable || !validated.mobile"
+        :disabled="!registerInfo.dragCaptchaToken || count.codeBtnDisable || !validated.mobile && !validated.email"
         size="small"
         type="primary"
-        @click="clickSmsBtn"
+        @click="clickCodeBtn"
       >
         {{ $t('btn.sendCode') }}
         <span v-show="count.showCount">({{ count.num }})</span>
@@ -63,7 +78,7 @@
       type="default"
       class="primary-btn mb20"
       @click="handleSubmit"
-      >{{ $t(btnType[pathName]) }}</van-button
+      >{{ $t('btn.register') }}</van-button
     >
 
     <div v-if="userTerms || privacyPolicy" class="login-agree">
@@ -112,25 +127,12 @@
 import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import EDrag from '&/components/e-drag';
-import { mapActions, mapState } from 'vuex';
+import {mapActions, mapState} from 'vuex';
 // eslint-disable-next-line no-unused-vars
-import XXTEA from '@/utils/xxtea.js';
-import { Toast } from 'vant';
+import {Toast} from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
 import Api from '@/api';
-
-const registerType = {
-  binding: 'title.bindingMobile',
-  register: 'title.registerAccount',
-};
-const btnType = {
-  binding: 'btn.binding',
-  register: 'btn.register',
-};
-const placeHolder = {
-  binding: 'placeholder.password',
-  register: 'placeholder.setPassword',
-};
+import XXTEA from '@/utils/xxtea.js';
 
 export default {
   components: {
@@ -140,22 +142,25 @@ export default {
   data() {
     return {
       registerInfo: {
+        email: '',
         mobile: '',
-        dragCaptchaToken: undefined, // 默认不需要滑动验证
+        dragCaptchaToken: undefined,
         encrypt_password: '',
-        smsCode: '',
+        code: '',
         smsToken: '',
+        emailToken: '',
         type: 'register',
       },
       showPassword: false,
       showPasswordTip: true,
-      dragEnable: false,
       dragKey: 0,
       errorMessage: {
+        email: '',
         mobile: '',
         encrypt_password: '',
       },
       validated: {
+        email: false,
         mobile: false,
         encrypt_password: false,
       },
@@ -164,14 +169,12 @@ export default {
         num: 120,
         codeBtnDisable: false,
       },
-      pathName: this.$route.name,
-      registerType,
-      btnType,
-      placeHolder,
       userTerms: false, // 用户协议
       privacyPolicy: false, // 隐私协议
       agreement: false, // 是否勾选
       popUpBottom: false, // 底部弹出层
+      registerType: '',
+      registerMode: '',
     };
   },
   computed: {
@@ -179,11 +182,22 @@ export default {
       isLoading: state => state.isLoading,
     }),
     btnDisable() {
-      return !(
-        this.registerInfo.mobile &&
-        this.registerInfo.encrypt_password &&
-        this.registerInfo.smsCode
-      );
+      if (this.registerType === 'mobile') {
+        return !(
+          this.registerInfo.mobile &&
+          this.registerInfo.encrypt_password &&
+          this.registerInfo.code
+        );
+      } else if (this.registerType === 'email') {
+        return !(
+          this.registerInfo.email &&
+          this.registerInfo.encrypt_password &&
+          this.registerInfo.code
+        );
+      }
+    },
+    showRegisterModeTabs() {
+      return this.registerMode === 'email_or_mobile';
     },
   },
   created() {
@@ -191,13 +205,22 @@ export default {
   },
   mounted() {
     this.registerInfo.registerVisitId = window._VISITOR_ID;
+    this.getRegisterSettings();
   },
   methods: {
-    ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin']),
+    ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin', 'sendEmailCenter']),
+    toggleRegisterType(type) {
+      this.registerType = type;
+      if (type === 'mobile') {
+        this.registerInfo.email = null;
+      } else if (type === 'email') {
+        this.registerInfo.mobile = null;
+      }
+    },
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
-    validateMobileOrPsw(type = 'mobile') {
+    validateMobileOrPswOrEmail(type = 'mobile') {
       const ele = this.registerInfo[type];
       const rule = rulesConfig[type];
 
@@ -206,21 +229,39 @@ export default {
         return false;
       }
 
-      this.showPasswordTip = type !== 'encrypt_password';
-
+      if (type === 'encrypt_password') {
+        this.showPasswordTip = rule.validator(ele);
+      }
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
-    validatedChecker() {
-      const mobile = this.registerInfo.mobile;
-      const rule = rulesConfig.mobile;
+    validatedChecker(type = 'mobile') {
+      const ele = this.registerInfo[type];
+      const rule = rulesConfig[type];
 
-      this.validated.mobile = rule.validator(mobile);
+      this.validated[type] = rule.validator(ele);
     },
-    handleSmsSuccess(token) {
+    handleDragSuccess(token) {
       this.registerInfo.dragCaptchaToken = token;
-      this.handleSendSms();
     },
-
+    async getRegisterSettings() {
+      await Api.getSettings({
+        query: {
+          type: 'register',
+        },
+      }).then(res => {
+          this.registerMode = res.mode;
+          if (this.registerMode === 'mobile') {
+            this.registerType = 'mobile'
+          } else if (this.registerMode === 'email') {
+            this.registerType = 'email'
+          } else if (this.registerMode === 'email_or_mobile') {
+            this.registerType = 'mobile'
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
     async getPrivacySetting() {
       await Api.getSettings({
         query: {
@@ -250,68 +291,64 @@ export default {
         window.location.origin + '/mapi_v2/School/getUserterms';
     },
     handleSubmit() {
-      const registerInfo = Object.assign({}, this.registerInfo);
-      const password = registerInfo.encrypt_password;
-      const mobile = registerInfo.mobile;
-      const encrypt = window.XXTEA.encryptToBase64(
-        password,
-        window.location.host,
-      );
+      if (this.registerType === 'mobile') {
+        const {email, mobile, code, dragCaptchaToken, ...reset} = this.registerInfo;
+        const registerInfo = Object.assign({}, { ...reset, mobile, smsCode: code});
+        const password = registerInfo.encrypt_password;
+        registerInfo.encrypt_password = window.XXTEA.encryptToBase64(
+          password,
+          window.location.host,
+        );
 
-      registerInfo.encrypt_password = encrypt;
-
-      // 手机绑定
-      if (this.pathName === 'binding') {
-        this.setMobile({
-          query: {
-            mobile,
-          },
-          data: {
+        if (this.agreement || (this.privacyPolicy === false && this.userTerms === false)) {
+          this.addUser(registerInfo)
+            .then(res => {
+              Toast.success({
+                duration: 2000,
+                message: this.$t('toast.registrationSuccess'),
+              });
+              this.afterLogin();
+            })
+            .then(() => {
+              this.userLogin({
+                password,
+                username: mobile,
+              });
+            })
+            .catch(err => {
+              Toast.fail(err.message);
+            });
+          return;
+        }
+        this.popUpBottom = true;
+      } else if (this.registerType === 'email') {
+        const {email, mobile, code, emailToken, ...reset} = this.registerInfo;
+        const registerInfo = Object.assign({}, { ...reset});
+        const password = registerInfo.encrypt_password;
+        registerInfo.encrypt_password = window.XXTEA.encryptToBase64(
+          password,
+          window.location.host,
+        );
+        this.addUser({
+          email,
+          emailToken,
+          emailCode: code,
+          encrypt_password: registerInfo.encrypt_password
+        }).then(res => {
+          Toast.success({
+            duration: 2000,
+            message: this.$t('toast.registrationSuccess'),
+          });
+          this.afterLogin();
+        }).then(res => {
+          this.userLogin({
             password,
-            smsCode: registerInfo.smsCode,
-            smsToken: registerInfo.smsToken,
-          },
-        })
-          .then(res => {
-            Toast.success({
-              duration: 2000,
-              message: this.$t('toast.bindingSuccess'),
-            });
-            this.afterLogin();
-          })
-          .catch(err => {
-            Toast.fail(err.message);
+            username: email,
           });
-        return;
+        }).catch(err => {
+          Toast.fail(err.message);
+        });
       }
-
-      if (
-        this.agreement ||
-        (this.privacyPolicy === false && this.userTerms === false)
-      ) {
-        // 手机注册
-        this.addUser(registerInfo)
-          .then(res => {
-            Toast.success({
-              duration: 2000,
-              message: this.$t('toast.registrationSuccess'),
-            });
-            this.afterLogin();
-          })
-          .then(() => {
-            this.userLogin({
-              password,
-              username: mobile,
-            });
-          })
-          .catch(err => {
-            Toast.fail(err.message);
-          });
-
-        return;
-      }
-
-      this.popUpBottom = true;
     },
     registerSign() {
       const registerInfo = Object.assign({}, this.registerInfo);
@@ -347,10 +384,12 @@ export default {
         });
     },
 
-    clickSmsBtn() {
-      if (!this.dragEnable) {
+    clickCodeBtn() {
+      if (!this.registerInfo.dragCaptchaToken) return;
+      if (this.registerType === 'mobile') {
         this.handleSendSms();
-        return;
+      } else if (this.registerType === 'email') {
+        this.handleSendEmail();
       }
       // 验证码组件更新数据
       if (!this.$refs.dragComponent.dragToEnd) {
@@ -360,11 +399,11 @@ export default {
       this.$refs.dragComponent.initDragCaptcha();
     },
     handleSendSms() {
-      this.sendSmsCenter(this.registerInfo)
+      const {mobile, email, code, emailToken, ...reset} = this.registerInfo;
+      this.sendSmsCenter({smsCode: code, mobile, ...reset})
         .then(res => {
           this.registerInfo.smsToken = res.smsToken;
           this.countDown();
-          this.dragEnable = false;
         })
         .catch(err => {
           switch (err.code) {
@@ -376,17 +415,28 @@ export default {
               Toast.fail(err.message);
               break;
             case 4030303:
-              if (this.dragEnable) {
-                Toast.fail(err.message);
-              } else {
-                this.dragEnable = true;
-              }
+              Toast.fail(err.message);
               break;
             default:
               Toast.fail(err.message);
               break;
           }
         });
+    },
+    handleSendEmail() {
+      const {email, ...reset} = this.registerInfo;
+      const params = {
+        email: email,
+        dragCaptchaToken: this.registerInfo.dragCaptchaToken
+      }
+      this.sendEmailCenter(params)
+        .then(res => {
+          this.registerInfo.emailToken = res.emailToken;
+          this.countDown();
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        })
     },
     // 倒计时
     countDown() {
