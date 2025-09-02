@@ -47,9 +47,8 @@ export default class Register {
   }
 
   resetDragCaptchaAndCodeBtn() {
-    let self = this;
     this._codeBtnDisable();
-    self.drag.initDragCaptcha();
+    this.drag.initDragCaptcha();
     $('input[name="dragCaptchaToken"]').val('')
   }
 
