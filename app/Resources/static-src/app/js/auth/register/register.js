@@ -54,9 +54,11 @@ export default class Register {
     $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
     $('#register_emailOrMobile-label').attr('for', 'verifiedMobile')
     $('#register_emailOrMobile-input').attr('name', 'verifiedMobile')
+    this._codeBtnDisable();
 
     $('#register_mode_switch').on('click', () => {
       this.resetValidation();
+      this._codeBtnDisable();
       $('#register_emailOrMobile-input').val('');
       if ($('#register_mode_switch').attr('mode') === 'email') {
         $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
@@ -221,6 +223,7 @@ export default class Register {
     let self = this;
     const register_mode = $('input[name="register_mode"]').val();
     $codeSendBtn.click(function(event) {
+      if(!$('input[name="dragCaptchaToken"]').val() || (!$('input[name="verifiedMobile"]').val() && !$('input[name="email"]').val())) return;
       self._codeBtnDisable();
       if (register_mode === 'mobile' || $('#register_mode_switch').length > 0 && $('#register_mode_switch').attr('mode') === 'mobile') {
         let coordinate = new Coordinate();
