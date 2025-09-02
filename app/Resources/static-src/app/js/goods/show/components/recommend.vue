@@ -11,7 +11,7 @@
                   <p class="learn-text__title">{{ item.title|removeHtml }}</p>
 <!--                  <span v-if="item.minPrice == item.maxPrice" class="learn-text__price">{{ item.minPrice }}</span>-->
 <!--                  <span v-if="item.minPrice != item.maxPrice" class="learn-text__price">{{ item.minPrice }}起</span>-->
-                  <p class="text-overflow learn-text__p">
+                  <p v-show="currentSku.hidePrice != 1" class="text-overflow learn-text__p">
                     <span v-if="item.minDisplayPriceObj.currency === 'RMB'">
                         <span class="learn-text__price price">{{ item.minDisplayPriceObj.amount | formatPrice }}</span>
                     </span>
@@ -51,7 +51,11 @@
       goods: {
           type: Object,
           default: null,
-      }
+      },
+      currentSku: {
+          type: Object,
+          default: null,
+      },
     },
     methods: {
         onClickGoods(item) {

@@ -57,6 +57,8 @@ abstract class BaseGoodsEntity
 
     abstract public function hasCertificate($goods, $specs);
 
+    abstract public function isSpecHidePrice($goods, $spec);
+
     /**
      * @param $productId
      *

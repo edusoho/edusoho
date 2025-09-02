@@ -112,6 +112,7 @@ class Good extends AbstractResource
             $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
         }
         $goods['isMember'] = false;
+        $goods['hidePrice'] = 1;
         foreach ($goods['specs'] as &$spec) {
             if ('course' === $goods['type']) {
                 $course = $this->getCourseService()->getCourse($spec['targetId']);
@@ -139,6 +140,10 @@ class Good extends AbstractResource
             }
             $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
             $spec['services'] = $spec['services'] ?: [];
+            $spec['hidePrice'] = $goodsEntity->isSpecHidePrice($goods, $spec);
+            if (empty($spec['hidePrice'])) {
+                $goods['hidePrice'] = 0;
+            }
         }
         $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
     }
