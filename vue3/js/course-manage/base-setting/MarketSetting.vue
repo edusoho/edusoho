@@ -37,6 +37,7 @@ const formState = reactive({
   services: props.manage.course.services,
   drainageImage: props.manage.course.drainageImage,
   drainageText: props.manage.course.drainageText,
+  hidePrice: props.manage.course.hidePrice,
 });
 if (props.manage.vipInstalled && props.manage.vipEnabled) {
   Object.assign(formState, {vipLevelId: props.manage.course.vipLevelId});
@@ -200,9 +201,15 @@ defineExpose({
           { pattern: /^(\d{1,8}(\.\d{1,2})?)?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' },
         ]"
       >
-        <a-input v-model:value="formState.originPrice"
-                 :disabled="props.manage.course.platform === 'supplier' && !props.manage.canModifyCoursePrice"
-                 suffix="元" style="width: 150px"></a-input>
+        <div class="flex items-center gap-24">
+          <a-input v-model:value="formState.originPrice"
+                   :disabled="props.manage.course.platform === 'supplier' && !props.manage.canModifyCoursePrice"
+                   suffix="元" style="width: 150px"></a-input>
+          <a-radio-group v-model:value="formState.hidePrice">
+            <a-radio value="0">显示价格</a-radio>
+            <a-radio value="1">不显示价格</a-radio>
+          </a-radio-group>
+        </div>
       </a-form-item>
       <a-form-item>
         <template #label>
