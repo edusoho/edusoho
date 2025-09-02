@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <e-loading v-if="isLoading" />
-    <span class="register-title">{{ $t(modeType[pathName]) }}</span>
+    <span class="register-title">{{ $t('title.registerAccount') }}</span>
 
     <div class="flex justify-center text-16 mt-50">
       <div v-if="showRegisterModeTabs" class="p-10 mr-40" :class="{'border-b border-blue-500 font-medium': registerType === 'mobile'}" @click="registerType = 'mobile'">手机号注册</div>
@@ -33,7 +33,7 @@
       v-model="registerInfo.encrypt_password"
       :border="false"
       :error-message="errorMessage.encrypt_password"
-      :placeholder="$t(placeHolder[pathName])"
+      :placeholder="$t('placeholder.setPassword')"
       :type="showPassword ? 'text' : 'password'"
       max-length="20"
       @blur="validateMobileOrPswOrEmail('encrypt_password')"
@@ -59,6 +59,7 @@
       clearable
       max-length="6"
       :placeholder="$t('placeholder.verificationCode')"
+      style="margin-top: 0"
     >
       <van-button
         slot="button"
@@ -77,7 +78,7 @@
       type="default"
       class="primary-btn mb20"
       @click="handleSubmit"
-      >{{ $t(btnType[pathName]) }}</van-button
+      >{{ $t('btn.register') }}</van-button
     >
 
     <div v-if="userTerms || privacyPolicy" class="login-agree">
@@ -132,19 +133,6 @@ import {Toast} from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
 import Api from '@/api';
 
-const modeType = {
-  binding: 'title.bindingMobile',
-  register: 'title.registerAccount',
-};
-const btnType = {
-  binding: 'btn.binding',
-  register: 'btn.register',
-};
-const placeHolder = {
-  binding: 'placeholder.password',
-  register: 'placeholder.setPassword',
-};
-
 export default {
   components: {
     EDrag,
@@ -179,10 +167,6 @@ export default {
         num: 120,
         codeBtnDisable: false,
       },
-      pathName: this.$route.name,
-      modeType,
-      btnType,
-      placeHolder,
       userTerms: false, // 用户协议
       privacyPolicy: false, // 隐私协议
       agreement: false, // 是否勾选
@@ -301,33 +285,7 @@ export default {
           window.location.host,
         );
 
-        // 手机绑定
-        if (this.pathName === 'binding') {
-          this.setMobile({
-            query: {
-              mobile,
-            },
-            data: {
-              password,
-              smsCode: registerInfo.code,
-              smsToken: registerInfo.smsToken,
-            },
-          })
-            .then(res => {
-              Toast.success({
-                duration: 2000,
-                message: this.$t('toast.bindingSuccess'),
-              });
-              this.afterLogin();
-            })
-            .catch(err => {
-              Toast.fail(err.message);
-            });
-          return;
-        }
-
         if (this.agreement || (this.privacyPolicy === false && this.userTerms === false)) {
-          // 手机注册
           this.addUser(registerInfo)
             .then(res => {
               Toast.success({
@@ -345,7 +303,6 @@ export default {
             .catch(err => {
               Toast.fail(err.message);
             });
-
           return;
         }
         this.popUpBottom = true;
