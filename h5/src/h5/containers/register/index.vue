@@ -4,8 +4,8 @@
     <span class="register-title">{{ $t('title.registerAccount') }}</span>
 
     <div class="flex justify-center text-16 mt-40">
-      <div v-if="showRegisterModeTabs" class="p-10 mr-40" :class="{'border-b border-blue-500 font-medium': registerType === 'mobile'}" @click="registerType = 'mobile'">手机号注册</div>
-      <div v-if="showRegisterModeTabs" class="p-10" :class="{'border-b border-blue-500 font-medium': registerType === 'email'}" @click="registerType = 'email'">邮箱号注册</div>
+      <div v-if="showRegisterModeTabs" class="p-10 mr-40" :class="{'border-b border-blue-500 font-medium': registerType === 'mobile'}" @click="toggleRegisterType('mobile')">手机号注册</div>
+      <div v-if="showRegisterModeTabs" class="p-10" :class="{'border-b border-blue-500 font-medium': registerType === 'email'}" @click="toggleRegisterType('email')">邮箱号注册</div>
     </div>
 
     <van-field
@@ -209,6 +209,14 @@ export default {
   },
   methods: {
     ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin', 'sendEmailCenter']),
+    toggleRegisterType(type) {
+      this.registerType = type;
+      if (type === 'mobile') {
+        this.registerInfo.email = null;
+      } else if (type === 'email') {
+        this.registerInfo.mobile = null;
+      }
+    },
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
@@ -221,7 +229,9 @@ export default {
         return false;
       }
 
-      this.showPasswordTip = rule.validator(ele);
+      if (type === 'encrypt_password') {
+        this.showPasswordTip = rule.validator(ele);
+      }
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
     validatedChecker(type = 'mobile') {
@@ -316,18 +326,17 @@ export default {
           password,
           window.location.host,
         );
-        Api.register({
-          data: {
-            email,
-            emailToken,
-            emailCode: code,
-            encrypt_password: registerInfo.encrypt_password
-          }
+        this.addUser({
+          email,
+          emailToken,
+          emailCode: code,
+          encrypt_password: registerInfo.encrypt_password
         }).then(res => {
           Toast.success({
             duration: 2000,
             message: this.$t('toast.registrationSuccess'),
           });
+          this.afterLogin();
         }).then(res => {
           this.userLogin({
             password,
