@@ -117,6 +117,7 @@
     "vue-template-compiler": "^2.6.11",
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1",
+    "wap-sdk": "^0.3.2",
     "webpack": "^4.42.1",
     "weixin-js-sdk": "^1.6.0"
   },
