@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
-'app/js/courseset/show/index.js']) %}
+'app/js/courseset/show/index.js', 'app/js/item-bank-exercise/show/index.js']) %}
 
 {% set bodyClass = 'course-dashboard-page' %}
 
@@ -49,8 +49,8 @@
       </div>
     {% endif %}
   {% endblock %}
-
   {% if exercise.isAgentActive %}
+    <input type="hidden" id="exercise" value="{{ exercise|json_encode }}">
     <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
     <input type="hidden" id="chatMetaData" value="{{ get_item_bank_exercise_chat_meta_data(exercise) }}" />
   {% endif %}
