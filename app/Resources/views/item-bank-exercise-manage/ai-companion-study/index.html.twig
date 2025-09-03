@@ -4,11 +4,6 @@
 {% do script(['vue3/js/item-bank-exercise-manage/ai-companion-study/index.js']) %}
 {% set course_side_nav = 'ai-companion-study' %}
 
-{% block stylesheets %}
-  {{ parent() }}
-  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
-{% endblock %}
-
 {% block main %}
   <div id="ai-companion-study"
        data-item-bank-id="{{ questionBank.id }}"
