@@ -157,9 +157,6 @@ export default {
           this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
           }, 80, 20);
-          if (res.studyPlanGenerated) {
-            this.aiAgentSdk.setVariable('studyPlanGenerated', true)
-          }
           this.aiAgentSdk.boot();
           this.aiAgentSdk.showReminder({
             title: "战绩新鲜出炉",
