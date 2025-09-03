@@ -9,8 +9,6 @@ class Agent extends AbstractResource
 {
     public function get()
     {
-        $this->getAIService()->inspectTenant();
-
         return [
             'enable' => $this->getAIService()->isAgentEnable(),
         ];
