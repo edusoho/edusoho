@@ -30,26 +30,33 @@
                   class="ks"
                   style="align-items: center;"
                 >
-                  <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'" class="px-8 text-white text-12 font-medium bg-black bg-opacity-80 rounded-bl-8 mr-8" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px;">2K 优享</span>
-                  <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'" class="px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] mr-8" style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px;">4K 臻享</span>
+                  <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '2k'"
+                        class="px-8 text-white text-12 font-medium bg-black bg-opacity-80 rounded-bl-8 mr-8"
+                        style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px;">2K 优享</span>
+                  <span v-if="lessonItem.tasks[lessonItem.index].videoMaxLevel === '4k'"
+                        class="px-8 text-[#492F0B] text-12 font-medium bg-gradient-to-l from-[#F7D27B] to-[#FCEABE] mr-8"
+                        style="padding-top: 3px; padding-bottom: 3px; line-height: 12px; border-bottom-left-radius: 8px; border-top-right-radius: 8px;">4K 臻享</span>
                   <i
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
                     class="iconfont"
                   />
-                  <div class="">
-                    {{
-                      Number(lessonItem.tasks[lessonItem.index].isOptional)
-                        ? ''
-                        : $t('courseLearning.lesson')
-                    }}{{
-                      Number(lessonItem.tasks[lessonItem.index].isOptional)
-                        ? lessonItem.title
-                        : `${lessonItem.tasks[lessonItem.index].number}:${
-                          lessonItem.title
-                        }`
-                    }}
+                  <div class="flex flex-col">
+                    <div>
+                      {{
+                        Number(lessonItem.tasks[lessonItem.index].isOptional)
+                          ? ''
+                          : $t('courseLearning.lesson')
+                      }}{{
+                        Number(lessonItem.tasks[lessonItem.index].isOptional)
+                          ? lessonItem.title
+                          : `${lessonItem.tasks[lessonItem.index].number}:${
+                            lessonItem.title
+                          }`
+                      }}
+                    </div>
+                    <br/>
+                    <div v-if="lessonItem.tasks[lessonItem.index].isLastLearn" class="last-learn-task">上次学到</div>
                   </div>
-
                 </span>
               </div>
 
@@ -94,6 +101,7 @@
                       }}</span
                     >
                   </span>
+                  <div v-if="lessonItem.tasks[lessonItem.index].isLastLearn" class="last-learn-task">上次学到</div>
                 </div>
               </div>
             </div>
@@ -211,7 +219,7 @@ export default {
         android: 'https://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.zhixiang',
         ios: 'https://apps.apple.com/cn/app/知享学堂/id887301045',
         scheme: 'com.qdxxzy.user://'
-      }
+      },
     };
   },
   watch: {
@@ -245,32 +253,39 @@ export default {
         taskId: taskId,
       });
     }
+
+    this.initLastLearnTaskEvent();
   },
   methods: {
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE,
       setTaskStatus: types.SET_TASK_SATUS
     }),
+    initLastLearnTaskEvent() {
+      if (this.$route.query.lastLearnTaskId) {
+        const {lastLearnTaskType, lastLearnTaskId} = this.$route.query;
+        this.setSourceType({
+          sourceType: lastLearnTaskType,
+          taskId: lastLearnTaskId,
+        });
+        const element = document.getElementById(this.$route.query.lastLearnTaskId);
+        if (element) {
+          element.click();
+        }
+      }
+    },
     // 获取lesson位置
     getTaskId() {
       this.currentTask = this.taskId;
     },
     // 直播双行显示判断
     doubleLine(task) {
-      if (task.isReplay) {
-        return;
-      }
+      if (task.isReplay) return;
+      if (!task.type) return;
 
-      if (!task.type) {
-        return;
-      }
       const type = task.type;
       let isDouble = false;
-      if (type === 'live') {
-        isDouble = true;
-      } else {
-        isDouble = false;
-      }
+      isDouble = type === 'live';
       return isDouble;
     },
     showPaddingY(videoMaxLevel) {

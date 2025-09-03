@@ -34,6 +34,10 @@
         />
       </div>
     </div>
+    <div v-if="course.lastLearnTask" class="e-course-last_learn_task-container">
+      <img class="icon" src="static/images/course/last-learn-task-icon.svg" alt="">
+      <div class="text">{{ course.lastLearnTask.title }}</div>
+    </div>
   </div>
 </template>
 
@@ -154,7 +158,7 @@ export default {
       if (this.typeList === 'vip') return;
       const id = this.course.id || this.order.targetId;
       if (e.target.tagName === 'SPAN') {
-        console.log(e.target.tagName);
+
         return;
       }
 
@@ -186,6 +190,10 @@ export default {
       if (this.typeList === 'course_list') {
         this.$router.push({
           path: `/course/${id}`,
+          query: {
+            lastLearnTaskId: this.course.lastLearnTask.id,
+            lastLearnTaskType: this.course.lastLearnTask.type,
+          },
         });
       }
     },

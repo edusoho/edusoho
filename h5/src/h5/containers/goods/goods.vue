@@ -399,6 +399,8 @@ export default {
     const targetId = this.$route.query.targetId;
     const type = this.$route.query.type;
     const hasCertificate = this.$route.query.hasCertificate;
+    const lastLearnTaskId = this.$route.query.lastLearnTaskId;
+    const lastLearnTaskType = this.$route.query.lastLearnTaskType;
     if (type === 'course_list') {
       Api.meCourseMember({
         query: {
@@ -411,6 +413,8 @@ export default {
               path: `/course/${targetId}`,
               query: {
                 hasCertificate,
+                lastLearnTaskId,
+                lastLearnTaskType,
               },
             });
           } else {
