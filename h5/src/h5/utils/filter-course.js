@@ -153,6 +153,7 @@ const getCourseDisplay = (data, listObj, price) => {
       html: `<div style="display: flex">${price}</div>`,
     },
     videoMaxLevel: data.videoMaxLevel,
+    hidePrice: data.hidePrice,
   };
 };
 
