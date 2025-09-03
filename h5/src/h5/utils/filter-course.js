@@ -87,7 +87,7 @@ const getPriceDisplay = (data, platform) => {
   };
   let price;
 
-  if (data.hidePrice === '1') {
+  if (data.hidePrice !== '1') {
     if (dataPrice > 0 && currency === 'coin') {
       price = `<span class="font-bold" style="color: #FF7A34">${coinAmount} ${coinName}</span>`;
     } else if (dataPrice > 0 && currency === 'RMB') {
@@ -126,7 +126,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
 };
 
 const getCourseDisplay = (data, listObj, price) => {
-  if (data.hidePrice === '1' && (data.originPrice !== data.price)) {
+  if (data.hidePrice !== '1' && (data.originPrice !== data.price)) {
     price = `
       <div class="text-14" style="color: #FF7A34;">¥ ${data.price}</div>
       <s style="font-size: 12px;margin: 3px 0 0 -2px;color: #86909C;transform: scale(0.83);">¥ ${data.originPrice}</s>

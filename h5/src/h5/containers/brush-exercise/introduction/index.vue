@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ItemBankExercise.hidePrice === '1'">
+  <div v-if="ItemBankExercise.hidePrice !== '1'">
     <e-panel :title="ItemBankExercise.title">
       <div class="course-detail__plan-price">
         <span :class="{ isFree: isFree }">{{ filterPrice() }} </span>

@@ -15,7 +15,7 @@
         <div class="flex flex-col justify-between p-8" style="height: 62px;">
           <div class="font-bold text-14 text-overflow" style="width: 124px;">{{ currentItem.title }}</div>
           <div class="flex items-end justify-between">
-            <div class="font-bold text-14" style="color: #FF7A34;"><span v-if="currentItem.hidePrice === '1'">￥{{ currentItem.price }}</span></div>
+            <div class="font-bold text-14" style="color: #FF7A34;"><span v-if="currentItem.hidePrice !== '1'">￥{{ currentItem.price }}</span></div>
             <div class="text-text-3 text-12">{{ $t('e.personStudying', { number: currentItem.studentNum }) }}</div>
           </div>
         </div>

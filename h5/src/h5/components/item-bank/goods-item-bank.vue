@@ -31,7 +31,7 @@ export default {
           <div class="text-12 font-normal mb-4" style="color: #919399;">章节练习：<span style="color: #37393D;">{{ item.chapterExerciseNum }}</span></div>
           <div class="text-12 font-normal" style="color: #919399;">试卷练习：<span style="color: #37393D;">{{ item.assessmentNum }}</span></div>
         </div>
-        <div v-if="item.itemBankExercise.hidePrice === '1'" class="flex items-end text-14 font-semibold" style="color: #FF7E56; line-height: 16px"><span class="text-12 font-normal mr-2">¥</span>{{ `${integerPart(item.itemBankExercise.price)}.` }}<span class="text-12" style="line-height: 14px">{{ decimalPart(item.itemBankExercise.price) }}</span></div>
+        <div v-if="item.itemBankExercise.hidePrice !== '1'" class="flex items-end text-14 font-semibold" style="color: #FF7E56; line-height: 16px"><span class="text-12 font-normal mr-2">¥</span>{{ `${integerPart(item.itemBankExercise.price)}.` }}<span class="text-12" style="line-height: 14px">{{ decimalPart(item.itemBankExercise.price) }}</span></div>
       </div>
     </div>
   </div>

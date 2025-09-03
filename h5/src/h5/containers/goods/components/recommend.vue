@@ -19,7 +19,7 @@
           </div>
           <div class="body-item__content">
             <p class="content-title text-overflow">{{ goods.title }}</p>
-            <template v-if="goods.hidePrice === '1'">
+            <template v-if="goods.hidePrice !== '1'">
               <p
                 class="content-price text-overflow"
                 :class="{
