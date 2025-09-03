@@ -62,6 +62,7 @@ const getDisplayStyle = (data, listObj) => {
       html: `<span class="text-12">${price}</span>${showStudentStr}`,
     },
     videoMaxLevel: data.videoMaxLevel,
+    hidePrice: data.hidePrice,
   };
 };
 
