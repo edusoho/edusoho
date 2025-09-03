@@ -14,8 +14,12 @@ use AppBundle\Common\MathToolkit;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\Distributor\Util\DistributorCookieToolkit;
+use Biz\Mail\MailException;
 use Biz\Sms\SmsException;
+use Biz\System\Service\LogService;
 use Biz\System\SettingException;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\TokenService;
 use Biz\User\UserException;
 
 class User extends AbstractResource
@@ -58,33 +62,21 @@ class User extends AbstractResource
      */
     public function add(ApiRequest $request)
     {
-        // 目前只支持手机注册
-        $auth = $this->getSettingService()->get('auth', []);
-        if (!(isset($auth['register_mode']) && in_array($auth['register_mode'], ['mobile', 'email_or_mobile']))) {
-            throw SettingException::FORBIDDEN_MOBILE_REGISTER();
-        }
-
-        //校验云短信开启
-        $smsSetting = $this->getSettingService()->get('cloud_sms', []);
-        if (empty($smsSetting['sms_enabled'])) {
-            throw SettingException::FORBIDDEN_SMS_SEND();
-        }
-
-        //校验字段缺失
         $fields = $request->request->all();
-        if (!ArrayToolkit::requireds($fields, [
-            'mobile',
-            'smsToken',
-            'smsCode',
-            'encrypt_password',
-        ], true)) {
+        if (empty($fields['encrypt_password'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
+        $registerType = $this->validateByRegisterMode($fields);
 
         //校验验证码,基于token，默认10次机会
-        $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
-        if (BizSms::STATUS_SUCCESS != $status) {
-            throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
+        if ('mobile' == $registerType) {
+            $status = $this->getBizSms()->check(BizSms::SMS_BIND_TYPE, $fields['mobile'], $fields['smsToken'], $fields['smsCode']);
+            if (BizSms::STATUS_SUCCESS != $status) {
+                throw SmsException::FORBIDDEN_SMS_CODE_INVALID();
+            }
+        }
+        if ('email' == $registerType && !$this->checkEmailVerifyCode($fields['email'], $fields['emailToken'], $fields['emailCode'])) {
+            throw MailException::EMAIL_CODE_INVALID();
         }
 
         $nickname = substr(MathToolkit::uniqid(), 8, 16);
@@ -92,16 +84,20 @@ class User extends AbstractResource
             $nickname = MathToolkit::uniqid();
         }
 
-        $registeredWay = DeviceToolkit::getMobileDeviceType($request->headers->get('user-agent'));
         $user = [
-            'mobile' => $fields['mobile'],
-            'emailOrMobile' => $fields['mobile'],
+            'emailOrMobile' => 'mobile' == $registerType ? $fields['mobile'] : $fields['email'],
             'nickname' => $nickname,
             'password' => $this->getPassword($fields['encrypt_password'], $request->getHttpRequest()->getHost()),
-            'registeredWay' => $registeredWay,
+            'registeredWay' => DeviceToolkit::getMobileDeviceType($request->headers->get('user-agent')),
             'registerVisitId' => empty($fields['registerVisitId']) ? '' : $fields['registerVisitId'],
             'createdIp' => $request->getHttpRequest()->getClientIp(),
         ];
+        if ('mobile' == $registerType) {
+            $user['mobile'] = $fields['mobile'];
+        }
+        if ('email' == $registerType) {
+            $user['email'] = $fields['email'];
+        }
 
         if ($this->isPluginInstalled('Drp')) {
             $user = DistributorCookieToolkit::setCookieTokenToFields($request->getHttpRequest(), $user, DistributorCookieToolkit::USER);
@@ -160,6 +156,43 @@ class User extends AbstractResource
         return EncryptionToolkit::XXTEADecrypt(base64_decode($password), $host);
     }
 
+    private function validateByRegisterMode($fields)
+    {
+        if (empty($fields['mobile']) && empty($fields['email'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+        $auth = $this->getSettingService()->get('auth', []);
+        if (!empty($fields['mobile']) && empty($fields['email']) && 'email' == $auth['register_mode']) {
+            throw SettingException::FORBIDDEN_MOBILE_REGISTER();
+        }
+        if (!empty($fields['email']) && empty($fields['mobile']) && 'mobile' == $auth['register_mode']) {
+            throw SettingException::FORBIDDEN_EMAIL_REGISTER();
+        }
+        if (!empty($fields['mobile']) && !ArrayToolkit::requireds($fields, ['smsToken', 'smsCode'], true)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        } elseif (!empty($fields['email']) && !ArrayToolkit::requireds($fields, ['emailToken', 'emailCode'], true)) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        return !empty($fields['mobile']) ? 'mobile' : 'email';
+    }
+
+    private function checkEmailVerifyCode($email, $emailToken, $emailCode)
+    {
+        $token = $this->getTokenService()->verifyToken('email_verify_code', $emailToken);
+        if (empty($token)) {
+            return false;
+        }
+        if (0 == $token['remainedTimes']) {
+            return false;
+        }
+        if ($token['data']['code'] !== $emailCode || $token['data']['email'] !== $email) {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * @return \Biz\User\Service\UserService
      */
@@ -169,16 +202,27 @@ class User extends AbstractResource
     }
 
     /**
-     * @return \Biz\System\Service\Impl\LogServiceImpl
+     * @return LogService
      */
     private function getLogService()
     {
         return $this->service('System:LogService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->service('User:AuthService');
+    }
+
+    /**
+     * @return TokenService
+     */
+    private function getTokenService()
+    {
+        return $this->service('User:TokenService');
     }
 
     protected function getBizSms()

@@ -34,12 +34,22 @@ define(function (require, exports, module) {
       return value.indexOf(' ') < 0;
     }, Translator.trans('validate.have_spaces'));
 
-    validator.addItem({
-      element: '[name="newPassword"]',
-      required: true,
-      rule: 'check_password_high spaceNoSupport',
-      errormessageRequired: Translator.trans('validate.check_password_high.message')
-    });
+    const needStrongPassword = $('#newPassword').data('strong');
+    if (needStrongPassword) {
+      validator.addItem({
+        element: '[name="newPassword"]',
+        required: true,
+        rule: 'password_strong spaceNoSupport',
+        errormessageRequired: Translator.trans('validate.check_password_high.message')
+      });
+    } else {
+      validator.addItem({
+        element: '[name="newPassword"]',
+        required: true,
+        rule: 'password_normal spaceNoSupport',
+        errormessageRequired: Translator.trans('validate.check_password_high.message')
+      });
+    }
 
     validator.addItem({
       element: '[name="confirmPassword"]',
@@ -47,30 +57,29 @@ define(function (require, exports, module) {
       rule: 'confirmation{target:#newPassword}'
     });
 
+    $('.js-new-password-open-eye').on('click', function () {
+      $('#newPassword').attr('type', 'password');
+      $('.js-new-password-open-eye').hide();
+      $('.js-new-password-close-eye').show();
+    });
+
+    $('.js-new-password-close-eye').on('click', function () {
+      $('#newPassword').attr('type', 'text');
+      $('.js-new-password-close-eye').hide();
+      $('.js-new-password-open-eye').show();
+    });
+
+    $('.js-confirm-password-open-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'password');
+      $('.js-confirm-password-open-eye').hide();
+      $('.js-confirm-password-close-eye').show();
+    });
+
+    $('.js-confirm-password-close-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'text');
+      $('.js-confirm-password-close-eye').hide();
+      $('.js-confirm-password-open-eye').show();
+    });
+
   };
-
-  $('.js-new-password-open-eye').on('click', function () {
-    $('#newPassword').attr('type', 'password');
-    $('.js-new-password-open-eye').hide();
-    $('.js-new-password-close-eye').show();
-  })
-
-  $('.js-new-password-close-eye').on('click', function () {
-    $('#newPassword').attr('type', 'text');
-    $('.js-new-password-close-eye').hide();
-    $('.js-new-password-open-eye').show();
-  })
-
-  $('.js-confirm-password-open-eye').on('click', function () {
-    $('#confirmPassword').attr('type', 'password');
-    $('.js-confirm-password-open-eye').hide();
-    $('.js-confirm-password-close-eye').show();
-  })
-
-  $('.js-confirm-password-close-eye').on('click', function () {
-    $('#confirmPassword').attr('type', 'text');
-    $('.js-confirm-password-close-eye').hide();
-    $('.js-confirm-password-open-eye').show();
-  })
-
 });

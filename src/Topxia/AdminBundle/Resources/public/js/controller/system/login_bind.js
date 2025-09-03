@@ -81,58 +81,20 @@ define(function(require, exports, module) {
         });
 
         $('[name=mobile_bind_mode]').change(function() {
-          if ($(this).val() == 'constraint') {
-            $('.constraint-tip').removeClass('hidden');
-            $('.option-tip').addClass('hidden');
-            $('.close-tip').addClass('hidden');
-          } else if ($(this).val() == 'option') {
-            $('.constraint-tip').addClass('hidden');
-            $('.option-tip').removeClass('hidden');
-            $('.close-tip').addClass('hidden');
-          } else {
-            $('.constraint-tip').addClass('hidden');
-            $('.option-tip').addClass('hidden');
-            $('.close-tip').removeClass('hidden');
-          };
+            if ($(this).val() == 'constraint') {
+                $('.constraint-tip').removeClass('hidden');
+                $('.option-tip').addClass('hidden');
+                $('.close-tip').addClass('hidden');
+            } else if ($(this).val() == 'option') {
+                $('.constraint-tip').addClass('hidden');
+                $('.option-tip').removeClass('hidden');
+                $('.close-tip').addClass('hidden');
+            } else {
+                $('.constraint-tip').addClass('hidden');
+                $('.option-tip').addClass('hidden');
+                $('.close-tip').removeClass('hidden');
+            };
         });
-      var $checkbox = $('#strong_pwd_skip-agreement-checkbox');
-      var $closeRadio = $('#strong_pwd_close_radio');
-      var $openRadio = $('input[name="login_strong_pwd_enable"][value="1"]');
-
-      function removeTooltip($el) {
-        $el.tooltip('destroy');
-        $el.removeAttr('data-original-title');
-        $el.removeAttr('title');
-        $el.off('mouseenter mouseleave focus blur');
-      }
-      function updateCloseRadioState() {
-        if ($checkbox.prop('checked')) {
-          $closeRadio.prop('disabled', false);
-          removeTooltip($closeRadio);
-        } else {
-          $closeRadio.prop('disabled', true);
-          $closeRadio.attr('title', Translator.trans('admin.login_connect.strong_pwd_skip_close_radio.prompt'));
-          $closeRadio.tooltip();
-          if ($closeRadio.prop('checked')) {
-            $openRadio.prop('checked', true);
-          }
-        }
-      }
-      updateCloseRadioState();
-
-      $checkbox.on('change', function() {
-        updateCloseRadioState();
-      });
-
-      $openRadio.on('change', function() {
-        if ($(this).prop('checked')) {
-          $checkbox.prop('checked', false);
-          $closeRadio.prop('disabled', true);
-          $closeRadio.attr('title', Translator.trans('admin.login_connect.strong_pwd_skip_close_radio.prompt'));
-          $closeRadio.tooltip();
-        }
-      });
-
     };
 
 });

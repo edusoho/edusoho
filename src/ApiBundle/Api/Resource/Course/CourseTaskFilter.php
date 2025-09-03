@@ -9,7 +9,7 @@ class CourseTaskFilter extends Filter
 {
     protected $publicFields = [
         'activity', 'id', 'title', 'isFree', 'isOptional', 'startTime', 'endTime', 'status', 'length', 'mode', 'type', 'mediaSource', 'lock', 'number', 'seq', 'result', 'subtitlesUrls', 'categoryId', 'enable_facein', 'courseUrl', 'liveStatus',
-        'videoMaxLevel',
+        'videoMaxLevel', 'isLastLearn',
     ];
 
     protected function publicFields(&$data)

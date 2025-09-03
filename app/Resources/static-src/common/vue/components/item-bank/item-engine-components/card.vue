@@ -378,13 +378,10 @@ export default {
           q
         ];
 
-        if (
-          this.assessmentResponses.section_responses[s].item_responses[i]
-            .question_responses[q].isTag
-        ) {
-          return `ibs-card-body__tag ${
-            status[data.status]
-          } ibs-card-body__tag--collect`;
+        const isTag = this.assessmentResponses?.section_responses?.[s]?.item_responses?.[i]?.question_responses?.[q]?.isTag ?? false;
+
+        if (isTag) {
+          return `ibs-card-body__tag ${status[data.status]} ibs-card-body__tag--collect`;
         }
 
         if (this.setting) {

@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,7 +25,7 @@ class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
             throw UserException::NOTFOUND_TOKEN();
         }
         $user = $this->getUserService()->getUser($rawToken['userId']);
-        if (empty($user['passwordUpgraded']) && (1 != count($user['roles']))) {
+        if (RoleHelper::isStaff($user['roles']) && !PasswordValidator::isStrongLevel($user['passwordUpgraded'])) {
             throw UserException::NOTFOUND_TOKEN();
         }
 

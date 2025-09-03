@@ -38,6 +38,8 @@ class SettingException extends AbstractException
 
     const MAIL_DISABLE = 4030815;
 
+    const FORBIDDEN_EMAIL_REGISTER = 4030816;
+
     public $messages = [
         4030801 => 'exception.setting.forbidden_mobile_register',
         4030802 => 'exception.sms.setting_enable',
@@ -54,5 +56,6 @@ class SettingException extends AbstractException
         4030813 => 'exception.setting.attachment.setting_enable',
         4030814 => 'exception.setting.app_client_closed',
         4030815 => 'exception.setting.mail_disable',
+        4030816 => 'exception.setting.forbidden_email_register',
     ];
 }

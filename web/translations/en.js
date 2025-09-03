@@ -2146,5 +2146,4 @@ t.add("course.market_setting.contract.model.handSignature", "Hand signature", "j
 t.add("course.market_setting.contract.model.partyBName", "Party B's name", "js", "en");
 t.add("course.market_setting.contract.model.iDNumber", "ID number", "js", "en");
 t.add("course.market_setting.contract.model.contactInformation", "Contact information", "js", "en");
-t.add("admin.login_connect.strong_pwd_skip_close_radio.prompt", "Please check the agreement below before closing it", "js", "en");
 })(Translator);

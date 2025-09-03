@@ -424,6 +424,13 @@ admin_v2:
                                     name: admin_v2.course.item_bank_exercise.analysis_tab
                                     disable: true
                                     router_name: admin_v2_item_bank_exercise_analysis
+                        admin_v2_question_tag:
+                            name: admin_v2.question.tag_manage
+                            children:
+                                admin_v2_question_tag_manage:
+                                  name: admin_v2.question.tag_manage
+                                  router_name: admin_v2_question_tag_manage
+                                  disable: true
                         # 分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu

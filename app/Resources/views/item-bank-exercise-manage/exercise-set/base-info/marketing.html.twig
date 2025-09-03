@@ -20,11 +20,16 @@
         <div class="col-sm-2 control-label">
           <label class="control-label-required" for="course_price">{{ 'site.price'|trans }}</label>
         </div>
-        <div class="col-sm-8">
-          <input class="form-control course-mangae-info__input mrs" id="course_price" type="text" name="price"
-                 value="{{ exercise.price|default(0) }}" aria-required="true" aria-describedby="course_price-error"
-                 aria-invalid="true">
-          <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+        <div class="col-sm-8" style="display: flex; align-items: center; gap: 24px">
+          <span>
+            <input class="form-control course-mangae-info__input mrs" id="course_price" type="text" name="price"
+                   value="{{ exercise.price|default(0) }}" aria-required="true" aria-describedby="course_price-error"
+                   aria-invalid="true">
+            <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+          </span>
+          <span style="display: flex; align-items: center; gap: 12px;">
+            {{ cd_radios('hidePrice', { '0': 'item_bank_exercise.marketing_setup.show_price'|trans, '1': 'item_bank_exercise.marketing_setup.hide_price'|trans }, exercise.hidePrice|default(0)) }}
+          </span>
         </div>
       </div>
 

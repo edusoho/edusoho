@@ -9,6 +9,7 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\SmsToolkit;
+use Biz\User\Support\PasswordValidator;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpFoundation\File\File;
@@ -522,7 +523,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             if (!$this->controller->getUserService()->isEmailAvaliable($email)) {
                 return $this->createErrorResponse('email_exist', '该邮箱已被注册');
             }
-            if (!SimpleValidator::password($password)) {
+            if (!PasswordValidator::validate($password)) {
                 return $this->createErrorResponse('password_invalid', '密码格式不正确');
             }
             $registTypeName = 'email' == $auth['register_mode'] ? 'email' : 'emailOrMobile';

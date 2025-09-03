@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use Biz\User\Support\PasswordValidator;
 use Silex\Application;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\EncryptionToolkit;
@@ -30,7 +31,7 @@ class Emails extends BaseResource
         }
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($data['password']), $request->getHost());
-        if (!SimpleValidator::password($password)) {
+        if (!PasswordValidator::validate($password)) {
             return $this->error('500', '密码不符合要求');
         }
         $user = $this->getUserService()->getUserByEmail($data['email']);

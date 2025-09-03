@@ -19,7 +19,7 @@ class PageCourseFilter extends Filter
         'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers',
         'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable',
         'reviews', 'myReview', 'enableFinish', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom',
-        'assistant', 'drainage', 'contract',
+        'assistant', 'drainage', 'contract', 'hidePrice',
     ];
 
     protected function publicFields(&$data)

@@ -49,6 +49,10 @@ class Activity
     {
     }
 
+    public function updateByIds($ids, $fields)
+    {
+    }
+
     public function delete($targetId)
     {
     }

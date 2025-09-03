@@ -49,8 +49,6 @@ class KernelControllerListener
         $this->checkMobileBind($event);
 
         $this->checkPasswordUpgrade($event);
-
-        $this->checkPasswordInit($event);
     }
 
     private function checkMobileBind(FilterControllerEvent $event)
@@ -76,26 +74,11 @@ class KernelControllerListener
         });
     }
 
-    private function checkPasswordInit(FilterControllerEvent $event)
-    {
-        $currentUser = $this->getCurrentUser();
-        if (empty($currentUser['passwordInit'])) {
-            $url = $this->generateUrl('password_init', ['goto' => $this->getTargetPath($event->getRequest())]);
-            $event->setController(function () use ($url) {
-                return new RedirectResponse($url);
-            });
-        }
-    }
-
+    /**
+     * 检查是否要升级密码强度
+     */
     private function checkPasswordUpgrade(FilterControllerEvent $event)
     {
-        $currentUser = $this->getCurrentUser();
-        $loginBind = $this->getSettingService()->get('login_bind');
-        $hasUpgradedPassword = !empty($currentUser['passwordUpgraded']);
-        $skipPasswordUpdate = $currentUser['roles'] === ['ROLE_USER'] && isset($loginBind['login_strong_pwd_enable']) && 0 == $loginBind['login_strong_pwd_enable'];
-        if ($hasUpgradedPassword || $skipPasswordUpdate) {
-            return;
-        }
         $request = $event->getRequest();
         if (empty($request->getSession()->get('needUpgradePassword'))) {
             return;
