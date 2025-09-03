@@ -15,7 +15,7 @@ class GoodFilter extends Filter
         'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj', 'maxPriceObj',
         'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'ratingNum', 'rating', 'hitNum',
         'hotSeq', 'showable', 'buyable', 'creator', 'discount', 'canManage', 'discountId', 'isMember',
-        'peopleShowNum', 'manageUrl', 'contractId', 'needSignContract',
+        'peopleShowNum', 'manageUrl', 'contractId', 'needSignContract', 'hidePrice',
     ];
 
     protected $publicFields = [
