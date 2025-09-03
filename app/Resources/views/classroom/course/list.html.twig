@@ -30,7 +30,7 @@
                   {% if videoMaxLevel == '4k' %}
                     <div style="position: absolute; left: 0; bottom: 0; color: #492F0B; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; background: linear-gradient(270deg, #F7D27B -33.33%, #FCEABE 100%); border-radius: 0 12px 0 0;">4K 臻享</div>
                   {% endif %}
-                  {{ lazy_img(filepath(course_cover(course, 'middle'), 'course.png'), '', '') }}
+                  {{ lazy_img(filepath(course_cover(course, 'middle'), 'course.png'), 'course-img', '') }}
                 </div>
               </a>
               <div class="media-body">
@@ -54,6 +54,16 @@
                     <div class="progress-text" style="width: 40px;margin-bottom: 4px;">{{ percent(courseMembers[course.id].learnedCompulsoryTaskNum|default(0), course.compulsoryTaskNum) }}</div>
                   </div>
                 </div>
+                {% if course.lastLearnTask %}
+                <div style="display: flex; margin: 4px 0 20px;">
+                  <div class="course-learn-history">
+                    <span class="history-icon"></span>
+                    <a href="{{ path('course_task_show', {courseId: course.id, id: course.lastLearnTask.id}) }}">
+                      上次学到：课时{{ course.lastLearnTask.number }} : {{ course.lastLearnTask.title }}
+                    </a>
+                  </div>
+                </div>
+                {% endif %}
                 <div class="hidden-xs class-course-price">
                   {{ 'classroom.origin_price'|trans }}：
                   {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}
