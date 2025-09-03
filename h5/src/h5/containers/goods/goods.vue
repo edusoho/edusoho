@@ -8,7 +8,7 @@
         </div>
 
         <discount
-          v-if="goods.discount"
+          v-if="goods.hidePrice !== '1' && goods.discount"
           :currentSku="currentSku"
           :goods="goods"
         />
@@ -20,7 +20,7 @@
         />
 
         <vip
-          v-if="currentSku.vipLevelInfo && vipSwitch"
+          v-if="goods.hidePrice !== '1' && currentSku.vipLevelInfo && vipSwitch"
           :currentSku="currentSku"
           :type="goods.type"
         />
@@ -95,8 +95,8 @@
             <div class="goods-info__title" style="color: #919399; font-weight: 400;">暂无题库</div>
           </div>
           <div v-else class="space-y-12">
-            <goods-item-bank :item="bindItemBankList[0]"/>
-            <goods-item-bank v-if="bindItemBankList.length > 1" :item="bindItemBankList[1]"/>
+            <goods-item-bank :item="bindItemBankList[0]" :hidePrice = "goods.hidePrice" />
+            <goods-item-bank v-if="bindItemBankList.length > 1" :item="bindItemBankList[1]" :hidePrice = "goods.hidePrice" />
           </div>
         </section>
 
@@ -129,7 +129,7 @@
           </div>
           <!-- 学习课程目录 -->
           <classroom-courses v-if="componentsInfo.classroomCourses.length > 0"
-            :classroomCourses="componentsInfo.classroomCourses"
+            :classroomCourses="componentsInfo.classroomCourses" :hidePrice = "goods.hidePrice"
           />
           <div class="w-full flex flex-col items-center pt-28" style="height: 223px;" v-else>
             <img style="width: 142px; height: 116px;" src="static/images/classroom/none-course.png" alt="暂无课程" />

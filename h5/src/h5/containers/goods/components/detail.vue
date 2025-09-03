@@ -9,85 +9,83 @@
         @click="onShare"
       ></i>
     </p>
-
-    <div
-      v-if="goods.discount && currentSku.displayPrice != 0"
-      class="detail-info__price"
-    >
-      <div class="clearfix">
-        <div class="pull-left">
-          {{ $t('goods.preferentialPrice') }}
-          <span
-            v-if="currentSku.displayPriceObj.currency === 'RMB'"
-            class="price"
-          >
+    <div class="flex flex-row justify-between detail-info__price">
+      <div>
+        <template v-if="goods.hidePrice !== '1' && goods.discount && currentSku.displayPrice != 0">
+          <div>
+            {{ $t('goods.preferentialPrice') }}
+            <span
+              v-if="currentSku.displayPriceObj.currency === 'RMB'"
+              class="price"
+            >
             {{ currentSku.displayPriceObj.amount | formatPrice }}{{ $t('goods.cny') }}
           </span>
-          <span
-            v-if="currentSku.displayPriceObj.currency === 'coin'"
-            class="price"
-          >
+            <span
+              v-if="currentSku.displayPriceObj.currency === 'coin'"
+              class="price"
+            >
             {{ currentSku.displayPriceObj.coinAmount | formatPrice }}
             <span class="detail-right__price__unit">
               {{ currentSku.displayPriceObj.coinName }}
             </span>
           </span>
-        </div>
-        <div class="pull-right study-num">
-          <i class="iconfont icon-renqi"></i>
-          {{ goods.product.target.studentNum }}{{ $t('goods.person') }}
-        </div>
-      </div>
-    </div>
-
-    <div
-      v-if="!goods.discount || currentSku.displayPrice == 0"
-      class="detail-info__price"
-    >
-      <div class="clearfix">
-        <div class="pull-left">
-          {{ $t('goods.price') }}
-          <span
-            v-if="currentSku.displayPriceObj.currency === 'RMB'"
-            class="price"
-          >
+          </div>
+        </template>
+        <template v-if="goods.hidePrice !== '1' && (!goods.discount || currentSku.displayPrice == 0)">
+          <div>
+            {{ $t('goods.price') }}
+            <span
+              v-if="currentSku.displayPriceObj.currency === 'RMB'"
+              class="price"
+            >
             {{ currentSku.displayPriceObj.amount | formatPrice }}{{ $t('goods.cny') }}
           </span>
-          <span
-            v-if="currentSku.displayPriceObj.currency === 'coin'"
-            class="price"
-          >
+            <span
+              v-if="currentSku.displayPriceObj.currency === 'coin'"
+              class="price"
+            >
             {{ currentSku.displayPriceObj.coinAmount | formatPrice }}
             <span class="detail-right__price__unit">
               {{ currentSku.displayPriceObj.coinName }}
             </span>
           </span>
+          </div>
+        </template>
+        <!-- 学习有效期 -->
+        <div class="detail-info__validity">
+          {{ $t('goods.validity') }}
+          <span
+            class="detail-info__validity__content"
+            v-html="buyableModeHtml"
+          ></span>
         </div>
-        <div
-          v-if="goodsSetting.show_number_data === 'join'"
-          class="pull-right study-num"
-        >
-          <i class="iconfont icon-people"></i>
-          {{ goods.product.target.studentNum }}
-        </div>
-        <div
-          v-else-if="goodsSetting.show_number_data === 'visitor'"
-          class="pull-right study-num"
-        >
-          <i class="iconfont icon-visibility"></i>
-          {{ goods.hitNum }}
-        </div>
+      </div>
+      <div>
+        <template v-if="goods.discount && currentSku.displayPrice != 0">
+          <div class="pull-right study-num">
+            <i class="iconfont icon-renqi"></i>
+            {{ goods.product.target.studentNum }}{{ $t('goods.person') }}
+          </div>
+        </template>
+        <template v-if="!goods.discount || currentSku.displayPrice == 0">
+          <div
+            v-if="goodsSetting.show_number_data === 'join'"
+            class="pull-right study-num"
+          >
+            <i class="iconfont icon-people"></i>
+            {{ goods.product.target.studentNum }}
+          </div>
+          <div
+            v-else-if="goodsSetting.show_number_data === 'visitor'"
+            class="pull-right study-num"
+          >
+            <i class="iconfont icon-visibility"></i>
+            {{ goods.hitNum }}
+          </div>
+        </template>
       </div>
     </div>
 
-    <!-- 学习有效期 -->
-    <div class="detail-info__validity">
-      {{ $t('goods.validity') }}
-      <span
-        class="detail-info__validity__content"
-        v-html="buyableModeHtml"
-      ></span>
-    </div>
   </div>
 </template>
 
