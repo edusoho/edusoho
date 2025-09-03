@@ -138,6 +138,7 @@ class PageClassroom extends AbstractResource
                 'id' => $member['lastLearnTaskId'],
                 'number' => $tasks[$member['lastLearnTaskId']]['number'],
                 'title' => $tasks[$member['lastLearnTaskId']]['title'],
+                'type' => $tasks[$member['lastLearnTaskId']]['type'],
             ];
         }
 
