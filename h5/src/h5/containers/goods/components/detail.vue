@@ -11,7 +11,7 @@
     </p>
     <div class="flex flex-row justify-between detail-info__price">
       <div>
-        <template v-if="goods.hidePrice !== '1' && goods.discount && currentSku.displayPrice != 0">
+        <template v-if="currentSku.hidePrice !== '1' && goods.discount && currentSku.displayPrice != 0">
           <div>
             {{ $t('goods.preferentialPrice') }}
             <span
@@ -31,7 +31,7 @@
           </span>
           </div>
         </template>
-        <template v-if="goods.hidePrice !== '1' && (!goods.discount || currentSku.displayPrice == 0)">
+        <template v-if="currentSku.hidePrice !== '1' && (!goods.discount || currentSku.displayPrice == 0)">
           <div>
             {{ $t('goods.price') }}
             <span
