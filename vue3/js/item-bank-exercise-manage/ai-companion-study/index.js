@@ -5,7 +5,7 @@ import { Button, Form, Switch, Select, Input, Spin } from 'ant-design-vue';
 import Index from './Index.vue';
 
 const app = createApp(Index, {
-  itemBankId: $('#ai-companion-study').data('itemBankId'),
+  exerciseId: $('#ai-companion-study').data('exerciseId'),
 });
 
 setCurrentPrimaryColor(app);

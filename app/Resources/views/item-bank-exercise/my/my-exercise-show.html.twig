@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
-'app/js/courseset/show/index.js']) %}
+'app/js/courseset/show/index.js', 'app/js/item-bank-exercise/show/index.js']) %}
 
 {% set bodyClass = 'course-dashboard-page' %}
 
@@ -49,4 +49,5 @@
       </div>
     {% endif %}
   {% endblock %}
+  <input type="hidden" id="exercise" value="{{ exercise|json_encode }}">
 {% endblock %}

@@ -6,7 +6,7 @@ import {message} from 'ant-design-vue';
 import dayjs from 'dayjs';
 
 const props = defineProps({
-  itemBankId: {required: true},
+  exerciseId: {required: true},
 });
 
 const spinning = ref(false);
@@ -39,56 +39,50 @@ const filterOption = (input, option) => {
   return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
 };
 
-// onMounted(async () => {
-//   spinning.value = true;
-//   agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.itemBankId);
-//   masking.value = agentConfig.value.agentEnable !== true;
-//   if (agentConfig.value.id) {
-//     formState.isActive = agentConfig.value?.isActive == 1 ?? false;
-//     formState.domainId = agentConfig.value?.domainId ?? null;
-//   }
-//   spinning.value = false;
-//
-//   const options = await Api.aiCompanionStudy.getDomains(props.itemBankId);
-//   domainOptions.value = options.map(item => ({
-//     label: item.name,
-//     value: item.id,
-//   }));
-//   if (!agentConfig.value.id) {
-//     if (formState.domainId) {
-//       return
-//     }
-//     const domain = await Api.aiCompanionStudy.getDomainId(props.itemBankId);
-//     if (domain.id.trim()) {
-//       formState.domainId = domain.id;
-//     }
-//   }
-// });
+onMounted(async () => {
+  try {
+    spinning.value = true;
+    const res = await Api.aiCompanionStudy.getAgentStatus();
+    masking.value = res.enable !== true;
+    agentConfig.value = await Api.itemBank.getItemBankExercises(props.exerciseId);
+    formState.isActive = agentConfig.value?.isAgentActive === '1';
+    formState.domainId = agentConfig.value?.agentDomainId === '' ? null : agentConfig.value.agentDomainId;
+  } finally {
+    spinning.value = false;
+  }
+  const options = await Api.aiCompanionStudy.getDomains();
+  domainOptions.value = options.map(item => ({
+    label: item.name,
+    value: item.id,
+  }));
+  if (formState.domainId) {
+    return
+  }
+  const domain = await Api.aiCompanionStudy.getDomainId({exerciseId: props.exerciseId});
+  if (domain.id.trim()) {
+    formState.domainId = domain.id;
+  }
+});
 
 const save = async () => {
-  // if (!agentConfig.value.id && !formState.isActive) {
-  //   return;
-  // }
-  // spinning.value = true;
-  // try {
-  //   if (!agentConfig.value.id) {
-  //     const params = {
-  //       itemBankId: props.itemBankId,
-  //       domainId: formState.domainId,
-  //     };
-  //     await Api.aiCompanionStudy.createAgentConfig(params);
-  //   } else {
-  //     const params = {
-  //       isActive: formState.isActive === true ? 1 : 0,
-  //       domainId: formState.domainId,
-  //     };
-  //     await Api.aiCompanionStudy.updateAgentConfig(props.itemBankId, params);
-  //   }
-  // } finally {
-  //   spinning.value = false;
-  // }
-  // agentConfig.value = await Api.aiCompanionStudy.getAgentConfig(props.itemBankId);
-  // message.success('保存成功');
+  if (
+    formState.isActive === (agentConfig.value?.isAgentActive === '1')
+    && formState.domainId === (agentConfig.value?.agentDomainId === '' ? null : agentConfig.value.agentDomainId)
+  ) {
+    return;
+  }
+  try {
+    spinning.value = true;
+    const params = {
+      isActive: formState.isActive === true ? '1' : '0',
+      domainId: formState.domainId,
+    };
+    await Api.itemBank.setItemBankExerciseAgent(props.exerciseId, params);
+  } finally {
+    spinning.value = false;
+  }
+  agentConfig.value = await Api.itemBank.getItemBankExercises(props.exerciseId);
+  message.success('保存成功');
 };
 </script>
 
