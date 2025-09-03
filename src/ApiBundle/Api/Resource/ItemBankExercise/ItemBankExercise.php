@@ -127,6 +127,11 @@ class ItemBankExercise extends AbstractResource
 
     private function appendAiTeacherDomainIfNecessary($itemBankExercise)
     {
+        if (!empty($itemBankExercise['isAgentActive']) && !empty($itemBankExercise['agentDomainId'])) {
+            $itemBankExercise['aiTeacherDomain'] = $itemBankExercise['agentDomainId'];
+
+            return $itemBankExercise;
+        }
         $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($itemBankExercise['id']);
         if (empty($exerciseBinds)) {
             return $itemBankExercise;
