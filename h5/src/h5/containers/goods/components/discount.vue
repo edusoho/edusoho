@@ -1,6 +1,6 @@
 <template>
   <!-- 优惠秒杀 -->
-  <div v-if="goods.hidePrice !== '1' && currentSku.displayPrice != 0" class="detail-discount clearfix">
+  <div v-if="currentSku.displayPrice != 0" class="detail-discount clearfix">
     <div class="pull-left detail-discount__left">
       <span class="text">限时优惠</span>
       <span

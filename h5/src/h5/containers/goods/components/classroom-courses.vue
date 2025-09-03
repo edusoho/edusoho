@@ -15,7 +15,7 @@
         <p class="item-info__title text-overflow">
           {{ course.courseSet.title }}
         </p>
-        <template v-if="course.hidePrice !== '1'">
+        <template v-if="hidePrice !== '1' && course.hidePrice !== '1'">
           <p
             class="item-info__price"
             v-if="course.originPrice2.currency === 'coin'"
@@ -67,6 +67,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    hidePrice: {
+      type: String,
+      default: '0'
+    }
   },
   methods: {
     gotoCourse: function(course) {
