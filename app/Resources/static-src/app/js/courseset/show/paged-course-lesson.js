@@ -271,6 +271,10 @@ class PagedCourseLesson {
           }
           return lessonNum;
         },
+
+        'isLastLearn': function(data, context) {
+          return data.isLastLearn;
+        },
       },
 
       'dataTemplateNode': '.js-infinite-item-template'

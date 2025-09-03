@@ -70,6 +70,7 @@ class MeCourse extends AbstractResource
                     'id' => $membersIndex[$course['id']]['lastLearnTaskId'],
                     'number' => $tasks[$membersIndex[$course['id']]['lastLearnTaskId']]['number'],
                     'title' => $tasks[$membersIndex[$course['id']]['lastLearnTaskId']]['title'],
+                    'type' => $tasks[$membersIndex[$course['id']]['lastLearnTaskId']]['type'],
                 ];
             }
         }

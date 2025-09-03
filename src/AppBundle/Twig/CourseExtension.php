@@ -223,6 +223,7 @@ class CourseExtension extends \Twig_Extension
                     'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
                     'videoMaxLevel' => $item['videoMaxLevel'] ?? '',
+                    'isLastLearn' => $item['isLastLearn'],
                 ];
                 if ('live' === $item['type']) {
                     $currentTime = time();
