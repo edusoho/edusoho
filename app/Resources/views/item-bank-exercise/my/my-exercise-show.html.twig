@@ -49,5 +49,9 @@
       </div>
     {% endif %}
   {% endblock %}
-  <input type="hidden" id="exercise" value="{{ exercise|json_encode }}">
+  {% if exercise.isAgentActive %}
+    <input type="hidden" id="exercise" value="{{ exercise|json_encode }}">
+    <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
+    <input type="hidden" id="chatMetaData" value="{{ get_item_bank_exercise_chat_meta_data(exercise) }}" />
+  {% endif %}
 {% endblock %}

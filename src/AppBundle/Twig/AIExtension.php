@@ -45,6 +45,7 @@ class AIExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_course_chat_meta_data', [$this, 'getCourseChatMetaData']),
             new \Twig_SimpleFunction('get_lesson_chat_meta_data', [$this, 'getLessonChatMetaData']),
             new \Twig_SimpleFunction('get_answer_chat_meta_data', [$this, 'getAnswerChatMetaData']),
+            new \Twig_SimpleFunction('get_item_bank_exercise_chat_meta_data', [$this, 'getItemBankExerciseChatMetaData']),
             new \Twig_SimpleFunction('is_study_plan_generated', [$this, 'isStudyPlanGenerated']),
         ];
     }
@@ -172,6 +173,14 @@ class AIExtension extends \Twig_Extension
         }
 
         return '';
+    }
+
+    public function getItemBankExerciseChatMetaData($exercise)
+    {
+        return json_encode([
+            'workerUrl' => $this->getAgentWorkerUrl(),
+            'domainId' => $exercise['domainId'],
+        ]);
     }
 
     public function isStudyPlanGenerated($courseId)
