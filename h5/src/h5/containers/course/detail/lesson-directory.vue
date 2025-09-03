@@ -262,7 +262,7 @@ export default {
       setTaskStatus: types.SET_TASK_SATUS
     }),
     initLastLearnTaskEvent() {
-      if (this.$route.query.lastLearnTaskId) {
+      if (this.$route.query.lastLearnTaskId && this.$route.query.lastLearnTaskType) {
         const {lastLearnTaskType, lastLearnTaskId} = this.$route.query;
         this.setSourceType({
           sourceType: lastLearnTaskType,

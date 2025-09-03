@@ -191,8 +191,7 @@ export default {
         this.$router.push({
           path: `/course/${id}`,
           query: {
-            lastLearnTaskId: this.course.lastLearnTask.id,
-            lastLearnTaskType: this.course.lastLearnTask.type,
+            ...(this.course.lastLearnTask ? {lastLearnTaskId: this.course.lastLearnTask.id, lastLearnTaskType: this.course.lastLearnTask.type} : {})
           },
         });
       }
