@@ -246,15 +246,17 @@ export default {
     },
   },
   mounted() {
-    if (Object.keys(this.$route.query).length) {
-      const {sourceType, taskId} = this.$route.query;
-      this.setSourceType({
-        sourceType: sourceType,
-        taskId: taskId,
-      });
+    if (this.$route.query.lastLearnTaskId && this.$route.query.lastLearnTaskType) {
+      this.initLastLearnTaskEvent();
+    } else {
+      if (Object.keys(this.$route.query).length) {
+        const {sourceType, taskId} = this.$route.query;
+        this.setSourceType({
+          sourceType: sourceType,
+          taskId: taskId,
+        });
+      }
     }
-
-    this.initLastLearnTaskEvent();
   },
   methods: {
     ...mapMutations('course', {
@@ -262,16 +264,14 @@ export default {
       setTaskStatus: types.SET_TASK_SATUS
     }),
     initLastLearnTaskEvent() {
-      if (this.$route.query.lastLearnTaskId && this.$route.query.lastLearnTaskType) {
-        const {lastLearnTaskType, lastLearnTaskId} = this.$route.query;
-        this.setSourceType({
-          sourceType: lastLearnTaskType,
-          taskId: lastLearnTaskId,
-        });
-        const element = document.getElementById(this.$route.query.lastLearnTaskId);
-        if (element) {
-          element.click();
-        }
+      const {lastLearnTaskType, lastLearnTaskId} = this.$route.query;
+      this.setSourceType({
+        sourceType: lastLearnTaskType,
+        taskId: lastLearnTaskId,
+      });
+      const element = document.getElementById(this.$route.query.lastLearnTaskId);
+      if (element) {
+        element.click();
       }
     },
     // 获取lesson位置
