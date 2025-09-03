@@ -15,6 +15,7 @@ use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
@@ -101,12 +102,18 @@ class CourseController extends BaseController
         $title = trim($request->get('title', ''));
         $courses = $this->getClassroomService()->findSortedCoursesByClassroomIdAndTitle($classroomId, $title);
         $currentUser = $this->getCurrentUser();
-        $courseMembers = $teachers = [];
+        $teachers = [];
+        $courseMembers = $this->getCourseMemberService()->findCourseMembersByUserIdAndCourseIds($currentUser['id'], array_column($courses, 'id'));
+        $tasks = $this->getTaskService()->findTasksByIds(array_column($courseMembers, 'lastLearnTaskId'));
+        $courseMembers = array_column($courseMembers, null, 'courseId');
+        $tasks = array_column($tasks, null, 'id');
         foreach ($courses as &$course) {
-            $courseMembers[$course['id']] = $this->getCourseMemberService()->getCourseMember(
-                $course['id'],
-                $currentUser['id']
-            );
+            $member = $courseMembers[$course['id']] ?? [];
+            $course['lastLearnTask'] = empty($tasks[$member['lastLearnTaskId']]) ? null : [
+                'id' => $member['lastLearnTaskId'],
+                'number' => $tasks[$member['lastLearnTaskId']]['number'],
+                'title' => $tasks[$member['lastLearnTaskId']]['title'],
+            ];
             $course['teachers'] = empty($course['teacherIds']) ? [] : $this->getUserService()->findUsersByIds(
                 $course['teacherIds']
             );
@@ -407,5 +414,13 @@ class CourseController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }
