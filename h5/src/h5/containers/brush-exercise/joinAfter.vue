@@ -83,10 +83,14 @@ export default {
           this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
           }, 20, 20, true);
-          if (res.studyPlanGenerated) {
-            this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
-          }
           this.aiAgentSdk.boot();
+          if (res.isAgentActive == '1') {
+            this.aiAgentSdk.showReminder({
+              title: "HI，我是你的 AI 老师小知～",
+              content: `欢迎加入《${res.title}》题库，我将在你学习的过程中为你提供专业答疑、题目分析等学习服务，现在开始刷题计划吧！`,
+            })
+          }
+
         }
       })
         .catch(err => {
