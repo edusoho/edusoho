@@ -49,6 +49,7 @@ class EmailVerifyCode extends AbstractResource
             'params' => [
                 'verifyCode' => $verifyCode,
             ],
+            'format' => 'html',
         ];
         $mail = $this->biz['mail_factory']($mailOptions);
         $mail->send();
