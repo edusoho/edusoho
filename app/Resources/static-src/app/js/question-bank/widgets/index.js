@@ -194,8 +194,12 @@ class QuestionSelect {
 
   renderTable(isPaginator) {
     isPaginator || this._resetPage();
-    let conditions = this.element.find('[data-role="search-conditions"]').serialize() + '&page=' + this.element.find('.js-page').val();
-    conditions += '&exclude_ids=' + $('.js-excludeIds').val();
+    let conditions = 'difficulty=' + ($('.js-search-form-difficulty').val() === 'default' ? '' : $('.js-search-form-difficulty').val())
+                          + '&type=' + ($('.js-search-form-type').val() === 'default' ? '' : $('.js-search-form-type').val())
+                          + '&keyword=' + $('.js-search-form-keyword').val()
+                          + '&tagIds=' + $('.js-search-form-tagIds').val()
+                          + '&exclude_ids=' + $('.js-excludeIds').val()
+                          + '&page=' + this.element.find('.js-page').val()
     this._loading();
     let self = this;
     $.ajax({
