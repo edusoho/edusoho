@@ -98,7 +98,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="price"><span>¥</span>{{`${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span>{{decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)}}</span></div>
+                  <div class="price" v-if="currentSku.hidePrice !== '1'"><span>¥</span>{{`${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span>{{decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)}}</span></div>
                 </div>
               </div>
               <div class="show-button">
@@ -210,7 +210,7 @@
       <div class="product-info__right pull-right">
         <teacher :teachers="currentSku.teachers"/>
         <qr :mpQrcode="componentsData.mpQrCode"/>
-        <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods"/>
+        <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods" :hidePrice="currentSku.hidePrice" />
         <certificate :goodsId="goodsId" :sku="currentSku"/>
       </div>
     </div>
