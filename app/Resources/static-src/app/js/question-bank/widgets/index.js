@@ -200,6 +200,7 @@ class QuestionSelect {
                           + '&tagIds=' + $('.js-search-form-tagIds').val()
                           + '&exclude_ids=' + $('.js-excludeIds').val()
                           + '&page=' + this.element.find('.js-page').val()
+                          + '&category_id=' + $('.js-category-choose').val()
     this._loading();
     let self = this;
     $.ajax({
