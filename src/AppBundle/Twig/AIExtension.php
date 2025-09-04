@@ -103,6 +103,10 @@ class AIExtension extends \Twig_Extension
         if (empty($module)) {
             return false;
         }
+        $exercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
+        if (!empty($exercise['isAgentActive'])) {
+            return true;
+        }
         $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
         if (empty($exerciseBinds)) {
             return false;
@@ -151,6 +155,13 @@ class AIExtension extends \Twig_Extension
         $module = $this->getItemBankExerciseModuleService()->getByAnswerSceneId($answerRecord['answer_scene_id']);
         if (empty($module)) {
             return '';
+        }
+        $exercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
+        if (!empty($exercise['isAgentActive'])) {
+            return json_encode([
+                'workerUrl' => $this->getAgentWorkerUrl(),
+                'domainId' => $exercise['agentDomainId'],
+            ]);
         }
         $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
         if (empty($exerciseBinds)) {
