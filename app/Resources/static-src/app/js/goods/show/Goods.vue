@@ -210,7 +210,7 @@
       <div class="product-info__right pull-right">
         <teacher :teachers="currentSku.teachers"/>
         <qr :mpQrcode="componentsData.mpQrCode"/>
-        <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods" :hidePrice="currentSku.hidePrice" />
+        <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods" />
         <certificate :goodsId="goodsId" :sku="currentSku"/>
       </div>
     </div>
