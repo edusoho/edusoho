@@ -18,7 +18,7 @@
 
           {% if classroom|default(null) %}
             <div class="my-course-item__classroom text-overflow">
-              <span>{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-assist" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title|raw }}</a></span>
+              <span style="display: -webkit-box; max-width: 300px; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; text-overflow: ellipsis;">{{ 'course.block_grid.from_classroom'|trans }}<a class="cd-link-assist" href="{{ path('classroom_show', {'id':classroom.id}) }}">{{ classroom.title|raw }}</a></span>
             </div>
           {% endif %}
         </div>
