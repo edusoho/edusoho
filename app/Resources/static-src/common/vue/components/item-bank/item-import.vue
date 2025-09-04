@@ -1068,7 +1068,7 @@ export default {
               for (const [answerIndex, answer] of question.answer.entries()) {
                 const latexMatch = answer.match(/\$\$([^$]+)\$\$/);
                 if (latexMatch) {
-                  mathEditor.set(latexMatch[1]);
+                  mathEditor.set(this.formatSpecialMathAnswer(latexMatch[1]));
                   const latex = await mathEditor.get();
                   question.stem = question.stem.replace(`[[$$${latexMatch[1]}$$]]`, `[[$$$${latex}$$$]]`);
                   question.answer[answerIndex] = `$$${latex}$$`;
@@ -1083,6 +1083,12 @@ export default {
         mathEditor.close();
       });
       mathEditor.open();
+    },
+    formatSpecialMathAnswer(latex) {
+      latex = latex.replace(/\\mathrm\{([^}]*)\}/g, '$1 ');
+      latex = latex.replace('\\bot ', '\\perp ');
+
+      return latex;
     },
     //每次item改动统一计算数据
     formateItems() {
