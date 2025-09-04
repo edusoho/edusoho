@@ -17,6 +17,7 @@ class CourseSetFilter extends Filter
     protected $publicFields = [
         'tags', 'category', 'serializeMode', 'goals', 'audiences', 'ratingNum', 'rating', 'noteNum',
         'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId', 'discount', 'discountType', 'maxRate', 'hitNum', 'materialNum', 'parentId', 'locked', 'maxCoursePrice', 'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime', 'goodsId', 'productId',
+        'hidePrice',
     ];
 
     protected function simpleFields(&$data)
