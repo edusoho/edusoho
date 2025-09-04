@@ -33,8 +33,13 @@ class ActivityCopy extends AbstractCopy
             $newActivity['copyId'] = $activity['id'];
 
             if ('live' == $newActivity['mediaType']) { //直播
-                $newActivity['startTime'] = time();
-                $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
+                if ($activity['endTime'] < time()) {
+                    $newActivity['startTime'] = $activity['startTime'];
+                    $newActivity['endTime'] = $activity['endTime'];
+                } else {
+                    $newActivity['startTime'] = time();
+                    $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
+                }
 
                 if (!empty($options['newMultiClass'])) {
                     if (0 == $cycleDifference) {
@@ -47,7 +52,7 @@ class ActivityCopy extends AbstractCopy
             }
 
             $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, [
-                'refLiveroom' => false,
+                'refLiveroom' => $activity['endTime'] < time(),
                 'newActivity' => $newActivity,
                 'isCopy' => true,
                 'newMultiClass' => !empty($options['newMultiClass']) ? $options['newMultiClass'] : [],
