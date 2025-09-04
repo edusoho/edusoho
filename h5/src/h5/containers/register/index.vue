@@ -31,6 +31,8 @@
 
     <van-field
       v-model="registerInfo.encrypt_password"
+      class="encrypt_password-input"
+      style="padding-bottom: 0"
       :border="false"
       :error-message="errorMessage.encrypt_password"
       :placeholder="$t('placeholder.setPassword')"
@@ -461,8 +463,13 @@ export default {
 <style scoped>
 .password-tip {
   font-size: 12px;
-  line-height: 24px;
+  line-height: 20px;
   color: rgba(0, 0, 0, 0.45);
   padding: 0 16px;
+}
+.encrypt_password-input {
+  .van-field__error-message {
+    line-height: 20px !important;
+  }
 }
 </style>
