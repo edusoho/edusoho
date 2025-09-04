@@ -2,6 +2,8 @@
 const emit = defineEmits(['ok'])
 import {ref, watch} from 'vue';
 import Api from '../../../api';
+import { Empty } from 'ant-design-vue';
+const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 
 const modalVisible = defineModel();
 const props = defineProps({
@@ -103,11 +105,12 @@ function onCancel() {
         <a-button type="primary" @click="selectAllTag">一键全选</a-button>
         <a-button @click="clearAllTag">一键清除</a-button>
       </div>
-      <div class="flex flex-col gap-32 max-h-420 overflow-y-scroll">
-        <div class="flex flex-col gap-32" v-for="(item, index) in tagGroupTag" :key="index">
-          <div class="flex flex-col gap-8">
-            <div class="text-[16px] leading-[28px] font-normal">{{ item.name }}</div>
-            <div class="flex flex-wrap gap-16">
+      <div class="min-h-270 max-h-420 overflow-y-scroll">
+        <div v-if="tagGroupTag.length > 0" class="flex flex-col gap-32">
+          <div class="flex flex-col gap-32" v-for="(item, index) in tagGroupTag" :key="index">
+            <div class="flex flex-col gap-8">
+              <div class="text-[16px] leading-[28px] font-normal">{{ item.name }}</div>
+              <div class="flex flex-wrap gap-16">
             <span
               v-for="(tag, index) in item.tags"
               :key="index"
@@ -117,8 +120,12 @@ function onCancel() {
             >
               {{ tag.name }}
             </span>
+              </div>
             </div>
           </div>
+        </div>
+        <div v-else class="w-full h-270 flex items-center justify-center">
+          <a-empty :image="simpleImage" />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import {createApp} from 'vue';
-import {Modal, Button} from 'ant-design-vue';
+import {Modal, Button, Empty} from 'ant-design-vue';
 import {createStyleTag, setCurrentPrimaryColor} from 'vue3/js/common';
 import 'vue3/main.less';
 import Index from './Index.vue';
@@ -13,6 +13,7 @@ const app = createApp(Index, {
 
 app.use(Modal);
 app.use(Button);
+app.use(Empty);
 
 setCurrentPrimaryColor(app);
 

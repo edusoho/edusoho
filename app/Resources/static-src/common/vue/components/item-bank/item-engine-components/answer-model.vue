@@ -9,13 +9,7 @@
       </template>
       <div class="ibs-engine-item">
         <div class="ibs-tab-container">
-          <a-button
-            size="small"
-            type="primary"
-            ghost
-          >
-            {{ showAnswerModeText(question.answer_mode) }}
-          </a-button>
+          <div class="answer-mode-tag">{{ showAnswerModeText(question.answer_mode) }}</div>
           <a-button
             v-show="showTag"
             size="small"
