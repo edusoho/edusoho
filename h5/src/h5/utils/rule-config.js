@@ -18,8 +18,21 @@ export default {
   encrypt_password: {
     message: messages.PASSWORD_REGISTER,
     validator(str) {
-      const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\s\da-zA-Z])[\S]{8,32}$/;
-      return reg.test(str);
+      if (typeof str !== 'string') {
+        return false;
+      }
+
+      if (str.length < 8 || str.length > 32) {
+        return false;
+      }
+
+      const hasLetter = /[a-zA-Z]/.test(str);
+      const hasNumber = /[0-9]/.test(str);
+      const hasSymbol = /[^a-zA-Z0-9]/.test(str);
+
+      const typeCount = [hasLetter, hasNumber, hasSymbol].filter(Boolean).length;
+
+      return typeCount >= 2;
     },
   },
   email: {
