@@ -207,7 +207,7 @@ export default {
             targetId: this.course.id,
             type: 'course_list',
             hasCertificate,
-            ...(this.course.bottom.data.lastLearnTask ? { lastLearnTaskId: this.course.bottom.data.lastLearnTask.id, lastLearnTaskType: this.course.bottom.data.lastLearnTask.type,} : {})
+            ...(this.course.bottom.data?.lastLearnTask ? { lastLearnTaskId: this.course.bottom.data?.lastLearnTask.id, lastLearnTaskType: this.course.bottom.data?.lastLearnTask.type,} : {})
           },
         });
       }
