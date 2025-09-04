@@ -1,6 +1,6 @@
 <template>
   <AntConfigProvider>
-    <div class="flex ml-16 items-center">
+    <div class="flex ml-10 items-center">
       <div class="text-[14px] text-[rgba(51,51,51,0.88)] text-nowrap mr-8">分类:</div>
       <a-tree-select
         v-model:value="selectedCategoryId"
@@ -11,7 +11,7 @@
         :tree-data="categoryTreeData"
         show-search
         tree-node-filter-prop="label"
-        style="width: 200px"
+        style="width: 172px"
       >
       </a-tree-select>
     </div>
