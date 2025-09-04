@@ -143,7 +143,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="price"><span>¥</span>{{`${integerPart(item.itemBankExercise.price)}.` }}<span>{{ decimalPart(item.itemBankExercise.price) }}</span></div>
+                      <div v-if="currentSku.hidePrice !== '1'" class="price"><span>¥</span>{{`${integerPart(item.itemBankExercise.price)}.` }}<span>{{ decimalPart(item.itemBankExercise.price) }}</span></div>
                     </div>
                   </div>
                   <div class="show-button">

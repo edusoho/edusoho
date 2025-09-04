@@ -70,6 +70,14 @@ class CourseSet extends AbstractResource
 
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $courses = $this->getCourseService()->fillCourseTryLookVideo($courses);
+        $courseGroup = ArrayToolkit::group($courses, 'courseSetId');
+        foreach ($courseSets as &$courseSet) {
+            foreach ($courseGroup[$courseSet['id']] as $course) {
+                if ('default' == $course['courseType']) {
+                    $courseSet['hidePrice'] = $course['hidePrice'];
+                }
+            }
+        }
 
         $tryLookVideoCourses = array_filter($courses, function ($course) {
             return !empty($course['tryLookVideo']);
