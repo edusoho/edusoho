@@ -31,13 +31,11 @@
 
     <van-field
       v-model="registerInfo.encrypt_password"
-      class="encrypt_password-input"
       :border="false"
       :error-message="errorMessage.encrypt_password"
       :placeholder="$t('placeholder.setPassword')"
       :type="showPassword ? 'text' : 'password'"
       max-length="20"
-      style="padding-bottom: 0"
       @blur="validateMobileOrPswOrEmail('encrypt_password')"
     >
       <template #button>
@@ -45,7 +43,7 @@
         <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
       </template>
     </van-field>
-    <div v-if="showPasswordTip" class="password-tip">请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码</div>
+    <div v-if="showPasswordTip" class="password-tip">8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码</div>
 
     <e-drag
       ref="dragComponent"
@@ -463,14 +461,8 @@ export default {
 <style scoped>
 .password-tip {
   font-size: 12px;
-  line-height: 20px;
+  line-height: 24px;
   color: rgba(0, 0, 0, 0.45);
   padding: 0 16px;
 }
-.encrypt_password-input {
-  .van-field__error-message {
-    line-height: 20px !important;
-  }
-}
-
 </style>
