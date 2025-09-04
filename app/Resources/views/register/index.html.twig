@@ -47,10 +47,10 @@
             <div id="register_mode_switch"
                  class="color-success register_mode_switch"
             ></div>
-            <div class="form-group mbl js-register_email_or_mobile_mode">
+            <div class="form-group mbl">
               <label class="control-label required" id="register_emailOrMobile-label"></label>
               <div class="controls">
-                <input type="tel" id="register_emailOrMobile-input" class="form-control input-lg"
+                <input id="register_emailOrMobile-input" class="form-control input-lg"
                        data-url="{{ path('register_email_or_mobile_check') }}"
                        onkeydown="if(event.keyCode==13) return false;">
                 <p class="help-block"></p>

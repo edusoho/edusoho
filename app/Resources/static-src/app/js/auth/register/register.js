@@ -72,12 +72,14 @@ export default class Register {
         $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
         $('#register_emailOrMobile-label').attr('for', 'verifiedMobile')
         $('#register_emailOrMobile-input').attr('name', 'verifiedMobile')
+        $('#register_emailOrMobile-input').attr('type', 'tel')
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
         $('#register_mode_switch').text('切换手机号注册 >>').attr('mode', 'email')
         $('#register_emailOrMobile-label').text('邮箱地址');
         $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的邮箱地址作为登陆账号');
         $('#register_emailOrMobile-label').attr('for', 'email')
         $('#register_emailOrMobile-input').attr('name', 'email')
+        $('#register_emailOrMobile-input').attr('type', 'email')
       }
       this.initEmailMobileMsg();
     })
