@@ -85,13 +85,13 @@ export default {
   border-bottom: 1px solid #ebebeb;
 
   .answer-mode-tag {
-    color: @primary-color;
+    color: #46c37b;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
     padding: 2px 8px;
     border-radius: 4px;
-    border: 1px solid @primary-color;
+    border: 1px solid #46c37b;
   }
 
   .answer_mode {
