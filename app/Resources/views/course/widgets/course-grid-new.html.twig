@@ -7,7 +7,7 @@
   {% set videoMaxLevel = get_video_max_level(course.id) %}
   <div class="course-img">
     <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank" style="position: relative;">
-      {% if courseSet.discountId > 0 %}
+      {% if course.hidePrice != '1' and courseSet.discountId > 0 %}
         {% if courseSet.discount == 0 %}
           <!-- 限免 -->
           <span class="{% if app.request.getLocale() == 'en' %}tag-discount-en{% else %}tag-discount{% endif %} free"></span>
