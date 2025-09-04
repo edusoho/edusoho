@@ -1,13 +1,6 @@
 <template>
   <div class="question-layout" :order="order">
-    <a-button
-      size="small"
-      type="primary"
-      class="answer_mode"
-      ghost
-    >
-      {{ showAnswerModeText(questions.answer_mode) }}
-    </a-button>
+    <div class="answer-mode-tag">{{ showAnswerModeText(question.answer_mode) }}</div>
 
     <stem :order="order" :stem="questions.stem" />
 
@@ -90,6 +83,16 @@ export default {
 .question-layout {
   padding: 16px 0 24px 54px;
   border-bottom: 1px solid #ebebeb;
+
+  .answer-mode-tag {
+    color: #46c37b;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #46c37b;
+  }
 
   .answer_mode {
     position: relative;

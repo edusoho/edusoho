@@ -7,7 +7,7 @@
   {% set videoMaxLevel = get_video_max_level(course.id) %}
   <div class="course-img">
     <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank" style="position: relative;">
-      {% if courseSet.discountId > 0 %}
+      {% if course.hidePrice != '1' and courseSet.discountId > 0 %}
         {% if courseSet.discount == 0 %}
           <!-- 限免 -->
           <span class="{% if app.request.getLocale() == 'en' %}tag-discount-en{% else %}tag-discount{% endif %} free"></span>
@@ -36,7 +36,7 @@
       {% if courseSet.course.tryLookVideo|default(false) %}
         <div style="position: absolute; top: 0; right: 0; border-radius: 0 4px 0 8px; color: #FFF; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; background: rgba(0, 0, 0, 0.40);"><i class="es-icon es-icon-video color-white" style="font-size: 12px; margin-right: 4px;"></i>{{'site.badge.try_watch'|trans}}</div>
       {% endif %}
-      {% if is_plugin_installed('Vip') and setting('vip.enabled') and course.vipLevelId|default(0) > 0 %}
+      {% if  course.hidePrice != '1' and is_plugin_installed('Vip') and setting('vip.enabled') and course.vipLevelId|default(0) > 0 %}
         <div style="position: absolute; z-index: 10; left: 0; bottom: 0; color: #FFF; font-size: 12px; font-weight: 500; line-height: 20px; padding: 2px 8px; border-radius: 0 12px 0 0; background: rgba(0, 0, 0, 0.80);">会员免费</div>
       {% else %}
         {% if videoMaxLevel == '2k' %}

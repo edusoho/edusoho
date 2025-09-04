@@ -134,4 +134,5 @@ UPDATE user SET password = 'KdpOIVZgl/Pb7NZGEzZNQaq8daibtcUtBgm+D2IJ6W8=', salt 
 ```sql
 UPDATE user SET password = 'LxjB1mpxx1Zwj6HudDJfywRZlCLzDZFJygpNgbSoc0E=', salt = 'nsur7jh5snkc0wskkk8oscwwkwckkos', passwordUpgraded = '0' WHERE nickname = '李雷' LIMIT 1;
 UPDATE user SET password = 'LxjB1mpxx1Zwj6HudDJfywRZlCLzDZFJygpNgbSoc0E=', salt = 'nsur7jh5snkc0wskkk8oscwwkwckkos', passwordUpgraded = '0' WHERE nickname = '管理员' LIMIT 1;
+UPDATE user SET password = 'LxjB1mpxx1Zwj6HudDJfywRZlCLzDZFJygpNgbSoc0E=', salt = 'nsur7jh5snkc0wskkk8oscwwkwckkos', passwordUpgraded = '0' WHERE nickname = '老师' LIMIT 1;
 ```

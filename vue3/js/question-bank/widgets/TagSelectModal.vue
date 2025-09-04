@@ -1,7 +1,9 @@
 <script setup>
 const emit = defineEmits(['ok'])
-import {onMounted, ref, watch} from 'vue';
+import {ref, watch} from 'vue';
 import Api from '../../../api';
+import { Empty } from 'ant-design-vue';
+const simpleImage = Empty.PRESENTED_IMAGE_SIMPLE;
 
 const modalVisible = defineModel();
 const props = defineProps({
@@ -14,12 +16,11 @@ const tagGroupTag = ref([])
 const relationTagIds = ref([]);
 const selectedTagIds = ref([]);
 
-onMounted(async () => {
-  tagGroupTag.value = await Api.questionTag.getTagGroupTag();
-})
-
-watch(modalVisible, async () => {
-  if (modalVisible.value && props.params.mode === 'set' && props.params.id) {
+watch(modalVisible, async (newVal) => {
+  if (newVal) {
+    tagGroupTag.value = await Api.questionTag.getTagGroupTag();
+  }
+  if (newVal && props.params.mode === 'set' && props.params.id) {
     const relationTags = await Api.questionTag.getTagRelationTags(props.params.id)
     relationTags.forEach(item => {
       item.tags.forEach(tag => {
@@ -27,7 +28,7 @@ watch(modalVisible, async () => {
       })
     })
     selectedTagIds.value = [...relationTagIds.value];
-  } else if (modalVisible.value && props.params.mode === 'filter' && props.params.tagIds) {
+  } else if (newVal && props.params.mode === 'filter' && props.params.tagIds) {
     selectedTagIds.value = [...props.params.tagIds];
   }
 })
@@ -104,11 +105,12 @@ function onCancel() {
         <a-button type="primary" @click="selectAllTag">一键全选</a-button>
         <a-button @click="clearAllTag">一键清除</a-button>
       </div>
-      <div class="flex flex-col gap-32 max-h-420 overflow-y-scroll">
-        <div class="flex flex-col gap-32" v-for="(item, index) in tagGroupTag" :key="index">
-          <div class="flex flex-col gap-8">
-            <div class="text-[16px] leading-[28px] font-normal">{{ item.name }}</div>
-            <div class="flex flex-wrap gap-16">
+      <div class="min-h-270 max-h-420 overflow-y-scroll">
+        <div v-if="tagGroupTag.length > 0" class="flex flex-col gap-32">
+          <div class="flex flex-col gap-32" v-for="(item, index) in tagGroupTag" :key="index">
+            <div class="flex flex-col gap-8">
+              <div class="text-[16px] leading-[28px] font-normal">{{ item.name }}</div>
+              <div class="flex flex-wrap gap-16">
             <span
               v-for="(tag, index) in item.tags"
               :key="index"
@@ -118,8 +120,12 @@ function onCancel() {
             >
               {{ tag.name }}
             </span>
+              </div>
             </div>
           </div>
+        </div>
+        <div v-else class="w-full h-270 flex items-center justify-center">
+          <a-empty :image="simpleImage" />
         </div>
       </div>
     </div>

@@ -39,16 +39,18 @@
           </a>
         {% endif %}
 
-        <div class="cd-mb16">
-          <span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
-          <span class="course-detail-price-money vertical-sub mrm">
+        {% if exercise.hidePrice != 1 %}
+          <div class="cd-mb16">
+            <span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
+            <span class="course-detail-price-money vertical-sub mrm">
             {% if exercise.price == 0 or exercise.isFree == 1 %}
               <b class="pirce-num color-success">{{'course.price.free'|trans}}</b>
             {% else %}
               <b class="pirce-num"><span class="cd-text-lg">¥&nbsp;</span>{{ exercise.price }}</b>
             {% endif %}
           </span>
-        </div>
+          </div>
+        {% endif %}
 
         <div class="course-detail-gray course-detail-gray--market not-activity">
           <div class="hidden-xs common-line-height">

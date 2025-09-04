@@ -104,7 +104,7 @@ onMounted(async () => {
   }
   spinning.value = false;
 
-  const options = await Api.aiCompanionStudy.getDomains(props.courseId);
+  const options = await Api.aiCompanionStudy.getDomains();
   domainOptions.value = options.map(item => ({
     label: item.name,
     value: item.id,
@@ -113,7 +113,7 @@ onMounted(async () => {
     if (formState.domainId) {
       return
     }
-    const domain = await Api.aiCompanionStudy.getDomainId(props.courseId);
+    const domain = await Api.aiCompanionStudy.getDomainId({courseId: props.courseId});
     if (domain.id.trim()) {
       formState.domainId = domain.id;
     }

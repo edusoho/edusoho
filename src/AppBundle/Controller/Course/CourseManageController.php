@@ -1012,7 +1012,7 @@ class CourseManageController extends BaseController
     public function courseItemsSortAction(Request $request, $courseId)
     {
         $ids = $request->request->get('ids', []);
-        if (!$this->checkSortAble($ids, $courseId)) {
+        if (!$this->canSort($courseId, $ids)) {
             return $this->createJsonResponse(['refresh' => true]);
         }
         $ids = $this->getCourseService()->courseItemIdsHandle($courseId, $ids);
@@ -1148,15 +1148,33 @@ class CourseManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function checkSortAble($ids, $courseId)
+    private function canSort($courseId, $ids)
     {
+        $chapterIds = [];
+        $taskIds = [];
+        foreach ($ids as $id) {
+            $result = explode('-', $id);
+            if ('chapter' == $result[0]) {
+                $chapterIds[] = $result[1];
+            }
+            if ('task' == $result[0]) {
+                $taskIds[] = $result[1];
+            }
+        }
+        if (!empty($chapterIds)) {
+            $chapters = $this->getCourseService()->findChaptersByCourseId($courseId);
+            if (!ArrayToolkit::isSameValues($chapterIds, array_column($chapters, 'id'))) {
+                return false;
+            }
+        }
+        if (!empty($taskIds)) {
+            $tasks = $this->getTaskService()->searchTasks(['courseId' => $courseId], [], 0, PHP_INT_MAX, ['id']);
+            if (!ArrayToolkit::isSameValues($taskIds, array_column($tasks, 'id'))) {
+                return false;
+            }
+        }
+
         return true;
-//        $taskCount = $this->getTaskService()->countTasks(['courseId' => $courseId]);
-//        $filteredIds = array_filter($ids, function ($id) {
-//            return false !== strpos($id, 'chapter');
-//        });
-//
-//        return count($filteredIds) != $taskCount;
     }
 
     private function sortMarkerStats(&$stats, $request)

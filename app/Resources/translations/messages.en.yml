@@ -2129,6 +2129,8 @@ item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit 
 item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
 item_bank_exercise.marketing_setup.rule.show: After disabling, the item bank exercise will be completely hidden and students will not be able to view it on the front-end.
+item_bank_exercise.marketing_setup.show_price: 'Show price'
+item_bank_exercise.marketing_setup.hide_price: 'Hide price'
 item_bank_exercise.assessment_exercise.add_module: Create
 item_bank_exercise.assessment_exercise.edit_module: Edit
 item_bank_exercise.assessment_exercise.module.name: Module Name

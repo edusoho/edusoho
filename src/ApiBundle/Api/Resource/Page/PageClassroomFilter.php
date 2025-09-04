@@ -22,6 +22,7 @@ class PageClassroomFilter extends Filter
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
         'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'myReview', 'member', 'vipLevel', 'goodsId', 'specsId', 'spec', 'vipDeadline',
+        'hidePrice',
     ];
 
     protected function simpleFields(&$data)

@@ -59,11 +59,19 @@ class MeCourse extends AbstractResource
         $total = $this->getCourseService()->countCourses($courseConditions);
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
 
+        $tasks = $this->getTaskService()->findTasksByIds(array_column($members, 'lastLearnTaskId'));
+        $tasks = array_column($tasks, null, 'id');
         $membersIndex = ArrayToolkit::index($members, 'courseId');
         foreach ($courses as &$course) {
             if (isset($membersIndex[$course['id']])) {
                 $course['lastLearnTime'] = $membersIndex[$course['id']]['lastLearnTime'];
                 $course['isExpired'] = $this->isExpired($membersIndex[$course['id']]['deadline']);
+                $course['lastLearnTask'] = empty($tasks[$membersIndex[$course['id']]['lastLearnTaskId']]) ? null : [
+                    'id' => $membersIndex[$course['id']]['lastLearnTaskId'],
+                    'number' => $tasks[$membersIndex[$course['id']]['lastLearnTaskId']]['number'],
+                    'title' => $tasks[$membersIndex[$course['id']]['lastLearnTaskId']]['title'],
+                    'type' => $tasks[$membersIndex[$course['id']]['lastLearnTaskId']]['type'],
+                ];
             }
         }
 

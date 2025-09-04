@@ -4,6 +4,7 @@ define(function (require, exports, module) {
   require('common/validator-rules').inject(Validator);
 
   exports.run = function () {
+    console.log('run');
     let $modal = $('#user-create-form').parents('.modal');
 
     let validator = new Validator({
@@ -52,7 +53,7 @@ define(function (require, exports, module) {
       element: '[name="password"]',
       required: true,
       rule: 'password_normal spaceNoSupport',
-      errormessageRequired: '请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码'
+      errormessageRequired: '请设置8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码'
     });
 
     validator.addItem({
@@ -60,30 +61,29 @@ define(function (require, exports, module) {
       required: true,
       rule: 'confirmation{target:#password}'
     });
+
+    $('.js-password-open-eye').on('click', function () {
+      $('#password').attr('type', 'password');
+      $('.js-password-open-eye').hide();
+      $('.js-password-close-eye').show();
+    });
+
+    $('.js-password-close-eye').on('click', function () {
+      $('#password').attr('type', 'text');
+      $('.js-password-close-eye').hide();
+      $('.js-password-open-eye').show();
+    });
+
+    $('.js-confirm-password-open-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'password');
+      $('.js-confirm-password-open-eye').hide();
+      $('.js-confirm-password-close-eye').show();
+    });
+
+    $('.js-confirm-password-close-eye').on('click', function () {
+      $('#confirmPassword').attr('type', 'text');
+      $('.js-confirm-password-close-eye').hide();
+      $('.js-confirm-password-open-eye').show();
+    });
   };
-
-  $('.js-password-open-eye').on('click', function () {
-    $('#password').attr('type', 'password');
-    $('.js-password-open-eye').hide();
-    $('.js-password-close-eye').show();
-  })
-
-  $('.js-password-close-eye').on('click', function () {
-    $('#password').attr('type', 'text');
-    $('.js-password-close-eye').hide();
-    $('.js-password-open-eye').show();
-  })
-
-  $('.js-confirm-password-open-eye').on('click', function () {
-    $('#confirmPassword').attr('type', 'password');
-    $('.js-confirm-password-open-eye').hide();
-    $('.js-confirm-password-close-eye').show();
-  })
-
-  $('.js-confirm-password-close-eye').on('click', function () {
-    $('#confirmPassword').attr('type', 'text');
-    $('.js-confirm-password-close-eye').hide();
-    $('.js-confirm-password-open-eye').show();
-  })
-
 });

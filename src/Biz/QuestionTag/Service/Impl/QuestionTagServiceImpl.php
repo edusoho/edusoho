@@ -196,17 +196,23 @@ class QuestionTagServiceImpl extends BaseService implements QuestionTagService
             $tags = $this->searchTags(['ids' => $tagIds, 'status' => 1], ['id']);
             $tagIds = array_column($tags, 'id');
         }
-        $this->getQuestionTagRelationDao()->batchDelete(['itemIds' => $itemIds]);
-        $relations = [];
+        if (1 == count($itemIds)) {
+            $this->getQuestionTagRelationDao()->batchDelete(['itemIds' => $itemIds]);
+        }
+        $relations = $this->findTagRelationsByItemIds($itemIds);
+        $relations = ArrayToolkit::groupIndex($relations, 'itemId', 'tagId');
+        $newRelations = [];
         foreach ($itemIds as $itemId) {
             foreach ($tagIds as $tagId) {
-                $relations[] = [
-                    'itemId' => $itemId,
-                    'tagId' => $tagId,
-                ];
+                if (empty($relations[$itemId][$tagId])) {
+                    $newRelations[] = [
+                        'itemId' => $itemId,
+                        'tagId' => $tagId,
+                    ];
+                }
             }
         }
-        $this->getQuestionTagRelationDao()->batchCreate($relations);
+        $this->getQuestionTagRelationDao()->batchCreate($newRelations);
     }
 
     public function findTagRelationsByTagIds($tagIds)

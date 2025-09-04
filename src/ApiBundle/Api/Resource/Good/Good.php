@@ -139,6 +139,7 @@ class Good extends AbstractResource
             }
             $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
             $spec['services'] = $spec['services'] ?: [];
+            $spec['hidePrice'] = $goodsEntity->isSpecHidePrice($goods, $spec);
         }
         $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
     }

@@ -1262,6 +1262,8 @@ item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理�
 item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
 item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
 item_bank_exercise.marketing_setup.rule.show: 隐藏后前台不可见，不可见范围：首页、列表页、搜索结果页、班级中添加课程列表页
+item_bank_exercise.marketing_setup.show_price: 显示价格
+item_bank_exercise.marketing_setup.hide_price: 不显示价格
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
@@ -5020,7 +5022,7 @@ contetn.article_list.contentCategory: >
 
 # course/block
 course.block_grid.view_course_btn: 查看课程
-course.block_grid.countinue_learn_btn: 继续学习
+course.block_grid.countinue_learn_btn: 进入学习
 course.block_grid.DRAFT_STATUS: 未发布
 course.block_grid.CLOSE_STATUS: 已关闭
 course.block_grid.SERIALIZE_SERIALIZE_MODE: 更新中

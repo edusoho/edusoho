@@ -1,0 +1,46 @@
+.course-learn-history {
+  display: flex;
+  padding: 2px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 99px;
+  background: fade(@brand-primary, 5%);
+
+  .history-icon {
+    @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+    <g clip-path="url(#clip0_861_729)">
+        <path d="M3.09783 11.1855C4.16751 12.4964 5.79583 13.3334 7.61964 13.3334C10.8413 13.3334 13.453 10.7217 13.453 7.50002C13.453 4.27836 10.8413 1.66669 7.61964 1.66669C5.71179 1.66669 4.01785 2.58259 2.95355 3.99868" stroke="@{brand-primary}" stroke-linecap="round"/>
+        <path d="M3.09783 11.1855C4.16751 12.4964 5.79583 13.3334 7.61964 13.3334C10.8413 13.3334 13.453 10.7217 13.453 7.50002C13.453 4.27836 10.8413 1.66669 7.61964 1.66669C5.71179 1.66669 4.01785 2.58259 2.95355 3.99868" stroke="black" stroke-opacity="0.2" stroke-linecap="round"/>
+        <path d="M7.61963 4.44971V7.50002L9.21498 9.15073" stroke="@{brand-primary}" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7.61963 4.44971V7.50002L9.21498 9.15073" stroke="black" stroke-opacity="0.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M1.38731 5.87506C1.39179 5.99942 1.50755 6.08954 1.62921 6.06339L4.56936 5.4314C4.7354 5.39571 4.7842 5.18238 4.6502 5.07805L1.60178 2.70469C1.46778 2.60036 1.27293 2.69998 1.27905 2.8697L1.38731 5.87506Z" fill="@{brand-primary}"/>
+        <path d="M1.38731 5.87506C1.39179 5.99942 1.50755 6.08954 1.62921 6.06339L4.56936 5.4314C4.7354 5.39571 4.7842 5.18238 4.6502 5.07805L1.60178 2.70469C1.46778 2.60036 1.27293 2.69998 1.27905 2.8697L1.38731 5.87506Z" fill="black" fill-opacity="0.2"/>
+    </g>
+    <defs>
+        <clipPath id="clip0_861_729">
+            <rect width="14" height="14" fill="white" transform="translate(0.619629 0.5)"/>
+        </clipPath>
+    </defs>
+</svg>');
+
+    width: 14px;
+    height: 14px;
+    aspect-ratio: 1/1;
+    background-image: url("data:image/svg+xml,@{svg}");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  a {
+    display: -webkit-box;
+    max-width: 365px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    color: mix(black, @brand-primary, 20%);
+    text-overflow: ellipsis;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+  }
+}
