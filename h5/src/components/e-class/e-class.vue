@@ -30,7 +30,7 @@
     </div>
     <div v-if="course && course.bottom && course.bottom.data && course.bottom.data.lastLearnTask" class="e-course-last_learn_task-container">
       <img class="icon" src="static/images/course/last-learn-task-icon.svg" alt="">
-      <div class="text">{{ course.bottom.data.lastLearnTask.title }}</div>
+      <div class="text">{{ `上次学到：课时${course.bottom.data.lastLearnTask.number}：${course.bottom.data.lastLearnTask.title}` }}</div>
     </div>
   </div>
 </template>
