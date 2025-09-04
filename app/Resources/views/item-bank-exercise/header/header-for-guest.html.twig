@@ -39,7 +39,7 @@
           </a>
         {% endif %}
 
-        {% if exercise.hidePrice == 0 %}
+        {% if exercise.hidePrice != 1 %}
           <div class="cd-mb16">
             <span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
             <span class="course-detail-price-money vertical-sub mrm">
