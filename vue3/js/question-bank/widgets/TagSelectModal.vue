@@ -1,6 +1,6 @@
 <script setup>
 const emit = defineEmits(['ok'])
-import {onMounted, ref, watch} from 'vue';
+import {ref, watch} from 'vue';
 import Api from '../../../api';
 
 const modalVisible = defineModel();
@@ -14,12 +14,11 @@ const tagGroupTag = ref([])
 const relationTagIds = ref([]);
 const selectedTagIds = ref([]);
 
-onMounted(async () => {
-  tagGroupTag.value = await Api.questionTag.getTagGroupTag();
-})
-
-watch(modalVisible, async () => {
-  if (modalVisible.value && props.params.mode === 'set' && props.params.id) {
+watch(modalVisible, async (newVal) => {
+  if (newVal) {
+    tagGroupTag.value = await Api.questionTag.getTagGroupTag();
+  }
+  if (newVal && props.params.mode === 'set' && props.params.id) {
     const relationTags = await Api.questionTag.getTagRelationTags(props.params.id)
     relationTags.forEach(item => {
       item.tags.forEach(tag => {
@@ -27,7 +26,7 @@ watch(modalVisible, async () => {
       })
     })
     selectedTagIds.value = [...relationTagIds.value];
-  } else if (modalVisible.value && props.params.mode === 'filter' && props.params.tagIds) {
+  } else if (newVal && props.params.mode === 'filter' && props.params.tagIds) {
     selectedTagIds.value = [...props.params.tagIds];
   }
 })
