@@ -38,6 +38,7 @@ const getDisplayStyle = (data, listObj) => {
         value: data.price || data.studentNum,
         html: `<span class="text-12">${price}</span>${showStudentStr}`,
       },
+      hidePrice: data.hidePrice,
     };
   }
 
