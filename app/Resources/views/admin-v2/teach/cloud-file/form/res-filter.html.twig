@@ -20,7 +20,7 @@
   <div class="form-inline row">
     <div class="form-group col-sm-5">
       <label>{{ 'admin.cloud_file.transcode_status'|trans }}</label>
-      <select class="form-control js-process-status-select form-control-input-md" name="convertStatus">
+      <select class="form-control js-process-status-select" name="convertStatus">
         <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
         <option value="waiting">{{ 'material.common_table.transcode_waiting'|trans }}</option>
         <option value="success">{{'material_lib.search.conditions.convert_status.success'|trans}}</option>
@@ -33,7 +33,7 @@
       <input type="hidden" name="categoryId">
     </div>
     {% if pageType == 'file' %}
-      <div class="form-group col-sm-6">
+      <div class="form-group col-sm-5">
         <label>{{ 'admin.cloud_file.use_status'|trans }}</label>
         <select class="form-control js-use-status-select form-control-input-md" name="useStatus">
           <option value="">{{ 'admin.cloud_file.select_placeholeder'|trans }}</option>
