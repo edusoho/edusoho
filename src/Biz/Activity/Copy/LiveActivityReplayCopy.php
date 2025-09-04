@@ -13,6 +13,7 @@ class LiveActivityReplayCopy extends AbstractCopy
             'title',
             'replayId',
             'globalId',
+            'userId',
             'hidden',
             'type',
         ];
