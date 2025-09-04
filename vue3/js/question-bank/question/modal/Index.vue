@@ -1,13 +1,12 @@
 <script setup>
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
-import {emitter} from 'vue3/js/event-bus';
 import TagSelectModal from '../../widgets/TagSelectModal.vue';
 import {ref} from 'vue';
 
 const params = ref({})
 
 const tagSelectModalVisible = ref(false);
-emitter.on('open-tag-modal', (val) => {
+window.emitter.on('open-tag-modal', (val) => {
   tagSelectModalVisible.value = true;
   params.value = val;
 });

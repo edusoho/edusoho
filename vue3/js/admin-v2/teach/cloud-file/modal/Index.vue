@@ -1,12 +1,11 @@
 <script setup>
-import {emitter} from 'vue3/js/event-bus';
 import {ref} from 'vue';
 import CategorySelectModal from './category-select/CategorySelectModal.vue';
 
 const params = ref();
 
 const categoryModalVisible = ref(false);
-emitter.on('open-category-modal', (val) => {
+window.emitter.on('open-category-modal', (val) => {
   if (val.ids.length > 0) {
     params.value = val;
     categoryModalVisible.value = true;
