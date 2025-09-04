@@ -179,7 +179,7 @@ class AIExtension extends \Twig_Extension
     {
         return json_encode([
             'workerUrl' => $this->getAgentWorkerUrl(),
-            'domainId' => $exercise['domainId'],
+            'domainId' => $exercise['agentDomainId'],
         ]);
     }
 
