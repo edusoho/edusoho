@@ -41,6 +41,7 @@ class CourseController extends CourseBaseController
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->appendLastLearnTask($courses);
         $courses = ArrayToolkit::sortPerArrayValue($courses, 'createdTime', false);
         $courses = ArrayToolkit::group($courses, 'courseSetId');
         list($learnedCourseSetIds, $learningCourseSetIds) = $this->differentiateCourseSetIds($courses, $members);
@@ -95,6 +96,7 @@ class CourseController extends CourseBaseController
 
         $courseIds = ArrayToolkit::column($members, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->appendLastLearnTask($courses);
 
         $courses = ArrayToolkit::group($courses, 'courseSetId');
 
@@ -273,6 +275,25 @@ class CourseController extends CourseBaseController
         return $this->render(
             'my/learning/lives-calendar.html.twig'
         );
+    }
+
+    private function appendLastLearnTask($courses)
+    {
+        $courseMembers = $this->getCourseMemberService()->findCourseMembersByUserIdAndCourseIds($this->getCurrentUser()->getId(), array_column($courses, 'id'));
+        $tasks = $this->getTaskService()->findTasksByIds(array_column($courseMembers, 'lastLearnTaskId'));
+        $courseMembers = array_column($courseMembers, null, 'courseId');
+        $tasks = array_column($tasks, null, 'id');
+        foreach ($courses as &$course) {
+            $member = $courseMembers[$course['id']] ?? [];
+            $course['lastLearnTask'] = empty($tasks[$member['lastLearnTaskId']]) ? null : [
+                'id' => $member['lastLearnTaskId'],
+                'number' => $tasks[$member['lastLearnTaskId']]['number'],
+                'title' => $tasks[$member['lastLearnTaskId']]['title'],
+                'type' => $tasks[$member['lastLearnTaskId']]['type'],
+            ];
+        }
+
+        return $courses;
     }
 
     /**
