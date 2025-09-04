@@ -1,7 +1,7 @@
 <script setup>
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import {nextTick, ref} from 'vue';
-import TagSelect from '../../widgets/TagSelectModal.vue';
+import TagSelectModal from '../../widgets/TagSelectModal.vue';
 import Selector from 'app/js/question-bank/common/selector';
 
 const element = $('.js-select-container');
@@ -90,7 +90,7 @@ function onSearch() {
       </div>
       <a-button type="primary" @click="onSearch">搜索</a-button>
     </div>
-    <TagSelect
+    <TagSelectModal
       v-model="tagSelectModalVisible"
       :params="{mode: 'filter', tagIds: tagIds}"
       @ok="onConfirm"

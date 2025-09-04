@@ -1,7 +1,7 @@
 <script setup>
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
 import {emitter} from 'vue3/js/event-bus';
-import TagSelect from '../../widgets/TagSelectModal.vue';
+import TagSelectModal from '../../widgets/TagSelectModal.vue';
 import {ref} from 'vue';
 
 const params = ref({})
@@ -15,7 +15,7 @@ emitter.on('open-tag-modal', (val) => {
 
 <template>
   <AntConfigProvider>
-    <TagSelect
+    <TagSelectModal
       v-model="tagSelectModalVisible"
       :params="params"
     />

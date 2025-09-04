@@ -5,7 +5,7 @@ import {goto} from '../../common';
 import {nextTick, onMounted, ref} from 'vue';
 import Selector from 'app/js/question-bank/common/selector';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
-import TagSelect from '../widgets/TagSelectModal.vue';
+import TagSelectModal from '../widgets/TagSelectModal.vue';
 
 const categoryId = ref()
 const difficulty = ref('default')
@@ -249,7 +249,7 @@ onMounted(() => {
     <input type="hidden" class="js-list-header-type" :value=type>
     <input type="hidden" class="js-list-header-keyword" :value=keyword>
     <input type="hidden" class="js-list-header-tagIds" :value=tagIds>
-    <TagSelect
+    <TagSelectModal
       v-model="tagSelectModalVisible"
       :params="{mode: 'filter' ,tagIds: tagIds}"
       @ok="onOk"
