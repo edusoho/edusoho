@@ -44,9 +44,10 @@ define(function(require, exports, module) {
         this.initEmitter();
       },
       initEmitter: function() {
-          window.emitter.on('set-category-success', () => {
-              this.renderTable();
-          });
+        window.emitter.on('set-category-success', () => {
+          $("[data-role=batch-select]").attr("checked", false);
+          this.renderTable();
+        });
       },
       initTagForm: function(event) {
         var $form = $("#tag-form");
