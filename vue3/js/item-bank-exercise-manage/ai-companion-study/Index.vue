@@ -3,7 +3,6 @@ import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import {onMounted, reactive, ref} from 'vue';
 import Api from '../../../api';
 import {message} from 'ant-design-vue';
-import dayjs from 'dayjs';
 
 const props = defineProps({
   exerciseId: {required: true},
@@ -65,12 +64,6 @@ onMounted(async () => {
 });
 
 const save = async () => {
-  if (
-    formState.isActive === (agentConfig.value?.isAgentActive === '1')
-    && formState.domainId === (agentConfig.value?.agentDomainId === '' ? null : agentConfig.value.agentDomainId)
-  ) {
-    return;
-  }
   try {
     spinning.value = true;
     const params = {
