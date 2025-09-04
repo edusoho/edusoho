@@ -1,6 +1,6 @@
 <template>
-  <div class="e-course">
-    <div class="clearfix" @click="onClick">
+  <div class="e-course" @click="onClick">
+    <div class="clearfix">
       <div class="e-course__left pull-left relative">
         <img v-lazy="imgSrc" :class="imgClass" />
         <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-top-right-radius: 12px;">2K 优享</div>
