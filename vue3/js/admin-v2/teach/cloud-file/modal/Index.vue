@@ -1,6 +1,7 @@
 <script setup>
 import {ref} from 'vue';
 import CategorySelectModal from './category-select/CategorySelectModal.vue';
+import AntConfigProvider from '../../../../components/AntConfigProvider.vue';
 
 const params = ref();
 
@@ -14,9 +15,11 @@ window.emitter.on('open-category-modal', (val) => {
 </script>
 
 <template>
-  <CategorySelectModal
-    v-model="categoryModalVisible"
-    :params="params"
-  />
+  <AntConfigProvider>
+    <CategorySelectModal
+      v-model="categoryModalVisible"
+      :params="params"
+    />
+  </AntConfigProvider>
 </template>
 
