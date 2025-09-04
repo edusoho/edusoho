@@ -5022,7 +5022,7 @@ contetn.article_list.contentCategory: >
 
 # course/block
 course.block_grid.view_course_btn: 查看课程
-course.block_grid.countinue_learn_btn: 继续学习
+course.block_grid.countinue_learn_btn: 进入学习
 course.block_grid.DRAFT_STATUS: 未发布
 course.block_grid.CLOSE_STATUS: 已关闭
 course.block_grid.SERIALIZE_SERIALIZE_MODE: 更新中
