@@ -1,8 +1,8 @@
-import { createApp } from 'vue';
+import {createApp} from 'vue';
 import SearchForm from './SearchForm.vue';
-import { Button, Dropdown, Menu, Select, Input, Modal } from 'ant-design-vue';
+import {Button, Dropdown, Menu, Select, Input, Modal, Empty} from 'ant-design-vue';
 import 'vue3/main.less';
-import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
+import {createStyleTag, setCurrentPrimaryColor} from 'vue3/js/common';
 
 const app = createApp(SearchForm);
 
@@ -12,6 +12,7 @@ app.use(Menu);
 app.use(Select);
 app.use(Input);
 app.use(Modal);
+app.use(Empty);
 
 setCurrentPrimaryColor(app);
 
