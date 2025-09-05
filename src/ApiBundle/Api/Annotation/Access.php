@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Annotation;
 
 use Biz\Common\CommonException;
+use Biz\User\CurrentUser;
 
 /**
  * @Annotation
@@ -12,7 +13,7 @@ class Access
 {
     private $roles;
 
-    private $rolesArray = array('ROLE_USER');
+    private $permissions;
 
     public function __construct(array $data)
     {
@@ -30,19 +31,54 @@ class Access
         $this->roles = $roles;
     }
 
+    public function setPermissions($permissions)
+    {
+        $this->permissions = $permissions;
+    }
+
     /**
-     * @param $currentUserRoles
+     * @param CurrentUser $currentUser
      *
      * @return bool
      */
-    public function canAccess($currentUserRoles)
+    public function canAccess(CurrentUser $currentUser)
     {
-        $roles = $this->rolesArray = explode(',', $this->roles);
+        if (empty($this->roles) && empty($this->permissions)) {
+            return true;
+        }
+        if (!empty($this->roles) && $this->canAccessByRoles($currentUser)) {
+            return true;
+        }
+        if (!empty($this->permissions) && $this->canAccessByPermissions($currentUser)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function canAccessByRoles(CurrentUser $currentUser)
+    {
+        $roles = explode(',', $this->roles);
         if (empty($roles)) {
             return true;
         }
         foreach ($roles as $role) {
-            if (in_array($role, $currentUserRoles)) {
+            if (in_array($role, $currentUser->getRoles())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function canAccessByPermissions(CurrentUser $currentUser)
+    {
+        $permissions = explode(',', $this->permissions);
+        if (empty($permissions)) {
+            return true;
+        }
+        foreach ($permissions as $permission) {
+            if ($currentUser->hasPermission($permission)) {
                 return true;
             }
         }
