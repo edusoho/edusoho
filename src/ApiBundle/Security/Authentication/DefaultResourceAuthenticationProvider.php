@@ -46,8 +46,7 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
         );
 
         $biz = $this->container->get('biz');
-        $currentUser = $biz['user'];
-        if ($accessAnnotation && !$accessAnnotation->canAccess($currentUser->getRoles())) {
+        if ($accessAnnotation && !$accessAnnotation->canAccess($biz['user'])) {
             throw UserException::PERMISSION_DENIED();
         }
 

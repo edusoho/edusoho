@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\UploadFile;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -13,6 +14,9 @@ use Biz\Task\Service\TaskService;
 
 class UploadFileReplace extends AbstractResource
 {
+    /**
+     * @Access(permissions="admin_v2_cloud_resource")
+     */
     public function add(ApiRequest $request, $fileId)
     {
         $params = $request->request->all();

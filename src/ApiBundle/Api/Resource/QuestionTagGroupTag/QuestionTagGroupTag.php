@@ -2,12 +2,16 @@
 
 namespace ApiBundle\Api\Resource\QuestionTagGroupTag;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\QuestionTag\Service\QuestionTagService;
 
 class QuestionTagGroupTag extends AbstractResource
 {
+    /**
+     * @Access(roles="ROLE_TEACHER", permissions="admin_v2")
+     */
     public function search()
     {
         $tagGroups = $this->getQuestionTagService()->searchTagGroups(['status' => 1], ['id', 'name']);

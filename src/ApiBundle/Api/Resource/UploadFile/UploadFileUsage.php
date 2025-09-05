@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\UploadFile;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -10,6 +11,9 @@ use Biz\Course\Service\MaterialService;
 
 class UploadFileUsage extends AbstractResource
 {
+    /**
+     * @Access(permissions="admin_v2_cloud_resource")
+     */
     public function search(ApiRequest $request, $fileId)
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
