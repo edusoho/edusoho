@@ -93,23 +93,20 @@
                 v-for="(item, index) in question.answer"
                 :key="index"
             >
-              {{ t("itemEngine.fillText") }} {{ `(${index + 1})` }} ：<span>{{
-                t("itemEngine.rightAnswer")
-              }}</span
-            ><span class="ibs-success-color">
-            <span v-if="isAnswerIncludeFormula(item)" v-html="displayAsFormula(answerFill(item))"></span>
-            <span v-else>{{ answerFill(item) }}</span>
-          </span>
-              <span v-if="reportAnswer.status !== 'right'" class="ibs-ml8"
-              >{{ t("itemEngine.memberAnswer") }}
-              <span v-if="finalAnswer.length" class="ibs-danger-color">
-                <span v-if="isAnswerIncludeFormula(finalAnswer[index])" v-html="displayAsFormula(finalAnswer[index])"></span>
-                <span v-else>{{ finalAnswer[index] }}</span>
+              {{ t("itemEngine.fillText") }} {{ `(${index + 1})` }} ：
+              <span>{{t("itemEngine.rightAnswer") }}</span>
+              <span class="ibs-success-color">
+                <span v-if="isAnswerIncludeFormula(item)" v-html="displayAsFormula(answerFill(item))"></span>
+                <span v-else>{{ answerFill(item) }}</span>
               </span>
-              <span v-else>{{
-                  t("itemEngine.answerStatus.no_answer")
-                }}</span></span
-              >
+              <span v-if="reportAnswer.status !== 'right'" class="ibs-ml8">
+                {{ t("itemEngine.memberAnswer") }}
+                <span v-if="finalAnswer.length" :class="{'ibs-success-color': answerFill(item) === finalAnswer[index], 'ibs-danger-color': answerFill(item) !== finalAnswer[index]}">
+                  <span v-if="isAnswerIncludeFormula(finalAnswer[index])" v-html="displayAsFormula(finalAnswer[index])"></span>
+                  <span v-else>{{ finalAnswer[index] }}</span>
+                </span>
+                <span v-else>{{t("itemEngine.answerStatus.no_answer") }}</span>
+              </span>
               <a-radio-group
                   v-if="isErrorCorrection && !correctionRequired[index]"
                   class="ibs-ml24"
@@ -373,6 +370,8 @@ export default {
     },
     getFinalAnswer() {
       this.finalAnswer = this.filterFillAnswer(this.reportAnswer.response);
+      console.log('------reportAnswer-------', this.reportAnswer)
+      console.log('------reportAnswer-------', this.reportAnswer)
     },
     changeTag(data) {
       this.$emit("changeTag", data, this.keys);
@@ -384,6 +383,7 @@ export default {
       return /\$\$([^$]+)\$\$/.test(str);
     },
     answerFill(str) {
+      console.log('------str-------', str.replace(/\|/g, this.t("Or")))
       return str.replace(/\|/g, this.t("Or"));
     },
     displayAsFormula(str) {
