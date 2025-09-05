@@ -94,7 +94,7 @@ function onOk(ids) {
 function onReset() {
   difficulty.value = 'default';
   type.value = 'default';
-  keyword.value = null;
+  keyword.value = '';
   tagIds.value = [];
   resetPage();
   const params = {

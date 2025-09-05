@@ -370,8 +370,6 @@ export default {
     },
     getFinalAnswer() {
       this.finalAnswer = this.filterFillAnswer(this.reportAnswer.response);
-      console.log('------reportAnswer-------', this.reportAnswer)
-      console.log('------reportAnswer-------', this.reportAnswer)
     },
     changeTag(data) {
       this.$emit("changeTag", data, this.keys);
@@ -383,7 +381,6 @@ export default {
       return /\$\$([^$]+)\$\$/.test(str);
     },
     answerFill(str) {
-      console.log('------str-------', str.replace(/\|/g, this.t("Or")))
       return str.replace(/\|/g, this.t("Or"));
     },
     displayAsFormula(str) {
