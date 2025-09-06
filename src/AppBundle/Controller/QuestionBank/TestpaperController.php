@@ -602,7 +602,6 @@ class TestpaperController extends BaseController
                 'type' => $type,
                 'questionTags' => $this->findQuestionTagsGroupByItemId(array_keys($items)),
             ]);
-            var_dump($this->findQuestionTagsGroupByItemId(array_keys($items)));
         }
 
         return $this->createJsonResponse($typeHtml);
