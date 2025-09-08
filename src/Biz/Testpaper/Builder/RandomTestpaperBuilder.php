@@ -242,7 +242,11 @@ class RandomTestpaperBuilder implements TestpaperBuilderInterface
                         $question['score_rule']['score'] = ceil($score * 10) / 10;
                         $question['score'] = $question['score_rule']['score'];
                     } else {
-                        $question['score_rule']['score'] = $question['score'];
+                        $question['score_rule'] = [
+                            'score' => $question['score'],
+                            'scoreType' => $scoreType,
+                            'otherScore' => $otherScore,
+                        ];
                     }
                     if (in_array($question['answer_mode'], ['choice', 'uncertain_choice'])) {
                         $question['miss_score'] = $otherScore;
