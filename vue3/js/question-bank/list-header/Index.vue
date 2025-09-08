@@ -10,7 +10,7 @@ import TagSelectModal from '../widgets/TagSelectModal.vue';
 const categoryId = ref()
 const difficulty = ref('default')
 const type = ref('default')
-const keyword = ref()
+const keyword = ref('')
 const tagIds = ref([])
 
 const exportUrl = $('.js-export-value').val()
@@ -94,7 +94,7 @@ function onOk(ids) {
 function onReset() {
   difficulty.value = 'default';
   type.value = 'default';
-  keyword.value = null;
+  keyword.value = '';
   tagIds.value = [];
   resetPage();
   const params = {

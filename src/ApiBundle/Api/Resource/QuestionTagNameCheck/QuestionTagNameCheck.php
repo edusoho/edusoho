@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\QuestionTagNameCheck;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -10,6 +11,9 @@ use Biz\QuestionTag\Service\QuestionTagService;
 
 class QuestionTagNameCheck extends AbstractResource
 {
+    /**
+     * @Access(permissions="admin_v2_question_tag_manage")
+     */
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();

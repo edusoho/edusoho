@@ -1,6 +1,6 @@
 <template>
   <div class="question-layout" :order="order">
-    <div class="answer-mode-tag">{{ showAnswerModeText(question.answer_mode) }}</div>
+    <div class="answer-mode-tag">{{ showAnswerModeText(questions.answer_mode) }}</div>
 
     <stem :order="order" :stem="questions.stem" />
 
@@ -56,6 +56,10 @@ export default {
     }
   },
 
+  onMounted() {
+    console.log('question-layout mounted', this.question);
+  },
+
   methods: {
     showAnswerModeText(mode) {
       switch (mode) {
@@ -85,6 +89,10 @@ export default {
   border-bottom: 1px solid #ebebeb;
 
   .answer-mode-tag {
+    position: relative;
+    right: 40px;
+    margin-bottom: 16px;
+    width: fit-content;
     color: #46c37b;
     font-size: 14px;
     font-weight: 400;

@@ -46,7 +46,6 @@ class CourseTaskMedia extends AbstractResource
      * @param $taskId
      *
      * @return array
-     * @Access(roles="")
      * @ApiConf(isRequiredAuth=false)
      */
     public function get(ApiRequest $request, $courseId, $taskId)

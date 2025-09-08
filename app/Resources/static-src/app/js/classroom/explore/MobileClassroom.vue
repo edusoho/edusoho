@@ -15,7 +15,7 @@
       <div v-if="classroomList.length" class="col-md-4 col-sm-6">
         <div v-for="(item, index) in classroomList" :key="index" class="class-item class-item--tag" style="position: relative;">
           <div class="class-img">
-            <span v-if="vipSetting.enabled && Number(item.vipLevelId)" class="tag-vip-free"></span>
+            <span v-if="item.hidePrice !== '1' && vipSetting.enabled && Number(item.vipLevelId)" class="tag-vip-free"></span>
             <a :href="'/classroom/'+item.id" target="_blank">
               <img
                 :src="item.cover.large"
@@ -43,7 +43,7 @@
               </li>
             </ul>
           </div>
-          <span class="class-price">
+          <span class="class-price" v-if="item.hidePrice !== '1'">
             <span v-if="Number(item.price)" class="price"> {{ item.price }}{{ 'cny'|trans }} </span>
             <span v-else class="color-success"> {{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
           </span>

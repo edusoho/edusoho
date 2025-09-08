@@ -21,6 +21,5 @@
   {% if is_answer_show_ai_agent(answerRecordId) %}
     <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
     <input type="hidden" id="chatMetaData" value="{{ get_answer_chat_meta_data(answerRecordId) }}" />
-    <input type="hidden" id="studyPlanGenerated" value="1" />
   {% endif %}
 {% endblock %}

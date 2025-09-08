@@ -47,7 +47,8 @@ function onSearch() {
                       }&keyword=${keyword.value || ''
                       }&tagIds=${tagIds.value
                       }&page=${element.find('.js-page').val()
-                      }&exclude_ids=${$('.js-excludeIds').val()}`;
+                      }&exclude_ids=${$('.js-excludeIds').val()
+                      }&category_id=${$('.js-category-choose').val()}`;
   $.ajax({
     type: 'GET',
     url: renderUrl,
@@ -95,6 +96,10 @@ function onSearch() {
       :params="{mode: 'filter', tagIds: tagIds}"
       @ok="onConfirm"
     />
+    <input type="hidden" class="js-search-form-difficulty" :value=difficulty>
+    <input type="hidden" class="js-search-form-type" :value=type>
+    <input type="hidden" class="js-search-form-keyword" :value=keyword>
+    <input type="hidden" class="js-search-form-tagIds" :value=tagIds>
   </AntConfigProvider>
 </template>
 

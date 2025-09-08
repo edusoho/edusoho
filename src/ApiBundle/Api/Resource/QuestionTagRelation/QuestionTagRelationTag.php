@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\QuestionTagRelation;
 
+use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -9,6 +10,9 @@ use Biz\QuestionTag\Service\QuestionTagService;
 
 class QuestionTagRelationTag extends AbstractResource
 {
+    /**
+     * @Access(roles="ROLE_TEACHER", permissions="admin_v2")
+     */
     public function search(ApiRequest $request, $itemId)
     {
         $relations = $this->getQuestionTagService()->findTagRelationsByItemIds([$itemId]);

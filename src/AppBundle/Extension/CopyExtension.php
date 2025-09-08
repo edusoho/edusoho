@@ -113,6 +113,10 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                                             'class' => 'Biz\Activity\Copy\ActivityMaterialCopy',
                                             'priority' => 100,
                                         ],
+                                        'live-activity-replay' => [
+                                            'class' => 'Biz\Activity\Copy\LiveActivityReplayCopy',
+                                            'priority' => 100,
+                                        ],
                                     ],
                                 ],
                             ],
