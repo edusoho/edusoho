@@ -1,5 +1,5 @@
 import {createApp} from 'vue';
-import {TreeSelect, Modal, Input, Table, Button, Pagination} from 'ant-design-vue';
+import {TreeSelect, Modal, Input, Table, Button, Pagination, Form, Select, Spin} from 'ant-design-vue';
 import {createStyleTag, setCurrentPrimaryColor} from 'vue3/js/common';
 import 'vue3/main.less';
 import Index from './Index.vue';
@@ -15,6 +15,9 @@ app.use(Input);
 app.use(Table);
 app.use(Button);
 app.use(Pagination);
+app.use(Form);
+app.use(Select);
+app.use(Spin);
 
 setCurrentPrimaryColor(app);
 

@@ -1,8 +1,8 @@
 <script setup>
 // const emit = defineEmits(['setCategorySuccess'])
-import {onMounted, reactive, ref, watch} from 'vue';
+import {reactive, ref, watch} from 'vue';
 import Api from '../../../../../../api';
-import ResourceSubstitution from './ResourceSubstitution.vue';
+import ReplaceUploadFileModal from './ReplaceUploadFileModal.vue';
 
 const modalVisible = defineModel();
 const props = defineProps({
@@ -22,10 +22,10 @@ watch(courseSetTitle, async () => {
   await onSearch();
 })
 
-const courseSetTitle = ref();
+const courseSetTitle = ref('');
 const referCourse = ref([])
 const state = reactive({
-  selectedIds: [],
+  selectedCourseSetIds: [],
   loading: false,
 });
 
@@ -37,7 +37,7 @@ function closeReferCourseModal() {
   modalVisible.value = false;
 }
 function openReferCourseModal() {
-  modalVisible.value = false;
+  modalVisible.value = true;
 }
 
 const columns = [
@@ -83,14 +83,28 @@ function onBatchReplace() {
 }
 
 function onSelectChange(selectedIds) {
-  state.selectedIds = selectedIds;
+  state.selectedCourseSetIds = selectedIds;
 }
 
 function onPaginationChange(current, pageSize) {
-  console.log('current: ', current, 'pageSize: ', pageSize);
   pagination.current = current;
   pagination.pageSize = pageSize;
   onSearch();
+}
+
+function onReset() {
+  courseSetTitle.value = '';
+  referCourse.value = [];
+  state.selectedCourseSetIds = [];
+  state.loading = false;
+  pagination.current = 1;
+  pagination.total = 0;
+  pagination.pageSize = 10;
+}
+
+function onCancel() {
+  onReset()
+  closeReferCourseModal();
 }
 </script>
 
@@ -99,7 +113,10 @@ function onPaginationChange(current, pageSize) {
            title="引用详情"
            :width="900"
            :footer="null"
+           :keyboard="false"
+           :maskClosable="false"
            centered
+           @cancel="onCancel"
   >
     <div class="flex flex-col">
       <div class="flex items-center justify-between mb-12">
@@ -111,18 +128,18 @@ function onPaginationChange(current, pageSize) {
             allow-clear
             @change="onSearch"
           />
-          <div v-if="state.selectedIds.length > 0">{{ `已选: ${state.selectedIds.length}` }}</div>
+          <div v-if="state.selectedCourseSetIds.length > 0">{{ `已选: ${state.selectedCourseSetIds.length}` }}</div>
         </div>
-        <a-button type="primary" @click="onBatchReplace" :disabled="state.selectedIds.length === 0">批量替换</a-button>
+        <a-button type="primary" @click="onBatchReplace" :disabled="state.selectedCourseSetIds.length === 0">批量替换</a-button>
       </div>
       <a-table
         class="mb-16 min-h-605"
         :columns="columns"
         :data-source="referCourse"
-        :row-key="record => record.id"
+        :row-key="record => record.courseSetId"
         :pagination="false"
         :loading="state.loading"
-        :row-selection="{ selectedRowKeys: state.selectedIds, onChange: onSelectChange }"
+        :row-selection="{ selectedRowKeys: state.selectedCourseSetIds, onChange: onSelectChange }"
         :scroll="{ y: 550 }"
       >
 
@@ -140,8 +157,12 @@ function onPaginationChange(current, pageSize) {
       </div>
     </div>
   </a-modal>
-  <ResourceSubstitution
+  <ReplaceUploadFileModal
     v-model="resourceSubstitutionModalVisible"
-    :ids="state.selectedIds"
+    :courseSetIds="state.selectedCourseSetIds"
+    :fileId="params.fileId"
+    :fileType="params.fileType"
+    :filename="params.filename"
+    @cancel="openReferCourseModal"
   />
 </template>
