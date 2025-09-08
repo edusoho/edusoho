@@ -16,7 +16,7 @@ window.emitter.on('open-category-modal', (val) => {
 
 const referCourseModalVisible = ref(false);
 window.emitter.on('open-refer-course-modal', (val) => {
-  if (Number(val.referCourse) > 0) {
+  if (Number(val.usedCount) > 0) {
     params.value = val;
     referCourseModalVisible.value = true;
   }

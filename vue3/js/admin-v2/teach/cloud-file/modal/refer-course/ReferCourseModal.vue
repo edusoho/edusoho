@@ -1,17 +1,28 @@
 <script setup>
 // const emit = defineEmits(['setCategorySuccess'])
-import {onMounted, reactive, ref} from 'vue';
+import {onMounted, reactive, ref, watch} from 'vue';
 import Api from '../../../../../../api';
 import ResourceSubstitution from './ResourceSubstitution.vue';
 
 const modalVisible = defineModel();
 const props = defineProps({
   params: {
-    type: Number,
+    type: Object,
+    default: {},
   },
 });
 
-const courseName = ref();
+watch(modalVisible, async () => {
+  if (modalVisible.value) {
+    await onSearch();
+  }
+})
+
+watch(courseSetTitle, async () => {
+  await onSearch();
+})
+
+const courseSetTitle = ref();
 const referCourse = ref([])
 const state = reactive({
   selectedIds: [],
@@ -31,16 +42,16 @@ function openReferCourseModal() {
 
 const columns = [
   {
-    key: 'name',
+    key: 'courseSetTitle',
     title: '课程名称',
-    dataIndex: 'name',
+    dataIndex: 'courseSetTitle',
     width: '50%',
     ellipsis: true,
   },
   {
-    key: '该资源引用次数',
-    title: '数量',
-    dataIndex: 'num',
+    key: 'usedCount',
+    title: '该资源引用次数',
+    dataIndex: 'usedCount',
     width: '50%',
   },
 ]
@@ -53,7 +64,16 @@ const pagination = reactive({
 
 async function onSearch() {
   state.loading = true
-  referCourse.value = await Api.cloudResources.searchReferCourse();
+  const params = {
+    offset: (pagination.current - 1) * pagination.pageSize,
+    limit: pagination.pageSize,
+    courseSetTitle: courseSetTitle.value
+  }
+  const {data, paging} = await Api.file.getFileUsage(props.params.fileId, params);
+  referCourse.value = data;
+  const {total, offset, limit} = paging;
+  pagination.total = Number(total);
+  pagination.pageSize = Number(limit);
   state.loading = false
 }
 
@@ -66,13 +86,12 @@ function onSelectChange(selectedIds) {
   state.selectedIds = selectedIds;
 }
 
-function onShowSizeChange(current, pageSize) {
-  console.log(current, pageSize);
+function onPaginationChange(current, pageSize) {
+  console.log('current: ', current, 'pageSize: ', pageSize);
+  pagination.current = current;
+  pagination.pageSize = pageSize;
+  onSearch();
 }
-
-onMounted(async () => {
-  await onSearch();
-})
 </script>
 
 <template>
@@ -86,7 +105,7 @@ onMounted(async () => {
       <div class="flex items-center justify-between mb-12">
         <div class="flex items-center gap-24">
           <a-input
-            v-model:value="courseName"
+            v-model:value="courseSetTitle"
             placeholder="课程名称"
             class="w-200"
             allow-clear
@@ -97,14 +116,14 @@ onMounted(async () => {
         <a-button type="primary" @click="onBatchReplace" :disabled="state.selectedIds.length === 0">批量替换</a-button>
       </div>
       <a-table
-        class="mb-16"
+        class="mb-16 min-h-605"
         :columns="columns"
         :data-source="referCourse"
         :row-key="record => record.id"
         :pagination="false"
         :loading="state.loading"
         :row-selection="{ selectedRowKeys: state.selectedIds, onChange: onSelectChange }"
-        :scroll="{ y: 500 }"
+        :scroll="{ y: 550 }"
       >
 
       </a-table>
@@ -115,7 +134,8 @@ onMounted(async () => {
           :total="pagination.total"
           show-size-changer
           :show-total="total => `共 ${total} 条数据`"
-          @showSizeChange="onShowSizeChange"
+          @showSizeChange="onPaginationChange"
+          @change="onPaginationChange"
         />
       </div>
     </div>

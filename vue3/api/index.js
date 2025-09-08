@@ -22,7 +22,6 @@ import teacher from './modules/teacher';
 import questionTag from './modules/questionTag';
 import uploadFile from './modules/uploadFile';
 import questionBank from './modules/questionBank'
-import cloudResources from './modules/cloudResources';
 
 const Api = {
   contract,
@@ -49,7 +48,6 @@ const Api = {
   questionTag,
   uploadFile,
   questionBank,
-  cloudResources
 };
 
 export default Api;

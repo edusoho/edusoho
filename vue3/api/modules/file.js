@@ -7,4 +7,7 @@ export default {
   async getCourseCoverTemplate(params) {
     return ajaxClient.get('/render/upload/image', {params});
   },
+  async getFileUsage(fileId, params) {
+    return apiClient.get(`/upload_file/${fileId}/usage`, {params});
+  },
 };

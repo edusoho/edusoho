@@ -84,7 +84,7 @@
         <span style="display:block">{{ categories[cloudFile.categoryId].name|default('-') }}</span>
       </td>
       <td class="vertical-middle">
-        <a onclick="window.emitter.emit('open-refer-course-modal', {id: {{cloudFile.id}}, referCourse: {{1}} })" style="display:block; cursor: pointer;">{{ cloudFile.usedCount }}</a>
+        <a onclick="window.emitter.emit('open-refer-course-modal', { fileId: {{ cloudFile.id }}, usedCount: {{ cloudFile.usedCount }} })" style="display:block; cursor: pointer;">{{ cloudFile.usedCount }}</a>
       </td>
     {% endif %}
 
