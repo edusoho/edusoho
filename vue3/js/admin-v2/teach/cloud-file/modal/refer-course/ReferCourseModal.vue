@@ -1,5 +1,4 @@
 <script setup>
-// const emit = defineEmits(['setCategorySuccess'])
 import {reactive, ref, watch} from 'vue';
 import Api from '../../../../../../api';
 import ReplaceUploadFileModal from './ReplaceUploadFileModal.vue';
