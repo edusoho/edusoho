@@ -121,7 +121,10 @@ export default {
       event.stopPropagation();//  阻止冒泡
       const images = [imagesUrl]
       ImagePreview({
-        images
+        images,
+        overlayStyle: {
+          backgroundColor: 'rgba(255, 255, 255, 0.9)'
+        }
       })
     },
     refreshChoice(res) {
