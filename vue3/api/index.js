@@ -47,7 +47,7 @@ const Api = {
   teacher,
   questionTag,
   uploadFile,
-  questionBank
+  questionBank,
 };
 
 export default Api;
