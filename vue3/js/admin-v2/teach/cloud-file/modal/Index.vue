@@ -29,12 +29,12 @@ function clearParams() {
 
 <template>
   <AntConfigProvider>
-    <ReferCourseModal
-      v-model="referCourseModalVisible"
-      :params="params"
-    />
     <CategorySelectModal
       v-model="categorySelectModalVisible"
+      :params="params"
+    />
+    <ReferCourseModal
+      v-model="referCourseModalVisible"
       :params="params"
     />
   </AntConfigProvider>

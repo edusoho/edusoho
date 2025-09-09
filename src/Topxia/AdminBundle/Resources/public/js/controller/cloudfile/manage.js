@@ -48,6 +48,9 @@ define(function(require, exports, module) {
           $("[data-role=batch-select]").attr("checked", false);
           this.renderTable();
         });
+        window.emitter.on('replace-upload-file-success', () => {
+          this.renderTable();
+        });
       },
       initTagForm: function(event) {
         var $form = $("#tag-form");

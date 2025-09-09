@@ -21,11 +21,15 @@ const props = defineProps({
   filename: {
     type: String,
     default: '',
+  },
+  fileLength: {
+    type: Number,
+    default: 0,
   }
 });
 
-watch(modalVisible, () => {
-  if (modalVisible.value) {
+watch(() => modalVisible.value, (newValue) => {
+  if (newValue) {
     getCategories();
     getTagOptions();
     formState.fileId = props.fileId;
@@ -123,11 +127,11 @@ function onReset() {
 }
 
 function closeReplaceUploadFileModal() {
+  onReset();
   modalVisible.value = false;
 }
 
 function onCancel() {
-  onReset();
   closeReplaceUploadFileModal();
   emit('cancel')
 }
@@ -135,16 +139,23 @@ function onCancel() {
 async function onOk() {
   formRef.value.validate()
     .then(async () => {
-      console.log('校验成功')
-    }).catch((err) => {
-      console.log('校验失败')
-  })
+      if (formState.fileId !== props.fileId) {
+        const params = {
+          fileId: formState.fileId,
+          courseSetIds: props.courseSetIds
+        }
+        await Api.file.replaceUploadFile(props.fileId, params)
+      }
+      closeReplaceUploadFileModal();
+      window.emitter.emit('replace-upload-file-success');
+    })
 }
 
 const isEditFile = ref(false);
 function onEdit() {
   onSearch()
   formState.fileId = null;
+  selectedFile.value = null;
   isEditFile.value = true;
 }
 
@@ -172,6 +183,7 @@ function onSelect(record) {
   formState.fileId = record.id;
   uploadFiles.value = [];
   isEditFile.value = false;
+  formRef.value.validate();
 }
 </script>
 
@@ -181,6 +193,7 @@ function onSelect(record) {
            :keyboard="false"
            :maskClosable="false"
            centered
+           :focus-lock="false"
            @cancel="onCancel"
            @ok="onOk"
   >
@@ -268,10 +281,10 @@ function onSelect(record) {
         </a-form-item-rest>
       </a-form-item>
       <a-form-item
-        v-if="['video', 'audio'].includes(fileType) && !isEditFile && selectedFile"
+        v-if="['video', 'audio'].includes(fileType) && !isEditFile"
         :label="`${fileTypeText(fileType)}时长`"
       >
-        <div class="text-[rgba(0,0,0,0.45)] text-[14px] font-normal leading-[22px]">{{ `${Math.floor(selectedFile.length / 60)} 分 ${selectedFile.length % 60 !== 0 ? selectedFile.length % 60 : '00'} 秒` }}</div>
+        <div class="text-[rgba(0,0,0,0.45)] text-[14px] font-normal leading-[22px]">{{ `${Math.floor((selectedFile?.length ? selectedFile.length : fileLength) / 60)} 分 ${(selectedFile?.length ? selectedFile.length : fileLength) % 60 !== 0 ? (selectedFile?.length ? selectedFile.length : fileLength) % 60 : '00'} 秒` }}</div>
       </a-form-item>
     </a-form>
   </a-modal>

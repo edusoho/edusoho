@@ -12,8 +12,15 @@ const props = defineProps({
   },
 });
 
-watch(modalVisible, async () => {
-  if (modalVisible.value) {
+const courseSetTitle = ref('');
+const referCourse = ref([])
+const state = reactive({
+  selectedCourseSetIds: [],
+  loading: false,
+});
+
+watch(() => modalVisible.value, async (newValue) => {
+  if (newValue) {
     await onSearch();
   }
 })
@@ -21,13 +28,6 @@ watch(modalVisible, async () => {
 watch(courseSetTitle, async () => {
   await onSearch();
 })
-
-const courseSetTitle = ref('');
-const referCourse = ref([])
-const state = reactive({
-  selectedCourseSetIds: [],
-  loading: false,
-});
 
 const resourceSubstitutionModalVisible = ref(false)
 function openResourceSubstitutionModal() {
@@ -116,6 +116,7 @@ function onCancel() {
            :keyboard="false"
            :maskClosable="false"
            centered
+           :focus-lock="false"
            @cancel="onCancel"
   >
     <div class="flex flex-col">
@@ -160,9 +161,10 @@ function onCancel() {
   <ReplaceUploadFileModal
     v-model="resourceSubstitutionModalVisible"
     :courseSetIds="state.selectedCourseSetIds"
-    :fileId="params.fileId"
-    :fileType="params.fileType"
+    :file-id="params.fileId"
+    :file-type="params.fileType"
     :filename="params.filename"
+    :file-length="params.fileLength"
     @cancel="openReferCourseModal"
   />
 </template>
