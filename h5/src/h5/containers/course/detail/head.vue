@@ -559,9 +559,8 @@ export default {
 
       const {finishType, finishData} = this.activity;
       if (finishType == 'end' && finishData == '1') {
-        options.controlBar = {
-          disableProgressBar: true
-        };
+        options.disableProgressBar = true;
+        options.disableSeek = 'forward';
       }
 
       this.$store.commit('UPDATE_LOADING_STATUS', true);
