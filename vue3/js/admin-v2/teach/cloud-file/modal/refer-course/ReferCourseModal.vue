@@ -5,9 +5,21 @@ import ReplaceUploadFileModal from './ReplaceUploadFileModal.vue';
 
 const modalVisible = defineModel();
 const props = defineProps({
-  params: {
-    type: Object,
-    default: {},
+  fileId: {
+    type: Number,
+    default: 0,
+  },
+  fileType: {
+    type: String,
+    default: '',
+  },
+  filename: {
+    type: String,
+    default: '',
+  },
+  fileLength: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -68,7 +80,7 @@ async function onSearch() {
     limit: pagination.pageSize,
     courseSetTitle: courseSetTitle.value
   }
-  const {data, paging} = await Api.file.getFileUsage(props.params.fileId, params);
+  const {data, paging} = await Api.file.getFileUsage(props.fileId, params);
   referCourse.value = data;
   const {total, offset, limit} = paging;
   pagination.total = Number(total);
@@ -160,10 +172,10 @@ function onCancel() {
   <ReplaceUploadFileModal
     v-model="resourceSubstitutionModalVisible"
     :courseSetIds="state.selectedCourseSetIds"
-    :file-id="params.fileId"
-    :file-type="params.fileType"
-    :filename="params.filename"
-    :file-length="params.fileLength"
+    :file-id="fileId"
+    :file-type="fileType"
+    :filename="filename"
+    :file-length="fileLength"
     @cancel="openReferCourseModal"
   />
 </template>

@@ -31,11 +31,14 @@ function clearParams() {
   <AntConfigProvider>
     <CategorySelectModal
       v-model="categorySelectModalVisible"
-      :params="params"
+      :ids="params.ids"
     />
     <ReferCourseModal
       v-model="referCourseModalVisible"
-      :params="params"
+      :file-id="params.fileId"
+      :file-type="params.fileType"
+      :filename="params.filename"
+      :file-length="params.fileLength"
     />
   </AntConfigProvider>
 </template>

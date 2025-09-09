@@ -4,9 +4,10 @@ import Api from '../../../../../../api';
 
 const modalVisible = defineModel();
 const props = defineProps({
-  params: {
-    type: Object,
-  }
+  ids: {
+    type: Array,
+    default: () => []
+  },
 });
 
 const selectedCategoryId = ref();
@@ -43,7 +44,7 @@ function closeCategoryModal() {
 
 async function confirmCategory() {
   const params = {
-    ids: props.params.ids,
+    ids: props.ids,
     categoryId: selectedCategoryId.value,
   }
   await Api.uploadFile.setCategory(params);
