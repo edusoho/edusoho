@@ -30,11 +30,6 @@ admin.user.teacher_menu: Teachers
 admin.user.approval_menu: Authentication
 admin.user.message_menu: Messages
 
-##用户管理模块
-admin.user.basic.basic_tab: Users
-admin.user.basic.online: Online
-admin.user.basic.login_record_tab: System Log
-
 admin.user.basic.basic_tab.create_btn: 'Add'
 admin.user.basic.basic_tab.edit_btn: 'Edit'
 admin.user.basic.basic_tab.setting_roles_btn: 'Group setting'
@@ -55,6 +50,9 @@ admin.user.teacher.basic_tab.promote_btn: Recommended
 admin_v2.user.destroy_account_manage_menu: Destroy
 admin_v2.user.destroy_account.basic_tab: Destroy Record
 admin_v2.user.destroy_account.destroyed_tab: Destroyed
+
+admin_v2.user.login_record: Login Record
+admin_v2.user.online: Online
 
 ##实名认证管理模块
 admin.user.approval.basic_tab: Authentication'
@@ -750,9 +748,7 @@ admin_v2.operation.message.basic_tab: Message Manage
 admin_v2.user.student_menu: Student management
 admin_v2.user.basic.basic_tab: Student Manage
 admin_v2.user.basic.fans_tab: Wechat Fans
-admin_v2.user.basic.online_tab: Online User
 admin_v2.user.basic.statistics_tab: User Statistics
-admin_v2.user.basic.login_record_tab: Login Record
 
 admin_v2.user.basic.basic_tab.create_btn: 'Add'
 admin_v2.user.basic.basic_tab.edit_btn: 'Edit'

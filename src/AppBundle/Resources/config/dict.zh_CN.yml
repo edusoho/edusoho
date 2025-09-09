@@ -308,7 +308,7 @@ userStatus:
     unlock: 未封禁
 
 userKeyWordTypes:
-    nickname: 学员名
+    nickname: 用户名
     email: 邮件地址
 
 staffKeyWordTypes:
