@@ -6,7 +6,7 @@ const selectedCategoryId = ref();
 const categoryTreeData = ref([]);
 
 watch(selectedCategoryId, () => {
-  const categoryIdInput = document.querySelector('input[name="categoryId"]');
+  const categoryIdInput = document.querySelector('input[name="fileCategoryId"]');
   categoryIdInput.value = selectedCategoryId.value ? selectedCategoryId.value : '';
   categoryIdInput.dispatchEvent(new Event('change', { bubbles: true }));
 });
