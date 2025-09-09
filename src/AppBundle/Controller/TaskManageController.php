@@ -325,7 +325,7 @@ class TaskManageController extends BaseController
 
     protected function parseTimeFields($fields)
     {
-        if ('normal' == $fields['testMode'] && isset($fields['startTime'])) {
+        if (isset( $fields['testMode']) && 'normal' == $fields['testMode'] && isset($fields['startTime'])) {
             $fields['startTime'] = 0;
             $fields['endTime'] = 0;
 
