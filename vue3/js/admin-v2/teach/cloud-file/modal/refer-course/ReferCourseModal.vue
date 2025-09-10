@@ -145,14 +145,14 @@ function onCancel() {
         <a-button type="primary" @click="onBatchReplace" :disabled="state.selectedCourseSetIds.length === 0">批量替换</a-button>
       </div>
       <a-table
-        class="mb-16 min-h-605"
+        class="mb-16 min-h-436"
         :columns="columns"
         :data-source="referCourse"
         :row-key="record => record.courseSetId"
         :pagination="false"
         :loading="state.loading"
         :row-selection="{ selectedRowKeys: state.selectedCourseSetIds, onChange: onSelectChange }"
-        :scroll="{ y: 550 }"
+        :scroll="{ y: 380 }"
       >
 
       </a-table>
