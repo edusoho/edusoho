@@ -7,7 +7,7 @@ import Selector from 'app/js/question-bank/common/selector';
 import AntConfigProvider from '../../components/AntConfigProvider.vue';
 import TagSelectModal from '../widgets/TagSelectModal.vue';
 
-const categoryId = ref()
+const categoryId = ref('')
 const difficulty = ref('default')
 const type = ref('default')
 const keyword = ref('')
