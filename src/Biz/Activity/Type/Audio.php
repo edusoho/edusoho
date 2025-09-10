@@ -81,6 +81,14 @@ class Audio extends Activity
         return $audioActivity;
     }
 
+    public function updateByIds($ids, $fields)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getAudioActivityDao()->update(['ids' => $ids], $fields);
+    }
+
     /**
      * {@inheritdoc}
      */

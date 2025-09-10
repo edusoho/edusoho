@@ -45,6 +45,7 @@ class AIExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_course_chat_meta_data', [$this, 'getCourseChatMetaData']),
             new \Twig_SimpleFunction('get_lesson_chat_meta_data', [$this, 'getLessonChatMetaData']),
             new \Twig_SimpleFunction('get_answer_chat_meta_data', [$this, 'getAnswerChatMetaData']),
+            new \Twig_SimpleFunction('get_item_bank_exercise_chat_meta_data', [$this, 'getItemBankExerciseChatMetaData']),
             new \Twig_SimpleFunction('is_study_plan_generated', [$this, 'isStudyPlanGenerated']),
         ];
     }
@@ -102,6 +103,10 @@ class AIExtension extends \Twig_Extension
         if (empty($module)) {
             return false;
         }
+        $exercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
+        if (!empty($exercise['isAgentActive'])) {
+            return true;
+        }
         $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
         if (empty($exerciseBinds)) {
             return false;
@@ -151,6 +156,13 @@ class AIExtension extends \Twig_Extension
         if (empty($module)) {
             return '';
         }
+        $exercise = $this->getItemBankExerciseService()->get($module['exerciseId']);
+        if (!empty($exercise['isAgentActive'])) {
+            return json_encode([
+                'workerUrl' => $this->getAgentWorkerUrl(),
+                'domainId' => $exercise['agentDomainId'],
+            ]);
+        }
         $exerciseBinds = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($module['exerciseId']);
         if (empty($exerciseBinds)) {
             return '';
@@ -172,6 +184,14 @@ class AIExtension extends \Twig_Extension
         }
 
         return '';
+    }
+
+    public function getItemBankExerciseChatMetaData($exercise)
+    {
+        return json_encode([
+            'workerUrl' => $this->getAgentWorkerUrl(),
+            'domainId' => $exercise['agentDomainId'],
+        ]);
     }
 
     public function isStudyPlanGenerated($courseId)

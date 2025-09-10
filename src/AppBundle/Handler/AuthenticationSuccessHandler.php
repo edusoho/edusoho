@@ -3,7 +3,10 @@
 namespace AppBundle\Handler;
 
 use AppBundle\Common\EncryptionToolkit;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -11,6 +14,9 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
 use Topxia\Service\Common\ServiceKernel;
 
+/**
+ * 登录成功后的处理器
+ */
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
@@ -26,10 +32,21 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             throw new AuthenticationException('账号已被禁用');
         }
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($request->request->get('_password')), 'EduSoho');
-        if ($this->getUserService()->validatePassword($password)) {
-            $this->getUserService()->updateUser($currentUser->getId(), ['passwordUpgraded' => 1]);
+        $passwordLevel = PasswordValidator::getLevel($password);
+        if ($currentUser['passwordUpgraded'] != $passwordLevel) {
+            $this->getUserService()->updateUser($currentUser->getId(), ['passwordUpgraded' => $passwordLevel]);
+            $currentUser['passwordUpgraded'] = $passwordLevel;
+        }
+
+        if (RoleHelper::isStudent($currentUser['roles'])) {
+            $loginBindSetting = $this->getSettingService()->get('login_bind');
+            if (($loginBindSetting['student_weak_password_check'] ?? 0) && !PasswordValidator::isValidLevel($passwordLevel)) {
+                $request->getSession()->set('needUpgradePassword', 1);
+            }
         } else {
-            $request->getSession()->set('needUpgradePassword', 1);
+            if (!PasswordValidator::isStrongLevel($passwordLevel)) {
+                $request->getSession()->set('needUpgradePassword', 1);
+            }
         }
 
         if ($request->isXmlHttpRequest()) {
@@ -40,20 +57,15 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
             return new JsonResponse($content, 200);
         }
 
-        if ($this->getAuthService()->hasPartnerAuth()) {
-            $url = $this->httpUtils->generateUri($request, 'partner_login');
-            $queries = ['goto' => $this->determineTargetUrl($request)];
-            $url = $url.'?'.http_build_query($queries);
-
-            return $this->httpUtils->createRedirectResponse($request, $url);
-        }
-
         return parent::onAuthenticationSuccess($request, $token);
     }
 
-    private function getAuthService()
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('User:AuthService');
+        return $this->getServiceKernel()->createService('System:SettingService');
     }
 
     /**
@@ -62,11 +74,6 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User:UserService');
-    }
-
-    protected function getSettingService()
-    {
-        return ServiceKernel::instance()->createService('System:SettingService');
     }
 
     protected function getServiceKernel()

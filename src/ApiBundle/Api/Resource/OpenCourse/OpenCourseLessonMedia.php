@@ -20,7 +20,6 @@ class OpenCourseLessonMedia extends AbstractResource
      * @param $leesonId
      *
      * @return array
-     * @Access(roles="")
      * @ApiConf(isRequiredAuth=false)
      */
     public function get(ApiRequest $request, $courseId, $lessonId)

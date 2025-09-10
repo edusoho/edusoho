@@ -157,6 +157,9 @@
           {% if testpaper|default() %}
             <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
           {% endif %}
+          {% if not(canUpdate) and validPeriodMode == 3 %}
+            <input type="hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}">
+          {% endif %}
         </div>
       </div>
 
@@ -280,6 +283,9 @@
             {{ 'course.plan_task.activity_manage.testpaper.mode.fixedTimeInterval'|trans }}
             <i class="es-icon es-icon-wenhaotishi color-gray" data-toggle="tooltip" data-placement="top" data-original-title="{{ 'course.plan_task.activity_manage.testpaper.fixedTimeInterval'|trans|raw }}"></i>
           </label>
+          {% if not(canUpdate) %}
+            <input type="hidden" name="validPeriodMode" value="{{ validPeriodMode }}">
+          {% endif %}
         </div>
           <input type="hidden" name="startTime" value="{% if activity.ext.answerScene.start_time|default(0) > 0 %}{{ activity.ext.answerScene.start_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
           <input type="hidden" name="endTime" value="{% if activity.ext.answerScene.end_time|default(0) > 0 %}{{ activity.ext.answerScene.end_time|date('Y-m-d H:i:s') }}{% else %}0{% endif %}" size="25" >
@@ -324,7 +330,7 @@
               style="width: 320px; margin-right: 24px"
               {% if not(canUpdate) and validPeriodMode == 3 %}disabled{% endif %}
             >
-            <div class="js-fixed-time" style="margin-right: 12px; margin-bottom: 10px"></div>
+            <div class="js-test-duration" style="margin-right: 12px; margin-bottom: 10px"></div>
           </div>
           <div class="js-fixed-time-tip" style="margin-top: 5px; font-size: 14px; font-weight: 400; line-height: 22px; color: #A1A1A1;"></div>
         </div>
@@ -348,7 +354,27 @@
         <div class="col-sm-2 control-label">
           <label>{{ 'course.plan_task.activity_manage.testpaper.times'|trans }}</label></div>
         <div class="col-sm-10 controls radios">
-          {{ radios('isLimitDoTimes', {'0':'course.plan_task.activity_manage.testpaper.times.always'|trans, '1':'course.plan_task.activity_manage.testpaper.times.once'|trans}, activity.ext.isLimitDoTimes|default('0'), not(canUpdate) and validPeriodMode == 3  ? 'disabled': null) }}
+          <label>
+            <input type="radio"
+                   name="isLimitDoTimes"
+                   value="0"
+                   {% if activity.ext.isLimitDoTimes|default('0') == 0 %}checked{% endif %}
+                   {% if not(canUpdate) and validPeriodMode == 3  %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.times.always'|trans }}
+          </label>
+          <label>
+            <input type="radio"
+                   name="isLimitDoTimes"
+                   value="1"
+                   {% if activity.ext.isLimitDoTimes|default('0') == 1 %}checked{% endif %}
+                   {% if not(canUpdate) and validPeriodMode == 3  %}disabled{% endif %}
+            >
+            {{ 'course.plan_task.activity_manage.testpaper.times.once'|trans }}
+          </label>
+          {% if not(canUpdate) and validPeriodMode == 3 %}
+            <input type="hidden" name="isLimitDoTimes" value="{{ activity.ext.isLimitDoTimes|default('0') }}">
+          {% endif %}
         </div>
 
         <div class="col-sm-offset-2 col-sm-10 controls">
@@ -357,7 +383,9 @@
                  id="doTimes"
                  name="doTimes"
                  value="{{ activity.ext.answerScene.do_times|default('1') }}"
-                 class="form-control inline-block width-150 js-examinations-num" >
+                 class="form-control inline-block width-150 js-examinations-num"
+                 {% if not(canUpdate) and validPeriodMode == 3 %}doTimes{% endif %}
+          >
         </div>
 
         <div class="col-sm-offset-2 col-sm-10 controls">
@@ -370,6 +398,9 @@
             >
             {{ 'course.plan_task.activity_manage.testpaper.show_answer'|trans }}
           </label>
+          {% if not(canUpdate) and validPeriodMode == 3 %}
+            <input type="hidden" name="answerMode" value="{{ activity.ext.answerMode|default(0) == 1 ? 1 : 0 }}">
+          {% endif %}
         </div>
       </div>
 

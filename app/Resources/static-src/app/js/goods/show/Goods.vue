@@ -98,7 +98,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="price"><span>¥</span>{{`${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span>{{decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)}}</span></div>
+                  <div class="price" v-if="currentSku.hidePrice !== '1'"><span>¥</span>{{`${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span>{{decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)}}</span></div>
                 </div>
               </div>
               <div class="show-button">
@@ -143,7 +143,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="price"><span>¥</span>{{`${integerPart(item.itemBankExercise.price)}.` }}<span>{{ decimalPart(item.itemBankExercise.price) }}</span></div>
+                      <div v-if="currentSku.hidePrice !== '1'" class="price"><span>¥</span>{{`${integerPart(item.itemBankExercise.price)}.` }}<span>{{ decimalPart(item.itemBankExercise.price) }}</span></div>
                     </div>
                   </div>
                   <div class="show-button">
@@ -173,7 +173,7 @@
               <a-input-search :placeholder="'course.search.placeholder'|trans" enter-button @search="searchCourse"/>
             </div>
             <classroom-courses v-if="searchResult.length > 0 || componentsData.classroomCourses.length > 0"
-                               :classroomCourses="isSearch ? searchResult : componentsData.classroomCourses"></classroom-courses>
+                               :classroomCourses="isSearch ? searchResult : componentsData.classroomCourses" :hide-price="currentSku.hidePrice"></classroom-courses>
             <div v-if="searchResult.length === 0 && isSearch" class="emptyCourse">
               <img class="emptyCourseImg" src="/static-dist/app/img/vue/goods/empty-course.png" alt="">
               <p class="emptyCourseContent">{{ 'classroom.search.empty.course' | trans }}</p>
@@ -210,7 +210,7 @@
       <div class="product-info__right pull-right">
         <teacher :teachers="currentSku.teachers"/>
         <qr :mpQrcode="componentsData.mpQrCode"/>
-        <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods"/>
+        <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods" />
         <certificate :goodsId="goodsId" :sku="currentSku"/>
       </div>
     </div>

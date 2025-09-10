@@ -1,4 +1,5 @@
-<span class="right-menu color-gray">
+<span class="right-menu color-gray" style="display: -webkit-box;">
+  <span class="hidden-xs last-learn" display-if="{isLastLearn}">上次学到</span>
 
   <span class="hidden-xs mr20" display-if="{hasWatchLimitRemaining}">  {{'course.task.learning.remaining.watch_time'|trans}}：{watchLimitRemaining} </span>
   {% set now = date().timestamp %}

@@ -187,7 +187,31 @@ class Testpaper extends Activity
             $this->getBiz()['db']->beginTransaction();
             $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
             if (3 == $answerScene['valid_period_mode'] && $this->getAnswerRecordService()->count(['answer_scene_id' => $answerScene['id']]) > 0) {
-                throw ActivityException::TESTPAPER_ANSWER_RECORD_EXISTED();
+                // 忽略 title，仅比较其他字段是否有变更（对比最新的 $answerScene）
+                $hasOtherChanges = (
+                    $filterFields['limitedTime'] != $answerScene['limited_time'] ||
+                    $filterFields['doTimes'] != $answerScene['do_times'] ||
+                    $filterFields['redoInterval'] != $answerScene['redo_interval'] ||
+                    $filterFields['startTime'] != $answerScene['start_time'] ||
+                    (3 == $fields['validPeriodMode'] ? $fields['validPeriodMode'] : 0) != $answerScene['valid_period_mode'] ||
+                    (empty($filterFields['passScore']) ? 0 : $filterFields['passScore']) != $answerScene['pass_score'] ||
+                    (empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein']) != $answerScene['enable_facein'] ||
+                    (empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode']) != $answerScene['exam_mode'] ||
+                    (empty($filterFields['endTime']) ? 0 : $filterFields['endTime']) != $answerScene['end_time'] ||
+                    (empty($filterFields['isItemsSeqRandom']) ? 0 : $filterFields['isItemsSeqRandom']) != $answerScene['is_items_seq_random'] ||
+                    (empty($filterFields['isOptionsSeqRandom']) ? 0 : $filterFields['isOptionsSeqRandom']) != $answerScene['is_options_seq_random']
+                );
+                if (!$hasOtherChanges) {
+                    // 只更新 title
+                    $this->getAnswerSceneService()->update($answerScene['id'], [
+                        'name' => $filterFields['title'],
+                    ]);
+                    $this->getBiz()['db']->commit();
+
+                    return $this->getTestpaperActivityService()->getActivity($activity['id']);
+                } else {
+                    throw ActivityException::TESTPAPER_ANSWER_RECORD_EXISTED();
+                }
             }
             $answerScene = $this->getAnswerSceneService()->update($activity['answerScene']['id'], [
                 'name' => $filterFields['title'],

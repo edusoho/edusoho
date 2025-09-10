@@ -157,7 +157,7 @@ class Testpaper {
     this.$rangeStartTime = $('.js-start-range')
     this.$rangeDateInput = $('.js-realTimeRange-data');
     this.$rangeFixedTime = $('.js-fixedTime-data');
-    this.$testDuration = $('.js-fixed-time');
+    this.$testDuration = $('.js-test-duration');
     this.$fixedTimeTip = $('.js-fixed-time-tip');
     this.$canUpdate = $('#canUpdate').val();
     this.$validPeriodMode = $('#validPeriodMode').val();
@@ -166,6 +166,7 @@ class Testpaper {
 
   _init() {
     dateFormat();
+    this.initDatePicker();
     this.setValidateRule();
     this.initQuestionBankSelector();
     this.initTestPaperTypeSelector();
@@ -174,7 +175,6 @@ class Testpaper {
     this.initEvent();
     this.initStepForm2();
     this.initAddComment();
-    this.initDatePicker();
     this.initFormItemData();
     this.initAdvancedSettings();
     this.validatorTestDuration();
@@ -242,12 +242,12 @@ class Testpaper {
 
     this.$rangeDateInput.on('show.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height + 240.8 + 'px';
     })
 
     this.$rangeDateInput.on('hide.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height - 240 + 'px';
     })
 
     this.$rangeStartTime.daterangepicker({
@@ -267,21 +267,21 @@ class Testpaper {
 
     this.$rangeStartTime.on('show.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height + 240 + 'px';
     })
 
     this.$rangeStartTime.on('hide.daterangepicker', function () {
       let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 168.8 + 'px';
+      document.getElementById('iframe-content').style.height = height - 240 + 'px';
     })
 
     this.$rangeFixedTime.daterangepicker({
-      "timePicker": true,
-      "timePicker24Hour": true,
-      'autoUpdateInput':false,
-      'minDate': new Date(),
-      'endDate': validPeriodMode == '3' ? endTime != '0' ? endTime : todayTime : todayTime,
-      'startDate': validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('minute') : moment().startOf('minute'),
+      timePicker: true,
+      timePicker24Hour: true,
+      autoUpdateInput: false,
+      minDate: new Date(),
+      endDate: validPeriodMode == '3' ? endTime != '0' ? endTime : todayTime : todayTime,
+      startDate: validPeriodMode == '3' ? activityId != '0' ? startTime : moment().startOf('minute') : moment().startOf('minute'),
       locale: fixedTimeLocale,
     });
 
@@ -289,21 +289,27 @@ class Testpaper {
     this.$rangeFixedTime.on('apply.daterangepicker', function(ev, picker) {
       $('input[name=startTime]').val(picker.startDate.format('YYYY-MM-DD HH:mm'))
       $('input[name=endTime]').val(picker.endDate.format('YYYY-MM-DD HH:mm'))
-      self.validatorTestDuration();
       $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm') +' - ' + picker.endDate.format('YYYY-MM-DD HH:mm'));
       const diffMs = picker.endDate - picker.startDate;
       const diffInMinutes = Math.floor(diffMs / (1000 * 60));
       $('#length').val(diffInMinutes);
+      self.validatorTestDuration();
     });
 
     this.$rangeFixedTime.on('show.daterangepicker', function () {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height + 240 + 'px';
+      if ($('#questionItemShowDiv').is(':visible')) {
+        $('#iframe-content').height($('#iframe-content').height() + 500);
+      } else {
+        $('#iframe-content').height($('#iframe-content').height() + 240);
+      }
     })
 
     this.$rangeFixedTime.on('hide.daterangepicker', function () {
-      let height = $('#iframe-content').height();
-      document.getElementById('iframe-content').style.height = height - 240 + 'px';
+      if ($('#questionItemShowDiv').is(':visible')) {
+        $('#iframe-content').height($('#iframe-content').height() - 500);
+      } else {
+        $('#iframe-content').height($('#iframe-content').height() - 240);
+      }
     })
   }
 
@@ -371,7 +377,7 @@ class Testpaper {
       const TEN_HOURS_IN_MS = 10 * 60 * 60 * 1000;
 
       if (diffMs > TEN_HOURS_IN_MS) {
-        $('.js-fixed-time').hide();
+        $('.js-test-duration').hide();
       }
 
       return diffMs <= TEN_HOURS_IN_MS;
@@ -388,7 +394,7 @@ class Testpaper {
       const diffMs = endDate - startDate;
 
       if (diffMs <= 0) {
-        $('.js-fixed-time').hide();
+        $('.js-test-duration').hide();
       }
 
       return diffMs > 0;
@@ -800,6 +806,7 @@ class Testpaper {
 
   showRedoExamination(event) {
     const $this = $(event.currentTarget);
+    this.validator.resetForm(['rangeFixedTime']);
     $('#length').val(null)
     $('[name=startTime]').val('0')
     $('[name=endTime]').val('0')
@@ -808,27 +815,22 @@ class Testpaper {
     $('input[name=rangeTime]').val('');
     $('input[name=rangeStartTime]').val('');
     $('input[name=rangeFixedTime]').val('');
+    this.$testDuration.hide();
     this.validatorTestDuration();
 
     if ($this.val() == 0) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'hidden');
-    }
-
-    if ($this.val() == 1) {
+    } else if ($this.val() == 1) {
       this.$rangeDateInput.attr('type', 'test');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'hidden');
-    }
-
-    if ($this.val() == 2) {
+    } else if ($this.val() == 2) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'test');
       this.$rangeFixedTime.attr('type', 'hidden');
-    }
-
-    if ($this.val() == 3) {
+    } else if ($this.val() == 3) {
       this.$rangeDateInput.attr('type', 'hidden');
       this.$rangeStartTime.attr('type', 'hidden');
       this.$rangeFixedTime.attr('type', 'test');
@@ -868,25 +870,17 @@ class Testpaper {
           .show();
       }
 
-      if (diffMs > TEN_HOURS_IN_MS) {
-        $('#rangeFixedTime-error').hide();
-        this.$testDuration
-          .text('固定考试时间不能超过10个小时')
-          .css('color', 'red')
-          .show();
-      } else if (diffMs <= 0) {
-        this.$testDuration
-          .text('考试时间需大于0')
-          .css('color', 'red')
-          .show();
-      }else {
+      if (startTime != 0 && endTime != 0) {
+        this.validator.element('#rangeFixedTime');
+      }
+
+      if (diffMs > 0 && diffMs <= TEN_HOURS_IN_MS) {
         this.$testDuration
           .text(diffHours > 0 ? `考试时长： ${diffHours}小时${diffMinutes}分钟` : `考试时长： ${diffMinutes}分`)
-          .css('color', 'black')
+          .css('color', 'rgba(0, 0, 0, 0.56)')
           .show();
       }
     } else {
-      this.$testDuration.hide();
       this.$fixedTimeTip.hide();
     }
   }

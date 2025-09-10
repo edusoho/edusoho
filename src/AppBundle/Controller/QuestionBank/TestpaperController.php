@@ -9,6 +9,7 @@ use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Question\Traits\QuestionImportTrait;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\QuestionTag\Service\QuestionTagService;
 use Biz\Testpaper\TestpaperException;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
@@ -265,6 +266,10 @@ class TestpaperController extends BaseController
         $assessmentDetail = $this->getAssessmentService()->showAssessment($assessment['id']);
         $itemCategories = $this->getItemCategoryService()->findItemCategoriesByBankId($questionBank['itemBankId']);
         $itemCategories = ArrayToolkit::index($itemCategories, 'id');
+        $itemIds = [];
+        foreach ($assessmentDetail['sections'] as $section) {
+            $itemIds = array_merge($itemIds, array_column($section['items'], 'id'));
+        }
 
         return $this->render('question-bank/testpaper/manage/testpaper-form.html.twig', [
             'questionBank' => $questionBank,
@@ -273,6 +278,7 @@ class TestpaperController extends BaseController
             'sections' => $this->setSectionsTypeAndQuestionCount($assessmentDetail['sections']),
             'itemCategories' => $itemCategories,
             'showBaseInfo' => $request->query->get('showBaseInfo', '1'),
+            'questionTags' => $this->findQuestionTagsGroupByItemId($itemIds),
         ]);
     }
 
@@ -517,6 +523,7 @@ class TestpaperController extends BaseController
             'categoryTree' => $this->getItemCategoryService()->getItemCategoryTree($questionBank['itemBankId']),
             'itemCategories' => $itemCategories,
             'excludeIds' => empty($conditions['exclude_ids']) ? '' : $conditions['exclude_ids'],
+            'questionTags' => $this->findQuestionTagsGroupByItemId(array_column($items, 'id')),
         ]);
     }
 
@@ -532,6 +539,12 @@ class TestpaperController extends BaseController
         $conditions['bank_id'] = $questionBank['itemBankId'];
         if (!empty($conditions['exclude_ids'])) {
             $conditions['exclude_ids'] = explode(',', $conditions['exclude_ids']);
+        }
+        if (!empty($conditions['tagIds'])) {
+            $conditions['tagIds'] = is_string($conditions['tagIds']) ? explode(',', $conditions['tagIds']) : $conditions['tagIds'];
+            $tagItems = $this->getQuestionTagService()->findTagRelationsByTagIds($conditions['tagIds']);
+            $conditions['ids'] = array_column($tagItems, 'itemId') ?: [-1];
+            unset($conditions['tagIds']);
         }
         $paginator = new Paginator(
             $request,
@@ -561,6 +574,7 @@ class TestpaperController extends BaseController
             'paginator' => $paginator,
             'questionBank' => $questionBank,
             'itemCategories' => $itemCategories,
+            'questionTags' => $this->findQuestionTagsGroupByItemId(array_column($items, 'id')),
         ]);
     }
 
@@ -586,6 +600,7 @@ class TestpaperController extends BaseController
                 'questionBank' => $questionBank,
                 'itemCategories' => $itemCategories,
                 'type' => $type,
+                'questionTags' => $this->findQuestionTagsGroupByItemId(array_keys($items)),
             ]);
         }
 
@@ -653,6 +668,26 @@ class TestpaperController extends BaseController
         return $types;
     }
 
+    private function findQuestionTagsGroupByItemId($itemIds)
+    {
+        $questionTagRelations = $this->getQuestionTagService()->findTagRelationsByItemIds($itemIds);
+        if (empty($questionTagRelations)) {
+            return [];
+        }
+        $questionTags = $this->getQuestionTagService()->searchTags(['ids' => array_column($questionTagRelations, 'tagId')], ['id', 'name']);
+        $questionTags = array_column($questionTags, null, 'id');
+        $questionTagRelations = ArrayToolkit::group($questionTagRelations, 'itemId');
+        $tags = [];
+        foreach ($questionTagRelations as $itemId => $relations) {
+            $tags[$itemId] = [];
+            foreach ($relations as $relation) {
+                $tags[$itemId][] = $questionTags[$relation['tagId']];
+            }
+        }
+
+        return $tags;
+    }
+
     /**
      * @return QuestionBankService
      */
@@ -699,5 +734,13 @@ class TestpaperController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return QuestionTagService
+     */
+    protected function getQuestionTagService()
+    {
+        return $this->createService('QuestionTag:QuestionTagService');
     }
 }

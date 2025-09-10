@@ -160,8 +160,12 @@ if (aiAgentToken) {
   const sdk = new AgentSDK({
     token: aiAgentToken.value,
     uiIframeSrc: '/static-dist/libs/agent-web-sdk/ui/index.html',
+    apiBaseUrl: app.aiApiServer,
+    signalServerUrl: app.aiSignalServer
   });
-  sdk.setVariable('studyPlanGenerated', document.getElementById('studyPlanGenerated')?.value == '1')
+  if (document.getElementById('studyPlanGenerated')?.value) {
+    sdk.setVariable('studyPlanGenerated', document.getElementById('studyPlanGenerated')?.value == '1')
+  }
   sdk.setChatMetadata(JSON.parse(document.getElementById('chatMetaData')?.value));
   sdk.on('clickLink', (data) => {
     const regex = /\/course\/(\d+)\/task\/(\d+)/;

@@ -90,4 +90,6 @@ interface ActivityService
     public function findVideoActivityLevelsByCourseId($courseId);
 
     public function findActivitiesByCopyId($copyId);
+
+    public function batchUpdateMedia($ids, $media);
 }

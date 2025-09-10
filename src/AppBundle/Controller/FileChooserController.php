@@ -140,6 +140,10 @@ class FileChooserController extends BaseController
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
+        if (isset($conditions['fileCategoryId'])) {
+            $conditions['categoryId'] = $conditions['fileCategoryId'];
+            unset($conditions['fileCategoryId']);
+        }
 
         if (isset($conditions['tagId']) && empty($conditions['tagId'])) {
             unset($conditions['tagId']);

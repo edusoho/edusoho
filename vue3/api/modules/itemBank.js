@@ -22,4 +22,10 @@ export default {
   async getMyBindItemBank(params) {
     return apiClient.get('/me/item_bank_exercises', {params});
   },
+  async getItemBankExercises(itemBankId) {
+    return apiClient.get(`/item_bank_exercises/${itemBankId}`, );
+  },
+  async setItemBankExerciseAgent(exerciseId, params) {
+    return apiClient.post(`/item_bank_exercise/${exerciseId}/agent`, params);
+  },
 }

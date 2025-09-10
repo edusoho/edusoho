@@ -334,6 +334,8 @@
         </a-col>
       </a-row>
     </a-modal>
+
+    <div id="math-editor-iframe-container" class="hidden"></div>
   </div>
 </template>
 
@@ -350,6 +352,7 @@ import importList from "./item-import-components/import-list";
 import itemFooter from "./item-import-components/item-footer";
 import itemManage from "./item-manage";
 import Locale from "common/vue/mixins/locale";
+import {MathEditor} from "@codeages/math-editor";
 
 const data = {
   fileName: "这是试卷",
@@ -1050,8 +1053,43 @@ export default {
     });
     //监听关闭模态框
     this.$on("closeModal", this.closeModalData);
+    this.formatMathAnswer();
   },
   methods: {
+    formatMathAnswer() {
+      const mathEditor = new MathEditor(
+          document.getElementById('math-editor-iframe-container'),
+          `/static-dist/libs/math-editor/math-editor.html?${window.app.version}`
+      );
+      mathEditor.on('ready', async () => {
+        for (const [index, item] of this.items.entries()) {
+          for (const [questionIndex, question] of item.questions.entries()) {
+            if (question.answer_mode === 'text') {
+              for (const [answerIndex, answer] of question.answer.entries()) {
+                const latexMatch = answer.match(/\$\$([^$]+)\$\$/);
+                if (latexMatch) {
+                  mathEditor.set(this.formatSpecialMathAnswer(latexMatch[1]));
+                  const latex = await mathEditor.get();
+                  question.stem = question.stem.replace(`[[$$${latexMatch[1]}$$]]`, `[[$$$${latex}$$$]]`);
+                  question.answer[answerIndex] = `$$${latex}$$`;
+                  item.questions[questionIndex] = question;
+                }
+              }
+            }
+          }
+          this.$set(this.items, index, item);
+        }
+        this.renderFormula();
+        mathEditor.close();
+      });
+      mathEditor.open();
+    },
+    formatSpecialMathAnswer(latex) {
+      latex = latex.replace(/\\mathrm\{([^}]*)\}/g, '$1 ');
+      latex = latex.replace('\\bot ', '\\perp ');
+
+      return latex;
+    },
     //每次item改动统一计算数据
     formateItems() {
       this.allTypes = {};
@@ -1232,12 +1270,17 @@ export default {
       document.body.style = "";
     },
     //设置分数
-    setScore(list, score) {
+    setScore(list, score, otherScore1) {
       //只允许更改非材料题
       this.items.forEach(item => {
         list.forEach(ids => {
           if (item.ids === ids) {
             item.questions[0].score = score;
+            if (item.type === 'choice' || item.type === 'uncertain_choice') {
+              item.questions[0].otherScore = otherScore1;
+              item.questions[0].otherScore1 = otherScore1;
+              item.questions[0].scoreType = 'question';
+            }
           }
         });
       });

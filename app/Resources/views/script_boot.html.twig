@@ -49,6 +49,8 @@
   app.cloudVideoPlayerSdkUrl = '{{ cloud_sdk_url("resource_player") }}';
   app.cloudOldUploaderSdkUrl = '{{ cloud_sdk_url("old_uploader") }}';
   app.cloudOldDocumentSdkUrl = '{{ cloud_sdk_url("old_document") }}';
+  app.aiApiServer = '{{ setting("developer.ai_api_server", "") }}';
+  app.aiSignalServer = '{{ setting("developer.ai_signal_server", "") }}';
   app.lang = '{{ app.request.locale }}';
   app.mainColor = '{{ current_theme().confirmConfig.maincolor|default('default') }}';
 </script>

@@ -19,11 +19,11 @@
           class="col-lg-3 col-md-4 col-xs-6 course-item-wrap"
         >
           <div class="course-item">
-            <span v-if="Number(item.vipLevelId)" class="tag-vip-free"></span>
+            <span v-if="item.hidePrice !== '1' && Number(item.vipLevelId)" class="tag-vip-free"></span>
             <div class="course-img">
               <a :href="'/course/'+item.defaultCourseId" target="_blank">
-                <span v-if="item.discountId > 0 && item.discount == 0" class="tag-discount free"></span>
-                <span v-if="item.discountId > 0 && item.discount != 0" class="tag-discount"></span>
+                <span v-if="item.hidePrice !== '1' && item.discountId > 0 && item.discount == 0" class="tag-discount free"></span>
+                <span v-if="item.hidePrice !== '1' && item.discountId > 0 && item.discount != 0" class="tag-discount"></span>
                 <div v-if="isShowTag(item)" class="course-tag clearfix">
                   <span v-if="item.type == 'live'" class="pull-right">
                     <span>
@@ -70,7 +70,7 @@
                   <i class="es-icon es-icon-textsms"></i>{{ item.ratingNum }}
                 </span>
 
-                <span class="course-price-widget">
+                <span class="course-price-widget" v-if="item.hidePrice !== '1'">
                   <span v-if="Number(item.maxCoursePrice) === 0" class="free">{{ 'course.marketing_setup.preview.set_task.free'|trans }} </span>
                   <span v-else class="price"> {{ item.maxCoursePrice }}{{ 'cny'|trans }} </span>
                 </span>

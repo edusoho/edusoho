@@ -4,6 +4,7 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\Item\ItemFilter;
 use ApiBundle\Api\Resource\Item\QuestionFilter;
 
 class MeQuestionFavoriteFilter extends Filter
@@ -23,6 +24,11 @@ class MeQuestionFavoriteFilter extends Filter
         if (!empty($data['question'])) {
             $questionFilter = new QuestionFilter();
             $questionFilter->filter($data['question']);
+        }
+
+        if (!empty($data['item'])) {
+            $questionFilter = new ItemFilter();
+            $questionFilter->filter($data['item']);
         }
     }
 }

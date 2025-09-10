@@ -1,16 +1,19 @@
+{% do script(['vue3/js/file-chooser/parts/materiallib-choose/index.js']) %}
+
 <div class="chooser-content">
 	<div class="row ">
-		<select class="form-control col-sm-2 inline-block" id="materialType" data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">
-			<option data-type="my" value="my" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_upload'|trans}}</option>
-			<option data-type="sharing" value="sharing"  data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_share'|trans}}</option>
-			<option data-type="public" value="public" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_public'|trans}}</option>
-		</select>
-		<div class="col-sm-4 controls material-tags">
-			<input type="text" id="materialTags" name="material-tags" class="width-200 select2-offscreen" tabindex="-1"
-						 data-url="{{ path('tag_match') }}"
-						 data-explain="{{ 'course.base.tag_tips'|trans }}">
-		</div>
-		<div class="col-sm-6 material-search-form hidden-xs pll">
+    <select class="form-control col-sm-3 inline-block" id="materialType" data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}" style="margin-left: 12px">
+      <option data-type="my" value="my" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_upload'|trans}}</option>
+      <option data-type="sharing" value="sharing"  data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_share'|trans}}</option>
+      <option data-type="public" value="public" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_public'|trans}}</option>
+    </select>
+    <div class="col-sm-4 material-tags">
+      <input type="text" id="materialTags" name="material-tags" class="width-200 select2-offscreen" tabindex="-1"
+             data-url="{{ path('tag_match') }}"
+             data-explain="{{ 'course.base.tag_tips'|trans }}">
+    </div>
+    <div id="ant-category-select" class="col-sm-4" style="margin-left: 12px"></div>
+		<div class="col-sm-10 material-search-form hidden-xs" style="margin-top: 12px">
       <span class="input-group js-file-name-group">
         <input name="file-filter-by-name" class="form-control  js-file-name" type="text"
                placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">
@@ -50,6 +53,7 @@
   <input type="hidden" name="types" value="{{ fileTypes|default('') }}">
 	<input type="hidden" name="keyword">
   <input type="hidden" name="batch" value="{{ batch|default(0) }}">
+  <input type="hidden" name="fileCategoryId" value="">
 </div>
 <div class="js-material-list chooser-list-parent">
 	<div class="empty">{{'file_chooser.materiallib_choose.wating'|trans}}</div>

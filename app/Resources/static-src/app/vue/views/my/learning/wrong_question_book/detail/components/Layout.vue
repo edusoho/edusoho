@@ -1,5 +1,7 @@
 <template>
   <div class="question-layout" :order="order">
+    <div class="answer-mode-tag">{{ showAnswerModeText(questions.answer_mode) }}</div>
+
     <stem :order="order" :stem="questions.stem" />
 
     <div class="prevent-click answer-content">
@@ -52,6 +54,31 @@ export default {
     questions() {
       return this.question.questions[0];
     }
+  },
+
+  onMounted() {
+    console.log('question-layout mounted', this.question);
+  },
+
+  methods: {
+    showAnswerModeText(mode) {
+      switch (mode) {
+      case 'true_false':
+        return '判断题'
+      case 'single_choice':
+        return '单选题'
+      case 'choice':
+        return '多选题'
+      case 'uncertain_choice':
+        return '不定项选择题'
+      case 'text':
+        return '填空题'
+      case 'rich_text':
+        return '问答题'
+      default:
+        return ''
+      }
+    },
   }
 }
 </script>
@@ -60,6 +87,26 @@ export default {
 .question-layout {
   padding: 16px 0 24px 54px;
   border-bottom: 1px solid #ebebeb;
+
+  .answer-mode-tag {
+    position: relative;
+    right: 40px;
+    margin-bottom: 16px;
+    width: fit-content;
+    color: #46c37b;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #46c37b;
+  }
+
+  .answer_mode {
+    position: relative;
+    left: -30px;
+    margin-bottom: 16px;
+  }
 
   .answer-content {
     margin-top: 16px;
@@ -89,7 +136,6 @@ export default {
     .choose-answer-content {
       display: table;
       white-space: normal;
-      color: #666;
 
       .choose-answer-text {
         width: 100%;
@@ -163,7 +209,7 @@ export default {
   }
 
   .right-answer {
-    color: #46c37b;
+    color: #46c37b !important;
   }
 }
 

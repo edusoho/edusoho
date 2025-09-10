@@ -12,6 +12,14 @@
           </div>
 
           <div class="ibs-engine-material" v-else>
+            <a-button
+              size="small"
+              type="primary"
+              ghost
+              style="margin-bottom: 16px"
+            >
+              材料题
+            </a-button>
             <div class=" ibs-editor-text" v-html="material"></div>
             <div
               class="ibs-mt16 ibs-engine-material__attachment"

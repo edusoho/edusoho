@@ -1,4 +1,5 @@
 const lang = {
+  otherScore1: '漏选得分',
   locale: 'zh-CN',
   single_choice: '单选题',
   fill: '填空题',
@@ -153,6 +154,10 @@ const lang = {
     confirmSave_tip:
       '退出考试后仍正常计时，请在倒计时结束前完成考试，倒计时结束后，系统将自动交卷',
     confirmSave_title: '需要保存当前答题进度并退出吗？',
+    formulaInputPlaceholder: '点击输入公式',
+    mathEditor: '数学公式编辑',
+    formulaSaved: '公式已保存',
+    cancel: '取消',
     confirm: '确认',
     exit: '离开',
     goThenDo: '继续答题',

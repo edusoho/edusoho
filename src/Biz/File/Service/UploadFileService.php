@@ -191,4 +191,6 @@ interface UploadFileService
     public function downloadAttachment($id, $ssl);
 
     public function updateUsedCount($fileId);
+
+    public function batchSetCategoryId($fileIds, $categoryId);
 }

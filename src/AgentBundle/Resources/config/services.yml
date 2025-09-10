@@ -1,9 +1,4 @@
 services:
-  api_agent_authentication_listener:
-    class: AgentBundle\Security\Firewall\AgentAuthenticationListener
-    arguments:
-      - '@service_container'
-
   agent_config_event_subscriber:
     class: AgentBundle\Biz\AgentConfig\Event\AgentConfigEventSubscriber
     arguments: [ '@biz' ]

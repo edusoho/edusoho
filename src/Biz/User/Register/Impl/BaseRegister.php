@@ -4,6 +4,7 @@ namespace Biz\User\Register\Impl;
 
 use AppBundle\Common\SimpleValidator;
 use Biz\User\Service\UserService;
+use Biz\User\Support\PasswordValidator;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -90,8 +91,8 @@ abstract class BaseRegister
             throw UserException::TRUENAME_INVALID();
         }
 
-        if (!empty($registration['password']) && !$this->getUserService()->validatePassword($registration['password'])) {
-            throw UserException::PASSWORD_REQUIRE_HIGH_LEVEL();
+        if (!empty($registration['password']) && !PasswordValidator::validate($registration['password'])) {
+            throw UserException::PASSWORD_INVALID();
         }
     }
 
@@ -113,10 +114,7 @@ abstract class BaseRegister
         if (in_array($type, ['default', 'marketing'])) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
-
-            if ($this->getUserService()->validatePassword($registration['password'])) {
-                $user['passwordUpgraded'] = 1;
-            }
+            $user['passwordUpgraded'] = PasswordValidator::getLevel($registration['password']);
         } else {
             $user['salt'] = '';
             $user['password'] = '';

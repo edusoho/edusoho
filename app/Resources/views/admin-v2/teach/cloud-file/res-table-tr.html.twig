@@ -79,6 +79,15 @@
       </td>
     {% endif %}
 
+    {% if pageType == 'file' %}
+      <td class="vertical-middle">
+        <span style="display:block">{{ categories[cloudFile.categoryId].name|default('-') }}</span>
+      </td>
+      <td class="vertical-middle">
+        <a onclick="window.emitter.emit('open-refer-course-modal', { fileId: {{ cloudFile.id }}, usedCount: {{ cloudFile.usedCount }}, fileType: '{{ cloudFile.type }}', filename: '{{ cloudFile.filename }}', fileLength: {{ cloudFile.length }} })" style="display:block; cursor: pointer;">{{ cloudFile.usedCount }}</a>
+      </td>
+    {% endif %}
+
     {# 转码进度 #}
     <td class="vertical-middle">
     {% if cloudFile.storage == "cloud" %}

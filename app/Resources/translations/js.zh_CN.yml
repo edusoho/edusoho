@@ -58,7 +58,6 @@ site.information: 信息
 site.tips: 提示
 site.tips.delist: 确认下架？
 site.unknow_server_error: 发生未知错误
-
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
 user.settings.security.mobile_bind.fail: 手机绑定失败
@@ -66,7 +65,8 @@ user.settings.security.mobile_bind.fail: 手机绑定失败
 site.modify.success: 修改成功
 user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
 
-
+password.hint.normal: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
+password.hint.strong: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 
 site.audio.quality.quota: 音质
 site.audio.quality.low: 流畅
@@ -747,7 +747,7 @@ validate.valid_starttime.required: 请选择开始时间
 validate.valid_fixedtime.required: 请选择考试开始和结束时间
 validate.valid_maxDuration: 固定考试时间不能超过10个小时
 validate.valid_endtime.required: 请选择结束时间
-validate.valid_email_input.message: 请输入有效的电子邮件地址
+validate.valid_email_input.message: 请输入正确的邮箱地址
 validate.valid_idcard_formate.message: 请输入有效的身份证号码
 validate.valid_url_input.message: 请输入有效的网址
 activity.testpaper_manage.required.number: 请至少输入一位数字
@@ -801,7 +801,7 @@ validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.only_alphanumeric.message: 请输入数字或英文字母
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
-validate.phone.message: 请输入有效手机号码
+validate.phone.message: 请输入正确的手机号码
 validate.mobile_or_telephone.message: 请输入有效手机号码或者电话号码(区号-电话号码)
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
@@ -836,6 +836,9 @@ validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
 validate.have_spaces: 密码不能有空格哦
+validate.password: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
+validate.password.strong: 8-32位字符，包含字母大小写、数字、符号四种字符组合成的密码
+validate.check_password.message: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
 validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
 validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
 validate.check_password_high.message: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
@@ -2358,5 +2361,3 @@ course.market_setting.contract.model.handSignature: 手写签名
 course.market_setting.contract.model.partyBName: 乙方姓名
 course.market_setting.contract.model.iDNumber: 身份证号
 course.market_setting.contract.model.contactInformation: 联系方式
-
-admin.login_connect.strong_pwd_skip_close_radio.prompt: 请先勾选下方协议才能关闭

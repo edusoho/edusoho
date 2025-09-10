@@ -42,7 +42,15 @@ trait FillAdapterTrait
         }
 
         return array_map(function ($answers) {
-            return implode('|', array_column($answers, 'content'));
+            $adaptAnswers = [];
+            foreach ($answers as $answer) {
+                if ('latex' == $answer['type']) {
+                    $answer['content'] = '$$'.$answer['content'].'$$';
+                }
+                $adaptAnswers[] = $answer['content'];
+            }
+
+            return implode('|', $adaptAnswers);
         }, $question['answer']['correct']);
     }
 

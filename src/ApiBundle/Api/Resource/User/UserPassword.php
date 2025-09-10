@@ -13,6 +13,7 @@ use Biz\Common\BizSms;
 use Biz\Common\CommonException;
 use Biz\Sms\SmsException;
 use Biz\System\SettingException;
+use Biz\User\Support\PasswordValidator;
 use Biz\User\UserException;
 
 class UserPassword extends AbstractResource
@@ -45,8 +46,8 @@ class UserPassword extends AbstractResource
         }
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($fields['encrypt_password']), $request->getHttpRequest()->getHost());
-        if (!SimpleValidator::highPassword($password)) {
-            throw UserException::PASSWORD_REQUIRE_HIGH_LEVEL();
+        if (!PasswordValidator::validate($password)) {
+            throw UserException::PASSWORD_INVALID();
         }
 
         $result = $this->getBizSms()->check(BizSms::SMS_FORGET_PASSWORD, $mobile, $fields['smsToken'], $fields['smsCode']);

@@ -373,6 +373,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'watchLimit',
                 'drainage',
                 'taskDisplay',
+                'hidePrice',
             ]
         );
 
@@ -3022,6 +3023,12 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     private function processFields($course, $fields, $courseSet)
     {
+        if (!empty($fields['expiryStartDate'])) {
+            $fields['expiryStartDate'] = strtotime(date('Y-m-d', $fields['expiryStartDate']));
+        }
+        if (!empty($fields['expiryEndDate'])) {
+            $fields['expiryEndDate'] = strtotime(date('Y-m-d', $fields['expiryEndDate']).' 23:59:59');
+        }
         if (in_array($course['status'], ['published', 'closed'])) {
             //计划发布或者关闭，不允许修改模式，但是允许修改时间
             unset($fields['expiryMode']);

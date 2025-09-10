@@ -9,6 +9,7 @@ use Biz\Mail\Template\EmailRegistrationTemplate;
 use Biz\Mail\Template\EmailResetEmailTemplate;
 use Biz\Mail\Template\EmailResetPasswordTemplate;
 use Biz\Mail\Template\EmailSystemSelfTestTemplate;
+use Biz\Mail\Template\EmailVerifyCodeTemplate;
 use Biz\Mail\Template\EmailVerifyEmailTemplate;
 use Biz\Mail\Template\EmptyTemplate;
 use Pimple\Container;
@@ -119,6 +120,13 @@ class MailServiceProvider extends Extension implements ServiceProviderInterface
 
         $biz['email_import_user_email_template'] = function ($biz) {
             $template = new EmailImportUserEmailTemplate();
+            $template->setBiz($biz);
+
+            return $template;
+        };
+
+        $biz['email_verify_code_template'] = function ($biz) {
+            $template = new EmailVerifyCodeTemplate();
             $template->setBiz($biz);
 
             return $template;

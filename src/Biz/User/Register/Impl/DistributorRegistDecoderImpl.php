@@ -2,6 +2,9 @@
 
 namespace Biz\User\Register\Impl;
 
+/**
+ * 来自分销的账号注册类
+ */
 class DistributorRegistDecoderImpl extends RegistDecoder
 {
     protected function validateBeforeSave($registration)

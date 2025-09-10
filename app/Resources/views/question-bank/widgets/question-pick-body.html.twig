@@ -25,6 +25,19 @@
             {{ 'site.data.empty'|trans }}
           {% endif %}
         </span>
+        <br/>
+        <div class="item-tag-list">
+          <div class="color-gray text-sm tag-label">{{ 'tag'|trans }}：</div>
+          <div class="item-tag-container">
+            {% if questionTags[item.id]|default([])|length > 0 %}
+              {% for tag in questionTags[item.id] %}
+                <div class="tag">{{ tag.name }}</div>
+              {% endfor %}
+            {% else %}
+              <span class="color-gray">{{ '-' }}</span>
+            {% endif %}
+          </div>
+        </div>
       </td>
       <td>
         {{ dict_text('questionType', item.type) }}

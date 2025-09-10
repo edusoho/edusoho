@@ -97,6 +97,14 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->update($targetId, $updateFields);
     }
 
+    public function updateByIds($ids, $fields)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getPptActivityDao()->update(['ids' => $ids], $fields);
+    }
+
     public function delete($targetId)
     {
         $ppt = $this->getPptActivityDao()->get($targetId);

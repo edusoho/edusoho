@@ -190,14 +190,13 @@ class CourseExtension extends \Twig_Extension
                 ];
                 $item = array_merge($default, $item);
                 $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
-                $testpaperActivity = $this->getTestpaperActivityService()->getActivity($item['activity']['mediaId']);
-                $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
-                if (Testpaper::VALID_PERIOD_MODE_LIMIT == $scene['valid_period_mode']) {
-                    $activityLength = $this->getActivityExtension()->lengthFormat($item['activity']['endTime'] - $item['activity']['startTime']);
-                } else {
-                    $activityLength = empty($item['activity']['length'])
-                        ? ''
-                        : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType);
+                $activityLength = empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType);
+                if ('testpaper' == $mediaType) {
+                    $testpaperActivity = $this->getTestpaperActivityService()->getActivity($item['activity']['mediaId']);
+                    $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+                    if (Testpaper::VALID_PERIOD_MODE_LIMIT == $scene['valid_period_mode']) {
+                        $activityLength = $this->getActivityExtension()->lengthFormat($item['activity']['endTime'] - $item['activity']['startTime']);
+                    }
                 }
                 $result = [
                     'itemType' => $item['itemType'],
@@ -223,6 +222,7 @@ class CourseExtension extends \Twig_Extension
                     'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
                     'videoMaxLevel' => $item['videoMaxLevel'] ?? '',
+                    'isLastLearn' => $item['isLastLearn'],
                 ];
                 if ('live' === $item['type']) {
                     $currentTime = time();

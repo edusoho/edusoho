@@ -32,8 +32,6 @@ admin.user.message_menu: 私信管理
 
 ##用户管理模块
 admin.user.basic.basic_tab: 用户管理
-admin.user.basic.online: 在线用户
-admin.user.basic.login_record_tab: 登录日志
 
 admin.user.basic.basic_tab.create_btn: '添加新用户'
 admin.user.basic.basic_tab.edit_btn: '编辑用户信息'
@@ -755,9 +753,7 @@ admin_v2.user.staff_menu: 员工管理
 admin_v2.user.basic.basic_tab: 学员管理
 admin_v2.user.staff.basic_tab: 员工管理
 admin_v2.user.basic.fans_tab: 服务号粉丝
-admin_v2.user.basic.online_tab: 在线用户
 admin_v2.user.basic.statistics_tab: 学习数据统计
-admin_v2.user.basic.login_record_tab: 登录日志
 
 admin_v2.user.basic.basic_tab.create_btn: '添加学员'
 admin_v2.user.basic.basic_tab.edit_btn: '编辑学员信息'
@@ -803,6 +799,9 @@ admin_v2.user.teacher.promote_list_tab: 教师推荐
 admin_v2.user.destroy_account_manage_menu: 注销管理
 admin_v2.user.destroy_account.basic_tab: 注销申请
 admin_v2.user.destroy_account.destroyed_tab: 注销记录
+
+admin_v2.user.login_record: 登录日志
+admin_v2.user.online: 在线用户
 
 #交易-商品订单
 admin_v2.trade.order_manage.basic_group: 订单管理
@@ -1088,3 +1087,4 @@ admin_v2.cloud.question_bank.attachment.basic_tab: 题库附件
 admin_v2.cloud.question_bank.attachment_setting.basic_tab: 题库附件设置
 
 admin_v2.total_site_export: 全站导出权限
+admin_v2.question.tag_manage: 题目标签管理
