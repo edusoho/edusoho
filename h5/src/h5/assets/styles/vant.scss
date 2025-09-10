@@ -1,0 +1,109 @@
+.van-toast {
+	&.van-toast--default {
+		width: auto;
+		min-width: 125px;
+		min-height: 125px;
+		padding: 10px;
+	}
+}
+
+.only-app-dialog > .van-dialog__content--isolated {
+	min-height: 70px !important;
+}
+
+.van-hairline--bottom::after {
+	border-bottom-width: 0;
+}
+
+.van-tabbar--fixed {
+	z-index: 1001;
+}
+
+.van-tabbar--iphonex {
+	@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+		padding-bottom: 34px;
+	}
+}
+
+.van-swipe__indicators {
+	bottom: vw(6);
+
+	.van-swipe__indicator {
+		&--active {
+			background-color: $primary-color;
+		}
+	}
+}
+
+.van-popup {
+	overflow: auto;
+}
+
+.van-checkbox__icon--checked .van-icon {
+	color: #fff;
+	background-color: $primary-color;
+	border-color: $primary-color;
+}
+
+// .van-cell {
+//   padding-left: 0;
+//   padding-right: 0;
+//   .van-cell__title {
+//     color: #71777D;
+//   }
+//   &:not(:last-child)::after {
+//     left: 0;
+//     transform: scaleY(1)
+//   }
+// }
+
+.van-dialog__confirm,
+.van-dialog__confirm:active {
+	color: $primary-color !important;
+}
+
+.van-button--primary {
+	color: #fff;
+	background-color: $primary-color;
+	border: 1px solid $primary-color;
+}
+
+.van-button--info {
+	color: #fff;
+	background-color: #1989fa;
+	border: 1px solid #1989fa;
+}
+
+.van-button--disabled {
+	cursor: not-allowed;
+	opacity: .6;
+}
+
+// nav
+.nav-bar--default {
+	color: #fff;
+	background-color: $bg-black;
+
+	.van-icon {
+		color: #fff;
+		font-weight: bold;
+	}
+
+	.van-nav-bar__title {
+		color: #fff;
+	}
+}
+
+.nav-bar--white {
+	color: #fff;
+	background-color: $bg-white;
+
+	.van-icon {
+		color: #333;
+		font-weight: bold;
+	}
+
+	.van-nav-bar__title {
+		color: #333;
+	}
+}

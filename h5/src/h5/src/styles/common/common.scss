@@ -1,0 +1,176 @@
+.ibs-clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.ibs-pull-left {
+  float: left;
+}
+
+.ibs-pull-right {
+  float: right;
+}
+
+.ibs-text-center {
+  text-align: center;
+}
+
+.ibs-hide {
+  display: none;
+}
+
+.ibs-text-overflow {
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+@mixin ibs-text-overflow-multi($line) {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
+.ibs-primary-btn {
+  margin-top: vw(30);
+  -webkit-text-fill-color: white;
+  font-size: vw(17);
+  align-self: stretch;
+  margin-right: 0;
+  margin-left: 0;
+  border-radius:vw(2);
+  background: $primary-color;
+}
+
+// text
+.ibs-text-10 {
+  font-size: vw(10);
+}
+
+.ibs-text-12 {
+  font-size: vw(12);
+}
+
+.ibs-text-14 {
+  font-size: vw(14);
+}
+
+.ibs-text-16 {
+  font-size: vw(16);
+}
+
+.ibs-text-18 {
+  font-size: vw(18);
+}
+
+// title
+.ibs-title-18 {
+  font-family: PingFangSC-Medium;
+  font-size: vw(18);
+  color: #2b333b;
+}
+
+.ibs-title-16 {
+  font-family: PingFangSC-Medium;
+  font-size: vw(16);
+  color: #2b333b;
+}
+
+.ibs-mb15 {
+  margin-bottom: vw(15) !important;
+}
+
+.ibs-mb20 {
+  margin-bottom: vw(20) !important;
+}
+
+.ibs-mb10 {
+  margin-bottom: vw(10) !important;
+}
+
+.ibs-mr20 {
+  margin-right: vw(20) !important;
+}
+
+.ibs-mt50 {
+  margin-top: vw(50) !important;
+}
+
+.ibs-mt30 {
+  margin-top: vw(30) !important;
+}
+
+.ibs-mt20 {
+  margin-top: vw(20) !important;
+}
+
+.ibs-mt10 {
+  margin-top: vw(10) !important;
+}
+
+.ibs-mt5 {
+  margin-top: vw(5) !important;
+}
+
+.ibs-ml5 {
+  margin-left: vw(5) !important;
+}
+
+.ibs-ml10 {
+  margin-left: vw(10) !important;
+}
+
+.ibs-ml-5 {
+  margin-left: vw(-5) !important;
+}
+
+.ibs-ph20 {
+  padding-left: vw(20);
+  padding-right: vw(20);
+}
+
+.ibs-pr10 {
+  padding-right: vw(10);
+}
+
+.ibs-pl3 {
+  padding-left: vw(3) !important;
+}
+
+// color
+.ibs-color-primary {
+  color: $primary-color;
+}
+.ibs-red {
+  color: #ff5353;
+}
+.ibs-dark {
+  color: #2b333b;
+}
+.ibs-grey {
+  color: #b0bdc9;
+}
+.ibs-grey-medium {
+  color: #71777D !important;
+}
+
+// font-family
+.ibs-font-family-PFM {
+  font-family: PingFangSC-Medium;
+}
+.ibs-font-family-PM {
+  font-family:PingFangSC-Medium,PingFang SC;
+}
+.ibs-font-family-PR {
+  font-family:PingFangSC-Regular,PingFang SC;
+}
+
+//box-shadow
+.ibs-box-shadow{
+  box-shadow:0px 1px 4px 0px rgba(0,0,0,0.05)
+}
+
+

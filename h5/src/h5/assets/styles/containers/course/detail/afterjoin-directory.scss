@@ -1,0 +1,339 @@
+.afterjoin-directory {
+  padding-bottom: vw(16);
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .icon-weiwancheng,
+  .icon-yiwanchengliang {
+    color: #408ffb;
+  }
+
+  .icon-weixuexi {
+    color: #dcdcdc;
+  }
+
+  .wrapper {
+    width: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    touch-action: none;
+
+    .pd-bo {
+      padding-bottom: vw(20);
+    }
+  }
+
+  .swiper-directory {
+    padding: vw(16) 0 vw(10) 0;
+    background: #fff;
+
+    .swiper-directory-active {
+      color: rgba(64, 143, 251, 1) !important;
+      background: rgba(64, 143, 251, 0.08) !important;
+
+      .chapter-title {
+        color: rgba(64, 143, 251, 1) !important;
+      }
+
+      .chapter-des {
+        color: rgba(64, 143, 251, 1) !important;
+      }
+
+      .iconfont {
+        color: rgba(64, 143, 251, 1) !important;
+      }
+    }
+
+    .nochapter {
+      padding: vw(0) vw(21);
+      line-height: vw(68);
+    }
+
+    .haschapter {
+      padding: vw(10) vw(14);
+    }
+
+    .chapter {
+      box-sizing: border-box;
+      // width:vw(250);
+      height: vw(68);
+      margin-left: vw(15);
+      background: rgba(245, 245, 245, 1);
+
+      .icon-wuzhangjieliang {
+        margin-right: vw(20);
+        font-size: vw(30);
+        vertical-align: middle;
+      }
+
+      .iconfont {
+        color: #bebebe;
+      }
+
+      .chapter-title {
+        width: 100%;
+        color: #333;
+        font-weight: 400;
+        font-size: vw(16);
+        font-family: PingFangSC-Regular;
+        line-height: vw(22);
+      }
+
+      .chapter-des {
+        margin-top: vw(6);
+        color: #999;
+        font-weight: 400;
+        font-size: vw(14);
+        font-family: PingFangSC-Regular;
+        line-height: vw(20);
+      }
+    }
+  }
+
+  .swiper-directory-fix {
+    position: sticky;
+    top: vw(56);
+    width: 100%;
+    z-index: 99;
+  }
+
+  .bl {
+    .iconfont {
+      color: #bebebe;
+    }
+  }
+
+  .noneItem {
+    color: #919191;
+    font-size: vw(16);
+    text-align: center;
+
+    .nodata {
+      width: vw(180);
+      margin: vw(30) 0;
+    }
+
+    .notask {
+      width: vw(140);
+      margin: vw(15) 0;
+    }
+  }
+
+  .util-directory {
+    box-sizing: border-box;
+    width: vw(345);
+    height: vw(30);
+    margin: vw(10) 0 0 vw(15);
+    padding-left: vw(15);
+    color: rgba(51, 51, 51, 1);
+    font-weight: 400;
+    font-size: vw(16);
+    font-family: PingFangSC-Regular;
+    line-height: vw(22);
+    border-bottom: vw(1) solid rgba(235, 235, 235, 1);
+  }
+
+  .lesson-directory {
+    width: vw(345);
+    margin: vw(10) 0 0 vw(15);
+    color: #333;
+    border: 1px solid rgba(245, 245, 245, 1);
+
+    .lessonactive {
+      color: #408ffb !important;
+    }
+
+    .end {
+      color: #999;
+      border: vw(1) solid #999;
+    }
+
+    .nopublished {
+      color: #999;
+    }
+
+    .back {
+      color: #f99931;
+      border: vw(1) solid #f99931;
+    }
+
+    .play {
+      color: #408ffb;
+    }
+
+    .tryLes {
+      display: inline-block !important;
+      margin-right: vw(10);
+      padding: vw(0) vw(2);
+      color: #fff;
+      font-size: vw(12);
+      line-height: vw(18) !important;
+      text-align: center;
+      vertical-align: top;
+      vertical-align: middle;
+      background: rgba(249, 153, 49, 1);
+      border-radius: vw(4);
+    }
+
+    .freeAdmission {
+      display: inline-block !important;
+      margin-right: vw(10);
+      padding: vw(0) vw(2);
+      color: #fff;
+      font-size: vw(12);
+      line-height: vw(18) !important;
+      text-align: center;
+      vertical-align: top;
+      vertical-align: middle;
+      background: #03c777;
+      border-radius: vw(4);
+    }
+
+    .lesson-title {
+      box-sizing: border-box;
+      width: 100%;
+      font-size: vw(14);
+      background: rgba(245, 245, 245, 1);
+
+      div {
+        display: inline-block;
+      }
+
+      .lesson-title-r {
+        .lesson-title-des {
+          display: inline-block;
+          box-sizing: border-box;
+
+          i {
+            margin-right: vw(8);
+          }
+
+          .l22 {
+            .tryLes,
+            .freeAdmission {
+              height: fit-content;
+              white-space: nowrap;
+              vertical-align: middle;
+            }
+          }
+
+          .ks {
+            display: inline-flex;
+            width: vw(220);
+            padding-top: 4px;
+            padding-bottom: 4px;
+            vertical-align: top;
+          }
+
+          .last-learn-task {
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 20px;
+            padding: 0 4px;
+            background-color: #FF706B;
+            border-radius: 4px;
+          }
+        }
+      }
+
+      .icon-shipin {
+        color: rgba(190, 190, 190, 1);
+        font-size: vw(16);
+      }
+
+      .lesson-title-l {
+        float: right;
+        color: #999;
+
+        span {
+          margin-right: vw(9);
+        }
+
+        .elective-tag {
+          position: relative;
+          top: vw(-2);
+          display: inline-block;
+          padding: vw(0) vw(2);
+          color: #fff;
+          font-size: vw(12);
+          line-height: vw(18);
+          text-align: center;
+          vertical-align: middle;
+          background: #03c7c4;
+          border-radius: vw(4);
+        }
+      }
+
+      .iconfont {
+        font-size: vw(16);
+      }
+    }
+
+    .zb-ks {
+      padding: 10px 12px;
+
+      .lesson-title-l {
+        line-height: vw(40);
+      }
+
+      .zbtime {
+        margin-top: vw(3);
+        margin-left: 26px;
+        color: #408ffb;
+        font-size: vw(12);
+        margin-right: 8px;
+      }
+
+      .bl {
+        line-height: normal !important;
+      }
+    }
+
+    .lesson-items {
+      box-sizing: border-box;
+      padding: vw(12) vw(15) vw(12) vw(15);
+
+      .litem {
+        display: flex;
+        justify-content: space-between;
+        padding: vw(12) vw(0);
+        line-height: vw(20);
+
+        div {
+          display: inline-block;
+        }
+
+        .litem-r {
+          display: flex;
+          width: vw(225);
+          color: #666;
+          font-size: vw(14);
+
+          .iconfont {
+            margin-right: vw(8);
+            color: #bebebe;
+            font-size: vw(16);
+          }
+        }
+
+        .litem-l {
+          display: flex;
+          color: #999;
+          font-size: vw(14);
+
+          span {
+            margin-right: vw(9);
+          }
+
+          .iconfont {
+            font-size: vw(16);
+          }
+        }
+      }
+    }
+  }
+}

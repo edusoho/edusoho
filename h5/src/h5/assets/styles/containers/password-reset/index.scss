@@ -1,0 +1,25 @@
+.password-reset {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 vw(15);
+
+	.alert-danger {
+		margin-bottom: vw(20);
+		padding: vw(15) vw(22);
+		color: #e74c3c;
+		font-size: 14px;
+		background-color: #fff1f0;
+		border: 1px solid #f0c7bd;
+	}
+
+	> .van-cell {
+		margin-top: vw(30);
+		font-size: vw(15);
+
+		.van-field__body {
+			padding-bottom: vw(15);
+			border-bottom: vw(1) solid #d8d8d8;
+		}
+	}
+}

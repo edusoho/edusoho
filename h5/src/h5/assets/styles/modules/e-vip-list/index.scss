@@ -1,0 +1,55 @@
+.e-vip-list {
+  padding: vw(25) 0 vw(30) vw(20);
+  &.single {
+    padding-right: vw(20);
+  }
+}
+
+.e-vip-item {
+  position: relative;
+  padding-right: vw(20);
+  &.single {
+    padding-right: 0;
+    padding-bottom: 46%;
+    height: 0;
+    .vip-background {
+      position: absolute;
+      height: 100%;
+    }
+    .name {
+      width: 50%;
+      transform: scale(1.6);
+      transform-origin: left;
+    }
+    .explain {
+      transform: scale(1.3);
+      transform-origin: left;
+    }
+  }
+  .vip-background {
+    height: vw(83);
+    width: 100%;
+  }
+  .name {
+    width: 75%;
+    position: absolute;
+    left: 10%;
+    top: 25%;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1;
+    color: #FFFFFF;
+    max-width: vw(150);
+  }
+  .explain {
+    position: absolute;
+    top: 42%;
+    left: 10%;
+    opacity: 0.56;
+    line-height: 2;
+    font-size: 12px;
+    transform: scale(0.85);
+    transform-origin: left;
+    color: #FFFFFF;
+  }
+}

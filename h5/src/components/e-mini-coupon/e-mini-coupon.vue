@@ -1,0 +1,22 @@
+<template>
+  <van-tag class="mini-coupon ml5" type="danger">{{
+    priceHtml(item, false)
+  }}</van-tag>
+</template>
+
+<script>
+import couponMixin from '@/mixins/coupon';
+
+export default {
+  name: 'EMiniCoupon',
+  mixins: [couponMixin],
+  props: {
+    item: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+  },
+};
+</script>

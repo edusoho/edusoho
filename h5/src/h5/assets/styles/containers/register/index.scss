@@ -1,0 +1,81 @@
+.register {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: vw(40) vw(15);
+
+	.van-checkbox {
+		display: inline !important;
+		justify-content: center;
+	}
+
+	.van-checkbox__icon {
+		display: inline-block;
+	}
+
+	&-title {
+		color: #313131;
+		font-size: vw(20);
+		font-family: PingFangSC-Regular;
+	}
+
+	&-avatarimg {
+		width: vw(90);
+		height: vw(90);
+		margin-top: vw(30);
+		border-radius: vw(45);
+	}
+
+	> .van-cell {
+		margin-top: vw(30);
+		font-size: vw(15);
+
+		.van-field__body {
+			padding-bottom: vw(15);
+			border-bottom: vw(1) solid #d8d8d8;
+		}
+	}
+
+	> .login-bottom {
+		> a {
+			color: $primary-color;
+			cursor: pointer;
+		}
+	}
+
+	&-social {
+		position: relative;
+		width: 100%;
+		margin-top: vw(30);
+		color: #c1c1c1;
+		text-align: center;
+
+		> span {
+			padding: 0 vw(10);
+			background: #fff;
+
+			i {
+				margin: 0 vw(10);
+				font-size: vw(40);
+			}
+		}
+
+		> .line {
+			position: absolute;
+			top: 50%;
+			z-index: -1;
+			width: 100%;
+			height: 1px;
+			background: #e1e1e1;
+		}
+	}
+
+	.van-button--primary {
+		background-color: $primary-color;
+		border-color: #fff;
+	}
+
+	.van-button--disabled {
+		color: #fff;
+	}
+}

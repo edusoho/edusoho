@@ -1,0 +1,101 @@
+.ibs-analysis {
+  margin: 0 vw(16);
+  font-size: vw(14);
+  margin-top: vw(24);
+  overflow: hidden;
+  border-top: vw(1) solid #f5f5f5;
+
+  .ibs-analysis-title {
+    padding: vw(20) 0 0 0;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .van-cell {
+    padding: 0;
+  }
+
+  .van-cell::after {
+    border-bottom: none;
+  }
+  .van-collapse-item__content {
+    padding: 0;
+  }
+  .van-hairline--top-bottom::after,
+  .van-hairline-unset--top-bottom::after {
+    border-width: 0;
+  }
+  .van-cell--clickable:active {
+    background: transparent;
+  }
+  .van-cell__right-icon {
+    margin-top: vw(16);
+  }
+  .van-collapse-item__title--disabled{
+    .van-cell__right-icon {
+      display:none
+    }
+  }
+
+  .ibs-analysis-result {
+    background: #fff;
+    padding: vw(20) 0;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  .ibs-analysis-content {
+    margin-left: vw(20);
+    color: #333333;
+    word-break: break-all;
+    font-weight: normal;
+    font-size: 14px;
+    .fill-type {
+      border-bottom: vw(1) dashed #f6f6f6;
+      padding-bottom: vw(10);
+    }
+
+    .fill-type:last-of-type {
+      border: 0;
+    }
+
+    .ibs-analysis-content__item {
+      display: flex;
+      .ibs-analysis-content__item--column {
+        display: flex;
+        flex-direction: column;
+      }
+      .ibs-analysis-item__title {
+        margin-right: vw(10);
+        flex: 0 0 24%;
+      }
+
+      .fill-answer {
+        margin: 0 0 vw(10) vw(-8);
+      }
+
+      .ibs-analysis-item_right {
+        color: #00d041;
+      }
+
+      .ibs-analysis-item_worng {
+        color: #ff5722;
+      }
+
+      .ibs-analysis-item_noAnswer {
+        color: #cccccc;
+      }
+
+      .ibs-analysis-item_none {
+        color: #ff954d;
+      }
+
+      .ibs-analysis-item_subject {
+        color: #00e6dc;
+      }
+    }
+  }
+}

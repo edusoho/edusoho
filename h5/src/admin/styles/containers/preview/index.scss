@@ -1,0 +1,284 @@
+@import "../../modules/coupon/index.scss";
+@import "../../modules/marketing-activity/index.scss";
+
+.preview-container {
+	box-sizing: border-box;
+	padding: 0 50px;
+
+	.preview-title__app {
+		position: absolute;
+		top: 76px;
+		right: 46px;
+		left: 46px;
+		height: 28px;
+		padding-left: 34px;
+		color: rgba(190, 190, 190, 1);
+		font-size: 12px;
+		line-height: 28px;
+		text-align: left;
+		background: rgba(245, 245, 245, 1);
+		border-radius: 14px;
+
+		i {
+			position: absolute;
+			top: 0;
+			left: 16px;
+		}
+	}
+
+	.preview-title__h5 {
+		position: absolute;
+		top: 122px;
+		width: 100%;
+		color: #fff;
+		text-align: center;
+	}
+
+	.preview-title__miniprogram {
+		position: absolute;
+		top: 58px;
+		width: 100%;
+		color: #fff;
+		text-align: center;
+	}
+
+	.image-container {
+		.phone-img {
+			position: relative;
+			float: left;
+			margin-right: 60px;
+
+			&-mp {
+				display: table;
+				float: none;
+				margin-right: auto;
+				margin-left: auto;
+
+				> img {
+					width: 375px;
+				}
+			}
+
+			> img {
+				width: 375px;
+			}
+
+			&-app {
+				> img {
+					width: 447px;
+				}
+			}
+		}
+
+		.code-container {
+			float: left;
+			text-align: center;
+
+			&-mp {
+				float: none;
+				margin-left: 0;
+			}
+
+			.btn-common {
+				padding: 0 30px;
+				line-height: 32px;
+			}
+		}
+
+		.code-item {
+			width: 240px;
+			height: 240px;
+			margin-top: 100px;
+			margin-bottom: 30px;
+			padding: 10px 20px 50px;
+			background-color: #fff;
+			border: 1px solid #e1e1e1;
+			border-radius: 2px;
+
+			.code-img-container {
+				height: 100%;
+
+				.code-image {
+					width: 100%;
+				}
+			}
+		}
+
+		.code-item__img {
+			width: 240px;
+			height: 240px;
+			margin-top: 100px;
+			margin-bottom: 30px;
+			padding: 10px 20px 20px;
+			background-color: #fff;
+			border: 1px solid #e1e1e1;
+			border-radius: 2px;
+
+			.code-image {
+				width: 100%;
+			}
+		}
+	}
+
+	// h5 组件 vw 单位复写
+	.e-course {
+		padding: 0 0 20px;
+
+		&__left {
+			border-radius: 2px;
+
+			.e-course__img {
+				width: 140px;
+				height: 80px;
+			}
+		}
+
+		&__right {
+			.e-course__header {
+				color: #2b333b;
+				font-family: PingFangSC-Medium;
+			}
+		}
+	}
+
+	.e-course-list {
+		padding: 0 6px;
+
+		&__header {
+			padding: 10px 0 !important;
+		}
+
+		&__list-title {
+			font-size: 15px;
+		}
+
+		&__more {
+			font-size: 14px;
+		}
+	}
+
+	.e-course-list__body {
+		.e-column-class:nth-of-type(2n-1) {
+			padding-left: 0;
+		}
+
+		.e-row-class {
+			padding-left: 0;
+		}
+
+		.e-openCourse-class:first-of-type {
+			padding-left: 0;
+		}
+	}
+
+	.coupon-preview__container {
+		padding-left: 0;
+
+		.e-coupon {
+			&-single {
+				.van-swipe-item {
+					width: 100% !important;
+				}
+
+				.e-coupon__header {
+					.e-coupon__name {
+						right: 80px;
+						width: 130px;
+						overflow: hidden;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+
+						.coupon-name {
+							width: auto;
+						}
+					}
+				}
+			}
+
+			&__price {
+				box-sizing: border-box;
+			}
+		}
+	}
+
+	.e-course-switch-box {
+		.switch-box__price {
+			font-size: 12px;
+		}
+	}
+
+	// h5 轮播长度单位复写
+	.item-container {
+		&__title {
+			font-size: 16px;
+			line-height: 30px;
+		}
+	}
+
+	.van-swipe__indicators {
+		bottom: 35px;
+
+		.van-swipe__indicator {
+			&--active {
+				background-color: $primary-color;
+			}
+		}
+	}
+
+	.e-groupon {
+		padding-right: 0;
+		padding-left: 0;
+	}
+}
+
+.find-page__part {
+	position: relative;
+
+	.e-poster,
+	.e-graphic-navigation {
+		margin: 0 -10px;
+	}
+
+	&:nth-last-child(2) {
+		.gray-border-bottom {
+			border-bottom: 0;
+		}
+	}
+
+	.e-poster__img {
+		border-radius: 6px;
+	}
+}
+
+.find-page__part__padding {
+	padding: 0 10px !important;
+}
+
+.preview-iframe {
+	position: absolute;
+	top: 155px;
+	left: 30px;
+	width: 390px;
+	height: 570px;
+	overflow: auto;
+	background-color: #f7f9fa;
+
+	&__miniprogram {
+		top: 89px;
+		left: 25px;
+		width: 325px;
+		height: 573px;
+	}
+
+	&__app {
+		top: 116px;
+		left: 31px;
+		width: 390px;
+		height: 666px;
+	}
+
+	.e-vip-list {
+		padding-right: 0;
+		padding-left: 0;
+	}
+}

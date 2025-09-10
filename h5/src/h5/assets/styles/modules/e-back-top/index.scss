@@ -1,0 +1,23 @@
+.e-back-top{
+  position: fixed;
+  bottom: vw(60);
+  right: vw(14);
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: vw(44);
+  height: vw(44);
+  font-size:vw(12);
+  text-align:center;
+  border-radius: 50%;
+  background:#ffffff;
+  box-shadow:0px 2px 8px 0px rgba(0,0,0,0.05);
+  box-sizing:border-box;
+  .iconfont{
+      font-size:vw(15)
+  }
+  span{
+    display:block;
+  }
+}

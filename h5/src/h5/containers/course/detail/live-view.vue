@@ -1,0 +1,192 @@
+<template>
+  <div class="web-view">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
+    <e-loading v-if="isLoading" />
+    <!-- web-view -->
+    <iframe id="player" :src="playUrl" width="100%" frameborder="0" />
+    <open-app-dialog v-if="appShow" :openAppUrl="openAppUrl" @cancel="cancel()" ></open-app-dialog>
+  </div>
+</template>
+<script>
+import Api from '@/api';
+import { mapState, mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
+import { Toast } from 'vant';
+import redirectMixin from '@/mixins/saveRedirect';
+import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+import openAppDialog from '../components/openAppDialog.vue';
+
+export default {
+  components: {
+    OutFocusMask,
+    openAppDialog
+  },
+  mixins: [redirectMixin, report],
+  data() {
+    return {
+      playUrl: '',
+      requestCount: 0,
+      courseId: '',
+      taskId: '',
+      openAppUrl: '',
+      appShow: false
+    };
+  },
+  computed: {
+    ...mapState([ 'courseSettings','course']),
+    ...mapState('course', {
+      joinStatus: state => state.joinStatus,
+    }),
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
+  },
+  async mounted() {
+    this.courseId = this.$route.query.courseId;
+    this.taskId = this.$route.query.taskId;
+    if (!this.$store.state.token) {
+      this.$router.push({
+        name: 'login',
+        query: {
+          redirect: this.redirect,
+        },
+      });
+      return;
+    }
+    this.handleLive();
+  },
+  methods: {
+    ...mapMutations({
+      setNavbarTitle: types.SET_NAVBAR_TITLE,
+    }),
+    ...mapMutations('course', {
+      setSourceType: types.SET_SOURCETYPE
+    }),
+
+    cancel() {
+      this.setSourceType({
+        sourceType: '',
+        taskId: ''
+      })
+      this.appShow = false;
+      this.$router.go(-1)
+    },
+    handleOnlyLearnOnApp() {
+      if (this.courseSettings.only_learning_on_APP == 0) return false
+
+      const { goodsId, id } = this.course.details;
+      const { host, protocol } = window.location;
+
+      if (!!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+        this.openAppUrl = `kuozhi://${host}?courseId=${id}&goodsId=${goodsId}`;
+      } else {
+        this.openAppUrl = `kuozhi://${host}?protocol=${protocol.replace(":","")}&courseId=${id}&goodsId=${goodsId}`;
+      }
+
+      this.appShow = true;
+
+      return true;
+    },
+    handleLive() {
+      if (this.handleOnlyLearnOnApp()) {
+        return;
+      }
+      const { taskId, replay, title } = this.$route.query;
+      this.setNavbarTitle(title);
+
+      if (String(replay) == 'true') {
+        this.initReportData(this.courseId, this.taskId, 'live', true);
+        // query boolean 被转成字符串了
+        this.getReplayUrl(taskId);
+        return;
+      }
+      this.initReportData(this.courseId, this.taskId, 'live', true);
+      this.requestLiveNo(taskId);
+    },
+    getReplayUrl(taskId) {
+      Api.getLiveReplayUrl({
+        query: {
+          taskId,
+        },
+      })
+        .then(res => {
+          if (res.nonsupport) {
+            Toast('回放暂不支持');
+            return;
+          }
+          if (res.url) {
+            if (res.url.indexOf('/error/') > -1) {
+              Toast(this.$t('courseLearning.noReplay'));
+            } else {
+              this.reprtData({ eventName: 'finish' });
+              const index = res.url.indexOf('/');
+              this.playUrl = index == 0 ? res.url : res.url.substring(index);
+            }
+            return;
+          }
+          if (res.error) {
+            Toast.fail(res.error.message);
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+
+    requestLiveNo(taskId) {
+      Api.requestLiveNo({
+        query: {
+          taskId,
+        },
+      })
+        .then(res => {
+          if (res.no) {
+            this.getLiveUrl(taskId, res.no);
+          }
+          if (res.error) {
+            Toast.fail(res.error.message);
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+    getLiveUrl(taskId, no) {
+      this.requestCount++;
+      Api.getLiveUrl({
+        query: {
+          taskId,
+          no,
+        },
+      })
+        .then(res => {
+          if (res.roomUrl) {
+            const index = res.roomUrl.indexOf('/');
+            // 由于在safari中从https转到http的地址会出错
+            this.playUrl =
+              index == 0 ? res.roomUrl : res.roomUrl.substring(index);
+            this.reprtData({ eventName: 'finish' });
+          } else {
+            if (this.requestCount < 30) {
+              this.getLiveUrl(taskId, no);
+            } else {
+              Toast('获取直播失败');
+            }
+          }
+          if (res.error) {
+            Toast.fail(res.error.message);
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+  },
+};
+</script>
