@@ -8,7 +8,7 @@
     "dev:admin": "vue-cli-service serve --mode  admin",
     "build:h5": "vue-cli-service build --mode prod h5",
     "build:admin": "vue-cli-service build --mode prod admin",
-    "build": "vue-cli-service build --mode prod h5 && vue-cli-service build --mode prod admin",
+    "build": "vue-cli-service build --mode prod h5 && vue-cli-service build --mode prod admin && rm -rf ../web/h5/ && cp -r dist/ ../web/h5/",
     "analyze:h5": "vue-cli-service build --mode prod h5 --report",
     "analyze:admin": "vue-cli-service build --mode prod admin --report",
     "test:unit": "vue-cli-service test:unit",
