@@ -33,6 +33,7 @@ watch(() => modalVisible.value, (newValue) => {
     getCategories();
     getTagOptions();
     formState.fileId = props.fileId;
+    isEditFile.value = false;
   }
 })
 
@@ -269,7 +270,7 @@ function onSelect(record) {
               <a-spin :spinning="spinning">
                 <div v-if="uploadFiles.length > 0" class="flex flex-col max-h-120 overflow-y-auto gap-12 p-12">
                   <div v-for="(record, index) in uploadFiles" :key="record.id" class="flex justify-between text-[rgba(0,0,0,0.65)] text-[14px] font-normal leading-[16px] cursor-pointer" @click="onSelect(record)">
-                    <div class="max-w-120 truncate">{{ record.filename }}</div>
+                    <div class="max-w-250 truncate">{{ record.filename }}</div>
                     <div class="flex gap-12">
                       <div>{{ record.fileSize }}</div>
                       <div class="w-88 text-right">{{ formatDate(record.createdTime, 'YYYY-MM-DD') }}</div>
