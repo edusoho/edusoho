@@ -6,23 +6,6 @@
 - [播放器地址](http://docs.qiqiuyun.com/)
 - [需求文档](https://pro.modao.cc/app/43be7ceee9ba1239e1366453d273907de9ac2043#screen=sFAABE922B31526366021396)
 
-
-## 分支说明
-
-1、beta/x.x.x 是当前迭代开发分支
-
-2、release/x.x.x 是当前迭代待发布分支，每次发布成功后需要 新建一个版本的tag作为标记。例如：
-
-```
-git tag -a v1.0.12 -m 'v1.0.12' // 新建tag
-
-git push origin v1.0.12         // push 到远程
-```
-
-然后提交 mergeRequest 合并到 master、develop 分支（后续可以自动化）
-
-3、master 稳定分支
-
 ## Build Setup
 
 ``` bash
@@ -38,43 +21,13 @@ npm run build
 npm run build:h5
 npm run build:admin
 
-# 将打包好的文件复制到Edusoho
-sudo rm -rf /var/www/edusoho/web/h5/*
-cp -r dist/* /var/www/edusoho/web/h5/
-
 # analyze 分析项目依赖
 npm run analyze:h5
 npm run analyze:admin
-
 ```
 
 开发中所有接口使用的服务器域名配置在 config/index.js proxyTable 配置里。
 **后台开发时**需要当前用户具有管理员权限，需要在 admin/api/interceptors.js 里配置 h5 里登录的管理员权限用户的token （h5 登录时 网络请求的 /token 接口里有）
-
-## 发布到测试站
-
-1、安装 composer 中的依赖
-
-```
-composer require deployer/deployer --dev
-```
-
-
-2、找后端人员给予 deployerkey 文件（允许 ssh 到服务器的验证文件）
-  放到~/.ssh/deployerkey目录下
-  设置权限 600
-
-```
-sudo chmod 600 ~/.ssh/deployerkey
-```
-
-3、打包发布代码到 try 服务器（测试站地址: http://lvliujie.st.edusoho.cn, http://zhangfeng.st.edusoho.cn）
-
-```
-cp deploy.yml.dist deploy.yml
-//配置参数
-php vendor/bin/dep deploy dev
-```
 
 ##  目录说明
 

@@ -34,7 +34,7 @@ class UploadFileUsage extends AbstractResource
             $materialConditions['courseSetIds'] = array_column($usages, 'courseSetId');
             $courseMaterials = $this->getCourseMaterialService()->searchMaterials($materialConditions, [], 0, PHP_INT_MAX);
             $courseMaterials = ArrayToolkit::group($courseMaterials, 'courseSetId');
-            $copyCourseMaterials = $this->getCourseMaterialService()->searchMaterials(['copyIds' => array_column($courseMaterials, 'id')], [], 0, PHP_INT_MAX);
+            $copyCourseMaterials = $this->getCourseMaterialService()->searchMaterials(['copyIds' => array_column($courseMaterials, 'id'), 'excludeLessonId' => 0], [], 0, PHP_INT_MAX);
             $copyCourseMaterials = ArrayToolkit::group($copyCourseMaterials, 'copyId');
             $courseSets = $this->getCourseSetService()->searchCourseSets(['ids' => array_column($usages, 'courseSetId')], [], 0, PHP_INT_MAX, ['id', 'title', 'defaultCourseId']);
             $courseSets = array_column($courseSets, null, 'id');
