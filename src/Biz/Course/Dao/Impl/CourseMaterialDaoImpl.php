@@ -128,6 +128,15 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
         return $builder->execute()->fetchColumn();
     }
 
+    public function searchCountGroupByFileId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('fileId, count(*) AS `usedCount`')
+            ->groupBy('fileId');
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
     protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {
