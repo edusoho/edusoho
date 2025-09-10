@@ -8,6 +8,7 @@
       id="image"
       src="/static-dist/app/img/question-bank/testpaperAiIcon.png"
       alt=""
+      @click="initImgViewer"
     />
 
     <!--  -->
@@ -572,7 +573,6 @@ import {
   isMobileDevice,
   getCountDown
 } from 'common/date-toolkit';
-
 import Viewer from 'viewerjs';
 
 let orderNum = 1;
@@ -861,13 +861,6 @@ export default {
     section_responses: {
       handler: function(val) {
         console.log(val);
-        const viewer = new Viewer(document.getElementById('image'), {
-          inline: true,
-          viewed() {
-            viewer.zoomTo(1);
-          },
-        });
-
       },
       deep: true
     }
@@ -889,7 +882,6 @@ export default {
     };
   },
   mounted() {
-
     //如果有暂存数据
     if (this.questionFavorites.length > 0) {
       this.collectList = this.questionFavorites;
@@ -942,6 +934,14 @@ export default {
     }
   },
   methods: {
+    initImgViewer() {
+      const viewer = new Viewer(document.getElementById('image'), {
+        inline: true,
+        viewed() {
+          viewer.zoomTo(1);
+        },
+      });
+    },
     //遍历获取答案体结构
     formateSections() {
       this.sections.forEach(item => {
