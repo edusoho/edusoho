@@ -91,6 +91,10 @@ async function getTagOptions() {
   }));
 }
 
+watch([sourceFrom, categoryId, tagId], () => {
+  onSearch();
+})
+
 const filename = ref();
 
 const filterOption = (input, option) => {
@@ -262,20 +266,18 @@ function onSelect(record) {
                   <a-button type="primary" ghost @click="onSearch">搜索</a-button>
                 </div>
               </div>
-              <div class="flex flex-col max-h-120 overscroll-y-auto p-12">
-                <a-spin :spinning="spinning">
-                  <div v-if="uploadFiles.length > 0" class="flex flex-col gap-12">
-                    <div v-for="(record, index) in uploadFiles" :key="record.id" class="flex justify-between text-[rgba(0,0,0,0.65)] text-[14px] font-normal leading-[16px] cursor-pointer" @click="onSelect(record)">
-                      <div class="max-w-120 truncate">{{ record.filename }}</div>
-                      <div class="flex gap-12">
-                        <div>{{ record.fileSize }}</div>
-                        <div class="w-88 text-right">{{ formatDate(record.createdTime, 'YYYY-MM-DD') }}</div>
-                      </div>
+              <a-spin :spinning="spinning">
+                <div v-if="uploadFiles.length > 0" class="flex flex-col max-h-120 overflow-y-auto gap-12 p-12">
+                  <div v-for="(record, index) in uploadFiles" :key="record.id" class="flex justify-between text-[rgba(0,0,0,0.65)] text-[14px] font-normal leading-[16px] cursor-pointer" @click="onSelect(record)">
+                    <div class="max-w-120 truncate">{{ record.filename }}</div>
+                    <div class="flex gap-12">
+                      <div>{{ record.fileSize }}</div>
+                      <div class="w-88 text-right">{{ formatDate(record.createdTime, 'YYYY-MM-DD') }}</div>
                     </div>
                   </div>
-                  <div v-else class="text-[rgba(0,0,0,0.45)] text-[14px] font-normal leading-[16px] text-center">没有资源</div>
-                </a-spin>
-              </div>
+                </div>
+                <div v-else class="text-[rgba(0,0,0,0.45)] text-[14px] font-normal leading-[16px] text-center">没有资源</div>
+              </a-spin>
             </div>
           </div>
         </a-form-item-rest>
