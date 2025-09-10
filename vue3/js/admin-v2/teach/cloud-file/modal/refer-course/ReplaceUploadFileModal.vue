@@ -3,7 +3,7 @@ import {reactive, ref, watch} from 'vue';
 import Api from '../../../../../../api';
 import {formatDate} from '../../../../../common';
 
-const emit = defineEmits(['cancel'])
+const emit = defineEmits(['cancel', 'ok'])
 const modalVisible = defineModel();
 const props = defineProps({
   courseSetIds: {
@@ -129,6 +129,7 @@ function onReset() {
   tagId.value = null;
   tagOptions.value = [];
   filename.value = null;
+  selectedFile.value = null;
 }
 
 function closeReplaceUploadFileModal() {
@@ -151,6 +152,7 @@ async function onOk() {
         }
         await Api.file.replaceUploadFile(props.fileId, params)
       }
+      emit('ok')
       closeReplaceUploadFileModal();
       window.emitter.emit('replace-upload-file-success');
     })
