@@ -1,0 +1,801 @@
+<template>
+  <div class="join-after">
+    <detail-head :course-set="details.courseSet" />
+    <van-tabs
+      v-show="showTabs"
+      class="tabs"
+      v-model="active"
+      title-active-color="#408ffb"
+      title-inactive-color="#666"
+      :class="tabFixed ? 'isFixed' : ''"
+    >
+      <van-tab v-for="item in tabs" :title="$t(`courseLearning.${item}`)" :key="item" />
+    </van-tabs>
+
+    <div class="join-after__content">
+      <div>
+        <!-- 目录 -->
+        <div style="position: relative;" v-if="active == 0">
+          <div class="course-info py-12" @click="gotoGoodsPage">
+            <div class="course-info__left">
+              <div class="title" :class="{ 'title--full': !details.goodsId }">{{ details.courseSet && details.courseSet.title }}</div>
+              <div class="learning-progress mt-8" :class="{ 'learning-progress--full': !details.goodsId }">
+                <div class="learning-progress__bar" :style="{ width: progress }" />
+                <div class="learning-progress__text">
+                  {{ progress }}
+                </div>
+              </div>
+            </div>
+            <van-icon name="arrow" v-if="details.goodsId" />
+          </div>
+
+          <div v-if="details.drainage && details.drainage.enabled == '1'" class="drainage-btn" @click="showDrainage = true">
+            <i class="iconfont icon-drainage" style="margin-right: 4px;"></i>
+            {{ $t('courseLearning.teachingService') }}
+          </div>
+
+          <!-- 助教 -->
+          <div class="assistant" v-if="details.assistant && details.assistant.weChatQrCode">
+            <div class="assistant-btn" @click="showAssistant">
+              <div class="assistant-btn__text">
+                <i class="iconfont icon-weixin1"></i>
+                {{ $t('courseLearning.addTeachingAssistantWeChat') }}
+              </div>
+
+              <van-icon class="arrow-icon" name="arrow" />
+            </div>
+
+            <van-popup
+              class="assistant-info"
+              v-model="assistantShow"
+              position="bottom"
+              closeable
+              round
+            >
+              <img class="avatar" :src="details.assistant.avatar.middle" :alt="$t('courseLearning.picture')" />
+              <p class="nickname">{{ details.assistant.nickname }}</p>
+              <p class="desc">{{ $t('courseLearning.addTheTeachingAssistant') }}</p>
+              <img class="wechat" :src="details.assistant.weChatQrCode" :alt="$t('courseLearning.qRCodePicture')" />
+              <div class="tips" v-if="isWeixin">{{ $t('courseLearning.longPressThePicture') }}</div>
+              <div class="tips" v-else>{{ $t('courseLearning.longPressThePicture2') }}</div>
+            </van-popup>
+          </div>
+
+          <afterjoin-directory :error-msg="errorMsg" @showDialog="showDialog" :course-set="details.courseSet" />
+          <div class="white-space" v-if="isShowClosedFooter"></div>
+        </div>
+
+        <div style="position: relative;" v-if="active == 1">
+          <div v-if="bindItemBankList.length === 0">
+            <van-empty description="暂无题库" />
+          </div>
+          <div v-else class="flex flex-col p-16 gap-12">
+            <div v-for="item in bindItemBankList" :key="item.id">
+              <goods-item-bank :item="item"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- 问答、话题、笔记、评价 通过动态组件实现 -->
+        <component
+          v-else
+          :is="currentTabComponent.name"
+          :type="currentTabComponent.type"
+          :details="details"
+          @chang-tabs-status="changTabsStatus"
+        />
+      </div>
+    </div>
+
+    <!-- 个人信息表单填写 -->
+    <van-action-sheet
+      v-model="isShowForm"
+      class="minHeight50"
+      :title="userInfoCollectForm.formTitle"
+      :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
+      @cancel="onCancelForm"
+    >
+      <info-collection
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
+        @submitForm="onCancelForm"
+      ></info-collection>
+    </van-action-sheet>
+
+    <van-overlay :show="show" z-index="1000" @click="clickCloseOverlay" />
+
+    <van-popup
+      v-if="details.drainage && details.drainage.enabled == '1'"
+      class="drainage-popup"
+      v-model="showDrainage"
+      round
+      closeable
+      position="bottom"
+    >
+      <div class="drainage-popup__title">{{ details.drainage.text }}</div>
+      <div class="drainage-popup__img">
+        <img :src="details.drainage.image" alt="" style="width: 200px; height: 200px; object-fit: fill; max-width: 200px">
+      </div>
+      <van-button class="drainage-popup__btn" type="primary" block>
+        {{ isWeixin ? $t('courseLearning.longPressThePicture') : $t('courseLearning.longPressThePicture2') }}
+      </van-button>
+    </van-popup>
+    <div class="footer">
+      <closedFixed v-if="isShowClosedFooter" :isJoin="true" :title="$t('closed.courseTitle')" :content="$t('closed.courseContent')" />
+    </div>
+  </div>
+</template>
+<script>
+import Directory from './detail/directory';
+import DetailHead from './detail/head';
+import afterjoinDirectory from './detail/afterjoin-directory';
+import collectUserInfo from '@/mixins/collectUserInfo';
+import aiAgent from '@/mixins/aiAgent';
+import { mapState, mapMutations } from 'vuex';
+import { Dialog, Toast } from 'vant';
+import infoCollection from '@/components/info-collection.vue';
+import Api from '@/api';
+import * as types from '@/store/mutation-types.js';
+import closedFixed from '@/components/closed-fixed.vue'
+
+// tabs 子组件
+import firstDiscussion from './discussion/index.vue'; // 问答
+import secondDiscussion from './discussion/index.vue?second'; // 话题
+import Notes from './notes/index.vue';
+import Reviews from './reviews/index.vue';
+import GoodsItemBank from '@/components/item-bank/goods-item-bank.vue';
+// 为什么第一个为空？ 目录是原有功能，为减少风险，暂时保留
+const tabComponent = {
+  catalogue: {
+    name: '',
+    type: 'catalogue'
+  },
+  question: {
+    name: 'firstDiscussion',
+    type: 'question'
+  },
+  discussion: {
+    name: 'secondDiscussion',
+    type: 'discussion'
+  },
+  notes: {
+    name: 'Notes',
+    type: 'notes'
+  },
+  evaluation: {
+    name: 'Reviews',
+    type: 'reviews'
+  }
+};
+
+export default {
+  inheritAttrs: true,
+
+  components: {
+    GoodsItemBank,
+    // eslint-disable-next-line vue/no-unused-components
+    Directory,
+    DetailHead,
+    afterjoinDirectory,
+    infoCollection,
+    firstDiscussion,
+    secondDiscussion,
+    Notes,
+    Reviews,
+    closedFixed
+  },
+
+  props: {
+    details: {
+      type: Object,
+      value: () => {}
+    }
+  },
+
+  data() {
+    return {
+      headBottom: 0,
+      active: 0,
+      scrollFlag: false,
+      tabs: ['catalogue', 'courseItemBank'],
+      tabFixed: false,
+      errorMsg: '',
+      offsetTop: '', // tab页距离顶部高度
+      offsetHeight: '', // 元素自身的高度
+      isFixed: false,
+      isShowForm: false,
+      paramsList: {
+        action: 'buy_after',
+        targetType: 'course',
+        targetId: this.details.id,
+      },
+      show: false,
+      show_course_review: this.$store.state.goods.show_course_review,
+      assistantShow: false,
+      showTabs: true, // 是否显示 tabs
+      showDrainage: false,
+      bindItemBankList: [],
+      aiAgentSdk: null,
+    };
+  },
+
+  mixins: [collectUserInfo, aiAgent],
+
+  computed: {
+    ...mapState('course', {
+      selectedPlanId: state => state.selectedPlanId,
+      currentJoin: state => state.currentJoin,
+    }),
+
+    ...mapState(['user', 'settingUgc']),
+
+    progress() {
+      if (!Number(this.details.publishedTaskNum)) return '0%';
+      return parseInt(this.details.progress.percent) + '%';
+    },
+
+    isShowClosedFooter() {
+      return this.details.courseSet?.status === 'closed';
+    },
+
+    summary() {
+      return this.details.summary || this.details.courseSet.summary;
+    },
+
+    isClassCourse() {
+      return Number(this.details.parentId);
+    },
+
+    currentTypeText() {
+      return this.details.classroom ? '班级' : '课程';
+    },
+
+    isWeixin() {
+      const ua = navigator.userAgent.toLowerCase();
+      return ua.match(/MicroMessenger/i) == 'micromessenger';
+    },
+
+    currentTabComponent() {
+      const { tabs, active } = this;
+      return tabComponent[tabs[active]];
+    }
+  },
+  watch: {
+    selectedPlanId: function(val, oldVal) {
+      this.active = 0;
+    },
+    currentJoin: {
+      handler(val, oldVal) {
+        if (val) {
+          Toast.loading({
+            duration: 0,
+            message: '加载中...',
+            forbidClick: true,
+          });
+          this.getInfoCollectionEvent(this.paramsList).then(res => {
+            if (Object.keys(res).length) {
+              this.userInfoCollect = res;
+              this.getInfoCollectionForm(res.id).then(res => {
+                this.isShowForm = true;
+                Toast.clear();
+              });
+              return;
+            }
+            Toast.clear();
+          });
+        }
+      },
+      // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
+      immediate: true,
+    },
+    $route(to, from) {
+      this.resetFrom();
+    },
+
+    details(newDetails, oldDetails) {
+      this.showDialog();
+      const drainage = newDetails.drainage;
+
+      if (drainage && drainage.enabled == '1' && !localStorage.getItem('first_drainage')) {
+        this.showDrainage = true;
+        localStorage.setItem('first_drainage', 1);
+      }
+    }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+    this.$nextTick(function() {
+      const NAVBARHEIGHT = 46;
+      const SELFHEIGHT = 44;
+      const IMGHEIGHT = document.getElementById('course-detail__head')
+        .offsetHeight;
+      // 这里要得到top的距离和元素自身的高度
+      this.offsetTop = IMGHEIGHT + NAVBARHEIGHT;
+      this.offsetHeight = SELFHEIGHT;
+    });
+    this.getBindItemBank();
+    this.tryInitAIAgentSdk();
+  },
+  async created() {
+    this.showDialog();
+    this.initTabs();
+  },
+
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+
+  methods: {
+    ...mapMutations('course', {
+      setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
+      setSourceType: types.SET_SOURCETYPE,
+    }),
+    tryInitAIAgentSdk() {
+      Api.meCourseMember({
+        query: {
+          id: this.$route.params.id,
+        },
+      }).then(res => {
+        if (res.aiTeacherEnabled) {
+          this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
+            domainId: res.aiTeacherDomain,
+            courseId: res.courseId,
+            courseName: res.courseSetTitle,
+          }, null, null, true);
+          if (res.studyPlanGenerated) {
+            this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
+          }
+          this.aiAgentSdk.boot();
+          if (!res.studyPlanGenerated) {
+            this.aiAgentSdk.showReminder({
+              title: "HI，我是你的 AI 老师小知～",
+              content: `欢迎加入《${res.courseSetTitle}》课程，我将在你学习的过程中为你提供专业答疑、督学提醒等学习服务，现在点击下方「制定学习计划」来生成专属学习计划吧！`,
+              buttonContent: 'plan.generate',
+            })
+          }
+        }
+      })
+    },
+
+    initTabs() {
+      const { thread, note, review } = this.settingUgc;
+
+      if (thread.course_question_enable) {
+        this.tabs.push('question');
+      }
+
+      if (thread.course_thread_enable) {
+        this.tabs.push('discussion');
+      }
+
+      if (note.course_enable) {
+        this.tabs.push('notes');
+      }
+
+      if (review.course_enable) {
+        this.tabs.push('evaluation');
+      }
+    },
+
+    gotoGoodsPage() {
+      // 班级课程，不存在 goodsId
+      if (!this.details.goodsId) return;
+
+      this.$router.push({
+        path: `/goods/${this.details.goodsId}/show`,
+        query: {
+          targetId: this.details.id,
+        },
+      });
+    },
+    showDialog() {
+      if (!this.details.member) return;
+
+      let errorCode = '';
+      if (this.details.member.access) {
+        errorCode = this.details.member.access.code;
+      }
+      if (!errorCode || errorCode === 'success') {
+        return;
+      }
+
+      // 学习任务报错信息
+      this.errorMsg = this.getErrorMsg(errorCode);
+
+      let errorMessage = '';
+      let confirmCallback = function() {};
+
+      if (
+        errorCode === 'course.expired' ||
+        (errorCode === 'member.expired' && !this.isClassCourse)
+      ) {
+        // 班级课程不可以退出, 普通课程可以退出
+        errorMessage = '课程已到期，无法继续学习，是否退出';
+        const params = { id: this.details.id };
+        confirmCallback = () => {
+          Api.deleteCourse({ query: params }).then(res => {
+            if (res.success) {
+              window.location.reload();
+              return;
+            }
+            Toast.fail('退出课程失败，请稍后重试');
+          });
+        };
+        this.callConfirm(errorMessage, confirmCallback);
+        return;
+      }
+      const vipName = this.details.vipLevel ? this.details.vipLevel.name : '';
+      const vipStatus = {
+        // 用户会员服务已过期
+        'vip.member_expired': {
+          message: `您的会员已到期，会员${this.currentTypeText}已无法学习，请续费会员，或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '续费会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 当前用户并不是vip
+        'vip.not_member': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 用户会员等级过低
+        'vip.level_low': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 会员等级无效
+        'vip.level_not_exist': {
+          message: `您不是${vipName}，请购买${vipName}后兑换该${this.currentTypeText}学习。或退出后重新购买${this.currentTypeText}。`,
+          confirmButtonText: '购买会员',
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+        // 课程会员被删除
+        'vip.vip_right_not_exist': {
+          message: `很抱歉，该${this.currentTypeText}已不属于会员权益，请退出后重新购买。`,
+          showConfirmButton: false,
+          cancelButtonText: `退出${this.currentTypeText}`,
+        },
+      };
+
+      if (vipStatus[errorCode]) {
+        this.vipCallConfirm(vipStatus[errorCode]);
+        return;
+      }
+      Toast.fail(this.errorMsg);
+    },
+    getErrorMsg(code) {
+      switch (code) {
+        case 'course.not_found':
+          return '当前课程不存在';
+        case 'course.unpublished':
+          return '当前课程未发布';
+        case 'course.expired':
+          return '当前课程已过期';
+        case 'course.not_arrive':
+          return '当前课程还不能学习';
+        case 'user.not_login':
+          return '用户未登录';
+        case 'user.locked':
+          return '用户被锁定';
+        case 'member.not_found':
+          return '用户未加入课程';
+        case 'member.expired':
+          return '课程已过期';
+        case 'vip.vip_closed':
+          return '网校已关闭会员功能';
+        case 'vip.not_login':
+          return '用户未登录';
+        case 'vip.not_member':
+          return '当前用户并不是vip';
+        case 'vip.member_expired':
+          return '用户会员服务已过期';
+        case 'vip.level_not_exist':
+          return '用户会员等级或课程会员不存在';
+        case 'vip.level_low':
+          return '用户会员等级过低';
+        default:
+          return '异常错误';
+      }
+    },
+    callConfirm(message, callback) {
+      Dialog.confirm({
+        message,
+        title: '',
+      })
+        .then(() => {
+          callback();
+        })
+        .catch(() => {});
+    },
+    vipCallConfirm(config) {
+      this.show = true;
+      Dialog.confirm({
+        ...config,
+        title: '',
+        confirmButtonColor: '#1895E7',
+        cancelButtonColor: '#FD4852',
+        messageAlign: 'left',
+        overlay: false,
+        beforeClose: this.beforeClose,
+      });
+    },
+
+    clickCloseOverlay() {
+      this.show = false;
+      Dialog.close();
+    },
+
+    beforeClose(action, done) {
+      if (action === 'confirm') {
+        this.$router.push({
+          path: `/vip`,
+          query: {
+            id: this.details.vipLevel.id,
+          },
+        });
+        done();
+        return;
+      }
+
+      if (!this.show) return;
+
+      if (this.currentTypeText == '班级') {
+        this.deleteClassroom(done);
+      } else {
+        this.deleteCourse(done);
+      }
+    },
+
+    deleteClassroom(done) {
+      const { id, goodsId } = this.details.classroom;
+      const params = { id };
+      Api.deleteClassroom({ query: params }).then(res => {
+        if (res.success) {
+          this.$router.replace({
+            path: `/goods/${goodsId}/show`,
+            query: {
+              backUrl: '/',
+            },
+          });
+          done();
+        }
+      });
+    },
+
+    deleteCourse(done) {
+      const { id, goodsId } = this.details;
+      const params = { id };
+      Api.deleteCourse({ query: params }).then(res => {
+        if (res.success) {
+          this.$router.replace({
+            path: `/goods/${goodsId}/show`,
+            query: {
+              targetId: id,
+            },
+          });
+          done();
+        }
+      });
+    },
+
+    handleScroll() {
+      const SWIPER = document.getElementById('swiper-directory');
+      const DOCUMENTHEIGHT = document.documentElement.scrollHeight;
+      const CLIENTHEIGHT = document.documentElement.clientHeight;
+      // 得到页面滚动的距离
+      const scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      // 判断页面滚动的距离是否大于吸顶元素的位置,并将课程的高度固定。由于ios浏览器可以随意拖动，会造成吸顶抖动，所以这里加上必须可视高度是否大于窗口可视高度
+      if (
+        scrollTop > this.offsetTop &&
+        DOCUMENTHEIGHT - this.offsetTop > CLIENTHEIGHT
+      ) {
+        this.tabFixed = true;
+        // eslint-disable-next-line no-unused-expressions
+        SWIPER ? SWIPER.classList.add('swiper-directory-fix') : null;
+      } else {
+        this.tabFixed = false;
+        // eslint-disable-next-line no-unused-expressions
+        SWIPER ? SWIPER.classList.remove('swiper-directory-fix') : null;
+      }
+    },
+    onCancelForm() {
+      this.setCurrentJoin(false);
+      this.isShowForm = false;
+    },
+
+    showAssistant() {
+      this.assistantShow = true;
+    },
+
+    changTabsStatus(value) {
+      this.showTabs = value;
+    },
+
+    async getBindItemBank() {
+      this.bindItemBankList = await Api.getBindItemBank({
+        params: {
+          bindType: 'course',
+          bindId: this.$route.params.id,
+        }
+      })
+    }
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.white-space {
+  height: 60px;
+}
+.tabs {
+  box-shadow: 0px 2px 6px 0px rgba(49, 49, 49, 0.1);
+
+  /deep/ .van-tabs__wrap {
+    height: vw(56);
+  }
+}
+
+.course-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: vw(16);
+  padding-left: vw(16);
+  border-bottom: vw(8) solid #f5f5f5;
+  align-items: flex-start;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 100%;
+
+    .title {
+      width: vw(300);
+      font-size: vw(14);
+      font-weight: 500;
+      color: #333;
+      line-height: vw(20);
+
+      &--full {
+        width: vw(340)
+      }
+    }
+
+    .learning-progress {
+      position: relative;
+      width: vw(230);
+      height: vw(8);
+      background: #f5f5f5;
+      border-radius: 4px;
+
+      &--full {
+        width: vw(320)
+      }
+
+      &__bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: vw(8);
+        background: $primary-color;
+        border-radius: 4px;
+      }
+
+      &__text {
+        position: absolute;
+        right: vw(-8);
+        top: 50%;
+        transform: translate(100%, -50%);
+        font-size: vw(12);
+        color: $primary-color;
+        line-height: vw(16);
+      }
+    }
+  }
+}
+
+.assistant {
+  .assistant-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 vw(16);
+    height: vw(32);
+    border-bottom: 1px solid #f5f5f5;
+
+    &__text {
+      display: flex;
+      align-items: center;
+      width: vw(300);
+      font-size: 12px;
+      color: #666;
+      line-height: 16px;
+
+      i {
+        margin-right: vw(4);
+        color: #03c777;
+      }
+    }
+  }
+
+  .assistant-info {
+    text-align: center;
+
+    .avatar {
+      width: 20%;
+      height: 20%;
+      margin-top: vw(40);
+      margin-top: vw(24);
+      border-radius: 50%;
+    }
+
+    .nickname {
+      padding-top: vw(10);
+      color: #bbb;
+    }
+
+    .desc {
+      padding-top: vw(10);
+    }
+
+    .wechat {
+      margin: vw(20) 0 vw(10);
+    }
+
+    .tips {
+      margin-bottom: vw(10);
+      font-size: vw(14);
+    }
+  }
+}
+
+.drainage-btn {
+  position: absolute;
+  top: vw(40);;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: vw(92);
+  height: vw(32);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 100px 0 0 100px;
+  font-size: vw(12);
+  color: $primary-color;
+}
+
+.drainage-popup {
+  box-sizing: border-box;
+  padding: 48px 16px 60px;
+  min-height: 40%;
+  text-align: center;
+
+  &__title {
+    color: #333;
+  }
+
+  &__img {
+    margin-top: 16px;
+  }
+
+  &__btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+</style>

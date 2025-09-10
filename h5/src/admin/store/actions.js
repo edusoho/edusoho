@@ -1,0 +1,215 @@
+import * as types from 'admin/store/mutation-types';
+import Api from 'admin/api';
+import treeDigger from 'admin/utils/tree-digger';
+import i18n from '../lang';
+
+/* eslint-disable */
+export const updateLoading = ({ commit }, { isLoading }) => {
+  commit(types.UPDATE_LOADING_STATUS, { isLoading });
+};
+
+// 全局设置
+export const getGlobalSettings = ({ commit }, { type, key }) =>
+  Api.getSettings({
+    query: { type },
+  }).then(res => {
+    commit(types.GET_SETTINGS, {
+      key,
+      setting: res || {},
+    });
+    return res;
+  });
+
+// 全局vip元素显示开关
+export const setVipLevels = ({ commit }) =>
+  Api.getVipLevels().then(levels => {
+    const levelsExist = levels.data;
+    commit(types.GET_SETTINGS, { key: 'vipLevels', setting: levelsExist });
+    return levelsExist;
+  });
+
+// vip插件安装
+export const setVipSetupStatus = ({ commit }) =>
+  Api.vipPlugin().then(vipPlugin => {
+    const pluginInfo = vipPlugin || {};
+    const pluginStatus = Object.keys(vipPlugin).length > 1;
+    commit(types.GET_SETTINGS, {
+      key: 'vipSetupStatus',
+      setting: pluginStatus,
+    });
+    commit(types.GET_SETTINGS, { key: 'vipPlugin', setting: pluginInfo });
+    return vipPlugin;
+  });
+
+// 课程分类
+export const getCourseCategories = ({ commit }) =>
+  Api.getCategories({
+    query: {
+      groupCode: 'course',
+    },
+  }).then(res => {
+    res.unshift({ id: '0', children: undefined, name: '全部' });
+    const formatedRes = treeDigger(res, children => {
+      if (!children.length) {
+        children = undefined;
+      }
+      return children;
+    });
+    commit(types.GET_COURSE_CATEGORIES, formatedRes);
+    return formatedRes;
+  });
+
+// 班级分类
+export const getClassCategories = ({ commit }) =>
+  Api.getCategories({
+    query: {
+      groupCode: 'classroom',
+    },
+  }).then(res => {
+    res.unshift({ id: '0', children: undefined, name: '全部' });
+    const formatedRes = treeDigger(res, children => {
+      if (!children.length) {
+        children = undefined;
+      }
+      return children;
+    });
+    commit(types.GET_CLASS_CATEGORIES, formatedRes);
+    return formatedRes;
+  });
+
+export const getItemBankCategories = ({ commit }) =>
+  Api.getItemBankCategories().then(res => {
+    res.unshift({ id: '0', children: undefined, name: '全部' });
+    const formatedRes = treeDigger(res, children => {
+      if (!children.length) {
+        children = undefined;
+      }
+      return children;
+    });
+    commit(types.GET_ITEM_BANK_CATEGORIES, formatedRes);
+    return formatedRes;
+  });
+
+// 获取后台配置（草稿／正式）
+export const getDraft = ({ commit }, { portal, type, mode }) =>
+  Api.getDraft({
+    query: {
+      portal,
+      type,
+    },
+    params: {
+      mode,
+    },
+  });
+
+// 获取后台配置（草稿／正式）
+export const getTemplate = ({ commit }, { portal, template }) =>
+  Api.getTemplate({
+    query: {
+      portal,
+      template,
+    },
+  });
+
+export const getCategoryType = ({ commit }, { type }) => {
+  let current = type;
+  if (type === 'openCourse') {
+    current = 'course';
+  }
+  return Api.getCategoryType({
+    query: {
+      type: current,
+    },
+  });
+};
+
+// 删除后台配置（草稿／正式）
+export const deleteDraft = ({ commit }, { portal, type, mode }) =>
+  Api.deleteDraft({
+    query: {
+      portal,
+      type,
+    },
+    params: {
+      mode,
+    },
+  });
+
+// 保存后台配置（草稿／正式）
+export const saveDraft = ({ commit }, { portal, type, mode, data }) =>
+  Api.saveDraft({
+    params: {
+      type,
+      mode,
+    },
+    query: { portal },
+    data,
+  });
+
+// 课程搜索列表数据
+export const getCourseList = ({ commit }, params) =>
+  Api.getCourseList({
+    params,
+  });
+
+// 班级搜索列表数据
+export const getClassList = ({ commit }, params) =>
+  Api.getClassList({
+    params,
+  });
+
+//公开课
+export const getOpenCourseList = ({ commit }, params) =>
+  Api.getOpenCourseList({
+    params,
+  });
+
+//题库课
+export const getItemBankList = ({ commit }, params) =>
+  Api.getItemBankList({
+    params,
+  });
+
+// 营销活动搜索列表数据
+export const getMarketingList = ({ commit }, params) =>
+  Api.getMarketingList({
+    params,
+  });
+
+// 优惠券搜索列表数据
+export const getCouponList = ({ commit }, params) =>
+  Api.getCouponList({
+    params,
+  });
+
+// 后台配置预览二维码
+export const getQrcode = ({ commit }, { route, preview, times, duration }) =>
+  Api.getQrcode({
+    query: {
+      route,
+    },
+    params: {
+      preview,
+      times,
+      duration,
+    },
+  });
+
+// 获取微营销创建活动地址
+export const getCreateMarketingUrl = ({ commit }) =>
+  Api.getCreateMarketingUrl().then(res => {
+    if (res.is_v2 == 0) {
+      commit(
+        types.GET_CREATE_MARKETING_URL,
+        '/admin/login/marketing?target=activity_create',
+      );
+    }
+  });
+
+// 获取站点中英文配置
+export const getLanguage = () => Api.getSettings({
+  query: { type: 'locale' }
+}).then(res => {
+  const language = res.locale.toLowerCase().replace('_', '-');
+  i18n.locale = language;
+});

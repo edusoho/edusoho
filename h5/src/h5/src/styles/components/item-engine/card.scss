@@ -1,0 +1,205 @@
+.ibs-popup-card {
+  .ibs-card {
+    background: #f5f5f5;
+  
+    .ibs-card-title {
+      padding: 0 vw(10);
+      display: flex;
+      justify-content: space-between;
+      height: vw(48);
+      line-height: vw(48);
+      box-sizing: border-box;
+      font-size: vw(14);
+      color: rgba(49, 49, 49, 1);
+      background: #fff;
+      border-bottom: vw(1) solid #f5f5f5;
+  
+      span {
+        position: relative;
+        padding-left: vw(24);
+        display: inline-block;
+        margin-right: vw(20)
+      }
+  
+      .ibs-card-finish::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: vw(14);
+        width: vw(16);
+        height: vw(16);
+        background: $primary-color;
+        border-radius: 100%;
+      }
+  
+      .ibs-card-nofinish::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: vw(14);
+        width: vw(16);
+        height: vw(16);
+        background: rgba(204, 204, 204, 1);
+        border-radius: 100%;
+      }
+  
+      .ibs-card-right::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: vw(14);
+        width: vw(16);
+        height: vw(16);
+        background: #00D041;
+        border-radius: 100%;
+      }
+  
+      .ibs-card-none::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: vw(14);
+        width: vw(16);
+        height: vw(16);
+        background: #FF954D;
+        border-radius: 100%;
+      }
+  
+      .ibs-card-wrong::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: vw(14);
+        width: vw(16);
+        height: vw(16);
+        background: #FF5722;
+        border-radius: 100%;
+      }
+  
+      .ibs-card-subjective::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: vw(14);
+        width: vw(16);
+        height: vw(16);
+        background: #00E6DC;
+        border-radius: 100%;
+      }
+  
+      .wap-icon-no {
+        font-size: vw(16);
+        color: rgba(204, 204, 204, 1)
+      }
+    }
+  
+    .ibs-card-list {
+      max-height: vw(415);
+      overflow: scroll;
+      .ibs-cicle-active {
+        background: $primary-color !important;
+      }
+  
+      .ibs-cicle-right {
+        background: #00D041 !important;
+      }
+  
+      .ibs-cicle-none {
+        background: #FF954D !important;
+      }
+  
+      .ibs-cicle-wrong {
+        background: #FF5722 !important;
+      }
+  
+      .ibs-cicle-subjective {
+        background: #00E6DC !important;
+      }
+  
+      .ibs-card-item {
+        margin-top: vw(10);
+        padding: 0 vw(10);
+        font-size: vw(14);
+        background: #fff;
+        font-weight: 500;
+  
+        .ibs-card-item-title {
+          height: vw(38);
+          line-height: vw(38);
+          border-bottom: vw(1) solid rgba(245, 245, 245, 1);
+        }
+  
+        .ibs-card-item-list {
+          margin-top: vw(20);
+          display: flex;
+          flex-wrap: wrap
+        }
+  
+        .ibs-list-cicle {
+          margin-right: vw(12);
+          margin-bottom: vw(10);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          justify-items: center;
+          width: vw(28);
+          height: vw(28);
+          border-radius: 100%;
+          color: #fff;
+          background: rgba(204, 204, 204, 1);
+        }
+  
+        .ibs-list-cicle:nth-child(9n+0) {
+          margin-right: 0;
+        }
+      }
+  
+      .ibs-card-homework-item {
+        margin-top: vw(10);
+        padding: 0 vw(10);
+        font-size: vw(14);
+        background: #fff;
+        font-weight: 500;
+  
+        .ibs-card-item-list {
+          margin-top: vw(10);
+          padding-top: vw(20);
+          display: flex;
+          flex-wrap: wrap
+        }
+  
+        .ibs-list-cicle {
+          margin-right: vw(11);
+          margin-bottom: vw(10);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          justify-items: center;
+          width: vw(34);
+          height: vw(34);
+          border-radius: 100%;
+          color: #fff;
+          background: rgba(204, 204, 204, 1);
+        }
+  
+        .ibs-cicle-active {
+          background: rgba(64, 143, 251, 1) !important;
+        }
+  
+        .ibs-list-cicle:nth-child(8n+0) {
+          margin-right: 0;
+        }
+      }
+    }
+  
+  }
+  .end-answer__btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    display: block;
+    width: 94%;
+    border-radius: 4px;
+    transform: translate(-50%, -50%);
+  }
+}

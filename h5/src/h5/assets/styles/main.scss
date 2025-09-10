@@ -1,0 +1,92 @@
+@import './variables.scss';
+@import './mixins.scss';
+@import './global.scss';
+@import './vant.scss';
+@import '../fonts/iconfont.css';
+//@import '../../src/styles/index.scss';
+// components
+@import './components/reviews.scss';
+@import './components/report-mask.scss';
+
+// containers
+@import './containers/home.scss';
+@import './containers/login/index.scss';
+@import './containers/login/face-varification.scss';
+@import './containers/register/index.scss';
+@import './containers/password-reset/index.scss';
+@import './containers/my/index.scss';
+@import './containers/my/setting/index.scss';
+@import './containers/my/activity/index.scss';
+@import './containers/order/index.scss';
+@import './containers/course/index.scss';
+@import './containers/comment/index.scss';
+@import './containers/course/component/questionbank.scss';
+@import './containers/course/detail/directory.scss';
+@import './containers/course/detail/web-view.scss';
+@import './containers/course/detail/afterjoin-directory.scss';
+@import './containers/course/lesssonTask/test/intro.scss';
+@import './containers/course/lesssonTask/test/result.scss';
+@import './containers/course/lesssonTask/test/do.scss';
+@import './containers/course/lesssonTask/test/analysis.scss';
+@import './containers/course/component/finish-dialog.scss';
+@import './containers/learning/index.scss';
+@import './containers/pay/index.scss';
+@import './containers/find/index.scss';
+@import './containers/vip/index.scss';
+@import './containers/study-card/index.scss';
+@import './containers/more/index.scss';
+@import './containers/live-timetable/index.scss';
+@import './containers/search/index.scss';
+@import './containers/goods/index.scss';
+@import './containers/goods/components/detail.scss';
+@import './containers/goods/components/info.scss';
+@import './containers/review/index.scss';
+@import './containers/certificate/index.scss';
+@import './containers/course/certificate/index.scss';
+@import './containers/brush-exercise/index.scss';
+@import './containers/info-collection/index.scss';
+@import './containers/course/component/wechat-subscribe.scss';
+@import './containers/wrong-question-book/index.scss';
+
+// modules
+@import './modules/e-drag.scss';
+@import './modules/e-panel.scss';
+@import './modules/e-footer.scss';
+@import './modules/e-loading.scss';
+@import './modules/e-more-mask.scss';
+@import './modules/e-load-more.scss';
+@import './modules/e-popup.scss';
+@import './modules/e-row-class/index.scss';
+@import './modules/e-column-class/index.scss';
+@import './modules/e-tree-selects/index.scss';
+@import './modules/e-empty/index.scss';
+@import './modules/e-navbar/index.scss';
+@import './modules/e-card/index.scss';
+@import './modules/e-back-top/index.scss';
+@import './modules/e-openCourse-class/e-openCourse-more.scss';
+@import './modules/e-graphic-navigation/index.scss';
+
+// webview
+@import './containers/webview/index.scss';
+
+//wap-sdk
+@import '~wap-sdk/src/styles/iconfont/font.scss';
+
+.ibs-wap-vue {
+	// $primary-color: #fb40d2;
+	@import '../../src/styles/index.scss';
+	// @import '~wap-sdk/src/styles/index.scss';
+}
+//隐藏滚动条
+html,
+body {
+	&::-webkit-scrollbar {
+		display: none;
+		width: 0;
+		height: 0;
+	}
+
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	overflow: -moz-scrollbars-none;
+}

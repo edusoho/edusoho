@@ -1,0 +1,99 @@
+/*icon字体路径变量*/
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
+
+/*按需引入用到的组件的scss文件和基础scss文件*/
+@import "~element-ui/packages/theme-chalk/src/icon.scss";
+@import "~element-ui/packages/theme-chalk/src/select.scss";
+@import "~element-ui/packages/theme-chalk/src/button.scss";
+@import "~element-ui/packages/theme-chalk/src/message.scss";
+@import "~element-ui/packages/theme-chalk/src/upload.scss";
+@import "~element-ui/packages/theme-chalk/src/input.scss";
+@import "~element-ui/packages/theme-chalk/src/radio.scss";
+@import "~element-ui/packages/theme-chalk/src/option.scss";
+@import "~element-ui/packages/theme-chalk/src/cascader.scss";
+@import "~element-ui/packages/theme-chalk/src/dialog.scss";
+@import "~element-ui/packages/theme-chalk/src/tag.scss";
+@import "~element-ui/packages/theme-chalk/src/autocomplete.scss";
+@import "~element-ui/packages/theme-chalk/src/tooltip.scss";
+@import "~element-ui/packages/theme-chalk/src/loading.scss";
+@import "~element-ui/packages/theme-chalk/src/dropdown.scss";
+@import "~element-ui/packages/theme-chalk/src/dropdown-item.scss";
+@import "~element-ui/packages/theme-chalk/src/dropdown-menu.scss";
+@import "~element-ui/packages/theme-chalk/src/message-box.scss";
+
+.el-cascader {
+  width: 100%;
+}
+
+
+.el-dialog {
+  &__header {
+    padding-bottom: 0;
+  }
+  &__body {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  &__footer {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    text-align: center;
+  }
+
+  .el-button {
+    &--info {
+      color: red;
+      border-color: #e1e1e1;
+      background: #e1e1e1;
+      &:hover {
+        background: #909399;
+      }
+    }
+    &--default {
+      font-weight: normal;
+      &:hover {
+        border-color: $primary-color;
+        color: $primary-color;
+        font-weight: normal;
+        background-color: #fff;
+      }
+    }
+    &--primary {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      &:hover{
+        background-color: #66b1ff;
+      }
+    }
+    +.el-button {
+      margin-left: 20px;
+    }
+  }
+}
+
+.el-button {
+  &--info {
+    color: #616161;
+    border-color: #e1e1e1;
+    background: #e1e1e1;
+    &:hover {
+      border-color: darken(#e1e1e1, 20%);
+      background: darken(#e1e1e1, 20%);
+    }
+  }
+}
+
+.el-message {
+  top: auto!important;
+  bottom: 150px;
+}
+
+.el-upload {
+  &:focus {
+    color: #333;
+    border-color: #333;
+  }
+  &.el-upload--text {
+    width: 100%;
+  }
+}

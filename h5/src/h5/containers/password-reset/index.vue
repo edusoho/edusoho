@@ -1,0 +1,318 @@
+<template>
+  <div class="password-reset">
+    <e-loading v-if="isLoading" />
+    <div v-if="upgradePassword" class="alert-danger">检测到您当前密码等级较低，请重新设置密码</div>
+    <span class="register-title">{{ $t('title.retrievePassword') }}</span>
+
+    <e-drag ref="dragComponent" :key="dragKey" @success="handleSmsSuccess" />
+
+    <van-field
+      v-model="resetInfo.account"
+      :error-message="errorMessage.account"
+      :placeholder="accountPlaceHolder"
+      @blur="validateAccountOrPsw('account')"
+      @keyup="validatedChecker()"
+    />
+
+    <van-field
+      v-show="accountType === 'mobile'"
+      v-model="resetInfo.encrypt_password"
+      :error-message="errorMessage.encrypt_password"
+      type="password"
+      max-length="32"
+      :placeholder="$t('placeholder.setPassword')"
+      @blur="validateAccountOrPsw('encrypt_password')"
+      style="padding-bottom: 0"
+    >
+      <template #button>
+        <img v-if="showPassword" src="static/images/open-eye.svg" alt="" @click="togglePasswordVisibility">
+        <img v-else src="static/images/close-eye.svg" alt="" @click="togglePasswordVisibility">
+      </template>
+    </van-field>
+    <div v-if="showPasswordTip" class="password-tip">8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码</div>
+
+    <van-field
+      v-show="accountType === 'mobile'"
+      v-model="resetInfo.smsCode"
+      type="text"
+      center
+      clearable
+      max-length="6"
+      :placeholder="$t('placeholder.verificationCode')"
+    >
+      <van-button
+        slot="button"
+        :disabled="count.codeBtnDisable || !validated.account"
+        size="small"
+        type="primary"
+        @click="clickSmsBtn"
+      >
+        {{ $t('btn.sendCode') }}
+        <span v-show="count.showCount">({{ count.num }})</span>
+      </van-button>
+    </van-field>
+
+    <van-button
+      :disabled="btnDisable"
+      type="default"
+      class="primary-btn mb20"
+      @click="handleSubmit"
+      >{{ $t('btn.confirm') }}</van-button
+    >
+  </div>
+</template>
+
+<script>
+import Api from '@/api';
+import EDrag from '&/components/e-drag';
+import { mapState } from 'vuex';
+// eslint-disable-next-line no-unused-vars
+import XXTEA from '@/utils/xxtea.js';
+import { Dialog, Toast } from 'vant';
+import rulesConfig from '@/utils/rule-config.js';
+
+export default {
+  name: 'PasswordReset',
+  components: {
+    EDrag,
+  },
+  data() {
+    return {
+      resetInfo: {
+        account: '',
+        accountType: '',
+        dragCaptchaToken: '',
+        encrypt_password: '',
+        smsCode: '',
+        smsToken: '',
+        type: 'register',
+      },
+      showPassword: false,
+      showPasswordTip: true,
+      dragKey: 0,
+      errorMessage: {
+        account: '',
+        encrypt_password: '',
+      },
+      validated: {
+        account: false,
+        encrypt_password: false,
+      },
+      count: {
+        showCount: false,
+        num: 120,
+        codeBtnDisable: false,
+      },
+      isEmail: false,
+      smsEnable: false,
+    };
+  },
+  async created() {
+    this.getEmailServiceState();
+    await this.getSmsSetting();
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
+    btnDisable() {
+      return !(
+        (this.resetInfo.account &&
+          this.resetInfo.encrypt_password &&
+          this.resetInfo.smsCode) ||
+        this.accountType === 'email'
+      );
+    },
+    accountType() {
+      if (!this.smsEnable) {
+        return 'email';
+      }
+      if (this.isEmail) {
+        return this.resetInfo.account.includes('@') ? 'email' : 'mobile';
+      } else {
+        return 'mobile';
+      }
+    },
+    accountPlaceHolder() {
+      if (!this.smsEnable) {
+        return this.$t('placeholder.email');
+      }
+      return this.isEmail ? this.$t('placeholder.mobileNumberOrEmail') : this.$t('placeholder.mobileNumber');
+    },
+    upgradePassword() {
+      return this.$route.query.upgradePassword;
+    }
+  },
+  methods: {
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
+    validateAccountOrPsw(type = 'account') {
+      const ele = this.resetInfo[type];
+      const rule =
+        type === 'account' ? rulesConfig[this.accountType] : rulesConfig[type]; // 规则：账号／密码
+
+      if (ele.length == 0) {
+        this.errorMessage[type] = '';
+        return false;
+      }
+
+      this.showPasswordTip = type !== 'encrypt_password';
+
+      this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
+    },
+    validatedChecker() {
+      const account = this.resetInfo.account;
+      const type = this.accountType;
+      const rule = rulesConfig[type];
+
+      this.validated.account = rule.validator(account);
+    },
+    handleSmsSuccess(token) {
+      this.resetInfo.dragCaptchaToken = token;
+    },
+    handleSubmit() {
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
+        return;
+      }
+      const resetInfo = Object.assign({}, this.resetInfo);
+      const password = resetInfo.encrypt_password;
+      const account = resetInfo.account;
+      const encrypt = window.XXTEA.encryptToBase64(
+        password,
+        window.location.host,
+      );
+
+      resetInfo.encrypt_password = encrypt;
+
+      // 邮箱重置
+      if (this.accountType === 'email') {
+        const dragCaptchaToken = this.resetInfo.dragCaptchaToken;
+        Api.resetPasswordByEmail({
+          query: { email: account },
+          data: { dragCaptchaToken },
+        })
+          .then(res => {
+            Dialog.alert({
+              message: this.$t('toast.verificationLinkHasBeenSentTo') + account,
+              confirmButtonText: this.$t('btn.confirm')
+            }).then(() => {
+              this.$router.replace({
+                name: 'login',
+                params: {
+                  username: account,
+                },
+              });
+            });
+          })
+          .catch(err => {
+            switch (err.code) {
+              case 4030301:
+              case 4030302:
+                this.dragKey++;
+                this.resetInfo.dragCaptchaToken = '';
+                break;
+            }
+            Toast.fail(err.message);
+          });
+        return;
+      }
+
+      // 手机重置
+      Api.resetPasswordByMobile({
+        query: { mobile: account },
+        data: {
+          smsToken: resetInfo.smsToken,
+          smsCode: resetInfo.smsCode,
+          encrypt_password: resetInfo.encrypt_password,
+        },
+      })
+        .then(res => {
+          Dialog.alert({
+            message: this.$t('toast.oasswordResetSuccessful'),
+            confirmButtonText: this.$t('btn.confirm')
+          }).then(() => {
+            this.$router.replace({
+              name: 'login',
+              params: {
+                username: account,
+              },
+            });
+          });
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+    clickSmsBtn() {
+      if (!this.$refs.dragComponent.dragToEnd) {
+        Toast(this.$t('toast.pleaseCompleteThePuzzleVerification'));
+        return;
+      }
+      this.handleSendSms();
+    },
+    handleSendSms() {
+      const mobile = this.resetInfo.account;
+      const dragCaptchaToken = this.resetInfo.dragCaptchaToken;
+      Api.resetPasswordSMS({
+        query: { mobile },
+        data: { dragCaptchaToken },
+      })
+        .then(res => {
+          this.resetInfo.smsToken = res.smsToken;
+          this.countDown();
+        })
+        .catch(err => {
+          switch (err.code) {
+            case 4030301:
+            case 4030302:
+              this.dragKey++;
+              this.resetInfo.dragCaptchaToken = '';
+              this.resetInfo.smsToken = '';
+              break;
+          }
+          Toast.fail(err.message);
+        });
+    },
+    // 倒计时
+    countDown() {
+      this.count.showCount = true;
+      this.count.codeBtnDisable = true;
+      this.count.num = 120;
+
+      const timer = setInterval(() => {
+        if (this.count.num <= 0) {
+          this.count.codeBtnDisable = false;
+          this.count.showCount = false;
+          clearInterval(timer);
+          return;
+        }
+        this.count.num--;
+      }, 1000);
+    },
+    // 是否开启邮箱服务
+    getEmailServiceState() {
+      Api.getEmailServiceState().then(res => {
+        this.isEmail = res.enabled;
+      });
+    },
+    async getSmsSetting() {
+      const res = await Api.settingsCloud()
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+      this.smsEnable = !!res.sms_enabled;
+    },
+  },
+};
+</script>
+
+<style scoped>
+.password-tip {
+  font-size: 12px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.45);
+  padding: 0 16px;
+}
+</style>

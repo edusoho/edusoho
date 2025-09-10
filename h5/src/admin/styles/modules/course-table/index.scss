@@ -1,0 +1,66 @@
+.course-table {
+  box-sizing: border-box;
+  border: 1px solid #E1E1E1;
+  line-height: 40px;
+  color: #313131;
+  &__th {
+    background: #f5f5f5;
+    font-weight: bold;
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  &__td {
+    display: inline-block;
+    &-space:not(:nth-child(2)) {
+      // 处理 span 之间的空格
+      margin-left: -4px;
+    }
+  }
+  &__tr {
+    height: 40px;
+    padding-left: 15px;
+    padding-right: 15px;
+    &:not(:first-child) {
+      .tr-content {
+        border-top: 1px solid #f5f5f5;
+      }
+    }
+    .tr-content {
+      height: 40px;
+      cursor: move;
+      .text-content {
+        box-sizing: border-box;
+        padding-right: 15px;
+      }
+    }
+  }
+  &__empty {
+    height: 50px;
+    line-height: 50px;
+    font-size: 16px;
+    color: #919191;
+    text-align: center;
+  }
+  .td-col {
+    &-1 {
+      width: 12.33%;
+    }
+    &-2 {
+      width: 18%;
+    }
+    &-3 {
+      width: 25%;
+    }
+    &-4 {
+      width: 33.32%;
+    }
+    &-5 {
+      width: 41.66%;
+    }
+  }
+  .delete {
+    color: $primary-color;
+    cursor: pointer;
+  }
+}

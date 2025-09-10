@@ -1,0 +1,89 @@
+.out-focus-mask {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 10000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 0;
+	background: rgba(0, 0, 0, 0.56);
+	outline: 0;
+
+	.report-go-back {
+		position: absolute;
+		top: vw(15);
+		left: vw(15);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: vw(50);
+		height: vw(35);
+		background-color: #222;
+		border-radius: vw(8);
+	}
+
+	.content {
+		text-align: center;
+
+		.tips {
+			margin-bottom: vw(10);
+
+			p {
+				color: #43bc60;
+				font-size: vw(14);
+			}
+
+			.kick-each-other {
+				color: #ffa51f;
+			}
+
+			.ineffective-learning {
+				color: #43bc60;
+			}
+		}
+	}
+}
+
+.report-mask-hidden {
+	position: fixed;
+	width: 100%;
+	overflow: hidden;
+}
+
+.video-report-mask {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 10000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.56);
+	outline: 0;
+
+	.content {
+		text-align: center;
+
+		.tips {
+			margin-bottom: vw(10);
+
+			p {
+				color: #43bc60;
+				font-size: vw(14);
+			}
+
+			.kick-each-other {
+				color: #ffa51f;
+			}
+
+			.ineffective-learning {
+				color: #43bc60;
+			}
+		}
+	}
+}

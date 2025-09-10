@@ -1,0 +1,93 @@
+.finish-dialog {
+  &-content {
+    position: relative;
+    z-index: 9999;
+    width: 80%;
+    margin: 40% auto;
+    padding: vw(24) vw(16);
+    padding-top: vw(84);
+    text-align: center;
+    background: #fff;
+    border-radius: 8px;
+  }
+  &-close{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: vw(-15);
+    top: vw(-15);
+    width: vw(30);
+    height: vw(30);
+    background: #fff;
+    border-radius: 100%;
+  }
+  .icon-guanbi{
+    font-size: 12px;
+    color: #71777D;
+  }
+  .finish-dialog-top{
+    position: absolute;
+    top:-30%;
+    width: 94%;
+    text-align: center;
+  }
+  &-img {
+    width: 50%;
+    margin: auto;
+  }
+  &-top--text{
+    margin-top: -25%;
+    color: #fff;
+  }
+  &-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: vw(16);
+    float: right;
+    width: vw(94);
+    height: vw(34);
+    border-radius: vw(17);
+    color: #fff;
+    background: $primary-color;
+  }
+  &-text {
+    margin: vw(16) 0 vw(4) 0 !important;
+    font-size: 14px;
+    color: rgba(113, 119, 125, 1);
+  }
+  .progress-bar {
+    position: relative;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    //background: #fff;
+    &__content {
+      background-color: #f7f7f7;
+      border-radius: vw(46);
+      height: 30px;
+      flex: 0 0 85%;
+      align-items: center;
+    }
+    &__text{
+      flex: 0 0 15%;
+      align-items: center;
+      color: $primary-color;
+    }
+    &__rate {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      box-sizing: border-box;
+      width: 0;
+      height: 100%;
+      border-radius: 46px;
+      background: $primary-color;
+      transition: all 0.5s;
+      color: #fff;
+      font-size: vw(14);
+    }
+  }
+}

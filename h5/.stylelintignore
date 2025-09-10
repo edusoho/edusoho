@@ -1,0 +1,4 @@
+{
+  "ignoreFiles": ["**/*.js"],
+  "ignoreFiles": ["**/*.vue"]
+}

@@ -1,0 +1,28 @@
+
+.web-view {
+	&--btn {
+		position: absolute;
+		top: 8px;
+		right: vw(8);
+		z-index: 2000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 94px;
+		height: 30px;
+		color: #fff;
+		font-size: vw(14);
+		border: 1px solid #fff;
+		border-radius: vw(30);
+	}
+
+	.icon-markdone {
+		margin-right: vw(4);
+	}
+
+	&--activebtn {
+		color: #fff;
+		background: $primary-color;
+		border-color: $primary-color;
+	}
+}

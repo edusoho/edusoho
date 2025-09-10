@@ -1,0 +1,24 @@
+@import './emptyCourse/index.scss';
+@import './historyLearn/index.scss';
+
+.e-learn {
+	.van-tabs__line {
+		background-color: $primary-color;
+	}
+
+	.van-tab--active {
+		color: $primary-color;
+	}
+
+	.van-hairline--top-bottom::after {
+		border-top: none;
+	}
+}
+
+.e-learn.e-learn-padding {
+	padding-bottom: vw(60);
+}
+
+.van-list {
+	margin-top: 12px;
+}
