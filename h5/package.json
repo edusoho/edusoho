@@ -21,11 +21,6 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.scss": [
       "stylelint --syntax=scss --fix"
@@ -81,7 +76,6 @@
     "file-loader": "^1.1.4",
     "gwm": "^0.5.0",
     "html-webpack-plugin": "3.2.0",
-    "husky": "^4.2.5",
     "js-cookie": "^2.2.1",
     "lint-staged": "^10.2.11",
     "load-script": "^1.0.0",
@@ -117,6 +111,7 @@
     "vue-template-compiler": "^2.6.11",
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1",
+    "wap-sdk": "^0.3.2",
     "webpack": "^4.42.1",
     "weixin-js-sdk": "^1.6.0"
   },
@@ -140,6 +135,7 @@
     "stylelint-scss": "^3.18.0"
   },
   "volta": {
-    "node": "14.21.3"
+    "node": "14.21.3",
+    "yarn": "1.22.22"
   }
 }

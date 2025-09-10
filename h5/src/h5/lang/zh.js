@@ -148,6 +148,7 @@ export default {
     emailMobileNumberUserName: '邮箱/手机/用户名',
     password: '请输入密码',
     mobileNumber: '请输入手机号',
+    emailNumber: '请输入邮箱号',
     setPassword: '请输入密码',
     verificationCode: '请输入验证码',
     mobileNumberOrEmail: '请输入手机号或邮箱号',
@@ -207,7 +208,7 @@ export default {
   tips: {
     iHaveReadAndAgreeToThe: '我已阅读并同意',
     and: '和',
-    password: '请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码',
+    password: '8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码',
   },
   setting: {
     heads: '头像',

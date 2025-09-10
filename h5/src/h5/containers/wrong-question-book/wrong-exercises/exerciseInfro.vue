@@ -124,6 +124,7 @@ export default {
           exerciseMode: this.radio,
           itemNum: this.questionsNum,
           id: this.targetId,
+          exerciseMediaType: this.exerciseMediaType,
           ...this.searchParams,
         },
       });

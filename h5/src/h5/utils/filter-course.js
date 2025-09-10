@@ -38,6 +38,7 @@ const getDisplayStyle = (data, listObj) => {
         value: data.price || data.studentNum,
         html: `<span class="text-12">${price}</span>${showStudentStr}`,
       },
+      hidePrice: data.hidePrice,
     };
   }
 
@@ -62,6 +63,7 @@ const getDisplayStyle = (data, listObj) => {
       html: `<span class="text-12">${price}</span>${showStudentStr}`,
     },
     videoMaxLevel: data.videoMaxLevel,
+    hidePrice: data.hidePrice,
   };
 };
 
@@ -86,12 +88,17 @@ const getPriceDisplay = (data, platform) => {
     h5: '#408FFB',
   };
   let price;
-  if (dataPrice > 0 && currency === 'coin') {
-    price = `<span class="font-bold" style="color: #FF7A34">${coinAmount} ${coinName}</span>`;
-  } else if (dataPrice > 0 && currency === 'RMB') {
-    price = `<span class="text-14 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
+
+  if (data.hidePrice !== '1') {
+    if (dataPrice > 0 && currency === 'coin') {
+      price = `<span class="font-bold" style="color: #FF7A34">${coinAmount} ${coinName}</span>`;
+    } else if (dataPrice > 0 && currency === 'RMB') {
+      price = `<span class="text-14 font-bold" style="color: #FF7A34">¥ ${amount}</span>`;
+    } else {
+      price = `<span class="font-bold text-14" style="color: #FF7A34">${i18n.t('filters.free')}</span>`;
+    }
   } else {
-    price = `<span class="font-bold text-14" style="color: #FF7A34">${i18n.t('filters.free')}</span>`;
+    price = ``
   }
   return price;
 };
@@ -121,7 +128,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
 };
 
 const getCourseDisplay = (data, listObj, price) => {
-  if (data.originPrice !== data.price) {
+  if (data.hidePrice !== '1' && (data.originPrice !== data.price)) {
     price = `
       <div class="text-14" style="color: #FF7A34;">¥ ${data.price}</div>
       <s style="font-size: 12px;margin: 3px 0 0 -2px;color: #86909C;transform: scale(0.83);">¥ ${data.originPrice}</s>
@@ -148,6 +155,7 @@ const getCourseDisplay = (data, listObj, price) => {
       html: `<div style="display: flex">${price}</div>`,
     },
     videoMaxLevel: data.videoMaxLevel,
+    hidePrice: data.hidePrice,
   };
 };
 

@@ -1,6 +1,6 @@
 <template>
-  <div class="e-course">
-    <div class="clearfix" @click="onClick">
+  <div class="e-course" @click="onClick">
+    <div class="clearfix">
       <div class="e-course__left pull-left relative">
         <img v-lazy="imgSrc" :class="imgClass" />
         <div v-if="course.videoMaxLevel === '2k'" class="absolute left-0 bottom-0 px-8 text-white text-12 font-medium bg-black bg-opacity-80" style="padding-top: 2px; padding-bottom: 2px; line-height: 20px; border-top-right-radius: 12px;">2K 优享</div>
@@ -33,6 +33,10 @@
           :published-task-num="course.publishedTaskNum"
         />
       </div>
+    </div>
+    <div v-if="course.lastLearnTask" class="e-course-last_learn_task-container">
+      <img class="icon" src="static/images/course/last-learn-task-icon.svg" alt="">
+      <div class="text">{{ `上次学到：课时${course.lastLearnTask.number}：${course.lastLearnTask.title}` }}</div>
     </div>
   </div>
 </template>
@@ -154,7 +158,7 @@ export default {
       if (this.typeList === 'vip') return;
       const id = this.course.id || this.order.targetId;
       if (e.target.tagName === 'SPAN') {
-        console.log(e.target.tagName);
+
         return;
       }
 
@@ -186,6 +190,9 @@ export default {
       if (this.typeList === 'course_list') {
         this.$router.push({
           path: `/course/${id}`,
+          query: {
+            ...(this.course.lastLearnTask ? {lastLearnTaskId: this.course.lastLearnTask.id, lastLearnTaskType: this.course.lastLearnTask.type} : {})
+          },
         });
       }
     },

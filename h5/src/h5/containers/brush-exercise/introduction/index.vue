@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="ItemBankExercise.hidePrice !== '1'">
     <e-panel :title="ItemBankExercise.title">
       <div class="course-detail__plan-price">
         <span :class="{ isFree: isFree }">{{ filterPrice() }} </span>
@@ -8,13 +8,26 @@
         </span>
       </div>
     </e-panel>
-
     <div class="course-detail__validity">
       <div>
         <span class="mr20">{{ $t('questionBank.validity') }}</span>
         <span class="dark">{{ learnExpiryHtml() }}</span>
       </div>
     </div>
+  </div>
+  <div v-else>
+    <e-panel :title="ItemBankExercise.title">
+      <div class="course-detail__plan-price">
+        <div>
+          <span class="mr20 text-gray-400">{{ $t('questionBank.validity') }}</span>
+          <span class="dark">{{ learnExpiryHtml() }}</span>
+        </div>
+        <span class="plan-price__student-num">
+          {{ $t('questionBank.personStudying', { number: ItemBankExercise.studentNum }) }}
+        </span>
+      </div>
+    </e-panel>
+
   </div>
 </template>
 

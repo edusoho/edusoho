@@ -15,18 +15,23 @@
         <p class="item-info__title text-overflow">
           {{ course.courseSet.title }}
         </p>
-        <p
-          class="item-info__price"
-          v-if="course.originPrice2.currency === 'coin'"
-        >
-          {{ course.originPrice2.coinAmount }}{{ course.originPrice2.coinName }}
-        </p>
-        <p
-          class="item-info__price"
-          v-if="course.originPrice2.currency === 'RMB'"
-        >
-          ￥{{ course.originPrice2.amount }}
-        </p>
+        <template v-if="hidePrice !== '1' && course.hidePrice !== '1'">
+          <p
+            class="item-info__price"
+            v-if="course.originPrice2.currency === 'coin'"
+          >
+            {{ course.originPrice2.coinAmount }}{{ course.originPrice2.coinName }}
+          </p>
+          <p
+            class="item-info__price"
+            v-if="course.originPrice2.currency === 'RMB'"
+          >
+            ￥{{ course.originPrice2.amount }}
+          </p>
+        </template>
+        <template v-else>
+          <p class="item-info__price">&nbsp;</p>
+        </template>
         <p class="item-info__plan clearfix">
           <span class="pull-left item-info__plan-mw text-overflow">{{
             course.title
@@ -62,6 +67,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    hidePrice: {
+      type: String,
+      default: '0'
+    }
   },
   methods: {
     gotoCourse: function(course) {
