@@ -277,7 +277,7 @@ function onSelect(record) {
                     </div>
                   </div>
                 </div>
-                <div v-else class="text-[rgba(0,0,0,0.45)] text-[14px] font-normal leading-[16px] text-center">没有资源</div>
+                <div v-else class="text-[rgba(0,0,0,0.45)] text-[14px] font-normal leading-[16px] text-center p-12">没有资源</div>
               </a-spin>
             </div>
           </div>
