@@ -12,15 +12,13 @@
           </div>
 
           <div class="ibs-engine-material" v-else>
-            <a-button
-              size="small"
-              type="primary"
-              ghost
-              style="margin-bottom: 16px"
+            <div class="answer-mode-tag">材料题</div>
+            <div
+              class=" ibs-editor-text"
+              v-html="material"
+              @click="onImgViewer($event.target)"
             >
-              材料题
-            </a-button>
-            <div class=" ibs-editor-text" v-html="material"></div>
+            </div>
             <div
               class="ibs-mt16 ibs-engine-material__attachment"
               style="padding: 8px;background-color: #f5f5f5;border-radius: 6px;"
@@ -49,6 +47,8 @@
 <script>
 import Locale from "common/vue/mixins/locale";
 import attachmentPreview from "../attachment-preview";
+import { onImgViewer } from 'common/viewer';
+
 export default {
   name: "material-title",
   mixins: [Locale],
@@ -87,7 +87,10 @@ export default {
       });
 
       return result;
-    }
+    },
+    onImgViewer(container) {
+      onImgViewer(container)
+    },
   }
 };
 </script>
