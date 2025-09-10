@@ -27,4 +27,6 @@ interface CourseMaterialDao extends AdvancedDaoInterface
     public function countGroupByCourseSetId($conditions, $start, $limit);
 
     public function countDistinctCourseSet($conditions);
+
+    public function searchCountGroupByFileId($conditions);
 }
