@@ -138,6 +138,7 @@ function closeReplaceUploadFileModal() {
 }
 
 function onCancel() {
+  formRef.value.clearValidate();
   closeReplaceUploadFileModal();
   emit('cancel')
 }
