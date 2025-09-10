@@ -177,5 +177,6 @@ function onCancel() {
     :filename="filename"
     :file-length="fileLength"
     @cancel="openReferCourseModal"
+    @ok="onReset"
   />
 </template>
