@@ -70,5 +70,5 @@ interface MaterialService
 
     public function countDistinctCourseSet($conditions);
 
-    public function countMaterialGroupByFileId($conditions);
+    public function countCourseSetGroupByFileId($conditions);
 }

@@ -683,10 +683,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
         $cloudFiles = $this->getFileImplementor('cloud')->findFiles($files, $cloudFileConditions);
         $files = ArrayToolkit::index($files, 'id');
-        $usedCounts = $this->getCourseMaterialService()->countMaterialGroupByFileId(['fileIds' => array_column($files, 'id'), 'type' => 'course', 'excludeLessonId' => 0]);
+        $usedCounts = $this->getCourseMaterialService()->countCourseSetGroupByFileId(['fileIds' => array_column($files, 'id'), 'type' => 'course', 'excludeLessonId' => 0, 'copyId' => 0]);
         foreach ($cloudFiles as &$cloudFile) {
             $cloudFile['type'] = $files[$cloudFile['id']]['type'];
-            $cloudFile['usedCourseCount'] = $usedCounts[$cloudFile['id']]['usedCount'] ?: 0;
+            $cloudFile['usedCourseCount'] = $usedCounts[$cloudFile['id']]['usedCourseCount'] ?: 0;
         }
 
         return $cloudFiles;
