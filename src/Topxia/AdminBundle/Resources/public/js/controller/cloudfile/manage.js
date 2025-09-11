@@ -32,7 +32,7 @@ define(function(require, exports, module) {
         'click .js-batch-tag-btn': 'onClickTagBatchBtn',
         'click .js-cd-modal': 'codeErrorTip',
         'click .js-batch-download': 'batchDownload',
-
+        'click .js-open-refer-course': 'onClickReferCourse',
       },
       setup: function() {
         this.set('model', 'normal');
@@ -42,6 +42,18 @@ define(function(require, exports, module) {
         this._initSelect2();
         this.initTagForm();
         this.initEmitter();
+      },
+      onClickReferCourse: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $target = $(e.currentTarget);
+        window.emitter.emit('open-refer-course-modal', {
+          fileId: $target.data('id'),
+          usedCount: $target.data('count'),
+          fileType: $target.data('type'),
+          filename: $target.data('filename'),
+          fileLength: $target.data('length'),
+        });
       },
       initEmitter: function() {
         window.emitter.on('set-category-success', () => {
