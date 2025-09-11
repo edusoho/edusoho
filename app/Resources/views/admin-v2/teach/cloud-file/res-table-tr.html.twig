@@ -85,13 +85,13 @@
       </td>
       <td class="vertical-middle">
         <span
-          class="js-open-refer-course"
+          class="js-open-refer-course {% if cloudFile.usedCourseCount > 0 %}color-success{% endif %}"
           data-id="{{ cloudFile.id }}"
           data-count="{{ cloudFile.usedCourseCount }}"
           data-type="{{ cloudFile.type }}"
           data-filename="{{ cloudFile.filename }}"
           data-length="{{ cloudFile.length }}"
-          style="display:block; cursor: pointer;"
+          style="display:block; cursor: pointer; {% if cloudFile.usedCourseCount == 0 %}color: rgba(0, 0, 0, 0.45){% endif %}"
         >
           {{ cloudFile.usedCourseCount }}
         </span>
