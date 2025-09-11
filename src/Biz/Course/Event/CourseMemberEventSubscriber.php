@@ -269,6 +269,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onLiveActivityCreate(Event $event)
     {
         $activity = $event->getArgument('activity');
+        if (empty($activity['teacherId'])) {
+            return;
+        }
         $this->addCourseTeacher($activity['fromCourseId'], $activity['teacherId']);
     }
 
@@ -276,6 +279,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $liveActivity = $event->getSubject();
         $activity = $event->getArgument('activity');
+        if (empty($liveActivity['teacherId'])) {
+            return;
+        }
         $this->addCourseTeacher($activity['fromCourseId'], $liveActivity['teacherId']);
     }
 
