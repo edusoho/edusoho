@@ -84,7 +84,17 @@
         <span style="display:block">{{ categories[cloudFile.categoryId].name|default('-') }}</span>
       </td>
       <td class="vertical-middle">
-        <a onclick="window.emitter.emit('open-refer-course-modal', { fileId: {{ cloudFile.id }}, usedCount: {{ cloudFile.usedCourseCount }}, fileType: '{{ cloudFile.type }}', filename: '{{ cloudFile.filename }}', fileLength: {{ cloudFile.length }} })" style="display:block; cursor: pointer;">{{ cloudFile.usedCourseCount }}</a>
+        <span
+          class="js-open-refer-course"
+          data-id="{{ cloudFile.id }}"
+          data-count="{{ cloudFile.usedCourseCount }}"
+          data-type="{{ cloudFile.type }}"
+          data-filename="{{ cloudFile.filename }}"
+          data-length="{{ cloudFile.length }}"
+          style="display:block; cursor: pointer;"
+        >
+          {{ cloudFile.usedCourseCount }}
+        </span>
       </td>
     {% endif %}
 
