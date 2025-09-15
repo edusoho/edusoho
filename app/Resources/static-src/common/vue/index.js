@@ -3,7 +3,6 @@ import 'moment';
 import './icons/iconfont.js';
 import SvgIcon from './icons/SvgIcon.vue';
 import MobileIce from './components/MobileIce.vue';
-// import './mock';
 import VueLazyload from 'vue-lazyload';
 
 import {

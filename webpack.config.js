@@ -91,6 +91,9 @@ module.exports = {
       ]
     },
     {
+      name: 'viewerjs/dist/viewer.css'
+    },
+    {
       from: 'node_modules/@codeages/math-editor/dist/iframe',
       to: 'web/static-dist/libs/math-editor'
     },

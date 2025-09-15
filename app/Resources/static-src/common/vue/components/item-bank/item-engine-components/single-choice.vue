@@ -34,6 +34,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
+                @click="onImgViewer($event.target)"
               ></div>
             </div>
 
@@ -58,6 +59,7 @@
                 <div
                   class="ibs-table-cell ibs-editor-text"
                   v-html="item.radio.text"
+                  @click="onImgViewer($event.target)"
                 ></div>
               </div>
               <div
@@ -75,6 +77,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
+                @click="onImgViewer($event.target)"
               ></div>
             </div>
           </a-radio>
@@ -128,6 +131,7 @@
 <script>
 import Locale from "common/vue/mixins/locale";
 import answerModel from "./answer-model";
+import { onImgViewer } from 'common/viewer';
 
 export default {
   name: "single-choice",
@@ -315,7 +319,10 @@ export default {
         data.type = "choice";
       }
       gen(data);
-    }
+    },
+    onImgViewer(container) {
+      onImgViewer(container)
+    },
   }
 };
 </script>

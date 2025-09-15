@@ -48,6 +48,16 @@ object-assign
  */
 
 /*!
+ * Viewer.js v1.11.7
+ * https://fengyuanchen.github.io/viewerjs
+ *
+ * Copyright 2015-present Chen Fengyuan
+ * Released under the MIT license
+ *
+ * Date: 2024-11-24T04:32:19.116Z
+ */
+
+/*!
  * Vue.js v2.6.11
  * (c) 2014-2019 Evan You
  * Released under the MIT License.
