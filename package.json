@@ -118,9 +118,9 @@
   "scripts": {
     "dev": "node webpack-build/dev.js",
     "dev:lite": "npm run serve ignore:theme,plugin,bundle",
-    "compile": "npm run build && cd vue3 && npm run build",
     "serve": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
     "build": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
+    "build:pc": "npm run build && cd vue3 && npm run build",
     "clean": "rm -rf node_modules",
     "test": "mocha --recursive --reporter mochawesome --require @babel/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
     "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",

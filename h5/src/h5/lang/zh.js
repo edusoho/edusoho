@@ -134,7 +134,7 @@ export default {
     switchSucceeded: '切换成功',
     pleaseWait: '请稍等',
     signInSuccessfully: '登录成功',
-    contactTheAdministrator: '网校未开启手机注册，请联系管理员',
+    contactTheAdministrator: '网校未开启注册，请联系管理员',
     enterUpTo32Characters: '最大输入 32 个字符',
     bindingSuccess: '绑定成功',
     registrationSuccess: '注册成功',

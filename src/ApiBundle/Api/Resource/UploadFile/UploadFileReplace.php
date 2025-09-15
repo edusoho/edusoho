@@ -10,6 +10,7 @@ use Biz\Common\CommonException;
 use Biz\Course\Service\MaterialService;
 use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
+use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
 
 class UploadFileReplace extends AbstractResource
@@ -64,6 +65,7 @@ class UploadFileReplace extends AbstractResource
             'ext' => $targetFile['ext'],
             'source' => $targetFile['originPlatform'],
         ]);
+        $this->getLogService()->info('upload_file', 'replace_file', "批量替换课程文件：{$file['filename']}", ['newFile' => $targetFile, 'courseSetIds' => $courseSetIds]);
     }
 
     /**
@@ -88,5 +90,13 @@ class UploadFileReplace extends AbstractResource
     private function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return LogService
+     */
+    private function getLogService()
+    {
+        return $this->service('System:LogService');
     }
 }

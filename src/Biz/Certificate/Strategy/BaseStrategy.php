@@ -193,6 +193,6 @@ abstract class BaseStrategy
      */
     protected function getFileService()
     {
-        return $this->createService('Content:FileService');
+        return $this->biz->service('Content:FileService');
     }
 }

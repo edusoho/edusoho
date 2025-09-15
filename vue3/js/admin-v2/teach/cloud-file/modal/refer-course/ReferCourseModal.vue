@@ -2,6 +2,7 @@
 import {reactive, ref, watch} from 'vue';
 import Api from '../../../../../../api';
 import ReplaceUploadFileModal from './ReplaceUploadFileModal.vue';
+import {open} from '../../../../../common';
 
 const modalVisible = defineModel();
 const props = defineProps({
@@ -154,7 +155,11 @@ function onCancel() {
         :row-selection="{ selectedRowKeys: state.selectedCourseSetIds, onChange: onSelectChange }"
         :scroll="{ y: 380 }"
       >
-
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.key === 'courseSetTitle'">
+            <div class="text-[--primary-color] truncate cursor-pointer w-fit max-w-full min-w-0" @click="open(`/course/${record.defaultCourseId}`)">{{ record.courseSetTitle }}</div>
+          </template>
+        </template>
       </a-table>
       <div class="flex flex-row-reverse">
         <a-pagination

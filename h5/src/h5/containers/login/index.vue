@@ -257,11 +257,7 @@ export default {
     },
 
     jumpRegister() {
-      if (
-        !this.registerSettings ||
-        this.registerSettings.mode === 'closed' ||
-        this.registerSettings.mode === 'email'
-      ) {
+      if (!this.registerSettings || this.registerSettings.mode === 'closed') {
         Toast(this.$t('toast.contactTheAdministrator'));
         return;
       }

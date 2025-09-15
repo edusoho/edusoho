@@ -11,7 +11,7 @@
         :tree-data="categoryTreeData"
         show-search
         tree-node-filter-prop="label"
-        style="width: 172px"
+        style="width: 150px"
       >
       </a-tree-select>
     </div>

@@ -623,7 +623,7 @@ t.add("validate.valid_starttime.required", "\u8bf7\u9009\u62e9\u5f00\u59cb\u65f6
 t.add("validate.valid_fixedtime.required", "\u8bf7\u9009\u62e9\u8003\u8bd5\u5f00\u59cb\u548c\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
 t.add("validate.valid_maxDuration", "\u56fa\u5b9a\u8003\u8bd5\u65f6\u95f4\u4e0d\u80fd\u8d85\u8fc710\u4e2a\u5c0f\u65f6", "js", "zh_CN");
 t.add("validate.valid_endtime.required", "\u8bf7\u9009\u62e9\u7ed3\u675f\u65f6\u95f4", "js", "zh_CN");
-t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7535\u5b50\u90ae\u4ef6\u5730\u5740", "js", "zh_CN");
+t.add("validate.valid_email_input.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u90ae\u7bb1\u5730\u5740", "js", "zh_CN");
 t.add("validate.valid_idcard_formate.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u8eab\u4efd\u8bc1\u53f7\u7801", "js", "zh_CN");
 t.add("validate.valid_url_input.message", "\u8bf7\u8f93\u5165\u6709\u6548\u7684\u7f51\u5740", "js", "zh_CN");
 t.add("activity.testpaper_manage.required.number", "\u8bf7\u81f3\u5c11\u8f93\u5165\u4e00\u4f4d\u6570\u5b57", "js", "zh_CN");
@@ -677,7 +677,7 @@ t.add("validate.alphanumeric.message", "\u5fc5\u987b\u662f\u82f1\u6587\u5b57\u6b
 t.add("validate.only_alphanumeric.message", "\u8bf7\u8f93\u5165\u6570\u5b57\u6216\u82f1\u6587\u5b57\u6bcd", "js", "zh_CN");
 t.add("validate.raty_star.message", "\u8bf7\u6253\u5206", "js", "zh_CN");
 t.add("validate.reg_invite_code.message", "\u5fc5\u987b\u662f5\u4f4d\u6570\u5b57\u3001\u82f1\u6587\u5b57\u6bcd\u7ec4\u6210", "js", "zh_CN");
-t.add("validate.phone.message", "\u8bf7\u8f93\u5165\u6709\u6548\u624b\u673a\u53f7\u7801", "js", "zh_CN");
+t.add("validate.phone.message", "\u8bf7\u8f93\u5165\u6b63\u786e\u7684\u624b\u673a\u53f7\u7801", "js", "zh_CN");
 t.add("validate.mobile_or_telephone.message", "\u8bf7\u8f93\u5165\u6709\u6548\u624b\u673a\u53f7\u7801\u6216\u8005\u7535\u8bdd\u53f7\u7801(\u533a\u53f7-\u7535\u8bdd\u53f7\u7801)", "js", "zh_CN");
 t.add("validate.nickname.message", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
 t.add("validate.password_check.message", "\u5bc6\u7801\u9519\u8bef", "js", "zh_CN");

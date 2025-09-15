@@ -183,8 +183,8 @@ class BuildUpgradePackageCommand extends BaseCommand
     {
         $this->output->writeln('<info>  拷贝升级脚本：</info>');
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$this->version.'.php';
-        $upgradesDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../')."/scripts/{$this->version}";
+        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/upgrade-scripts/upgrade-'.$this->version.'.php';
+        $upgradesDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../')."/upgrade-scripts/{$this->version}";
 
         if (!file_exists($path)) {
             $this->output->writeln('无升级脚本');

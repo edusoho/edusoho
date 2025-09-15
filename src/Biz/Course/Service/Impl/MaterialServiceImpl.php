@@ -321,9 +321,9 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $this->getMaterialDao()->countDistinctCourseSet($conditions);
     }
 
-    public function countMaterialGroupByFileId($conditions)
+    public function countCourseSetGroupByFileId($conditions)
     {
-        $counts = $this->getMaterialDao()->searchCountGroupByFileId($conditions);
+        $counts = $this->getMaterialDao()->countCourseSetGroupByFileId($conditions);
 
         return array_column($counts, null, 'fileId');
     }

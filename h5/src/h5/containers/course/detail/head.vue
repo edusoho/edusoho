@@ -194,7 +194,8 @@ export default {
       watermark: {},
       lastLearnTime: 0,
       jsPlayer: '',
-      playKey: ''
+      playKey: '',
+      taskResult: null,
     };
   },
   inject: ['getDetailsContent'],
@@ -307,6 +308,7 @@ export default {
       this.getCourseData(this.selectedPlanId, this.taskId).then(res => {
         this.activity = res.activity;
         this.finishCondition = res.activity && res.activity.finishCondition;
+        this.taskResult = res.result;
       });
     },
     // 直播视频回放刚进入课程就算学习完成
@@ -558,7 +560,7 @@ export default {
       }
 
       const {finishType, finishData} = this.activity;
-      if (finishType == 'end' && finishData == '1') {
+      if (finishType === 'end' && finishData == '1' && this.taskResult?.status !== 'finish') {
         options.disableProgressBar = true;
         options.disableSeek = 'forward';
       }

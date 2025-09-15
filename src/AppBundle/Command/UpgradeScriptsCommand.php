@@ -45,7 +45,7 @@ class UpgradeScriptsCommand extends BaseCommand
 
     protected function executeScript($code, $version, $index = 0)
     {
-        $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../scripts/upgrade-{$version}.php";
+        $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../upgrade-scripts/upgrade-{$version}.php";
         if (!file_exists($scriptFile)) {
             return;
         }
