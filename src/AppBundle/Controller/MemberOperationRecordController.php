@@ -42,7 +42,7 @@ class MemberOperationRecordController extends BaseController
 
         $records = $this->getMemberOperationService()->searchRecords(
             $condition,
-            ['created_time' => 'DESC'],
+            ['id' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

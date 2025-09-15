@@ -1041,7 +1041,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $this->getMemberDao()->batchCreate($newMembers);
-        $newMembers = $this->searchMembers(['courseId' => $course['id']], [], 0, PHP_INT_MAX);
+        $newMembers = $this->searchMembers(['courseId' => $course['id'], 'role' => 'student'], [], 0, PHP_INT_MAX);
         $this->batchCreateJoinRecords($course, $newMembers);
 
         $this->getCourseService()->updateCourseStatistics($course['id'], ['studentNum']);
