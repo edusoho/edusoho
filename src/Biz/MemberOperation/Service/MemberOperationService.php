@@ -8,6 +8,8 @@ interface MemberOperationService
 
     public function createRecord($record);
 
+    public function createRecords($records);
+
     public function countRecords($conditions);
 
     public function searchRecords($conditions, $orderBy, $start, $limit);

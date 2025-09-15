@@ -20,6 +20,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Goods\Service\GoodsService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
@@ -1041,6 +1042,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $this->getMemberDao()->batchCreate($newMembers);
         $newMembers = $this->searchMembers(['courseId' => $course['id']], [], 0, PHP_INT_MAX);
+        $this->batchCreateJoinRecords($course, $newMembers);
 
         $this->getCourseService()->updateCourseStatistics($course['id'], ['studentNum']);
         $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], ['studentNum']);
@@ -1701,6 +1703,32 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $record;
     }
 
+    private function batchCreateJoinRecords($course, $members)
+    {
+        $memberJoinRecords = [];
+        foreach ($members as $member) {
+            $memberJoinRecords[] = [
+                'user_id' => $member['userId'],
+                'member_id' => $member['id'],
+                'member_type' => $member['role'],
+                'target_id' => $member['courseId'],
+                'target_type' => 'course',
+                'operate_type' => 'join',
+                'operate_time' => time(),
+                'operator_id' => $this->getCurrentUser()->getId(),
+                'data' => ['member' => $member],
+                'order_id' => $member['orderId'],
+                'title' => $course['title'],
+                'course_set_id' => $course['courseSetId'],
+                'parent_id' => $course['parentId'],
+                'join_course_set' => 1,
+                'reason' => 'course.member.operation.reason.join_classroom',
+                'reason_type' => 'classroom_join',
+            ];
+        }
+        $this->getMemberOperationService()->createRecords($memberJoinRecords);
+    }
+
     private function addMember($member, $reason = [])
     {
         try {
@@ -2010,6 +2038,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->biz->service('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return MemberOperationService
+     */
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
