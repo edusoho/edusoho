@@ -22,11 +22,11 @@
         <div v-if="isFixed" class="fixed">
           <div class="cd-container clearfix">
             <ul class="info-left__nav pull-left">
-              <li :class="howActive === 1 ? 'active' : ''"><a href="#info-left-1">{{
-                  'goods.show_page.tab.intro'|trans
-                }}</a>
+              <li :class="howActive === 1 ? 'active' : ''">
+                <a href="#info-left-1">{{'goods.show_page.tab.intro'|trans }}</a>
               </li>
-              <li :class="howActive === 2 ? 'active' : ''"><a href="#info-left-2">题库</a>
+              <li :class="howActive === 2 ? 'active' : ''">
+                <a href="#info-left-2">{{'goods.show_page.tab.question_bank'|trans }}</a>
               </li>
               <li :class="howActive === 3 ? 'active' : ''"><a
                 href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
@@ -50,13 +50,14 @@
             <a href="#info-left-1">{{ 'goods.show_page.tab.intro'|trans }}</a>
           </li>
           <li :class="howActive === 2 ? 'active' : ''">
-            <a href="#info-left-2">题库</a>
+            <a href="#info-left-2">{{'goods.show_page.tab.question_bank'|trans }}</a>
           </li>
           <li :class="howActive === 3 ? 'active' : ''">
             <a href="#info-left-3">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
           </li>
           <li v-if="ugcReviewSetting.enable_review == 1
-                                 && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course') || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
+              && ((ugcReviewSetting.enable_course_review == 1 && goods.type == 'course')
+              || (ugcReviewSetting.enable_classroom_review == 1 && goods.type == 'classroom'))"
               :class="howActive === 4 ? 'active' : ''">
             <a href="#info-left-4">{{ 'goods.show_page.tab.reviews'|trans }}</a>
           </li>
@@ -71,7 +72,7 @@
 
           <div id="info-left-2" class="js-content-item item-bank-exercise-container">
             <div class="header">
-              <div class="title">题库</div>
+              <div class="title">{{'goods.show_page.tab.question_bank'|trans }}</div>
               <div v-if="bindItemBankExerciseList.length > 1"
                    class="show-button"
                    @click="showItemBanKDrawer">
@@ -105,7 +106,7 @@
                 <a-button type="primary" ghost @click.stop="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
               </div>
             </div>
-            <div v-else class="empty">暂无绑定的题库哦～</div>
+            <div v-else class="empty">{{'goods.show_page.tab.question_bank.empty'|trans }}</div>
           </div>
           <a-drawer
             :placement="drawerPlacement"
@@ -119,7 +120,7 @@
             :bodyStyle="{padding: '0',}"
           >
             <div class="header">
-                <div class="title">题库</div>
+                <div class="title">{{'goods.show_page.tab.question_bank'|trans }}</div>
                 <a-icon type="close" @click="closeItemBanKDrawer"/>
             </div>
             <div class="body-container">
