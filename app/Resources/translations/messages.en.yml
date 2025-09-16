@@ -126,6 +126,9 @@ site.question.attr.score.unit: ''
 site.question.determine.true: 'True'
 site.question.determine.false: 'False'
 site.badge.try_watch: Preview
+site.badge.membership_free: Membership is free
+site.badge.2k: 2K Premium Enjoyment
+site.badge.4k: 4K Premium Experience
 site.badge.free: Free
 site.btn.detail: more
 site.setting.finished: Setting finished
@@ -398,6 +401,7 @@ finance.max_deduction_rate: 'Maximum coin deduction rate'
 finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
 vip: VIP
+vip.subtitle: 'Purchase membership to enjoy more member benefits.'
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
 plugin.money: 'Recharge'
@@ -3187,14 +3191,18 @@ homepage.live_course.start_time: 'Live available at:'
 homepage.live_course.time_before_start: "<span>%minutes%</span> from the live broadcast\n"
 homepage.live_course.join_btn: 'Enroll the live'
 homepage.live_course.more: 'More'
+homepage.open_course.title: 'Open Course'
 homepage.open_course.tips: 'Free Anytime, Anywhere'
 homepage.open_course.more: 'More'
 homepage.learning_course: Continue：%title%
+homepage.learning_course.title: 'Online course'
+homepage.learning_course.subtitle: 'Selected online school courses to meet your learning interests.'
 homepage.learning_course.continue_learning_btn: Continue
 homepage.learning_course.content_title: 'Learning Courses'
 homepage.learning_course.teacher_name: 'Teacher ：%nickname%'
 homepage.learning_course.learning_progress: '%percent% finished'
 homepage.recommend_classroom.content_title: 'Recommend Classes'
+homepage.recommend_classroom.content_subtitle: 'The class-based learning system offers you more course-related services.'
 homepage.recommend_classroom.more: "More %moreClassrooms%\n"
 site.datagrid.filter.class_more: More
 homepage.article.content_title: 'Latest %article_name%'
@@ -3202,6 +3210,8 @@ homepage.student_comment.content_title: 'Student reviews'
 homepage.student_comment.from: "from <a class=\"link-dark\" href=\"%courseUrl%\">《%courseTitle%》</a>\n"
 homepage.student_comment.empty: 'No review'
 homepage.student_dynamic.content_title: 'Latest updates'
+homepage.recommend_teacher.title: 'Recommended Teacher'
+homepage.recommend_teacher.subtitle: 'A collection of renowned teachers, ensuring high teaching quality and excellent learning outcomes.'
 homepage.recommend_teacher.more: 'More'
 homepage.footer.archive: 'Archived courses'
 homepage.footer.learning: Learning
@@ -3365,6 +3375,8 @@ cloud_search.itemBankExercise.recommend.content_title: 'Recommend Exercise of qu
 cloud_search.itemBankExercise.recommend.empty: 'Sorry, no Recommend Exercise of question bank now.'
 
 group: 'Group Channel'
+group.title: 'Dynamic condition'
+group.subtitle: 'Join the group, make more friends, and keep track of the course updates.'
 group.name: 'Group name'
 group.about: 'Group Instruction'
 group.page_title: Group
