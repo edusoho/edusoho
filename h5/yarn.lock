@@ -14968,6 +14968,11 @@ vfile@^4.0.0:
     unist-util-stringify-position "^2.0.0"
     vfile-message "^2.0.0"
 
+viewerjs@^1.11.7:
+  version "1.11.7"
+  resolved "https://registry.npmmirror.com/viewerjs/-/viewerjs-1.11.7.tgz#99c39b86c3f1b6debf446747a1f0e25f8be4db74"
+  integrity sha512-0JuVqOmL5v1jmEAlG5EBDR3XquxY8DWFQbFMprOXgaBB0F7Q/X9xWdEaQc59D8xzwkdUgXEMSSknTpriq95igg==
+
 vinyl-fs@^3.0.0:
   version "3.0.3"
   resolved "https://registry.npmmirror.com/vinyl-fs/-/vinyl-fs-3.0.3.tgz#c85849405f67428feabbbd5c5dbdd64f47d31bc7"
