@@ -17,10 +17,10 @@
   {% set courseSets = data('CourseSetsWithGoods',{'courseSets':courseSets}) %}
   <div class="container">
     <div class="text-line">
-      <h5><span>{{ config.title|default(config.defaultTitle) }}</span>
+      <h5><span>{{ config.title|default('homepage.learning_course.title'|trans) }}</span>
         <div class="line"></div>
       </h5>
-      <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+      <div class="subtitle">{{ config.subTitle|default('homepage.learning_course.subtitle'|trans) }}</div>
     </div>
     <div class="course-filter" id="course-filter">
       <ul class="nav nav-pills hidden-xs" role="tablist">
@@ -33,7 +33,10 @@
               <li role="presentation"
                   class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter"
                   data-url="{{ path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"
-                  data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
+                  data-type="course"
+              >
+                <a href="javascript:;">{{ category.name }}</a>
+              </li>
             {% endif %}
           {% endfor %}
           {% if  moreCategories %}

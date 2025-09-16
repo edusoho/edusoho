@@ -7,8 +7,8 @@
 
   <div class="container">
     <div class="text-line">
-      <h5><span>{{ config.title|default(config.defaultTitle|default('')) }}</span><div class="line"></div></h5>
-      <div class="subtitle">{{ config.subTitle|default('homepage.open_course.tips')|trans }}</div>
+      <h5><span>{{ config.title|default('homepage.open_course.title'|trans) }}</span><div class="line"></div></h5>
+      <div class="subtitle">{{ config.subTitle|default('homepage.open_course.tips'|trans) }}</div>
     </div>
 
     <div class="course-list">

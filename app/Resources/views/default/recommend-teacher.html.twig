@@ -3,8 +3,8 @@
   <section class="recommend-teacher {{config.background|default("")}}">
     <div class="container">
       <div class="text-line">
-        <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
-        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+        <h5><span>{{ config.title|default('homepage.recommend_teacher.title'|trans) }}</span><div class="line"></div></h5>
+        <div class="subtitle">{{ config.subTitle|default('homepage.recommend_teacher.subtitle'|trans) }}</div>
       </div>
       <div class="row">
         {% for teacher in teachers %}

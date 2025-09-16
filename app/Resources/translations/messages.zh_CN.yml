@@ -142,6 +142,9 @@ site.question.attr.score.unit: 分
 site.question.determine.true: 正确
 site.question.determine.false: 错误
 site.badge.try_watch: 试看
+site.badge.membership_free: 会员免费
+site.badge.2k: 2k 优享
+site.badge.4k: 4k 臻享
 site.badge.free: 免费
 site.twig.extension.smarttime.future: 未来
 site.twig.extension.smarttime.hardly: 刚刚
@@ -489,6 +492,7 @@ finance.max_can_use_coin: 最大可用%coinName%
 
 #插件
 vip: 会员
+vip.subtitle: 购买会员，享受更多会员权益
 plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money: 学习卡
@@ -3676,9 +3680,12 @@ homepage.live_course.time_before_start: >
   距离直播还有<span>%minutes%</span>分钟
 homepage.live_course.join_btn: 进入直播教室
 homepage.live_course.more: 更多直播
+homepage.open_course.title: 公开课
 homepage.open_course.tips: 随时随地，免费听课。
 homepage.open_course.more: 更多公开课
 homepage.learning_course: 继续学习：%title%
+homepage.learning_course.title: 网校课程
+homepage.learning_course.subtitle: 精选网校课程，满足你的学习兴趣。
 homepage.learning_course.continue_learning_btn: 继续学习
 homepage.learning_course.content_title: 在学课程
 homepage.learning_course.teacher_name: 教师：%nickname%
@@ -3694,6 +3701,8 @@ homepage.student_comment.from: >
   发布于 <a class="link-dark" href="%courseUrl%">《%courseTitle%》</a>
 homepage.student_comment.empty: 还没有评价
 homepage.student_dynamic.content_title: 学员动态
+homepage.recommend_teacher.title: 推荐教师
+homepage.recommend_teacher.subtitle: 名师汇集，保证教学质量与学习效果。
 homepage.recommend_teacher.more: 更多教师
 homepage.footer.archive: 课程存档
 homepage.footer.learning: 学习
@@ -3889,6 +3898,8 @@ cloud_search.itemBankExercise.recommend.empty: 暂无推荐题库练习
 
 # 小组
 group: 小组频道
+group.title: 动态
+group.subtitle: 参与小组，结交更多同学，关注课程动态。
 group.name: 小组名称
 group.about: 小组介绍
 group.page_title: 小组
