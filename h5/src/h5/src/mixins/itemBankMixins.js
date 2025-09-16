@@ -1,5 +1,5 @@
-import { ImagePreview } from 'vant'
 import Api from '@/api';
+import Viewer from 'viewerjs';
 
 export default {
   computed: {
@@ -116,16 +116,25 @@ export default {
         return true;
       }
     },
-    handleClickImage (imagesUrl) {
-      if (imagesUrl === undefined) return;
-      event.stopPropagation();//  阻止冒泡
-      const images = [imagesUrl]
-      ImagePreview({
-        images,
-        overlayStyle: {
-          backgroundColor: 'rgba(255, 255, 255, 0.9)'
+    handleClickImage (container) {
+      if (!container) return;
+      const viewer = new Viewer(container, {
+        navbar: false,
+        title: false,
+        toolbar: {
+          zoomIn: true,
+          zoomOut: true,
+          oneToOne: true,
+          reset: true,
+          prev: false,
+          play: false,
+          next: false,
+          rotateLeft: true,
+          rotateRight: true,
+          flipHorizontal: true,
+          flipVertical: true,
         }
-      })
+      });
     },
     refreshChoice(res) {
       if (res) {

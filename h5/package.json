@@ -100,6 +100,7 @@
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
     "vant": "^2.12.48",
+    "viewerjs": "^1.11.7",
     "vue": "^2.6.11",
     "vue-awesome-swiper": "^4.1.1",
     "vue-calendar-component": "^2.8.2",
