@@ -27,7 +27,6 @@
   {% endif %}
   {% if questionBank is defined %}
     <div class="question-add__content clearfix">
-      <div class="question-add__line"></div>
       <div class="question-add__left js-category-list">
         {% include 'question-bank/question/category-list.html.twig' %}
       </div>
@@ -48,7 +47,7 @@
   {% endif %}
 
   <div class="question-add__content question-add__footer">
-    <div class="clearfix">
+    <div class="question-add__footer--container">
       <div class="question-add__footer--title">{{ 'my.teaching.question_bank.question.selected'|trans }}：<span class="cd-link-primary js-select-number">0</span></div>
       <div class="question-add__footer--btn">
         <button class="cd-btn cd-btn-default cd-btn-sm js-clear-select">清空已选</button>
