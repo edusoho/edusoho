@@ -79,7 +79,7 @@ export default {
           id: this.$route.params.id,
         }
       }).then(res => {
-        if (res.aiTeacherDomain && res.isAgentActive === '0') {
+        if (res.aiTeacherDomain && res.isAgentActive === '1') {
           this.aiAgentSdk = this.initAIAgentSdk(this.$store.state.user.aiAgentToken, {
             domainId: res.aiTeacherDomain,
           }, 20, 20, true);
