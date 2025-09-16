@@ -3684,6 +3684,7 @@ homepage.learning_course.content_title: 在学课程
 homepage.learning_course.teacher_name: 教师：%nickname%
 homepage.learning_course.learning_progress: 完成%percent%
 homepage.recommend_classroom.content_title: 推荐班级
+homepage.recommend_classroom.content_subtitle: 班级化学习体系，给你更多的课程相关服务。
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
 site.datagrid.filter.class_more: 更多班级

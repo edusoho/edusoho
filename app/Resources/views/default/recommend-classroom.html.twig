@@ -8,7 +8,7 @@
                     <span>{{ config.title|default("homepage.recommend_classroom.content_title"|trans) }}</span>
                     <div class="line"></div>
                 </h5>
-                <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+                <div class="subtitle">{{ config.subTitle|default("homepage.recommend_classroom.content_subtitle"|trans) }}</div>
             </div>
             <div class="recommend-class-list row">
                 {% for classroom in classrooms %}
