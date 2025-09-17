@@ -3,6 +3,7 @@ import 'vue3/main.less';
 import ItemBankBind from '../../components/item-bank/ItemBankBind.vue';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 import { Button, Tooltip } from 'ant-design-vue';
+import i18n from '../../../js/components/item-bank/vue-lang';
 
 const app = createApp(ItemBankBind, {
   bindType: 'classroom',
@@ -10,6 +11,8 @@ const app = createApp(ItemBankBind, {
 });
 
 setCurrentPrimaryColor(app);
+
+app.use(i18n);
 
 app.use(Button);
 app.use(Tooltip);
