@@ -55,6 +55,7 @@
           <div
             class="ibs-content ibs-editor-text"
             v-html="question.answer[0]"
+            @click="handleClickImage($event.target)"
           ></div>
         </template>
       </div>
@@ -64,6 +65,7 @@
         <div
           class="ibs-content ibs-editor-text"
           v-html="question.answer[0]"
+          @click="handleClickImage($event.target)"
         ></div>
         <div class="ibs-content" v-if="needScore">
           <div class="ibs-position-relative">
@@ -103,6 +105,7 @@
             <div
               class="ibs-content ibs-editor-text"
               v-html="question.answer[0]"
+              @click="handleClickImage($event.target)"
             ></div>
           </div>
           <div class="ibs-mb4">
@@ -111,6 +114,7 @@
               v-if="reportAnswer.response[0] !== '' && reportAnswer.response[0]"
               class="ibs-content ibs-editor-text"
               v-html="reportAnswer.response[0]"
+              @click="handleClickImage($event.target)"
             ></div>
             <div v-else class="ibs-content">
               {{ t("itemEngine.answerStatus.no_answer") }}
@@ -145,6 +149,7 @@
                     v-html="
                       `${reportAnswer.comment || t('itemReport.no_comment')}`
                     "
+                    @click="handleClickImage($event.target)"
                   ></div>
                 </div>
               </div>
@@ -168,6 +173,7 @@
         <div
           class="ibs-content ibs-editor-text"
           v-html="question.answer[0]"
+          @click="handleClickImage($event.target)"
         ></div>
       </div>
     </template>
@@ -182,6 +188,7 @@ import attachmentUpload from "../attachment-upload";
 import attachmentPreview from "../attachment-preview";
 import { debounce } from "common/debounce";
 import Locale from "common/vue/mixins/locale";
+import { handleClickImage } from 'common/viewer';
 
 export default {
   name: "essay-type",
@@ -404,7 +411,10 @@ export default {
         data.type = "essay";
       }
       gen(data);
-    }
+    },
+    handleClickImage(container) {
+      handleClickImage(container)
+    },
   }
 };
 </script>

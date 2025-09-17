@@ -349,8 +349,19 @@
   }
 }
 
-.ibs-prevent-click {
-  pointer-events: none
+.ibs-cursor-default {
+  input {
+    cursor: default !important;
+  }
+  span {
+    cursor: default !important;
+  }
+  label {
+    cursor: default !important;
+  }
+  .ibs-table {
+    cursor: default !important;
+  }
 }
 
 .ibs-engin-section {
@@ -395,7 +406,7 @@
   }
 
   .ant-radio-checked .ant-radio-inner {
-    border-color: @ibs-brand-success;
+    border-color: @ibs-brand-success !important;
 
     &:after {
       background-color: @ibs-brand-success;
@@ -404,7 +415,7 @@
 
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: @ibs-brand-success;
-    border-color: @ibs-brand-success;
+    border-color: @ibs-brand-success !important;
   }
 
   .ant-radio-checked {
@@ -420,7 +431,7 @@
 
 .ibs-engine-radio--error {
   .ant-radio-checked .ant-radio-inner {
-    border-color: @ibs-brand-danger;
+    border-color: @ibs-brand-danger !important;
 
     &:after {
       background-color: @ibs-brand-danger;
@@ -429,7 +440,7 @@
 
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: @ibs-brand-danger;
-    border-color: @ibs-brand-danger;
+    border-color: @ibs-brand-danger !important;
   }
 
   .ant-radio-checked {
@@ -444,6 +455,35 @@
 
   .ibs-table {
     color: @ibs-brand-danger;
+  }
+}
+
+.ibs-engine-radio--default {
+  .ant-radio-checked .ant-radio-inner {
+    border-color: rgba(0, 0, 0, .65) !important;
+
+    &:after {
+      background-color: rgba(0, 0, 0, .65);
+    }
+  }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: rgba(0, 0, 0, .65);
+    border-color: rgba(0, 0, 0, .65) !important;
+  }
+
+  .ant-radio-checked {
+    &:after {
+      border: 1px solid rgba(0, 0, 0, .65);
+    }
+  }
+
+  .ibs-judge-choose {
+    color: rgba(0, 0, 0, .65);
+  }
+
+  .ibs-table {
+    color: rgba(0, 0, 0, .65);
   }
 }
 

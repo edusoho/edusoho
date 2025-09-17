@@ -16,7 +16,8 @@
     <template v-slot:response_points>
       <div class="ibs-answer">
         <a-radio-group
-          :class="{ 'ibs-prevent-click ibs-width-full': mode !== 'do' }"
+          :disabled="mode !== 'do'"
+          :class="{ 'ibs-cursor-default ibs-width-full': mode !== 'do' }"
           v-model="answer"
           @change="changeAnswer"
         >
@@ -286,7 +287,7 @@ export default {
       } else if (this.question.answer[0] == item && this.mode !== "do") {
         return "ibs-choose-item ibs-engine-radio ibs-engine-radio--success";
       } else {
-        return "ibs-choose-item ibs-engine-radio";
+        return "ibs-choose-item ibs-engine-radio ibs-engine-radio--default";
       }
     },
 
