@@ -16,7 +16,8 @@
     <template v-slot:response_points>
       <div class="ibs-answer">
         <a-checkbox-group
-          :class="{ 'ibs-prevent-click ibs-width-full': mode !== 'do' }"
+          :disabled="mode !== 'do'"
+          :class="{ 'ibs-cursor-default ibs-width-full': mode !== 'do' }"
           v-model="answer"
           @change="changeAnswer"
         >
@@ -36,7 +37,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.checkbox.text"
-                @click="onImgViewer($event.target)"
+                @click="handleClickImage($event.target)"
               ></div>
             </div>
 
@@ -61,7 +62,7 @@
                 <div
                   class="ibs-table-cell ibs-editor-text"
                   v-html="item.checkbox.text"
-                  @click="onImgViewer($event.target)"
+                  @click="handleClickImage($event.target)"
                 ></div>
               </div>
               <div
@@ -80,7 +81,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.checkbox.text"
-                @click="onImgViewer($event.target)"
+                @click="handleClickImage($event.target)"
               ></div>
             </div>
           </a-checkbox>
@@ -138,7 +139,7 @@
 <script>
 import Locale from "common/vue/mixins/locale";
 import answerModel from "./answer-model";
-import { onImgViewer } from 'common/viewer';
+import { handleClickImage } from 'common/viewer';
 export default {
   name: "choice",
   inheritAttrs: false,
@@ -311,7 +312,7 @@ export default {
       } else if (this.question.answer.includes(item) && this.mode !== "do") {
         return "ibs-choose-item ibs-engine-radio ibs-engine-radio--success";
       } else {
-        return "ibs-choose-item ibs-engine-radio";
+        return "ibs-choose-item ibs-engine-radio ibs-engine-radio--default";
       }
     },
     prepareTeacherAiAnalysis(gen) {
@@ -331,8 +332,8 @@ export default {
       }
       gen(data);
     },
-    onImgViewer(container) {
-      onImgViewer(container)
+    handleClickImage(container) {
+      handleClickImage(container)
     },
   }
 };
