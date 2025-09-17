@@ -119,7 +119,6 @@ export default {
     handleClickImage (container) {
       if (!container) return;
       const viewer = new Viewer(container, {
-        navbar: false,
         title: false,
         toolbar: {
           zoomIn: {

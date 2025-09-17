@@ -4,7 +4,6 @@ const handleClickImage = (container) => {
   console.log('handleClickImage', container);
   if (!container) return;
   const viewer = new Viewer(container, {
-    navbar: false,
     title: false,
     toolbar: {
       zoomIn: {
