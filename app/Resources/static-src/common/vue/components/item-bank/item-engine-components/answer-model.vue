@@ -69,7 +69,7 @@
               v-else
               class="ibs-stem ibs-editor-text"
               v-html="replaceHtmlSpace(question.stem)"
-              @click="onImgViewer($event.target)"
+              @click="handleClickImage($event.target)"
             ></div>
 
             <div
@@ -176,7 +176,7 @@ import AiAnalysis from "../ai-analysis";
 import Emitter from "common/vue/mixins/emitter";
 import Locale from "common/vue/mixins/locale";
 import loadScript from "load-script";
-import { onImgViewer } from 'common/viewer';
+import { handleClickImage } from 'common/viewer';
 
 export default {
   name: "answer-model",
@@ -501,8 +501,8 @@ export default {
         this.question.analysis += analysis;
       }
     },
-    onImgViewer(container) {
-      onImgViewer(container)
+    handleClickImage(container) {
+      handleClickImage(container)
     },
   }
 };

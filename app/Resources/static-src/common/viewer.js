@@ -1,25 +1,51 @@
 import Viewer from 'viewerjs';
 
-const onImgViewer = (container) => {
+const handleClickImage = (container) => {
+  if (!container) return;
   const viewer = new Viewer(container, {
+    minZoomRatio: 1,
     navbar: false,
     title: false,
     toolbar: {
-      zoomIn: true,
-      zoomOut: true,
-      oneToOne: true,
-      reset: true,
+      zoomIn: {
+        show: true,
+        size: 'large',
+      },
+      zoomOut: {
+        show: true,
+        size: 'large',
+      },
+      oneToOne: {
+        show: true,
+        size: 'large',
+      },
+      reset: {
+        show: true,
+        size: 'large',
+      },
       prev: false,
       play: false,
       next: false,
-      rotateLeft: true,
-      rotateRight: true,
-      flipHorizontal: true,
-      flipVertical: true,
+      rotateLeft: {
+        show: true,
+        size: 'large',
+      },
+      rotateRight: {
+        show: true,
+        size: 'large',
+      },
+      flipHorizontal: {
+        show: true,
+        size: 'large',
+      },
+      flipVertical: {
+        show: true,
+        size: 'large',
+      },
     }
   });
 }
 
 export {
-  onImgViewer,
+  handleClickImage,
 };
