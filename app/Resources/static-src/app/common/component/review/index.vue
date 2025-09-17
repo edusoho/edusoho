@@ -165,7 +165,7 @@ export default {
       return this.paging.offset;
     },
     reviewEmptyHtml() {
-      return '暂无评价哦～';
+      return Translator.trans('goods.show_page.tab.summary_empty_tips');
     }
   },
   props: {

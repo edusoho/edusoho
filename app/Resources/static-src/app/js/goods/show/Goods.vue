@@ -76,7 +76,7 @@
               <div v-if="bindItemBankExerciseList.length > 1"
                    class="show-button"
                    @click="showItemBanKDrawer">
-                <div>{{ `查看全部（${bindItemBankExerciseList.length}）` }}</div>
+                <div><span>{{'goods.show_page.tab.question_bank.show'|trans }}</span><span>{{ `(${bindItemBankExerciseList.length})` }}</span></div>
                 <a-icon type="right" class="icon"/>
               </div>
             </div>
@@ -92,9 +92,9 @@
                       <div class="title">{{ bindItemBankExerciseList[0].itemBankExercise.title }}</div>
                     </a-tooltip>
                     <div class="exercise-container">
-                      <div class="title">章节练习：<span>{{ bindItemBankExerciseList[0].chapterExerciseNum }}</span></div>
+                      <div class="title">{{'goods.show_page.tab.question_bank.chapter_exercise'|trans }}：<span>{{ `${bindItemBankExerciseList[0].chapterExerciseNum}` }}</span></div>
                       <div class="flex justify-between">
-                        <div class="title">试卷练习：<span>{{ bindItemBankExerciseList[0].assessmentNum }}</span></div>
+                        <div class="title">{{'goods.show_page.tab.question_bank.test_paper_practice'|trans }}：<span>{{ `${bindItemBankExerciseList[0].assessmentNum}` }}</span></div>
                         <div class="col-price"><span>¥</span>{{`${integerPart(bindItemBankExerciseList[0].itemBankExercise.price)}.` }}<span>{{decimalPart(bindItemBankExerciseList[0].itemBankExercise.price)}}</span></div>
                       </div>
                     </div>
@@ -103,7 +103,7 @@
                 </div>
               </div>
               <div class="show-button">
-                <a-button type="primary" ghost @click.stop="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">查看</a-button>
+                <a-button type="primary" ghost @click.stop="toItemBankExercisePage(bindItemBankExerciseList[0].itemBankExercise.id)">{{'goods.show_page.tab.question_bank.check'|trans }}</a-button>
               </div>
             </div>
             <div v-else class="empty">{{'goods.show_page.tab.question_bank.empty'|trans }}</div>
@@ -137,9 +137,9 @@
                           <div class="title">{{ item.itemBankExercise.title }}</div>
                         </a-tooltip>
                         <div class="exercise-container">
-                          <div class="exercise">章节练习：<span>{{ item.chapterExerciseNum }}</span></div>
+                          <div class="exercise">{{'goods.show_page.tab.question_bank.chapter_exercise'|trans }}：<span>{{ `${item.chapterExerciseNum}` }}</span></div>
                           <div class="flex justify-between">
-                            <div class="exercise">试卷练习：<span>{{ item.assessmentNum }}</span></div>
+                            <div class="exercise">{{'goods.show_page.tab.question_bank.test_paper_practice'|trans }}：<span>{{ `${item.assessmentNum}` }}</span></div>
                             <div class="col-price"><span>¥</span>{{`${integerPart(item.itemBankExercise.price)}.` }}<span>{{ decimalPart(item.itemBankExercise.price) }}</span></div>
                           </div>
                         </div>
@@ -148,13 +148,13 @@
                     </div>
                   </div>
                   <div class="show-button">
-                    <a-button type="primary" ghost @click.stop="toItemBankExercisePage(item.itemBankExercise.id)">查看</a-button>
+                    <a-button type="primary" ghost @click.stop="toItemBankExercisePage(item.itemBankExercise.id)">{{'goods.show_page.tab.question_bank.check'|trans }}</a-button>
                   </div>
                 </div>
                 <a-divider v-if="bindItemBankExerciseList.length > 1 && index + 1 !== bindItemBankExerciseList.length"/>
               </div>
             </div>
-            <div class="footer"><a-button @click="closeItemBanKDrawer">关闭</a-button></div>
+            <div class="footer"><a-button @click="closeItemBanKDrawer">{{'goods.show_page.tab.question_bank.close'|trans }}</a-button></div>
           </a-drawer>
 
           <div v-if="goods.product.targetType === 'course'" id="info-left-3"
@@ -336,7 +336,9 @@ export default {
       return Translator.trans('validate.learn_content.closed');
     },
     summaryHtml() {
-      if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
+      if (!this.goods.summary) {
+        return Translator.trans('goods.show_page.tab.summary_empty_tips');
+      }
       return this.goods.summary.replace(/(<table[^>]*>.*?<\/table>)/gs, '<div style="width: 100%; overflow-x: auto;">$1</div>');
     },
     getReportType() {
