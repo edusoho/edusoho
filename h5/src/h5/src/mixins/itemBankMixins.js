@@ -119,7 +119,6 @@ export default {
     handleClickImage (container) {
       if (!container) return;
       const viewer = new Viewer(container, {
-        minZoomRatio: 1,
         navbar: false,
         title: false,
         toolbar: {
@@ -131,10 +130,7 @@ export default {
             show: true,
             size: 'large',
           },
-          oneToOne: {
-            show: true,
-            size: 'large',
-          },
+          oneToOne: false,
           reset: {
             show: true,
             size: 'large',
