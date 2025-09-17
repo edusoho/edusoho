@@ -35,7 +35,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
-                @click="handleClickImage($event.target)"
+                @click="handleClickImage($event.currentTarget)"
               ></div>
             </div>
 
@@ -60,7 +60,7 @@
                 <div
                   class="ibs-table-cell ibs-editor-text"
                   v-html="item.radio.text"
-                  @click="handleClickImage($event.target)"
+                  @click="handleClickImage($event.currentTarget)"
                 ></div>
               </div>
               <div
@@ -78,7 +78,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
-                @click="handleClickImage($event.target)"
+                @click="handleClickImage($event.currentTarget)"
               ></div>
             </div>
           </a-radio>
@@ -287,7 +287,7 @@ export default {
       } else if (this.question.answer[0] == item && this.mode !== "do") {
         return "ibs-choose-item ibs-engine-radio ibs-engine-radio--success";
       } else {
-        return "ibs-choose-item ibs-engine-radio ibs-engine-radio--default";
+        return "ibs-choose-item ibs-engine-radio";
       }
     },
 

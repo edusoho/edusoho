@@ -135,9 +135,15 @@ export default {
             show: true,
             size: 'large',
           },
-          prev: false,
+          prev: {
+            show: true,
+            size: 'large',
+          },
           play: false,
-          next: false,
+          next: {
+            show: true,
+            size: 'large',
+          },
           rotateLeft: {
             show: true,
             size: 'large',
