@@ -312,7 +312,7 @@ export default {
       } else if (this.question.answer.includes(item) && this.mode !== "do") {
         return "ibs-choose-item ibs-engine-radio ibs-engine-radio--success";
       } else {
-        return "ibs-choose-item ibs-engine-radio ibs-engine-radio--default";
+        return "ibs-choose-item ibs-engine-radio";
       }
     },
     prepareTeacherAiAnalysis(gen) {

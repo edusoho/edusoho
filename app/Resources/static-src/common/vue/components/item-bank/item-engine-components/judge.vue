@@ -288,7 +288,7 @@ export default {
       } else if (this.question.answer.includes(item)) {
         return "ibs-choose-item ibs-engine-radio ibs-engine-radio--success";
       } else {
-        return "ibs-choose-item ibs-engine-radio ibs-engine-radio--default";
+        return "ibs-choose-item ibs-engine-radio";
       }
     },
     getStatus() {

@@ -287,7 +287,7 @@ export default {
       } else if (this.question.answer[0] == item && this.mode !== "do") {
         return "ibs-choose-item ibs-engine-radio ibs-engine-radio--success";
       } else {
-        return "ibs-choose-item ibs-engine-radio ibs-engine-radio--default";
+        return "ibs-choose-item ibs-engine-radio";
       }
     },
 
