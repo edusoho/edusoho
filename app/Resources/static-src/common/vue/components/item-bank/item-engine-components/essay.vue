@@ -55,7 +55,7 @@
           <div
             class="ibs-content ibs-editor-text"
             v-html="question.answer[0]"
-            @click="handleClickImage($event.target)"
+            @click="handleClickImage($event.currentTarget)"
           ></div>
         </template>
       </div>
@@ -65,7 +65,7 @@
         <div
           class="ibs-content ibs-editor-text"
           v-html="question.answer[0]"
-          @click="handleClickImage($event.target)"
+          @click="handleClickImage($event.currentTarget)"
         ></div>
         <div class="ibs-content" v-if="needScore">
           <div class="ibs-position-relative">
@@ -105,7 +105,7 @@
             <div
               class="ibs-content ibs-editor-text"
               v-html="question.answer[0]"
-              @click="handleClickImage($event.target)"
+              @click="handleClickImage($event.currentTarget)"
             ></div>
           </div>
           <div class="ibs-mb4">
@@ -114,7 +114,7 @@
               v-if="reportAnswer.response[0] !== '' && reportAnswer.response[0]"
               class="ibs-content ibs-editor-text"
               v-html="reportAnswer.response[0]"
-              @click="handleClickImage($event.target)"
+              @click="handleClickImage($event.currentTarget)"
             ></div>
             <div v-else class="ibs-content">
               {{ t("itemEngine.answerStatus.no_answer") }}
@@ -149,7 +149,7 @@
                     v-html="
                       `${reportAnswer.comment || t('itemReport.no_comment')}`
                     "
-                    @click="handleClickImage($event.target)"
+                    @click="handleClickImage($event.currentTarget)"
                   ></div>
                 </div>
               </div>
@@ -173,7 +173,7 @@
         <div
           class="ibs-content ibs-editor-text"
           v-html="question.answer[0]"
-          @click="handleClickImage($event.target)"
+          @click="handleClickImage($event.currentTarget)"
         ></div>
       </div>
     </template>

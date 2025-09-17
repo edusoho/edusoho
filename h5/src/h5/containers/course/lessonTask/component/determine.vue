@@ -5,7 +5,7 @@
         <span v-if="itemdata.parentTitle" :class="['material-tags']">
           {{ subject }}
         </span>
-        <span class="material-text material-icon" v-html="stem" @click="handleClickImage($event.target)" >
+        <span class="material-text material-icon" v-html="stem" @click="handleClickImage($event.currentTarget)" >
         </span>
       </div>
       <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'show-up-icon': isShowDownIcon }]"></i>
@@ -22,12 +22,12 @@
       </span>
       <div v-if="!itemdata.parentTitle" class="subject-stem">
         <span class="serial-number">{{ itemdata.seq }}、</span>
-        <div class="subject-stem__content rich-text" v-html="stem" @click="handleClickImage($event.target)" />
+        <div class="subject-stem__content rich-text" v-html="stem" @click="handleClickImage($event.currentTarget)" />
       </div>
 
       <div  v-if="itemdata.parentTitle" :class="['material-title',{'material-title-weight': itemdata.parentTitle}]">
         <span class="serial-number"><span class="material-type">[{{ $t('courseLearning.determine') }}] </span> {{ itemdata.materialIndex }}、</span>
-        <div class="rich-text" v-html="itemdata.stem" @click="handleClickImage($event.target)" />
+        <div class="rich-text" v-html="itemdata.stem" @click="handleClickImage($event.currentTarget)" />
       </div>
 
       <attachement-preview
@@ -102,7 +102,7 @@
         </div>
         <div class="analysis-color">
           <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
-          <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target)" />
+          <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.currentTarget)" />
           <span v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</span>
         </div>
         <div class="ai-analysis" v-show="itemdata.aiAnalysisEnable">
@@ -139,7 +139,7 @@
     </div>
     <div v-if="parentType && parentType === 'material' && !disabledData" class="subject-footer">
       <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
-      <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target)" />
+      <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.currentTarget)" />
       <span v-else>{{ $t('courseLearning.noParsing') }}</span>
       <attachement-preview
         v-for="item in getAttachementMaterialType('analysis')"

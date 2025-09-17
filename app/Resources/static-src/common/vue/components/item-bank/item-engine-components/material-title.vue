@@ -16,7 +16,7 @@
             <div
               class=" ibs-editor-text"
               v-html="material"
-              @click="handleClickImage($event.target)"
+              @click="handleClickImage($event.currentTarget)"
             >
             </div>
             <div

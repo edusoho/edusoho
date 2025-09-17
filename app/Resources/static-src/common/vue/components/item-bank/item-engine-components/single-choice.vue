@@ -35,7 +35,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
-                @click="handleClickImage($event.target)"
+                @click="handleClickImage($event.currentTarget)"
               ></div>
             </div>
 
@@ -60,7 +60,7 @@
                 <div
                   class="ibs-table-cell ibs-editor-text"
                   v-html="item.radio.text"
-                  @click="handleClickImage($event.target)"
+                  @click="handleClickImage($event.currentTarget)"
                 ></div>
               </div>
               <div
@@ -78,7 +78,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
-                @click="handleClickImage($event.target)"
+                @click="handleClickImage($event.currentTarget)"
               ></div>
             </div>
           </a-radio>

@@ -69,7 +69,7 @@
               v-else
               class="ibs-stem ibs-editor-text"
               v-html="replaceHtmlSpace(question.stem)"
-              @click="handleClickImage($event.target)"
+              @click="handleClickImage($event.currentTarget)"
             ></div>
 
             <div
