@@ -6,10 +6,22 @@ const i18n = createI18n({
   globalInjection: true,
   messages: {
     zh_CN: {
-
+      title: {
+        chapterExercises: '章节练习',
+        testPaperPractice: '试卷练习',
+      },
+      btn: {
+        check: '查看'
+      }
     },
     en: {
-
+      title: {
+        chapterExercises: 'Chapter Exercises',
+        testPaperPractice: 'Test Paper Practice',
+      },
+      btn: {
+        check: 'Check'
+      }
     }
   }
 })
