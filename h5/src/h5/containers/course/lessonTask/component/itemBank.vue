@@ -378,6 +378,8 @@ export default {
         }, 80, 20);
         if (res.studyPlanGenerated) {
           this.aiAgentSdk.setVariable('studyPlanGenerated' ,true)
+        } else {
+          this.aiAgentSdk.setVariable('studyPlanGenerated' ,false)
         }
         this.aiAgentSdk.boot();
         if (this.canDo) {
