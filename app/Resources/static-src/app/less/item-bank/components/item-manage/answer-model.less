@@ -347,10 +347,25 @@
   .ibs-table {
     margin-left: 16px;
   }
+
+  .ant-radio-disabled+span {
+    color: rgba(0, 0, 0, .65) !important;
+  }
 }
 
-.ibs-prevent-click {
-  pointer-events: none
+.ibs-cursor-default {
+  input {
+    cursor: default !important;
+  }
+  span {
+    cursor: default !important;
+  }
+  label {
+    cursor: default !important;
+  }
+  .ibs-table {
+    cursor: default !important;
+  }
 }
 
 .ibs-engin-section {
@@ -395,7 +410,7 @@
   }
 
   .ant-radio-checked .ant-radio-inner {
-    border-color: @ibs-brand-success;
+    border-color: @ibs-brand-success !important;
 
     &:after {
       background-color: @ibs-brand-success;
@@ -404,7 +419,7 @@
 
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: @ibs-brand-success;
-    border-color: @ibs-brand-success;
+    border-color: @ibs-brand-success !important;
   }
 
   .ant-radio-checked {
@@ -420,7 +435,7 @@
 
 .ibs-engine-radio--error {
   .ant-radio-checked .ant-radio-inner {
-    border-color: @ibs-brand-danger;
+    border-color: @ibs-brand-danger !important;
 
     &:after {
       background-color: @ibs-brand-danger;
@@ -429,7 +444,7 @@
 
   .ant-checkbox-checked .ant-checkbox-inner {
     background-color: @ibs-brand-danger;
-    border-color: @ibs-brand-danger;
+    border-color: @ibs-brand-danger !important;
   }
 
   .ant-radio-checked {

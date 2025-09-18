@@ -119,20 +119,46 @@ export default {
     handleClickImage (container) {
       if (!container) return;
       const viewer = new Viewer(container, {
-        navbar: false,
         title: false,
         toolbar: {
-          zoomIn: true,
-          zoomOut: true,
-          oneToOne: true,
-          reset: true,
-          prev: false,
+          zoomIn: {
+            show: true,
+            size: 'large',
+          },
+          zoomOut: {
+            show: true,
+            size: 'large',
+          },
+          oneToOne: false,
+          reset: {
+            show: true,
+            size: 'large',
+          },
+          prev: {
+            show: true,
+            size: 'large',
+          },
           play: false,
-          next: false,
-          rotateLeft: true,
-          rotateRight: true,
-          flipHorizontal: true,
-          flipVertical: true,
+          next: {
+            show: true,
+            size: 'large',
+          },
+          rotateLeft: {
+            show: true,
+            size: 'large',
+          },
+          rotateRight: {
+            show: true,
+            size: 'large',
+          },
+          flipHorizontal: {
+            show: true,
+            size: 'large',
+          },
+          flipVertical: {
+            show: true,
+            size: 'large',
+          },
         }
       });
     },

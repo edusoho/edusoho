@@ -16,7 +16,8 @@
     <template v-slot:response_points>
       <div class="ibs-answer">
         <a-radio-group
-          :class="{ 'ibs-prevent-click ibs-width-full': mode !== 'do' }"
+          :disabled="mode !== 'do'"
+          :class="{ 'ibs-cursor-default ibs-width-full': mode !== 'do' }"
           v-model="answer"
           @change="changeAnswer"
         >
@@ -34,7 +35,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
-                @click="onImgViewer($event.target)"
+                @click="handleClickImage($event.currentTarget)"
               ></div>
             </div>
 
@@ -59,7 +60,7 @@
                 <div
                   class="ibs-table-cell ibs-editor-text"
                   v-html="item.radio.text"
-                  @click="onImgViewer($event.target)"
+                  @click="handleClickImage($event.currentTarget)"
                 ></div>
               </div>
               <div
@@ -77,7 +78,7 @@
               <div
                 class="ibs-table-cell ibs-editor-text"
                 v-html="item.radio.text"
-                @click="onImgViewer($event.target)"
+                @click="handleClickImage($event.currentTarget)"
               ></div>
             </div>
           </a-radio>
@@ -131,7 +132,7 @@
 <script>
 import Locale from "common/vue/mixins/locale";
 import answerModel from "./answer-model";
-import { onImgViewer } from 'common/viewer';
+import { handleClickImage } from 'common/viewer';
 
 export default {
   name: "single-choice",
@@ -320,8 +321,8 @@ export default {
       }
       gen(data);
     },
-    onImgViewer(container) {
-      onImgViewer(container)
+    handleClickImage(container) {
+      handleClickImage(container)
     },
   }
 };

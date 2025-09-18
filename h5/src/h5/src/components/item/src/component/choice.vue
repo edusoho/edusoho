@@ -6,7 +6,7 @@
           <span class="ibs-material-tags">
             {{ $t('courseLearning.material') }}
           </span>
-          <span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.target)"></span>
+          <span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.currentTarget)"></span>
         </div>
         <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'ibs-show-up-icon': isShowDownIcon }]"></i>
         <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'ibs-show-down-icon': isShowUpIcon}]"></i>
@@ -24,7 +24,7 @@
           <div>
             <span v-if="currentItem.type === 'material'" class="ibs-serial-number"><span class="ibs-material-type">[{{ subject }}] </span> {{ Number(commonData.current) }}、</span>
             <span v-else class="ibs-serial-number">{{ Number(commonData.current) }}、</span>
-            <div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.target)"/>
+            <div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.currentTarget)"/>
           </div>
         </div>
         <attachement-preview
@@ -53,7 +53,7 @@
               <i class="iconfont icon-a-Frame34723"></i>
               <i class="iconfont icon-zhengque1"></i>
               <i class="iconfont icon-cuowu2"></i>
-              <div class="ibs-subject-option__content" v-html="item.checkbox.text" @click="handleClickImage($event.target)"/>
+              <div class="ibs-subject-option__content" v-html="item.checkbox.text" @click="handleClickImage($event.currentTarget)"/>
               <span
                 slot="icon"
                 :class="[
@@ -82,7 +82,7 @@
           </div>
           <div class="ibs-analysis-color">
             <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
-            <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.target)"/>
+            <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.currentTarget)"/>
             <span v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</span>
           </div>
           <div class="ai-analysis" v-show="commonData.aiAnalysisEnable">
@@ -118,7 +118,7 @@
       </div>
       <div v-if="!disabledData && currentItem.type === 'material'" class="ibs-subject-footer">
         <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
-        <span v-if="currentItem.analysis !== ''" v-html="currentItem.analysis" @click="handleClickImage($event.target)"/>
+        <span v-if="currentItem.analysis !== ''" v-html="currentItem.analysis" @click="handleClickImage($event.currentTarget)"/>
         <span v-else>{{ $t('courseLearning.noParsing') }}</span>
         <attachement-preview
           v-for="item in getAttachementByType('analysis')"

@@ -7,7 +7,7 @@
           <span class="ibs-material-tags">
             {{ $t('courseLearning.material') }}
           </span>
-          <span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.target)"></span>
+          <span :id="`current${currentItem.id}`" class="ibs-material-text" v-html="currentItem.material" @click="handleClickImage($event.currentTarget)"></span>
         </div>
         <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'ibs-show-up-icon': isShowDownIcon }]"></i>
         <i @click="changeDownIcon" :class="['iconfont', 'icon-arrow-down', {'ibs-show-down-icon': isShowUpIcon}]"></i>
@@ -25,7 +25,7 @@
           <div>
             <span v-if="currentItem.type === 'material'" class="ibs-serial-number"><span class="ibs-material-type">[{{ subject }}] </span> {{ Number(commonData.current) }}、</span>
             <span v-else class="ibs-serial-number">{{ Number(commonData.current) }}、</span>
-            <div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.target)" />
+            <div class="ibs-rich-text" v-html="getStem()" @click="handleClickImage($event.currentTarget)" />
           </div>
         </div>
         <attachement-preview
@@ -69,14 +69,14 @@
                     {'ibs-is-right-answer': status === 'right'},
                     {'ibs-is-right-answer': commonData.report.status === 'right'},
                     {'ibs-is-wrong-answer': commonData.report.status === 'wrong'},
-                  ]" style="color: #37393D;" v-html="answer" @click="handleClickImage($event.target)"></span>
+                  ]" style="color: #37393D;" v-html="answer" @click="handleClickImage($event.currentTarget)"></span>
               </div>
             </div>
             <div class="ibs-your-answer mt-16">
               {{ $t('courseLearning.correctAnswer') }}：
             </div>
             <div class="mb-16">
-              <span class="ibs-is-right-answer" v-html="commonData.answer[0]" @click="handleClickImage($event.target)"/>
+              <span class="ibs-is-right-answer" v-html="commonData.answer[0]" @click="handleClickImage($event.currentTarget)"/>
             </div>
             <div v-if="$route.query.type == 'assessment'" class="ibs-analysis-color mb-8">
               {{ $t('courseLearning.score') }}：<div>{{ commonData.report ? commonData.report.score : 0.0 }}</div>
@@ -86,7 +86,7 @@
             </div>
             <div class="ibs-analysis-color">
               {{ $t('courseLearning.analyze') }}：
-              <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.target)"/>
+              <span v-if="commonData.analysis" v-html="commonData.analysis" @click="handleClickImage($event.currentTarget)"/>
               <div v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</div>
             </div>
             <div class="ai-analysis" v-show="commonData.aiAnalysisEnable">
@@ -123,7 +123,7 @@
       </div>
       <div v-if="!disabledData && currentItem.type === 'material'" class="ibs-subject-footer">
         {{ $t('courseLearning.analyze') }}：
-        <span v-if="currentItem.analysis !== ''" v-html="currentItem.analysis" @click="handleClickImage($event.target)"/>
+        <span v-if="currentItem.analysis !== ''" v-html="currentItem.analysis" @click="handleClickImage($event.currentTarget)"/>
         <span v-else>{{ $t('courseLearning.noParsing') }}</span>
         <attachement-preview
           v-for="item in getAttachementByType('analysis')"

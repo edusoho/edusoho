@@ -17,8 +17,9 @@
       <div class="ibs-answer ibs-answer--judge">
         <!-- 答题结果 -->
         <a-radio-group
+          :disabled="mode === 'report'"
           v-if="mode == 'report'"
-          :class="{ 'ibs-prevent-click': mode === 'report' }"
+          :class="{ 'ibs-cursor-default': mode === 'report' }"
           v-model="answer"
         >
           <a-radio
@@ -39,9 +40,10 @@
 
         <!-- 做题以及预览任务 -->
         <a-radio-group
+          :disabled="mode !== 'do'"
           v-if="mode == 'do'"
           v-model="answer"
-          :class="{ 'ibs-prevent-click': mode !== 'do' }"
+          :class="{ 'ibs-cursor-default': mode !== 'do' }"
           @change="changeAnswer"
         >
           <a-radio
@@ -55,9 +57,10 @@
 
         <!-- 预览题目 -->
         <a-radio-group
+          disabled
           v-if="mode === 'preview' || mode === 'import'"
           v-model="answer"
-          class="ibs-prevent-click"
+          class="ibs-cursor-default"
         >
           <a-radio
             v-for="(item, index) in question.response_points"
@@ -72,10 +75,11 @@
 
         <!-- 答题分布 -->
         <a-radio-group
+          :disabled="mode !== 'do'"
           v-if="mode == 'analysis'"
           v-model="answer"
           :class="{
-            'ibs-prevent-click ibs-width-full': mode !== 'do'
+            'ibs-cursor-default ibs-width-full': mode !== 'do'
           }"
           @change="changeAnswer"
         >

@@ -14,8 +14,8 @@
       </span>
       <div class="clearfix question-stem">
         <div class="pull-left">{{ order }}、</div>
-        <div v-html="formateQuestionStem" @click="handleClickImage($event.target.src)" />
-        <attachement-preview 
+        <div v-html="formateQuestionStem" @click="handleClickImage($event.currentTarget)" />
+        <attachement-preview
           v-for="item in getAttachementByType('stem')"
           :attachment="item"
           :key="item.id" />
@@ -41,7 +41,7 @@
             <div :class="[{'options': questions.answer_mode !== 'text'}]" style="color: #00B42A;" v-html="rightAnswer"></div>
           </div>
         </div>
-        <attachement-preview 
+        <attachement-preview
           v-for="item in getAttachementByType('answer')"
           :attachment="item"
           :key="item.id" />
@@ -49,7 +49,7 @@
           <span class="float-left">{{ $t('courseLearning.analyze') }}：</span>
           <span class="analysis-content mt10" v-html="questions.analysis || $t('wrongQuestion.noParsing')"></span>
           <div class="analysis-content">
-            <attachement-preview 
+            <attachement-preview
               v-for="item in getAttachementByType('analysis')"
               :attachment="item"
               :key="item.id" />
@@ -261,8 +261,8 @@ export default {
       return this.questions.attachments.filter(item => item.module === type) || []
     },
     getResourceToken(globalId) {
-      return Api.getItemDetail({ 
-        params: { globalId } 
+      return Api.getItemDetail({
+        params: { globalId }
       })
     },
     yourAnswerShow() {

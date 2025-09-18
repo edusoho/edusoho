@@ -16,7 +16,7 @@
             <div
               class=" ibs-editor-text"
               v-html="material"
-              @click="onImgViewer($event.target)"
+              @click="handleClickImage($event.currentTarget)"
             >
             </div>
             <div
@@ -47,7 +47,7 @@
 <script>
 import Locale from "common/vue/mixins/locale";
 import attachmentPreview from "../attachment-preview";
-import { onImgViewer } from 'common/viewer';
+import { handleClickImage } from 'common/viewer';
 
 export default {
   name: "material-title",
@@ -88,8 +88,8 @@ export default {
 
       return result;
     },
-    onImgViewer(container) {
-      onImgViewer(container)
+    handleClickImage(container) {
+      handleClickImage(container)
     },
   }
 };

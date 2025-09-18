@@ -5,7 +5,7 @@
         <span v-if="itemdata.parentTitle" :class="['material-tags']">
           {{ subject }}
         </span>
-        <span class="material-text material-icon" v-html="stem" @click="handleClickImage($event.target.src)">
+        <span class="material-text material-icon" v-html="stem" @click="handleClickImage($event.currentTarget)">
         </span>
       </div>
       <i @click="changeUpIcon" :class="['iconfont', 'icon-arrow-up', {'show-up-icon': isShowDownIcon }]"></i>
@@ -22,12 +22,12 @@
       </span>
       <div v-if="!itemdata.parentTitle" class="subject-stem">
         <div class="serial-number">{{ itemdata.seq }}、</div>
-        <div class="rich-text" v-html="stem" @click="handleClickImage($event.target.src)" />
+        <div class="rich-text" v-html="stem" @click="handleClickImage($event.currentTarget)" />
       </div>
 
       <div v-if="itemdata.parentTitle" :class="['material-title',{'material-title-weight': itemdata.parentTitle}]">
         <span class="serial-number"><span class="material-type">[{{ $t('courseLearning.essay') }}] </span> {{ itemdata.materialIndex }}、</span>
-        <div class="rich-text" v-html="itemdata.stem" @click="handleClickImage($event.target.src)" />
+        <div class="rich-text" v-html="itemdata.stem" @click="handleClickImage($event.currentTarget)" />
       </div>
 
       <attachement-preview
@@ -68,21 +68,21 @@
                 :src="wrong"
                 alt=""
                 class="fill-status">
-              <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
-              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
-              <span v-if="itemdata.testResult.status === 'none'" class="your-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span class="is-right-answer" v-if="(exerciseMode == '' &&  question.length > 0 && question[0].status === 'right') || (itemdata.testResult.status === 'right' && itemdata.testResult.status !== 'none')" v-html="answer[0]" @click="handleClickImage($event.currentTarget)"></span>
+              <span class="is-wrong-answer" v-else-if="(question.length > 0 && question[0].status === 'wrong') || (itemdata.testResult.status === 'wrong') || (itemdata.testResult.status === 'noAnswer') || (itemdata.testResult.status === 'partRight')" v-html="answer[0]" @click="handleClickImage($event.currentTarget)"></span>
+              <span v-if="itemdata.testResult.status === 'none'" class="your-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.currentTarget)"></span>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer is-wrong-answer"> {{ $t('courseLearning.unanswered') }}</span>
             </div>
             <div v-else>
               <span v-if="answer[0] === '' || itemdata.testResult.answer && itemdata.testResult.answer.length === 0" class="your-answer"> {{ $t('courseLearning.unanswered') }}</span>
-              <span class="essay-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.target.src)"></span>
+              <span class="essay-answer" style="color: #37393D;" v-html="answer[0]" @click="handleClickImage($event.currentTarget)"></span>
             </div>
           </div>
           <div class="your-answer mt-16">
             {{ $t('courseLearning.correctAnswer') }}：
           </div>
           <div class="mb-16">
-            <span class="is-right-answer" v-html="itemdata.answer[0]" @click="handleClickImage($event.target.src)" />
+            <span class="is-right-answer" v-html="itemdata.answer[0]" @click="handleClickImage($event.currentTarget)" />
           </div>
           <div v-if="mode === 'exam'" class="analysis-color mb-8">
             {{ $t('courseLearning.score') }}：<div>{{ itemdata.testResult ? itemdata.testResult.score : 0.0 }}</div>
@@ -92,7 +92,7 @@
           </div>
           <div class="analysis-color">
             {{ $t('courseLearning.analyze') }}：
-            <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.target.src)" />
+            <span v-if="analysis" v-html="analysis" @click="handleClickImage($event.currentTarget)" />
             <div v-else ref="aiAnalysis">{{ $t('courseLearning.noParsing') }}</div>
           </div>
           <div class="ai-analysis" v-show="itemdata.aiAnalysisEnable">
@@ -130,7 +130,7 @@
     </div>
     <div v-if="parentType && parentType === 'material' && !disabledData" class="subject-footer">
       {{ $t('courseLearning.analyze') }}：
-      <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.target.src)" />
+      <span v-if="parentTitleAnalysis !== ''" v-html="parentTitleAnalysis" @click="handleClickImage($event.currentTarget)" />
       <div v-else>{{ $t('courseLearning.noParsing') }}</div>
       <attachement-preview
         v-for="item in getAttachementMaterialType('analysis')"
@@ -165,14 +165,14 @@ import attachementPreview from './attachement-preview.vue';
 import { Dialog, Toast } from 'vant'
 import isShowFooterShardow from '@/mixins/lessonTask/footerShardow';
 import refreshChoice from '@/mixins/lessonTask/swipeRefResh.js';
-import handleClickImage from '@/mixins/lessonTask/handleClickImage.js';
 import store from "@/store";
+import itemBankMixins from '@/src/mixins/itemBankMixins';
 
 const WINDOWWIDTH = document.documentElement.clientWidth
 
 export default {
   name: 'EssayType',
-  mixins: [isShowFooterShardow, refreshChoice, handleClickImage],
+  mixins: [isShowFooterShardow, refreshChoice, itemBankMixins],
   components: {
     attachementPreview
   },
