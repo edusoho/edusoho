@@ -1,7 +1,6 @@
 import Viewer from 'viewerjs';
 
 const handleClickImage = (container) => {
-  console.log('handleClickImage', container);
   if (!container) return;
   const viewer = new Viewer(container, {
     title: false,
