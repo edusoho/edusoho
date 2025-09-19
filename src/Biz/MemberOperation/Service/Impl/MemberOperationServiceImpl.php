@@ -24,6 +24,14 @@ class MemberOperationServiceImpl extends BaseService implements MemberOperationS
         return $this->getRecordDao()->create($record);
     }
 
+    public function createRecords($records)
+    {
+        if (empty($records)) {
+            return;
+        }
+        $this->getRecordDao()->batchCreate($records);
+    }
+
     public function countGroupByUserId($field, $conditions)
     {
         $result = $this->getRecordDao()->countGroupByUserId($field, $conditions);
