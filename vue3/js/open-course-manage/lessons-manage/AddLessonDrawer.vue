@@ -396,7 +396,7 @@ watch(() => props.drawerType,async (newType) => {
             <a-table
               :columns="replays.columns"
               :data-source="replays.data"
-              :row-key="replay => replay.replayId"
+              :row-key="replay => replay.id"
               :loading="replays.loading"
               :pagination="false"
             >
