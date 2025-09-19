@@ -3,6 +3,7 @@ import {onBeforeMount, ref} from 'vue';
 import Api from '../../../api';
 import AntConfigProvider from '../AntConfigProvider.vue';
 import {open} from '../../common';
+import {t} from './vue-lang';
 
 const props = defineProps({
   bindType: {required: true},
@@ -36,13 +37,13 @@ onBeforeMount(async () => {
                 <div class="text-16 font-medium text-[#37393D] max-w-150 md:max-w-260 truncate hover:text-[#18AD3B] cursor-pointer" @click="open(`/item_bank_exercise/${item.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ item.itemBankExercise.title }}</div>
               </a-tooltip>
               <div class="flex flex-col md:flex-row">
-                <div class="text-12 text-[#919399] font-normal mr-16 mt-4"><span class="text-[#37393D] mr-2">{{ item.chapterExerciseNum }}</span>章节练习</div>
-                <div class="text-12 text-[#919399] font-normal mt-4"><span class="text-[#37393D] mr-2">{{ item.assessmentNum }}</span>试卷练习</div>
+                <div class="text-12 text-[#919399] font-normal mr-16 mt-4"><span class="text-[#37393D] mr-2">{{ item.chapterExerciseNum }}</span>{{ t('title.chapterExercises') }}</div>
+                <div class="text-12 text-[#919399] font-normal mt-4"><span class="text-[#37393D] mr-2">{{ item.assessmentNum }}</span>{{ t('title.testPaperPractice') }}</div>
               </div>
             </div>
           </div>
           <div class="hidden md:flex md:items-center">
-            <a-button type="primary" ghost @click="open(`/item_bank_exercise/${item.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">查看</a-button>
+            <a-button type="primary" ghost @click="open(`/item_bank_exercise/${item.itemBankExercise.id}?bindId=${props.bindId}&bindType=${props.bindType}`)">{{ t('btn.check') }}</a-button>
           </div>
         </div>
         <div v-if="bindItemBankList.length  > index + 1" class="border border-t-0 border-[#E5E6EB] border-solid w-full block md:hidden my-16 md:my-0"></div>

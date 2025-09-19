@@ -1906,6 +1906,13 @@ course.info.video.convert.audio.start: 'Open'
 course.info.video.convert.audio.close: 'Close'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 goods.show_page.tab.intro: Goods Intro
+goods.show_page.tab.question_bank: Question Bank
+goods.show_page.tab.question_bank.show: View All
+goods.show_page.tab.question_bank.empty: There is no bound question bank for now~
+goods.show_page.tab.question_bank.chapter_exercise: Chapter Exercises
+goods.show_page.tab.question_bank.test_paper_practice: Test Paper Practice
+goods.show_page.tab.question_bank.check: Check
+goods.show_page.tab.question_bank.close: Close
 goods.show_page.tab.catalogue: Learn Catalogue
 goods.show_page.tab.catalogue.empty: After purchasing, you can view the course catalog~
 goods.show_page.tab.reviews: Reviews

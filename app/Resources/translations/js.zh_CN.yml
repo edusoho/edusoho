@@ -1869,6 +1869,13 @@ course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
   例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
   对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
 goods.show_page.tab.intro: 简介
+goods.show_page.tab.question_bank: 题库
+goods.show_page.tab.question_bank.show: 查看全部
+goods.show_page.tab.question_bank.empty: 暂无绑定的题库哦～
+goods.show_page.tab.question_bank.chapter_exercise: 章节练习
+goods.show_page.tab.question_bank.test_paper_practice: 试卷练习
+goods.show_page.tab.question_bank.check: 查看
+goods.show_page.tab.question_bank.close: 关闭
 goods.show_page.tab.catalogue: 学习目录
 goods.show_page.tab.catalogua: 课程题库
 goods.show_page.tab.catalogue.empty: 购买完成后即可查看课程目录～
