@@ -2,9 +2,9 @@ import {createApp} from 'vue';
 import {Button, Empty, Drawer, Form, Input, DatePicker, InputNumber, Switch, Select, Spin, Table, Pagination, Modal} from 'ant-design-vue';
 import {createStyleTag, setCurrentPrimaryColor} from 'vue3/js/common';
 import 'vue3/main.less';
-import LessonsManage from './LessonsManage.vue';
+import Index from './Index.vue';
 
-const app = createApp(LessonsManage, {
+const app = createApp(Index, {
   course: $('#lessons-manage').data('course')
 });
 
