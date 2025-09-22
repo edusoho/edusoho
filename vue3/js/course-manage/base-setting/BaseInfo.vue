@@ -269,7 +269,7 @@ onMounted(() => {
   <div class="flex flex-col w-full">
     <div class="flex flex-col relative" v-if="!props.manage.isUnMultiCourseSet">
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
-           style="width: calc(100% + 64px);">基础信息
+           style="width: calc(100% + 64px);">{{ t('title.basicInformation') }}
       </div>
       <a-form
         ref="formRef"
@@ -279,11 +279,11 @@ onMounted(() => {
         :wrapper-col="{ span: 16 }"
       >
         <a-form-item
-          label="计划名字"
+          :label="t('label.planName')"
           name="title"
           :validateTrigger="['blur']"
           :rules="[
-          { required: true, message: '请输入计划名称' },
+          { required: true, message: t('validate.inputPlanName') },
           { validator: interByteValidator, maxSize: 100, minSize: 2 },
           { validator: courseTitleValidator },
           ]"
@@ -291,7 +291,7 @@ onMounted(() => {
           <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
         <a-form-item
-          label="计划副标题"
+          :label="t('label.subheadingOfThePlan')"
           name="subtitle"
           :validateTrigger="['blur']"
           :rules="[
@@ -305,7 +305,7 @@ onMounted(() => {
 
     <div class="relative" v-else>
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
-           style="width: calc(100% + 64px);">基础信息
+           style="width: calc(100% + 64px);">{{ t('title.basicInformation') }}
       </div>
       <a-form
         ref="formRef"
@@ -315,11 +315,11 @@ onMounted(() => {
         :wrapper-col="{ span: 16 }"
       >
         <a-form-item
-          label="课程标题"
+          :label="t('label.courseTitle')"
           name="title"
           :validateTrigger="['blur']"
           :rules="[
-          { required: true, message: '请输入课程标题' },
+          { required: true, message: t('validate.inputCourseTitle') },
           { validator: courseTitleLengthValidator },
           { validator: courseTitleValidator },
           ]"
@@ -327,29 +327,29 @@ onMounted(() => {
           <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
         <a-form-item
-          label="课程副标题"
+          :label="t('label.courseSubtitle')"
           name="subtitle"
           :validateTrigger="['blur']"
           :rules="[
-          { max: 50, message: '最多支持50个字符' },
+          { max: 50, message: t('validate.courseSubtitleLimit') },
           ]"
         >
           <a-textarea v-model:value="formState.subtitle" :rows="3"/>
         </a-form-item>
         <a-form-item
-          label="标签"
+          :label="t('label.tag')"
         >
           <a-select
             v-model:value="formState.tags"
             mode="multiple"
-            placeholder="请选择"
+            :placeholder="t('placeholder.pleaseSelect')"
             :options="tabOptions"
             allow-clear
           ></a-select>
-          <div class="text-[#adadad] text-14 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
+          <div class="text-[#adadad] text-14 mt-8 ">{{ t('tip.tag') }}</div>
         </a-form-item>
         <a-form-item
-          label="分类"
+          :label="t('label.category')"
         >
           <a-tree-select
             v-model:value="formState.categoryId"
@@ -363,7 +363,7 @@ onMounted(() => {
         </a-form-item>
         <a-form-item
           v-if="props.manage.enableOrg === 1"
-          label="组织机构"
+          :label="t('label.organization')"
         >
           <a-tree-select
             v-model:value="formState.orgCode"
@@ -376,13 +376,13 @@ onMounted(() => {
           ></a-tree-select>
         </a-form-item>
         <a-form-item
-          label="连载状态"
+          :label="t('label.serializeMode')"
         >
           <a-radio-group v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
         </a-form-item>
         <a-form-item
-          label="封面图片"
+          :label="t('label.coverPicture')"
         >
           <a-upload
             ref="upload"
@@ -397,18 +397,18 @@ onMounted(() => {
             <div v-else class="flex flex-col items-center relative">
               <div class="flex flex-col items-center">
                 <PlusOutlined/>
-                <div class="mt-8">上传图片</div>
+                <div class="mt-8">{{ t('tip.uploadPictures') }}</div>
               </div>
             </div>
           </a-upload>
-          <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
+          <div class="text-[#a1a1a1]">{{ t('tip.coverPicture') }}</div>
         </a-form-item>
         <a-form-item
-          label="课程简介"
+          :label="t('label.courseIntroduction')"
         >
           <textarea id="course-introduction"></textarea>
           <div class="text-[#a1a1a1] font-normal text-14 leading-28">
-            为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+            {{ t('tip.courseIntroduction') }}
           </div>
         </a-form-item>
       </a-form>
@@ -422,13 +422,13 @@ onMounted(() => {
       @cancel="cropperModalVisible = false"
     >
       <vue-cropper ref="cropperInstance" :src="coverUrl" :aspectRatio="16/9"></vue-cropper>
-      <template #title>裁剪图片</template>
+      <template #title>{{ t('title.cropThePicture') }}</template>
       <template #footer>
         <div class="flex justify-between">
-          <a-button @click="reSelectCover">重新选择</a-button>
+          <a-button @click="reSelectCover">{{ t('btn.reselect') }}</a-button>
           <div>
-            <a-button @click="hideCropperModal">取消</a-button>
-            <a-button type="primary" @click="saveCropperCover">保存图片</a-button>
+            <a-button @click="hideCropperModal">{{ t('btn.cancel') }}</a-button>
+            <a-button type="primary" @click="saveCropperCover">{{ t('btn.saveTheImage') }}</a-button>
           </div>
         </div>
       </template>
