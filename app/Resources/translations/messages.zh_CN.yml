@@ -1992,6 +1992,9 @@ course.files_manage.tips: 提示：课程文件需要<strong class="color-warnin
 
 course.plan_overview: 数据概览
 
+course.student_incorrect_questions: 学员错题
+course.ai_assisted_learning_service: AI伴学助手
+course.question_bank_practice_management: 题库练习管理
 course.plan_task: 课时管理
 course.announcement_manage: 公告管理
 course.plan_task.deadline_learn_tips: >
