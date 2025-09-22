@@ -97,13 +97,19 @@ export default class Register {
   initEmailMobileMsg() {
     const register_mode = $('input[name="register_mode"]').val();
 
+    $('.email_mobile_msg').removeClass('hidden')
+    $('.js-email_mobile_msg-input').removeClass('hidden')
     if (register_mode === 'email') {
-      $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
-      $('.js-email_mobile_msg-input').attr('name', 'email_code')
-      $('.js-email_mobile_msg-input').attr('id', 'email_code')
+      if ($('input[name="email_enabled"]').val() === 'opened') {
+        $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
+        $('.js-email_mobile_msg-input').attr('name', 'email_code')
+        $('.js-email_mobile_msg-input').attr('id', 'email_code')
 
-      $('.js-email_mobile_msg-label').text('邮箱验证码')
-      $('.js-email_mobile_msg-label').attr('for', 'email_code')
+        $('.js-email_mobile_msg-label').text('邮箱验证码')
+        $('.js-email_mobile_msg-label').attr('for', 'email_code')
+      } else {
+        $('.email_mobile_msg').addClass('hidden')
+      }
     } else if (register_mode === 'mobile') {
       $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
       $('.js-email_mobile_msg-input').attr('name', 'sms_code')
@@ -112,13 +118,15 @@ export default class Register {
       $('.js-email_mobile_msg-label').text('短信验证码')
       $('.js-email_mobile_msg-label').attr('for', 'sms_code')
     } else {
-      if ($('#register_mode_switch').attr('mode') === 'email') {
+      if ($('#register_mode_switch').attr('mode') === 'email' && $('input[name="email_enabled"]').val() === 'opened') {
         $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
         $('.js-email_mobile_msg-input').attr('name', 'email_code')
         $('.js-email_mobile_msg-input').attr('id', 'email_code')
 
         $('.js-email_mobile_msg-label').text('邮箱验证码')
         $('.js-email_mobile_msg-label').attr('for', 'email_code')
+      } else if ($('#register_mode_switch').attr('mode') === 'email' && $('input[name="email_enabled"]').val() === 'closed') {
+        $('.email_mobile_msg').addClass('hidden')
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
         $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
         $('.js-email_mobile_msg-input').attr('name', 'sms_code')
