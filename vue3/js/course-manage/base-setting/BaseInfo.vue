@@ -5,6 +5,7 @@ import {PlusOutlined,} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import VueCropper from '../../components/VueCropper.vue';
 import {removeHtml} from '../../common';
+import {t} from './vue-lang';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
@@ -15,7 +16,7 @@ const tabOptions = ref();
 const getCategory = async () => {
   const category = await Api.category.getCategory('course');
   categoryTree.value = transformCategoryData(category);
-  categoryTree.value.unshift({ value: '0', label: '无' });
+  categoryTree.value.unshift({ value: '0', label: t('label.nothing') });
 };
 
 const getTabs = async () => {
@@ -35,7 +36,7 @@ const formState = reactive({
 const courseTitleValidator = (rule, value) => {
   return new Promise((resolve, reject) => {
     if (!/^[^<>]*$/.test(value)) {
-      reject(new Error(`标题不能包含尖括号`));
+      reject(new Error(t('validate.cannotContainAngleBrackets')));
     }
     resolve();
   });
@@ -60,9 +61,9 @@ const interByteValidator = (rule, value) => {
       }
     }
     if (rule.maxSize && isPositiveInteger(rule.maxSize) && byteLength > rule.maxSize) {
-      reject(new Error(`输入内容的长度不能超过 ${rule.maxSize} 字节`));
+      reject(new Error(t('validate.maxByteLimit', {maxByte: rule.maxSize})));
     } else if (rule.minSize && isPositiveInteger(rule.minSize) && byteLength < rule.minSize) {
-      reject(new Error(`输入内容的长度不能少于 ${rule.minSize} 字节`));
+      reject(new Error(t('validate.minByteLimit', {minByte: rule.minSize})));
     } else {
       resolve();
     }
@@ -90,7 +91,7 @@ const courseTitleLengthValidator = async (rule, value) => {
     if (byteLength <= 200) {
       resolve();
     } else {
-      reject(new Error('字符长度必须小于等于200，一个中文字算2个字符'));
+      reject(new Error(t('validate.courseTitleLengthLimit')));
     }
   });
 };
@@ -142,11 +143,11 @@ const fileData = ref();
 function uploadCover(info) {
   const isPngOrGifOrJpg = info.file.type === 'image/png' || info.file.type === 'image/gif' || info.file.type === 'image/jpg' || info.file.type === 'image/jpeg';
   if (!isPngOrGifOrJpg) {
-    message.error('请上传jpg,gif,png格式的图片');
+    message.error(t('validate.imgTypeLimit'));
   }
   const isLt2M = info.file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
-    message.error('图片大小不能超过2MB');
+    message.error(t('validate.imgSizeLimit'));
   }
   if (isPngOrGifOrJpg && isLt2M) {
     const reader = new FileReader();
@@ -210,9 +211,9 @@ const saveCropperCover = async () => {
 };
 
 const serializeOption = [
-  {label: '非连载课程', value: 'none'},
-  {label: '更新中', value: 'serialized'},
-  {label: '已完结', value: 'finished'},
+  {label: t('label.NonSerialCourse'), value: 'none'},
+  {label: t('label.updating'), value: 'serialized'},
+  {label: t('label.completed'), value: 'finished'},
 ];
 
 let editor = null;

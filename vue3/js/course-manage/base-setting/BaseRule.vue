@@ -3,6 +3,7 @@ import {reactive, ref} from 'vue';
 import {
   QuestionCircleOutlined,
 } from '@ant-design/icons-vue';
+import {t} from './vue-lang';
 
 const props = defineProps({
   manage: {type: Object, default: {}}

@@ -6,82 +6,44 @@ const i18n = createI18n({
   globalInjection: true,
   messages: {
     zh_CN: {
-      title: '我的合同',
-      associatedCurriculum: '关联课程',
-      relatedQuestionBank: '关联题库',
-      associatedClass: '关联班级',
       btn: {
-        view: '查看',
-        close: '关闭',
-        download: '下载',
+        save: '保存',
       },
-      message: {
-        noContract: '暂无合同',
-        downloading: '下载中',
-        contractDownloadFailure: '合同下载失败',
+      validate: {
+        cannotContainAngleBrackets: '标题不能包含尖括号',
+        maxByteLimit: '输入内容的长度不能超过 {maxByte} 字节',
+        minByteLimit: '输入内容的长度不能少于 {minByte} 字节',
+        courseTitleLengthLimit: '字符长度必须小于等于200，一个中文字算2个字符',
+        imgTypeLimit: '请上传jpg,gif,png格式的图片',
+        imgSizeLimit: '图片大小不能超过2MB',
       },
-      modal: {
-        contractNumber: '合同编号',
-        contractSigning: '电子合同签署',
-        partyA: '甲方',
-        signingDate: '签约日期',
-        partyB: '乙方',
-        handSignature: '手写签名',
-        partyBName: '乙方姓名',
-        iDNumber: '身份证号',
-        contactInformation: '联系方式',
-        dataWillDisappear: '离开后已编辑的数据将消失...',
-        footer: {
-          btn: {
-
-          }
-        }
-      },
-      pagination: {
-        total: '共',
-        item: '项'
-      },
+      label: {
+        nothing: '无',
+        NonSerialCourse: '非连载课程',
+        updating: '更新中',
+        completed: '已完结',
+      }
     },
-
-
 
     en: {
-      title: 'My contract',
-      associatedCurriculum: 'Associated curriculum',
-      relatedQuestionBank: 'Related question bank',
-      associatedClass: 'Associated class',
       btn: {
-        view: 'View',
-        close: 'Close',
-        download: 'Download',
+        save: 'Save',
       },
-      message: {
-        noContract: 'No contract',
-        downloading: 'Downloading',
-        contractDownloadFailure: 'Contract download failure',
+      validate: {
+        cannotContainAngleBrackets: 'Title cannot contain angle brackets',
+        maxByteLimit: 'Length of input content cannot exceed {maxByte} characters.',
+        minByteLimit: 'The length of the input content must be no less than {minByte} bytes.',
+        courseTitleLengthLimit: 'The character length must be less than or equal to 200. One Chinese character is counted as 2 characters.',
+        imgTypeLimit: 'Please upload pictures in JPG, GIF or PNG formats.',
+        imgSizeLimit: 'The size of the image cannot exceed 2MB.',
       },
-      modal: {
-        contractNumber: 'Contract number',
-        contractSigning: 'Contract signing',
-        partyA: 'Party A',
-        signingDate: 'Signing date',
-        partyB: 'Party B',
-        handSignature: 'Hand signature',
-        partyBName: 'Party B\'s name',
-        iDNumber: 'ID number',
-        contactInformation: 'Contact information',
-        dataWillDisappear: 'The edited data will disappear when you leave...',
-        footer: {
-          btn: {
-
-          }
-        }
-      },
-      pagination: {
-        total: 'In total',
-        item: 'item'
-      },
-    },
+      label: {
+        nothing: 'Nothing',
+        NonSerialCourse: 'Non-serial course',
+        updating: 'Updating',
+        completed: 'Completed',
+      }
+    }
   },
 })
 

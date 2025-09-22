@@ -3,6 +3,7 @@ import { createStyleTag, setCurrentPrimaryColor } from '../../common';
 import {createApp} from 'vue';
 import {Button, Form, Input, Select, TreeSelect, Radio, Popover, Checkbox, List, Tooltip, Tag, DatePicker, Upload, Switch, Dropdown, Menu, Modal} from 'ant-design-vue';
 import 'vue3/main.less';
+import i18n from './vue-lang';
 
 const app = createApp(Index,
   {
@@ -44,6 +45,8 @@ const app = createApp(Index,
     enableOrg: $('#manage-info').data('enableOrg'),
   }
 );
+
+app.use(i18n);
 
 app.use(Button);
 app.use(Form);
