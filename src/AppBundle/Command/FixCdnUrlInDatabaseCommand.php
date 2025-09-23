@@ -45,7 +45,8 @@ class FixCdnUrlInDatabaseCommand extends BaseCommand
         echo "biz_answer_question_report 表总共有 ${count} 条数据。\n";
 
         $cursor = 0;
-        $limit = 10;
+        $limit = 100;
+        $replaceCount = 0;
         while ( true) {
             if ($cursor > 0) {
                 $sql = "SELECT * FROM biz_answer_question_report WHERE id < {$cursor} ORDER BY id DESC LIMIT ${limit}";
@@ -53,7 +54,8 @@ class FixCdnUrlInDatabaseCommand extends BaseCommand
                 $sql = "SELECT * FROM biz_answer_question_report ORDER BY id DESC LIMIT ${limit}";
             }
             $rows = $db->fetchAll($sql);
-            echo "查询到 ${count} 条数据，游标： ${cursor} \n";
+            $count = count($rows);
+            echo "查询到 {$count} 条数据，游标： ${cursor} \n";
             foreach ($rows as $row) {
                 $cursor = $row['id'];
                 echo "ID: {$row['id']} {$row['response']} \n";
@@ -75,11 +77,14 @@ class FixCdnUrlInDatabaseCommand extends BaseCommand
                         echo "更新数据 End.\n";
                         echo "=================================================================";
                     }
+
+                    $replaceCount ++;
                 }
             }
 
             if (count($rows) < $limit) {
                 echo "已处理完毕！\n";
+                echo "共处理替换了 ${replaceCount} 条数据。\n";
                 break;
             }
         }
