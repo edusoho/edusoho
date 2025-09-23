@@ -170,7 +170,7 @@ class User extends AbstractResource
         }
         if (!empty($fields['mobile']) && !ArrayToolkit::requireds($fields, ['smsToken', 'smsCode'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
-        } elseif (!empty($fields['email']) && !ArrayToolkit::requireds($fields, ['emailToken', 'emailCode'], true)) {
+        } elseif (!empty($fields['email']) && (isset($auth['email_enabled']) && $auth['email_enabled'] == 'opened') && !ArrayToolkit::requireds($fields, ['emailToken', 'emailCode'], true)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -179,6 +179,11 @@ class User extends AbstractResource
 
     private function checkEmailVerifyCode($email, $emailToken, $emailCode)
     {
+        $auth = $this->getSettingService()->get('auth', []);
+        if (!isset($auth['email_enabled']) || $auth['email_enabled'] != 'opened') {
+            return true;
+        }
+
         $token = $this->getTokenService()->verifyToken('email_verify_code', $emailToken);
         if (empty($token)) {
             return false;
