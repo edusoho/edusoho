@@ -6,20 +6,20 @@ import 'vue3/main.less';
 
 const app = createApp(Index,
   {
-    classroom: $('#manage-info').data('classroom'),
-    tags: $('#manage-info').data('tags'),
-    enableOrg: $('#manage-info').data('enableOrg'),
-    cover: $('#manage-info').data('cover'),
-    imageUploadUrl: $('#manage-info').data('imageUploadUrl'),
-    courseNum: $('#manage-info').data('courseNum'),
-    coursePrice: $('#manage-info').data('coursePrice'),
-    coinSetting: $('#manage-info').data('coinSetting'),
-    classroomExpiryRuleUrl: $('#manage-info').data('classroomExpiryRuleUrl'),
-    vipInstalled: $('#manage-info').data('vipInstalled'),
-    vipEnabled: $('#manage-info').data('vipEnabled'),
-    vipLevels: $('#manage-info').data('vipLevels'),
-    serviceTags: $('#manage-info').data('serviceTags'),
-    infoSaveUrl: $('#manage-info').data('infoSaveUrl'),
+    classroom: $('#vue3-basic-setting').data('classroom'),
+    tags: $('#vue3-basic-setting').data('tags'),
+    enableOrg: $('#vue3-basic-setting').data('enableOrg'),
+    cover: $('#vue3-basic-setting').data('cover'),
+    imageUploadUrl: $('#vue3-basic-setting').data('imageUploadUrl'),
+    courseNum: $('#vue3-basic-setting').data('courseNum'),
+    coursePrice: $('#vue3-basic-setting').data('coursePrice'),
+    coinSetting: $('#vue3-basic-setting').data('coinSetting'),
+    classroomExpiryRuleUrl: $('#vue3-basic-setting').data('classroomExpiryRuleUrl'),
+    vipInstalled: $('#vue3-basic-setting').data('vipInstalled'),
+    vipEnabled: $('#vue3-basic-setting').data('vipEnabled'),
+    vipLevels: $('#vue3-basic-setting').data('vipLevels'),
+    serviceTags: $('#vue3-basic-setting').data('serviceTags'),
+    infoSaveUrl: $('#vue3-basic-setting').data('infoSaveUrl'),
   }
 );
 
@@ -44,4 +44,4 @@ if (process.env.NODE_ENV === 'production') {
   createStyleTag(`/static-dist/vue3/js/classroom-manage/base-setting/index.css?${window.app.version}`);
 }
 
-app.mount('#manage-info');
+app.mount('#vue3-basic-setting');

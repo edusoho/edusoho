@@ -7,7 +7,7 @@ import { Button, Empty, Drawer, TreeSelect, Select, Input, Table, Checkbox, Tool
 
 const app = createApp(Index, {
   bindType: 'classroom',
-  bindId: $('#item-bank').data('classroomId'),
+  bindId: $('#vue3-item-bank').data('classroomId'),
 });
 
 setCurrentPrimaryColor(app);
@@ -29,4 +29,4 @@ if (process.env.NODE_ENV === 'production') {
   createStyleTag(`/static-dist/vue3/js/classroom-manage/item-bank/index.css?${window.app.version}`);
 }
 
-app.mount('#item-bank')
+app.mount('#vue3-item-bank')

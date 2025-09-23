@@ -7,7 +7,7 @@ import i18n from '../../../js/components/item-bank/vue-lang';
 
 const app = createApp(ItemBankBind, {
   bindType: 'classroom',
-  bindId: $('#item-bank').data('classroomId'),
+  bindId: $('#vue3-item-bank').data('classroomId'),
 });
 
 setCurrentPrimaryColor(app);
@@ -21,4 +21,4 @@ if (process.env.NODE_ENV === 'production') {
   createStyleTag(`/static-dist/vue3/js/classroom/item-bank/index.css?${window.app.version}`);
 }
 
-app.mount('#item-bank')
+app.mount('#vue3-item-bank')
