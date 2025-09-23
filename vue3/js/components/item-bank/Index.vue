@@ -7,6 +7,7 @@ import {message, Modal} from 'ant-design-vue';
 import Api from '../../../api';
 import draggable from 'vuedraggable';
 import {formatDate, open} from '../../common';
+import {t} from './vue-lang';
 
 const props = defineProps({
   bindType: {required: true},
@@ -94,18 +95,18 @@ onBeforeMount(async () => {
   <AntConfigProvider>
     <div class="flex flex-col px-32 pt-20">
       <div class="flex justify-between items-center mb-20">
-        <div class="text-16 font-medium text-black/[.88]">题库练习管理</div>
+        <div class="text-16 font-medium text-black/[.88]">{{ t('label.management') }}</div>
         <a-tooltip placement="topLeft">
           <template #title>
-            <div class="w-216">{{ props.bindType === 'course' ? '绑定后课程学员自动加入题库练习，学员在课程内的学习有效期和学习权限同步影响其在题库练习内的有效期和答题权限。' : '绑定后班级学员可同步加入到题库练习内（包括在绑定前加入班级的学员），班级学员获得绑定的题库练习的学员权限。' }}</div>
+            <div class="w-216">{{ props.bindType === 'course' ? t('tooltip.course') : t('tooltip.classroom') }}</div>
           </template>
           <a-button type="primary" class="flex items-center" @click="showItemBankList">
             <InfoCircleOutlined style="font-size: 16px"/>
-            <div class="ml-8 text-14 font-normal">绑定题库</div>
+            <div class="ml-8 text-14 font-normal">{{ t('btn.bind') }}</div>
           </a-button>
         </a-tooltip>
       </div>
-      <a-spin :spinning="loading" tip="加载中...">
+      <a-spin :spinning="loading" :tip="t('label.loading')">
         <div v-if="bindItemBankExerciseList.length === 0">
           <a-empty description="暂无已绑定的题库" class="mt-150"/>
         </div>

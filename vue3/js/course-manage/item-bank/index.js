@@ -1,15 +1,18 @@
 import {createApp} from 'vue';
 import 'vue3/main.less';
-import ItemBankPage from '../../components/item-bank/ItemBankPage.vue';
+import Index from '../../components/item-bank/Index.vue';
+import i18n from '../../components/item-bank/vue-lang';
 import { createStyleTag, setCurrentPrimaryColor } from 'vue3/js/common';
 import { Button, Empty, Drawer, TreeSelect, Select, Input, Table, Checkbox, Tooltip, Spin } from 'ant-design-vue';
 
-const app = createApp(ItemBankPage, {
+const app = createApp(Index, {
   bindType: 'course',
   bindId: $('#item-bank').data('courseId'),
 });
 
 setCurrentPrimaryColor(app);
+
+app.use(i18n);
 
 app.use(Button);
 app.use(Empty);
