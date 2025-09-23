@@ -54,6 +54,7 @@
     />
 
     <van-field
+      v-if="registerType === 'mobile' || registerType === 'email' && emailVerifyEnabled"
       v-model="registerInfo.code"
       :border="false"
       type="text"
@@ -177,6 +178,7 @@ export default {
       popUpBottom: false, // 底部弹出层
       registerType: '',
       registerMode: '',
+      emailVerifyEnabled: false,
     };
   },
   computed: {
@@ -186,15 +188,17 @@ export default {
     btnDisable() {
       if (this.registerType === 'mobile') {
         return !(
-          this.registerInfo.mobile &&
-          this.registerInfo.encrypt_password &&
-          this.registerInfo.code
+          this.registerInfo.dragCaptchaToken
+          && this.registerInfo.mobile
+          && this.registerInfo.encrypt_password
+          && this.registerInfo.code
         );
       } else if (this.registerType === 'email') {
         return !(
-          this.registerInfo.email &&
-          this.registerInfo.encrypt_password &&
-          this.registerInfo.code
+          this.registerInfo.dragCaptchaToken
+          && this.registerInfo.email
+          && this.registerInfo.encrypt_password
+          && (!this.emailVerifyEnabled || this.registerInfo.code)
         );
       }
     },
@@ -252,6 +256,7 @@ export default {
         },
       }).then(res => {
           this.registerMode = res.mode;
+          this.emailVerifyEnabled = res.emailVerifyEnabled;
           if (this.registerMode === 'mobile') {
             this.registerType = 'mobile'
           } else if (this.registerMode === 'email') {
