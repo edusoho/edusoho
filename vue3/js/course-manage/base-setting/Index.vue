@@ -33,8 +33,8 @@ const manageProps = defineProps({
   canModifyCoursePrice: Number,
   liveCapacityUrl: String,
   serviceTags: Object,
-  vipInstalled: String,
-  vipEnabled: String,
+  vipInstalled: Number,
+  vipEnabled: Number,
   vipLevels: Object,
 });
 

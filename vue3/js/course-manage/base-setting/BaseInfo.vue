@@ -275,7 +275,7 @@ onMounted(() => {
         ref="formRef"
         class="mt-66"
         :model="formState"
-        :label-col="{ span: 4 }"
+        :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
       >
         <a-form-item
