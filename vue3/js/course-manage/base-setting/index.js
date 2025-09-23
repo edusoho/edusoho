@@ -73,4 +73,4 @@ if (process.env.NODE_ENV === 'production') {
   createStyleTag(`/static-dist/vue3/js/course-manage/base-setting/index.css?${window.app.version}`);
 }
 
-app.mount('#vue3-basic-settings');
+app.mount('#vue3-basic-setting');
