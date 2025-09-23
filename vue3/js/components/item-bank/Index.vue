@@ -23,7 +23,7 @@ const bindItemBankExerciseNum = computed(() => {
 const itemBankListVisible = ref(false);
 const showItemBankList = () => {
   if (bindItemBankExerciseNum.value >= 100) {
-    message.error('已超出上限，最多可绑定100个题库练习');
+    message.error(t('message.limit'));
   } else {
     itemBankListVisible.value = true;
   }
