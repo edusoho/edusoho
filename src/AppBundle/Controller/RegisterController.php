@@ -635,7 +635,10 @@ class RegisterController extends BaseController
 
     protected function emailCodeValidator($authSettings, $registration)
     {
-        return in_array($authSettings['register_mode'], ['email', 'email_or_mobile']) && !empty($registration['email']);
+        return isset($authSettings['email_enabled'])
+            && $authSettings['email_enabled'] == 'opened'
+            && in_array($authSettings['register_mode'], ['email', 'email_or_mobile'])
+            && !empty($registration['email']);
     }
 
     private function checkEmailVerifyCode($registration)

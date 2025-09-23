@@ -101,22 +101,27 @@ const replays = reactive({
     {
       key: 'title',
       title: '直播课时名称',
+      width: '25%',
     },
     {
       key: 'liveTime',
       title: '直播时长',
+      width: '15%',
     },
     {
       key: 'anchor',
       title: '主讲人',
+      width: '20%',
     },
     {
       key: 'liveStartTime',
       title: '直播时间',
+      width: '30%',
     },
     {
       key: 'operation',
       title: '操作',
+      width: '10%',
     },
   ],
   data: [],
@@ -396,7 +401,7 @@ watch(() => props.drawerType,async (newType) => {
             <a-table
               :columns="replays.columns"
               :data-source="replays.data"
-              :row-key="replay => replay.replayId"
+              :row-key="replay => replay.id"
               :loading="replays.loading"
               :pagination="false"
             >

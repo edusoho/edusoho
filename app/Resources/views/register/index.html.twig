@@ -93,10 +93,10 @@
           {% endif %}
           <div
             class="form-group mbl email_mobile_msg">
-            <label class="control-label required js-email_mobile_msg-label" for="sms_code">{{ 'user.settings.security.sms_code'|trans }}</label>
+            <label class="control-label required js-email_mobile_msg-label">{{ 'user.settings.security.sms_code'|trans }}</label>
             <div class="controls cd-row">
               <div class="col-xs-6">
-                <input type="text" maxlength="6" class="form-control input-lg js-email_mobile_msg-input" id="sms_code" name="sms_code"
+                <input type="text" maxlength="6" class="form-control input-lg js-email_mobile_msg-input"
                        data-url="{{ path('edu_cloud_sms_check',{type:'sms_registration'}) }}"
                        onkeydown="if(event.keyCode==13) return false;">
                 <p class="help-block"></p>
@@ -160,6 +160,7 @@
 
           <input type="hidden" name="emailToken" value="">
           <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}"/>
+          <input type="hidden" name="email_enabled" value="{{ setting('auth.email_enabled') }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input type="hidden" name="registerVisitId" value="">
           <input type="hidden" name="emailOrMobile" value="">
