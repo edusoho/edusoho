@@ -363,29 +363,6 @@ export default {
         captcha.isShowCaptcha = 1;
         captcha.hideDrag();
       })
-
-      // axios({
-      //     url: "/api/review/" + reviewId + "/post",
-      //     method: "POST",
-      //     data: {
-      //         'content': $targetForm.find('.post-content').val().trim()
-      //     },
-      // }).then(res => {
-      //     let html = this.generateReviewPostLi(res.data);
-      //
-      //     if ($targetForm.siblings('ul').length) {
-      //         $targetForm.siblings('ul').append(html);
-      //     } else {
-      //         html = '<ul class="media-list thread-post-list thread-subpost-list">' + html + '</ul>';
-      //         $targetForm.before(html);
-      //     }
-      //
-      //     $targetForm.find('.post-content').val('');
-      //     cd.message({
-      //         type: 'success',
-      //         message: Translator.trans('site.save_success_hint')
-      //     });
-      // });
     },
     onDelete() {
       $('.reviews').on('click', '.js-delete-post', function (event) {

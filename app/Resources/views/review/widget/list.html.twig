@@ -33,12 +33,9 @@
         </div>
         <div class="content">
           <div class="short-content" style="white-space: pre-wrap;">{{ review.content|raw|wrap_text(100) }}{% if app.user.isLogin()|default(false) and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
-{#            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}#}
           </div>
           <div class="full-content" style="white-space: pre-wrap; display:none;">{{ review.content|raw|nl2br }}{% if app.user.isLogin()|default(false) and app.user.id != review.userId and is_reported(reportType, review.id) %}<span style="color: red;">({{ ('已举报')|trans }})</span>{% endif %}<span id="{{ 'js-review-after-' ~ review.id }}"></span>
-{#            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}#}
           </div>
-
         </div>
         <div class="actions clearfix">
           <a href="javascript:;" class="show-full-btn" style="display:none;">[{{'course.reviews.expand_btn'|trans}}]</a>
