@@ -41,8 +41,8 @@ export default class Captcha extends Emitter {
 		var width = document.documentElement.clientWidth;
 		var height = document.documentElement.clientHeight;
 		$(this.params.dragClass).css({top: (height-219)/2+"px",left:(width-338)/2+"px"});
-    	$(this.params.maskClass+","+this.params.dragClass).show();
-  	}
+    $(this.params.maskClass+","+this.params.dragClass).show();
+  }
 
 	hideDrag(){
 		$(this.params.maskClass+","+this.params.dragClass).hide();
