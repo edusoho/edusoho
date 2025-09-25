@@ -7,6 +7,7 @@ import {message, Modal} from 'ant-design-vue';
 import Api from '../../../api';
 import draggable from 'vuedraggable';
 import {formatDate, open} from '../../common';
+import {t} from './vue-lang';
 
 const props = defineProps({
   bindType: {required: true},
@@ -22,7 +23,7 @@ const bindItemBankExerciseNum = computed(() => {
 const itemBankListVisible = ref(false);
 const showItemBankList = () => {
   if (bindItemBankExerciseNum.value >= 100) {
-    message.error('已超出上限，最多可绑定100个题库练习');
+    message.error(t('message.limit'));
   } else {
     itemBankListVisible.value = true;
   }
@@ -72,13 +73,13 @@ async function deleteBindItemBank(id) {
 
 function showDeleteConfirm(id) {
   Modal.confirm({
-    title: '删除题库练习',
+    title: t('label.deletePracticeQuestions'),
     centered: true,
     icon: createVNode(ExclamationCircleOutlined),
-    content: createVNode('div', { style: 'font-size: 14px; color: #5E6166; font-weight: 400; ' }, props.bindType === 'course' ? '是否要从课程中删除该题库练习？' : '是否要从班级中删除该题库练习？'),
+    content: createVNode('div', { style: 'font-size: 14px; color: #5E6166; font-weight: 400; ' }, props.bindType === 'course' ? t('label.deleteFromCourse') : t('label.deleteFromClassroom')),
     async onOk() {
       await deleteBindItemBank(id)
-      message.success('删除成功');
+      message.success(t('message.successfullyDelete'));
     },
     onCancel() {
     },
@@ -94,20 +95,20 @@ onBeforeMount(async () => {
   <AntConfigProvider>
     <div class="flex flex-col px-32 pt-20">
       <div class="flex justify-between items-center mb-20">
-        <div class="text-16 font-medium text-black/[.88]">题库练习管理</div>
+        <div class="text-16 font-medium text-black/[.88]">{{ t('label.management') }}</div>
         <a-tooltip placement="topLeft">
           <template #title>
-            <div class="w-216">{{ props.bindType === 'course' ? '绑定后课程学员自动加入题库练习，学员在课程内的学习有效期和学习权限同步影响其在题库练习内的有效期和答题权限。' : '绑定后班级学员可同步加入到题库练习内（包括在绑定前加入班级的学员），班级学员获得绑定的题库练习的学员权限。' }}</div>
+            <div class="w-216">{{ props.bindType === 'course' ? t('tooltip.course') : t('tooltip.classroom') }}</div>
           </template>
           <a-button type="primary" class="flex items-center" @click="showItemBankList">
             <InfoCircleOutlined style="font-size: 16px"/>
-            <div class="ml-8 text-14 font-normal">绑定题库</div>
+            <div class="ml-8 text-14 font-normal">{{ t('btn.bind') }}</div>
           </a-button>
         </a-tooltip>
       </div>
-      <a-spin :spinning="loading" tip="加载中...">
+      <a-spin :spinning="loading" :tip="t('label.loading')">
         <div v-if="bindItemBankExerciseList.length === 0">
-          <a-empty description="暂无已绑定的题库" class="mt-150"/>
+          <a-empty :description="t('label.noBound')" class="mt-150"/>
         </div>
         <div v-else class="mb-20">
           <draggable
@@ -123,8 +124,8 @@ onBeforeMount(async () => {
                   </div>
                   <div class="relative">
                     <img :src="element.itemBankExercise.cover.middle" class="h-90 rounded-5" draggable="false" alt="">
-                    <div v-if="element.itemBankExercise.status === 'published'" class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">已发布</div>
-                    <div v-if="element.itemBankExercise.status === 'closed'" class="text-12 text-white font-medium px-8 py-2 rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0 bg-[rgba(0,0,0,0.6)]">已关闭</div>
+                    <div v-if="element.itemBankExercise.status === 'published'" class="text-12 text-white font-medium px-8 py-2 bg-[#00C261] rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0">{{ t('label.havePublished') }}</div>
+                    <div v-if="element.itemBankExercise.status === 'closed'" class="text-12 text-white font-medium px-8 py-2 rounded-tl-5 rounded-br-5 leading-20 absolute top-0 left-0 bg-[rgba(0,0,0,0.6)]">{{ t('label.closed') }}</div>
                   </div>
                   <div class="flex flex-col justify-between">
                     <a-tooltip placement="top" :title="element.itemBankExercise.title">
@@ -142,19 +143,19 @@ onBeforeMount(async () => {
                 <div class="flex flex-col justify-between items-end">
                   <div class="text-20 font-semibold text-[#FF7E56] whitespace-nowrap"><span class="text-12 mr-2">¥</span>{{ `${integerPart(element.itemBankExercise.price)}.` }}<span class="text-12">{{ decimalPart(element.itemBankExercise.price) }}</span></div>
                   <div class="flex">
-                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.itemBankExercise.studentNum }}</span>学员</div>
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.itemBankExercise.studentNum }}</span>{{ t('label.students') }}</div>
                     <div class="mx-6 text-[#E5E6EB] text-12">|</div>
-                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.chapterExerciseNum }}</span>章节练习</div>
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.chapterExerciseNum }}</span>{{ t('label.chapterExercises') }}</div>
                     <div class="mx-6 text-[#E5E6EB] text-12">|</div>
-                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.assessmentNum }}</span>试卷练习</div>
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap"><span class="text-[#37393D] mr-2">{{ element.assessmentNum }}</span>{{ t('label.testPaperPractice') }}</div>
                     <div class="mx-6 text-[#E5E6EB] text-12">|</div>
-                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap">有效期：
-                      <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'forever'">长期有效</span>
-                      <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'date' || element.itemBankExercise.expiryMode === 'end_date'">{{ `截止至 ${formatDate(element.itemBankExercise.expiryEndDate, 'YYYY-MM-DD')}` }}</span>
-                      <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'days'">{{ `共 ${element.itemBankExercise.expiryDays} 天` }}</span>
+                    <div class="text-12 text-[#919399] font-normal whitespace-nowrap">{{ t('label.periodOfValidity') }}
+                      <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'forever'">{{ t('label.longTermEffective') }}</span>
+                      <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'date' || element.itemBankExercise.expiryMode === 'end_date'">{{ t('label.expiryEndDate', {expiryEndDate: formatDate(element.itemBankExercise.expiryEndDate, 'YYYY-MM-DD')}) }}</span>
+                      <span class="text-[#37393D] mr-2" v-if="element.itemBankExercise.expiryMode === 'days'">{{ t('label.expiryEndDate', {expiryDays: element.itemBankExercise.expiryDays}) }}</span>
                     </div>
                   </div>
-                  <a-button size="small" @click="showDeleteConfirm(element.id)">删除</a-button>
+                  <a-button size="small" @click="showDeleteConfirm(element.id)">{{ t('btn.delete') }}</a-button>
                 </div>
               </div>
             </template>

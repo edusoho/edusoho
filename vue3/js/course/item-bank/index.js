@@ -6,7 +6,7 @@ import { Button, Tooltip } from 'ant-design-vue';
 
 const app = createApp(ItemBankBind, {
   bindType: 'course',
-  bindId: $('#item-bank').data('courseId'),
+  bindId: $('#vue3-item-bank').data('courseId'),
 });
 
 setCurrentPrimaryColor(app);
@@ -18,4 +18,4 @@ if (process.env.NODE_ENV === 'production') {
   createStyleTag(`/static-dist/vue3/js/course/item-bank/index.css?${window.app.version}`);
 }
 
-app.mount('#item-bank')
+app.mount('#vue3-item-bank')

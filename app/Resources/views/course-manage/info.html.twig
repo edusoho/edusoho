@@ -36,7 +36,7 @@
       {% endif %}
     {% endfor %}
 
-    <div id="manage-info"
+    <div id="vue3-basic-setting"
          data-course-manage-url="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"
          data-is-un-multi-course-set="{{ is_un_multi_courseset(courseSet.id) }}"
          data-course="{{ course|json_encode }}"

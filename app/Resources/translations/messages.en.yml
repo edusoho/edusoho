@@ -1720,6 +1720,9 @@ course.files_manage.tips: "Tip：Course file could not be seen by students until
 
 course.plan_overview: 'Data Overview'
 
+course.student_incorrect_questions: Student's incorrect questions
+course.ai_assisted_learning_service: AI-assisted learning service
+course.question_bank_practice_management: Question bank practice management
 course.plan_task: Lessons
 course.announcement_manage: Announcements
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">.'

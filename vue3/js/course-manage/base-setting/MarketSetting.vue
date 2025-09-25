@@ -89,7 +89,7 @@ const uploadDrainageImage = async (info) => {
   drainageLoading.value = true;
   const isJpgOrGifOrPng = info.file.type === 'image/jpeg' || info.file.type === 'image/gif' || info.file.type === 'image/png';
   if (!isJpgOrGifOrPng) {
-    message.error('请上传jpg，gif，png格式的图');
+    message.error(t('validate.imgTypeLimit'));
     drainageLoading.value = false;
   }
   if (isJpgOrGifOrPng) {
@@ -150,9 +150,9 @@ const previewContract = async (id) => {
 };
 
 const expiryModeOptions = [
-  {label: '随到随学', value: 'days'},
-  {label: '固定周期', value: 'date'},
-  {label: '长期有效', value: 'forever'},
+  {label: t('label.learning'), value: 'days'},
+  {label: t('label.fixedCycle'), value: 'date'},
+  {label: t('label.longTerm'), value: 'forever'},
 ];
 
 const liveCapacity = ref();
@@ -183,77 +183,77 @@ defineExpose({
 <template>
   <div class="flex flex-col w-full relative">
     <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
-         style="width: calc(100% + 64px);">营销设置
+         style="width: calc(100% + 64px);">{{ t('title.marketingSettings') }}
     </div>
     <a-form
       ref="formRef"
       class="mt-66"
       :model="formState"
-      :label-col="{ span: 4 }"
+      :label-col="{ span: 6 }"
       :wrapper-col="{ span: 16 }"
     >
       <a-form-item
-        label="价格"
+        :label="t('label.price')"
         name="originPrice"
         :validateTrigger="['blur']"
         :rules="[
-          { required: true, message: '请输入价格' },
-          { pattern: /^(\d{1,8}(\.\d{1,2})?)?$/, message: '请输入大于0的有效价格，最多两位小数，整数位不超过8位！' },
+          { required: true, message: t('validate.enterPrice') },
+          { pattern: /^(\d{1,8}(\.\d{1,2})?)?$/, message: t('validate.validPrice') },
         ]"
       >
         <div class="flex items-center gap-24">
           <a-input v-model:value="formState.originPrice"
                    :disabled="props.manage.course.platform === 'supplier' && !props.manage.canModifyCoursePrice"
-                   suffix="元" style="width: 150px"></a-input>
-          <a-radio-group v-model:value="formState.hidePrice">
-            <a-radio value="0">显示价格</a-radio>
-            <a-radio value="1">不显示价格</a-radio>
-          </a-radio-group>
+                   :suffix="t('label.rmb')" style="width: 150px"></a-input>
+          <a-form-item-rest>
+            <a-radio-group v-model:value="formState.hidePrice">
+              <a-radio value="0">{{ t('label.displayPrice') }}</a-radio>
+              <a-radio value="1">{{ t('label.notDisplayPrice') }}</a-radio>
+            </a-radio-group>
+          </a-form-item-rest>
         </div>
       </a-form-item>
       <a-form-item>
         <template #label>
           <div class="flex items-center">
-            <div>可加入</div>
+            <div>{{ t('label.canBeAdded') }}</div>
             <a-popover>
               <template #content>
-                <div class="text-14">
-                  关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
-                </div>
+                <div class="text-14">{{ t('tip.canBeAdded') }}</div>
               </template>
               <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
             </a-popover>
           </div>
         </template>
         <a-radio-group v-model:value="formState.buyable">
-          <a-radio value="1">可加入</a-radio>
-          <a-radio value="0">不可加入</a-radio>
+          <a-radio value="1">{{ t('label.canBeAdded') }}</a-radio>
+          <a-radio value="0">{{ t('label.doNotAdd') }}</a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item
         v-if="props.manage.courseSet.type === 'live'"
         name="maxStudentNumL"
-        label="限制加入人数"
+        :label="t('label.limitNumber')"
         :validateTrigger="['blur']"
         :rules="[
-          { required: true, message: '请输入限制加入人数' },
-          { pattern: /^[0-9]\d*$/, message: '请输入非负整数' },
+          { required: true, message: t('validate.enterLimit') },
+          { pattern: /^[0-9]\d*$/, message: t('validate.integer') },
           ]"
       >
         <a-input v-model:value="formState.maxStudentNumL" class="mb-8" style="width: 150px;"></a-input>
-        <div class="text-[#a1a1a1] text-14">加入直播课程人数限制，0为不限制人数</div>
+        <div class="text-[#a1a1a1] text-14">{{ t('tip.numberOfParticipants') }}</div>
         <div v-if="liveCapacity !== null && parseInt(formState.maxStudentNumL) > parseInt(liveCapacity)"
              class="text-[#F56C6C] text-14">
-          网校可支持最多{{ liveCapacity }}人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。
+          {{ t('tip.supportPeople', {liveCapacity: liveCapacity}) }}
         </div>
       </a-form-item>
       <a-form-item>
         <template #label>
           <div class="flex items-center">
-            <div>电子合同</div>
+            <div>{{ t('label.electronicContract') }}</div>
             <a-popover>
               <template #content>
-                <div class="text-14">启用后，学员开始学习前需完成电子合同签署</div>
+                <div class="text-14">{{ t('tip.electronicContract') }}</div>
               </template>
               <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
             </a-popover>
@@ -280,7 +280,7 @@ defineExpose({
                     <div class="w-150 truncate text-left" @click="selectContract(contract.id, contract.name)">
                       {{ contract.name }}
                     </div>
-                    <div class="text-[#46c37b]" @click="previewContract(contract.id)">预览</div>
+                    <div class="text-[#46c37b]" @click="previewContract(contract.id)">{{ t('btn.preview') }}</div>
                   </div>
                 </a-menu-item>
               </a-menu>
@@ -292,12 +292,10 @@ defineExpose({
         <a-form-item>
           <template #label>
             <div class="flex items-center">
-              <div>强制签署</div>
+              <div>{{ t('label.compulsorySigning') }}</div>
               <a-popover>
                 <template #content>
-                  <div class="text-14 w-350">
-                    开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。
-                  </div>
+                  <div class="text-14 w-350">{{ t('tip.compulsorySigning') }}</div>
                 </template>
                 <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
               </a-popover>
@@ -307,20 +305,20 @@ defineExpose({
         </a-form-item>
       </div>
       <a-form-item
-        label="加入截止日期"
+        :label="t('label.joiningDeadline')"
         :required="true"
       >
         <div class="flex">
           <a-radio-group v-model:value="formState.enableBuyExpiryTime"
                          :class="{'mb-24': formState.enableBuyExpiryTime === '1'}" class="flex items-center">
-            <a-radio value="0">不限时间</a-radio>
-            <a-radio value="1">自定义</a-radio>
+            <a-radio value="0">{{ t('label.noTimeLimit') }}</a-radio>
+            <a-radio value="1">{{ t('label.custom') }}</a-radio>
           </a-radio-group>
           <a-form-item
             v-if="formState.enableBuyExpiryTime === '1'"
             name="buyExpiryTime"
             :validateTrigger="['blur']"
-            :rules="[{ required: true, message: '请输入截至日期' }]"
+            :rules="[{ required: true, message: t('validate.enterDeadline') }]"
           >
             <a-date-picker v-model:value="formState.buyExpiryTime" :disabled-date="disabledPastDate"
                            style="width: 150px"/>
@@ -330,14 +328,13 @@ defineExpose({
       <a-form-item>
         <template #label>
           <div class="flex items-center">
-            <div>学习有效期</div>
+            <div>{{ t('label.validityPeriod') }}</div>
             <a-popover>
               <template #content>
                 <div class="flex flex-col text-14">
-                  <div class="mb-10"><span class="font-medium">随到随学：</span>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
-                  </div>
-                  <div class="mb-10"><span class="font-medium">固定周期：</span>有固定的学习开始日期和结束日期</div>
-                  <div>过期后无法继续学习，系统会在到期前10天提醒学员。</div>
+                  <div class="mb-10"><span class="font-medium">{{ t('tip.dropLearning') }}：</span>{{ t('tip.validityPeriod') }}</div>
+                  <div class="mb-10"><span class="font-medium">{{ t('tip.fixedCycle') }}：</span>{{ t('tip.fixedDate') }}</div>
+                  <div>{{ t('tip.expirationDate') }}</div>
                 </div>
               </template>
               <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
@@ -367,8 +364,8 @@ defineExpose({
                 :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !=='self'"
                 v-model:value="formState.deadlineType"
               >
-                <a-radio value="end_date">按截止日期</a-radio>
-                <a-radio value="days">按有效天数</a-radio>
+                <a-radio value="end_date">{{ t('label.deadline') }}</a-radio>
+                <a-radio value="days">{{ t('label.validDays') }}</a-radio>
               </a-radio-group>
             </a-form-item-rest>
             <div v-if="formState.expiryMode === 'days' && formState.deadlineType === 'end_date'">
@@ -376,14 +373,14 @@ defineExpose({
                 name="deadline"
                 :validateTrigger="['blur']"
                 :rules="[
-                  { required: true, message: '请输入截至日期' },
+                  { required: true, message: t('validate.enterDeadline') },
                 ]"
               >
                 <div class="flex items-center mt-16">
                   <a-date-picker v-model:value="formState.deadline"
                                  :disabled="props.manage.course.platform !=='self'"
                                  style="width: 150px" :disabled-date="disabledPastDate"/>
-                  <div class="text-14 opacity-65 ml-10">在此日期前，学员可进行学习。</div>
+                  <div class="text-14 opacity-65 ml-10">{{ t('tip.deadline') }}</div>
                 </div>
               </a-form-item>
             </div>
@@ -392,37 +389,37 @@ defineExpose({
                 name="expiryDays"
                 :validateTrigger="['blur']"
                 :rules="[
-                  { required: true, message: '请输入有效期天数' },
-                  { pattern: /^([1-9]|[1-9]\d{1,2}|[1-6]\d{3}|7[0-2]\d{2}|7300)$/,message: '请输入不大于 7300（20年）的正整数' },
+                  { required: true, message: t('validate.enterValidityPeriod') },
+                  { pattern: /^([1-9]|[1-9]\d{1,2}|[1-6]\d{3}|7[0-2]\d{2}|7300)$/,message: t('validate.years') },
                 ]"
               >
                 <div class="flex items-center mt-16">
                   <a-input v-model:value="formState.expiryDays"
                            :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
                            style="width: 150px"/>
-                  <div class="text-14 opacity-65 ml-10">从加入当天起，在几天内可进行学习。</div>
+                  <div class="text-14 opacity-65 ml-10">{{ t('tip.expiryDays') }}</div>
                 </div>
               </a-form-item>
             </div>
             <div v-if="formState.expiryMode === 'date'" class="flex">
-              <div class="text-14 mt-6 mr-4">开始日期</div>
+              <div class="text-14 mt-6 mr-4">{{ t('label.startDate') }}</div>
               <a-form-item
                 name="expiryStartDate"
                 :validateTrigger="['blur']"
                 :rules="[
-                  { required: true, message: '请输入开始日期' },
+                  { required: true, message: t('validate.enterStartDate') },
                 ]"
               >
                 <a-date-picker v-model:value="formState.expiryStartDate"
                                :disabled="expiryValueDisabled || props.manage.course.platform !=='self'"
                                :disabled-date="disabledStartDate" style="width: 150px"/>
               </a-form-item>
-              <div class="text-14 mt-6 mr-4 ml-8">结束日期</div>
+              <div class="text-14 mt-6 mr-4 ml-8">{{ t('label.endingDate') }}</div>
               <a-form-item
                 name="expiryEndDate"
                 :validateTrigger="['blur']"
                 :rules="[
-                  { required: true, message: '请输入结束日期' },
+                  { required: true, message: t('validate.enterEndingDate') },
                 ]"
               >
                 <a-date-picker v-model:value="formState.expiryEndDate"
@@ -431,20 +428,18 @@ defineExpose({
               </a-form-item>
             </div>
           </div>
-          <div class="text-[#adadad] text-14 mt-8">
-            教学计划一旦发布，有效期类型不能修改；课程或教学计划下架后，可以修改日期，新的学习有效期仅对修改后加入的学员生效
-          </div>
+          <div class="text-[#adadad] text-14 mt-8">{{ t('tip.endDate') }}</div>
         </div>
       </a-form-item>
       <a-form-item
         v-if="props.manage.vipInstalled && props.manage.vipEnabled"
-        label="会员免费兑换"
+        :label="t('label.membersFree')"
       >
         <a-select
           v-model:value="formState.vipLevelId"
           style="width: 200px"
         >
-          <a-select-option value="0">无</a-select-option>
+          <a-select-option value="0">{{ t('label.nothing') }}</a-select-option>
           <a-select-option
             v-if="props.manage.vipLevels.length > 0"
             v-for="level in props.manage.vipLevels"
@@ -456,7 +451,7 @@ defineExpose({
         </a-select>
       </a-form-item>
       <a-form-item
-        label="承诺提供服务"
+        :label="t('label.provideServices')"
       >
         <a-checkable-tag
           v-for="(tag, index) in serviceItem"
@@ -473,39 +468,37 @@ defineExpose({
         </a-checkable-tag>
       </a-form-item>
       <a-form-item
-        label="商品页目录展示"
+        :label="t('label.catalogueDisplay')"
       >
         <a-radio-group v-model:value="formState.taskDisplay">
-          <a-radio value="1">开启</a-radio>
-          <a-radio value="0">关闭</a-radio>
+          <a-radio value="1">{{ t('label.open') }}</a-radio>
+          <a-radio value="0">{{ t('label.close') }}</a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item>
         <template #label>
           <div class="flex items-center">
-            <div>引流设置</div>
+            <div>{{ t('label.drainageSetting') }}</div>
             <a-popover>
               <template #content>
-                <div class="text-14">
-                  将已购用户引流至私域流量池
-                </div>
+                <div class="text-14">{{ t('tip.drainageSetting') }}</div>
               </template>
               <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
             </a-popover>
           </div>
         </template>
         <a-radio-group v-model:value="formState.drainageEnabled">
-          <a-radio :value=1>开启</a-radio>
-          <a-radio :value=0>关闭</a-radio>
+          <a-radio :value=1>{{ t('label.open') }}</a-radio>
+          <a-radio :value=0>{{ t('label.close') }}</a-radio>
         </a-radio-group>
       </a-form-item>
       <div v-if="formState.drainageEnabled === 1">
         <a-form-item
-          label="二维码设置"
+          :label="t('label.QRCodeSettings')"
           name="drainageImage"
           :validateTrigger="['blur']"
           :rules="[
-            { required: true, message: '二维码不能为空' },
+            { required: true, message: t('validate.enterQRCode') },
           ]"
         >
           <a-upload
@@ -522,27 +515,27 @@ defineExpose({
             <div v-else>
               <loading-outlined v-if="drainageLoading"></loading-outlined>
               <plus-outlined v-else></plus-outlined>
-              <div class="ant-upload-text">上传</div>
+              <div class="ant-upload-text">{{ t('btn.uploading') }}</div>
             </div>
           </a-upload>
-          <div class="text-[#a1a1a1] text-14">请上传jpg，gif，png格式的图</div>
+          <div class="text-[#a1a1a1] text-14">{{ t('validate.imgTypeLimit') }}</div>
         </a-form-item>
         <a-form-item
-          label="引流文案"
+          :label="t('label.attractingAttentionCopywriting')"
         >
-          <a-input v-model:value="formState.drainageText" placeholder="请输入内容" show-count :maxlength="20"/>
+          <a-input v-model:value="formState.drainageText" :placeholder="t('placeholder.provideContent')" show-count :maxlength="20"/>
         </a-form-item>
         <a-form-item
-          label="引流页样式"
+          :label="t('label.referralPage')"
         >
           <div class="flex">
-            <div class="opacity-65 text-14">加入/支付完成页</div>
+            <div class="opacity-65 text-14">{{ t('tip.completionPage') }}</div>
             <a-popover>
               <template #content>
                 <img src="../../../img/course-manage/base-setting/drainage-style.png" alt="drainage"
                      style="height: 500px">
               </template>
-              <div class="text-[--primary-color] font-medium text-14 ml-4 cursor-pointer">查看详情</div>
+              <div class="text-[--primary-color] font-medium text-14 ml-4 cursor-pointer">{{ t('btn.viewDetails') }}</div>
             </a-popover>
           </div>
         </a-form-item>

@@ -14,7 +14,7 @@
         </li>
         <li class="cd-sidebar__item {% if side_nav == 'itemBank' %}active{% endif %}">
           <a href="{{ path('classroom_manage_item_bank', {id: classroom.id}) }}">
-            题库练习管理
+            {{ 'course.question_bank_practice_management'|trans }}
           </a>
         </li>
         <li class="cd-sidebar__item {% if side_nav == 'announcements' %}active{% endif %}">
@@ -68,7 +68,7 @@
       {% if canManage %}
         <li class="cd-sidebar__item {% if side_nav == 'wrong-questions' %}active{% endif %}">
           <a href="{{ path('classroom_manage_wrong_questions', {id: classroom.id}) }}">
-            {{ '学员错题'|trans }}
+            {{ 'course.student_incorrect_questions'|trans }}
           </a>
         </li>
       {% endif %}

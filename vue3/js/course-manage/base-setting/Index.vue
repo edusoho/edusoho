@@ -7,6 +7,7 @@ import MarketSetting from './MarketSetting.vue';
 import Api from '../../../api';
 import {message} from 'ant-design-vue';
 import dayjs from 'dayjs';
+import {t} from './vue-lang';
 
 const manageProps = defineProps({
   isUnMultiCourseSet: {type: [String, Number]},
@@ -32,8 +33,8 @@ const manageProps = defineProps({
   canModifyCoursePrice: Number,
   liveCapacityUrl: String,
   serviceTags: Object,
-  vipInstalled: String,
-  vipEnabled: String,
+  vipInstalled: Number,
+  vipEnabled: Number,
   vipLevels: Object,
 });
 
@@ -106,6 +107,6 @@ const submitForm = async () => {
       ref="marketSettingRef"
       :manage="manageProps"
     />
-    <a-button type="primary" @click="submitForm" class="ml-200">保存</a-button>
+    <a-button type="primary" @click="submitForm" class="ml-200">{{ t('btn.save') }}</a-button>
   </ant-config-provider>
 </template>

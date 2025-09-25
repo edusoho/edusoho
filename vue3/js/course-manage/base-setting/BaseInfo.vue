@@ -5,6 +5,7 @@ import {PlusOutlined,} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import VueCropper from '../../components/VueCropper.vue';
 import {removeHtml} from '../../common';
+import {t} from './vue-lang';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
@@ -15,7 +16,7 @@ const tabOptions = ref();
 const getCategory = async () => {
   const category = await Api.category.getCategory('course');
   categoryTree.value = transformCategoryData(category);
-  categoryTree.value.unshift({ value: '0', label: '无' });
+  categoryTree.value.unshift({ value: '0', label: t('label.nothing') });
 };
 
 const getTabs = async () => {
@@ -35,7 +36,7 @@ const formState = reactive({
 const courseTitleValidator = (rule, value) => {
   return new Promise((resolve, reject) => {
     if (!/^[^<>]*$/.test(value)) {
-      reject(new Error(`标题不能包含尖括号`));
+      reject(new Error(t('validate.cannotContainAngleBrackets')));
     }
     resolve();
   });
@@ -60,9 +61,9 @@ const interByteValidator = (rule, value) => {
       }
     }
     if (rule.maxSize && isPositiveInteger(rule.maxSize) && byteLength > rule.maxSize) {
-      reject(new Error(`输入内容的长度不能超过 ${rule.maxSize} 字节`));
+      reject(new Error(t('validate.maxByteLimit', {maxByte: rule.maxSize})));
     } else if (rule.minSize && isPositiveInteger(rule.minSize) && byteLength < rule.minSize) {
-      reject(new Error(`输入内容的长度不能少于 ${rule.minSize} 字节`));
+      reject(new Error(t('validate.minByteLimit', {minByte: rule.minSize})));
     } else {
       resolve();
     }
@@ -90,7 +91,7 @@ const courseTitleLengthValidator = async (rule, value) => {
     if (byteLength <= 200) {
       resolve();
     } else {
-      reject(new Error('字符长度必须小于等于200，一个中文字算2个字符'));
+      reject(new Error(t('validate.courseTitleLengthLimit')));
     }
   });
 };
@@ -142,11 +143,11 @@ const fileData = ref();
 function uploadCover(info) {
   const isPngOrGifOrJpg = info.file.type === 'image/png' || info.file.type === 'image/gif' || info.file.type === 'image/jpg' || info.file.type === 'image/jpeg';
   if (!isPngOrGifOrJpg) {
-    message.error('请上传jpg,gif,png格式的图片');
+    message.error(t('validate.imgTypeLimit'));
   }
   const isLt2M = info.file.size / 1024 / 1024 < 2;
   if (!isLt2M) {
-    message.error('图片大小不能超过2MB');
+    message.error(t('validate.imgSizeLimit'));
   }
   if (isPngOrGifOrJpg && isLt2M) {
     const reader = new FileReader();
@@ -210,9 +211,9 @@ const saveCropperCover = async () => {
 };
 
 const serializeOption = [
-  {label: '非连载课程', value: 'none'},
-  {label: '更新中', value: 'serialized'},
-  {label: '已完结', value: 'finished'},
+  {label: t('label.NonSerialCourse'), value: 'none'},
+  {label: t('label.updating'), value: 'serialized'},
+  {label: t('label.completed'), value: 'finished'},
 ];
 
 let editor = null;
@@ -268,21 +269,21 @@ onMounted(() => {
   <div class="flex flex-col w-full">
     <div class="flex flex-col relative" v-if="!props.manage.isUnMultiCourseSet">
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
-           style="width: calc(100% + 64px);">基础信息
+           style="width: calc(100% + 64px);">{{ t('title.basicInformation') }}
       </div>
       <a-form
         ref="formRef"
         class="mt-66"
         :model="formState"
-        :label-col="{ span: 4 }"
+        :label-col="{ span: 6 }"
         :wrapper-col="{ span: 16 }"
       >
         <a-form-item
-          label="计划名字"
+          :label="t('label.planName')"
           name="title"
           :validateTrigger="['blur']"
           :rules="[
-          { required: true, message: '请输入计划名称' },
+          { required: true, message: t('validate.inputPlanName') },
           { validator: interByteValidator, maxSize: 100, minSize: 2 },
           { validator: courseTitleValidator },
           ]"
@@ -290,7 +291,7 @@ onMounted(() => {
           <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
         <a-form-item
-          label="计划副标题"
+          :label="t('label.subheadingOfThePlan')"
           name="subtitle"
           :validateTrigger="['blur']"
           :rules="[
@@ -304,7 +305,7 @@ onMounted(() => {
 
     <div class="relative" v-else>
       <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
-           style="width: calc(100% + 64px);">基础信息
+           style="width: calc(100% + 64px);">{{ t('title.basicInformation') }}
       </div>
       <a-form
         ref="formRef"
@@ -314,11 +315,11 @@ onMounted(() => {
         :wrapper-col="{ span: 16 }"
       >
         <a-form-item
-          label="课程标题"
+          :label="t('label.courseTitle')"
           name="title"
           :validateTrigger="['blur']"
           :rules="[
-          { required: true, message: '请输入课程标题' },
+          { required: true, message: t('validate.inputCourseTitle') },
           { validator: courseTitleLengthValidator },
           { validator: courseTitleValidator },
           ]"
@@ -326,29 +327,29 @@ onMounted(() => {
           <a-input v-model:value.trim="formState.title"/>
         </a-form-item>
         <a-form-item
-          label="课程副标题"
+          :label="t('label.courseSubtitle')"
           name="subtitle"
           :validateTrigger="['blur']"
           :rules="[
-          { max: 50, message: '最多支持50个字符' },
+          { max: 50, message: t('validate.courseSubtitleLimit') },
           ]"
         >
           <a-textarea v-model:value="formState.subtitle" :rows="3"/>
         </a-form-item>
         <a-form-item
-          label="标签"
+          :label="t('label.tag')"
         >
           <a-select
             v-model:value="formState.tags"
             mode="multiple"
-            placeholder="请选择"
+            :placeholder="t('placeholder.pleaseSelect')"
             :options="tabOptions"
             allow-clear
           ></a-select>
-          <div class="text-[#adadad] text-14 mt-8 ">用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理</div>
+          <div class="text-[#adadad] text-14 mt-8 ">{{ t('tip.tag') }}</div>
         </a-form-item>
         <a-form-item
-          label="分类"
+          :label="t('label.category')"
         >
           <a-tree-select
             v-model:value="formState.categoryId"
@@ -362,7 +363,7 @@ onMounted(() => {
         </a-form-item>
         <a-form-item
           v-if="props.manage.enableOrg === 1"
-          label="组织机构"
+          :label="t('label.organization')"
         >
           <a-tree-select
             v-model:value="formState.orgCode"
@@ -375,13 +376,13 @@ onMounted(() => {
           ></a-tree-select>
         </a-form-item>
         <a-form-item
-          label="连载状态"
+          :label="t('label.serializeMode')"
         >
           <a-radio-group v-model:value="formState.serializeMode"
                          :options="serializeOption"/>
         </a-form-item>
         <a-form-item
-          label="封面图片"
+          :label="t('label.coverPicture')"
         >
           <a-upload
             ref="upload"
@@ -396,18 +397,18 @@ onMounted(() => {
             <div v-else class="flex flex-col items-center relative">
               <div class="flex flex-col items-center">
                 <PlusOutlined/>
-                <div class="mt-8">上传图片</div>
+                <div class="mt-8">{{ t('tip.uploadPictures') }}</div>
               </div>
             </div>
           </a-upload>
-          <div class="text-[#a1a1a1]">请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。</div>
+          <div class="text-[#a1a1a1]">{{ t('tip.coverPicture') }}</div>
         </a-form-item>
         <a-form-item
-          label="课程简介"
+          :label="t('label.courseIntroduction')"
         >
           <textarea id="course-introduction"></textarea>
           <div class="text-[#a1a1a1] font-normal text-14 leading-28">
-            为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+            {{ t('tip.courseIntroduction') }}
           </div>
         </a-form-item>
       </a-form>
@@ -421,13 +422,13 @@ onMounted(() => {
       @cancel="cropperModalVisible = false"
     >
       <vue-cropper ref="cropperInstance" :src="coverUrl" :aspectRatio="16/9"></vue-cropper>
-      <template #title>裁剪图片</template>
+      <template #title>{{ t('title.cropThePicture') }}</template>
       <template #footer>
         <div class="flex justify-between">
-          <a-button @click="reSelectCover">重新选择</a-button>
+          <a-button @click="reSelectCover">{{ t('btn.reselect') }}</a-button>
           <div>
-            <a-button @click="hideCropperModal">取消</a-button>
-            <a-button type="primary" @click="saveCropperCover">保存图片</a-button>
+            <a-button @click="hideCropperModal">{{ t('btn.cancel') }}</a-button>
+            <a-button type="primary" @click="saveCropperCover">{{ t('btn.saveTheImage') }}</a-button>
           </div>
         </div>
       </template>

@@ -3,6 +3,7 @@ import {reactive, ref} from 'vue';
 import {
   QuestionCircleOutlined,
 } from '@ant-design/icons-vue';
+import {t} from './vue-lang';
 
 const props = defineProps({
   manage: {type: Object, default: {}}
@@ -10,17 +11,17 @@ const props = defineProps({
 
 const tryLookLengthOptions = Array.from({length: 11}, (v, i) => ({
   value: String(i),
-  label: i === 0 ? '不支持试看' : `${i}分钟试看`
+  label: i === 0 ? t('label.notAvailableForPreview') : t('label.minuteTrialViewing', {min: i})
 }));
 
 const learnModeOptions = [
-  {label: '自由式', value: 'freeMode'},
-  {label: '解锁式', value: 'lockMode'},
+  {label: t('label.freestyle'), value: 'freeMode'},
+  {label: t('label.unlockingType'), value: 'lockMode'},
 ];
 
 const enableAudioOptions = [
-  {label: '开启', value: '1'},
-  {label: '关闭', value: '0'},
+  {label: t('label.open'), value: '1'},
+  {label: t('label.close'), value: '0'},
 ];
 
 const formRef = ref(null);
@@ -55,23 +56,23 @@ defineExpose({
 <template>
   <div class="flex flex-col w-full relative">
     <div class="absolute -left-32 w-full px-32 font-medium py-10 text-14 text-stone-900 bg-[#f5f5f5]"
-         style="width: calc(100% + 64px);">基础规则
+         style="width: calc(100% + 64px);">{{ t('title.baseRule') }}
     </div>
     <a-form
       ref="formRef"
       class="mt-66"
       :model="formState"
-      :label-col="{ span: 4 }"
+      :label-col="{ span: 6 }"
       :wrapper-col="{ span: 16 }"
     >
       <a-form-item>
         <template #label>
           <div class="flex items-center">
-            <div>学习模式</div>
+            <div>{{ t('label.studyMode') }}</div>
             <a-popover>
               <template #content>
-                <div class="text-14"><span class="font-medium">自由式：</span>学习过程自由安排</div>
-                <div class="text-14"><span class="font-medium">解锁式：</span>根据既定顺序逐个解锁学习</div>
+                <div class="text-14"><span class="font-medium">{{ t('label.freestyle') }}：</span>{{ t('tip.freestyle') }}</div>
+                <div class="text-14"><span class="font-medium">{{ t('label.unlockingType') }}：</span>{{ t('tip.unlockingType') }}</div>
               </template>
               <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
             </a-popover>
@@ -81,41 +82,39 @@ defineExpose({
           <a-radio-group v-model:value="formState.learnMode" :options="learnModeOptions"
                          :disabled="props.manage.course.status !== 'draft' || props.manage.course.platform !== 'self'"/>
         </div>
-        <div class="text-[#a1a1a1] text-14 mt-8">计划发布后学习模式无法修改</div>
+        <div class="text-[#a1a1a1] text-14 mt-8">{{ t('tip.studyMode') }}</div>
       </a-form-item>
       <a-form-item
         v-if="props.manage.lessonWatchLimit"
-        label="视频观看时长限制"
+        :label="t('label.viewingDurationLimit')"
         name="watchLimit"
         :required="true"
         :validateTrigger="['blur']"
         :rules="[
-          { pattern: /^(?:[0-9]|[1-5][0-9])$/, message: '请输入非负整数，其中秒数只能在0-59之间' },
+          { pattern: /^(?:[0-9]|[1-5][0-9])$/, message: t('validate.nonNegativeInteger') },
           ]"
       >
         <div class="flex items-center space-x-8">
           <a-input v-model:value="formState.watchLimit" style="width: 150px"></a-input>
-          <div class="text-[#a1a1a1] font-normal text-14 whitespace-nowrap">倍总时长</div>
+          <div class="text-[#a1a1a1] font-normal text-14 whitespace-nowrap">{{ t('label.totalDuration') }}</div>
           <a-popover>
             <template #content>
-              <div class="text-14 font-normal w-300">例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。
-                对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
-              </div>
+              <div class="text-14 font-normal w-300">{{ t('tip.viewingDurationLimit') }}</div>
             </template>
             <QuestionCircleOutlined class="text-14 leading-14"/>
           </a-popover>
         </div>
       </a-form-item>
       <a-form-item
-        label="任务完成规则"
+        :label="t('label.taskCompletionRules')"
       >
         <a-radio-group v-model:value="formState.enableFinish"
                        :disabled="props.manage.course.platform === 'supplier'">
-          <a-radio value="1">无限制</a-radio>
-          <a-radio value="0">由任务完成条件决定<span>
+          <a-radio value="1">{{ t('label.unlimited') }}</a-radio>
+          <a-radio value="0">{{ t('label.conditions') }}<span>
               <a-popover>
                 <template #content>
-                  <div class="text-14 font-normal">必须达到完成条件，任务才算完成</div>
+                  <div class="text-14 font-normal">{{ t('tip.conditions') }}</div>
                 </template>
                 <QuestionCircleOutlined class="text-14 leading-14 ml-4"/>
               </a-popover>
@@ -124,7 +123,7 @@ defineExpose({
       </a-form-item>
       <div v-if="props.manage.courseSet !== 'live'">
         <a-form-item
-          label="设置免费学习任务"
+          :label="t('label.freeTasks')"
         >
           <div class="flex flex-col">
             <a-checkbox-group v-model:value="formState.freeTaskIds" style="width: 100%">
@@ -150,13 +149,13 @@ defineExpose({
                         <span>{{ props.manage.taskName }} {{ task.number }} : {{ task.title }}</span>
                       </div>
                     </a-checkbox>
-                    <a-tag v-if="formState.freeTaskIds.includes(task.id)" color="#f46300">免费</a-tag>
+                    <a-tag v-if="formState.freeTaskIds.includes(task.id)" color="#f46300">{{ t('tag.free') }}</a-tag>
                   </div>
                 </a-list-item>
               </a-list>
             </a-checkbox-group>
             <div class="text-[#a1a1a1] text-14 flex items-center">
-              免费{{ props.manage.taskName }}仅支持{{ props.manage.canFreeActivityTypes }}
+              {{ t('tag.free') }}{{ props.manage.taskName }}{{ t('label.onlySupported') }}{{ props.manage.canFreeActivityTypes }}
               <a-popover placement="right">
                 <template #content>
                   <div class="text-14">{{ props.manage.freeTaskChangelog }}</div>
@@ -172,10 +171,10 @@ defineExpose({
         >
           <template #label>
             <div class="flex items-center">
-              <div>视频试看</div>
+              <div>{{ t('label.videoPreview') }}</div>
               <a-popover>
                 <template #content>
-                  <div class="text-14">常用于收费视频内容的前几分钟免费试看</div>
+                  <div class="text-14">{{ t('tip.videoPreview') }}</div>
                 </template>
                 <QuestionCircleOutlined class="text-14 leading-14 mx-4"/>
               </a-popover>
@@ -197,16 +196,16 @@ defineExpose({
       </div>
       <a-form-item
         v-if="props.manage.audioServiceStatus !== 'needOpen' && props.manage.course.type === 'normal'"
-        label="音频听课（试用）"
+        :label="t('label.audioLearning')"
       >
         <a-radio-group class="base-rule-radio mt-6" v-model:value="formState.enableAudio"
                        :options="enableAudioOptions"
                        :disabled="props.manage.course.platform === 'supplier'"/>
-        <div class="text-14 text-[#a1a1a1] mt-8">1.开启后，学员在学习时，可按需切换为音频听课，提高完成率。</div>
-        <div class="text-14 text-[#a1a1a1] mt-8">2.当前转音频完成情况 ：{{ props.manage.videoConvertCompletion }}<a
+        <div class="text-14 text-[#a1a1a1] mt-8">1.{{ t('tip.afterActivation') }}</div>
+        <div class="text-14 text-[#a1a1a1] mt-8">2.{{ t('tip.audioStatus') }} ：{{ props.manage.videoConvertCompletion }}<a
           class="text-[--primary-color] text-14 ml-8 font-medium" :href="props.manage.courseSetManageFilesUrl"
-          target="__blank">查看详情</a></div>
-        <div class="text-14 text-[#a1a1a1] mt-8">3.视频含弹题时，在APP端不支持转音频播放</div>
+          target="__blank">{{ t('btn.viewDetails') }}</a></div>
+        <div class="text-14 text-[#a1a1a1] mt-8">3.{{ t('tip.notAPP') }}</div>
       </a-form-item>
     </a-form>
   </div>

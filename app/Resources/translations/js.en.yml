@@ -417,6 +417,16 @@ auth.register.number_validate_error_hint: 11 numbers, the first number can not b
 auth.register.drag_captcha_tips: Please drag the left block to finish the puzzle
 auth.register.name_required_error_hint: Please input username
 auth.register.password_required_error_hint: Please input password
+auth.register.register_by_email: Switch to another email address for registration >>
+auth.register.register_by_mobile: Switch to another mobile phone number for registration >>
+auth.register.mobile: Cell phone number
+auth.register.email: E-mail address
+auth.register.input_mobile: Enter mobile phone number as your login account
+auth.register.input_email: Enter email address as your login account
+auth.register.input_email_verification_code: Verification code
+auth.register.input_mobile_verification_code: Verification code
+auth.register.email_verification_code: Email verification code
+auth.register.mobile_verification_code: SMS verification code
 
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error

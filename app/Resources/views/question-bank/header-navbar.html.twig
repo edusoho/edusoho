@@ -5,19 +5,19 @@
 {% endif %}
 <div class="courseset-header-section">
   <ul class="nav nav-tabs nav-header-section clearfix">
-    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'question-list' %} active {% endif %}">
+    <li class="item-bank-nav-header-section cd-ml32 {% if active_tab == 'question-list' %} active {% endif %}">
       <a href="{{ path('question_bank_manage_question_list', {id: questionBank.id }) }}" data-is-link="true">{{ 'my.teaching.question_bank.question.manage'|trans }}</a>
     </li>
-    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'testpaper-list' %} active {% endif %}">
+    <li class="item-bank-nav-header-section cd-ml32 {% if active_tab == 'testpaper-list' %} active {% endif %}">
       <a href="{{ path('question_bank_manage_testpaper_list', {id: questionBank.id }) }}" data-is-link="true">{{ 'my.teaching.question_bank.testpaper.manage'|trans }}</a>
     </li>
-    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'category-list' %} active {% endif %}">
+    <li class="item-bank-nav-header-section cd-ml32 {% if active_tab == 'category-list' %} active {% endif %}">
       <a href="{{ path('question_bank_manage_question_category', {id: questionBank.id }) }}" data-is-link="true">{{ 'my.teaching.question_bank.question_category.manage'|trans }}</a>
     </li>
-    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'bank-info' %} active {% endif %}">
+    <li class="item-bank-nav-header-section cd-ml32 {% if active_tab == 'bank-info' %} active {% endif %}">
       <a href="{{ path('question_bank_manage', {id: questionBank.id }) }}" data-is-link="true">{{ 'my.teaching.question_bank.info'|trans }}</a>
     </li>
-    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'exercise-set' %} active {% endif %}" style="float: right">
+    <li class="item-bank-nav-header-section cd-ml32 {% if active_tab == 'exercise-set' %} active {% endif %}" style="float: right">
       <a href="{{ path('item_bank_exercise_manage_base', {questionBankId: questionBank.id, exerciseId: exerciseId }) }}" data-is-link="true">{{ 'my.teaching.question_bank.exercise_set'|trans }}</a>
     </li>
   </ul>

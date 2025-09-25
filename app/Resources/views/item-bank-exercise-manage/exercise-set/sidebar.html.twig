@@ -42,14 +42,16 @@
         <li class="cd-sidebar__item {% if course_side_nav == 'wrong_questions' %}active{% endif %}">
           <a
             href="{{ path('item_bank_exercise_manage_wrong_questions', {exerciseId:exercise.id}) }}">
-            {{ '学员错题'|trans }}
+            {{ 'course.student_incorrect_questions'|trans }}
           </a>
         </li>
         {# AI伴学服务 #}
         <li class="cd-sidebar__item {% if course_side_nav == 'ai-companion-study' %}active{% endif %}" style="position: relative">
-          <div style="color: white; font-size: 12px; line-height: 16px; font-weight: 500; padding: 0 6px; background-color: #FF4D4F; border-radius: 6px 6px 6px 0; position: absolute; left: 105px; top: 5px">NEW</div>
           <a href="{{ path('item_bank_exercise_manage_ai_companion_study', {exerciseId:exercise.id}) }}">
-            AI伴学服务
+            <div style="position: relative; width: fit-content">
+              <div>{{ 'course.question_bank_practice_management'|trans }}</div>
+              <div style="color: white; font-size: 12px; line-height: 16px; font-weight: 500; padding: 0 2px; background-color: #FF4D4F; border-radius: 6px 6px 6px 0; position: absolute; right: -25px; top: -10px">NEW</div>
+            </div>
           </a>
         </li>
       </div>

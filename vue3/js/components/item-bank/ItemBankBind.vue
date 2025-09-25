@@ -26,7 +26,7 @@ onBeforeMount(async () => {
 
 <template>
   <AntConfigProvider>
-    <div v-if="bindItemBankList.length === 0" class="flex justify-center py-20 text-[#c1c1c1] text-14 font-normal">暂无绑定题库</div>
+    <div v-if="bindItemBankList.length === 0" class="flex justify-center py-20 text-[#c1c1c1] text-14 font-normal">{{ t('label.noQuestionBank') }}</div>
     <div v-else class="px-4 md:px-16 pt-15 max-h-800 overflow-y-auto">
       <div v-for="(item, index) in bindItemBankList" class="flex flex-col justify-between md:px-24 md:py-16 border border-[#E5E6EB] border-none md:border-solid rounded-6 md:my-16">
         <div class="flex w-full">
