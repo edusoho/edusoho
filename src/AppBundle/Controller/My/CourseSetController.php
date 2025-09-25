@@ -138,61 +138,6 @@ class CourseSetController extends CourseBaseController
         );
     }
 
-    public function livesAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        $courseSets = $this->getCourseSetService()->findLearnCourseSetsByUserId($currentUser['id']);
-        $setIds = ArrayToolkit::column($courseSets, 'id');
-        $courses = $this->getCourseService()->findCoursesByCourseSetIds($setIds);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $conditions = [
-            'status' => 'published',
-            'startTime_GE' => time(),
-            'parentId' => 0,
-            'courseIds' => $courseIds,
-            'type' => 'live',
-        ];
-
-        $paginator = new Paginator(
-            $request,
-            $this->getTaskService()->countTasks($conditions),
-            10
-        );
-
-        $tasks = $this->getTaskService()->searchTasks(
-            $conditions,
-            ['startTime' => 'ASC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $courses = ArrayToolkit::index($courses, 'id');
-        $tasks = ArrayToolkit::group($tasks, 'courseId');
-        $newCourseSets = [];
-        if (!empty($courseSets)) {
-            foreach ($tasks as $key => &$task) {
-                $course = $courses[$key];
-                $courseSetId = $course['courseSetId'];
-                $newCourseSets[$courseSetId] = $courseSets[$courseSetId];
-                $newCourseSets[$courseSetId]['task'] = $task[0];
-            }
-        }
-
-        $default = $this->getSettingService()->get('default', []);
-
-        return $this->render(
-            'my/learning/course-set/live-list.html.twig',
-            [
-                'courseSets' => $newCourseSets,
-                'paginator' => $paginator,
-                'default' => $default,
-            ]
-        );
-    }
-
     protected function buildMyTeachingCoursesConditions($filter, $tab = 'publish')
     {
         $conditions = [

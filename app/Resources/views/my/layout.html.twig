@@ -33,9 +33,8 @@
           </li>
 
           {% if setting('course.live_course_enabled') %}
-            <li class="list-group-item
-          {% if side_nav == 'my-learning-live' %} active {% endif %}">
-              <a href="{{ path('my_live_courses_learning') }}">{{ 'my.learning.live_menu'|trans }}</a>
+            <li class="list-group-item{% if side_nav == 'my-learning-live' %} active {% endif %}">
+              <a href="{{ path('my_courses_live_calendar') }}">{{ 'my.learning.live_menu'|trans }}</a>
             </li>
           {% endif %}
 
