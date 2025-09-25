@@ -44,7 +44,7 @@ class Order extends AbstractResource
             if (!empty($params['isOrderCreate'])) {
                 return $order;
             }
-            // 优惠卷全额抵扣
+            // 优惠券全额抵扣
             if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
                 return [
                     'id' => $order['id'],
