@@ -1236,14 +1236,12 @@ admin.course.close_course_hint: Students who are still valid after closing canno
 admin.close.btn.confirm_close: Confirm close?
 admin.close.btn.confirm_hide: Confirm removal?
 admin.close.btn.confirm_publish: Confirm release?
-admin.course.close_success_hint: Course was closed successfully!
 admin.course.hide_course_hint: After the course is removed, it will not be displayed at the front desk, and students will not be able to view it on the home page and list page.
 admin.course.delist_course_hint: After the course is removed, it will not be displayed at the front desk and students will not be able to view it
 admin.course.hide_success_hint: Course hidden successfully!
 admin.course.show_success_hint: Page enabled!
 admin.course.delist_success_hint: Course removed successfully!
 admin.course.publish_hint: Confirm the release?
-admin.course.publish_success_hint: The course was published successfully!
 admin.course.unknow_error_hint: unknown mistake
 admin.course.delete_hint: Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?
 admin.course.remove_hint: Removal of the course will delete all student information and student data, and cannot be restored after removal! Are you sure you want to remove this course?
@@ -2406,3 +2404,11 @@ course.market_setting.contract.model.handSignature: Hand signature
 course.market_setting.contract.model.partyBName: Party B's name
 course.market_setting.contract.model.iDNumber: ID number
 course.market_setting.contract.model.contactInformation: Contact information
+
+tab.course_tab.index.my_courses: My Courses
+tab.course_tab.index.enter_course_name: Please enter the course name
+tab.course_tab.live_class_schedule: Live class schedule
+tab.course_tab.learning: Learning
+tab.course_tab.have_completed: Have completed studying
+tab.course_tab.have_expired: Have expired
+tab.course_tab.collect: Collect

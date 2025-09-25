@@ -1,32 +1,32 @@
 <template>
   <div>
     <div class="panel-heading" style="padding: 10px 0; line-height: 30px;">
-      <label class="text-18">我的课程</label>
+      <label class="text-18">{{ 'tab.course_tab.index.my_courses'|trans }}</label>
       <div class="pull-right">
         <form class="search-form" @submit.prevent="getTabData(tabValue)" style="margin-right: 54px;">
-          <input class="search-input-content inline-block" v-model:value="searchValue" type="text" name="title" placeholder="请输入课程名称" />
+          <input class="search-input-content inline-block" v-model="searchValue" type="text" name="title" :placeholder="'tab.course_tab.index.enter_course_name'|trans" />
           <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit" @click="getTabData(tabValue)" style="padding-top: 6px !important;"></a>
         </form>
-        <a href="/my/courses/live/calendar" v-show="tabValue == 'learning'" class="live-course-btn">直播课表</a>
+        <a href="/my/courses/live/calendar" v-show="tabValue == 'learning'" class="live-course-btn">{{ 'tab.course_tab.live_class_schedule'|trans }}</a>
       </div>
     </div>
 
     <div class="panel-body" style="padding: 0 0 16px 0;">
-    <a-tabs 
+    <a-tabs
     v-model:activeKey="tabValue"
     :tabBarGutter="0"
-    size="small" 
+    size="small"
     @change="tabOnChange">
-      <a-tab-pane key="learning" tab="学习中">
+      <a-tab-pane key="learning" :tab="'tab.course_tab.learning'|trans">
         <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="learned" tab="已学完">
+      <a-tab-pane key="learned" :tab="'tab.course_tab.have_completed'|trans">
         <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="expired" tab="已过期">
+      <a-tab-pane key="expired" :tab="'tab.course_tab.have_expired'|trans">
         <CourseList :courseLists="courseLists" :tabValue="tabValue"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="favorite" tab="收藏">
+      <a-tab-pane key="favorite" :tab="'tab.course_tab.collect'|trans">
         <CourseSetList :courseSets="courseLists"></CourseSetList>
       </a-tab-pane>
     </a-tabs>
@@ -56,7 +56,7 @@ export default {
   },
   async mounted(){
     const params = this.getParams(window.location.href)
-    
+
     if (params.search) {
       this.searchValue = decodeURIComponent(params.search)
     }
