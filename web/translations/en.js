@@ -364,6 +364,16 @@ t.add("auth.register.number_validate_error_hint", "11 numbers, the first number 
 t.add("auth.register.drag_captcha_tips", "Please drag the left block to finish the puzzle", "js", "en");
 t.add("auth.register.name_required_error_hint", "Please input username", "js", "en");
 t.add("auth.register.password_required_error_hint", "Please input password", "js", "en");
+t.add("auth.register.register_by_email", "Switch to another email address for registration >>", "js", "en");
+t.add("auth.register.register_by_mobile", "Switch to another mobile phone number for registration >>", "js", "en");
+t.add("auth.register.mobile", "Cell phone number", "js", "en");
+t.add("auth.register.email", "E-mail address", "js", "en");
+t.add("auth.register.input_mobile", "Enter mobile phone number as your login account", "js", "en");
+t.add("auth.register.input_email", "Enter email address as your login account", "js", "en");
+t.add("auth.register.input_email_verification_code", "Verification code", "js", "en");
+t.add("auth.register.input_mobile_verification_code", "Verification code", "js", "en");
+t.add("auth.register.email_verification_code", "Email verification code", "js", "en");
+t.add("auth.register.mobile_verification_code", "SMS verification code", "js", "en");
 t.add("auth.mobile_captcha_required_error_hint", "Please enter a verification code", "js", "en");
 t.add("auth.mobile_captcha_error_hint", "Verification code error", "js", "en");
 t.add("user.login.read.agree.policy.and.user.terms", "Please read and check the \u300aUser Service Agreement\u300b and \u300aPrivacy Policy\u300b", "js", "en");

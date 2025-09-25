@@ -3675,6 +3675,8 @@ homepage.header.admin_menu: 管理后台
 homepage.header.switch_pc: 切换电脑版
 homepage.header.switch_mobile: 切换触屏版
 homepage.friend-link.content_title: 友情链接：
+homepage.live_course.title: 近期直播
+homepage.live_course.subtitle: 实时跟踪直播课程，避免课程遗漏。
 homepage.live_course.living: 正在直播
 homepage.live_course.expect: 敬请期待
 homepage.live_course.teacher: '授课老师:'

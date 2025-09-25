@@ -304,6 +304,16 @@ t.add("auth.register.number_validate_error_hint", "\u4e0d\u5141\u8bb8\u4ee51\u5f
 t.add("auth.register.drag_captcha_tips", "\u8bf7\u62d6\u52a8\u5de6\u8fb9\u6ed1\u5757\u5b8c\u6210\u4e0a\u65b9\u62fc\u56fe", "js", "zh_CN");
 t.add("auth.register.name_required_error_hint", "\u8bf7\u8f93\u5165\u5e10\u53f7", "js", "zh_CN");
 t.add("auth.register.password_required_error_hint", "\u8bf7\u8f93\u5165\u5bc6\u7801", "js", "zh_CN");
+t.add("auth.register.register_by_email", "\u5207\u6362\u90ae\u7bb1\u53f7\u6ce8\u518c >>", "js", "zh_CN");
+t.add("auth.register.register_by_mobile", "\u5207\u6362\u624b\u673a\u53f7\u6ce8\u518c >>", "js", "zh_CN");
+t.add("auth.register.mobile", "\u624b\u673a\u53f7\u7801", "js", "zh_CN");
+t.add("auth.register.email", "\u90ae\u7bb1\u5730\u5740", "js", "zh_CN");
+t.add("auth.register.input_mobile", "\u8bf7\u586b\u5199\u4f60\u5e38\u7528\u7684\u624b\u673a\u53f7\u7801\u4f5c\u4e3a\u767b\u9646\u8d26\u53f7", "js", "zh_CN");
+t.add("auth.register.input_email", "\u8bf7\u586b\u5199\u4f60\u5e38\u7528\u7684\u90ae\u7bb1\u5730\u5740\u4f5c\u4e3a\u767b\u9646\u8d26\u53f7", "js", "zh_CN");
+t.add("auth.register.input_email_verification_code", "\u586b\u5199\u90ae\u7bb1\u9a8c\u8bc1\u7801", "js", "zh_CN");
+t.add("auth.register.input_mobile_verification_code", "\u586b\u5199\u77ed\u4fe1\u9a8c\u8bc1\u7801", "js", "zh_CN");
+t.add("auth.register.email_verification_code", "\u90ae\u7bb1\u9a8c\u8bc1\u7801", "js", "zh_CN");
+t.add("auth.register.mobile_verification_code", "\u77ed\u4fe1\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_required_error_hint", "\u8bf7\u8f93\u5165\u9a8c\u8bc1\u7801", "js", "zh_CN");
 t.add("auth.mobile_captcha_error_hint", "\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
 t.add("user.login.read.agree.policy.and.user.terms", "\u8bf7\u9605\u8bfb\u5e76\u52fe\u9009\u300a\u7528\u6237\u670d\u52a1\u534f\u8bae\u300b\u548c\u300a\u9690\u79c1\u653f\u7b56\u300b", "js", "zh_CN");
