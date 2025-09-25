@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeMount, reactive, ref, watch, watchEffect} from 'vue';
+import {computed, onBeforeMount, reactive, ref, watch} from 'vue';
 import { useInfiniteScroll } from '@vueuse/core'
 import { message } from 'ant-design-vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
