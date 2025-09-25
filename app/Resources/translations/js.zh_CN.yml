@@ -361,6 +361,16 @@ auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
 auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 auth.register.name_required_error_hint: 请输入帐号
 auth.register.password_required_error_hint: 请输入密码
+auth.register.register_by_email: 切换邮箱号注册 >>
+auth.register.register_by_mobile: 切换手机号注册 >>
+auth.register.mobile: 手机号码
+auth.register.email: 邮箱地址
+auth.register.input_mobile: 请填写你常用的手机号码作为登陆账号
+auth.register.input_email: 请填写你常用的邮箱地址作为登陆账号
+auth.register.input_email_verification_code: 填写邮箱验证码
+auth.register.input_mobile_verification_code: 填写短信验证码
+auth.register.email_verification_code: 邮箱验证码
+auth.register.mobile_verification_code: 短信验证码
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误

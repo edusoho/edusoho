@@ -55,9 +55,9 @@ export default class Register {
   initRegisterModeSwitch() {
     if ($('#register_mode_switch').length === 0) return;
 
-    $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-    $('#register_emailOrMobile-label').text('手机号码');
-    $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
+    $('#register_mode_switch').text(Translator.trans("auth.register.register_by_email")).attr('mode', 'mobile')
+    $('#register_emailOrMobile-label').text(Translator.trans("auth.register.mobile"));
+    $('#register_emailOrMobile-input').attr('placeholder', Translator.trans("auth.register.input_mobile"));
     $('#register_emailOrMobile-label').attr('for', 'verifiedMobile')
     $('#register_emailOrMobile-input').attr('name', 'verifiedMobile')
     this._codeBtnDisable();
@@ -67,16 +67,16 @@ export default class Register {
       this.resetDragCaptchaAndCodeBtn()
       $('#register_emailOrMobile-input').val('');
       if ($('#register_mode_switch').attr('mode') === 'email') {
-        $('#register_mode_switch').text('切换邮箱号注册 >>').attr('mode', 'mobile')
-        $('#register_emailOrMobile-label').text('手机号码');
-        $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的手机号码作为登陆账号');
+        $('#register_mode_switch').text(Translator.trans("auth.register.register_by_email")).attr('mode', 'mobile')
+        $('#register_emailOrMobile-label').text(Translator.trans("auth.register.mobile"));
+        $('#register_emailOrMobile-input').attr('placeholder', Translator.trans("auth.register.input_mobile"));
         $('#register_emailOrMobile-label').attr('for', 'verifiedMobile')
         $('#register_emailOrMobile-input').attr('name', 'verifiedMobile')
         $('#register_emailOrMobile-input').attr('type', 'tel')
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
-        $('#register_mode_switch').text('切换手机号注册 >>').attr('mode', 'email')
-        $('#register_emailOrMobile-label').text('邮箱地址');
-        $('#register_emailOrMobile-input').attr('placeholder', '请填写你常用的邮箱地址作为登陆账号');
+        $('#register_mode_switch').text(Translator.trans("auth.register.register_by_mobile")).attr('mode', 'email')
+        $('#register_emailOrMobile-label').text(Translator.trans("auth.register.email"));
+        $('#register_emailOrMobile-input').attr('placeholder', Translator.trans("auth.register.input_email"));
         $('#register_emailOrMobile-label').attr('for', 'email')
         $('#register_emailOrMobile-input').attr('name', 'email')
         $('#register_emailOrMobile-input').attr('type', 'email')
@@ -101,38 +101,38 @@ export default class Register {
     $('.js-email_mobile_msg-input').removeClass('hidden')
     if (register_mode === 'email') {
       if ($('input[name="email_enabled"]').val() === 'opened') {
-        $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
+        $('.js-email_mobile_msg-input').attr('placeholder', Translator.trans("auth.register.input_email_verification_code"))
         $('.js-email_mobile_msg-input').attr('name', 'email_code')
         $('.js-email_mobile_msg-input').attr('id', 'email_code')
 
-        $('.js-email_mobile_msg-label').text('邮箱验证码')
+        $('.js-email_mobile_msg-label').text(Translator.trans("auth.register.email_verification_code"))
         $('.js-email_mobile_msg-label').attr('for', 'email_code')
       } else {
         $('.email_mobile_msg').addClass('hidden')
       }
     } else if (register_mode === 'mobile') {
-      $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
+      $('.js-email_mobile_msg-input').attr('placeholder', Translator.trans("auth.register.input_mobile_verification_code"))
       $('.js-email_mobile_msg-input').attr('name', 'sms_code')
       $('.js-email_mobile_msg-input').attr('id', 'sms_code')
 
-      $('.js-email_mobile_msg-label').text('短信验证码')
+      $('.js-email_mobile_msg-label').text(Translator.trans("auth.register.mobile_verification_code"))
       $('.js-email_mobile_msg-label').attr('for', 'sms_code')
     } else {
       if ($('#register_mode_switch').attr('mode') === 'email' && $('input[name="email_enabled"]').val() === 'opened') {
-        $('.js-email_mobile_msg-input').attr('placeholder', '填写邮箱验证码')
+        $('.js-email_mobile_msg-input').attr('placeholder', Translator.trans("auth.register.input_email_verification_code"))
         $('.js-email_mobile_msg-input').attr('name', 'email_code')
         $('.js-email_mobile_msg-input').attr('id', 'email_code')
 
-        $('.js-email_mobile_msg-label').text('邮箱验证码')
+        $('.js-email_mobile_msg-label').text(Translator.trans("auth.register.email_verification_code"))
         $('.js-email_mobile_msg-label').attr('for', 'email_code')
       } else if ($('#register_mode_switch').attr('mode') === 'email' && $('input[name="email_enabled"]').val() === 'closed') {
         $('.email_mobile_msg').addClass('hidden')
       } else if ($('#register_mode_switch').attr('mode') === 'mobile') {
-        $('.js-email_mobile_msg-input').attr('placeholder', '填写短信验证码')
+        $('.js-email_mobile_msg-input').attr('placeholder', Translator.trans("auth.register.input_mobile_verification_code"))
         $('.js-email_mobile_msg-input').attr('name', 'sms_code')
         $('.js-email_mobile_msg-input').attr('id', 'sms_code')
 
-        $('.js-email_mobile_msg-label').text('短信验证码')
+        $('.js-email_mobile_msg-label').text(Translator.trans("auth.register.mobile_verification_code"))
         $('.js-email_mobile_msg-label').attr('for', 'sms_code')
 
       }
