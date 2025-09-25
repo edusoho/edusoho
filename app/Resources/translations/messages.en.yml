@@ -3187,6 +3187,8 @@ homepage.header.admin_menu: 'Admin'
 homepage.header.switch_pc: Switch PC
 homepage.header.switch_mobile: Switch Mobile
 homepage.friend-link.content_title: Links：
+homepage.live_course.title: 'Live'
+homepage.live_course.subtitle: 'Real-time tracking of live courses to avoid missing any part of the lessons.'
 homepage.live_course.living: 'On live'
 homepage.live_course.expect: 'Coming Soon'
 homepage.live_course.teacher: 'Teacher:'
