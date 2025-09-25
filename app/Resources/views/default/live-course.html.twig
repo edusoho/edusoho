@@ -3,8 +3,8 @@
   <section class="live-course-section {{config.background|default("")}}">
     <div class="container">
       <div class="text-line gray">
-        <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
-        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+        <h5><span>{{ config.title|default("homepage.live_course.title"|trans) }}</span><div class="line"></div></h5>
+        <div class="subtitle">{{ config.subTitle|default("homepage.live_course.subtitle"|trans) }}</div>
       </div>
       <div class="course-list course-list-new">
         <div class="row">
