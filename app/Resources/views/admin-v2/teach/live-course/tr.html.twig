@@ -1,14 +1,24 @@
 <tr id="tag-tr-{{ liveTask.id }}">
   {% set lessonUrl = path('course_task_show', {courseId:liveTask.courseId, id:liveTask.id}) %}
   <td>
-    <a href="{{ lessonUrl }}" target="_blank">{{ liveTask.title }}</a>
+    <a href="{{ lessonUrl }}" target="_blank" class="font-bold">{{ liveTask.title }}</a>
+  </td>
+  <td>
     <div class="mts">
       {% if courseSet %}
-        <a class="text-success text-sm" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
+        <a class="" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
       {% else %}
-        <span class="text-muted text-sm">{{'admin.live_manage.deleted'|trans}}</span>
+        <span class="text-muted">{{'admin.live_manage.deleted'|trans}}</span>
       {% endif %}
     </div>
+  </td>
+  <td>
+    {% if liveTask.classroom %}
+      <a class="" href="{{ path('classroom_show',{id: liveTask.classroom.id}) }}" target="_blank">{{ liveTask.classroom.title }}</a>
+
+    {% else %}
+      -
+    {% endif %}
   </td>
   {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
   <td>{{ liveTask.startTime|date('Y-m-d H:i') }}</td>

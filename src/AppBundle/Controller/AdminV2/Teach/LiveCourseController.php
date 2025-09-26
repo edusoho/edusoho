@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2\Teach;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -124,6 +125,14 @@ class LiveCourseController extends BaseController
 
     private function migrate(&$courseSets, &$liveTasks)
     {
+        $courseIds = ArrayToolkit::column($liveTasks, 'courseId');
+        $classroomCourses = empty($courseIds) ? [] : $this->getClassroomService()->findClassroomsByCoursesIds($courseIds);
+        $classroomCourses = ArrayToolkit::index($classroomCourses, 'courseId');
+
+        $classroomIds = ArrayToolkit::column($classroomCourses, 'classroomId');
+        $classrooms = empty($classroomIds) ? [] : $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $classrooms = ArrayToolkit::index($classrooms, 'id');
+
         foreach ($courseSets as &$courseSet) {
             $defaultCourse = $this->getCourseService()->getDefaultCourseByCourseSetId($courseSet['id']);
             $courseSet['maxStudentNum'] = $defaultCourse['maxStudentNum'];
@@ -132,6 +141,13 @@ class LiveCourseController extends BaseController
         foreach ($liveTasks as &$liveTask) {
             $activity = $this->getActivityService()->getActivity($liveTask['activityId']);
             $liveTask['length'] = $activity['length'];
+
+            $classroomId = isset ($classroomCourses[$liveTask['courseId']]) ? $classroomCourses[$liveTask['courseId']]['classroomId'] : null;
+            if (isset ($classroomId)) {
+                $liveTask['classroom'] = $classrooms[$classroomId] ?? null;
+            } else {
+                $liveTask['classroom'] = null;
+            }
         }
     }
 
@@ -185,6 +201,14 @@ class LiveCourseController extends BaseController
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**
