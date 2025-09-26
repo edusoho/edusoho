@@ -2384,3 +2384,39 @@ tab.course_tab.learning: 学习中
 tab.course_tab.have_completed: 已学完
 tab.course_tab.have_expired: 已过期
 tab.course_tab.collect: 收藏
+
+tab.course_tab.course_list.empty: 暂无课程
+
+tab.course_tab.course_item.learning_progress: 学习进度
+tab.course_tab.course_item.last_time_learned: 上次学到：课时
+tab.course_tab.course_item.closed: 已关闭
+tab.course_tab.course_item.live_streaming: 直播
+tab.course_tab.course_item.view_course: 查看课程
+tab.course_tab.course_item.start_studying: 进入学习
+
+tab.classroom_tab.index.my_class: 我的班级
+tab.classroom_tab.index.enter_class_name: 请输入班级名称
+tab.classroom_tab.learning: 学习中
+tab.classroom_tab.have_completed: 已学完
+tab.classroom_tab.have_expired: 已过期
+
+tab.classroom_tab.classroom_list.empty: 暂无课程
+
+tab.classroom_tab.classroom_item.have_learned: 已学了%days%天
+tab.classroom_tab.classroom_item.learning_progress: 学习进度
+tab.classroom_tab.classroom_tab.closed: 已关闭
+tab.classroom_tab.classroom_tab.view_class: 查看班级
+tab.classroom_tab.classroom_tab.continue_learning: 继续学习
+
+course_manage.live_statistics.detail.index.course_mistakes: 课程错题
+course_manage.live_statistics.detail.index.classroom_mistakes: 班级错题
+course_manage.live_statistics.detail.index.quiz_mistakes: 题库练习错题
+
+my.learning.wrong_question_book.detail.course.search_placeholder: 请输入课程名称
+
+my.learning.wrong_question_book.detail.list_item.problem: 题
+my.learning.wrong_question_book.detail.list_item.check: 查看错题
+
+my.learning.wrong_question_book.detail.classroom.search_placeholder: 请输入班级名称
+
+my.learning.wrong_question_book.detail.item_bank.search_placeholder: 请输入题库练习名称

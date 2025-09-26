@@ -5,14 +5,14 @@
     </div>
     <div class="item-info pull-left">
       <h3 class="title" @click="goToWrongQuestionDetail">{{ question.target_data.title | formatHtml }}</h3>
-      <p class="number">{{ question.item_num }} 题</p>
+      <p class="number">{{ question.item_num }} {{ 'my.learning.wrong_question_book.detail.list_item.problem'|trans }}</p>
     </div>
     <a-button
       type="primary"
       class="check-wrong-question pull-right"
       @click="goToWrongQuestionDetail"
     >
-      查看错题
+      {{ 'my.learning.wrong_question_book.detail.list_item.check'|trans }}
     </a-button>
   </div>
 </template>
@@ -56,7 +56,7 @@ export default {
     width: 45%;
 
     .title {
-      line-height: 22px; 
+      line-height: 22px;
       display: inline-block;
       max-width: 100%;
       cursor: pointer;

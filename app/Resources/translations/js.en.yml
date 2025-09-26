@@ -2407,8 +2407,38 @@ course.market_setting.contract.model.contactInformation: Contact information
 
 tab.course_tab.index.my_courses: My Courses
 tab.course_tab.index.enter_course_name: Please enter the course name
-tab.course_tab.live_class_schedule: Live class schedule
-tab.course_tab.learning: Learning
-tab.course_tab.have_completed: Have completed studying
-tab.course_tab.have_expired: Have expired
-tab.course_tab.collect: Collect
+tab.course_tab.index.live_class_schedule: Live class schedule
+tab.course_tab.index.learning: Learning
+tab.course_tab.index.have_completed: Have completed studying
+tab.course_tab.index.have_expired: Have expired
+tab.course_tab.index.collect: Collect
+
+tab.course_tab.course_list.empty: No courses available for the moment
+
+tab.course_tab.course_item.learning_progress: Learning progress
+tab.course_tab.course_item.last_time_learned: Last time learned： Class period
+tab.course_tab.course_item.closed: Closed
+tab.course_tab.course_item.live_streaming: Live streaming
+tab.course_tab.course_item.view_course: View the course
+tab.course_tab.course_item.start_studying: Start studying
+
+tab.classroom_tab.index.my_class: My class
+tab.classroom_tab.index.enter_class_name: Please enter the class name
+tab.classroom_tab.classroom_list.have_learned: Have learned for %days% day
+tab.classroom_tab.classroom_item.learning_progress: Progress
+tab.classroom_tab.classroom_tab.closed: Closed
+tab.classroom_tab.classroom_tab.view_class: View the class
+tab.classroom_tab.classroom_tab.continue_learning: Continue
+
+my.learning.wrong_question_book.detail.index.course_mistakes: Course mistakes
+my.learning.wrong_question_book.detail.index.classroom_mistakes: Classroom mistakes
+my.learning.wrong_question_book.detail.index.quiz_mistakes: Quiz mistakes
+
+my.learning.wrong_question_book.detail.course.search_placeholder: Please enter the course name
+
+my.learning.wrong_question_book.detail.list_item.problem: questions
+my.learning.wrong_question_book.detail.list_item.check: Check
+
+my.learning.wrong_question_book.detail.classroom.search_placeholder: Please enter the classroom name
+
+my.learning.wrong_question_book.detail.item_bank.search_placeholder: Please enter the name of the practice question bank

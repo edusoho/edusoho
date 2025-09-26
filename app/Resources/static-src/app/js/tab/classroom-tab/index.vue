@@ -1,28 +1,28 @@
 <template>
   <div>
     <div class="panel-heading" style="padding: 10px 0; line-height: 30px;">
-      <label class="text-18">我的班级</label>
+      <label class="text-18">{{ 'tab.classroom_tab.index.my_class'|trans }}</label>
       <div class="pull-right">
         <form class="search-form" @submit.prevent="getTabData(tabValue)" style="margin-right: 54px;">
-          <input class="search-input-content inline-block" v-model:value="searchValue" type="text" name="title" placeholder="请输入班级名称" />
+          <input class="search-input-content inline-block" v-model="searchValue" type="text" name="title" :placeholder="'tab.classroom_tab.index.enter_class_name'|trans" />
           <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit" @click="getTabData(tabValue)" style="padding-top: 6px !important;"></a>
         </form>
       </div>
     </div>
 
     <div class="panel-body" style="padding: 0 0 16px 0;">
-    <a-tabs 
+    <a-tabs
     v-model:activeKey="tabValue"
     :tabBarGutter="0"
-    size="small" 
+    size="small"
     @change="tabOnChange">
-      <a-tab-pane key="learning" tab="学习中">
+      <a-tab-pane key="learning" :tab="'tab.classroom_tab.learning'|trans">
         <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
-      <a-tab-pane key="learned" tab="已学完" force-render>
+      <a-tab-pane key="learned" :tab="'tab.classroom_tab.have_completed'|trans" force-render>
         <ClassroomList :classroomLists="classroomLists"></ClassroomList>
       </a-tab-pane>
-      <a-tab-pane key="expired" tab="已过期">
+      <a-tab-pane key="expired" :tab="'tab.classroom_tab.have_expired'|trans">
         <ClassroomList :classroomLists="classroomLists" :tabValue="tabValue"></ClassroomList>
       </a-tab-pane>
     </a-tabs>
@@ -50,7 +50,7 @@ export default {
         },
   async mounted(){
     const params = this.getParams(window.location.href)
-    
+
     if (params.search) {
       this.searchValue = decodeURIComponent(params.search)
     }

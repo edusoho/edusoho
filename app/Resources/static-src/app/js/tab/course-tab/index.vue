@@ -7,7 +7,7 @@
           <input class="search-input-content inline-block" v-model="searchValue" type="text" name="title" :placeholder="'tab.course_tab.index.enter_course_name'|trans" />
           <a class="btn inline-block searchCourseBtn es-icon es-icon-search" type="submit" @click="getTabData(tabValue)" style="padding-top: 6px !important;"></a>
         </form>
-        <a href="/my/courses/live/calendar" v-show="tabValue == 'learning'" class="live-course-btn">{{ 'tab.course_tab.live_class_schedule'|trans }}</a>
+        <a href="/my/courses/live/calendar" v-show="tabValue == 'learning'" class="live-course-btn">{{ 'tab.course_tab.index.live_class_schedule'|trans }}</a>
       </div>
     </div>
 
@@ -17,16 +17,16 @@
     :tabBarGutter="0"
     size="small"
     @change="tabOnChange">
-      <a-tab-pane key="learning" :tab="'tab.course_tab.learning'|trans">
+      <a-tab-pane key="learning" :tab="'tab.course_tab.index.learning'|trans">
         <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="learned" :tab="'tab.course_tab.have_completed'|trans">
+      <a-tab-pane key="learned" :tab="'tab.course_tab.index.have_completed'|trans">
         <CourseList :courseLists="courseLists"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="expired" :tab="'tab.course_tab.have_expired'|trans">
+      <a-tab-pane key="expired" :tab="'tab.course_tab.index.have_expired'|trans">
         <CourseList :courseLists="courseLists" :tabValue="tabValue"></CourseList>
       </a-tab-pane>
-      <a-tab-pane key="favorite" :tab="'tab.course_tab.collect'|trans">
+      <a-tab-pane key="favorite" :tab="'tab.course_tab.index.collect'|trans">
         <CourseSetList :courseSets="courseLists"></CourseSetList>
       </a-tab-pane>
     </a-tabs>
