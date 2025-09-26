@@ -96,7 +96,7 @@ export default {
   methods: {
     getContinue() {
       this.isLoading = true;
-      const data = { answer_record_id: this.$route.query.answer_record_id ? this.$route.query.answer_record_id : localStorage.getItem('exerciseId_'+this.$route.query.exerciseId) };
+      const data = { answer_record_id: this.$route.query.answer_record_id };
       Api.continueAnswer({ data })
         .then(res => {
           this.recordId = res.answer_record.id
@@ -133,7 +133,6 @@ export default {
           this.status = res.answer_record.status;
           this.isLoading = false;
           this.assignData(res);
-          localStorage.setItem('exerciseId_'+this.$route.query.exerciseId,res.answer_record.id)
         })
         .catch(err => {
           this.handleError(err);
