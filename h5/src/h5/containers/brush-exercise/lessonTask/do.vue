@@ -65,7 +65,7 @@ export default {
   created() {
     const mode = this.$route.query.mode;
 
-    if (mode === 'start' && !localStorage.getItem('exerciseId_'+this.$route.query.exerciseId)) {
+    if (mode === 'start') {
       this.getStart()
     } else {
       this.getContinue()
