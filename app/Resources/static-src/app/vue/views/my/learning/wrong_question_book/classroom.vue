@@ -2,7 +2,7 @@
   <div>
     <a-input-search
       allowClear
-      placeholder="请输入班级名称"
+      :placeholder="'my.learning.wrong_question_book.detail.classroom.search_placeholder'|trans"
       style="width: 224px; margin-top: 16px;"
       @search="onSearch"
     />
