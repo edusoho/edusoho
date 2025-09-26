@@ -10779,6 +10779,7 @@ exception.rate_limit_error_captcha: 图形验证码错误!
 exception.sms.setting_enable: 云短信相关设置未开启!
 exception.setting.attachment.setting_enable: 云附件未开启!
 exception.setting.app_client_closed: App客户端已关闭!
+exception.setting.mp_client_closed: 微信小程序客户端已关闭!
 exception.setting.mail_disable: 网校未开启邮件服务，请联系管理员处理
 exception.sms.code_invalid: 短信验证码错误
 exception.sms.type_error: sms类型错误

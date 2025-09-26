@@ -36,6 +36,8 @@ class SettingException extends AbstractException
 
     const APP_CLIENT_CLOSED = 4030814;
 
+    const MP_CLIENT_CLOSED = 4030817;
+
     const MAIL_DISABLE = 4030815;
 
     const FORBIDDEN_EMAIL_REGISTER = 4030816;
@@ -57,5 +59,6 @@ class SettingException extends AbstractException
         4030814 => 'exception.setting.app_client_closed',
         4030815 => 'exception.setting.mail_disable',
         4030816 => 'exception.setting.forbidden_email_register',
+        4030817 => 'exception.setting.mp_client_closed',
     ];
 }

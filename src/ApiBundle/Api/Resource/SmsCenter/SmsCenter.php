@@ -26,7 +26,14 @@ class SmsCenter extends AbstractResource
         if (!($request->getHttpRequest()->isXmlHttpRequest())) {
             $mobileSetting = $this->getSettingService()->get('mobile', []);
             $wap = $this->getSettingService()->get('wap', []);
-            if (0 == $mobileSetting['enabled'] && 'sail' != $wap['template']) {
+
+            $referer = $request->headers->get('referer', '');
+            if ($referer && (strpos($referer, 'MiniProgram') !== false)) {
+                $mp = $this->getSettingService()->get('wechat_app', []);
+                if (!$mp || empty($mp['enabled'])) {
+                    throw SettingException::MP_CLIENT_CLOSED();
+                }
+            } else if (0 == $mobileSetting['enabled'] && 'sail' != $wap['template']) {
                 throw SettingException::APP_CLIENT_CLOSED();
             }
         }
