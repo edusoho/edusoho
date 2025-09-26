@@ -20,7 +20,7 @@
 
           <div class="my-course-item-course__learn">
             <div class="my-course-item__progress my-course-item-course__progress">
-              <span style="flex-shrink: 0">学习进度</span>
+              <span style="flex-shrink: 0">{{ 'tab.course_tab.course_item.learning_progress'|trans }}</span>
               <div class="cd-progress cd-progress-sm">
                 <div class="progress-bar">
                   <div class="progress-outer">
@@ -33,7 +33,7 @@
             <div class="course-learn-history" v-if="course.lastLearnTask">
               <span class="history-icon"></span>
               <a :href="`/course/${course.id}/task/${course.lastLearnTask.id}/show`">
-                {{ `上次学到：课时${course.lastLearnTask.number} : ${course.lastLearnTask.title}` }}
+                {{ 'tab.course_tab.course_item.last_time_learned'|trans }}{{ `${course.lastLearnTask.number} : ${course.lastLearnTask.title}` }}
               </a>
             </div>
             <div v-else class="my-course-item-course__empty"></div>
@@ -71,12 +71,13 @@ export default {
       if (this.course?.courseSet?.status == 'closed') {
         status = {
           class: 'course-status-expired',
-          text: '已关闭'
+          text: Translator.trans('tab.course_tab.course_item.closed')
+
         }
       } else if (this.course?.courseSet?.type == 'live') {
         status = {
           class: 'course-status-live',
-          text: '直播'
+          text: Translator.trans('tab.course_tab.course_item.live_streaming')
         }
       }
 
@@ -84,10 +85,10 @@ export default {
     },
     btnContent() {
       if (this.course?.courseSet?.status === 'closed' || this.tabValue == 'expired' || this.course?.progress?.percent == 100) {
-        return '查看课程'
+        return Translator.trans('tab.course_tab.course_item.view_course')
       }
 
-      return '进入学习'
+      return Translator.trans('tab.course_tab.course_item.start_studying')
     },
     progressClass() {
       return {

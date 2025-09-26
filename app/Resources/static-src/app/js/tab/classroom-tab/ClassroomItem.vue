@@ -12,10 +12,10 @@
         <a class="cd-link-major text-16" :href="'/classroom/'+classItem.id">
           {{ classItem.title }}</a>
       </div>
-      <div class="my-course-item__classroom"><span>已学了{{ classItem.joinedDays }}天</span></div>
+      <div class="my-course-item__classroom"><span>{{ 'tab.classroom_tab.classroom_item.have_learned'|trans({days: classItem.joinedDays}) }}</span></div>
 
       <div class="my-course-item__progress cd-mt32 cd-clearfix">
-        <span class="my-course-item__progress__text">学习进度</span>
+        <span class="my-course-item__progress__text">{{ 'tab.classroom_tab.classroom_item.learning_progress'|trans }}</span>
         <div class="cd-progress cd-progress-sm">
           <div class="progress-bar">
             <div class="progress-outer">
@@ -58,7 +58,7 @@ export default {
       if (this.classItem.status == 'closed') {
         status = {
           class: 'course-status-expired',
-          text: '已关闭'
+          text: Translator.trans('tab.classroom_tab.classroom_tab.closed')
         }
       }
 
@@ -66,10 +66,10 @@ export default {
     },
     btnContent() {
       if (this.classItem?.status === 'closed' || this.classItem?.learningProgressPercent == 100 || this.tabValue == 'expired') {
-        return '查看班级'
+        return Translator.trans('tab.classroom_tab.classroom_tab.view_class')
       }
 
-      return '继续学习'
+      return Translator.trans('tab.classroom_tab.classroom_tab.continue_learning')
     },
     progressClass() {
       return {
