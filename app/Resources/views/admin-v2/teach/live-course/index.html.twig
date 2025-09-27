@@ -14,7 +14,11 @@
     {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({courseSetTitle:'admin.live_manage.name_option'|trans, taskTitle: 'admin.live_manage.task_option'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}, app.request.get('keywordType')) }}
+        {{ select_options({
+          taskTitle: 'admin.live_manage.task_option'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}),
+          courseSetTitle:'admin.live_manage.name_option'|trans,
+          classroomTitle:'admin.live_manage.classroom_option'|trans,
+        }, app.request.get('keywordType')) }}
       </select>
     </div>
     <div class="form-group">
@@ -33,8 +37,8 @@
     <thead>
     <tr>
       <th style="width: 25%">{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}</th>
-      <th style="width: 20%">课程</th>
-      <th style="width: 15%">班级</th>
+      <th style="width: 20%">{{'admin.live_manage.course_th'|trans}}</th>
+      <th style="width: 15%">{{'admin.live_manage.classroom_th'|trans}}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
       <th style="width: 15%">{{'admin.live_manage.live_start_time_th'|trans}}</th>
       <th style="width: 10%">{{'admin.live_manage.live_time_long_th'|trans}}</th>

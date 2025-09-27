@@ -5665,10 +5665,13 @@ admin.live_manage.underway_live: 当前进行中
 admin.live_manage.end_live: 已结束的
 admin.live_manage.name_option: 课程名
 admin.live_manage.task_option: %taskName%名
+admin.live_manage.classroom_option: 班级名
 admin.live_manage.keyword_placeholder: 关键词
 admin.live_manage.live_start_time_label: 直播开始时间
 admin.live_manage.live_start_time_placeholder: 开始时间
 admin.live_manage.live_end_time_placeholder: 结束时间
+admin.live_manage.course_th: 课程
+admin.live_manage.classroom_th: 班级
 admin.live_manage.live_start_time_th: 直播开始时间
 admin.live_manage.live_time_long_th: 直播时长(分)
 admin.live_manage.max_participate_count_th: 最大参与人数

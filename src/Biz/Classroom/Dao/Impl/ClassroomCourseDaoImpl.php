@@ -96,6 +96,15 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         return $this->db()->fetchAll($sql, [$classroomId]) ?: [];
     }
 
+    public function findByClassroomIds(array $classroomIds) {
+        if (empty($classroomIds)) {
+            return [];
+        }
+        $marks = str_repeat('?,', count($classroomIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE classroomId IN ({$marks}) ORDER BY seq ASC;";
+        return $this->db()->fetchAll($sql, $classroomIds) ?: [];
+    }
+
     public function findByCoursesIds($courseIds)
     {
         if (empty($courseIds)) {

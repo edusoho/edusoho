@@ -44,6 +44,26 @@ class LiveCourseController extends BaseController
                 $taskConditions['fromCourseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             }
 
+            if ('classroomTitle' == $taskConditions['keywordType']) {
+                $classrooms = $this->getClassroomService()->findClassroomsByLikeTitle($taskConditions['keyword']);
+                $classroomIds = ArrayToolkit::column($classrooms, 'id');
+                $courseIds = $this->getClassroomService()->findCourseIdsByClassroomIds($classroomIds);
+                if (empty($courseIds)) {
+                    return $this->render(
+                        'admin-v2/teach/live-course/index.html.twig',
+                        array(
+                            'status' => $status,
+                            'liveTasks' => array(),
+                            'courseSets' => array(),
+                            'paginator' => array(),
+                            'default' => $default,
+                            'eduCloudStatus' => $eduCloudStatus,
+                        )
+                    );
+                }
+                $taskConditions['courseIds'] = $courseIds;
+            }
+
             if ('taskTitle' == $taskConditions['keywordType']) {
                 $taskConditions['titleLike'] = $taskConditions['keyword'];
             }
