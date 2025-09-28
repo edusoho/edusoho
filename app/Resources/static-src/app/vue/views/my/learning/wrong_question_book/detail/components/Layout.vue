@@ -64,17 +64,17 @@ export default {
     showAnswerModeText(mode) {
       switch (mode) {
       case 'true_false':
-        return '判断题'
+        return this.t("itemEngine.trueOrFalseQuestions")
       case 'single_choice':
-        return '单选题'
+        return this.t("itemEngine.singleChoice")
       case 'choice':
-        return '多选题'
+        return this.t("itemEngine.multipleChoice")
       case 'uncertain_choice':
-        return '不定项选择题'
+        return this.t("itemEngine.multipleChoiceQuestion")
       case 'text':
-        return '填空题'
+        return this.t("itemEngine.gapFilling")
       case 'rich_text':
-        return '问答题'
+        return this.t("itemEngine.essayQuestion")
       default:
         return ''
       }

@@ -231,7 +231,15 @@ const lang = {
     reGenerate: 'reGenerate',
     aiAnalysisRefer: 'AI parsing content is for reference only',
     aiAnalysisTips: 'New online Al problem resolution function! Edit the content of the topic after a key to generate analysis.',
-    aiUnableGenerate: 'When the topic content is plain text, the AI will generate the parsing for you.'
+    aiUnableGenerate: 'When the topic content is plain text, the AI will generate the parsing for you.',
+    trueOrFalseQuestions: 'True Or False Questions',
+    singleChoice: 'Single Choice',
+    multipleChoice: 'Multiple Choice',
+    multipleChoiceQuestion: 'Multiple-choice Question',
+    gapFilling: 'Gap Filling',
+    essayQuestion: 'Essay Question',
+    materialQuestion: 'Material Question',
+    seekSolution: 'Seeking the solution strategy from Teacher Xiao Zi～',
   },
   attachmentPreview: {
     File_not_supported: 'Can not preview this type of file',

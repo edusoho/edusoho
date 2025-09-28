@@ -1,6 +1,7 @@
 <script setup>
 import {message} from 'ant-design-vue';
 import {open} from '../../../common';
+import {t} from './vue-lang';
 
 const props = defineProps({
   chapter: {type: Object, default: {}},
@@ -21,12 +22,12 @@ async function exerciseChapter() {
   }
   //题库练习已关闭并且状态为未开始或继续做题
   if (props.exercise.status === 'closed' && !['reviewing', 'finished'].includes(props.record?.status)) {
-    message.error('题库已关闭，无法继续学习');
+    message.error(t('message.closed'));
     return;
   }
   //有效期已过
   if (props.member.canLearn === '0') {
-    message.error('学习有效期已过期，无法继续学习');
+    message.error(t('message.expired'));
     return;
   }
 
@@ -53,16 +54,16 @@ function showButtonStatus(status) {
   case 'doing':
   case 'paused':
     return {
-      text: '继续做题',
+      text: t('btn.continue'),
     };
   case 'reviewing':
   case 'finished':
     return {
-      text: '查看报告',
+      text: t('btn.report'),
     };
   default:
     return {
-      text: '开始做题',
+      text: t('btn.start'),
     };
   }
 }
@@ -74,12 +75,12 @@ function showButtonStatus(status) {
       <div v-if="props.chapter.question_num !== '0'" class="flex items-center justify-between text-14 leading-22 text-[#87898F] max-w-380">
         <div class="flex mr-12 sm:mr-80">
           <div class="text-right">
-            <span v-if="Object.keys(props.record).length === 0">{{ `0/${props.chapter.question_num}题` }}</span>
-            <span v-else>{{ `${props.record.doneQuestionNum}/${props.chapter.question_num}题` }}</span>
+            <span v-if="Object.keys(props.record).length === 0">{{ `0/${props.chapter.question_num}${t('topic')}` }}</span>
+            <span v-else>{{ `${props.record.doneQuestionNum}/${props.chapter.question_num}${t('topic')}` }}</span>
           </div>
           <div class="ml-12 w-100 hidden sm:block">
-            <span v-if="Object.keys(props.record).length === 0">正确率：0.0%</span>
-            <span v-else>{{ `正确率：${props.record.rightRate}%` }}</span>
+            <span v-if="Object.keys(props.record).length === 0">{{ t('accuracy') }}：0.0%</span>
+            <span v-else>{{ `${t('accuracy')}：${props.record.rightRate}%` }}</span>
           </div>
         </div>
         <div>
@@ -89,6 +90,6 @@ function showButtonStatus(status) {
         </div>
       </div>
     </div>
-    <div v-else class="text-14 leading-22 text-[#87898F] w-full text-right">{{ props.chapter.question_num }}题</div>
+    <div v-else class="text-14 leading-22 text-[#87898F] w-full text-right">{{ props.chapter.question_num }}{{ t('topic') }}</div>
   </div>
 </template>

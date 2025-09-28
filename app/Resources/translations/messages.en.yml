@@ -574,6 +574,7 @@ order.refund.refund_is_not_supported: Refund is not supported
 order.refund.success_tips: You may apply for a refund within %maxRefundDays% days from the date of purchase
 order.refund.failed_tips: 'It''s behind the refund time %maxRefundDays% days. Refund application is refused.'
 
+order.refund.cancel: Cancel
 order.refund.quit_study_btn: 'Quit the course'
 order.refund.quit_study_btn.submiting: Quiting...
 order.vip_order.total_months: Months

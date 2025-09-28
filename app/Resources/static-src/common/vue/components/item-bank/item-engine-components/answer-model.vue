@@ -3,7 +3,7 @@
     <a-popover placement="bottomRight" overlayClassName="ai-agent-custom-popover" :trigger="showTeacherQuestion() ? 'hover' : 'manual'">
       <template slot="content">
         <div class="ai-agent-popover-content">
-          <button class="ai-agent-button" @click="showAgentSdk"><span>请教小知老师解题思路～</span></button>
+          <button class="ai-agent-button" @click="showAgentSdk"><span>{{ t("itemEngine.seekSolution") }}</span></button>
           <img src="/static-dist/app/img/ai-agent/icon.png" alt="头像">
         </div>
       </template>
@@ -447,17 +447,17 @@ export default {
     showAnswerModeText(mode) {
       switch (mode) {
       case 'true_false':
-        return '判断题'
+        return this.t("itemEngine.trueOrFalseQuestions")
       case 'single_choice':
-        return '单选题'
+        return this.t("itemEngine.singleChoice")
       case 'choice':
-        return '多选题'
+        return this.t("itemEngine.multipleChoice")
       case 'uncertain_choice':
-        return '不定项选择题'
+        return this.t("itemEngine.multipleChoiceQuestion")
       case 'text':
-        return '填空题'
+        return this.t("itemEngine.gapFilling")
       case 'rich_text':
-        return '问答题'
+        return this.t("itemEngine.essayQuestion")
       default:
         return ''
       }

@@ -226,7 +226,15 @@ const lang = {
     reGenerate: '重新生成',
     aiAnalysisRefer: 'AI解析内容仅供参考',
     aiAnalysisTips: '全新上线 Al 题目解析功能！编辑题目内容后一键生成解析。',
-    aiUnableGenerate: '题目内容为纯文字时，AI将为你生成解析。'
+    aiUnableGenerate: '题目内容为纯文字时，AI将为你生成解析。',
+    trueOrFalseQuestions: '判断题',
+    singleChoice: '单选题',
+    multipleChoice: '多选题',
+    multipleChoiceQuestion: '不定项选择题',
+    gapFilling: '填空题',
+    essayQuestion: '问答题',
+    materialQuestion: '材料题',
+    seekSolution: '请教小知老师解题思路～',
   },
   attachmentPreview: {
     File_not_supported: '文件类型暂不支持预览',

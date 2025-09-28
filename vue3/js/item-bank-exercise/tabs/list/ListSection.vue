@@ -1,7 +1,7 @@
 <script setup>
 import { DownOutlined, UpOutlined } from '@ant-design/icons-vue';
 import {ref} from 'vue';
-import ChapterListButton from './ChapterListButton.vue';
+import ListButton from './ListButton.vue';
 
 const props = defineProps({
   chapter: {type: Object, default: {}},
@@ -32,7 +32,7 @@ function selectChapter(chapterId) {
         <DownOutlined v-if="!isUnfold" class="mr-12 text-12 text-[#5E6166]" :class="{'opacity-0': props.chapter.children.length === 0}"/>
         <div class="max-w-120 sm:max-w-210 truncate text-14 leading-22 text-[#37393D]" :class="{'font-medium': props.chapter.depth == 1, 'pl-16': props.chapter.depth == 3, 'text-[#5E6166]': props.chapter.depth == 3, 'text-[--primary-color]': props.chapter.id === props.selectedChapterId}">{{ props.chapter.name }}</div>
       </div>
-      <chapter-list-button
+      <list-button
         :chapter="props.chapter"
         :preview-as="props.previewAs"
         :member="props.member"
@@ -41,13 +41,13 @@ function selectChapter(chapterId) {
         :module-id="props.moduleId"
         @select-chapter="selectChapter"
       >
-      </chapter-list-button>
+      </list-button>
     </div>
     <div v-if="props.chapter.depth == 3 && !isLast" class="border border-solid border-t-0 border-[#F2F3F5] my-8 ml-44 mr-12"></div>
     <div v-else class="mb-8"></div>
     <div v-show="isUnfold">
       <div v-for="(item, index) in props.chapter.children" :key="item.id" :ref="item.id">
-        <chapter-list-section
+        <list-section
           :chapter="item"
           :records="props.records"
           :is-last="index + 1 === props.chapter.children.length"
@@ -58,7 +58,7 @@ function selectChapter(chapterId) {
           :selected-chapter-id="props.selectedChapterId"
           @select-chapter="selectChapter"
         >
-        </chapter-list-section>
+        </list-section>
       </div>
     </div>
   </div>
