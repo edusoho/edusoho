@@ -59,7 +59,7 @@
                   <div class="course-learn-history">
                     <span class="history-icon"></span>
                     <a href="{{ path('course_task_show', {courseId: course.id, id: course.lastLearnTask.id}) }}">
-                      上次学到：课时{{ course.lastLearnTask.number }} : {{ course.lastLearnTask.title }}
+                      {{ 'course.members_manage.official_student.last_learn_task'|trans }}{{ course.lastLearnTask.number }} : {{ course.lastLearnTask.title }}
                     </a>
                   </div>
                 </div>

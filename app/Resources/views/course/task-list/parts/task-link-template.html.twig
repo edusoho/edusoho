@@ -33,7 +33,7 @@
   {% endif %}
 
   {% include 'course/task-list/parts/task-length-template.html.twig' %}
-  <span class="hidden-lg last-learn" display-if="{isLastLearn}">上次学到</span>
+  <span class="hidden-lg last-learn" display-if="{isLastLearn}">{{ 'course.task.learning.is_last_learn'|trans }}</span>
   <span class="right-menu mouse-enter">
     {% if not member and courseSet.status | default('published') == 'published' %}
       <tmp display-if="{isTaskFree}">

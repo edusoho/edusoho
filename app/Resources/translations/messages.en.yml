@@ -1048,6 +1048,7 @@ course.members_manage.official_student.send_message.receiver: Receiver
 course.members_manage.official_student.send_message.content: Content
 course.members_manage.official_student.show.content_title: 'Personal inormation'
 course.members_manage.official_student.remark.tips: 'Please input student''s note'
+course.members_manage.official_student.last_learn_task: 'Last time learned: Class period'
 course.members_manage.official_student.modify_expiry_day: Modify the validity period of the student
 course.members_manage.official_student.add_expiry_day.add: Add
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 'Course expiry date'
@@ -1349,6 +1350,7 @@ course.thread.question_type.content: content
 course.thread.question.title: This is a %questionType% question
 course.task.classroom_sync_job_executing_tips: 'Classroom synchronization, please publish later'
 course.task.learning.remaining.watch_time: 'remaining watch length'
+course.task.learning.is_last_learn: Last time I learned
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
 course.thread.mission_number: %taskName%%number%
