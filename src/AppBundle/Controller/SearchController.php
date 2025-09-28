@@ -81,7 +81,7 @@ class SearchController extends BaseController
                 [
                     'keywords' => $keywords,
                     'type' => $type,
-                    'errorMessage' => '在上方搜索框输入关键词进行搜索.',
+                    'errorMessage' => 'cloud_search.error.input_empty',
                 ]
             );
         }
