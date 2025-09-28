@@ -4,7 +4,7 @@
 
     <!-- 答题自评 -->
     <review
-      v-if="showReview"	
+      v-if="showReview"
       :needScore="commonData.showScore"
       :questionId="commonData.questionId"
       :questionScore="commonData.score"

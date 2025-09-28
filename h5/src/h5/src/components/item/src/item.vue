@@ -1,5 +1,5 @@
 <template>
-  <div v-if="item" style="height: 100% !important;">
+  <div v-if="item" style="height: 100% !important; padding-bottom: 60px">
     <swiper
       :ref="`childSwiper${item.id}`"
       :height="height"
