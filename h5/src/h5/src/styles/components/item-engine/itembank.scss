@@ -78,7 +78,6 @@ $common-padding: 35;
 	.ibs-question-swiper {
 		position: relative;
 		height: 100%;
-		padding-bottom: vw(60);
 	}
 
 	.ibs-exercise-do {
@@ -722,7 +721,7 @@ $common-padding: 35;
 
 	.ibs-footer-shadow {
 		height: vw(16);
-		margin: 0 vw(32) 60px;
+		margin: 0 vw(32);
 		background-color: rgba(255, 255, 255, 0.6);
 		border-radius: 0 0 vw(12) vw(12);
 	}

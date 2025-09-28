@@ -1,4 +1,5 @@
 .ibs-review{
+  margin-bottom: 60px;
   font-size: vw(14);
   overflow: hidden;
   border-radius: vw(12);
@@ -32,17 +33,17 @@
       justify-content: center;
       height: vw(94);
       margin: vw(16) 0 0 0;
-  
+
       .ibs-self-judging-group-radio {
         display: flex;
         align-items: center;
         justify-content: center;
       }
-  
+
       .ibs-self-judging-radio {
         display: flex;
         flex-direction: column;
-  
+
         &:nth-child(1) {
           margin-right: vw(64);
         }
