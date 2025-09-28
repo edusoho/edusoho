@@ -1187,6 +1187,7 @@ course.members_manage.official_student.send_message.receiver: 收件人
 course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
 course.members_manage.official_student.remark.tips: >
+course.members_manage.official_student.last_learn_task: 上次学到：课时
   请填写学员的备注信息
 course.members_manage.official_student.modify_expiry_day: 修改学员有效期
 course.members_manage.official_student.add_expiry_day.add: 增加
@@ -2440,6 +2441,7 @@ course.note.collapse_btn: '[收起全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.task.learning.remaining.watch_time: 剩余观看时长
+course.task.learning.is_last_learn: 上次学到
 course.btn.pay_tips: 正在创建订单...
 
 course.export: 导出课时数据
