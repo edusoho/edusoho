@@ -3352,6 +3352,7 @@ cloud_search.course.learned: '(%studentNum%) students are learning'
 cloud_search.course.task: Lesson
 cloud_search.course.recommend.content_title: 'Recommend courses'
 cloud_search.course.recommend.empty: 'Sorry, no Recommend course now.'
+cloud_search.error.input_empty: 'Enter the keywords in the search box above to conduct the search.'
 
 cloud_search.classroom: Classroom
 cloud_search.classroom.result: >

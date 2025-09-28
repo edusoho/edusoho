@@ -3858,6 +3858,7 @@ cloud_search.common_keywords: 常用关键字
 cloud_search.result: 搜索结果
 cloud_search.all_courses: 全部课程
 cloud_search.input_placeholder: 可搜索
+cloud_search.error.input_empty: 在上方搜索框输入关键词进行搜索
 
 cloud_search.course: 课程
 cloud_search.course.result: >
