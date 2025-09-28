@@ -12,7 +12,7 @@
           </div>
 
           <div class="ibs-engine-material" v-else>
-            <div class="answer-mode-tag">材料题</div>
+            <div class="answer-mode-tag">{{ t("itemEngine.materialQuestion") }}</div>
             <div
               class=" ibs-editor-text"
               v-html="material"

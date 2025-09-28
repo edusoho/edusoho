@@ -670,6 +670,7 @@ order.refund.refund_is_not_supported: 暂不支持退款，如有疑问，请联
 order.refund.buy_price: （购买时的价格：%amount%元）
 order.refund.success_tips: 购买之日起%maxRefundDays%天内可申请退款。
 order.refund.failed_tips: 购买之日起%maxRefundDays%天内可申请退款，现已超出期限。您可以退出学习，但不支持退款。如有疑问，请联系客服
+order.refund.cancel: 取消
 order.refund.quit_study_btn: 退出学习
 order.refund.quit_study_btn.submiting: 正在退出...
 order.vip_order.total_months: 个月

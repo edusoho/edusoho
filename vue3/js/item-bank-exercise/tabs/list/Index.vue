@@ -1,7 +1,8 @@
 <script setup>
 import {ref, onMounted} from 'vue';
-import ChapterListSection from './ChapterListSection.vue';
+import ListSection from './ListSection.vue';
 import AntConfigProvider from '../../../components/AntConfigProvider.vue';
+import {t} from './vue-lang';
 
 const props = defineProps({
   categoryTree: {type: Array, default: []},
@@ -48,7 +49,7 @@ onMounted(() => {
   <ant-config-provider>
     <div v-if="newCategoryTree.length > 0" class="w-full mt-8">
       <div v-for="(item, index) in newCategoryTree" :key="item.id" :ref="item.id">
-        <chapter-list-section
+        <list-section
           :chapter="item"
           :records="props.records"
           :member="props.member"
@@ -59,9 +60,9 @@ onMounted(() => {
           :selected-chapter-id="selectedChapterId"
           @select-chapter="selectChapter"
         >
-        </chapter-list-section>
+        </list-section>
       </div>
     </div>
-    <a-empty v-else class="mt-50" description="暂无题目"/>
+    <a-empty v-else class="mt-50" :description="t('empty')"/>
   </ant-config-provider>
 </template>
