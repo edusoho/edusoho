@@ -1,7 +1,7 @@
 <template>
   <div class="clearfix analysis">
-    <div class="pull-left analysis-label">解析：</div>
-    <div class="pull-left analysis-content" v-html="analysis || '无解析'"></div>
+    <div class="pull-left analysis-label">{{ 'components.wrong_question.question_element.answer_result.answering_result' | trans }}：</div>
+    <div class="pull-left analysis-content" v-html="analysis || noAnalysisText()"></div>
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
     analysis: {
       type: String,
       required: true
+    }
+  },
+  methods: {
+    noAnalysisText() {
+      return Translator.trans('components.wrong_question.question_element.analysis.no_explanation');
     }
   }
 }

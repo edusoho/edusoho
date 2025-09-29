@@ -2493,3 +2493,19 @@ my.learning.wrong_question_book.detail.components.layout.multipleChoice: Multipl
 my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion: Multiple Choice Question
 my.learning.wrong_question_book.detail.components.layout.gapFilling: Gap Filling
 my.learning.wrong_question_book.detail.components.layout.essayQuestion: Essay Question
+
+components.wrong_question.question_element.answer_result.answering_result: Answering result
+components.wrong_question.question_element.analysis.analysis: Analysis
+components.wrong_question.question_element.analysis.no_explanation: No explanation
+components.wrong_question.question_element.situation.source: Source
+components.wrong_question.question_element.situation.mistakes_frequency: Frequency of mistakes
+components.wrong_question.question_element.situation.incorrect_questions: Time spent on incorrect questions
+components.wrong_question.question_element.situation.times: times
+components.wrong_question.question_element.answer_result.correct: Correct
+components.wrong_question.question_element.answer_result.mistake: Error
+components.wrong_question.question_element.right_answer.right_answers: Right answers
+components.wrong_question.question_element.answer_result.gap_filling: Gap filling
+components.wrong_question.question_element.right_answer.your_answer: Your answer
+components.wrong_question.question_element.right_answer.not_answered: Not answered
+components.wrong_question.question_element.right_answer.your_answer_is: Your answer is
+components.wrong_question.question_element.right_answer.answered_incorrectly: You answered incorrectly.
