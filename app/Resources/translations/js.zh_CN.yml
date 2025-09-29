@@ -2475,3 +2475,19 @@ my.learning.wrong_question_book.detail.components.layout.multipleChoice: 多选�
 my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion: 不定项选择题
 my.learning.wrong_question_book.detail.components.layout.gapFilling: 填空题
 my.learning.wrong_question_book.detail.components.layout.essayQuestion: 问答题
+
+components.wrong_question.question_element.answer_result.answering_result: 答题结果
+components.wrong_question.question_element.analysis.analysis: 解析
+components.wrong_question.question_element.analysis.no_explanation: 无解析
+components.wrong_question.question_element.situation.source: 来源
+components.wrong_question.question_element.situation.mistakes_frequency: 做错频次
+components.wrong_question.question_element.situation.incorrect_questions: 错题时间
+components.wrong_question.question_element.situation.times: 次
+components.wrong_question.question_element.answer_result.correct: 正确
+components.wrong_question.question_element.answer_result.mistake: 错误
+components.wrong_question.question_element.right_answer.right_answers: 正确答案
+components.wrong_question.question_element.answer_result.gap_filling: 填空
+components.wrong_question.question_element.right_answer.your_answer: 你的答案
+components.wrong_question.question_element.right_answer.not_answered: 未作答
+components.wrong_question.question_element.right_answer.your_answer_is: 你的答案是
+components.wrong_question.question_element.right_answer.answered_incorrectly: 你答错了

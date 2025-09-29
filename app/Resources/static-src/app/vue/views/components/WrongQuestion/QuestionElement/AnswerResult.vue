@@ -1,6 +1,6 @@
 <template>
   <div class="clearfix answer-result">
-    <div class="pull-left answer-result-label">答题结果：</div>
+    <div class="pull-left answer-result-label">{{ 'components.wrong_question.question_element.answer_result.answering_result' | trans }}：</div>
     <div class="pull-left answer-result-content" v-html="answerResult" />
   </div>
 </template>
@@ -22,19 +22,19 @@ export default {
 
       if (answer_mode === 'true_false') {
         response = _.map(response, function(item) {
-          return item === 'T' ? '正确' : '错误';
+          return item === 'T' ? Translator.trans('components.wrong_question.question_element.answer_result.correct') : Translator.trans('components.wrong_question.question_element.answer_result.mistake');
         });
       }
 
       if (answer_mode === 'text') {
         let result = '';
         _.forEach(answer, function(item, index) {
-          result += `<div>填空(${index + 1})：正确答案：<span class="success">${item}</span>， 你的答案：<span class="danger">${response.length > 0 ? response[index] : '未作答'}</span></div>`;
+          result += `<div>${ Translator.trans('components.wrong_question.question_element.answer_result.gap_filling') }(${index + 1})：${ Translator.trans('components.wrong_question.question_element.right_answer.right_answers') }：<span class="success">${item}</span>， ${ Translator.trans('components.wrong_question.question_element.right_answer.your_answer') }：<span class="danger">${response.length > 0 ? response[index] : Translator.trans('components.wrong_question.question_element.right_answer.not_answered')}</span></div>`;
         });
         return result;
       }
 
-      return `你的答案是<span class="danger"> ${_.join(response, '、')} </span>, 你答错了。`;
+      return `${ Translator.trans('components.wrong_question.question_element.right_answer.your_answer_is') }<span class="danger"> ${_.join(response, '、')} </span>, ${ Translator.trans('components.wrong_question.question_element.right_answer.answered_incorrectly') }。`;
     }
   }
 }
