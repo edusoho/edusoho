@@ -418,9 +418,4 @@ const bgClass = computed(() => {
     max-width: 100% !important;
   }
 }
-
-.ant-message {
-  left: 50%;
-  transform: translateX(-50%)
-}
 </style>
