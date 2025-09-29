@@ -9,7 +9,7 @@
             href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId':tab.id, 'previewAs':previewAs}) }}"
           {% endif %}
         >
-          {{ tab.title }}
+          {{ tab.title|trans }}
         </a>
       </li>
   {% endfor %}

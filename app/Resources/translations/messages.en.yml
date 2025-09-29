@@ -11305,3 +11305,7 @@ admin_v2.question.ai_analysis.upgrade_now: Upgrade now
 #二次验证
 admin_v2.secondary.verification.security_verification: 'Security verification'
 admin_v2.secondary.verification.security_verification.tips: 'To ensure the security of online school data export, SMS verification is required. Please use the phone number filled in when opening the online school to receive the verification code.'
+
+# 数据库中返回的值
+章节练习: Chapter practice
+模拟考试: Tests paper practice
