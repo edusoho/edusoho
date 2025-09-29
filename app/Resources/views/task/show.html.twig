@@ -101,7 +101,7 @@
 
         {% if not preview and task.type in ['video', 'audio'] and not is_mobile_client() %}
         <span class="play-continue-switch hidden">
-          <span class="text-bold">连续播放&nbsp;</span>
+          <span class="text-bold">{{ 'course.task.show.video.play_continuously'|trans }}&nbsp;</span>
           <label class="cd-switch checked js-play-sequence">
           </label>
         </span>

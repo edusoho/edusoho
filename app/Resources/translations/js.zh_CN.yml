@@ -2377,13 +2377,13 @@ course.market_setting.contract.model.partyBName: 乙方姓名
 course.market_setting.contract.model.iDNumber: 身份证号
 course.market_setting.contract.model.contactInformation: 联系方式
 
-tab.course_tab.my_courses: 我的课程
-tab.course_tab.enter_course_name: 请输入课程名称
-tab.course_tab.live_class_schedule: 直播课表
-tab.course_tab.learning: 学习中
-tab.course_tab.have_completed: 已学完
-tab.course_tab.have_expired: 已过期
-tab.course_tab.collect: 收藏
+tab.course_tab.index.my_courses: 我的课程
+tab.course_tab.index.enter_course_name: 请输入课程名称
+tab.course_tab.index.live_class_schedule: 直播课表
+tab.course_tab.index.learning: 学习中
+tab.course_tab.index.have_completed: 已学完
+tab.course_tab.index.have_expired: 已过期
+tab.course_tab.index.collect: 收藏
 
 tab.course_tab.course_list.empty: 暂无课程
 
@@ -2420,3 +2420,47 @@ my.learning.wrong_question_book.detail.list_item.check: 查看错题
 my.learning.wrong_question_book.detail.classroom.search_placeholder: 请输入班级名称
 
 my.learning.wrong_question_book.detail.item_bank.search_placeholder: 请输入题库练习名称
+
+my.learning.wrong_question_book.detail.index.practice_of_incorrect_answers: 错题练习
+my.learning.wrong_question_book.detail.index.modal.title: 错题练习
+my.learning.wrong_question_book.detail.index.modal.ok_text: 开始答题
+my.learning.wrong_question_book.detail.index.modal.cancel_text: 取消
+my.learning.wrong_question_book.detail.index.modal.display_quantity: 展示数量
+my.learning.wrong_question_book.detail.index.modal.questions: 题
+my.learning.wrong_question_book.detail.index.modal.custom: 自定义
+my.learning.wrong_question_book.detail.index.modal.tip: 可输入范围：1≤题目数量≤单个错题本全部错题
+my.learning.wrong_question_book.detail.index.message.warning.zero: 答题数不能为0
+
+my.learning.wrong_question_book.detail.screen.course.empty: 暂无数据
+my.learning.wrong_question_book.detail.screen.course.entire_plan: 全部计划
+my.learning.wrong_question_book.detail.screen.course.source: 题目来源
+my.learning.wrong_question_book.detail.screen.course.task_name: 任务名称
+my.learning.wrong_question_book.detail.screen.course.select_option.mistakes_frequency: 做错频次
+my.learning.wrong_question_book.detail.screen.course.select_option.desc: 由高至低
+my.learning.wrong_question_book.detail.screen.course.select_option.asc: 由低至高
+my.learning.wrong_question_book.detail.screen.course.search: 搜索
+my.learning.wrong_question_book.detail.screen.course.sources.exam_task: 考试任务
+my.learning.wrong_question_book.detail.screen.course.sources.job_task: 作业任务
+my.learning.wrong_question_book.detail.screen.course.sources.practice_task: 练习任务
+
+my.learning.wrong_question_book.detail.screen.classroom.empty: 暂无数据
+my.learning.wrong_question_book.detail.screen.classroom.all_courses: 全部课程
+my.learning.wrong_question_book.detail.screen.classroom.source: 题目来源
+my.learning.wrong_question_book.detail.screen.classroom.task_name: 任务名称
+my.learning.wrong_question_book.detail.screen.classroom.select_option.mistakes_frequency: 做错频次
+my.learning.wrong_question_book.detail.screen.classroom.select_option.desc: 由高至低
+my.learning.wrong_question_book.detail.screen.classroom.select_option.asc: 由低至高
+my.learning.wrong_question_book.detail.screen.classroom.search: 搜索
+my.learning.wrong_question_book.detail.screen.classroom.sources.exam_task: 考试任务
+my.learning.wrong_question_book.detail.screen.classroom.sources.job_task: 作业任务
+my.learning.wrong_question_book.detail.screen.classroom.sources.practice_task: 练习任务
+
+my.learning.wrong_question_book.detail.screen.question_bank.empty: 暂无数据
+my.learning.wrong_question_book.detail.screen.question_bank.all_papers: 全部试卷
+my.learning.wrong_question_book.detail.screen.question_bank.all_chapters: 全部章节
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.mistakes_frequency: 做错频次
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.desc: 由高至低
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: 由低至高
+my.learning.wrong_question_book.detail.screen.question_bank.search: 搜索
+my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: 章节练习
+my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: 试卷练习

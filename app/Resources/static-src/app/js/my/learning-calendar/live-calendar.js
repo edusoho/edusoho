@@ -4,6 +4,7 @@ import ClickComp from 'app/common/calendar/comp/click-comp';
 import Api from 'common/api';
 
 new CustomFullCalendar({
+  'locale': document.querySelector('html').getAttribute('lang') === 'en' ? 'en' : 'zh-cn',
   'calendarContainer': '#calendar',
   'dataApi': Api.studentLiveCourse.search, //需要使用 common/api/index.js 指定的路由
   'attrs': {

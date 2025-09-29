@@ -5,12 +5,12 @@
         show-search
         option-filter-prop="children"
         :filter-option="filterOption"
-        notFoundContent="暂无数据"
+        :notFoundContent="'my.learning.wrong_question_book.detail.screen.course.empty'|trans"
         style="width: 120px;"
         v-model="form.courseId"
         @change="(value) => handleChange(value, 'plan')"
       >
-        <a-select-option value="default">全部计划</a-select-option>
+        <a-select-option value="default">{{ 'my.learning.wrong_question_book.detail.screen.course.entire_plan'|trans }}</a-select-option>
 
         <a-select-option
           v-for="plan in conditions.plans"
@@ -27,12 +27,12 @@
         show-search
         option-filter-prop="children"
         :filter-option="filterOption"
-        notFoundContent="暂无数据"
+        :notFoundContent="'my.learning.wrong_question_book.detail.screen.course.empty'|trans"
         style="width: 120px;"
         v-model="form.courseMediaType"
         @change="(value) => handleChange(value, 'source')"
       >
-        <a-select-option value="default">题目来源</a-select-option>
+        <a-select-option value="default">{{ 'my.learning.wrong_question_book.detail.screen.course.source'|trans }}</a-select-option>
 
         <a-select-option
           v-for="item in conditions.source"
@@ -49,11 +49,11 @@
         show-search
         option-filter-prop="children"
         :filter-option="filterOption"
-        notFoundContent="暂无数据"
+        :notFoundContent="'my.learning.wrong_question_book.detail.screen.course.empty'|trans"
         style="width: 325px;"
         v-model="form.courseTaskId"
       >
-        <a-select-option value="default">任务名称</a-select-option>
+        <a-select-option value="default">{{ 'my.learning.wrong_question_book.detail.screen.course.task_name'|trans }}</a-select-option>
 
         <a-select-option
           v-for="task in conditions.tasks"
@@ -71,19 +71,19 @@
         v-model="form.wrongTimesSort"
       >
         <a-select-option value="default">
-          做错频次
+          {{ 'my.learning.wrong_question_book.detail.screen.course.select_option.mistakes_frequency'|trans }}
         </a-select-option>
         <a-select-option value="DESC">
-          由高至低
+          {{ 'my.learning.wrong_question_book.detail.screen.course.select_option.desc'|trans }}
         </a-select-option>
         <a-select-option value="ASC">
-          由低至高
+          {{ 'my.learning.wrong_question_book.detail.screen.course.select_option.asc'|trans }}
         </a-select-option>
       </a-select>
     </a-form-model-item>
 
     <a-form-model-item>
-      <a-button type="primary" @click="handleSubmit">搜索</a-button>
+      <a-button type="primary" @click="handleSubmit">{{ 'my.learning.wrong_question_book.detail.screen.course.search'|trans }}</a-button>
     </a-form-model-item>
   </a-form-model>
 </template>
@@ -93,9 +93,9 @@ import _ from 'lodash';
 import { WrongBookCondition } from 'common/vue/service';
 
 const sources = {
-  testpaper: '考试任务',
-  homework: '作业任务',
-  exercise: '练习任务'
+  testpaper: Translator.trans('my.learning.wrong_question_book.detail.screen.course.sources.exam_task'),
+  homework: Translator.trans('my.learning.wrong_question_book.detail.screen.course.sources.job_task'),
+  exercise: Translator.trans('my.learning.wrong_question_book.detail.screen.course.sources.practice_task'),
 }
 
 export default {

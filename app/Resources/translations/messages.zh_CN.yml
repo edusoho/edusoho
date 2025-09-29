@@ -10631,6 +10631,7 @@ course.video.convert.client.click.listen: 手机端支持一键听课
 course.video.convert.client.try: '（试一试）'
 course.task.show.video.convert.client.try: 手机端支持一键听课，快去试试...
 course.task.show.video.convert.client.notify: 不再提醒
+course.task.show.video.play_continuously: 连续播放
 course.info.video.convert.audio.enable: 音频听课（试用）
 course.info.video.convert.audio.enable_label: 音频听课
 course.info.video.convert.audio.start: 开启

@@ -2442,3 +2442,47 @@ my.learning.wrong_question_book.detail.list_item.check: Check
 my.learning.wrong_question_book.detail.classroom.search_placeholder: Please enter the classroom name
 
 my.learning.wrong_question_book.detail.item_bank.search_placeholder: Please enter the name of the practice question bank
+
+my.learning.wrong_question_book.detail.index.practice_of_incorrect_answers: Practice of Incorrect Answers
+my.learning.wrong_question_book.detail.index.modal.title: Practice of Incorrect Answers
+my.learning.wrong_question_book.detail.index.modal.ok_text: Start answering the questions
+my.learning.wrong_question_book.detail.index.modal.cancel_text: Cancel
+my.learning.wrong_question_book.detail.index.modal.display_quantity: Display quantity
+my.learning.wrong_question_book.detail.index.modal.questions: questions
+my.learning.wrong_question_book.detail.index.modal.custom: Custom
+my.learning.wrong_question_book.detail.index.modal.tip: 'Input range: 1 ≤ Number of questions ≤ Total number of incorrect questions in a single error logbook'
+my.learning.wrong_question_book.detail.index.message.warning.zero: The number of answers cannot be zero
+
+my.learning.wrong_question_book.detail.screen.course.empty: No data
+my.learning.wrong_question_book.detail.screen.course.entire_plan: The entire plan
+my.learning.wrong_question_book.detail.screen.course.source: Source of the question
+my.learning.wrong_question_book.detail.screen.course.task_name: Task name
+my.learning.wrong_question_book.detail.screen.course.select_option.mistakes_frequency: Frequency of mistakes
+my.learning.wrong_question_book.detail.screen.course.select_option.desc: DESC
+my.learning.wrong_question_book.detail.screen.course.select_option.asc: ASC
+my.learning.wrong_question_book.detail.screen.course.search: Search
+my.learning.wrong_question_book.detail.screen.course.sources.exam_task: Exam task
+my.learning.wrong_question_book.detail.screen.course.sources.job_task: Job task
+my.learning.wrong_question_book.detail.screen.course.sources.practice_task: Practice task
+
+my.learning.wrong_question_book.detail.screen.classroom.empty: No data
+my.learning.wrong_question_book.detail.screen.classroom.all_courses: All courses
+my.learning.wrong_question_book.detail.screen.classroom.source: Source of the question
+my.learning.wrong_question_book.detail.screen.classroom.task_name: Task name
+my.learning.wrong_question_book.detail.screen.classroom.select_option.mistakes_frequency: Frequency of mistakes
+my.learning.wrong_question_book.detail.screen.classroom.select_option.desc: DESC
+my.learning.wrong_question_book.detail.screen.classroom.select_option.asc: ASC
+my.learning.wrong_question_book.detail.screen.classroom.search: Search
+my.learning.wrong_question_book.detail.screen.classroom.sources.exam_task: Exam task
+my.learning.wrong_question_book.detail.screen.classroom.sources.job_task: Job task
+my.learning.wrong_question_book.detail.screen.classroom.sources.practice_task: Practice task
+
+my.learning.wrong_question_book.detail.screen.question_bank.empty: No data
+my.learning.wrong_question_book.detail.screen.question_bank.all_papers: All the examination papers
+my.learning.wrong_question_book.detail.screen.question_bank.all_chapters: All chapters
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.mistakes_frequency: Frequency of mistakes
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.desc: DESC
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: ASC
+my.learning.wrong_question_book.detail.screen.question_bank.search: Search
+my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: Chapter exercises
+my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: Test paper practice

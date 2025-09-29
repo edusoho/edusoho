@@ -6,7 +6,7 @@
       </h3>
 
       <a-button class="pull-right" type="primary" :disabled="pagination.total <= 0" @click="handleClickWrongExercises">
-        错题练习
+        {{ 'my.learning.wrong_question_book.detail.index.practice_of_incorrect_answers'|trans }}
       </a-button>
     </div>
 
@@ -39,26 +39,26 @@
     />
 
     <a-modal
-      title="错题练习"
+      :title="'my.learning.wrong_question_book.detail.index.modal.title'|trans"
       width="446px"
-      ok-text="开始答题"
-      cancel-text="取消"
+      :ok-text="'my.learning.wrong_question_book.detail.index.modal.ok_text'|trans"
+      :cancel-text="'my.learning.wrong_question_book.detail.index.modal.cancel_text'|trans"
       :visible="visible"
       @cancel="visible = false"
       @ok="goToWrongExercises"
     >
       <div>
-        展示数量：
+        {{ 'my.learning.wrong_question_book.detail.index.modal.display_quantity'|trans }}：
         <a-radio-group v-model:value="modeValue" name="radioGroup">
-          <a-radio class="font-normal" value="A">{{ Math.min(wrongNumCount,20) }}题</a-radio>
-          <a-radio class="font-normal" value="B">自定义</a-radio>
+          <a-radio class="font-normal" value="A">{{ Math.min(wrongNumCount,20) }}{{ 'my.learning.wrong_question_book.detail.index.modal.questions'|trans }}</a-radio>
+          <a-radio class="font-normal" value="B">{{ 'my.learning.wrong_question_book.detail.index.modal.custom'|trans }}</a-radio>
         </a-radio-group>
         <div v-show="modeValue === 'B'">
           <div>
-            <a-input class="item-num" v-model:value="itemNum" type="number" v-on:input="changeInput" v-on:blur="blurInput" />题
+            <a-input class="item-num" v-model:value="itemNum" type="number" v-on:input="changeInput" v-on:blur="blurInput" />{{ 'my.learning.wrong_question_book.detail.index.modal.questions'|trans }}
           </div>
           <div class="item-num-tip">
-            可输入范围：1≤题目数量≤单个错题本全部错题
+            {{ 'my.learning.wrong_question_book.detail.index.modal.tip'|trans }}
           </div>
         </div>
       </div>
@@ -197,7 +197,7 @@ export default {
     },
 
     goToWrongExercises() {
-      if(this.itemNum == 0 && this.modeValue === 'B') return message.warning('答题数不能为0');
+      if(this.itemNum == 0 && this.modeValue === 'B') return message.warning(Translator.trans('my.learning.wrong_question_book.detail.index.message.warning.zero'));
 
       this.visible = false;
       // 错题练习
