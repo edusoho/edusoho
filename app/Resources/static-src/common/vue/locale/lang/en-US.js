@@ -147,7 +147,7 @@ const lang = {
     questionIsDeleted: 'The question is deleted',
     itemIsDeleted: 'The item is deleted',
     card: 'Answer card',
-    toggleCard: 'Toggle Answer card >>',
+    toggleCard: 'Toggle card >>',
     remainReview: 'To be review',
     undo: 'Not Start',
     showError: 'Wrong answers only',
