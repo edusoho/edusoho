@@ -2476,3 +2476,13 @@ my.learning.wrong_question_book.detail.screen.classroom.search: Search
 my.learning.wrong_question_book.detail.screen.classroom.sources.exam_task: Exam task
 my.learning.wrong_question_book.detail.screen.classroom.sources.job_task: Job task
 my.learning.wrong_question_book.detail.screen.classroom.sources.practice_task: Practice task
+
+my.learning.wrong_question_book.detail.screen.question_bank.empty: No data
+my.learning.wrong_question_book.detail.screen.question_bank.all_papers: All the examination papers
+my.learning.wrong_question_book.detail.screen.question_bank.all_chapters: All chapters
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.mistakes_frequency: Frequency of mistakes
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.desc: DESC
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: ASC
+my.learning.wrong_question_book.detail.screen.question_bank.search: Search
+my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: Chapter exercises
+my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: Test paper practice

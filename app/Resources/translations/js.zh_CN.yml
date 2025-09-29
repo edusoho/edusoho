@@ -2454,3 +2454,13 @@ my.learning.wrong_question_book.detail.screen.classroom.search: 搜索
 my.learning.wrong_question_book.detail.screen.classroom.sources.exam_task: 考试任务
 my.learning.wrong_question_book.detail.screen.classroom.sources.job_task: 作业任务
 my.learning.wrong_question_book.detail.screen.classroom.sources.practice_task: 练习任务
+
+my.learning.wrong_question_book.detail.screen.question_bank.empty: 暂无数据
+my.learning.wrong_question_book.detail.screen.question_bank.all_papers: 全部试卷
+my.learning.wrong_question_book.detail.screen.question_bank.all_chapters: 全部章节
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.mistakes_frequency: 做错频次
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.desc: 由高至低
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: 由低至高
+my.learning.wrong_question_book.detail.screen.question_bank.search: 搜索
+my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: 章节练习
+my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: 试卷练习

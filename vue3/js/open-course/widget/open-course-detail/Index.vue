@@ -8,6 +8,7 @@ import { ClockCircleOutlined } from '@ant-design/icons-vue';
 import {formatDate, open} from '../../../common';
 import { AlignLeftOutlined } from '@ant-design/icons-vue';
 import ThreadShowWidget from 'app/js/thread/thread-show';
+import {t} from './vue-lang';
 
 const props = defineProps({
   course: {required: true},
@@ -51,18 +52,18 @@ function isLessonAvailable(lesson) {
 }
 function getLessonStatus(lesson) {
   if (lesson.status === 'unpublished') {
-    return '敬请期待';
+    return t('status.comingSoon');
   }
   if (lesson.replayStatus === 'generated' || lesson.replayStatus === 'videoGenerated') {
-    return '回放';
+    return t('status.playback');
   }
   switch (lesson.progressStatus) {
   case 'live':
-    return '直播中';
+    return t('status.Live');
   case 'created':
-    return '未开始';
+    return t('status.haveNotStarted');
   default:
-    return '已结束';
+    return t('status.finished');
   }
 }
 function isLessonDisabled(lesson) {
@@ -91,14 +92,14 @@ function entryLesson(lesson) {
   <AntConfigProvider>
     <div class="px-32">
       <a-tabs v-model:activeKey="activeKey" centered class="open-course-detail-tabs">
-        <a-tab-pane key="intro" tab="简介">
+        <a-tab-pane key="intro" :tab="t('tab.intro')">
           <div v-if="props.course.about" v-html="props.course.about" class="mt-24 mb-24"></div>
           <div v-else class="mt-48 mb-100">
-            <a-empty :image="simpleImage" description="暂无简介"/>
+            <a-empty :image="simpleImage" :description="t('empty.intro')"/>
           </div>
         </a-tab-pane>
-        <a-tab-pane key="catalogue" tab="目录">
-          <a-spin :spinning="lessons.loading" tip="加载中..." class="w-full">
+        <a-tab-pane key="catalogue" :tab="t('tab.catalogue')">
+          <a-spin :spinning="lessons.loading" :tip="t('loading')" class="w-full">
             <div v-if="lessons.data.length" v-for="(lesson, index) in lessons.data" :key="lesson.id">
               <div class="flex justify-between my-24">
                 <div class="flex flex-col">
@@ -116,17 +117,17 @@ function entryLesson(lesson) {
                   </div>
                 </div>
                 <div class="flex items-center">
-                  <a-button @click.stop="entryLesson(lesson)" type="primary" ghost :disabled="isLessonDisabled(lesson)">{{ lesson.status === 'unpublished' ? '敬请期待' : lesson.progressStatus === 'closed' ? '查看回放' : '查看直播' }}</a-button>
+                  <a-button @click.stop="entryLesson(lesson)" type="primary" ghost :disabled="isLessonDisabled(lesson)">{{ lesson.status === 'unpublished' ? t('btn.comingSoon') : lesson.progressStatus === 'closed' ? t('btn.viewTheReplay') : t('btn.viewTheLive') }}</a-button>
                 </div>
               </div>
               <a-divider v-if="index + 1 !== lessons.data.length"/>
             </div>
             <div v-else class="mt-48 mb-100">
-              <a-empty :image="simpleImage" description="暂无内容"/>
+              <a-empty :image="simpleImage" :description="t('empty.catalogue')"/>
             </div>
           </a-spin>
         </a-tab-pane>
-        <a-tab-pane key="comment" tab="评论" force-render>
+        <a-tab-pane key="comment" :tab="t('tab.comment')" force-render>
           <div v-html="commentTemplate" class="mt-24"></div>
         </a-tab-pane>
       </a-tabs>
