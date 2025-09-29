@@ -229,6 +229,7 @@ export default {
           title: this.t("itemEngine.itemType"),
           dataIndex: "section_name",
           key: "section_name",
+          scopedSlots: { customRender: "section_name" },
           align: "center"
         },
         {
