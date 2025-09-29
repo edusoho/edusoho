@@ -376,6 +376,8 @@ const lang = {
     fail: 'Fail',
     rightQuestionCount: 'Number of objective questions answered correctly:'
   },
+  '作业题目': 'Homework',
+  '练习题目': 'Exercise',
   '题目列表': 'Questions',
   '单选题': 'Single choice',
   '多选题': 'Multiple choice',
