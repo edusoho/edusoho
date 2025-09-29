@@ -223,6 +223,9 @@ const lang = {
     itemWrong: 'Wrong',
     itemUndo: 'Not Start',
     Explain: 'Analysis:',
+    analysis: 'Analysis',
+    openExplain: 'Open analysis',
+    closeExplain: 'Close analysis',
     InspectionMobileTip:
       'Cloud exams have been opened for this exam. Answering questions on the mobile terminal is currently not supported. Please go to the PC to answer the questions.',
     aiAssistant: 'I am your AI problem assistant, click on \'AI analysis\' to see the problem analysis I searched for you。',
