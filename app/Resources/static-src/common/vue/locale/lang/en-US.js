@@ -2,7 +2,7 @@ const lang = {
   otherScore1: 'Missed Selection Score',
   locale: 'en-US',
   single_choice: 'Single choice',
-  fill: 'Gap filling',
+  fill: 'Fill in the blank',
   essay: 'Q&A',
   material: 'Materail',
   uncertain_choice: 'Indefinite choice',
@@ -375,7 +375,15 @@ const lang = {
     pass: 'Pass',
     fail: 'Fail',
     rightQuestionCount: 'Number of objective questions answered correctly:'
-  }
+  },
+  '题目列表': 'Questions',
+  '单选题': 'Single choice',
+  '多选题': 'Multiple choice',
+  '不定项选择题': 'Indefinite choice',
+  '判断题': 'True or false',
+  '填空题': 'Fill in the blank',
+  '问答题': 'Essay',
+  '材料题': 'Materail',
 };
 
 export default lang;
