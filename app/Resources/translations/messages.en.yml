@@ -439,7 +439,7 @@ coin.alipay.tips: 'The site is using "secured transaction". You need to confirm 
 coin.redirect_alipay_btn: 'Click to redirect to alipay'
 coin.pay.submit.request: 'Redirecting to payment gateway'
 order.charge: Charge
-order.name: 'Order name'
+order.name: Name
 order.product_name: Product Name
 order.product_price: Product Price
 order.price_amount: Price payable
@@ -9309,6 +9309,7 @@ course.video.convert.client.click.listen: 'The mobile phone supports one-click c
 course.video.convert.client.try: '(Try)'
 course.task.show.video.convert.client.try: 'The mobile phone supports one-click class, try it...'
 course.task.show.video.convert.client.notify: 'No longer remind'
+course.task.show.video.play_continuously: 'Play continuously'
 course.info.video.convert.audio.enable: 'Audio lecture (trial)'
 course.info.video.convert.audio.enable_label: Audio lecture
 course.info.video.convert.audio.start: 'Open'
