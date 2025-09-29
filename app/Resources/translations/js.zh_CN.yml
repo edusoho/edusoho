@@ -2421,6 +2421,10 @@ my.learning.wrong_question_book.detail.classroom.search_placeholder: 请输入�
 
 my.learning.wrong_question_book.detail.item_bank.search_placeholder: 请输入题库练习名称
 
+my.learning.wrong_question_book.detail.index.course_mistakes: 课程错题
+my.learning.wrong_question_book.detail.index.classroom_mistakes: 班级错题
+my.learning.wrong_question_book.detail.index.quiz_mistakes: 题库练习错题
+
 my.learning.wrong_question_book.detail.index.practice_of_incorrect_answers: 错题练习
 my.learning.wrong_question_book.detail.index.modal.title: 错题练习
 my.learning.wrong_question_book.detail.index.modal.ok_text: 开始答题
@@ -2464,3 +2468,10 @@ my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: �
 my.learning.wrong_question_book.detail.screen.question_bank.search: 搜索
 my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: 章节练习
 my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: 试卷练习
+
+my.learning.wrong_question_book.detail.components.layout.trueOrFalseQuestions: 判断题
+my.learning.wrong_question_book.detail.components.layout.singleChoice: 单选题
+my.learning.wrong_question_book.detail.components.layout.multipleChoice: 多选题
+my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion: 不定项选择题
+my.learning.wrong_question_book.detail.components.layout.gapFilling: 填空题
+my.learning.wrong_question_book.detail.components.layout.essayQuestion: 问答题

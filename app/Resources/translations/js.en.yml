@@ -2486,3 +2486,10 @@ my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: A
 my.learning.wrong_question_book.detail.screen.question_bank.search: Search
 my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: Chapter exercises
 my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: Test paper practice
+
+my.learning.wrong_question_book.detail.components.layout.trueOrFalseQuestions: True Or False Questions
+my.learning.wrong_question_book.detail.components.layout.singleChoice: Single Choice
+my.learning.wrong_question_book.detail.components.layout.multipleChoice: Multiple Choice
+my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion: Multiple Choice Question
+my.learning.wrong_question_book.detail.components.layout.gapFilling: Gap Filling
+my.learning.wrong_question_book.detail.components.layout.essayQuestion: Essay Question
