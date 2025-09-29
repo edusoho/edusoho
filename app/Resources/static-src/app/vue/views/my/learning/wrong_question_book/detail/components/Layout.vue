@@ -64,17 +64,17 @@ export default {
     showAnswerModeText(mode) {
       switch (mode) {
       case 'true_false':
-        return this.t("itemEngine.trueOrFalseQuestions")
+        return Translator.trans("my.learning.wrong_question_book.detail.components.layout.trueOrFalseQuestions")
       case 'single_choice':
-        return this.t("itemEngine.singleChoice")
+        return Translator.trans("my.learning.wrong_question_book.detail.components.layout.singleChoice")
       case 'choice':
-        return this.t("itemEngine.multipleChoice")
+        return Translator.trans("my.learning.wrong_question_book.detail.components.layout.multipleChoice")
       case 'uncertain_choice':
-        return this.t("itemEngine.multipleChoiceQuestion")
+        return Translator.trans("my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion")
       case 'text':
-        return this.t("itemEngine.gapFilling")
+        return Translator.trans("my.learning.wrong_question_book.detail.components.layout.gapFilling")
       case 'rich_text':
-        return this.t("itemEngine.essayQuestion")
+        return Translator.trans("my.learning.wrong_question_book.detail.components.layout.essayQuestion")
       default:
         return ''
       }
