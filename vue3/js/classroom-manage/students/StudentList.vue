@@ -608,9 +608,4 @@ const removeStudent = async userId => {
   font-weight: 400;
   line-height: 22px;
 }
-
-.ant-message {
-  left: 50%;
-  transform: translateX(-50%)
-}
 </style>
