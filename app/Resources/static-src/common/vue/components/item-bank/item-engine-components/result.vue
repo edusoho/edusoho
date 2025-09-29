@@ -107,6 +107,9 @@
       :dataSource="answerReport.section_reports"
       :pagination="false"
     >
+      <template slot="section_name" slot-scope="text, record">
+        <span>{{ t(text) }}</span>
+      </template>
       <template slot="score" slot-scope="text, record" v-show="needScore">
         <span
           class="ibs-warning-color ibs-text-folder"
@@ -182,6 +185,7 @@ export default {
           title: this.t("itemEngine.itemType"),
           dataIndex: "section_name",
           key: "section_name",
+          scopedSlots: { customRender: "section_name" },
           align: "center"
         },
         {

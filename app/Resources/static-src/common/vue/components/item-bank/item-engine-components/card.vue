@@ -19,7 +19,7 @@
         :key="'cardSection' + sectionsIndex"
       >
         <p class="ibs-card-body__type" v-show="getReviewTitle(sectionsIndex)">
-          {{ section.name }}
+          {{ t(section.name) }}
         </p>
         <a-anchor :affix="false" class="ibs-card-anchor" @click="handleClick">
           <template v-for="(item, itemIndex) in section.items">
