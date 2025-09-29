@@ -2163,6 +2163,9 @@ t.add("my.learning.wrong_question_book.detail.list_item.problem", "\u9898", "js"
 t.add("my.learning.wrong_question_book.detail.list_item.check", "\u67e5\u770b\u9519\u9898", "js", "zh_CN");
 t.add("my.learning.wrong_question_book.detail.classroom.search_placeholder", "\u8bf7\u8f93\u5165\u73ed\u7ea7\u540d\u79f0", "js", "zh_CN");
 t.add("my.learning.wrong_question_book.detail.item_bank.search_placeholder", "\u8bf7\u8f93\u5165\u9898\u5e93\u7ec3\u4e60\u540d\u79f0", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.index.course_mistakes", "\u8bfe\u7a0b\u9519\u9898", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.index.classroom_mistakes", "\u73ed\u7ea7\u9519\u9898", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.index.quiz_mistakes", "\u9898\u5e93\u7ec3\u4e60\u9519\u9898", "js", "zh_CN");
 t.add("my.learning.wrong_question_book.detail.index.practice_of_incorrect_answers", "\u9519\u9898\u7ec3\u4e60", "js", "zh_CN");
 t.add("my.learning.wrong_question_book.detail.index.modal.title", "\u9519\u9898\u7ec3\u4e60", "js", "zh_CN");
 t.add("my.learning.wrong_question_book.detail.index.modal.ok_text", "\u5f00\u59cb\u7b54\u9898", "js", "zh_CN");
@@ -2203,4 +2206,10 @@ t.add("my.learning.wrong_question_book.detail.screen.question_bank.select_option
 t.add("my.learning.wrong_question_book.detail.screen.question_bank.search", "\u641c\u7d22", "js", "zh_CN");
 t.add("my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises", "\u7ae0\u8282\u7ec3\u4e60", "js", "zh_CN");
 t.add("my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice", "\u8bd5\u5377\u7ec3\u4e60", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.components.layout.trueOrFalseQuestions", "\u5224\u65ad\u9898", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.components.layout.singleChoice", "\u5355\u9009\u9898", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.components.layout.multipleChoice", "\u591a\u9009\u9898", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion", "\u4e0d\u5b9a\u9879\u9009\u62e9\u9898", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.components.layout.gapFilling", "\u586b\u7a7a\u9898", "js", "zh_CN");
+t.add("my.learning.wrong_question_book.detail.components.layout.essayQuestion", "\u95ee\u7b54\u9898", "js", "zh_CN");
 })(Translator);

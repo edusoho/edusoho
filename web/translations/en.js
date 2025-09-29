@@ -2232,4 +2232,10 @@ t.add("my.learning.wrong_question_book.detail.screen.question_bank.select_option
 t.add("my.learning.wrong_question_book.detail.screen.question_bank.search", "Search", "js", "en");
 t.add("my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises", "Chapter exercises", "js", "en");
 t.add("my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice", "Test paper practice", "js", "en");
+t.add("my.learning.wrong_question_book.detail.components.layout.trueOrFalseQuestions", "True Or False Questions", "js", "en");
+t.add("my.learning.wrong_question_book.detail.components.layout.singleChoice", "Single Choice", "js", "en");
+t.add("my.learning.wrong_question_book.detail.components.layout.multipleChoice", "Multiple Choice", "js", "en");
+t.add("my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion", "Multiple Choice Question", "js", "en");
+t.add("my.learning.wrong_question_book.detail.components.layout.gapFilling", "Gap Filling", "js", "en");
+t.add("my.learning.wrong_question_book.detail.components.layout.essayQuestion", "Essay Question", "js", "en");
 })(Translator);
