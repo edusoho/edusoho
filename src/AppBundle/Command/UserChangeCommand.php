@@ -67,6 +67,7 @@ class UserChangeCommand extends BaseCommand
                     break;
                 case 'email':
                     $this->getUserService()->changeEmail($user['id'], $value);
+                    $this->getUserService()->setEmailVerified($user['id']);
                     break;
             }
             $output->writeln("\n<info>修改成功！</info>\n");
