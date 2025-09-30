@@ -16,7 +16,7 @@ class FixCourseTaskInvalidChapterIdCommand extends BaseCommand
                 'real',
                 InputArgument::OPTIONAL
             )
-            ->setDescription('修复课程计划任务错误的章节ID（由于 BUG 导致数据出错），参见工单：102395。BUG 的现象：课时的任务无法编辑，任务无法排序。');
+            ->setDescription('修复课程计划任务错误的章节ID（由于 BUG 导致数据出错，此BUG 25.3.2中已修复，请更新到最新版本），参见工单：102395。BUG 的现象：课时的任务无法编辑，任务无法排序。');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
