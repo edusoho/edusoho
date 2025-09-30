@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Content\FileException;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -70,6 +71,7 @@ class TaskController extends BaseController
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
         if ('classroom' === $member['joinedType'] && !empty($member['classroomId'])) {
             $classroomMember = $this->getClassroomService()->getClassroomMember($member['classroomId'], $member['userId']);
+            $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
             $member['locked'] = $classroomMember['locked'];
         }
         if ($member['locked']) {
@@ -136,6 +138,22 @@ class TaskController extends BaseController
             }
         }
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
+        $goodsKey = empty($classroomMember) ? 'course_'.$course['id'] : 'classroom_'.$classroomMember['classroomId'];
+        $contract = $this->getContractService()->getRelatedContractByGoodsKey($goodsKey);
+        $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($user['id'], $goodsKey);
+        if (empty($contract) || $preview || !empty($signRecord)) {
+            $contract = [
+                'sign' => 'no',
+            ];
+        } else {
+            $contract = [
+                'sign' => $contract['sign'] ? 'required' : 'optional',
+                'name' => $contract['contractName'],
+                'id' => $contract['contractId'],
+                'goodsKey' => $goodsKey,
+                'targetTitle' => $classroom['title'] ?? $course['courseSetTitle'] ?? ''
+            ];
+        }
 
         return $this->render(
             'task/show.html.twig',
@@ -151,6 +169,8 @@ class TaskController extends BaseController
                 'media' => $media,
                 'learnControlSetting' => $learnControlSetting,
                 'videoHeaderLength' => $videoHeaderLength,
+                'contract' => $contract,
+                'user' => $this->getCurrentUser(),
             ]
         );
     }
@@ -350,6 +370,8 @@ class TaskController extends BaseController
                 'task' => $task,
                 'preview' => $preview,
                 'doAgain' => $request->query->get('doAgain', false),
+                'assessmentId' => $request->query->get('assessmentId'),
+                'sign' => $request->query->get('sign', 'no')
             ]
         );
     }
@@ -776,5 +798,13 @@ class TaskController extends BaseController
     protected function getAnswerReportService()
     {
         return $this->createService('ItemBank:Answer:AnswerReportService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }

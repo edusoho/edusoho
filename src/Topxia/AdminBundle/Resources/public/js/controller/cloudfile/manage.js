@@ -26,12 +26,13 @@ define(function(require, exports, module) {
         'click .js-search-type option': 'onClickSearchTypeBtn',
         'click .js-refresh-btn': 'onClickRefreshBtn',
         'click .js-manage-batch-btn': 'onClickManageBtn',
+        'click .js-batch-category-btn': 'onClickCategoryBatchBtn',
         'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
         'click .js-batch-share-btn': 'onClickShareBatchBtn',
         'click .js-batch-tag-btn': 'onClickTagBatchBtn',
         'click .js-cd-modal': 'codeErrorTip',
         'click .js-batch-download': 'batchDownload',
-
+        'click .js-open-refer-course': 'onClickReferCourse',
       },
       setup: function() {
         this.set('model', 'normal');
@@ -40,7 +41,28 @@ define(function(require, exports, module) {
         this._initHeader();
         this._initSelect2();
         this.initTagForm();
-        
+        this.initEmitter();
+      },
+      onClickReferCourse: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const $target = $(e.currentTarget);
+        window.emitter.emit('open-refer-course-modal', {
+          fileId: $target.data('id'),
+          usedCount: $target.data('count'),
+          fileType: $target.data('type'),
+          filename: $target.data('filename'),
+          fileLength: $target.data('length'),
+        });
+      },
+      initEmitter: function() {
+        window.emitter.on('set-category-success', () => {
+          $("[data-role=batch-select]").attr("checked", false);
+          this.renderTable();
+        });
+        window.emitter.on('replace-upload-file-success', () => {
+          this.renderTable();
+        });
       },
       initTagForm: function(event) {
         var $form = $("#tag-form");
@@ -49,6 +71,21 @@ define(function(require, exports, module) {
         }
         var validator = new Validator({
           element: $form,
+          autoSubmit: false,
+          onFormValidated: function (error, results, $form) {
+            if (error) {
+              return false;
+            }
+
+            $.post($form.attr('action'), $form.serialize())
+              .success(function (response) {
+                $('#tag-modal').modal('hide');
+                Notify.success(Translator.trans('admin.cloud_file.add_tag_ok'));
+              })
+              .fail(function (xhr, status, error) {
+                Notify.danger(xhr.responseJSON.error.message);
+              });
+          }
         });
 
         validator.addItem({
@@ -78,7 +115,7 @@ define(function(require, exports, module) {
         });
         for (var i = 0;i < urls.length;i++) {
           var url = urls[i];
-          self.downloadFile(url);   
+          self.downloadFile(url);
         }
       },
 
@@ -90,9 +127,9 @@ define(function(require, exports, module) {
           var solution = $btn.data('solution');
           var status = $btn.data('status');
           $('.js-error-tip').html(
-           '<div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.file_name') +'：</span><span class="pull-left error-content">' + title + 
+           '<div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.file_name') +'：</span><span class="pull-left error-content">' + title +
            '</span></div><div class="mbl clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.transcoding') +'：</span><span class="pull-left error-content">' + status + '</span></div><div class="mbl clearfix"><span class="pull-left error-label">' + Translator.trans('material.common_table.error_reason') + '：</span><span class="color-danger pull-left error-content">' + reason +
-           '</span></div><div class="clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.solution_way') +'：</span><span class="color-info pull-left error-content">' +  solution + 
+           '</span></div><div class="clearfix"><span class="pull-left error-label">'+ Translator.trans('material.common_table.solution_way') +'：</span><span class="color-info pull-left error-content">' +  solution +
            '</span></div>')
         })
       },
@@ -299,6 +336,17 @@ define(function(require, exports, module) {
         });
         $('#modal').modal('show');
 
+      },
+      onClickCategoryBatchBtn: function(event) {
+          var ids = [];
+          this.element.find('[data-role=batch-item]:checked').each(function() {
+              ids.push($(this).data('fileId'));
+          });
+          if (ids.length === 0) {
+              Notify.danger(Translator.trans('meterial_lib.select_resource_operate_hint') + '!');
+              return;
+          }
+          window.emitter.emit('open-category-modal', {ids: ids})
       },
       onClickShareBatchBtn: function(event) {
         if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {

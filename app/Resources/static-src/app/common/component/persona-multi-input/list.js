@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import sortList from 'common/sortable';
-import { getRandomString } from '../multi-input/part';
+import React from 'react';
 import MultiInputList from 'app/common/component/multi-input/list';
 
 export default class List extends MultiInputList {
@@ -32,10 +30,10 @@ export default class List extends MultiInputList {
                 <img className="avatar-sm avatar-sm-square mrm" src={item.avatar} />
                 <span className="label-name text-overflow inline-block vertical-middle">{item.nickname}</span>
                 <label className={showCheckbox ? '' : 'hidden'}><input type="checkbox" name={checkBoxName + item.id} checked={item.isVisible} onChange={event => this.context.onChecked(event)} value={item.itemId} />{Translator.trans('course.manage.teacher_display_label')}</label>
-								<span data-url="" data-toggle="tooltip" data-placement="top" title={Translator.trans('del.role.theater.hover.title')} className={item.isCanceledTeacherRoles ? '' : 'hidden'}>
-									<i className="es-icon es-icon-infooutline pull-right mtm mlm text-16 text-FF7D00"></i>
+								<span data-toggle="tooltip" data-placement="top" title={Translator.trans(item.isLiveTeacher ? 'course.teacher.hover.title.live_teacher' : 'del.role.theater.hover.title')} className={item.isCanceledTeacherRoles || item.isLiveTeacher ? 'pull-right mtm mlm' : 'hidden'}>
+									<i className="es-icon es-icon-infooutline text-16 text-FF7D00"></i>
 								</span>
-                <a className={showDeleteBtn ? 'pull-right link-gray mtm' : 'hidden'} onClick={event => this.context.removeItem(event)} data-item-id={item.itemId}>
+                <a className={showDeleteBtn && !item.isLiveTeacher ? 'pull-right link-gray mtm' : 'hidden'} onClick={event => this.context.removeItem(event)} data-item-id={item.itemId}>
                   <i className="es-icon es-icon-close01 text-16"></i>
                 </a>
                 <input type="hidden" name={inputName} value={item.id} />

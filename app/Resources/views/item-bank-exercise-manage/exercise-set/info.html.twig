@@ -21,4 +21,9 @@
     {% else %}
       <div class="cd-alert cd-alert-danger">{{ 'item_bank_exercise.marketing_setup.no_permission_tips'|trans }}</div>
     {% endif %}
+  <div style="display:none">
+    <div id="contract-setting"
+         data-exercise="{{ exercise|json_encode }}"
+    ></div>
+  </div>
 {% endblock %}

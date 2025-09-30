@@ -10,7 +10,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\LiveReplayException;
-use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\User\Service\UserService;
 
@@ -80,10 +79,10 @@ class LiveReplay extends AbstractResource
         }
         $activityIds = $this->getActivityService()->findManageReplayActivityIds($conditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $replays = $this->getLiveReplayService()->searchReplays(['lessonIds' => $activityIds, 'hidden' => 0], ['createdTime' => 'desc'], $offset, $limit);
+        $replays = $this->getLiveReplayService()->searchReplays(['lessonIds' => $activityIds, 'hidden' => 0, 'type' => 'live'], ['createdTime' => 'desc'], $offset, $limit);
         $replays = $this->handleActivityReplay($replays);
 
-        return $this->makePagingObject($replays, $this->getLiveReplayService()->searchCount(['lessonIds' => $activityIds, 'hidden' => 0]), $offset, $limit);
+        return $this->makePagingObject($replays, $this->getLiveReplayService()->searchCount(['lessonIds' => $activityIds, 'hidden' => 0, 'type' => 'live']), $offset, $limit);
     }
 
     protected function handleActivityReplay($replays)
@@ -101,6 +100,7 @@ class LiveReplay extends AbstractResource
             $liveTime = $activity['ext']['liveEndTime'] - $activity['ext']['liveStartTime'];
             $activitiesList[] = [
                 'id' => $activity['id'],
+                'replayId' => $replay['replayId'],
                 'title' => $activity['title'],
                 'liveStartTime' => empty($activity['ext']['liveStartTime']) ? '-' : date('Y-m-d H:i:s', $activity['ext']['liveStartTime']),
                 'liveTime' => empty($liveTime) ? '-' : $this->timeFormatterFilter($liveTime),
@@ -130,60 +130,6 @@ class LiveReplay extends AbstractResource
         }
 
         return $this->trans('site.twig.extension.time_interval.hour_minute', ['%diff_hour%' => floor($time / 3600), '%diff_minute%' => round($time % 3600 / 60)]);
-    }
-
-    protected function filterReplayCondition($conditions)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        if ($currentUser->isAdmin()) {
-            $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByReplayStatus();
-        } else {
-            $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByIsPublic();
-        }
-
-        $activityPublic = [];
-        $liveActivitiesIds = ArrayToolkit::column($liveActivity, 'id');
-        if (!empty($liveActivitiesIds)) {
-            $activityPublic = $this->getActivityService()->findActivitiesByMediaIdsAndMediaType(ArrayToolkit::column($liveActivity, 'id'), 'live');
-        }
-
-        $activityCreator = $this->getActivityService()->findActivitiesByCourseSetIdAndType($conditions['courseSetId'], 'live');
-        $activityIds = ArrayToolkit::column(array_merge($activityPublic, $activityCreator), 'id');
-
-        if (isset($conditions['categoryId']) && !empty($conditions['categoryId'])) {
-            $courseSet = $this->getCourseSetService()->findCourseSetsByCategoryIdAndCreator($conditions['categoryId'], $currentUser->getId());
-            $activityCategory = $this->getActivityService()->findActivitiesByCourseSetIdsAndType(ArrayToolkit::column($courseSet, 'id'), 'live');
-            $activityCategoryIds = ArrayToolkit::column($activityCategory, 'id');
-            $activityIds = array_intersect($activityIds, $activityCategoryIds);
-        }
-
-        if (isset($conditions['tagId']) && !empty($conditions['tagId'])) {
-            $liveActivity = $this->getLiveActivityService()->findLiveActivitiesByReplayTagId($conditions['tagId']);
-            $activityTagIds = ArrayToolkit::column($liveActivity, 'id');
-            $activityIds = array_intersect($activityIds, $activityTagIds);
-        }
-
-        if (isset($conditions['replayPublic']) && !empty($conditions['replayPublic'])) {
-            $liveActivityPublic = $this->getLiveActivityService()->findLiveActivitiesByIsPublic();
-            $activityPublicIds = ArrayToolkit::column($liveActivityPublic, 'id');
-            $activityIds = array_intersect($activityIds, $activityPublicIds);
-        }
-
-        if (isset($conditions['keyword']) && !empty($conditions['keyword'])) {
-            $activityLikeTitle = $this->getActivityService()->findActivitiesLiveByLikeTitle($conditions['keyword']);
-            $activityLikeTitleIds = ArrayToolkit::column($activityLikeTitle, 'id');
-            $activityIds = array_intersect($activityIds, $activityLikeTitleIds);
-        }
-
-        if (!empty($conditions['courseId'])) {
-            $searchConditions['fromCourseId'] = $conditions['courseId'];
-        }
-
-        $searchConditions['ids'] = empty($activityIds) ? [-1] : $activityIds;
-        $searchConditions['mediaType'] = 'live';
-
-        return $searchConditions;
     }
 
     /**
@@ -216,13 +162,5 @@ class LiveReplay extends AbstractResource
     protected function getLiveReplayService()
     {
         return $this->service('Course:LiveReplayService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->service('Course:CourseSetService');
     }
 }

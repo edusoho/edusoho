@@ -15,8 +15,8 @@ use Biz\Favorite\Service\FavoriteService;
 use Biz\Group\Service\GroupService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\System\Service\themeSettingService;
 use Biz\System\Service\SettingService;
+use Biz\System\Service\themeSettingService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\NotificationService;
@@ -87,7 +87,7 @@ class UserController extends BaseController
     {
 //        $user = $this->tryGetUser($id);
         $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
@@ -102,7 +102,7 @@ class UserController extends BaseController
     {
         //$user = $this->tryGetUser($id);
         $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
 
@@ -113,7 +113,7 @@ class UserController extends BaseController
     {
 //        $user = $this->tryGetUser($id);
         $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
@@ -127,7 +127,7 @@ class UserController extends BaseController
     public function learningAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
@@ -255,7 +255,7 @@ class UserController extends BaseController
     {
         //$user = $this->tryGetUser($id);
         $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
@@ -301,7 +301,7 @@ class UserController extends BaseController
     {
 //        $user = $this->tryGetUser($id);
         $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
@@ -353,7 +353,7 @@ class UserController extends BaseController
     {
 //        $user = $this->tryGetUser($id);
         $user = $this->getUserService()->getUserByUUID($id);
-        if(empty($user)) {
+        if (empty($user)) {
             $this->createNewException(UserException::NOTFOUND_USER());
         }
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
@@ -498,6 +498,7 @@ class UserController extends BaseController
         $user['learningNum'] = $this->getCourseService()->countUserLearningCourses($user['id']);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($user['id']);
         $user['followerNum'] = $this->getUserService()->findUserFollowerCount($user['id']);
+        $user['nickname'] = $this->getUserService()->hideUserNickname($user)['nickname'];
         $levels = [];
 
         if ($this->isPluginInstalled('Vip')) {
@@ -744,7 +745,6 @@ class UserController extends BaseController
 
         return $userInfo;
     }
-
 
     protected function tryGetUserByUUID($id)
     {

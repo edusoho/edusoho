@@ -50,6 +50,8 @@ class MeClassroom extends AbstractResource
                 $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $this->getCurrentUser()->getId());
                 $classroom['learningProgressPercent'] = $progress['percent'];
                 $classroom['isExpired'] = empty($members[$classroom['id']]) || $this->isExpired($members[$classroom['id']]['deadline']);
+                $joinedTime = time() - $members[$classroom['id']]['createdTime'];
+                $classroom['joinedDays'] = intval($joinedTime / (3600 * 24));
             }
 
             return $this->makePagingObject($classrooms, $this->getClassroomService()->countClassrooms($classroomConditions), $offset, $limit);

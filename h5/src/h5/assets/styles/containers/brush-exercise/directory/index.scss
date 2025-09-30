@@ -1,0 +1,41 @@
+.brush-exercise-directory {
+	$report-btn: #ff954d;
+
+	@import './components/swiper-tab.scss';
+	@import './components/exam.scss';
+	@import './components/exercise.scss';
+
+	.learn-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: vw(72);
+		height: 28px;
+		padding: 0 vw(0);
+		color: $primary-color;
+		border: vw(1) solid $primary-color;
+		border-radius: vw(0) vw(14) vw(0) vw(14);
+	}
+
+	.learn-btn-doing {
+		color: #fff;
+		background: $primary-color;
+	}
+
+	.learn-btn-report {
+		color: $report-btn;
+		border: vw(1) solid $report-btn;
+	}
+
+	.van-loading {
+		padding-top: vw(20);
+	}
+
+	.van-list {
+		margin-top: vw(0);
+	}
+
+	.empty__exam {
+		padding-top: 20%;
+	}
+}

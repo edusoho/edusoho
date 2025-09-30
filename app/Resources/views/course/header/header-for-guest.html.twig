@@ -81,11 +81,13 @@
             <span >{{ courseSet.subtitle }}</span>
           </p>
         {% endif %}
-        <div class="{% if onDiscount %} mb10  {% else %} cd-mb16 {% endif %}">
-          {% include 'course/header/header-for-price.html.twig' %}
-        </div>
+        {% if course.hidePrice == '0' %}
+          <div class="{% if onDiscount %} mb10  {% else %} cd-mb16 {% endif %}">
+            {% include 'course/header/header-for-price.html.twig' %}
+          </div>
+        {% endif %}
 
-        {% if onDiscount %}
+        {% if onDiscount and course.hidePrice == '0' %}
           <div class="cd-mb8">
             <span class="course-detail__label">{{ 'plugin.acitivity'|trans }}</span>
             <span class="text-12 color-warning">

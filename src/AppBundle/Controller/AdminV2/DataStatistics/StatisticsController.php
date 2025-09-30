@@ -307,32 +307,27 @@ class StatisticsController extends BaseController
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $count = 0;
+        $searchConditions = [
+            'modules' => ['user', 'mobile'],
+            'action' => 'login_success',
+            'startDateTime' => date('Y-m-d H:i:s', $timeRange['startTime']),
+            'endDateTime' => date('Y-m-d H:i:s', $timeRange['endTime']),
+        ];
 
         $paginator = new Paginator(
             $request,
-            $this->getLogService()->searchLogCount(
-                [
-                    'action' => 'login_success',
-                    'startDateTime' => date('Y-m-d H:i:s', $timeRange['startTime']),
-                    'endDateTime' => date('Y-m-d H:i:s', $timeRange['endTime']),
-                ]
-            ),
+            $this->getLogService()->searchLogCount($searchConditions),
             20
         );
 
         $loginDetail = $this->getLogService()->searchLogs(
-            [
-                'action' => 'login_success',
-                'startDateTime' => date('Y-m-d H:i:s', $timeRange['startTime']),
-                'endDateTime' => date('Y-m-d H:i:s', $timeRange['endTime']),
-            ],
+            $searchConditions,
             'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $loginData = '';
+        $count = 0;
 
         if ('trend' == $tab) {
             $loginData = $this->getLogService()->analysisLoginDataByTime(
@@ -347,7 +342,7 @@ class StatisticsController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $loginStartData = $this->getLogService()->searchLogs(['action' => 'login_success'], 'createdByAsc', 0, 1);
+        $loginStartData = $this->getLogService()->searchLogs(['modules' => ['user', 'mobile'], 'action' => 'login_success'], 'createdByAsc', 0, 1);
 
         if ($loginStartData) {
             $loginStartDate = date('Y-m-d', $loginStartData[0]['createdTime']);

@@ -52,6 +52,7 @@ class StudentManageController extends BaseController
             'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($students, 'userId')),
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             'paginator' => $paginator,
+            'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
         ]);
     }
 
@@ -60,6 +61,16 @@ class StudentManageController extends BaseController
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
         return $this->render('item-bank-exercise-manage/wrong-question/index.html.twig', [
+            'exercise' => $exercise,
+            'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
+        ]);
+    }
+
+    public function aiCompanionStudyAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        return $this->render('item-bank-exercise-manage/ai-companion-study/index.html.twig', [
             'exercise' => $exercise,
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
         ]);
@@ -92,11 +103,11 @@ class StudentManageController extends BaseController
             $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
             $data['reason'] = OperateReason::JOIN_BY_IMPORT;
             $data['reasonType'] = OperateReason::JOIN_BY_IMPORT_TYPE;
+            $data['joinedChannel'] = OperateReason::JOIN_BY_IMPORT_TYPE;
             $data['source'] = 'outside';
 
             try {
                 $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
-                $this->setFlashMessage('success', 'site.add.success');
             } catch (\Exception $e) {
                 $this->setFlashMessage('danger', $e->getMessage());
             } finally {
@@ -132,7 +143,7 @@ class StudentManageController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
         $user = $this->getUserService()->getUser($userId);
-        $member = $this->getExerciseMemberService()->getExerciseMember($exerciseId, $userId);
+        $member = $this->getExerciseMemberService()->getExerciseStudent($exerciseId, $userId);
 
         if (empty($member)) {
             $this->createNewException(ItemBankExerciseMemberException::NOTFOUND_MEMBER());
@@ -164,12 +175,8 @@ class StudentManageController extends BaseController
         if (!$user) {
             $response = $this->trans('item_bank_exercise.student_manage.student_not_exist');
         } else {
-            if ($this->getExerciseService()->isExerciseTeacher($exerciseId, $user['id'])) {
-                $response = $this->trans('item_bank_exercise.student_manage.can_not_add_teacher');
-            } else {
-                if ($this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id'])) {
-                    $response = $this->trans('item_bank_exercise.student_manage.student_exist');
-                }
+            if ($this->getExerciseMemberService()->isExerciseStudent($exerciseId, $user['id'])) {
+                $response = $this->trans('item_bank_exercise.student_manage.student_exist');
             }
         }
 
@@ -203,7 +210,7 @@ class StudentManageController extends BaseController
                     return $this->createJsonResponse(true);
                 }
                 $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
-                $this->getExerciseMemberService()->updateMembers(['exerciseId' => $exerciseId], ['deadline' => $date]);
+                $this->getExerciseMemberService()->updateMembers(['exerciseId' => $exerciseId, 'role' => 'student'], ['deadline' => $date]);
 
                 return $this->createJsonResponse(true);
             }
@@ -255,7 +262,8 @@ class StudentManageController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
-        $userIds = $request->request->get('userIds', []);
+        $userIds = $request->request->get('studentIds', []);
+        $userIds = is_array($userIds) ? $userIds : explode(',', $userIds);
         if (empty($this->getUserService()->findUsersByIds($userIds))) {
             return $this->createJsonResponse(['success' => false]);
         }

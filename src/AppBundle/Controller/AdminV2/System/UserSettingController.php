@@ -27,7 +27,7 @@ class UserSettingController extends BaseController
         $default = [
             'register_enabled' => $registerEnabled,
             'register_mode' => 'mobile',
-            'email_enabled' => 'closed',
+            'email_enabled' => 'opened',
             'setting_time' => -1,
             'email_activation_title' => '',
             'email_activation_body' => '',
@@ -41,8 +41,8 @@ class UserSettingController extends BaseController
             'privacy_policy' => 'closed',
             'privacy_policy_body' => '',
             'captcha_enabled' => 0,
-            'register_protective' => 'middle',
-            'password_level' => 'low',
+            'password_level' => 'high',
+            'register_protective' => 'high',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
         ];
@@ -432,7 +432,7 @@ class UserSettingController extends BaseController
             'enabled' => 0,
             'verify_code' => '',
             'captcha_enabled' => 0,
-            'temporary_lock_enabled' => 0,
+            'temporary_lock_enabled' => 1,
             'temporary_lock_allowed_times' => 5,
             'ip_temporary_lock_allowed_times' => 20,
             'temporary_lock_minutes' => 20,

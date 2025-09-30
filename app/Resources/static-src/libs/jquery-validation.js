@@ -1,6 +1,7 @@
 import 'jquery-validation';
 import {isEmpty} from 'common/utils';
 import {axis} from 'common/axis';
+import {validatePassword, validateStrongPassword} from 'common/password';
 
 $.validator.setDefaults({
   errorClass: 'form-error-message jq-validate-error',
@@ -274,17 +275,33 @@ jQuery.validator.addMethod('max_year', function (value, element) {
   return this.optional(element) || value < 100000;
 }, Translator.trans('validate.max_year.message'));
 
+// @DEPRECATED
 $.validator.addMethod('check_password_low', function (value, element) {
   return this.optional(element) || /^[\S]{5,20}$/u.test(value);
 }, Translator.trans('validate.check_password_low.message'));
 
+// @DEPRECATED
 $.validator.addMethod('check_password_middle', function (value, element) {
   return this.optional(element) || /^(?!^(\d+|[a-zA-Z]+|[^\s\da-zA-Z]+)$)^[\S]{8,20}$/.test(value);
 }, Translator.trans('validate.check_password_middle.message'));
 
+// @DEPRECATED
 $.validator.addMethod('check_password_high', function (value, element) {
   return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\s\da-zA-Z])[\S]{8,32}$/.test(value);
 }, Translator.trans('validate.check_password_high.message'));
+
+$.validator.addMethod('password_normal', function (value, element, params) {
+  return this.optional(element) || validatePassword(value);
+}, Translator.trans('password.hint.normal'));
+
+$.validator.addMethod('password_strong', function (value, element) {
+    return this.optional(element) || validateStrongPassword(value);
+}, Translator.trans('password.hint.strong'));
+
+$.validator.addMethod('no_space', function (value, element) {
+  return value.indexOf(' ') < 0;
+}, $.validator.format(Translator.trans('validate.have_spaces')));
+
 
 $.validator.addMethod('before_date', function (value, element, params) {
     let date = new Date(value);

@@ -37,6 +37,8 @@ $document.ajaxError(function (event, jqxhr, settings, exception) {
     case 4040101: //普通请求异常状态码
       loginAgain();
       break;
+    case 4004004:
+      break;
     default:
       cd.message({
         type: 'danger',

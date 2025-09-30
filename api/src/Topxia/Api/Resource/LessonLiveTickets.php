@@ -31,7 +31,7 @@ class LessonLiveTickets extends BaseResource
         $params['id'] = $user['id'];
         $params['displayName'] = $user['nickname'];
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
-        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']);
+        $params['role'] = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($task['courseId'], $user['id'], $task['activityId']);
 
         // android, iphone
         if ($request->request->get('device')) {
@@ -52,7 +52,7 @@ class LessonLiveTickets extends BaseResource
         if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
             $maker = new H5LiveEntryToken();
             $token = $maker->make($task['courseId'], $task['activityId']);
-            $ticket['roomUrl'] = "/es_live/h5_entry/{$token}";
+            $ticket['roomUrl'] = "{$request->getSchemeAndHttpHost()}/es_live/h5_entry/{$token}";
         }
 
         return $ticket;

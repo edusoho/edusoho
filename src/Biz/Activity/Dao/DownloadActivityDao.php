@@ -7,9 +7,9 @@
 
 namespace Biz\Activity\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface DownloadActivityDao extends GeneralDaoInterface
+interface DownloadActivityDao extends AdvancedDaoInterface
 {
     public function findByIds($Ids);
 }

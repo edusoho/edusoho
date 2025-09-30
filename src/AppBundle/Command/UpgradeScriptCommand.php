@@ -30,7 +30,12 @@ class UpgradeScriptCommand extends BaseCommand
             $index = $input->getArgument('index');
         }
 
-        $this->executeScript($code, $version, $index);
+        try {
+            $this->executeScript($output, $code, $version, $index);
+        } catch (\Exception $e) {
+            $output->writeln('<error>执行脚本失败：'.$e->getMessage().'</error>');
+            $output->writeln('<error> '. $e->getTraceAsString() .'</error>');
+        }
         $output->writeln('<info>执行脚本</info>');
 
         PluginUtil::refresh();
@@ -39,11 +44,12 @@ class UpgradeScriptCommand extends BaseCommand
         $output->writeln('<info>元数据更新</info>');
     }
 
-    protected function executeScript($code, $version, $index = 0)
+    protected function executeScript($output, $code, $version, $index = 0)
     {
-        $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../scripts/upgrade-{$version}.php";
+        $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../upgrade-scripts/upgrade-{$version}.php";
 
         if (!file_exists($scriptFile)) {
+            $output->writeln("<info>脚本文件{$scriptFile}不存在！</info>");
             return;
         }
 
@@ -54,7 +60,7 @@ class UpgradeScriptCommand extends BaseCommand
             $info = $upgrade->update($index);
 
             if (isset($info) && !empty($info['index'])) {
-                $this->executeScript($code, $version, $info['index']);
+                $this->executeScript($output, $code, $version, $info['index']);
             }
         }
     }

@@ -15,6 +15,7 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
             'answer.submitted' => 'onAnswerSubmitted',
             'answer.finished' => 'onAnswerFinished',
             'assessment.delete' => 'onAssessmentDelete',
+            'assessment.batch.delete' => 'onAssessmentBatchDelete',
         ];
     }
 
@@ -23,6 +24,13 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
         $assessment = $event->getSubject();
 
         $this->getItemBankAssessmentExerciseService()->deleteByAssessmentId($assessment['id']);
+    }
+
+    public function onAssessmentBatchDelete(Event $event)
+    {
+        $assessmentIds = $event->getSubject();
+
+        $this->getItemBankAssessmentExerciseService()->deleteByAssessmentIds($assessmentIds);
     }
 
     public function onAnswerSubmitted(Event $event)

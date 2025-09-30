@@ -47,6 +47,7 @@ class LiveController extends BaseController
                     break;
                 case 'replay.finished':
                     $this->getLiveReplayService()->handleReplayGenerateEvent($eventData['id'], $eventData['replayDatas']);
+                    $this->getLiveReplayService()->handleReplayGenerateEventForOpenCourse($eventData['id'], $eventData['replayDatas']);
                     break;
                 default:
                     break;

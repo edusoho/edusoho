@@ -21,7 +21,7 @@
       @deleteAttachment="deleteAttachment"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
-      @getAiAnalysis="getAiAnalysis"
+      @renderFormula="renderFormula"
     ></item-manage>
     <item-manage
       v-if="mode === 'edit'"
@@ -45,12 +45,14 @@
       @deleteAttachment="deleteAttachment"
       @previewAttachment="previewAttachment"
       @downloadAttachment="downloadAttachment"
-      @getAiAnalysis="getAiAnalysis"
+      @renderFormula="renderFormula"
     ></item-manage>
   </div>
 </template>
 
 <script>
+import { renderKatex } from 'app/common/katex-render';
+
 export default {
   data() {
     let mode = $("[name=mode]").val();
@@ -267,44 +269,10 @@ export default {
         })
       });
     },
-    async getAiAnalysis(data, disable, enable, complete, finish) {
-      if (/<img .*>/.test(JSON.stringify(data))) {
-        disable();
-        return;
-      };
-      enable();
-      data.role = "teacher";
-      const response = await fetch("/api/ai/question_analysis/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-          Accept: "application/vnd.edusoho.v2+json",
-        },
-        body: JSON.stringify(data),
+    renderFormula() {
+      this.$nextTick(() => {
+        renderKatex();
       });
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let lastMessgae = "";
-      while (true) {
-        const { done, value } = await reader.read();
-        const messages = (lastMessgae + decoder.decode(value)).split("\n\n");
-        let key = 1;
-        for (let message of messages) {
-          if (key == messages.length) {
-            lastMessgae = message;
-          } else {
-            const parseMessage = JSON.parse(message.slice(5));
-            if (parseMessage.event === "message") {
-              complete(parseMessage.answer);
-            }
-            key++;
-          }
-        }
-        if (done) {
-          finish();
-          break;
-        }
-      }
     },
   },
 };

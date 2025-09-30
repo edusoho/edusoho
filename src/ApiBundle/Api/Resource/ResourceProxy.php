@@ -18,7 +18,7 @@ class ResourceProxy
 
     public function __call($method, $arguments)
     {
-        $result = call_user_func_array(array($this->resource, $method), $arguments);
+        $result = call_user_func_array([$this->resource, $method], $arguments);
         if (in_array($method, $this->resource->supportMethods()) && $this->getFieldFilter($method)) {
             $this->filterResult($method, $result);
         }
@@ -42,9 +42,9 @@ class ResourceProxy
 
     private function filterResult($method, &$result)
     {
-        if ($method == AbstractResource::METHOD_SEARCH) {
+        if (AbstractResource::METHOD_SEARCH == $method) {
             $this->getFieldFilter($method)->filters($result);
-        } else {
+        } elseif (AbstractResource::METHOD_REMOVE != $method) {
             $this->getFieldFilter($method)->filter($result);
         }
     }

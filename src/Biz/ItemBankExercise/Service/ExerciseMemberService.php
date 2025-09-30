@@ -8,11 +8,9 @@ interface ExerciseMemberService
 
     public function update($id, $member);
 
-    public function getByExerciseIdAndUserId($exerciseId, $userId);
-
     public function search($conditions, $orderBy, $start, $limit, $columns = []);
 
-    public function isExerciseMember($exerciseId, $userId);
+    public function isExerciseStudent($exerciseId, $userId);
 
     public function becomeStudent($exerciseId, $userId, $info);
 
@@ -24,7 +22,11 @@ interface ExerciseMemberService
 
     public function removeStudent($exerciseId, $userId, $reason = []);
 
-    public function getExerciseMember($exerciseId, $userId);
+    public function getExerciseStudent($exerciseId, $userId);
+
+    public function getExerciseTeacher($exerciseId, $userId);
+
+    public function findMembers($exerciseId, $userId);
 
     public function remarkStudent($exerciseId, $userId, $remark);
 
@@ -42,8 +44,11 @@ interface ExerciseMemberService
 
     public function updateMasteryRate($exerciseId, $userId);
 
-
     public function removeStudents($exerciseId, $userIds, $reason = []);
 
     public function batchUpdateMembers($updateFields);
+
+    public function batchBecomeStudent($exerciseIds, $userIds, $info, $exercise);
+
+    public function batchRemoveStudent($exerciseId, $userIds);
 }

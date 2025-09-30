@@ -94,6 +94,8 @@ class MeJoined extends AbstractResource
         $courses = $this->getCourseService()->appendSpecsInfo($courses);
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
         $courses = ArrayToolkit::index($courses, 'id');
+        $tasks = $this->getTaskService()->findTasksByIds(array_column($members, 'lastLearnTaskId'));
+        $tasks = array_column($tasks, null, 'id');
         foreach ($members as $member) {
             if (isset($courses[$member['courseId']])) {
                 $courses[$member['courseId']]['lastLearnTime'] = (0 == $member['lastLearnTime']) ? $member['updatedTime'] : $member['lastLearnTime'];
@@ -101,6 +103,11 @@ class MeJoined extends AbstractResource
                 $courses[$member['courseId']]['courseSet']['cover'] = $this->transformCover($courses[$member['courseId']]['courseSet']['cover'], 'course');
                 $courses[$member['courseId']]['cover'] = is_string($courses[$member['courseId']]['cover']) ? null : $courses[$member['courseId']]['cover'];
                 $courses[$member['courseId']]['isExpired'] = $this->isExpired($member['deadline']);
+                $courses[$member['courseId']]['lastLearnTask'] = empty($tasks[$member['lastLearnTaskId']]) ? null : [
+                    'id' => $member['lastLearnTaskId'],
+                    'number' => $tasks[$member['lastLearnTaskId']]['number'],
+                    'title' => $tasks[$member['lastLearnTaskId']]['title'],
+                ];
             }
         }
 

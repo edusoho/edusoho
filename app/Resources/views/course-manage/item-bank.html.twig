@@ -1,0 +1,13 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'course.item_bank_manage'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'item-bank' %}
+
+{% do script(['vue3/js/course-manage/item-bank/index.js']) %}
+
+{% block main %}
+  <div id="vue3-item-bank"
+       data-course-id="{{ course.id }}"
+       style="margin-left: 200px; min-height: 800px"
+  ></div>
+{% endblock %}

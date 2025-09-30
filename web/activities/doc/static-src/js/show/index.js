@@ -1,3 +1,5 @@
+import Api from 'common/api';
+
 let url = $('.js-cloud-url').data('url');
 (function (url) {
   window.QiQiuYun || (window.QiQiuYun = {});
@@ -10,23 +12,11 @@ let url = $('.js-cloud-url').data('url');
   firstScriptTag.parentNode.insertBefore(script, firstScriptTag);
 })(url);
 
-let $element = $('#document-content');
-let watermarkUrl = $element.data('watermark-url');
+const $element = $('#document-content');
 
-if(watermarkUrl) {
-  $.get(watermarkUrl, function(watermark) {
-    initDocPlayer(watermark);
-  });
-} else {
-  initDocPlayer('');
-}
-
-onFullScreen();
-
-function initDocPlayer(watermark) {
+const initDocPlayer = async () => {
   const playerConfig = {
     id: 'document-content',
-    // playServer: app.cloudPlayServer,
     sdkBaseUri: app.cloudSdkBaseUri,
     disableDataUpload: app.cloudDisableLogReport,
     disableSentry: app.cloudDisableLogReport,
@@ -36,17 +26,22 @@ function initDocPlayer(watermark) {
       id: $element.data('userId'),
       name: $element.data('userName')
     }
-  }
+  };
+  const watermark = await Api.watermark.get('task');
 
-  if (watermark) {
+  if (watermark.text) {
     playerConfig.fingerprint = {
-      html: watermark
-    }
+      html: watermark.text,
+      color: watermark.color,
+      alpha: watermark.alpha,
+    };
   }
 
   new QiQiuYun.Player(playerConfig);
-}
+};
 
+initDocPlayer();
+onFullScreen();
 
 function onFullScreen() {
   window.onmessage = function (e) {

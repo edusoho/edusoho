@@ -1,6 +1,6 @@
 <template>
   <div class="clearfix right-answer">
-    <div class="pull-left right-answer-label">正确答案：</div>
+    <div class="pull-left right-answer-label">{{ 'components.wrong_question.question_element.right_answer.right_answers' | trans }}：</div>
     <div class="pull-left right-answer-content" v-html="rightAnswer" />
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
 
       if (answer_mode === 'true_false') {
         answer = _.map(answer, function(item) {
-          return item === 'T' ? '正确' : '错误';
+          return item === 'T' ? Translator.trans('components.wrong_question.question_element.answer_result.correct') : Translator.trans('components.wrong_question.question_element.answer_result.mistake');
         });
       }
 

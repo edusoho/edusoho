@@ -1,0 +1,364 @@
+.e-coupon {
+	padding: 10px 16px;
+	overflow: hidden;
+
+	&__title {
+		margin-bottom: 8px;
+		color: #1d2129;
+		font-size: 16px;
+		font-weight: bold;
+		line-height: 1;
+	}
+
+	&__body {
+		position: relative;
+		box-sizing: border-box;
+		width: 100%;
+	}
+
+	&__name {
+		position: absolute;
+		top: vw(22);
+		right: vw(85);
+		color: #fff;
+		line-height: 1.3;
+	}
+
+	.coupon-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		min-width: vw(48);
+		height: vw(22);
+		padding: 0 vw(4);
+		font-weight: 500;
+		font-size: vw(12);
+		border-radius: vw(28);
+
+		&.unreceive {
+			color: #fff;
+			background-color: #ff900e;
+		}
+
+		&.unused {
+			color: #ff900e;
+			background-color: transparent;
+			border: 1px solid #ff900e;
+		}
+	}
+
+	&__middle {
+		height: vw(6);
+		margin-top: vw(-6);
+		margin-bottom: vw(-1);
+		background-image: url($baseUrl+"static/images/dot_red@2x.png");
+		background-position-x: vw(6);
+		background-size: vw(16) vw(6);
+	}
+
+	&__bottom {
+		padding: vw(10);
+		color: #fff;
+		font-size: vw(10);
+		background-color: #ff5353;
+		border-bottom-right-radius: vw(2);
+		border-bottom-left-radius: vw(2);
+	}
+
+	&__price {
+		display: inline-block;
+		margin-top: vw(-5);
+		color: #fff;
+		font-weight: 500;
+		font-size: vw(32);
+	}
+
+	&-single {
+		.e-coupon__price {
+			margin-top: vw(1);
+		}
+
+		.stamp {
+			right: vw(20) !important;
+		}
+	}
+
+	&__select-circle {
+		position: absolute;
+		top: vw(10);
+		right: vw(10);
+		display: inline-block;
+		width: vw(20);
+		height: vw(20);
+		color: #fff;
+
+		.select-icon {
+			font-size: 20px;
+		}
+	}
+}
+
+// 详情页mini优惠券样式
+.mini-coupon::before,
+.mini-coupon::after {
+	position: absolute;
+	top: 0;
+	width: vw(4);
+	height: 100%;
+	background-image: url($baseUrl+'static/images/coupon_dots.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	transform: scale(0.8);
+	content: "";
+}
+
+.mini-coupon {
+	position: relative;
+
+	&::before {
+		left: vw(-2);
+	}
+
+	&::after {
+		right: vw(-2);
+		left: auto;
+		border: none;
+		transform-origin: center;
+	}
+}
+
+// 链接领取优惠券
+.coupon-receive-page {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, .6);
+
+	.coupon-card-bg {
+		margin: vw(80) vw(15);
+		padding: vw(40) vw(15) vw(50);
+		background-size: 95%;
+		border-radius: vw(10);
+
+		.coupon-info {
+			margin-bottom: vw(15);
+			color: #fff;
+			font-weight: bold;
+			font-size: vw(16);
+			text-align: center;
+		}
+	}
+}
+
+html,
+body,
+#app,
+.receive-all {
+	height: 100%;
+}
+
+#app {
+	background-color: #fff;
+}
+
+.find-page {
+	height: 100%;
+	background-color: #f7f9fa;
+}
+
+// 优化链接领取优惠券
+.coupon-receive {
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1;
+	min-height: 100%;
+	padding-top: 1px;
+	text-align: center;
+	background: #fed01b;
+
+	&-title {
+		margin: vw(33) vw(44) vw(15) vw(44);
+		color: #fff;
+		font-weight: 500;
+		font-size: vw(18);
+		font-family: PingFangSC-Medium;
+	}
+
+	&-ticket {
+		width: vw(357);
+		height: vw(176);
+		margin: auto;
+		padding-top: vw(1);
+		color: #feffc2;
+		font-weight: 500;
+		font-family: PingFangSC-Medium;
+		text-align: center;
+		background-image: url($baseUrl+'static/images/coupon-heade.png');
+		background-size: 100%;
+
+		.ticket-discount {
+			margin-top: vw(40);
+			padding: 0 vw(40);
+			font-size: vw(24);
+
+			.rate {
+				font-size: vw(48);
+			}
+		}
+
+		.ticket-expire {
+			margin-top: vw(6);
+			padding: 0 vw(40);
+			font-size: vw(14);
+		}
+
+		.ticket-range {
+			margin-top: vw(4);
+			padding: 0 vw(40);
+			font-size: vw(14);
+		}
+	}
+
+	.receive-status {
+		margin-top: vw(56);
+		color: #e54116;
+		font-size: vw(16);
+
+		.status-text {
+			margin-top: vw(16);
+		}
+
+		.status-user {
+			margin-top: vw(16);
+			color: #f60;
+		}
+
+		.status__btn {
+			width: vw(200);
+			height: vw(40);
+			margin: vw(50) auto 0 auto;
+			color: #f60;
+			line-height: vw(40);
+			background: rgba(254, 255, 194, 1);
+			border-radius: vw(20);
+		}
+	}
+
+	&-login {
+		margin-top: vw(40);
+
+		.receive-login-input {
+			.van-cell {
+				background-color: transparent !important;
+			}
+
+			.van-field__body {
+				padding-left: vw(20);
+			}
+
+			.van-field__error-message {
+				margin-top: vw(14) !important;
+			}
+
+			box-sizing: border-box;
+			width: vw(305);
+			height: 44px;
+			margin: 0 auto vw(34) auto;
+			padding: 0 vw(9) 0 vw(0);
+			line-height: 44px;
+			background: #fff;
+			border-radius: vw(4);
+		}
+
+		.mobile-drag {
+			position: fixed;
+			top: 46px;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 20001;
+			background: rgba(0, 0, 0, .6);
+		}
+
+		.mobile-drag-content {
+			width: 90%;
+			margin: vw(100) auto;
+			padding: vw(20) 0;
+			background: #fff;
+
+			.e-drag {
+				width: 90%;
+			}
+		}
+
+		.receive-login__btn {
+			width: vw(200);
+			height: vw(40);
+			margin: vw(40) auto 0 auto;
+			color: #f60;
+			line-height: vw(40);
+			background: #feffc2;
+			border-radius: vw(20);
+		}
+
+		.disabled__btn {
+			color: rgba(255, 102, 0, 0.4);
+			background: rgba(254, 255, 194, 0.4);
+		}
+
+		.code-btn {
+			box-sizing: border-box;
+			height: vw(28);
+			margin-right: vw(6);
+			padding-left: vw(15);
+			color: #f60;
+			line-height: vw(28);
+			border-left: vw(1) solid #ebebeb;
+		}
+
+		.code-btn--disabled {
+			color: #999;
+		}
+
+		.receive-login__text {
+			color: #e54116;
+			text-align: center;
+
+			.receive-login-tools {
+				position: relative;
+				display: inline-block;
+				height: 20px;
+				margin-top: vw(30);
+				color: rgba(229, 65, 22, 1);
+				font-weight: 400;
+				font-size: 14px;
+				font-family: PingFangSC-Regular;
+				line-height: 20px;
+
+				&::before {
+					position: absolute;
+					top: 10px;
+					left: -25px;
+					width: 18px;
+					height: 1px;
+					background: linear-gradient(90deg, rgba(255, 159, 0, 0) 0%, rgba(255, 102, 0, 1) 100%); /* 标准的语法 */
+					content: '';
+				}
+
+				&::after {
+					position: absolute;
+					top: 10px;
+					right: -25px;
+					width: 18px;
+					height: 1px;
+					background: linear-gradient(270deg, rgba(255, 159, 0, 0) 0%, rgba(255, 102, 0, 1) 100%); /* 标准的语法 */
+					content: '';
+				}
+			}
+		}
+	}
+}

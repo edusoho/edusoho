@@ -69,8 +69,8 @@ class CourseSetFileManageController extends BaseController
 
         $teacherIsDownload = 1;
         $currentUser = $this->getCurrentUser();
-        if($currentUser->isTeacher() && !$currentUser->isSuperAdmin()){
-            $teacherIsDownload = $this->getSettingService()->node("course.teacher_course_material_download", 1);
+        if ($currentUser->isTeacher() && !$currentUser->isSuperAdmin()) {
+            $teacherIsDownload = $this->getSettingService()->node('course.teacher_course_material_download', 1);
         }
 
         return $this->render('courseset-manage/file/index.html.twig', [
@@ -127,13 +127,14 @@ class CourseSetFileManageController extends BaseController
         } else {
             try {
                 if ('video' == $file['type']) {
-                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
+                    $file = $this->getCloudFileService()->getByGlobalId($file['globalId'], $request->isSecure());
+                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId'], $request->isSecure());
                 }
             } catch (\RuntimeException $e) {
                 $thumbnails = [];
             }
 
-            return $this->render('admin/cloud-file/detail.html.twig', [
+            return $this->render('admin-v2/teach/cloud-file/detail.html.twig', [
                 'material' => $file,
                 'thumbnails' => empty($thumbnails) ? '' : $thumbnails,
                 'params' => $request->query->all(),

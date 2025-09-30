@@ -1,0 +1,13 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}AI伴学服务 - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'ai-companion-study' %}
+
+{% do script(['vue3/js/course-manage/ai-companion-study/index.js']) %}
+
+{% block main %}
+  <div id="ai-companion-study"
+       data-course-id="{{ course.id }}"
+       style="margin-left: 200px; min-height: 800px"
+  ></div>
+{% endblock %}

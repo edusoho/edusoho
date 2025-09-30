@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
-'app/js/courseset/show/index.js']) %}
+'app/js/courseset/show/index.js', 'vue3/js/item-bank-exercise/index.js']) %}
 
 {% set bodyClass = 'course-dashboard-page' %}
 
@@ -13,6 +13,9 @@
 
   {{ render(controller('AppBundle:ItemBankExercise/Exercise:header',{previewAs:previewAs,exercise: exercise, tab:tab, moduleId:moduleId} )) }}
 
+  <div id="item-bank-show-remove-modal"
+       data-display-bind-pop-up="{{ displayBindPopUp|json_encode }}"
+  ></div>
   <div class="container cd-container">
     <div class="row cd-row">
       <div class="col-lg-9 col-md-8 course-detail-content">

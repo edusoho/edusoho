@@ -1,12 +1,11 @@
 import SceneReport from './scene-report';
+import SceneReportComponent from 'common/vue/components/item-bank/scene-report';
 
 jQuery.support.cors = true;
 
 Vue.config.productionTip = false;
-if (app.lang == 'en') {
-  const locale = local.default;
-  itemBank.default.install(Vue, {locale});
-}
+
+Vue.component(SceneReportComponent.name, SceneReportComponent);
 
 new Vue({
   render: createElement => createElement(SceneReport)

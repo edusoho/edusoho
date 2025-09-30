@@ -77,7 +77,7 @@ class LessonReplay extends BaseResource
                     'nickname' => $user['nickname'],
                     'device' => $device,
                     'protocol' => $protocol,
-                    'role' => 'replay' == $task['type'] ? 'student' : $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($task['courseId'], $user['id']),
+                    'role' => 'replay' == $task['type'] ? 'student' : $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($task['courseId'], $user['id'], $activity['id']),
                 ];
 
                 foreach ($visibleReplays as $index => $visibleReplay) {
@@ -95,7 +95,7 @@ class LessonReplay extends BaseResource
                 if ($this->getLiveService()->isESLive($activity['ext']['liveProvider'])) {
                     $maker = new H5LiveEntryToken();
                     $token = $maker->make($task['courseId'], $task['activityId'], $visibleReplays[0]['id']);
-                    $response['url'] = "/es_live/replay/h5_entry/{$token}";
+                    $response['url'] = "{$request->getSchemeAndHttpHost()}/es_live/replay/h5_entry/{$token}";
                 }
             }
         } catch (\Exception $e) {

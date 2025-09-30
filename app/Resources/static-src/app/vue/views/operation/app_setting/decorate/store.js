@@ -6,6 +6,7 @@ export const state = Vue.observable({
   couponSetting: {},
   courseCategory: [], // 课程分类数据
   classroomCategory: [], // 班级分类数据
+  questionBankCategory:[],
   openCourseCategory: [], // 公开课分类数据
   courseCategories: [], // 课程分类
   classroomCategories: [], // 班级分类
@@ -44,7 +45,9 @@ export const mutations = {
   setOpenCourseCategory(data) {
     state.openCourseCategory = data;
   },
-
+  setQuestionBankCategory(data){
+    state.questionBankCategory = data;
+  },
   setCourseCategories(data) {
     deleteEmptyChildren(data);
     data.unshift({ name: all, id: '0' });

@@ -105,6 +105,7 @@ class KernelRequestListener
 
         if (strlen($ipConfigEntry) > 0) {
             $regex = str_replace('.', "\.", $ipConfigEntry);
+            $regex = str_replace('/', "\/", $regex);
             $regex = str_replace('*', "\d{1,3}", $regex);
             $regex = '/^'.$regex.'/';
 

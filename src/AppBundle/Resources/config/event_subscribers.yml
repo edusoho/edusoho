@@ -452,6 +452,13 @@ services:
         tags:
             -
                 name: codeages_plugin.event.subscriber
+    exercise_bind_event_subscriber:
+        class: Biz\ItemBankExercise\Event\ExerciseBindEventSubscriber
+        arguments:
+            - '@biz'
+        tags:
+            -
+                name: codeages_plugin.event.subscriber
     exercise_member_event_subscriber:
         class: Biz\ItemBankExercise\Event\ExerciseMemberEventSubscriber
         arguments:

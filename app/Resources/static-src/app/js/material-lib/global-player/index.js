@@ -23,8 +23,8 @@ const globalPlayer = () => {
     project: 'PlayerProject',
     type: 'child'
   });
-  
-  play.on('video.timeupdate', (mes) => {
+
+  play.on('timeupdate', (mes) => {
     messenger.sendToParent('video.timeupdate', mes);
   });  
 };

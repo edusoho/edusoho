@@ -1,0 +1,182 @@
+.test-preview-content {
+  display: flex;
+  padding: 24px 46px 32px 46px;
+  flex-direction: column;
+  gap: 32px;
+  flex: 1 0 0;
+  align-self: stretch;
+
+  .test-preview-content-title {
+    color: var(---Text-5, #37393D);
+    font-family: "PingFang SC";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 150% */
+  }
+  .test-preview-content-basic {
+    display: flex;
+    padding: 16px;
+    justify-content: space-between;
+    gap: 24px;
+    border-radius: var(--Number, 4px);
+    border: 1px solid var(---Line-1, #F2F3F5);
+
+
+    .test-preview-content-basic-img {
+      height: 180px;
+    }
+
+    .test-preview-content-basic-information-list {
+      flex: 1 0 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 16px;
+
+      .test-preview-content-basic-information-item {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        .test-preview-content-basic-information-item-value {
+          padding: 0;
+          border: 0;
+          box-shadow: none;
+          font-family: "PingFang SC";
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: 22px;
+        }
+        span.test-preview-content-basic-information-item-value {
+          color: #37393D;
+        }
+      }
+    }
+
+    .test-preview-content-basic-operation {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+    }
+  }
+
+  .test-preview-content-question-type-display {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 16px;
+  }
+
+  .question-type-display {
+    display: flex;
+    padding: 16px;
+    align-items: center;
+    gap: 20px;
+    width: fit-content;
+
+    border-radius: var(--Number, 4px);
+    border: 1px solid var(---Line-1, #F2F3F5);
+
+    .question-type-single_choice, .question-type-fill {
+      .question-type-icon {
+        background: #D0F7E4;
+      }
+      background: rgba(20, 202, 114, 0.05);
+    }
+    .question-type-choice, .question-type-uncertain_choice {
+      .question-type-icon {
+        background: #FFE1E1;
+      }
+      background: rgba(245, 113, 106, 0.05);
+    }
+    .question-type-essay, .question-type-material {
+      .question-type-icon {
+        background: #DDF4FF;
+      }
+      background: rgba(1, 171, 245, 0.05);
+    }
+    .question-type-determine {
+      .question-type-icon {
+        background: #FFF0DC;
+      }
+      background: rgba(253, 142, 12, 0.05);
+    }
+
+    .question-type {
+      display: flex;
+      padding: 16px;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+
+      border-radius: var(--Number-2, 6px);
+
+      .question-type-icon {
+        padding: 10px;
+        flex-shrink: 0;
+        border-radius: 8px;
+
+        img {
+          width: 32px;
+        }
+      }
+
+      .question-type-label {
+        color: var(---Text-5, #37393D);
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+      }
+    }
+
+    .question-type-content {
+      display: flex;
+      flex: 1 0 0;
+      flex-direction: column;
+      gap: 16px;
+
+      .question-type-num-and-score {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .divider {
+        background: #F2F3F5;
+        height: 1px;
+      }
+
+      .question-type-total {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .question-type-num-value, .question-type-total-value {
+        color: var(---Text-5, #37393D);
+        font-family: "PingFang SC";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 22px;
+      }
+    }
+
+  }
+}
+
+.paper-description {
+
+  .ant-modal-body {
+    max-height: 460px;
+    min-height: 160px;
+    overflow-y: auto;
+  }
+
+  img {
+    max-width: 100%;
+  }
+}

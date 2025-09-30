@@ -38,7 +38,6 @@ class LearnStatistic extends AbstractResource
         }
         $total = $this->getUserService()->countUsers($userConditions);
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        file_put_contents('/tmp/jc123', json_encode($userConditions), 8);
         $users = $this->getUserService()->searchUsers(
             $userConditions,
             ['id' => 'DESC'],

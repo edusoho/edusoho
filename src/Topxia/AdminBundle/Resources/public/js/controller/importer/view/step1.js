@@ -20,6 +20,9 @@ define(function (require, exports, module) {
             var self = this;
             var $form = this.$el.find('form');
 
+            // 重置按钮状态，确保从错误页面返回时按钮可用
+            $('#start-import-btn').removeClass('disabled');
+
             $form.attr('action', this.model.get('checkUrl')).ajaxForm({
                 beforeSubmit: function () {
                     var validated = true;
@@ -42,6 +45,8 @@ define(function (require, exports, module) {
                 },
                 error: function (error) {
                     console.log('error:', error);
+                    // 发生错误时也要重置按钮状态
+                    $('#start-import-btn').removeClass('disabled');
                 }
             });
 
@@ -54,17 +59,21 @@ define(function (require, exports, module) {
         },
 
         onChangeExcelFile: function (event) {
-            $('#start-import-btn').removeClass('disabled');
             var filename = $(event.currentTarget).val();
             if (filename === '') {
+                $('#start-import-btn').addClass('disabled');
                 return;
             }
+            // 只有当文件不为空时才启用按钮
+            $('#start-import-btn').removeClass('disabled');
             this.model.set('file', filename);
             this.$el.find('.filename').val(filename);
         },
 
         onDanger: function (data) {
             this.$el.find('.js-importer-message').addClass('alert-danger').html(data.message).removeClass('hidden');
+            // 当出现危险状态时，重置按钮状态
+            $('#start-import-btn').removeClass('disabled');
         },
 
         onError: function (data) {

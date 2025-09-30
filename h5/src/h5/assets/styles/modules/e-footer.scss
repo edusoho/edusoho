@@ -1,0 +1,31 @@
+
+footer {
+	&.footer-bar {
+		position: fixed;
+		bottom: 0;
+		z-index: 900;
+		width: 100%;
+		height: vw(50);
+		color: white;
+		font-size: vw(16);
+		font-family: PingFangSC-Medium;
+		line-height: vw(50);
+		text-align: center;
+		background-color: $primary-color;
+		border: none;
+		cursor: pointer;
+
+		&.disabled {
+			background-color: #b0bdc9;
+		}
+
+		&.half {
+			width: 50%;
+		}
+
+		+ .footer-bar {
+			right: 0;
+			background: #fa0;
+		}
+	}
+}

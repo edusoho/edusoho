@@ -190,6 +190,8 @@ interface ClassroomService
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
 
+    public function changeMembersDeadlineByDate($classroomId, $date);
+
     public function updateMember($id, $member);
 
     public function searchMemberCount($conditions);
@@ -242,6 +244,8 @@ interface ClassroomService
     public function getClassroomCourse($classroomId, $courseId);
 
     public function findCoursesByClassroomId($classroomId);
+
+    public function findCourseIdsByClassroomIds(array $classroomIds);
 
     public function findSortedCoursesByClassroomIdAndCourseSetTitle(int $classroomId, string $title);
 

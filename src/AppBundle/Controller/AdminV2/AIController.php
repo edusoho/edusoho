@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\AdminV2;
 
+use Biz\AI\Service\AIService;
 use Biz\CloudData\Service\CloudDataService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -9,6 +10,15 @@ class AIController extends BaseController
 {
     public function surveyAction()
     {
+        try {
+            $tenant = $this->getAIService()->inspectTenant();
+            if ('ok' != $tenant['status']) {
+                $this->getAIService()->enableTenant();
+                $this->getAIService()->inspectTenant();
+            }
+        } catch (\Exception $exception) {
+        }
+
         return $this->render('admin-v2/ai/survey-modal.html.twig');
     }
 
@@ -52,5 +62,13 @@ class AIController extends BaseController
     private function getCloudDataService()
     {
         return $this->createService('CloudData:CloudDataService');
+    }
+
+    /**
+     * @return AIService
+     */
+    private function getAIService()
+    {
+        return $this->createService('AI:AIService');
     }
 }

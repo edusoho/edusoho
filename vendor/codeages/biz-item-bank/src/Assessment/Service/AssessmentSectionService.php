@@ -18,6 +18,8 @@ interface AssessmentSectionService
 
     public function deleteAssessmentSectionsByAssessmentId($assessmentId);
 
+    public function deleteAssessmentSectionsByAssessmentIds($assessmentIds);
+
     public function countAssessmentSections($conditions);
 
     public function searchAssessmentSections($conditions, $orderBys, $start, $limit, $columns = []);

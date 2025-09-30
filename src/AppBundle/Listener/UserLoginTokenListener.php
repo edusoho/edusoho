@@ -6,6 +6,8 @@ use Biz\System\Service\SettingService;
 use Biz\User\AnonymousUser;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Biz\User\UserException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -108,11 +110,22 @@ class UserLoginTokenListener
             }
         }
 
+        $user = $this->getUserService()->getUser($user['id']);
+
+        // 员工账号如果没有升级密码到最强级别(即等级 1），则每次页面刷新后自动退出
+        if (RoleHelper::isStaff($user['roles']) && !PasswordValidator::isStrongLevel($user['passwordUpgraded']) && empty($request->getSession()->get('needUpgradePassword')) && $request->isMethod('GET')) {
+            if (!strstr($request->getPathInfo(), '/app/package_update')) {
+                $request->getSession()->invalidate();
+                $response = $this->logout('', $request->isXmlHttpRequest());
+                $event->setResponse($response);
+
+                return;
+            }
+        }
+
         if (empty($loginBind['login_limit'])) {
             return;
         }
-
-        $user = $this->getUserService()->getUser($user['id']);
 
         if (empty($user['loginSessionId']) || strlen($user['loginSessionId']) <= 0) {
             $sessionId = $request->getSession()->getId();
@@ -148,7 +161,9 @@ class UserLoginTokenListener
     {
         $this->container->get('security.token_storage')->setToken(null);
 
-        $this->container->get('session')->getFlashBag()->add('danger', $content);
+        if (!empty($content)) {
+            $this->container->get('session')->getFlashBag()->add('danger', $content);
+        }
 
         $goto = $this->container->get('router')->generate('login');
         $response = $isXmlHttpRequest ? new JsonResponse(['goto' => $goto], 403) : new RedirectResponse($goto, '302');

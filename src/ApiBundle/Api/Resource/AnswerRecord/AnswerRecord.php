@@ -69,11 +69,16 @@ class AnswerRecord extends AbstractResource
 
     private function wrapAIAnalysis($assessment, $answerRecord)
     {
+        $isAgentActive = $this->isAgentActive($answerRecord['answer_scene_id']);
         $user = $this->getCurrentUser();
         foreach ($assessment['sections'] as &$section) {
             foreach ($section['items'] as &$item) {
                 foreach ($item['questions'] as &$question) {
-                    $question['aiAnalysisEnable'] = $answerRecord['user_id'] == $user['id'] && $this->canGenerateAIAnalysisForStudent($question, $item);
+                    if ($isAgentActive) {
+                        $question['aiAnalysisEnable'] = false;
+                    } else {
+                        $question['aiAnalysisEnable'] = $answerRecord['user_id'] == $user['id'] && $this->canGenerateAIAnalysisForStudent($question, $item);
+                    }
                 }
             }
         }
@@ -134,7 +139,7 @@ class AnswerRecord extends AbstractResource
 
         if ('submitted' === $answerShowMode) {
             $testpaperActivity = $this->getTestpaperActivityService()->getActivityByAnswerSceneId($answerScene['id']);
-            if (0 == $answerScene['do_times'] && Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
+            if (Testpaper::ANSWER_MODE_PASSED == $testpaperActivity['answerMode']) {
                 if ('finished' === $answerRecord['status'] && $answerReport['score'] >= $answerScene['pass_score']) {
                     $resultShow = true;
                 } else {

@@ -17,6 +17,7 @@ class ClassroomFilter extends Filter
 {
     protected $simpleFields = [
         'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId', 'specsId', 'spec', 'learningProgressPercent', 'isExpired', 'status', 'canLearn', 'categoryId',
+        'joinedDays',
     ];
 
     protected $publicFields = [
@@ -24,6 +25,7 @@ class ClassroomFilter extends Filter
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
         'createdTime', 'updatedTime', 'creator', 'access', 'productId', 'goodsId', 'hasCertificate', 'specsId', 'spec',
+        'hidePrice',
     ];
 
     protected function simpleFields(&$data)

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Handler;
 
+use AppBundle\Common\EncryptionToolkit;
 use Topxia\Service\Common\ServiceKernel;
 
 class AuthenticationHelper
@@ -16,7 +17,7 @@ class AuthenticationHelper
         );
         $setting = array_merge($default, $setting);
 
-        $username = $request->request->get('_username');
+        $username = EncryptionToolkit::XXTEADecrypt(base64_decode($request->request->get('_username')), 'EduSoho');
         $user = $username ? self::getUserService()->getUserByLoginField($username) : null;
 
         $result = self::getUserService()->checkLoginForbidden($user ? $user['id'] : 0, $request->getClientIp());

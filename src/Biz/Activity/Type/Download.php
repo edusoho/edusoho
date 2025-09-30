@@ -64,6 +64,20 @@ class Download extends Activity
         return $downloadActivity;
     }
 
+    public function updateByIds($ids, $fields)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $downloadActivities = $this->find($ids);
+        $updates = [];
+        foreach ($downloadActivities as $downloadActivity) {
+            $downloadActivity['fileIds'][] = $fields['mediaId'];
+            $updates[$downloadActivity['id']] = ['fileIds' => $downloadActivity['fileIds']];
+        }
+        $this->getDownloadActivityDao()->batchUpdate(array_keys($updates), $updates);
+    }
+
     /**
      * {@inheritdoc}
      */

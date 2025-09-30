@@ -79,7 +79,7 @@
         <div v-else class="no-data text-center">
           <img
             class="no-data-img"
-            src="/static-dist/app/img/question-bank/noduplicative.png"
+            src="/static-dist/app/img/question-bank/empty.png"
           />
           <div class="no-data-content">{{ 'question.bank.check.result.noData.title'|trans }}</div>
           <button class="return-btn" @click="goBack">{{ 'question.bank.check.result.noData.btn'|trans }}</button>
@@ -136,7 +136,7 @@ export default {
   watch: {
     async questionContentList() {
       if (this.questionContentList.length == 0) {
-        return 
+        return
       }
 
       if (this.questionContentList.length > 1) {
@@ -236,7 +236,7 @@ export default {
       this.activeKey = activeKey;
       try {
         if(!this.questionData.length) {
-          return 
+          return
         }
 
         const res = await Repeat.getRepeatQuestionInfo(

@@ -22,6 +22,7 @@ class LiveStatusSubscriber extends EventSubscriber implements EventSubscriberInt
             'live.activity.create' => 'liveActivityCreateStatus',
             'live.activity.update' => 'liveActivityUpdateStatus',
             'live.activity.delete' => 'liveActivityDeleteStatus',
+            'open.course.lesson.update' => 'openCourseLessonUpdate',
         ];
     }
 
@@ -88,6 +89,15 @@ class LiveStatusSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->deleteLiveStatusJob($this->makeLiveStatusJobName($liveId, 'closeJob'));
         $this->deleteLiveStatusJob($this->makeLiveStatusJobName($liveId, 'closeAgainJob'));
         $this->deleteLiveStatusJob($this->makeLiveStatusJobName($liveId, 'closeSecondJob'));
+    }
+
+    public function openCourseLessonUpdate(Event $event)
+    {
+        $subject = $event->getSubject();
+        $lesson = $subject['lesson'];
+        if ('liveOpen' == $lesson['type']) {
+            $this->createLiveStatusJobs($lesson['mediaId'], $lesson);
+        }
     }
 
     private function createLiveStatusJobs($liveId, $activity)

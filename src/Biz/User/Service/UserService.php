@@ -283,6 +283,8 @@ interface UserService
      */
     public function waveUserCounter($userId, $name, $number);
 
+    public function waveUsersCounter($userIds, $name, $number);
+
     /**
      * 清零用户的计数器.
      *
@@ -452,4 +454,6 @@ interface UserService
     public function getStudentOpenInfo($userId);
 
     public function findUserLikeNickname($nickname);
+
+    public function hideUserNickname($user);
 }

@@ -1,6 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js',
-'app/js/courseset/show/index.js']) %}
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/jquery-countdown.js','app/js/courseset/show/index.js']) %}
 
 {% set course_set = data('CourseSet', {id: course.courseSetId})|merge({'tags': 'tags'}) %}
 {% set bodyClass = 'course-dashboard-page' %}
@@ -43,18 +42,6 @@
 	          {% else %}
 		          {% include 'course/header/nav-tab-for-guest.html.twig' %}
 	          {% endif %}
-
-{#            {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}#}
-{#              <div class="btnbar hidden-xs">#}
-{#                <a href="#modal" data-toggle="modal"#}
-{#                  data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"#}
-{#                  class="btn btn-link">#}
-{#                  <i class="es-icon es-icon-anonymous-iconfont"></i>#}
-{#                  {{ 'course.btn.announcement'|trans }}#}
-{#                </a>#}
-{#              </div>#}
-{#            {% endif %}#}
-
           </div>
 
           {% if hasAssistant|default(false) %}
@@ -62,7 +49,7 @@
               <i class="es-icon es-icon-weixin"></i>{{ 'course.student.add.assistant.tip'|trans }}
             </div>
           {% endif %}
-          
+
           {% block detail_content %}
             {{ render(controller(metas.tabs[tab].content, {request: app.request, course: course, member: member|default(null), type: tab|default(null)})) }}
           {% endblock %}
@@ -109,4 +96,9 @@
     }%}
 
   {{ slot('course.bottom.extension', {'course': course}) }}
+  {% if is_course_show_ai_agent(course.id) %}
+    <input type="hidden" id="aiAgentToken" value="{{ ai_agent_token() }}" />
+    <input type="hidden" id="chatMetaData" value="{{ get_course_chat_meta_data(course) }}" />
+    <input type="hidden" id="studyPlanGenerated" value="{{ is_study_plan_generated(course.id) }}" />
+  {% endif %}
 {% endblock %}

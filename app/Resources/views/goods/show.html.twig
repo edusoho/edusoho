@@ -1,6 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% do script(['libs/jquery-countdown.js', 'app/js/goods/show/index.js']) %}
+{% do css(['app/css/main-ant.css']) %}
 
 {% block title %}{{ goods.title|raw }} - {{ parent() }}{% endblock %}
 {% block full_content %}

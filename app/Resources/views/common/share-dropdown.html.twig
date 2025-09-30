@@ -37,7 +37,11 @@
   {% set title = course.title %}
   {% set summary = course.summary|default('')|plain_text(50) %}
   {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.open_course_message')|trans({'%course%':course.title}) %}
-  {% set url = url('open_course_show', {courseId:course.id}) %}
+  {% if lesson|default() %}
+    {% set url = url('open_course_lesson_learn', {courseId: course.id, lessonId: lesson.id}) %}
+  {% else %}
+    {% set url = url('open_course_show', {courseId: course.id}) %}
+  {% endif %}
   {% set picture = fileurl(course.largePicture, 'course.png') %}
   {% set id = course.id%}
 {% elseif type == 'task' %}

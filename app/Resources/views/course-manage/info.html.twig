@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'course.plan_base_info'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/base-setting/index.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'vue3/js/course-manage/base-setting/index.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}
@@ -36,8 +36,7 @@
       {% endif %}
     {% endfor %}
 
-    {# 计划基础信息 #}
-    <div id="app"
+    <div id="vue3-basic-setting"
          data-course-manage-url="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}"
          data-is-un-multi-course-set="{{ is_un_multi_courseset(courseSet.id) }}"
          data-course="{{ course|json_encode }}"
@@ -66,7 +65,7 @@
          data-buy-before-approval="{{ setting('magic.buy_before_approval') }}"
          data-can-free-activity-types="{{ can_free_activity_types|join('word.seperator'|trans) }}"
          data-free-task-changelog="{{ freeTaskChangelog }}"
-         data-tags="{{ tags|json_encode }}" ,
+         data-tags="{{ tags|json_encode }}"
          data-image-save-url="{{ path('course_set_manage_cover_crop', {id: courseSet.id}) }}"
          data-image-src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
          data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"

@@ -1,0 +1,112 @@
+.e-column-class {
+	width: 50%;
+	margin-bottom: 8px;
+	padding: 0 6px;
+
+	.column-class-left {
+		position: relative;
+		width: 100%;
+		font-size: 0;
+		border-radius: 6px 6px 0 0;
+
+		img {
+			width: 100%;
+			border-radius: 6px 6px 0 0;
+		}
+
+		&__discount {
+			position: absolute;
+			top: vw(9);
+			right: vw(-19);
+			width: vw(75);
+			height: vw(20);
+			color: #fff;
+			font-size: vw(12);
+			line-height: vw(20);
+			text-align: center;
+			background: #ef6b50;
+			-ms-transform: rotate(45deg);
+			-moz-transform: rotate(45deg);
+			-webkit-transform: rotate(45deg);
+			-o-transform: rotate(45deg);
+			transform: rotate(45deg);
+		}
+
+		&__member {
+			position: absolute;
+			bottom: -1px;
+			left: -5px;
+			z-index: 11;
+			padding: 2px 8px;
+			color: #fff;
+			font-weight: 500;
+			font-size: 12px;
+			text-align: center;
+			background: #162923;
+			border-radius: 0 6px;
+			transform: scale(0.83);
+		}
+
+		&__live {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			z-index: 11;
+			width: 44px;
+			height: 18px;
+			color: #fff;
+			font-weight: 500;
+			font-size: 12px;
+			line-height: 18px;
+			text-align: center;
+			background: #ff900e;
+			border-radius: 6px 0 0;
+
+			.icon-renqi {
+				margin-right: vw(2);
+				font-size: vw(12);
+			}
+		}
+	}
+
+	.column-class-right {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		box-sizing: border-box;
+		height: 86px;
+		padding: 8px 0;
+		border-radius: 0 0 6px 6px;
+		box-shadow: 0 vw(2) vw(8) 0 rgba(0, 0, 0, 0.05);
+
+		&__top {
+			display: flex;
+			height: 22px;
+			padding: 0 12px;
+			color: #1d2129;
+			font-weight: 500;
+			font-size: 14px;
+			line-height: 22px;
+		}
+
+		&__center {
+			display: flex;
+			align-items: center;
+			height: 20px;
+			margin-top: -2px;
+			padding: 0 12px;
+			color: #86909c;
+			font-size: 12px;
+			line-height: 20px;
+		}
+
+		&__bottom {
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			height: 20px;
+			font-weight: 500;
+			font-size: 12px;
+		}
+	}
+}

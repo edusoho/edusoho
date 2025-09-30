@@ -57,23 +57,23 @@
                           {% endif %}
                         </span>
                         <span class="class-student hidden-md"><i class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
-                        <span class="class-price">
-                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            {% if classroom.price > 0 %}
-                              {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}
+                        {% if classroom.hidePrice != '1' %}
+                          <span class="class-price">
+                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                              {% if classroom.price > 0 %}
+                                {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}
+                              {% else %}
+                                {{ '免费'|trans }}
+                              {% endif %}
                             {% else %}
-                              {{ '免费'|trans }}
+                              {% if classroom.price > 0 %}
+                                {{ '%classroom.price% 元'|trans({'%classroom.price%': classroom.price}) }}
+                              {% else %}
+                                {{ '免费'|trans }}
+                              {% endif %}
                             {% endif %}
-                          {% else %}
-                            {% if classroom.price > 0 %}
-                              {{ '%classroom.price% 元'|trans({'%classroom.price%': classroom.price}) }}
-                            {% else %}
-                              {{ '免费'|trans }}
-                            {% endif %}
-                          {% endif %}
-
-
-                      </span>
+                          </span>
+                        {% endif %}
                       </div>
                       <div class="course-num">{{ '共%courseNum%课程'|trans({'%courseNum%': classroom.courseNum }) }}</div>
                     </div>

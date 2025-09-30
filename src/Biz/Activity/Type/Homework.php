@@ -246,7 +246,9 @@ class Homework extends Activity
 
         $answerScene = $this->getAnswerSceneService()->get($homework['answerSceneId']);
         $answerScene['pass_score'] = empty($fields['finishData']) ? $answerScene['pass_score'] : $fields['finishData'];
-        $answerScene['need_score'] = ('score' == $fields['finishType']) ? 1 : 0;
+        if (!empty($fields['finishType'])) {
+            $answerScene['need_score'] = ('score' == $fields['finishType']) ? 1 : 0;
+        }
 
         $this->getAnswerSceneService()->update($homework['answerSceneId'], $answerScene);
         $this->getAssessmentService()->updateAssessment($homework['assessmentId'], $assessment);

@@ -564,6 +564,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'expiryMode',
             'expiryValue',
             'tagIds',
+            'hidePrice',
         ]);
 
         if (isset($fields['expiryMode']) && 'date' === $fields['expiryMode']) {
@@ -621,6 +622,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDay($course['id'], $userIds, $day, $waveType);
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $classroomId, 'bindType' => 'classroom', 'updateType' => 'day', 'userIds' => $userIds]));
     }
 
     public function updateMembersDeadlineByDate($classroomId, $userIds, $date)
@@ -641,6 +643,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 $this->getCourseMemberService()->batchUpdateMemberDeadlinesByDate($course['id'], $userIds, $date);
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $classroomId, 'bindType' => 'classroom', 'userIds' => $userIds]));
     }
 
     public function checkDayAndWaveTypeForUpdateDeadline($classroomId, $userIds, $day, $waveType = 'plus')
@@ -762,7 +765,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if ('published' === $classroom['status']) {
             $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
         }
-        $this->tryManageClassroom($id, 'admin_classroom_delete');
+        $this->tryManageClassroom($id, 'admin_v2_classroom_delete');
         if ('error' === $this->getProductMallGoodsRelationService()->checkEsProductCanDelete([$id], 'classroom')) {
             throw $this->createServiceException('该产品已在营销商城中上架售卖，请将对应商品下架后再进行删除操作');
         }
@@ -774,6 +777,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->getClassroomGoodsMediator()->onDelete($classroom);
             $this->dispatchEvent('classroom.delete', $classroom);
             $this->dispatchEvent('wrong_question_pool.delete', ['target_id' => $id, 'target_type' => 'classroom']);
+            $this->dispatchEvent('exercise.unBind', new Event(['bindId' => $id, 'bindType' => 'classroom']));
 
             $this->commit();
         } catch (\Exception $exception) {
@@ -844,7 +848,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function publishClassroom($id)
     {
-        $this->tryManageClassroom($id, 'admin_classroom_open');
+        $this->tryManageClassroom($id, 'admin_v2_classroom_open');
         $classroom = $this->getClassroom($id);
         if (0 == $classroom['courseNum']) {
             $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
@@ -855,26 +859,34 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
         $this->getCourseSetService()->canLearningByIds($courseIds);
         $this->dispatchEvent('classroom.publish', new Event($classroom));
+        $this->dispatchEvent('exercise.canLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
 
         return $classroom;
     }
 
     public function closeClassroom($id)
     {
-        $this->tryManageClassroom($id, 'admin_classroom_close');
-
-        $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
-        $this->getClassroomGoodsMediator()->onClose($classroom);
-        $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
-        $this->getCourseSetService()->banLearningByIds($courseIds);
-        $this->dispatchEvent('classroom.close', new Event($classroom));
+        $this->tryManageClassroom($id, 'admin_v2_classroom_close');
+        try {
+            $this->beginTransaction();
+            $classroom = $this->updateClassroom($id, ['status' => 'closed', 'canLearn' => '0']);
+            $this->getClassroomGoodsMediator()->onClose($classroom);
+            $courseIds = array_column($this->findCoursesByClassroomId($id), 'courseSetId');
+            $this->getCourseSetService()->banLearningByIds($courseIds);
+            $this->dispatchEvent('classroom.close', new Event($classroom));
+            $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'classroom', 'bindId' => $id]));
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
 
         return $classroom;
     }
 
     public function unpublishedClassroom($id)
     {
-        $this->tryManageClassroom($id, 'admin_classroom_close');
+        $this->tryManageClassroom($id, 'admin_v2_classroom_unpublished');
 
         $classroom = $this->updateClassroom($id, ['status' => 'unpublished']);
         $this->getClassroomGoodsMediator()->onClose($classroom);
@@ -1107,6 +1119,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom.quit',
             new Event($classroom, ['userId' => $member['userId'], 'member' => $member])
         );
+        $this->dispatchEvent('exercise.bind.remove.student', new Event(['userIds' => [$member['userId']], 'bindId' => $classroomId, 'bindType' => 'classroom']));
     }
 
     public function removeStudents($classroomId, $userIds, $info = [])
@@ -1269,6 +1282,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroom.join',
             new Event($classroom, ['userId' => $member['userId'], 'member' => $member])
         );
+        $this->dispatchEvent('course.member.join', new Event($classroom, ['userId' => $member['userId'], 'member' => $member]));
+        $this->dispatchEvent('exercise.bind.add.student', new Event(['userIds' => [$member['userId']], 'bindId' => $classroomId, 'bindType' => 'classroom']));
 
         return $member;
     }
@@ -1374,6 +1389,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'orderId' => 0,
                     'note' => $params['remark'],
                 ];
+                if (!empty($params['reason'])) {
+                    $info['reason'] = $params['reason'];
+                }
+                if (!empty($params['reason_type'])) {
+                    $info['reason_type'] = $params['reason_type'];
+                }
                 $this->becomeStudent($classroom['id'], $user['id'], $info);
                 $order = ['id' => 0];
             }
@@ -1509,6 +1530,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         unset($courses);
 
         return $sortedCourses;
+    }
+
+    public function findCourseIdsByClassroomIds(array $classroomIds) {
+        $classroomCourses = $this->getClassroomCourseDao()->findByClassroomIds($classroomIds);
+        return ArrayToolkit::column($classroomCourses, 'courseId');
     }
 
     public function findSortedCoursesByClassroomIdAndCourseSetTitle(int $classroomId, string $title)
@@ -1861,7 +1887,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      *
      * @return bool
      */
-    public function canManageClassroom($id, $permission = 'admin_classroom_content_manage')
+    public function canManageClassroom($id, $permission = 'admin_v2_classroom_content_manage')
     {
         $classroom = $this->getClassroom($id);
 
@@ -2263,9 +2289,31 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
     {
-        $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+        try {
+            $this->beginTransaction();
+            $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+            $this->getCourseMemberService()->changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
+            $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $classroomId, 'bindType' => 'classroom', 'updateType' => 'day', 'all' => true]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
 
-        return $this->getClassroomMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
+    public function changeMembersDeadlineByDate($classroomId, $date)
+    {
+        try {
+            $this->beginTransaction();
+            $this->updateMember($classroomId, $date);
+            $this->getCourseMemberService()->updateMembersDeadlineByClassroomId($classroomId, $date['deadline']);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $classroomId, 'bindType' => 'classroom', 'all' => true]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function updateMember($id, $member)
@@ -2338,37 +2386,39 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return;
         }
         $classroomMembers = $this->findClassroomStudents($classroomId, $start, $limit);
-
+        $coursesMembers = $this->getCourseMemberService()->searchMembers(['classroomId' => $classroomId, 'userIds' => array_column($classroomMembers, 'userId'), 'role' => 'student'], [], 0, PHP_INT_MAX, ['userId', 'courseId', 'isLearned', 'finishedTime', 'learnedCompulsoryTaskNum', 'learnedElectiveTaskNum']);
+        $coursesMembers = ArrayToolkit::groupIndex($coursesMembers, 'userId', 'courseId');
         $courses = $this->findCoursesByClassroomId($classroomId);
-        $courseIds = ArrayToolkit::column($courses, 'id');
 
+        $updateMembers = [];
         foreach ($classroomMembers as $classroomMember) {
-            $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($classroomMember['userId'], $courseIds), 'courseId');
+            $userCourseMembers = $coursesMembers[$classroomMember['userId']] ?? [];
             $finished = '1';
             foreach ($courses as $course) {
-                if (empty($coursesMembers[$course['id']]) || !$coursesMembers[$course['id']]['isLearned']) {
+                if (empty($userCourseMembers[$course['id']]) || !$userCourseMembers[$course['id']]['isLearned']) {
                     $finished = '0';
                     break;
                 }
             }
-            $finishedTimes = ArrayToolkit::column($coursesMembers, 'finishedTime');
+            $finishedTimes = array_column($userCourseMembers, 'finishedTime');
             $finishedTime = count($finishedTimes) > 0 ? max($finishedTimes) : 0;
-            $this->updateMember($classroomMember['id'], [
+            $updateMembers[$classroomMember['id']] = [
                 'isFinished' => $finished,
                 'finishedTime' => $finished ? $finishedTime : 0,
-                'learnedCompulsoryTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedCompulsoryTaskNum')),
-                'learnedElectiveTaskNum' => array_sum(ArrayToolkit::column($coursesMembers, 'learnedElectiveTaskNum')),
-            ]);
+                'learnedCompulsoryTaskNum' => array_sum(array_column($userCourseMembers, 'learnedCompulsoryTaskNum')),
+                'learnedElectiveTaskNum' => array_sum(array_column($userCourseMembers, 'learnedElectiveTaskNum')),
+            ];
         }
+        $this->getClassroomMemberDao()->batchUpdate(array_keys($updateMembers), $updateMembers);
     }
 
     public function updateClassroomMembersFinishedStatus($classroomId)
     {
-        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId, 'role' => '%student%']);
+        $classroomMembersCount = $this->getClassroomStudentCount($classroomId);
         if (empty($classroomMembersCount)) {
             return;
         }
-        if ($classroomMembersCount > 2000) {
+        if ($classroomMembersCount > 500) {
             $this->createUpdateClassroomMembersFinishedStatusJob($classroomId);
 
             return;

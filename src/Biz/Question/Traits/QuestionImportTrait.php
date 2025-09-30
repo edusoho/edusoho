@@ -12,7 +12,7 @@ trait QuestionImportTrait
 {
     private function replaceRemoteImgToLocalImg($text)
     {
-        preg_match_all('/<img src=\\\\"(.*?)\\\\"/', $text, $matches);
+        preg_match_all('/<img.*? src=\\\\"(.*?)\\\\"/', $text, $matches);
         $imgs = $matches[1] ?? [];
         if (empty($imgs)) {
             return $text;
@@ -21,7 +21,7 @@ trait QuestionImportTrait
         $replaceImgs = array_combine($imgs, $this->convertImgUri(array_column($localImgs, 'uri')));
 
         return preg_replace_callback(
-            '/<img src=\\\\"(.*?)\\\\"/',
+            '/<img.*? src=\\\\"(.*?)\\\\"/',
             function ($match) use ($replaceImgs) {
                 return "<img src=\\\"{$replaceImgs[$match[1]]}\\\"";
             },

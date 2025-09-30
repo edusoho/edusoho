@@ -1,0 +1,68 @@
+.find-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+	background-color: #fff;
+	border-top: 1px solid #e1e1e1;
+
+	&.preview-app-footer {
+		right: 29px;
+		bottom: 63px;
+		left: 30px;
+		width: inherit;
+	}
+
+	.iconfont {
+		font-size: 20px;
+	}
+
+	&-item {
+		display: inline-block;
+		box-sizing: border-box;
+		height: 100%;
+		padding: 5px 0;
+		color: #929292;
+		font-size: 12px;
+
+		&__icon {
+			display: block;
+			height: 25px;
+			margin-right: auto;
+			margin-left: auto;
+			text-align: center;
+		}
+
+		&__text {
+			display: block;
+			line-height: 20px;
+			text-align: center;
+		}
+
+		&.active {
+			.find-footer-item__text {
+				color: rgb(61, 205, 127);
+			}
+
+			.iconfont {
+				color: $primary-color;
+			}
+		}
+
+		&.app-active {
+			.find-footer-item__text {
+				color: $app-primary-color;
+			}
+
+			.iconfont {
+				color: $app-primary-color;
+			}
+		}
+	}
+	// delete
+	&-img {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
+}

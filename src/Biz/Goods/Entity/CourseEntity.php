@@ -179,6 +179,13 @@ class CourseEntity extends BaseGoodsEntity
         return $this->getCourseService()->hasCertificate($specs['targetId']);
     }
 
+    public function isSpecHidePrice($goods, $spec)
+    {
+        $course = $this->getCourseService()->getCourse($spec['targetId']);
+
+        return $course['hidePrice'];
+    }
+
     /**
      * @return CourseSetService
      */

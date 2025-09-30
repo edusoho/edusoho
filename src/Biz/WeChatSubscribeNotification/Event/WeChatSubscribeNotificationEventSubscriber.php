@@ -114,7 +114,7 @@ class WeChatSubscribeNotificationEventSubscriber extends EventSubscriber impleme
             return;
         }
 
-        $weChatUser = $this->getWeChatService()->searchWeChatUsers(['userId' => $answerRecord['user_id']], ['lastRefreshTime' => 'ASC'], 0, 1, ['id', 'openId']);
+        $weChatUser = $this->getWeChatService()->searchWeChatUsers(['userId' => $answerRecord['user_id'], 'type' => WeChatService::OFFICIAL_TYPE], ['lastRefreshTime' => 'ASC'], 0, 1, ['id', 'openId']);
         $weChatUser = empty($weChatUser) ? [] : $weChatUser[0];
         if (empty($weChatUser['openId'])) {
             return $this->sendHomeworkOrTestpaperResultSms($user['id'], $task, $activity);

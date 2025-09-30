@@ -20,6 +20,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
@@ -682,8 +683,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
         $cloudFiles = $this->getFileImplementor('cloud')->findFiles($files, $cloudFileConditions);
         $files = ArrayToolkit::index($files, 'id');
+        $usedCounts = $this->getCourseMaterialService()->countCourseSetGroupByFileId(['fileIds' => array_column($files, 'id'), 'type' => 'course', 'excludeLessonId' => 0, 'copyId' => 0]);
         foreach ($cloudFiles as &$cloudFile) {
             $cloudFile['type'] = $files[$cloudFile['id']]['type'];
+            $cloudFile['usedCourseCount'] = $usedCounts[$cloudFile['id']]['usedCourseCount'] ?: 0;
         }
 
         return $cloudFiles;
@@ -1067,6 +1070,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $fields = [
             'convertStatus' => $convertStatus,
+            'convertMaxLevel' => $result['maxLevel'],
             'audioConvertStatus' => 'none',
             'mp4ConvertStatus' => 'none',
             'updatedTime' => time(),
@@ -1430,6 +1434,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->update($file['id'], ['usedCount' => $count]);
     }
 
+    public function batchSetCategoryId($fileIds, $categoryId)
+    {
+        if (empty($fileIds)) {
+            return;
+        }
+        $this->getUploadFileDao()->update(['ids' => $fileIds], ['categoryId' => $categoryId]);
+    }
+
     protected function updateTags($localFile, $fields)
     {
         if (!isset($fields['tags'])) {
@@ -1476,6 +1488,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $conditions = $this->filterKeyWords($conditions);
         $conditions = $this->filterSourceForm($conditions);
         $conditions = $this->filterTag($conditions);
+        $conditions = $this->filterCategory($conditions);
 
         return $conditions;
     }
@@ -1545,6 +1558,18 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 break;
         }
         unset($conditions['sourceFrom']);
+
+        return $conditions;
+    }
+
+    protected function filterCategory($conditions)
+    {
+        if (!empty($conditions['categoryId'])) {
+            $categoryIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $categoryIds[] = $conditions['categoryId'];
+            $conditions['categoryIds'] = $categoryIds;
+            unset($conditions['categoryId']);
+        }
 
         return $conditions;
     }
@@ -1845,6 +1870,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getTagService()
     {
         return ServiceKernel::instance()->createService('Taxonomy:TagService');
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**

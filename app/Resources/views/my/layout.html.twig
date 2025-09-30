@@ -33,9 +33,8 @@
           </li>
 
           {% if setting('course.live_course_enabled') %}
-            <li class="list-group-item
-          {% if side_nav == 'my-learning-live' %} active {% endif %}">
-              <a href="{{ path('my_live_courses_learning') }}">{{ 'my.learning.live_menu'|trans }}</a>
+            <li class="list-group-item{% if side_nav == 'my-learning-live' %} active {% endif %}">
+              <a href="{{ path('my_courses_live_calendar') }}">{{ 'my.learning.live_menu'|trans }}</a>
             </li>
           {% endif %}
 
@@ -74,6 +73,12 @@
           <li class="list-group-item {% if side_nav == 'my-wrong-question-book' %} active {% endif %}">
             <a href="{{path('my_wrong_question_book')}}">{{'my.wrong_question_book'|trans}}</a>
           </li>
+
+          {% if setting('electronicContract.enabled') %}
+            <li class="list-group-item {% if side_nav == 'my-contract' %} active {% endif %}">
+              <a href="{{path('my_contract')}}">{{'my.contract'|trans}}</a>
+            </li>
+          {% endif %}
 
           {{ slot('my.learning.menu', {'side_nav': side_nav}) }}
         </ul>

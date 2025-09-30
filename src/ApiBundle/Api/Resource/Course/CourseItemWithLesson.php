@@ -14,6 +14,7 @@ use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
+use Biz\File\Service\UploadFileService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
@@ -47,6 +48,16 @@ class CourseItemWithLesson extends AbstractResource
             $request->query->get('showOptionalNum', 1)
         );
         $needReplayStatus = $request->query->get('needReplayDownloadStatus', 0);
+        $activities = $this->getActivityService()->findActivitiesByCourseIdAndType($courseId, 'video', true);
+        $fileIds = [];
+        foreach ($activities as $activity) {
+            if ('self' == $activity['ext']['mediaSource']) {
+                $fileIds[] = $activity['ext']['mediaId'];
+            }
+        }
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $activities = array_column($activities, null, 'id');
+        $files = array_column($files, null, 'id');
 
         //TODO 循环中调用查询，性能问题
         foreach ($items as &$item) {
@@ -80,6 +91,9 @@ class CourseItemWithLesson extends AbstractResource
                             $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $userId);
                             $task['activity']['ext']['answerRecordId'] = empty($answerRecord) ? 0 : $answerRecord['id'];
                         }
+                    }
+                    if ('video' == $task['type'] && !empty($task['activity'])) {
+                        $task['videoMaxLevel'] = empty($files[$activities[$task['activity']['id']]['ext']['mediaId']]) ? '' : $files[$activities[$task['activity']['id']]['ext']['mediaId']]['convertMaxLevel'];
                     }
                 }
             }
@@ -207,5 +221,13 @@ class CourseItemWithLesson extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->service('File:UploadFileService');
     }
 }

@@ -1,6 +1,11 @@
 {% extends 'layout.html.twig' %}
 {% do script(['app/vue/views/teacher/qualification/index.js']) %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block full_content %}
   <div id="app"></div>
 {% endblock %}

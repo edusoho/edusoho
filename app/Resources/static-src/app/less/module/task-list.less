@@ -34,6 +34,27 @@
     .btn-learn {
       margin-top: -6px;
     }
+
+    .last-learn {
+      display: flex;
+      padding: 0 4px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      background: #FF706B;
+      color: #FFF;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      margin-right: 12px;
+
+      @media (max-width: @screen-xs-max) {
+        margin-right: 0;
+        position: absolute;
+        right: 20px;
+        top: 37px;
+      }
+    }
   }
   &.task-list-gray{
     .task-item{

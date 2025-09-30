@@ -44,7 +44,7 @@ class CouponAction extends AbstractResource
         }
         $batch = $this->getCouponBatchService()->getBatch($coupon['batchId']);
         if (empty($batch['codeEnable'])) {
-            return $this->error('该优惠卷无法通过优惠码渠道发放');
+            return $this->error('该优惠券无法通过优惠码渠道发放');
         }
 
         if (isset($batch['deadlineMode']) && 'day' == $batch['deadlineMode']) {

@@ -41,7 +41,7 @@ interface LogService
      *                 );.
      *
      * @param array $conditions 搜索条件，
-     * @param array $sort       按什么排序, 暂只提供'created'
+     * @param array|string $sort       按什么排序, 暂只提供'created'
      * @param int   $start      开始行数
      * @param int   $limit      返回最多行数
      *

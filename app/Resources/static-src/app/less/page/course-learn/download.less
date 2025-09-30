@@ -24,31 +24,28 @@
 
 .download-materials-list {
   padding: 16px;
-  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
   .download-materials-item {
-    position: relative;
-    padding: 12px 16px 12px 56px;
-    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 16px;
     background-color: @bg-color;
     border-radius: 4px;
 
-    &:first-child {
-      margin-top: 0;
-    }
-
     .materials-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
       width: 28px;
       height: 30px;
     }
 
     .materials-content {
-      position: relative;
-      padding-right: 80px;
+      width: 100%;
+      min-width: 0;
+      display: flex;
+      justify-content: space-between;
 
       p {
         margin-bottom: 0;
@@ -66,11 +63,14 @@
         line-height: 16px;
       }
 
+      .download-material-btn-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
       .download-materials-btn {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
         padding: 4px 20px;
         background: #03c777;
         box-shadow: 0 2px 4px 0 rgba(3, 199, 119, 0.20);

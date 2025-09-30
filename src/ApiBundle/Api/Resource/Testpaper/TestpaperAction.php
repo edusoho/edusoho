@@ -125,6 +125,7 @@ class TestpaperAction extends AbstractResource
             'items' => $items,
             'isShowTestResult' => 1,
             'courseId' => $course['id'],
+            'scene' => $scene,
         ];
     }
 
@@ -168,7 +169,17 @@ class TestpaperAction extends AbstractResource
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['activity'] = $activity;
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
-
+        if ('random' == $assessment['type']) {
+            $ids = $this->getAssessmentService()->searchAssessments(
+                    ['parent_id' => $assessment['id']],
+                    ['id' => 'ASC'],
+                    0,
+                    PHP_INT_MAX,
+                    ['id']
+                );
+            $ids = array_column($ids, 'id');
+            $assessment['id'] = $ids[array_rand($ids)];
+        }
         $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
         $answerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($scene['id'], $user['id']);
         $answerReport = $this->getAnswerReportService()->getSimple($answerRecord['answer_report_id']);
@@ -204,6 +215,7 @@ class TestpaperAction extends AbstractResource
             'items' => $items,
             'isShowTestResult' => 0,
             'courseId' => $course['id'],
+            'scene' => $scene,
         ];
     }
 

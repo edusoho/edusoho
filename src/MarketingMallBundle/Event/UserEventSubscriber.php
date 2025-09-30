@@ -4,6 +4,7 @@ namespace MarketingMallBundle\Event;
 
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use MarketingMallBundle\Biz\Mall\Service\MallService;
 use MarketingMallBundle\Biz\SyncList\Service\SyncListService;
 use MarketingMallBundle\Common\GoodsContentBuilder\TeacherInfoBuilder;
 
@@ -71,6 +72,9 @@ class UserEventSubscriber extends BaseEventSubscriber
 
     protected function syncUserInfoToMarketingMall($userId)
     {
+        if (!$this->getMallService()->isInit()) {
+            return;
+        }
         $this->userUpdate($userId);
         $this->userContentUpdate($userId);
     }
@@ -93,6 +97,14 @@ class UserEventSubscriber extends BaseEventSubscriber
         }
 
         $this->updateTeacherInfo(new TeacherInfoBuilder(), $userId);
+    }
+
+    /**
+     * @return MallService
+     */
+    private function getMallService()
+    {
+        return $this->getBiz()->service('Mall:MallService');
     }
 
     /**

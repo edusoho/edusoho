@@ -6,7 +6,9 @@
 {% set tab_nav = 'learning' %}
 {% block title %}{{ 'my.learning.course.learning'|trans }} - {{ parent() }}{% endblock %}
 
+
 {% block main %}
+  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
 
   <div class="panel panel-default panel-col">
     {% if is_mobile_client() %}

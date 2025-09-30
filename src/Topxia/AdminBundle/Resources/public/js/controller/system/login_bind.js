@@ -81,21 +81,20 @@ define(function(require, exports, module) {
         });
 
         $('[name=mobile_bind_mode]').change(function() {
-          if ($(this).val() == 'constraint') {
-            $('.constraint-tip').removeClass('hidden');
-            $('.option-tip').addClass('hidden');
-            $('.close-tip').addClass('hidden');
-          } else if ($(this).val() == 'option') {
-            $('.constraint-tip').addClass('hidden');
-            $('.option-tip').removeClass('hidden');
-            $('.close-tip').addClass('hidden');
-          } else {
-            $('.constraint-tip').addClass('hidden');
-            $('.option-tip').addClass('hidden');
-            $('.close-tip').removeClass('hidden');
-          };
+            if ($(this).val() == 'constraint') {
+                $('.constraint-tip').removeClass('hidden');
+                $('.option-tip').addClass('hidden');
+                $('.close-tip').addClass('hidden');
+            } else if ($(this).val() == 'option') {
+                $('.constraint-tip').addClass('hidden');
+                $('.option-tip').removeClass('hidden');
+                $('.close-tip').addClass('hidden');
+            } else {
+                $('.constraint-tip').addClass('hidden');
+                $('.option-tip').addClass('hidden');
+                $('.close-tip').removeClass('hidden');
+            };
         });
-
     };
 
 });

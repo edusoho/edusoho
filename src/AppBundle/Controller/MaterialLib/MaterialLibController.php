@@ -5,9 +5,11 @@ namespace AppBundle\Controller\MaterialLib;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use AppBundle\Util\PlayToken;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileShareHistoryService;
 use Biz\File\UploadFileException;
+use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
@@ -160,7 +162,12 @@ class MaterialLibController extends BaseController
 
     public function playerAction(Request $request, $fileId)
     {
-        $file = $this->getUploadFileService()->tryAccessFile($fileId);
+        $token = $request->query->get('token');
+        if (empty($token) || !$this->validatePlayToken($token, $fileId)) {
+            $file = $this->getUploadFileService()->tryAccessFile($fileId);
+        } else {
+            $file = $this->getUploadFileService()->getFullFile($fileId);
+        }
 
         if ('cloud' == $file['storage']) {
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', [
@@ -211,13 +218,14 @@ class MaterialLibController extends BaseController
         } else {
             try {
                 if ('video' == $file['type']) {
-                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId']);
+                    $file = $this->getCloudFileService()->getByGlobalId($file['globalId'], $request->isSecure());
+                    $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($file['globalId'], $request->isSecure());
                 }
             } catch (\RuntimeException $e) {
                 $thumbnails = [];
             }
 
-            return $this->render('admin/cloud-file/detail.html.twig', [
+            return $this->render('admin-v2/teach/cloud-file/detail.html.twig', [
                 'material' => $file,
                 'thumbnails' => empty($thumbnails) ? '' : $thumbnails,
                 'params' => $request->query->all(),
@@ -604,9 +612,22 @@ class MaterialLibController extends BaseController
     {
         $this->getUploadFileService()->tryManageGlobalFile($globalId);
 
-        $second = $request->query->get('second');
+        $options = ['seconds' => $request->query->get('second')];
+        if ($request->isSecure()) {
+            $options['protocol'] = 'https';
+        }
 
-        return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, ['seconds' => $second]));
+        return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, $options));
+    }
+
+    private function validatePlayToken($token, $fileId)
+    {
+        $params = (new PlayToken())->parse($token);
+        if (empty($params)) {
+            return false;
+        }
+
+        return $this->getCurrentUser()->getId() == $params['userId'] && $fileId == $params['fileId'];
     }
 
     protected function getUserService()
@@ -614,6 +635,9 @@ class MaterialLibController extends BaseController
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return MaterialLibService
+     */
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');

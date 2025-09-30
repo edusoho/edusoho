@@ -48,10 +48,29 @@
               </a>
             {% endif %}
           </li>
+          {% if courseSet.parentId == 0 %}
+            <li class="cd-sidebar__item {% if course_side_nav == 'item-bank' %}active{% endif %}">
+              <a href="{{ path('course_set_manage_course_item_bank', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+                {{ 'course.question_bank_practice_management'|trans }}
+                {% if hasLessonChanged|default(0) %}
+                  <i class="es-icon es-icon-tip color-danger"></i>
+                {% endif %}
+              </a>
+            </li>
+          {% endif %}
 
           <li class="cd-sidebar__item {% if course_side_nav == 'announcements' %}active{% endif %}">
             <a href="{{ path('announcement_list', { targetType: 'course', targetId: curCourse.id }) }}">
               {{ 'course.announcement_manage'|trans }}
+            </a>
+          </li>
+
+          <li class="cd-sidebar__item {% if course_side_nav == 'ai-companion-study' %}active{% endif %}">
+            <a href="{{ path('course_set_manage_course_ai_companion_study', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              <div style="position: relative; width: fit-content">
+                <div>{{ 'course.ai_assisted_learning_service'|trans }}</div>
+                <div style="color: white; font-size: 12px; line-height: 16px; font-weight: 500; padding: 0 2px; background-color: #FF4D4F; border-radius: 6px 6px 6px 0; position: absolute; right: -25px; top: -10px">NEW</div>
+              </div>
             </a>
           </li>
           {#录播管理#}
@@ -110,7 +129,7 @@
         </li>
         <li class="cd-sidebar__item {% if course_side_nav == 'wrong-questions' %}active{% endif %}">
           <a
-            href="{{ path('course_manage_wrong_questions', {id: curCourse.id}) }}">{{ '学员错题'|trans }}
+            href="{{ path('course_manage_wrong_questions', {id: curCourse.id}) }}">{{ 'course.student_incorrect_questions'|trans }}
           </a>
         </li>
         <li class="cd-sidebar__heading">

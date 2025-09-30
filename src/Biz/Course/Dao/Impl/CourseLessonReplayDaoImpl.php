@@ -63,9 +63,9 @@ class CourseLessonReplayDaoImpl extends AdvancedDaoImpl implements CourseLessonR
         return $this->db()->fetchAssoc($sql, [$courseId, $lessonId, $lessonType]);
     }
 
-    public function getByReplayId($replayId)
+    public function getByLessonIdAndReplayIdAndType($lessonId, $replayId, $type)
     {
-        return $this->getByFields(['replayId' => $replayId]);
+        return $this->getByFields(['lessonId' => $lessonId, 'replayId' => $replayId, 'type' => $type]);
     }
 
     public function findByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')

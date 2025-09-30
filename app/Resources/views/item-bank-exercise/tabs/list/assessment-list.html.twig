@@ -4,7 +4,7 @@
     {% for assessment in assessments if assessments %}
       {% if records|default(null) %}{% set record = records[assessment.id]|default(null) %}{% endif %}
       <div class="row">
-        <li class="assessment-list-li">
+        <li class="assessment-list-li flex">
           <div class="col-xs-4 col-md-7 title-overflow">
             <span>{{ assessment.name }}</span>
           </div>

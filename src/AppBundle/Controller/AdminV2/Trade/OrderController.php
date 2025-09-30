@@ -57,6 +57,7 @@ class OrderController extends BaseController
             [
                 'request' => $request,
                 'orders' => $orders,
+                'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
                 'users' => $users,
                 'goodsSpecs' => $goodsSpecs,
                 'paginator' => $paginator,

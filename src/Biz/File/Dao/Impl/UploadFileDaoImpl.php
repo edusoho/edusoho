@@ -3,9 +3,9 @@
 namespace Biz\File\Dao\Impl;
 
 use Biz\File\Dao\UploadFileDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
+class UploadFileDaoImpl extends AdvancedDaoImpl implements UploadFileDao
 {
     protected $table = 'upload_files';
 
@@ -140,6 +140,8 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
                 'id IN ( :idsOr )',
                 'audioConvertStatus = :audioConvertStatus',
                 'audioConvertStatus IN ( :inAudioConvertStatus )',
+                'categoryId = :categoryId',
+                'categoryId in (:categoryIds)',
                 /*S2B2C-CUSTOM*/
                 'syncId = :syncId',
                 'syncId in (:syncIds)',

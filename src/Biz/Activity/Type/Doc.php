@@ -105,6 +105,14 @@ class Doc extends Activity
         return $this->getDocActivityDao()->update($targetId, $updateFields);
     }
 
+    public function updateByIds($ids, $fields)
+    {
+        if (empty($fields)) {
+            return;
+        }
+        $this->getDocActivityDao()->update(['ids' => $ids], $fields);
+    }
+
     public function delete($targetId)
     {
         $doc = $this->getDocActivityDao()->get($targetId);

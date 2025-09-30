@@ -6,8 +6,6 @@ module.exports = {
   libs: {
     'base': ['libs/base.js'], // 基础类库
     'boot_base': ['libs/boot_base.js'],
-    'html5shiv': ['html5shiv'],
-    'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],
     'jquery-nouislider': ['libs/jquery-nouislider.js'],
     'jquery-sortable': ['es-jquery-sortable'],
@@ -35,7 +33,6 @@ module.exports = {
     'ltc-sdk-server': ['libs/ltc-sdk-server/index.js'],
     'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
     'province-city-area': ['libs/province-city-area.js'],
-    'element-ui': ['element-ui'],
     'vue': ['libs/vue.js'],
   },
   noParseDeps: { // 不解析依赖，加快编译速度
@@ -45,9 +42,6 @@ module.exports = {
     'perfect-scrollbar': 'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
     'bootstrap-notify': 'bootstrap-notify/bootstrap-notify.js',
     'store': 'store/store.js',
-    'respond-js': 'respond.js/dest/respond.src.js',
-    'console-polyfill': 'console-polyfill/index.js',
-    'html5shiv': 'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker': 'bootstrap-daterangepicker/daterangepicker.js',
     'bootstrap-datetime-picker': 'bootstrap-datetime-picker/js/bootstrap-datetimepicker.js',
     'jquery-sortable': 'es-jquery-sortable/source/js/jquery-sortable.js',
@@ -60,7 +54,6 @@ module.exports = {
     'moment': 'moment/moment.js',
     'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js',
     'codeages-design': 'codeages-design/dist/codeages-design.js',
-    'element-ui': 'element-ui/dist/index.js',
   },
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
@@ -71,37 +64,7 @@ module.exports = {
       ]
     },
     {
-      name: 'element-ui',
-      ignore: [
-        'lib/**',
-        'packages/**',
-        'src/**',
-        'types/**'
-      ],
-    },
-    {
       name: 'swagger-ui/dist/swagger-ui.css',
-    },
-    // 纯拷贝item-bank/lib/itemBank.umd.min.js
-    {
-      name: 'item-bank/lib/itemBank.umd.min.js',
-    },
-    // 纯拷贝item-bank/lib/styles目录下的简墨主色调
-    {
-      name: 'item-bank/lib/styles',
-    },
-    // 纯拷贝item-bank/lib/local目录下的语言包
-    {
-      name: 'item-bank/lib/locale',
-    },
-    {
-      name: 'item-bank/lib/img',
-    },
-    {
-      name: 'es5-shim/es5-shim.js',
-    },
-    {
-      name: 'es5-shim/es5-sham.js',
     },
     {
       name: 'easy-pie-chart/dist/jquery.easypiechart.js',
@@ -126,9 +89,20 @@ module.exports = {
         'js/**',
         'less/**',
       ]
-    }
+    },
+    {
+      name: 'viewerjs/dist/viewer.css'
+    },
+    {
+      from: 'node_modules/@codeages/math-editor/dist/iframe',
+      to: 'web/static-dist/libs/math-editor'
+    },
+    {
+      from: 'node_modules/@codeages/agent-web-sdk/dist',
+      to: 'web/static-dist/libs/agent-web-sdk'
+    },
   ],
-  extryCssName: '{main,header,bootstrap,mobile,admin}',
+  extryCssName: '{main,header,bootstrap,mobile,admin,item-bank}',
   isESlint: false,
   baseName: 'libs/base,libs/ltc-sdk',
   activitiesDir: 'web/activities',

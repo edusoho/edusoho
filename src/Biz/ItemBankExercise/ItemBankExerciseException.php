@@ -56,6 +56,10 @@ class ItemBankExerciseException extends AbstractException
 
     const ANSWER_UNPUBLISHED_CHAPTER = 4007524;
 
+    const BIND_STATUS_CREATE = 4007525;
+
+    const BIND_STATUS_DELETE = 4007526;
+
     public $messages = [
         4037501 => 'exception.item_bank_exercise.forbidden_learn',
         5007502 => 'exception.item_bank_exercise.chapter_answer_is_doing',
@@ -81,5 +85,7 @@ class ItemBankExerciseException extends AbstractException
         5007522 => 'exception.item_bank_exercise.exercise.not_arrive',
         4007523 => 'exception.item_bank_exercise.parent_chapter_unpublish',
         4007524 => 'exception.item_bank_exercise.answer_unpublish_chapter',
+        4007525 => 'exception.item_bank_exercise.bind_status_create',
+        4007526 => 'exception.item_bank_exercise.bind_status_delete',
     ];
 }

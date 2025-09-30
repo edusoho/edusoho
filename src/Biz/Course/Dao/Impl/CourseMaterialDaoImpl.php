@@ -108,6 +108,35 @@ class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function countGroupByCourseSetId($conditions, $start, $limit)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('courseSetId, count(*) AS `usedCount`')
+            ->groupBy('courseSetId')
+            ->orderBy('courseSetId')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
+    public function countDistinctCourseSet($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('COUNT(DISTINCT(courseSetId))');
+
+        return $builder->execute()->fetchColumn();
+    }
+
+    public function countCourseSetGroupByFileId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('fileId, count(DISTINCT(courseSetId)) AS `usedCourseCount`')
+            ->groupBy('fileId');
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
     protected function createQueryBuilder($conditions)
     {
         if (isset($conditions['title'])) {

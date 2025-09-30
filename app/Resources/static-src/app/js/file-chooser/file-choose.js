@@ -47,13 +47,13 @@ class FileChooser extends Emitter{
     this.emit('select', file);
   }
 
-  fillTitle(file){
-    let $title = $('#title');
-    if ($title.length > 0 && $title.val()=='') {
-      let title = file.name.substring(0,file.name.lastIndexOf('.') !== -1 ? file.name.lastIndexOf('.') : file.name.length);
-      $title.val(title);
+  fillTitle(file) {
+    const $title = $('#title');
+    if ($title.length > 0 && $title.val() === '') {
+      $title.val(file.name.replace(`.${file.ext}`, ''));
     }
   }
+
   static openUI() {
     $('.file-chooser-bar').addClass('hidden');
     $('.file-chooser-main').removeClass('hidden');

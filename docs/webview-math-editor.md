@@ -1,0 +1,17 @@
+# App对接数学公式编辑器
+
+数学公式编辑器通过 Webview 嵌入 App。 嵌入地址为： `/static-dist/libs/math-editor/math-editor.html`。
+
+## 参数
+
+通过 URL Query 的参数方式传入。 
+
+### `formula`
+
+编辑器初始公式，Latex 格式。 示例：`/static-dist/libs/math-editor/math-editor.html?formula=x^2`。
+
+## 方法
+
+### `getFormula()`
+
+获取编辑器中的公式，Latex 格式。

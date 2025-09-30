@@ -12,6 +12,7 @@ class MeCourseFilter extends Filter
      */
     protected $publicFields = [
         'id', 'title', 'courseSetTitle', 'learnedNum', 'courseSet', 'compulsoryTaskNum', 'publishedTaskNum', 'learnedCompulsoryTaskNum', 'progress', 'goodsId', 'specsId', 'spec', 'isExpired', 'status', 'canLearn',
+        'lastLearnTask',
     ];
 
     protected function publicFields(&$data)

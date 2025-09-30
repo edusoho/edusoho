@@ -15,6 +15,31 @@ class Export {
   {
     let self  = this;
     self.$exportBtns.on('click', function () {
+      const url = location.href;
+      if (url.includes('order/manage') || url.includes('user/manage')) {
+        const $smsCodeInput = $('#sms_code');
+        if ($smsCodeInput.val().trim() === '') {
+          return false; // 验证失败，阻止导出（空值或纯空格）
+        }else {
+          const smsCode = $smsCodeInput.val().trim();
+          let ajaxResult = false;
+          $.ajax({
+            url: $smsCodeInput.data('url')+'?value='+smsCode,
+            type: 'GET',
+            async: false,
+            success: function(response) {
+              console.log(response);
+              console.log(response.success);
+              if (response.success) {
+                ajaxResult = true;
+              }
+            }
+          });
+          if (!ajaxResult) {
+            return false;
+          }
+        }
+      }
       self.$exportBtn = $(this);
       self.names = self.$exportBtn.data('fileNames');
       let $form = $(self.$exportBtn.data('targetForm'));
@@ -43,7 +68,9 @@ class Export {
       url : tryUrl,
       async : false,
       data: {
-        names: self.names
+        names: self.names,
+        sms_code: $('#sms_code').val(),
+        mobile: $('#mobile').val()
       },
       success : function(response){
         if (!response.success) {

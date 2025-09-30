@@ -5,6 +5,7 @@ namespace AppBundle\Component\Export;
 use AppBundle\Common\Exception\UnexpectedValueException;
 use AppBundle\Component\Export\Bill\CashBillExporter;
 use AppBundle\Component\Export\Bill\CoinBillExporter;
+use AppBundle\Component\Export\Certificate\CertificateRecordExporter;
 use AppBundle\Component\Export\Classroom\ClassroomCourseStatisticsExporter;
 use AppBundle\Component\Export\Classroom\ClassroomMemberStatisticsExporter;
 use AppBundle\Component\Export\Classroom\ClassroomSignStatisticsExporter;
@@ -81,6 +82,7 @@ class Factory
             'classroom-statistics-course-learn' => ClassroomStatisticsCoursesLearnExporter::class,
             'classroom-statistics-course-learn-detail' => ClassroomStatisticsCourseLearnDetailExporter::class,
             'information-collect-detail' => InformationCollectDetailExporter::class,
+            'certificate-records' => CertificateRecordExporter::class,
         ];
 
         $names = explode(':', $name);

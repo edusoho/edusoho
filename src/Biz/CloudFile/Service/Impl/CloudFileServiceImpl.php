@@ -11,6 +11,7 @@ use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileTagService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
+use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\UserService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
@@ -41,6 +42,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
         $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
         $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
+        $result['categories'] = $this->getCategoryService()->findCategoriesByIds(array_column($result['data'], 'categoryId'));
 
         $result['data'] = array_map(function ($file) {
             $file['no'] = $file['globalId'];
@@ -174,8 +176,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         if (!empty($attachmentFile)) {
-            $this->getAttachmentService()->updateAttachment($attachmentFile['id'], ['status' => 'delete']);
+            $this->getAttachmentService()->deleteAttachment($attachmentFile['id']);
             $this->getLogService()->info('question_bank', 'delete_attachment', "管理员 {$user['nickname']}删除了附件《{$attachmentFile['file_name']}》");
+            $this->getCloudFileImplementor()->deleteFile(['globalId' => $globalId]);
 
             return ['success' => true];
         }
@@ -196,9 +199,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return true;
     }
 
-    public function getByGlobalId($globalId)
+    public function getByGlobalId($globalId, $ssl = false)
     {
-        $file = $this->getCloudFileImplementor()->getFileByGlobalId($globalId);
+        $file = $this->getCloudFileImplementor()->getFileByGlobalId($globalId, $ssl);
         $questionFile = empty($file['id']) ? $this->getByGlobalIdFromItemAttachment($globalId) : [];
         if (!empty($questionFile)) {
             $file['type'] = $questionFile['file_type'];
@@ -245,9 +248,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getFile($file);
     }
 
-    public function getDefaultHumbnails($globalId)
+    public function getDefaultHumbnails($globalId, $ssl = false)
     {
-        return $this->getCloudFileImplementor()->getDefaultHumbnails($globalId);
+        return $this->getCloudFileImplementor()->getDefaultHumbnails($globalId, $ssl);
     }
 
     public function getThumbnail($globalId, $options)
@@ -289,6 +292,14 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         }
 
         return false;
+    }
+
+    /**
+     * @return CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**

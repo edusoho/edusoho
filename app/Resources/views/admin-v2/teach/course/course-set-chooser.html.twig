@@ -44,7 +44,7 @@
 	<tbody>
 	  {% for courseSet in courseSets %}
 	  	{% set user = users[courseSet.creator]|default(null) %}
-	  	{% import "admin/macro.html.twig" as admin_macro %}
+	  	{% import 'admin-v2/macro.html.twig' as admin_macro %}
 	    {% set category = categories[courseSet.categoryId]|default(null) %}
 		<tr id="course-tr-{{ courseSet.id }}">
 		  <td>{{ courseSet.id }}</td>

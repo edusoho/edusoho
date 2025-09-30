@@ -86,6 +86,8 @@ class FileChooserController extends BaseController
         if ($batchCreate) {
             //计划批量添加课时只支持以下文件类型
             $conditions['types'] = ['document', 'video', 'audio', 'ppt', 'flash'];
+        } elseif (!empty($query['types'])) {
+            $conditions['types'] = explode(',', $query['types']);
         } else {
             $conditions['type'] = (empty($query['type']) || 'all' == $query['type']) ? null : $query['type'];
         }
@@ -138,6 +140,10 @@ class FileChooserController extends BaseController
             $conditions['filename'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
+        if (isset($conditions['fileCategoryId'])) {
+            $conditions['categoryId'] = $conditions['fileCategoryId'];
+            unset($conditions['fileCategoryId']);
+        }
 
         if (isset($conditions['tagId']) && empty($conditions['tagId'])) {
             unset($conditions['tagId']);
@@ -145,6 +151,9 @@ class FileChooserController extends BaseController
 
         if (!empty($conditions['batch'])) {
             $conditions['types'] = ['document', 'video', 'audio', 'ppt', 'flash'];
+        } elseif (!empty($conditions['types'])) {
+            $conditions['types'] = explode(',', $conditions['types']);
+            unset($conditions['type']);
         } else {
             $conditions['type'] = (empty($conditions['type']) || ('all' == $conditions['type'])) ? null : $conditions['type'];
         }

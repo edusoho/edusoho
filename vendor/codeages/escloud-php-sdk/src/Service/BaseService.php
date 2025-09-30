@@ -98,7 +98,7 @@ abstract class BaseService
      * @throws SDKException
      * @throws SDK\HttpClient\ClientException
      */
-    protected function request($method, $uri, array $data = array(), array $headers = array(), $node = 'root', $stream = false)
+    protected function request($method, $uri, array $data = array(), array $headers = array(), $node = 'root', $streamCallback = null)
     {
         $options = array();
 
@@ -125,12 +125,12 @@ abstract class BaseService
         $headers['Content-Type'] = 'application/json';
         $options['headers'] = $headers;
 
-        if ($stream) {
-            $options['stream'] = $stream;
+        if ($streamCallback) {
+            $options['streamCallback'] = $streamCallback;
         }
 
         $response = $this->createClient()->request($method, $this->getRequestUri($uri, 'http', $node), $options);
-        if ($stream) {
+        if ($streamCallback) {
             return $this->extractResultFromStreamResponse($response);
         }
 
@@ -164,16 +164,8 @@ abstract class BaseService
     protected function extractResultFromStreamResponse(Response $response)
     {
         $this->checkResponseHttpCode($response);
-        $result = [];
-        try {
-            foreach (array_filter(explode("\n\n", $response->getBody())) as $data) {
-                $result[] = SDK\json_decode(substr($data, 5), true);
-            }
-        } catch (\Exception $e) {
-            throw new SDKException($e->getMessage() . "(response: {$response->getBody()}");
-        }
 
-        return $result;
+        return $response->getBody();
     }
 
     /**

@@ -36,16 +36,6 @@
       </div>
     </div>
 
-    {% if partnerAvatar %}
-      <div class="form-group">
-        <div class="col-md-2 control-label"><b>{{'admin.user.manage.user_avatar.fields.partner_avatar'|trans}}</b></div>
-        <div class="controls col-md-8 controls">
-          <img src="{{ partnerAvatar }}" class="mrm">
-          <button class="btn btn-default use-partner-avatar" type="button" data-url="{{ path('settings_avatar_fetch_partner') }}" data-goto="{{ path('settings') }}">{{'admin.user.manage.user_avatar.using_current_avatar_btn'|trans}}</button>
-        </div>
-      </div>
-    {% endif %}
-
   </form>
 
 {% endblock %}

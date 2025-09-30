@@ -14,11 +14,7 @@
 
 {% block stylesheets %}
   {{ parent() }}
-  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
-  {% else %}
-    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
-  {% endif %}
+  {% include 'item-bank-css-loader.html.twig' %}
 {% endblock %}
 
 {% block body %}
@@ -31,7 +27,7 @@
     <input type="hidden" class="js-testpaper-type" value='{{ type|default('default') }}'>
     <div class="ibs-vue">
       <div class="ant-row">
-        <div class="ant-col ant-col-offset-2 ibs-resutl-item">
+        <div class="ant-col ibs-result-item">
           <div class="item-bank-result review-result">
             <div class="review-result__icon">
               {% if answerReport.grade == 'unpassed' or answerReport.grade == 'none' %}
@@ -41,7 +37,7 @@
               {% endif %}
             </div>
 
-            <div class="review-result__content ">
+            <div class="review-result__content">
               <div class="result-status">
                 {% if answerReport.grade == 'unpassed' or answerReport.grade == 'none' %}
                   <span class="result-status--unpassed">{{ 'review.result.fail' | trans }}</span>

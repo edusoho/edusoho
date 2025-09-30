@@ -1,0 +1,37 @@
+@import './e-select-menu/index.scss';
+
+.e-tree-select {
+  position: relative;
+  width: 100vw;
+  .e-tree-select__items {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: vw(50);
+    .e-tree-select__item {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      font-size: 16px;
+      color: #2B333B;
+      font-family: PingFangSC-Medium;
+      &::after {
+        content: '';
+        display: inline-block;
+        margin-left: vw(10);
+        border-top: 2px solid #71777D;
+        border-right: 2px solid #71777D;
+        width: vw(5);
+        height: vw(5);
+        transform: rotate(135deg);
+        transition: all 200ms;
+      }
+      &.active {
+        &::after {
+          transform: rotate(-45deg);
+        }
+      }
+    }
+  }
+}

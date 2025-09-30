@@ -5,6 +5,7 @@ namespace Biz\Live\Job;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\Live\Constant\LiveStatus;
 use Biz\Live\Service\LiveService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\System\Constant\LogModule;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
@@ -15,7 +16,10 @@ class LiveStatusJob extends AbstractJob
     {
         $liveId = $this->args['liveId'];
         $jobType = $this->args['jobType'];
-        $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
+        $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId) ?: $this->getOpenCourseService()->getLiveOpenLessonByLiveId($liveId);
+        if (empty($liveActivity)) {
+            return;
+        }
         $canExecute = $this->canExecute($liveActivity['progressStatus'], $jobType);
         if (!$canExecute) {
             return;
@@ -26,10 +30,12 @@ class LiveStatusJob extends AbstractJob
         if ('living' === $status) {
             $startTime = $confirmStatus['liveStartTime'] ?: 0;
             $this->getLiveActivityService()->startLive($liveId, $startTime);
+            $this->getOpenCourseService()->startLive($liveId, $startTime);
         }
         if ('finished' === $status || (false !== strpos($jobType, 'close') && 'living' !== $status)) {
             $closeTime = $confirmStatus['liveEndTime'] ?: 0;
             $this->getLiveActivityService()->closeLive($liveId, $closeTime);
+            $this->getOpenCourseService()->closeLive($liveId, $closeTime);
         }
     }
 
@@ -56,6 +62,14 @@ class LiveStatusJob extends AbstractJob
     protected function getLiveActivityService()
     {
         return $this->biz->service('Activity:LiveActivityService');
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->biz->service('OpenCourse:OpenCourseService');
     }
 
     /**

@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import MultiInput from '../multi-input';
 import List from './list';
 
 function initItem(dataSourceUi,data,index,props) {
   let obj = {
-    itemId:Math.random(),
+    itemId: Math.random(),
     nickname: data[props.nickname],
     isVisible: data[props.isVisible] == 1 ? true : false,
     avatar: data[props.avatar],
     seq: index,
-    id:data[props.id],
-		isCanceledTeacherRoles:data.isCanceledTeacherRoles,
+    id: data[props.id],
+    isCanceledTeacherRoles: data.isCanceledTeacherRoles,
+    isLiveTeacher: data.isLiveTeacher,
     outputValue: {
       [props.id]: data[props.id],
-      [props.isVisible]: data[props.isVisible] ,
+      [props.isVisible]: data[props.isVisible],
     }
   }
   dataSourceUi.push(obj);

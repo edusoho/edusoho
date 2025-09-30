@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ActivityController extends BaseController
 {
-    public function showAction($task, $preview)
+    public function showAction($task, $preview, $sign = 'no')
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-
+        $activity['sign'] = $sign;
         if (empty($activity)) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
@@ -93,6 +93,7 @@ class ActivityController extends BaseController
             ];
         }
 
+        $activity['courseStatus'] = $course['status'];
         $container = $this->get('activity_runtime_container');
 
         return $container->content($activity);
@@ -102,7 +103,7 @@ class ActivityController extends BaseController
     {
         $this->getCourseService()->tryManageCourse($courseId);
         if (!empty($activityId)) {
-            $activity = $this->getActivityService()->getActivity($activityId);
+            $activity = $this->getActivityService()->getActivity($activityId, true);
         } else {
             $activity = [
                 'id' => $activityId,

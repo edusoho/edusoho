@@ -11,6 +11,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Testpaper\ExerciseException;
 use Codeages\Biz\ItemBank\Answer\Constant\ExerciseMode;
@@ -32,7 +33,8 @@ class ContinueAnswer extends AbstractResource
         }
         if (!empty($assessmentResponse['exerciseId'])) {
             $exercise = $this->getExerciseService()->get($assessmentResponse['exerciseId']);
-            if ('closed' == $exercise['status']) {
+            $member = $this->getExerciseMemberService()->getExerciseStudent($assessmentResponse['exerciseId'], $this->getCurrentUser()['id']);
+            if ('closed' == $exercise['status'] || 0 == $member['canLearn']) {
                 throw ExerciseException::CLOSED_EXERCISE();
             }
         }
@@ -53,9 +55,6 @@ class ContinueAnswer extends AbstractResource
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         if (empty($assessment)) {
             throw AssessmentException::ASSESSMENT_NOTEXIST();
-        }
-        if ('open' !== $assessment['status']) {
-            throw AssessmentException::ASSESSMENT_NOTOPEN();
         }
         $assessment = $this->getAnswerRandomSeqService()->shuffleItemsAndOptionsIfNecessary($assessment, $answerRecord['id']);
 
@@ -159,5 +158,13 @@ class ContinueAnswer extends AbstractResource
     protected function getExerciseService()
     {
         return $this->service('ItemBankExercise:ExerciseService');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getExerciseMemberService()
+    {
+        return $this->service('ItemBankExercise:ExerciseMemberService');
     }
 }

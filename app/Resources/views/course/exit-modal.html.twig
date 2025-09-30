@@ -17,7 +17,7 @@
           </select>
         {% endif %}
         <div style="position: relative" id="reasonNote-container" class="{% if type|default() != 'itemBank' %}hide{% endif %}">
-          <textarea id="reasonNote" show-length maxlength="120" class="form-control mtm" 
+          <textarea id="reasonNote" show-length maxlength="120" class="form-control mtm"
             name="reason[note]" placeholder="{{'order.refund.reason_tips'|trans}}" style="height: 120px;resize: none;"></textarea>
           <span style="position: absolute;right: 12px;bottom:8px;color: #86909c;font-size: 14px;">
             <span class="js-textarea-number">0</span>
@@ -33,6 +33,6 @@
 {% endblock %}
 
 {% block footer %}
-  <a href="javascript:;" data-dismiss="modal" style="margin-right: 24px; color: #333;">取消</a>
+  <a href="javascript:;" data-dismiss="modal" style="margin-right: 24px; color: #333;">{{ 'order.refund.cancel'|trans }}</a>
   <button class="btn btn-danger" disabled type="submit" data-toggle="form-submit" data-target="#refund-form" data-loading-text="{{ 'order.refund.quit_study_btn.submiting'|trans }}">{{ 'order.refund.quit_study_btn'|trans }}</button>
 {% endblock %}

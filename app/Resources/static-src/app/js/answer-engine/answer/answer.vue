@@ -22,9 +22,9 @@
       :type="type"
       :assessmentResponses="assessmentResponses"
       @getAnswerData="getAnswerData"
-      @saveAnswerData="saveAnswerData"
+      @saveAnswerData="postAnswerData"
       @exitAnswer="returnToCourseDetail"
-      @timeSaveAnswerData="timeSaveAnswerData"
+      @timeSaveAnswerData="postAnswerData"
       @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
       @deleteAttachment="deleteAttachment"
       @previewAttachment="previewAttachment"
@@ -213,6 +213,18 @@
             })
             return
           }
+
+          if (errorCode === 4004004) {
+            this.$error({
+              title: '试卷已删除',
+              okText: '确定',
+              centered: true,
+              onOk: () => {
+                parent.location.href = $('[name=return_url]').val();
+              },
+            });
+            return;
+          }
         }).done(function (resp) {
           that.emitter.emit('finish', {data: ''});
           location.replace($('[name=submit_goto_url]').val());
@@ -250,13 +262,7 @@
           })
         })
       },
-      timeSaveAnswerData(assessmentResponse) {
-        this.postAnswerData(assessmentResponse)
-      },
-      saveAnswerData(assessmentResponse){
-        this.postAnswerData(assessmentResponse)
-      },
-      postAnswerData(assessmentResponse) {
+      postAnswerData(assessmentResponse, okCallback) {
         if (this.isReachTime) return
 
         if (!this.ajaxTimeOut) {
@@ -284,11 +290,13 @@
 
           if (!result.assessment_id) {
             this.networkError(assessmentResponse);
+          } else {
+            okCallback && okCallback();
           }
         }).fail((result) => {
+          this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut);
           if (!result.responseJSON) {
             this.networkError(assessmentResponse);
-            this.ajaxTimeOut && clearTimeout(this.ajaxTimeOut)
 
             return
           }
@@ -323,6 +331,18 @@
             return
           }
 
+          if (errorCode === 4004004) {
+            this.$error({
+              title: '试卷已删除',
+              okText: '确定',
+              centered: true,
+              onOk: () => {
+                parent.location.href = $('[name=return_url]').val();
+              },
+            });
+            return;
+          }
+
           if (traceId) {
             Modal.error({
               ...commonConfig,
@@ -332,7 +352,6 @@
               okText: '退出答题',
               onOk: () => this.returnToCourseDetail()
             })
-            return
           }
 
         })

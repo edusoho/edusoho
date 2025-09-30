@@ -5,9 +5,9 @@ namespace ApiBundle\Api\Resource\SmsCenter;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\Common\BizSms;
 use Biz\Common\CommonException;
+use Biz\SmsDefence\Service\SmsDefenceService;
 use Biz\System\SettingException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -26,8 +26,15 @@ class SmsCenter extends AbstractResource
         if (!($request->getHttpRequest()->isXmlHttpRequest())) {
             $mobileSetting = $this->getSettingService()->get('mobile', []);
             $wap = $this->getSettingService()->get('wap', []);
-            if (0 == $mobileSetting['enabled'] && 'sail' != $wap['template']) {
-                return null;
+
+            $referer = $request->headers->get('referer', '');
+            if ($referer && (strpos($referer, 'MiniProgram') !== false)) {
+                $mp = $this->getSettingService()->get('wechat_app', []);
+                if (!$mp || empty($mp['enabled'])) {
+                    throw SettingException::MP_CLIENT_CLOSED();
+                }
+            } else if (0 == $mobileSetting['enabled'] && 'sail' != $wap['template']) {
+                throw SettingException::APP_CLIENT_CLOSED();
             }
         }
         if ($request->getHttpRequest()->isXmlHttpRequest()) {
@@ -35,7 +42,7 @@ class SmsCenter extends AbstractResource
                 'fingerprint' => $request->getHttpRequest()->get('encryptedPoint'),
                 'userAgent' => $request->getHttpRequest()->headers->get('user-agent'),
                 'ip' => $request->getHttpRequest()->getClientIp(),
-                'mobile' => $request->getHttpRequest()->get('mobile') ?: $request->get('to'),
+                'mobile' => $request->getHttpRequest()->get('mobile') ?: $request->getHttpRequest()->get('to'),
             ];
             if ($this->getSmsDefenceService()->validate($fields)) {
                 return new JsonResponse(['ACK' => 'ok', 'allowance' => 0]);

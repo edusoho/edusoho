@@ -291,7 +291,41 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             return [];
         }
 
-        return $this->getMaterialDao()->batchCreate($materials);
+        $this->getMaterialDao()->batchCreate($materials);
+        $this->dispatchEvent('course.material.batchCreate', new Event($materials));
+
+        return $materials;
+    }
+
+    public function batchUpdateMaterials($materials)
+    {
+        $this->getMaterialDao()->batchUpdate(array_keys($materials), $materials);
+    }
+
+    public function batchDeleteMaterials(array $materials)
+    {
+        if (empty($materials)) {
+            return;
+        }
+        $this->getMaterialDao()->batchDelete(['ids' => array_column($materials, 'id')]);
+        $this->dispatchEvent('course.material.batchDelete', new Event($materials));
+    }
+
+    public function searchMaterialCountGroupByCourseSetId($conditions, $start, $limit)
+    {
+        return $this->getMaterialDao()->countGroupByCourseSetId($conditions, $start, $limit);
+    }
+
+    public function countDistinctCourseSet($conditions)
+    {
+        return $this->getMaterialDao()->countDistinctCourseSet($conditions);
+    }
+
+    public function countCourseSetGroupByFileId($conditions)
+    {
+        $counts = $this->getMaterialDao()->countCourseSetGroupByFileId($conditions);
+
+        return array_column($counts, null, 'fileId');
     }
 
     private function _getMaterialFields($material)

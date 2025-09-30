@@ -1,0 +1,21 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['libs/vue.js', 'app/js/answer-engine/message/index.js']) %}
+
+{% block body %}
+  {% block header %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+  <style>
+    html, body {
+      -webkit-overflow-scrolling: touch;
+    }
+  </style>
+  <div style="min-height:1000px"></div>
+  <div id="app"></div>
+  <input type="hidden" id="errorMessage" value="{{ message }}">
+  <input type="hidden" id="returnUrl" value="{{ returnUrl }}">
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+{% endblock %}

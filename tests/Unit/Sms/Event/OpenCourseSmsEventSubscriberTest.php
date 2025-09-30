@@ -37,11 +37,12 @@ class OpenCourseSmsEventSubscriberTest extends BaseTestCase
                     'withParams' => array(array(
                         'name' => 'SmsSendOneDayJob_liveOpenLesson_123',
                         'expression' => $lessonStartTime - 24 * 60 * 60,
-                        'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
+                        'class' => 'Biz\Sms\Job\SmsSendJob',
                         'misfire_threshold' => 60 * 60,
                         'args' => array(
                             'targetType' => 'liveOpenLesson',
                             'targetId' => 123,
+                            'smsType' => 'sms_live_play_one_day',
                         ),
                     )),
                 ),
@@ -50,11 +51,12 @@ class OpenCourseSmsEventSubscriberTest extends BaseTestCase
                     'withParams' => array(array(
                         'name' => 'SmsSendOneHourJob_liveOpenLesson_123',
                         'expression' => $lessonStartTime - 60 * 60,
-                        'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
+                        'class' => 'Biz\Sms\Job\SmsSendJob',
                         'misfire_threshold' => 60 * 10,
                         'args' => array(
                             'targetType' => 'liveOpenLesson',
                             'targetId' => 123,
+                            'smsType' => 'sms_live_play_one_hour',
                         ),
                     )),
                 ),

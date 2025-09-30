@@ -22,7 +22,7 @@ class MallProductMember extends BaseResource
         $userId = $request->query->get('userId');
         $targetId = $request->query->get('targetId');
         $method = "checkIsExist{$targetType}";
-        if (!method_exists($this, $method)){
+        if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
         }
 
@@ -37,7 +37,7 @@ class MallProductMember extends BaseResource
         $params = $request->request->all();
         $userId = $params['userId'] ?? '';
         $targetId = $params['targetId'] ?? '';
-        $method = "join".$targetType;
+        $method = 'join'.$targetType;
         if (!method_exists($this, $method)) {
             throw CommonException::NOTFOUND_METHOD();
         }
@@ -111,7 +111,7 @@ class MallProductMember extends BaseResource
 
     private function checkIsExistQuestionBank($targetId, $userId)
     {
-        return !empty($this->getExerciseMemberService()->getExerciseMember($targetId, $userId));
+        return !empty($this->getExerciseMemberService()->findMembers($targetId, $userId));
     }
 
     /**

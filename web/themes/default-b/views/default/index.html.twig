@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% set bodyClass = 'homepage' %}
-{% do script(['libs/echo-js.js','defaultbtheme/js/default/index.js']) %}
+{% do script(['libs/echo-js.js','libs/jquery-cycle2.js','defaultbtheme/js/default/index.js']) %}
 
 {% set consultDisplay = true %}
 
@@ -9,7 +9,7 @@
 
   <div class="es-row-wrap">
 
-    <div class="homepage-feature homepage-feature-slides ">
+    <div class="homepage-feature homepage-feature-slides mbl">
       <div class="cycle-pager"></div>
       {{ block_show('default-b:home_top_banner') }}
     </div>
@@ -72,21 +72,23 @@
                             {% endif %}
                           </span>
                           <span class="class-student hidden-md"><i class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }} 人</span>
-                          <span class="class-price mr0">
-                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                              {% if classroom.price > 0 %}
-                                {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}
+                          {% if classroom.hidePrice != '1' %}
+                            <span class="class-price mr0">
+                              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                                {% if classroom.price > 0 %}
+                                  {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}
+                                {% else %}
+                                  {{ '免费'|trans }}
+                                {% endif %}
                               {% else %}
-                                {{ '免费'|trans }}
+                                {% if classroom.price > 0 %}
+                                  {{ '%classroomPrice%元'|trans({'%classroomPrice%': classroom.price}) }}
+                                {% else %}
+                                  {{ '免费'|trans }}
+                                {% endif %}
                               {% endif %}
-                            {% else %}
-                              {% if classroom.price > 0 %}
-                                {{ '%classroomPrice%元'|trans({'%classroomPrice%': classroom.price}) }}
-                              {% else %}
-                                {{ '免费'|trans }}
-                              {% endif %}
-                            {% endif %}
-                          </span>
+                            </span>
+                          {% endif %}
                         </div>
                         <div class="course-num">{{ '共%classroomCourseNum%课程'|trans({'%classroomCourseNum%': classroom.courseNum}) }}</div>
                       </div>

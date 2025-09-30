@@ -2,9 +2,12 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use AgentBundle\Biz\AgentConfig\Service\AgentConfigService;
+use AgentBundle\Biz\StudyPlan\Service\StudyPlanService;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -34,6 +37,17 @@ class MeCourseMember extends AbstractResource
                 $courseMember['expire']['status'] = $classroomMember['expire']['status'];
                 $courseMember['expire']['deadline'] = empty($classroomMember['expire']['deadline']) ? 0 : strtotime($classroomMember['expire']['deadline']);
             }
+        }
+        if ($courseMember) {
+            $goodsKey = empty($classroom) ? 'course_'.$course['id'] : 'classroom_'.$classroom['id'];
+            $signRecord = $this->getContractService()->getSignRecordByUserIdAndGoodsKey($this->getCurrentUser()->getId(), $goodsKey);
+            $courseMember['isContractSigned'] = empty($signRecord) ? 0 : 1;
+
+            $studyPlanConfig = $this->getAgentConfigService()->getAgentConfigByCourseId($courseId);
+            $courseMember['aiTeacherEnabled'] = !empty($studyPlanConfig['isActive']);
+            $courseMember['studyPlanGenerated'] = $this->getStudyPlanService()->isUserStudyPlanGenerated($this->getCurrentUser()->getId(), $courseId);
+            $courseMember['aiTeacherDomain'] = $studyPlanConfig['domainId'] ?? '';
+            $courseMember['courseSetTitle'] = $course['courseSetTitle'];
         }
 
         return $courseMember;
@@ -156,5 +170,29 @@ class MeCourseMember extends AbstractResource
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->service('Contract:ContractService');
+    }
+
+    /**
+     * @return AgentConfigService
+     */
+    private function getAgentConfigService()
+    {
+        return $this->biz->service('AgentBundle:AgentConfig:AgentConfigService');
+    }
+
+    /**
+     * @return StudyPlanService
+     */
+    private function getStudyPlanService()
+    {
+        return $this->service('AgentBundle:StudyPlan:StudyPlanService');
     }
 }

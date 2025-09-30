@@ -59,10 +59,10 @@
       </div>
 
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
-      {% include 'export/export-btn.html.twig' with
-      { 'exportFileName': 'order',
-        'targetFormId': 'order-search-form'}
-      %}
+      {% if canExport %}
+      <button class="btn-primary cd-btn cd-btn-info cd-btn-sm mhs order-js-export-btn" type="button" id="student-add-btn"><i class="es-icon es-icon-filedownload"></i> {{'form.btn.export'|trans}}</button>
+      {% include 'export/export-modal.html.twig' %}
+      {% endif %}
     </div>
   </form>
   {% include 'admin-v2/trade/order/order-table.html.twig' %}

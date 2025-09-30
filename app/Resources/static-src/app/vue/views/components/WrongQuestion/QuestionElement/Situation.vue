@@ -1,13 +1,13 @@
 <template>
   <div class="clearfix situation">
-    <div class="pull-left source">来源：{{ source }}</div>
+    <div class="pull-left source">{{ 'components.wrong_question.question_element.situation.source' | trans }}：{{ source }}</div>
 
     <div class="pull-right clearfix situation-right">
       <div class="pull-left frequency">
-        做错频次：
-        <span class="frequency-error">{{ question.wrong_times }}</span>次
+        {{ 'components.wrong_question.question_element.situation.mistakes_frequency' | trans }}：
+        <span class="frequency-error">{{ question.wrong_times }}</span>{{ 'components.wrong_question.question_element.situation.times' | trans }}
       </div>
-      <div class="pull-left time">错题时间：{{ $dateFormat(question.submit_time, 'YYYY-MM-DD HH:mm:ss') }}</div>
+      <div class="pull-left time">{{ 'components.wrong_question.question_element.situation.incorrect_questions' | trans }}：{{ $dateFormat(question.submit_time, 'YYYY-MM-DD HH:mm:ss') }}</div>
     </div>
   </div>
 </template>

@@ -8,8 +8,7 @@
   </head>
   <body>
     <script>
-      var url = "{{ path('testpaper_do', {'lessonId': activity.id, 'testId': testpaper.id}) }}";
-      window.location.href = url;
+      window.location.href = "{{ path('testpaper_do', {'lessonId': activity.id, 'testId': activity.ext.mediaId}) }}";
     </script>
   </body>
 </html>

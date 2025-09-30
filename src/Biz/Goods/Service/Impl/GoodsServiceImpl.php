@@ -395,6 +395,14 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         $goods['maxDisplayPrice'] = $maxDisplayPrice;
         $goods['minDisplayPriceObj'] = Money::convert($minDisplayPrice);
         $goods['maxDisplayPriceObj'] = Money::convert($maxDisplayPrice);
+        $goods['hidePrice'] = '1';
+        $goodsEntity = $this->getGoodsEntityFactory()->create($goods['type']);
+        $specs = $this->findGoodsSpecsByGoodsId($goods['id']);
+        foreach ($specs as $spec) {
+            if (empty($goodsEntity->isSpecHidePrice($goods, $spec))) {
+                $goods['hidePrice'] = '0';
+            }
+        }
 
         return $goods;
     }

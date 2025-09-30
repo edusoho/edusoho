@@ -32,7 +32,7 @@ class VideoImport extends Chooser {
     $btn.button('loading');
 
     $.get($btn.data('url'), { url: url }, function(video) {
-      var media = {
+      const media = {
         status: 'none',
         type: video.type,
         source: video.source,
@@ -45,13 +45,9 @@ class VideoImport extends Chooser {
     }, 'json').always(function() {
       $btn.button('reset');
     });
-
-    return;
   }
 
   _onChange(file) {
-    // this._close();
-    var value = file ? JSON.stringify(file) : '';
     this.emit('file.select', file);
     $('[data-role="placeholder"]').html(file.name);
   }

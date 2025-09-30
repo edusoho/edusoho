@@ -100,7 +100,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->searchCourseSets($conditions, 'latest', $offset, $num);
     }
 
-    public function tryManageCourseSet($id)
+    public function tryManageCourseSet($id, $permission = 'admin_v2_course_content_manage')
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -120,7 +120,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
         }
-        if (!$this->hasCourseSetManageRole($id)) {
+        if (!$this->hasCourseSetManageRole($id) && !$user->hasPermission($permission)) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 
@@ -659,6 +659,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->beginTransaction();
         try {
+            if ('closed' == $courseSet['status']) {
+                $this->dispatchEvent('exercise.canLearn', new Event(['bindType' => 'courseSet', 'bindId' => $courseSet['id']]));
+            }
             // 直播课程隐藏了教学计划，所以发布直播课程的时候自动发布教学计划
             if (empty($publishedCourses) && 'live' === $courseSet['type']) {
                 //对于直播课程，有且仅有一个教学计划
@@ -697,7 +700,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function unpublishedCourseSet($id)
     {
-        $courseSet = $this->tryManageCourseSet($id);
+        $courseSet = $this->tryManageCourseSet($id, 'admin_v2_course_set_unpublished');
         if ('published' !== $courseSet['status']) {
             $this->createNewException(CourseSetException::UNPUBLISHED_COURSESET());
         }
@@ -739,6 +742,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed', 'canLearn' => '0']);
             $this->getCourseSetGoodsMediator()->onClose($courseSet);
             $this->getCourseService()->banLearningByCourseSetIds([$courseSet['id']]);
+            $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'courseSet', 'bindId' => $courseSet['id']]));
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
@@ -1247,7 +1251,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
      */
     public function addCourseSet($courseSet)
     {
-        if (!$this->hasCourseSetManageRole()) {
+        if (!$this->hasCourseSetManageRole() && !$this->getCurrentUser()->hasPermission('admin_v2_course_add')) {
             $this->createNewException(CourseSetException::FORBIDDEN_MANAGE());
         }
 

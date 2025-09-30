@@ -74,6 +74,7 @@ class AnswerRecordDaoImpl extends AdvancedDaoImpl implements AnswerRecordDao
                 'begin_time <= :beginTime_ELT',
                 'answer_scene_id IN (:answer_scene_ids)',
                 'assessment_id = :assessment_id',
+                'assessment_id IN (:assessment_ids)',
                 'end_time <= :endTime_LE',
             ],
         ];

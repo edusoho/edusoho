@@ -111,7 +111,7 @@ class Editor {
         }
 
         resolve(msg.data);
-      });  
+      });
     });
   }
 
@@ -126,8 +126,8 @@ class Editor {
         }
 
         resolve(msg.data);
-      });      
-    }); 
+      });
+    });
   }
 
   async _onSave() {

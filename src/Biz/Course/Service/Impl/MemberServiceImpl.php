@@ -4,6 +4,7 @@ namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
+use Biz\Activity\Service\ActivityService;
 use Biz\Assistant\Service\AssistantStudentService;
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
@@ -19,6 +20,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
 use Biz\Goods\Service\GoodsService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\MultiClass\MultiClassException;
 use Biz\MultiClass\Service\MultiClassGroupService;
 use Biz\MultiClass\Service\MultiClassRecordService;
@@ -193,6 +195,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         $this->dispatchEvent('course.quit', $course, ['userId' => $userId, 'member' => $member]);
+        $this->dispatchEvent('exercise.bind.remove.student', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
 
         if ($this->getCurrentUser()->isAdmin()) {
             $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -358,7 +361,15 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMembers($conditions, $updateFields)
     {
-        return $this->getMemberDao()->updateMembers($conditions, $updateFields);
+        try {
+            $this->beginTransaction();
+            $this->getMemberDao()->updateMembers($conditions, $updateFields);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $conditions['courseId'], 'bindType' => 'course', 'all' => true]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function isMemberNonExpired($course, $member)
@@ -919,6 +930,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $course,
             ['userId' => $member['userId'], 'member' => $member]
         );
+        $this->dispatchEvent('exercise.bind.add.student', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
 
         return $member;
     }
@@ -1029,7 +1041,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $this->getMemberDao()->batchCreate($newMembers);
-        $newMembers = $this->searchMembers(['courseId' => $course['id']], [], 0, PHP_INT_MAX);
+        $newMembers = $this->searchMembers(['courseId' => $course['id'], 'role' => 'student'], [], 0, PHP_INT_MAX);
+        $this->batchCreateJoinRecords($course, $newMembers);
 
         $this->getCourseService()->updateCourseStatistics($course['id'], ['studentNum']);
         $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], ['studentNum']);
@@ -1101,6 +1114,8 @@ class MemberServiceImpl extends BaseService implements MemberService
                 $infoData
             );
         }
+
+        $this->dispatchEvent('exercise.bind.remove.student', new Event(['userIds' => [$member['userId']], 'bindId' => $courseId, 'bindType' => 'course']));
 
         $this->dispatchEvent(
             'course.quit',
@@ -1436,9 +1451,23 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function changeMembersDeadlineByCourseId($courseId, $day, $waveType)
     {
+        try {
+            $this->beginTransaction();
+            $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
+            $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
+            $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day', 'all' => true]));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType)
+    {
         $updateDate = 'plus' == $waveType ? '+'.$day * 24 * 60 * 60 : '-'.$day * 24 * 60 * 60;
 
-        return $this->getMemberDao()->changeMembersDeadlineByCourseId($courseId, $updateDate);
+        return $this->getMemberDao()->changeMembersDeadlineByClassroomId($classroomId, $updateDate);
     }
 
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus')
@@ -1459,6 +1488,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 );
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['waveType' => $waveType, 'bindId' => $courseId, 'bindType' => 'course', 'updateType' => 'day', 'userIds' => $userIds]));
     }
 
     public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus')
@@ -1500,6 +1530,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 );
             }
         }
+        $this->dispatchEvent('exercise.member.deadline.update', new Event(['bindId' => $courseId, 'bindType' => 'course', 'userIds' => $userIds]));
     }
 
     public function checkDeadlineForUpdateDeadline($date)
@@ -1672,6 +1703,32 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $record;
     }
 
+    private function batchCreateJoinRecords($course, $members)
+    {
+        $memberJoinRecords = [];
+        foreach ($members as $member) {
+            $memberJoinRecords[] = [
+                'user_id' => $member['userId'],
+                'member_id' => $member['id'],
+                'member_type' => $member['role'],
+                'target_id' => $member['courseId'],
+                'target_type' => 'course',
+                'operate_type' => 'join',
+                'operate_time' => time(),
+                'operator_id' => $this->getCurrentUser()->getId(),
+                'data' => ['member' => $member],
+                'order_id' => $member['orderId'],
+                'title' => $course['title'],
+                'course_set_id' => $course['courseSetId'],
+                'parent_id' => $course['parentId'],
+                'join_course_set' => 1,
+                'reason' => 'course.member.operation.reason.join_classroom',
+                'reason_type' => 'classroom_join',
+            ];
+        }
+        $this->getMemberOperationService()->createRecords($memberJoinRecords);
+    }
+
     private function addMember($member, $reason = [])
     {
         try {
@@ -1772,14 +1829,22 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId)
+    public function getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($courseId, $userId, $activityId)
     {
         $user = $this->getUserService()->getUser($userId);
         if ($this->isCourseTeacher($courseId, $userId) || $this->isCourseAssistant($courseId, $userId) || in_array('ROLE_EDUCATIONAL_ADMIN', $user['roles'])) {
-            $course = $this->getCourseService()->getCourse($courseId);
-            $teacherId = array_shift($course['teacherIds']);
+            $activity = $this->getActivityService()->getActivity($activityId, true);
+            if (!empty($activity['ext']['teacherId']) && $activity['ext']['teacherId'] == $userId) {
+                return 'teacher';
+            }
+            $teacher = $this->searchMembers(
+                ['courseId' => $courseId, 'role' => 'teacher'],
+                ['seq' => 'ASC'],
+                0,
+                1
+            );
 
-            if ($teacherId == $userId) {
+            if (empty($activity['ext']['teacherId']) && $teacher[0]['userId'] == $userId) {
                 return 'teacher';
             } else {
                 return 'speaker';
@@ -1973,6 +2038,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->biz->service('Taxonomy:CategoryService');
     }
 
+    /**
+     * @return MemberOperationService
+     */
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
@@ -2036,5 +2104,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getMultiClassRecordService()
     {
         return $this->createService('MultiClass:MultiClassRecordService');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }

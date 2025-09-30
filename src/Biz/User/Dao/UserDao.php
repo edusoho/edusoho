@@ -40,6 +40,8 @@ interface UserDao extends GeneralDaoInterface
 
     public function waveCounterById($id, $name, $number);
 
+    public function waveCounterByIds($ids, $name, $number);
+
     public function deleteCounterById($id, $name);
 
     public function analysisRegisterDataByTime($startTime, $endTime);

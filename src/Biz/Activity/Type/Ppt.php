@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\PptActivityDao;
 use Biz\Activity\Service\ActivityService;
+use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Common\CommonException;
 use Biz\File\Service\UploadFileService;
 
@@ -96,6 +97,14 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->update($targetId, $updateFields);
     }
 
+    public function updateByIds($ids, $fields)
+    {
+        if (empty($ids)) {
+            return;
+        }
+        $this->getPptActivityDao()->update(['ids' => $ids], $fields);
+    }
+
     public function delete($targetId)
     {
         $ppt = $this->getPptActivityDao()->get($targetId);
@@ -117,7 +126,21 @@ class Ppt extends Activity
 
     public function find($targetIds, $showCloud = 1)
     {
-        return $this->getPptActivityDao()->findByIds($targetIds);
+        $pptActivities = $this->getPptActivityDao()->findByIds($targetIds);
+        try {
+            $files = $this->getUploadFileService()->findFilesByIds(array_column($pptActivities, 'mediaId'), $showCloud);
+        } catch (CloudAPIIOException $e) {
+            $files = [];
+        }
+        if (empty($files)) {
+            return $pptActivities;
+        }
+        $files = array_column($files, null, 'id');
+        foreach ($pptActivities as &$pptActivity) {
+            $pptActivity['file'] = $files[$pptActivity['mediaId']] ?? [];
+        }
+
+        return $pptActivities;
     }
 
     public function materialSupported()

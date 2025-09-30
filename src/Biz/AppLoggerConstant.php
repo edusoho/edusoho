@@ -209,6 +209,13 @@ class AppLoggerConstant implements LoggerConstantInterface
     const ITEM_BANK_EXERCISE = 'item_bank_exercise';
 
     /**
+     *  [$question_tag 题目标签]
+     *
+     * $var string
+     */
+    const QUESTION_TAG = 'question_tag';
+
+    /**
      *  [$certificate 证书]
      *
      * $var string
@@ -545,6 +552,12 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'auto_issue',
                 'create_template',
             ],
+            self::QUESTION_TAG => [
+                'add_tag_group',
+                'delete_tag_group',
+                'add_tag',
+                'delete_tag',
+            ],
         ];
     }
 
@@ -576,6 +589,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::QUESTION_BANK,
             self::DESTROY_ACCOUNT_RECORD,
             self::ITEM_BANK_EXERCISE,
+            self::QUESTION_TAG,
 //            self::COIN,
 //            self::COUPON,
 //            self::DISCOUNT,

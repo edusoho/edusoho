@@ -10,6 +10,10 @@ interface AssessmentService
 
     const CLOSED = 'closed';
 
+    const FAILURE = 'failure';
+
+    const GENERATING = 'generating';
+
     public function getAssessment($id);
 
     public function findAssessmentsByIds($assessmentIds);
@@ -26,7 +30,15 @@ interface AssessmentService
 
     public function updateBasicAssessment($assessmentId, $assessment);
 
+    public function updateBasicAssessmentByParentId($parentId, $assessment);
+
     public function deleteAssessment($id);
+
+    public function deleteAssessmentByIds($assessmentIds);
+
+    public function deleteAssessmentByParentId($parentId);
+
+    public function deleteAssessmentByParentIds($parentIds);
 
     public function drawItems($range, $sections);
 
@@ -53,4 +65,6 @@ interface AssessmentService
     public function getAssessmentSnapshotBySnapshotAssessmentId($snapshotAssessmentId);
 
     public function isEmptyAssessment($assessmentId);
+    
+    public function findAssessmentTypes();
 }

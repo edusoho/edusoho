@@ -137,6 +137,7 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
             'orderbys' => ['endTime', 'startTime', 'createdTime'],
             'conditions' => [
                 'id IN (:ids)',
+                'id NOT IN (:excludeIds)',
                 'fromCourseId = :fromCourseId',
                 'mediaType = :mediaType',
                 'fromCourseId IN (:courseIds)',
@@ -187,5 +188,17 @@ class ActivityDaoImpl extends AdvancedDaoImpl implements ActivityDao
     public function getByMediaIdAndMediaType($mediaId, $mediaType)
     {
         return $this->getByFields(['mediaId' => $mediaId, 'mediaType' => $mediaType]);
+    }
+
+    public function findVideoActivityLevelsByCourseId($courseId)
+    {
+        $sql = "SELECT uf.convertMaxLevel FROM {$this->table} a, `activity_video` av, `upload_files` uf WHERE a.fromCourseId = ? AND a.mediaType = 'video' AND a.mediaId = av.id AND av.mediaId = uf.id;";
+
+        return $this->db()->fetchAll($sql, [$courseId]);
+    }
+
+    public function findByCopyId($copyId)
+    {
+        return $this->findByFields(['copyId' => $copyId]);
     }
 }

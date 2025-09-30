@@ -4,9 +4,10 @@
 {% set side_nav = 'homework-check' %}
 
 {% do script(['libs/vue.js', 'app/js/course-manage/testpaper-check/index.js']) %}
+{% do css(['app/css/main-ant.css']) %}
 
 {% block main %}
-  <div class="panel panel-default panel-col">
+  <div class="panel panel-default panel-col" style="border: 0">
     <div class="classroom-testpaper">
       {{'classroom.homework_check'|trans}}
       <div class="testpaper-check-title">

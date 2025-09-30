@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
@@ -107,6 +108,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
         $this->getChapterDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
         $this->getTaskDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
         $this->getActivityDao()->update(['fromCourseId' => $courseSet['defaultCourseId'], 'excludeMediaType' => 'live'], ['copyId' => 0]);
+        $this->getMaterialDao()->update(['courseSetId' => $courseSet['id']], ['copyId' => 0]);
     }
 
     /**
@@ -173,5 +175,13 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getActivityDao()
     {
         return $this->getBiz()->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return CourseMaterialDao
+     */
+    protected function getMaterialDao()
+    {
+        return $this->getBiz()->dao('Course:CourseMaterialDao');
     }
 }

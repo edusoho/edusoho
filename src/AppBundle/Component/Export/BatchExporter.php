@@ -182,12 +182,13 @@ class BatchExporter
         }
         $filePath = $this->exportFileRootPath() . $fileName;
         $csvPath = $this->exportFileRootPath() . $csvName;
-        $contentRows = $this->getContentRows($filePath);
         $fp = fopen($csvPath, 'w');
         fprintf($fp, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-        foreach ($contentRows as $fields) {
-            fputcsv($fp, $fields);
+        foreach (unserialize(file_get_contents($filePath)) as $item) {
+            foreach (unserialize(file_get_contents($item)) as $fields) {
+                fputcsv($fp, $fields);
+            }
         }
 
         fclose($fp);
@@ -207,17 +208,6 @@ class BatchExporter
         FileToolkit::remove($filePath);
     }
 
-    protected function getContentRows($filePath)
-    {
-        $contentRows = [];
-        $data = unserialize(file_get_contents($filePath));
-        foreach ($data as $item) {
-            $contentRows[] = unserialize(file_get_contents($item));
-        }
-
-        return $this->handleContent($contentRows);
-    }
-
     private function exportFileRootPath()
     {
         $biz = $this->getBiz();
@@ -228,18 +218,6 @@ class BatchExporter
         }
 
         return $rootPath;
-    }
-
-    private function handleContent($content)
-    {
-        $data = [];
-        foreach ($content as $item) {
-            foreach ($item as $values) {
-                $data[] = $values;
-            }
-        }
-
-        return $data;
     }
 
     private function generateCsvName($name)

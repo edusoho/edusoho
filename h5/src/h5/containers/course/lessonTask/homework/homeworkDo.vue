@@ -1,0 +1,503 @@
+<template>
+  <div class="paper-swiper">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
+    <e-loading v-if="isLoading" />
+
+    <!-- 做题 -->
+    <item-bank
+      v-if="info.length > 0"
+      :current.sync="cardSeq"
+      :info="info"
+      :answer.sync="answer"
+      :show-score="false"
+      :slide-index.sync="slideIndex"
+      :all="info.length"
+      :ai-agent-record-id="recordId"
+    />
+
+    <!-- 引导页 -->
+    <guide-page />
+
+    <!-- 底部 -->
+    <ibs-footer
+      :mode="'do'"
+      :show-save-process-btn="false"
+      @showcard="showCard"
+      @submitPaper="submitpaper"
+    />
+
+    <!-- 答题卡 -->
+    <van-popup v-model="cardShow" position="bottom">
+      <div v-if="info.length > 0" class="card">
+        <div class="card-title">
+          <div>
+            <span class="card-finish">{{ $t('courseLearning.completed') }}</span>
+            <span class="card-nofinish">{{ $t('courseLearning.notCompleted') }}</span>
+          </div>
+          <i class="iconfont icon-no" @click="cardShow = false" />
+        </div>
+        <div class="card-list">
+          <div class="card-homework-item">
+            <div class="card-item-list">
+              <div
+                v-for="cards in info"
+                :key="cards.id"
+                :class="[
+                  'list-cicle',
+                  formatStatus(cards.type, cards.id) == 1 ? 'cicle-active' : '',
+                ]"
+                @click="slideToNumber(cards.seq)"
+              >
+                {{ cards.seq }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </van-popup>
+  </div>
+</template>
+
+<script>
+import Api from '@/api';
+import * as types from '@/store/mutation-types';
+import { mapState, mapMutations, mapActions } from 'vuex';
+import { Toast, Dialog } from 'vant';
+import guidePage from '../component/guide-page';
+import itemBank from '../component/itemBank';
+import homeworkMixin from '@/mixins/lessonTask/homework.js';
+import testMixin from '@/mixins/lessonTask/index.js';
+import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+import IbsFooter from '@/src/components/common/footer.vue';
+
+// 由于会重定向到说明页或者结果页，为了避免跳转后不能返回，添加backUrl机制
+let backUrl = '';
+export default {
+  name: 'HomeworkDo',
+  components: {
+    IbsFooter,
+    itemBank,
+    guidePage,
+    OutFocusMask,
+  },
+  mixins: [homeworkMixin, testMixin, report],
+  data() {
+    return {
+      info: [], // 作业信息
+      answer: {}, // 答案
+      lastAnswer: null,
+      cardSeq: 0, // 点击题卡要滑动的指定位置的索引
+      homework: null,
+      cardShow: false, // 答题卡显示标记
+      localanswerName: null,
+      localtimeName: null,
+      lastUsedTime: null,
+      usedTime: null, // 使用时间，本地实时计时
+      isHandHomework: false, // 是否已经交完作业
+      slideIndex: 0, // 题库组件当前所在的划片位置
+      forceLeave: false,
+      interval: null,
+      recordId: null,
+    };
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+      user: state => state.user,
+    }),
+  },
+  mounted() {
+    this.initReport();
+    this.getData();
+    this.saveAnswerInterval();
+  },
+  beforeRouteEnter(to, from, next) {
+    // 通过链接进来
+    if (from.fullPath === '/') {
+      backUrl = '/';
+    } else {
+      backUrl = '';
+    }
+    next();
+  },
+  beforeRouteLeave(to, from, next) {
+    this.interval && clearInterval(this.interval)
+    // 可捕捉离开提醒
+    if (
+      this.info.length == 0 ||
+      this.isHandHomework ||
+      this.forceLeave ||
+      this.homework.status != 'doing'
+    ) {
+      next();
+    } else {
+      this.submitpaper()
+        .then(() => {
+          next();
+        })
+        .catch(() => {
+          next(false);
+        });
+    }
+  },
+  beforeDestroy() {
+    // 清除定时器
+    this.clearTime();
+    Dialog.close();
+  },
+  methods: {
+    ...mapMutations({
+      setNavbarTitle: types.SET_NAVBAR_TITLE,
+    }),
+    ...mapActions('course', ['handHomeworkdo', 'saveAnswerdo']),
+    showCard() {
+      this.cardShow = true;
+    },
+    // 初始化上报数据
+    initReport() {
+      this.initReportData(
+        this.$route.query.courseId,
+        this.$route.query.targetId,
+        'homework',
+      );
+    },
+    // 请求接口获取数据
+    getData() {
+      const homeworkId = this.$route.query.homeworkId;
+      const targetId = this.$route.query.targetId;
+      Api.getHomeworkInfo({
+        query: {
+          homeworkId,
+        },
+        data: {
+          targetId,
+          targetType: 'task',
+        },
+      })
+        .then(res => {
+          this.recordId = res.id;
+          this.afterGetData(res);
+        })
+        .catch(err => {
+          const toast = Toast.fail(err.message);
+          /**
+           * 4036706:试卷正在批阅中
+           */
+          if (err.code == '4036706') {
+            setTimeout(() => {
+              this.toIntro();
+              toast.clear();
+            }, 2000);
+          }
+        });
+    },
+    // 获取到数据后进行操作
+    afterGetData(res) {
+      this.setNavbarTitle(res.paperName);
+
+      this.homework = res;
+
+      // 判断是否做题状态
+      if (this.isDoing()) {
+        return;
+      }
+
+      this.getLocalData();
+
+      this.formatData(res);
+
+      this.interruption();
+
+      this.saveTime();
+    },
+    // 判断是否做题状态
+    isDoing() {
+      if (this.homework.status != 'doing') {
+        this.showResult();
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // 异常中断
+    interruption() {
+      if (!this.$route.params.KeepDoing) {
+        // 异常中断或者刷新页面
+        this.canDoing(this.homework, this.user.id)
+          .then(() => {})
+          .catch(({ answer }) => {
+            this.submitHomework(answer);
+          });
+      }
+    },
+    // 遍历数据类型去做对应处理
+    formatData(res) {
+      const paper = res.items;
+      paper.forEach(item => {
+        if (item.type != 'material') {
+          const detail = this.sixType(item.type, item, this.lastAnswer);
+          this.$set(this.answer, item.id, detail.answer);
+          this.info.push(detail.item);
+        }
+        if (item.type == 'material') {
+          const title = Object.assign({}, item, { subs: '' });
+          item.subs.forEach((sub, index) => {
+            sub.parentTitle = title; // 材料题题干
+            sub.parentType = item.type; // 材料题题型
+            sub.materialIndex = index + 1; // 材料题子题的索引值，在页面要显示
+
+            const detail = this.sixType(sub.type, sub, this.lastAnswer);
+            this.$set(this.answer, sub.id, detail.answer);
+            this.info.push(detail.item);
+          });
+        }
+      });
+    },
+    // 答题卡状态判断,finish 0是未完成  1是已完成
+    formatStatus(type, id) {
+      let finish = 0;
+      // 单选题、多选题、不定项选择题、判断题
+      if (
+        (type == 'single_choice' ||
+          type == 'choice' ||
+          type == 'uncertain_choice' ||
+          type == 'determine') &&
+        this.answer[id].length > 0
+      ) {
+        finish = 1;
+        return finish;
+      }
+      // 问答题
+      if (type == 'essay' && this.answer[id][0] != '') {
+        finish = 1;
+        return finish;
+      }
+      // 填空题，规则：只要填了一个就算完成
+      if (type == 'fill') {
+        finish = Number(
+          this.answer[id].some(item => {
+            return item != '';
+          }),
+        );
+        return finish;
+      }
+      return finish;
+    },
+    // 答题卡定位
+    slideToNumber(num) {
+      const index = Number(num);
+      this.cardSeq = index;
+      // 关闭弹出层
+      this.cardShow = false;
+    },
+    // 获取本地数据
+    getLocalData() {
+      this.localanswerName = `homework-${this.user.id}-${this.homework.id}`;
+      this.localuseTime = `homework-${this.user.id}-${this.homework.id}-usedTime`;
+      this.lastAnswer = JSON.parse(localStorage.getItem(this.localanswerName));
+    },
+    // 实时存储时间
+    saveTime() {
+      let time = localStorage.getItem(this.localuseTime) || 0;
+      this.usedTime = setInterval(() => {
+        localStorage.setItem(this.localuseTime, ++time);
+      }, 1000);
+    },
+    clearTime() {
+      clearInterval(this.usedTime);
+      this.usedTime = null;
+    },
+    // 提交作业
+    submitpaper() {
+      let index = 0;
+      let message = '题目已经做完，确认提交吗?';
+      const answer = JSON.parse(JSON.stringify(this.answer));
+      Object.keys(answer).forEach(key => {
+        // 去除空数据
+        answer[key] = answer[key].filter(t => t !== '');
+        // 统计未做个数
+        if (answer[key].length === 0) {
+          index++;
+        }
+      });
+
+      if (index > 0) {
+        message = `还有${index}题未做，确认提交吗？`;
+      }
+
+      this.saveAnswerInterval();
+
+      return new Promise((resolve, reject) => {
+        Dialog.confirm({
+          title: '提交',
+          cancelButtonText: '立即提交',
+          confirmButtonText: '检查一下',
+          message: message,
+        })
+          .then(res => {
+            // 显示答题卡
+            this.cardShow = true;
+            reject(res);
+          })
+          .catch(() => {
+            this.clearTime();
+            // 提交作业
+            this.submitHomework(answer)
+              .then(res => {
+                resolve();
+              })
+              .catch(err => {
+                reject(err);
+              });
+          });
+      });
+    },
+    // dispatch给store，提交答卷
+    submitHomework(answer) {
+      // 如果已经遍历过answer就不要再次遍历，直接用
+      if (!answer) {
+        answer = JSON.parse(JSON.stringify(this.answer));
+        Object.keys(answer).forEach(key => {
+          answer[key] = answer[key].filter(t => t !== '');
+        });
+      }
+
+      const datas = {
+        answer,
+        homeworkId: this.$route.query.homeworkId,
+        userId: this.user.id,
+        homeworkResultId: this.homework.id,
+        courseId: this.$route.query.courseId
+      };
+
+      return new Promise((resolve, reject) => {
+        this.handHomeworkdo(datas)
+          .then(res => {
+            this.isHandHomework = true;
+            resolve();
+            // 上报完成作业课时
+            this.reprtData({ eventName: 'finish' });
+            // 跳转到结果页
+            this.showResult();
+          })
+          .catch(err => {
+            /**
+             * 4036705：已经提交过此次作业，直接去结果页
+             */
+            if (err.code == '4036705') {
+             const toast = Toast.fail(err.message);
+              setTimeout(() => {
+                this.isHandHomework = true;
+                toast.clear();
+                resolve();
+                this.showResult();
+              }, 2000);
+              return
+            }
+
+            if (err.code == '50095204') {
+              // 试卷已提交 -- 退出答题
+              Dialog.confirm({
+                title: '你已提交过答题，当前页面无法重复提交',
+                showCancelButton: false,
+                confirmButtonText: '退出答题'
+              }).then(() => this.exitPage())
+              return
+            }
+
+            Toast.fail(err.message);
+            reject(err);
+          });
+      });
+    },
+    saveAnswerInterval() {
+      clearInterval(this.interval);
+      this.interval = setInterval(() => {
+        this.saveAnswerAjax();
+      }, 30 * 1000)
+    },
+    saveAnswerAjax() {
+      this.saveAnswerdo({
+        admission_ticket: this.homework.admission_ticket,
+        answer: JSON.parse(JSON.stringify(this.answer)),
+        resultId: this.homework.id,
+        courseId: this.$route.query.courseId
+      }).catch((error) => {
+        const { code: errorCode, message, traceId } = error;
+
+        if (errorCode == '50095204') {
+          // 试卷已提交 -- 退出答题
+          Dialog.confirm({
+            title: '你已提交过答题，当前页面无法重复提交',
+            showCancelButton: false,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (errorCode == '50095209') {
+          // 不能同时多端答题
+          Dialog.confirm({
+            title: '有新答题页面，请在新页面中继续答题',
+            showCancelButton: false,
+            confirmButtonText: '确定'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        if (traceId) {
+          Dialog.confirm({
+            title: '答题保存失败，请保存截图后，联系技术支持处理',
+            message: `【${message}】【${traceId}】`,
+            confirmButtonText: '退出答题'
+          }).then(() => this.exitPage())
+          return
+        }
+
+        Toast.fail(err.message);
+
+        Dialog.confirm({
+          title: '网络连接不可用，自动保存失败',
+          showCancelButton: false,
+          confirmButtonText: '重新保存'
+        }).then(() => this.saveAnswerAjax())
+      })
+    },
+    exitPage() {
+      this.forceLeave = true
+      this.$router.push(`/course/${this.homework.courseId}`)
+    },
+    // 跳转到结果页
+    showResult() {
+      this.$router.replace({
+        name: 'homeworkResult',
+        query: {
+          homeworkId: this.$route.query.homeworkId,
+          homeworkResultId: this.homework.id,
+          taskId: this.$route.query.targetId,
+          backUrl: backUrl,
+          courseId: this.$route.query.courseId,
+        },
+      });
+    },
+    // 跳转到说明页
+    toIntro() {
+      this.$router.replace({
+        name: 'homeworkIntro',
+        query: {
+          courseId: this.$route.query.courseId,
+          taskId: this.$route.query.targetId,
+          backUrl: backUrl,
+        },
+      });
+    },
+  },
+};
+</script>
+

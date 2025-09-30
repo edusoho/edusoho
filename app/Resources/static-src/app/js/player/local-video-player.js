@@ -20,6 +20,7 @@ class LocalVideoPlayer extends Emitter {
     var player = videojs(this.options.element, {
       techOrder: techOrder,
       loop: false,
+      autoplay: that.options.autoplay,
       flash: {
         swf: videoSwf
       },

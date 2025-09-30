@@ -121,3 +121,15 @@ if ($(".js-sts-login-link").length) {
     element: $(".js-login-main")
   });
 }
+
+$('.open-eye').on('click', function () {
+  $('#login_password').attr('type', 'password');
+  $('.open-eye').hide();
+  $('.close-eye').show();
+})
+
+$('.close-eye').on('click', function () {
+  $('#login_password').attr('type', 'text');
+  $('.close-eye').hide();
+  $('.open-eye').show();
+})

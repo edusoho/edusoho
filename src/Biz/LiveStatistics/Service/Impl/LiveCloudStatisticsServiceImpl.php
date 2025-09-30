@@ -20,7 +20,7 @@ use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class LiveCloudStatisticsServiceImpl extends BaseService implements LiveCloudStatisticsService
 {
-    const LIMIT = 300;
+    const LIMIT = 1000;
 
     /**
      * @param $conditions

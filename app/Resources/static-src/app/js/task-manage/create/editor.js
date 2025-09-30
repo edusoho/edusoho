@@ -2,7 +2,6 @@ import loadAnimation from 'common/load-animation';
 import 'jquery-sortable';
 import notify from 'common/notify';
 import Intro from 'app/js/courseset-manage/intro';
-import { sortablelist } from 'app/js/course-manage/help';
 
 
 class Editor {

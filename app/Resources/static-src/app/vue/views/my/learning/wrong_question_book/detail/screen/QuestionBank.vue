@@ -5,7 +5,7 @@
         show-search
         option-filter-prop="children"
         :filter-option="filterOption"
-        notFoundContent="暂无数据"
+        :notFoundContent="'my.learning.wrong_question_book.detail.screen.question_bank.empty'|trans"
         style="width: 120px;"
         v-model="form.exerciseMediaType"
         @change="(value) => handleChange(value, 'exerciseMediaType')"
@@ -25,11 +25,11 @@
         show-search
         option-filter-prop="children"
         :filter-option="filterOption"
-        notFoundContent="暂无数据"
+        :notFoundContent="'my.learning.wrong_question_book.detail.screen.question_bank.empty'|trans"
         style="width: 120px;"
         v-model="form.testpaperId"
       >
-        <a-select-option value="default">全部试卷</a-select-option>
+        <a-select-option value="default">{{ 'my.learning.wrong_question_book.detail.screen.question_bank.all_papers'|trans }}</a-select-option>
 
         <a-select-option
           v-for="testpaper in conditions.testpapers"
@@ -43,12 +43,12 @@
 
     <a-form-model-item v-if="form.exerciseMediaType === 'chapter'">
       <a-tree-select
-        notFoundContent="暂无数据"
+        :notFoundContent="'my.learning.wrong_question_book.detail.screen.question_bank.empty'|trans"
         v-model="form.chapterId"
         style="min-width: 120px"
         :dropdown-style="{ maxHeight: '400px',  overflow: 'auto' }"
         :tree-data="conditions.chapter"
-        placeholder="全部章节"
+        :placeholder="'my.learning.wrong_question_book.detail.screen.question_bank.all_chapters'|trans"
         :replace-fields="{title:'name', key:'id', value: 'id', children: 'children' }"
         tree-default-expand-all
       >
@@ -61,19 +61,19 @@
         v-model="form.wrongTimesSort"
       >
         <a-select-option value="default">
-          做错频次
+          {{ 'my.learning.wrong_question_book.detail.screen.question_bank.select_option.mistakes_frequency'|trans }}
         </a-select-option>
         <a-select-option value="DESC">
-          由高至低
+          {{ 'my.learning.wrong_question_book.detail.screen.question_bank.select_option.desc'|trans }}
         </a-select-option>
         <a-select-option value="ASC">
-          由低至高
+          {{ 'my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc'|trans }}
         </a-select-option>
       </a-select>
     </a-form-model-item>
 
     <a-form-model-item>
-      <a-button type="primary" @click="handleSubmit">搜索</a-button>
+      <a-button type="primary" @click="handleSubmit">{{ 'my.learning.wrong_question_book.detail.screen.question_bank.search'|trans }}</a-button>
     </a-form-model-item>
   </a-form-model>
 </template>
@@ -83,8 +83,8 @@ import _ from 'lodash';
 import { WrongBookCondition } from 'common/vue/service';
 
 const sources = {
-  chapter: '章节练习',
-  testpaper: '试卷练习',
+  chapter: Translator.trans('my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises'),
+  testpaper: Translator.trans('my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice'),
 }
 
 export default {
@@ -163,7 +163,7 @@ export default {
 
       try {
         const result = await WrongBookCondition.get(params);
-        result.chapter = [{"id": "default", "name": "全部章节"}].concat(result.chapter);
+        result.chapter = [{"id": "default", "name": Translator.trans('my.learning.wrong_question_book.detail.screen.question_bank.all_chapters')}].concat(result.chapter);
         result.testpapers = result.testpaper;
         this.$emit('set-title', result.title);
         this.conditions = result;
@@ -172,7 +172,7 @@ export default {
         }
       } catch (error) {
         let result = {}
-        result.chapter = [{"id": "default", "name": "全部章节"}]
+        result.chapter = [{"id": "default", "name": Translator.trans('my.learning.wrong_question_book.detail.screen.question_bank.all_chapters')}]
         this.conditions = result;
       }
     },

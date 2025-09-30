@@ -3,7 +3,11 @@
 namespace Biz\User\Register\Impl;
 
 use Biz\System\SettingException;
+use Biz\User\Support\PasswordValidator;
 
+/**
+ * 第三方账号绑定注册类
+ */
 class BinderRegistDecoderImpl extends RegistDecoder
 {
     protected function validateBeforeSave($registration)
@@ -23,6 +27,7 @@ class BinderRegistDecoderImpl extends RegistDecoder
         if (!empty($registration['password'])) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
+            $user['passwordUpgraded'] = PasswordValidator::getLevel($registration['password']);
         } else {
             $user['salt'] = '';
             $user['password'] = '';

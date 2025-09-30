@@ -21,14 +21,7 @@
         <i class="es-icon es-icon-search"></i>
     </span>
   <input type="hidden" name="classroomId" value="{{ classroom.id }}">
-  {% include 'export/export-btn.html.twig' with
-    {
-      'exportFileName' : 'classroom-statistics-students-learn',
-      'targetFormId': 'overview-student-detail',
-      'exportClass': 'cd-btn-sm pull-right cd-btn-primary',
-      'exportWebpack': 'ture'
-    }
-  %}
+  <button class=" cd-btn  mhs cd-btn-sm pull-right cd-btn-primary classroom-student-chart-js-export-btn" type="button" id="student-add-btn"><i class="es-icon es-icon-filedownload cd-text-sm"></i> {{'form.btn.export'|trans}}</button>
 </form>
 <button class="btn btn-primary pull-right hide">{{ 'form.btn.export'|trans }}</button>
 <div id="student-detail-chart"

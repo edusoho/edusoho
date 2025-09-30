@@ -70,13 +70,7 @@ class ExerciseBuyController extends BuyFlowController
 
     protected function isJoined($id)
     {
-        $user = $this->getUser();
-        $member = $this->getExerciseMemberService()->getExerciseMember($id, $user['id']);
-        if (!empty($member)) {
-            $this->getExerciseService()->get($id);
-        }
-
-        return $member;
+        return $this->getExerciseMemberService()->isExerciseStudent($id, $this->getUser()->getId());
     }
 
     protected function tryFreeJoin($id)

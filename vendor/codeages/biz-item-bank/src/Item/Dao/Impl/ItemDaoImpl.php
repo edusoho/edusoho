@@ -31,6 +31,33 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
         return $builder->execute()->fetchAll() ?: [];
     }
 
+    public function getItemCountGroupByDifficulty($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(id) as itemNum, difficulty')
+            ->addGroupBy('difficulty');
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
+    public function countItemGroupByCategoryIdAndType($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(id) as itemNum, category_id, type')
+            ->addGroupBy(['category_id', 'type']);
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
+    public function countItemGroupByCategoryId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('count(id) as itemNum, category_id')
+            ->addGroupBy('category_id');
+
+        return $builder->execute()->fetchAll() ?: [];
+    }
+
     public function countItemQuestionNumByBankId($bankId)
     {
         $sql = "SELECT count(*) FROM {$this->table} i INNER JOIN `biz_question` q ON i.id = q.item_id WHERE i.bank_id = ? AND i.is_deleted = 0;";

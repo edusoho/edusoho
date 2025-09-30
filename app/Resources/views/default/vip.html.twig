@@ -9,7 +9,7 @@
           <span>{{config.title|default("vip"|trans)}}</span>
           <div class="line"></div>
         </h5>
-        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+        <div class="subtitle">{{ config.subTitle|default("vip.subtitle"|trans) }}</div>
       </div>
       <div class="recommend-class-list row">
         {% for vipLevel in vipLevels %}

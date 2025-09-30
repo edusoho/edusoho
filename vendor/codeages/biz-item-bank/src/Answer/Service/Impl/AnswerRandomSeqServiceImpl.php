@@ -7,6 +7,7 @@ use Codeages\Biz\ItemBank\Answer\Dao\AnswerRandomSeqRecordDao;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRandomSeqService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentSectionItemService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Item\AnswerMode\ChoiceAnswerMode;
 use Codeages\Biz\ItemBank\Item\AnswerMode\SingleChoiceAnswerMode;
@@ -82,7 +83,8 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         }
         $answerRandomSeqRecord = $this->getAnswerRandomSeqRecordDao()->getByAnswerRecordId($answerRecord['id']);
         if ($answerRecord['is_items_seq_random']) {
-            $questionReports = $this->shuffleQuestionReports($questionReports, $answerRandomSeqRecord['items_random_seq']);
+            $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($answerRecord['assessment_id']);
+            $questionReports = $this->shuffleQuestionReports($questionReports, $answerRandomSeqRecord['items_random_seq'], $assessmentSnapshot['sections_snapshot'] ?? []);
         }
         if ($answerRecord['is_options_seq_random']) {
             $questionReports = $this->convertQuestionReportOptions($questionReports, $answerRandomSeqRecord['options_random_seq']);
@@ -138,8 +140,11 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
 
     private function shuffleAssessmentItems($assessment, $randomSeq)
     {
+        $assessmentSnapshot = $this->getAssessmentService()->getAssessmentSnapshotBySnapshotAssessmentId($assessment['id']);
+        $sectionSnapshot = empty($assessmentSnapshot) ? [] : array_flip($assessmentSnapshot['sections_snapshot']);
         foreach ($assessment['sections'] as &$section) {
-            $section['items'] = $this->shuffleItems($section['items'], $randomSeq[$section['id']]);
+            $sectionId = $sectionSnapshot[$section['id']] ?? $section['id'];
+            $section['items'] = $this->shuffleItems($section['items'], $randomSeq[$sectionId]);
         }
 
         return $assessment;
@@ -181,7 +186,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         return $assessmentResponse;
     }
 
-    private function shuffleQuestionReports($questionReports, $randomSeq)
+    private function shuffleQuestionReports($questionReports, $randomSeq, $sectionSnapshot)
     {
         if (empty($randomSeq)) {
             return $questionReports;
@@ -192,6 +197,7 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
         }
         $shuffledQuestionReports = [];
         foreach ($randomSeq as $sectionId => $itemIds) {
+            $sectionId = $sectionSnapshot[$sectionId] ?? $sectionId;
             foreach ($itemIds as $itemId) {
                 $shuffledQuestionReports = array_merge($shuffledQuestionReports, $sectionReports[$sectionId][$itemId]);
             }
@@ -324,6 +330,14 @@ class AnswerRandomSeqServiceImpl extends BaseService implements AnswerRandomSeqS
     protected function getAnswerRecordService()
     {
         return $this->biz->service('ItemBank:Answer:AnswerRecordService');
+    }
+
+    /**
+     * @return AssessmentService
+     */
+    protected function getAssessmentService()
+    {
+        return $this->biz->service('ItemBank:Assessment:AssessmentService');
     }
 
     /**

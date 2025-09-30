@@ -36,10 +36,12 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     public function update($id, $answerScene = array())
     {
-        if (empty($this->get($id))) {
+        $originAnswerScene = $this->get($id);
+        if (empty($originAnswerScene)) {
             throw new AnswerSceneException('AnswerScene not found.', ErrorCode::ANSWER_SCENE_NOTFOUD);
         }
 
+        $answerScene['name'] = $answerScene['name'] ?? $originAnswerScene['name'];
         $answerScene = $this->validateAnswerScene($answerScene);
         $answerScene['updated_user_id'] = empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'];
 
@@ -67,6 +69,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'end_time' => ['integer'],
             'is_items_seq_random' => ['integer', ['in', [0, 1]]],
             'is_options_seq_random' => ['integer', ['in', [0, 1]]],
+            'valid_period_mode' => ['integer', ['in', [0, 1, 2, 3]]],
         ]);
 
         if (isset($answerScene['do_times']) && 1 == $answerScene['do_times']) {

@@ -14,7 +14,6 @@ use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Goods\Service\RecommendGoodsService;
 use Biz\Product\Service\ProductService;
-use Biz\System\Service\SettingService;
 
 class GoodComponent extends AbstractResource
 {
@@ -69,7 +68,6 @@ class GoodComponent extends AbstractResource
 
             if ('classroomCourses' === $type) {
                 $components['classroomCourses'] = $this->getClassroomCourses($product);
-                continue;
             }
         }
 

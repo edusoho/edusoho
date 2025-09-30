@@ -1,3 +1,4 @@
+{% include 'common/anti-brush-captcha.html.twig' %}
 {% if app.user %}
   {% if service.canAccess('post.create', thread) %}
     <form class="thread-post-form" id="thread-post-form" method="post" action="{{path('thread_post', {threadId:thread.id})}}">
@@ -17,7 +18,7 @@
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <input type="hidden" name="type" value="{{ target.type }}">
         <input type="hidden" name="id" value="{{ target.id }}">
-        <button class="btn btn-primary pull-right" data-loading-text="{{'thread.replying'|trans}}">{{'form.btn.reply'|trans}}</button>
+        <button class="btn btn-primary pull-right js-btn-thread-save" data-loading-text="{{'thread.replying'|trans}}">{{'form.btn.reply'|trans}}</button>
       </div>  
     </form>
   {% else %}

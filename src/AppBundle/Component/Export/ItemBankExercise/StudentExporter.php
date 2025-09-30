@@ -4,8 +4,11 @@ namespace AppBundle\Component\Export\ItemBankExercise;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\ItemBankExercise\Service\MemberOperationRecordService;
 use Biz\User\Service\UserFieldService;
 
 class StudentExporter extends Exporter
@@ -35,6 +38,9 @@ class StudentExporter extends Exporter
             'user.fields.username_label',
             'user.fields.email_label',
             'user.fields.phone_label',
+            'join.channel',
+            'join.time',
+            'course.marketing_setup.rule.expiry_date',
             'task.learn_data_detail.createdTime',
             'exercise.answers.done_num',
             'exercise.answers.completion_rate',
@@ -87,6 +93,9 @@ class StudentExporter extends Exporter
             $member[] = $user['nickname']."\t";
             $member[] = $user['email'];
             $member[] = empty($user['mobile']) ? (empty($userProfile['mobile']) ? '-' : $userProfile['mobile']) : $user['mobile'];
+            $member[] = $this->convertJoinedChannel($exerciseMember);
+            $member[] = date('Y-n-d H:i:s', $exerciseMember['createdTime']);
+            $member[] = 0 == $exerciseMember['deadline'] ? '长期有效' : date('Y-n-d H:i:s', $exerciseMember['deadline']);
             $member[] = date('Y-n-d H:i:s', $exerciseMember['createdTime']);
             $member[] = $exerciseMember['doneQuestionNum'];
             $member[] = $exerciseMember['completionRate'].'%';
@@ -111,6 +120,48 @@ class StudentExporter extends Exporter
         return $datas;
     }
 
+    private function convertJoinedChannel($member)
+    {
+        if ('import_join' === $member['joinedChannel']) {
+            $records = $this->getMemberOperationRecordService()->search(['exerciseId' => $member['exerciseId'], 'memberId' => $member['id'], 'operateType' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operatorId']);
+
+                return "{$operator['nickname']}添加";
+            }
+        }
+        if ('bind_join' === $member['joinedChannel']) {
+            $autoRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByUserIdsAndExerciseId([$member['userId']], $member['exerciseId']);
+            $exerciseBinds = $this->getItemBankExerciseService()->findBindExerciseByIds(array_column($autoRecords, 'itemBankExerciseBindId'));
+            $exerciseBindGroups = ArrayToolkit::group($exerciseBinds, 'bindType');
+
+            $joinedChannels = [];
+
+            // 处理课程绑定
+            if (!empty($exerciseBindGroups['course'])) {
+                $courseIds = array_column($exerciseBindGroups['course'], 'bindId');
+                $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+                foreach ($courses as $course) {
+                    $joinedChannels[] = '《'.$course['courseSetTitle'].'》课程加入';
+                }
+            }
+
+            // 处理班级绑定
+            if (!empty($exerciseBindGroups['classroom'])) {
+                $classroomIds = array_column($exerciseBindGroups['classroom'], 'bindId');
+                $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+                foreach ($classrooms as $classroom) {
+                    $joinedChannels[] = '《'.$classroom['title'].'》班级加入';
+                }
+            }
+
+            // 拼接所有加入渠道，并去掉最后的 "、"
+            return rtrim(implode('、', $joinedChannels), '、');
+        }
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入'][$member['joinedChannel']] ?? '';
+    }
+
     public function buildParameter($conditions)
     {
         $parameter = parent::buildParameter($conditions);
@@ -121,10 +172,44 @@ class StudentExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return [
+        $params = [
             'exerciseId' => $conditions['exerciseId'],
             'role' => 'student',
+            'startTimeGreaterThan' => $conditions['startTimeGreaterThan'] ?? '',
+            'startTimeLessThan' => $conditions['startTimeLessThan'] ?? '',
+            'joinedChannel' => $conditions['joinedChannel'] ?? '',
+            'deadlineAfter' => $conditions['deadlineAfter'] ?? '',
+            'deadlineBefore' => $conditions['deadlineBefore'] ?? '',
+            'locked' => 0,
         ];
+        if (isset($conditions['joinedChannel']) && in_array($conditions['joinedChannel'], ['course_join', 'classroom_join'])) {
+            $bindExercises = $this->getItemBankExerciseService()->findExerciseBindByExerciseId($conditions['exerciseId']);
+            $bindExercises = array_filter($bindExercises, function ($bindExercise) use ($conditions) {
+                if ('course_join' == $conditions['joinedChannel']) {
+                    return 'course' == $bindExercise['bindType'];
+                } elseif ('classroom_join' == $conditions['joinedChannel']) {
+                    return 'classroom' == $bindExercise['bindType'];
+                }
+            });
+            $bindExerciseIds = array_column($bindExercises, 'id');
+            $autoJoinRecords = $this->getItemBankExerciseService()->findExerciseAutoJoinRecordByItemBankExerciseIdAndItemBankExerciseBindIds($conditions['exerciseId'], $bindExerciseIds);
+            $params['userIds'] = array_column($autoJoinRecords, 'userId');
+            $params['joinedChannel'] = 'bind_join';
+        }
+        if (isset($params['userKeyword']) && '' != $params['userKeyword']) {
+            $userIdsByKeyword = $this->getUserService()->getUserIdsByKeyword($params['userKeyword']);
+            if (!empty($params['userIds'])) {
+                $params['userIds'] = array_intersect($userIdsByKeyword, $params['userIds']);
+            } else {
+                $params['userIds'] = $userIdsByKeyword;
+            }
+            unset($params['userKeyword']);
+        }
+        if (isset($params['userIds']) && empty($params['userIds'])) {
+            $params['userIds'] = [-1];
+        }
+
+        return $params;
     }
 
     public function postExport()
@@ -154,5 +239,37 @@ class StudentExporter extends Exporter
     protected function getExerciseMemberService()
     {
         return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberOperationRecordService
+     */
+    protected function getMemberOperationRecordService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:MemberOperationRecordService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseService');
     }
 }

@@ -139,6 +139,14 @@ class PagedCourseLesson {
           }
         },
 
+        'is2kVideoLevel' :  function(data, context) {
+            return data.videoMaxLevel === '2k';
+        },
+
+        'is4kVideoLevel' :  function(data, context) {
+          return data.videoMaxLevel === '4k';
+        },
+
         'hasWatchLimitRemaining': function(data, context) {
           return data.watchLimitRemaining !== false;
         },

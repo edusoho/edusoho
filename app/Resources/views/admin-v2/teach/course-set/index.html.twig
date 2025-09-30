@@ -54,7 +54,7 @@
       {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.course_manage.manage.course_tips'|trans|raw, placement: 'left'} %}
     </form>
   </div>
-  
+
   <p class="text-muted">
     <span class="mrl">{{ 'admin.course_manage.manage.count'|trans({'%courseNum%':courseSetStatusNum.total})|raw }}</span>
     <span class="mrl">{{ 'admin.course_manage.manage.published_count'|trans({'%publishedNum%':courseSetStatusNum.published})|raw }}</span>
@@ -77,7 +77,7 @@
       {% endif %}
       <th>{{ 'admin.course_manage.manage.tags'|trans }}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
-      
+
       {% if filter == 'classroom' %}
         <th width="15%">{{ 'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%':setting("classroom.name")|default('classroom'|trans)}) }}</th>
       {% else %}
@@ -94,13 +94,15 @@
         <th>{{ 'admin.course_manage.manage.vip_grade'|trans }}</th>
       {% endif %}
 
-      
+
       <th>{{ 'admin.course_manage.manage.creator'|trans }}</th>
       <th class="status_tooptip_intro">{{ 'admin.course_manage.manage.status'|trans }}
-      <span class="es-icon es-icon-wenhaotishi" 
-          style="color: #919399;font-size: 14px;" 
-          data-toggle="tooltip" 
-          title="{{ 'admin.setting.table.status.tooltip'|trans }}"></span></th>
+        <span class="es-icon es-icon-wenhaotishi"
+          style="color: #919399;font-size: 14px;"
+          data-toggle="tooltip"
+          title="{{ 'admin.setting.table.status.tooltip'|trans }}">
+        </span>
+      </th>
       <th width="10%">{{'admin.course_manage.operater'|trans}}</th>
     </tr>
     </thead>

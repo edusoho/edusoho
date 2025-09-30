@@ -170,7 +170,7 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
         $biz['ESCloudSdk.resource'] = function ($biz) use ($that) {
             $service = null;
-            $sdk = $that->generateEsCloudSdk($biz, []);
+            $sdk = $that->generateEsCloudSdk($biz, $this->getResourceConfig($biz), $biz['logger']);
             if (!empty($sdk)) {
                 $service = $sdk->getResourceService();
             }
@@ -227,6 +227,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return null;
         };
+
+        $biz['ESCloudSdk.appPush'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, $this->getAppPushConfig($biz), $biz['logger']);
+            if (!empty($sdk)) {
+                $service = $sdk->getAppPushService();
+            }
+
+            return $service;
+        };
     }
 
     /**
@@ -280,21 +290,45 @@ class DefaultSdkProvider implements ServiceProviderInterface
         return $sdk;
     }
 
+    protected function getResourceConfig(Biz $biz)
+    {
+        $developerSetting = $biz->service('System:SettingService')->get('developer', []);
+        if (!empty($developerSetting['resource_api_server'])) {
+            $host = $this->parseHost($developerSetting['resource_api_server']);
+        }
+        if (empty($host)) {
+            $host = '';
+        }
+
+        return ['resource' => ['host' => $host]];
+    }
+
     protected function getAIConfig(Biz $biz)
     {
         $setting = $biz->service('System:SettingService');
         $developerSetting = $setting->get('developer', []);
         if (!empty($developerSetting['ai_api_server'])) {
-            $urlSegments = explode('://', $developerSetting['ai_api_server']);
-            if (2 === count($urlSegments)) {
-                $hostUrl = $urlSegments[1];
-            }
+            $host = $this->parseHost($developerSetting['ai_api_server']);
         }
-        if (empty($hostUrl)) {
-            $hostUrl = '';
+        if (empty($host)) {
+            $host = '';
         }
 
-        return ['ai' => ['host' => $hostUrl]];
+        return ['ai' => ['host' => $host]];
+    }
+
+    private function getAppPushConfig($biz)
+    {
+        $setting = $biz->service('System:SettingService');
+        $developerSetting = $setting->get('developer', []);
+        if (!empty($developerSetting['push_api_server'])) {
+            $host = $this->parseHost($developerSetting['push_api_server']);
+        }
+        if (empty($host)) {
+            $host = '';
+        }
+
+        return ['apppush' => ['host' => $host]];
     }
 
     public function getSCRMConfig(Biz $biz)
@@ -495,5 +529,18 @@ class DefaultSdkProvider implements ServiceProviderInterface
         }
 
         return ['platformnews' => ['host' => $url['host']]];
+    }
+
+    private function parseHost($url)
+    {
+        $urlSegments = explode('://', $url);
+        if (1 === count($urlSegments)) {
+            return $urlSegments[0];
+        }
+        if (2 === count($urlSegments)) {
+            return $urlSegments[1];
+        }
+
+        return '';
     }
 }

@@ -1,10 +1,9 @@
 import ShowAssessment from './show-assessment';
+import AssessmentPreview from 'common/vue/components/item-bank/assessment-preview';
 
 Vue.config.productionTip = false;
-if (app.lang == 'en') {
-  const locale = local.default;
-  itemBank.default.install(Vue, {locale});
-}
+
+Vue.component(AssessmentPreview.name, AssessmentPreview);
 
 new Vue({
   render: createElement => createElement(ShowAssessment)

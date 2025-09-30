@@ -1,0 +1,8 @@
+.find-search{
+  .van-search__content{
+    padding-left: 16px;
+  }
+  .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
+    border-top: 0;
+  }
+}

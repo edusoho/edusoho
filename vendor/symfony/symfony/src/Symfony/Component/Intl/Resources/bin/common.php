@@ -43,7 +43,7 @@ function cd($dir)
 
 function run($command)
 {
-    exec($command, $output, $status);
+    throw new Exception('This function not allowed to run commands.');
 
     if (0 !== $status) {
         $output = implode("\n", $output);

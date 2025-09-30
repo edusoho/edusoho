@@ -84,7 +84,7 @@
         }
         @media (max-width: @screen-xs-max) {
           top: auto;
-          bottom: 30px;
+          bottom: 80px;
         }
         i {
           font-size: 24px;
@@ -114,6 +114,7 @@
         font-size: 18px;
         color: #151515;
       }
+      height: 25px;
     }
   }
 }
@@ -129,6 +130,28 @@
     img {
       max-width: 100%;
       height: auto;
+    }
+  }
+
+  .class-course-list {
+    .course-img {
+      width: 200px !important;
+      height: 112.5px !important;
+
+      @media (max-width: @screen-xs-max) {
+        width: 100% !important;
+        height: auto !important;
+      }
+    }
+
+    .course-learn-history {
+      @media (max-width: @screen-xs-max) {
+        max-width: 276px;
+      }
+
+      a {
+        line-height: 1.5;
+      }
     }
   }
 }

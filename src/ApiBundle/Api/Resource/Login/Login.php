@@ -153,9 +153,7 @@ class Login extends AbstractResource
         while (!$this->getUserService()->isNicknameAvaliable($nickname)) {
             $nickname = MathToolkit::uniqid();
         }
-        $auth = $this->getSettingService()->get('auth', []);
-        $passwordLevel = empty($auth['password_level']) ? 'low' : $auth['password_level'];
-        $password = PasswordGenerateToolkit::create($passwordLevel);
+        $password = PasswordGenerateToolkit::create('high');
 
         $newUser = [
             'mobile' => $mobile,

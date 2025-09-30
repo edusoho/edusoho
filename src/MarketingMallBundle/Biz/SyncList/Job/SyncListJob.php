@@ -17,18 +17,14 @@ class SyncListJob extends AbstractJob
         }
         $client = new MarketingMallClient($this->biz);
         $flag = false;
-        foreach ($tasks as $task)
-        {
+        foreach ($tasks as $task) {
             $result = $client->syncNotify($task['type']);
-            if ($result['ok'])
-            {
+            if ($result['ok']) {
                 $flag = true;
             }
         }
-        if ($flag)
-        {
-            $ids = implode(',',array_column($this->getSyncListService()->getSyncIds(),'id'));
-            $this->getSyncListService()->syncStatusUpdate($ids);
+        if ($flag) {
+            $this->getSyncListService()->syncStatusUpdate(array_column($this->getSyncListService()->getSyncIds(), 'id'));
         }
     }
 

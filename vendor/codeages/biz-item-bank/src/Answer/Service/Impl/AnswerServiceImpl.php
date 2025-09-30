@@ -2,7 +2,10 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use ApiBundle\Api\Util\AssetHelper;
+use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Common\CommonException;
+use Biz\Question\Service\QuestionService;
 use Biz\WrongBook\Dao\WrongQuestionDao;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -67,6 +70,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
     public function submitAnswer(array $assessmentResponse)
     {
+        // todo 背景信息
+        $assessmentResponse = $this->appendNoAnswerQuestion($assessmentResponse);
         $assessmentResponse = $this->convertAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->validateAssessmentResponse($assessmentResponse);
         $assessmentResponse = $this->getAnswerRandomSeqService()->restoreOptionsToOriginalSeqIfNecessary($assessmentResponse);
@@ -82,14 +87,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         try {
             $this->beginTransaction();
 
-            if ($this->getAnswerQuestionReportService()->count(
-                ['answer_record_id' => $answerRecord['id']]
-            )) {
-                $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
-            } else {
-                $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
-            }
-
+            $this->saveAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
             $attachments = $this->getAttachmentsFromAssessmentResponse($assessmentResponse);
             $this->updateAttachmentsTarget($answerRecord['id'], $attachments);
@@ -735,7 +733,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             $submittedQuestions[] = [
                 'questionId' => $questionId,
                 'answer' => $questions[$questionId]['answer'],
-                'analysis' => $questions[$questionId]['analysis'],
+                'analysis' => $this->filterHtml($questions[$questionId]['analysis']),
                 'manualMarking' => $reviewedQuestion['is_reviewed'] ? 0 : 1,
                 'status' => $answerQuestionReports[$questionId]['status'],
                 'response' => $answerQuestionReports[$questionId]['response'],
@@ -1074,13 +1072,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 $assessmentResponse,
                 $reviewedQuestions ?? []
             );
-            if ($this->getAnswerQuestionReportService()->count(
-                ['answer_record_id' => $answerRecord['id']]
-            )) {
-                $this->getAnswerQuestionReportService()->batchUpdate($answerQuestionReports);
-            } else {
-                $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
-            }
+            $this->saveAnswerQuestionReport($answerQuestionReports, $answerRecord['id']);
 
             $this->saveAnswerQuestionTag($assessmentResponse, $answerRecord);
 
@@ -1133,7 +1125,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         foreach ($assessmentResponse['section_responses'] as $sectionResponse) {
             foreach ($sectionResponse['item_responses'] as $itemResponse) {
                 foreach ($itemResponse['question_responses'] as $questionResponse) {
-                    if ($questionResponse['isTag']) {
+                    if (!empty($questionResponse['isTag'])) {
                         $questionIds[] = $questionResponse['question_id'];
                     }
                 }
@@ -1141,14 +1133,14 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         if (empty($questionIds)) {
-            if ($answerRecord['isTag']) {
+            if (!empty($answerRecord['isTag'])) {
                 $this->getAnswerRecordService()->update($answerRecord['id'], ['isTag' => 0]);
                 $this->getAnswerQuestionTagService()->deleteByAnswerRecordId($answerRecord['id']);
             }
 
             return;
         }
-        if ($answerRecord['isTag']) {
+        if (!empty($answerRecord['isTag'])) {
             $this->getAnswerQuestionTagService()->updateByAnswerRecordId($answerRecord['id'], $questionIds);
         } else {
             $this->getAnswerQuestionTagService()->createAnswerQuestionTag($answerRecord['id'], $questionIds);
@@ -1214,21 +1206,223 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     {
         $answerScene = $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']);
 
-        if (empty($answerScene['limited_time'])) {
+        if (empty($answerScene['limited_time']) && $answerScene['valid_period_mode'] != 3) {
             return;
         }
 
         if (self::EXAM_MODE_SIMULATION != $answerRecord['exam_mode']) {
             return;
         }
+        $time = time() + $answerScene['limited_time'] * 60 + 120;
+        if ($answerScene['valid_period_mode'] == 3) {
+            if ($answerRecord['exam_mode'] == 1) {
+                return ; // 固定考试练习考试不自动提交
+            }
+            $time = $answerScene['end_time'];
+        }
         $autoSubmitJob = [
             'name' => 'AssessmentAutoSubmitJob_' . $answerRecord['id'] . '_' . time(),
-            'expression' => time() + $answerScene['limited_time'] * 60 + 120,
+            'expression' => intval($time),
             'class' => 'Biz\Testpaper\Job\AssessmentAutoSubmitJob',
             'args' => ['answerRecordId' => $answerRecord['id']],
         ];
 
         $this->getSchedulerService()->register($autoSubmitJob);
+    }
+
+    protected function saveAnswerQuestionReport($answerQuestionReports, $answerRecordId)
+    {
+        $existIdentifies = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $answerRecordId], [], 0, PHP_INT_MAX, ['identify']);
+        if (empty($existIdentifies)) {
+            $this->getAnswerQuestionReportService()->batchCreate($answerQuestionReports);
+        }else {
+            // 对$answerQuestionReports分类，分成存在的数据和不存在的数据，然后存在的去更新，不存在的去创建
+            $existIdentifies = array_column($existIdentifies, 'identify'); // 获取已存在的 identify
+            $toCreate = [];
+            $toUpdate = [];
+            foreach ($answerQuestionReports as $report) {
+                if (in_array($report['identify'], $existIdentifies)) {
+                    $toUpdate[] = $report;
+                } else {
+                    $toCreate[] = $report;
+                }
+            }
+            // 对需要创建的数据进行批量创建
+            if (!empty($toCreate)) {
+                $this->getAnswerQuestionReportService()->batchCreate($toCreate);
+            }
+            // 对需要更新的数据进行批量更新
+            if (!empty($toUpdate)) {
+                $this->getAnswerQuestionReportService()->batchUpdate($toUpdate);
+            }
+
+        }
+    }
+
+    /**
+     * @param $assessmentResponse
+     * @return mixed
+     */
+    protected function appendNoAnswerQuestion($assessmentResponse)
+    {
+        $assessment = $this->getAssessmentService()->showAssessment($assessmentResponse['assessment_id']);
+        $allIdentifies = [];
+        $sectionResponses = [];
+        $assessmentTotalQuestions = 0;
+        $allQuestionIds = [];
+        foreach ($assessment['sections'] as $section) {
+            foreach ($section['items'] as $item) {
+                $assessmentTotalQuestions += count($item['questions']);
+                foreach ($item['questions'] as $question) {
+                    $allIdentifies[] = $assessmentResponse['answer_record_id'] . '_' . $question['id'];
+                    $sectionResponses[$question['id']] = $section['id'].'_'.$item['id'];
+                    $allQuestionIds[] = $question['id'];
+                }
+            }
+        }
+        // todo 需要拿答题快照， 确认共享快照还是独立快照
+        if ($assessmentTotalQuestions == $this->countTotalQuestions($assessmentResponse)) {
+            return $assessmentResponse;
+        }
+        $saveDassessmentResponse = $this->getAssessmentResponseByAnswerRecordId($assessmentResponse['answer_record_id']);
+        $savedIdentifies = [];
+        foreach ($saveDassessmentResponse['section_responses'] as $section_response)  {
+            foreach ($section_response['item_responses'] as $item_response) {
+                foreach ($item_response['question_responses'] as $question_response) {
+                    $identify = $assessmentResponse['answer_record_id'] . '_' . $question_response['question_id'];
+                    $savedIdentifies[$identify] = $question_response['response'];
+                }
+            }
+        }
+//        $savedQuestionReports = $this->getAnswerQuestionReportService()->search(['answer_record_id' => $assessmentResponse['answer_report_id']], [], 0, PHP_INT_MAX);
+//        $savedIdentifies = array_column($savedQuestionReports, 'identify');
+//        $answerQuestionReportIndex = ArrayToolkit::index($savedQuestionReports, 'identify');
+        $answerResults = [];
+        foreach ($assessmentResponse['section_responses'] as $sectionResponse)  {
+            foreach ($sectionResponse['item_responses'] as $itemResponse) {
+                foreach ($itemResponse['question_responses'] as $questionResponse) {
+                    $answerResult['response'] = $questionResponse['response'] ?? [""];
+                    $answerResults[$sectionResponse['section_id']][$itemResponse['item_id']][$questionResponse['question_id']] = $answerResult;
+                }
+            }
+        }
+        $assessmentSectiones = $this->getAssessmentSectionService()->findSectionsByAssessmentId($assessment['id']);
+        $assessmentSectionesIndex = ArrayToolkit::index($assessmentSectiones, 'id');
+        $questionsIndex = $this->getItemService()->findQuestionsByQuestionIds($allQuestionIds);
+        // 将缺失的问题添加到新的结构中
+        foreach ($allIdentifies as $identify) {
+            list($answerRecordId, $questionId) = explode('_', $identify);
+            list($sectionId, $itemId) = explode('_', $sectionResponses[$questionId]);
+            // 判断该section是否已经存在
+            if (!isset($newSectionResponses[$sectionId])) {
+                $newSectionResponses[$sectionId] = [
+                    'section_id' => $sectionId,
+                    'item_responses' => []
+                ];
+            }
+            // 判断该item是否已经存在
+            if (!isset($newSectionResponses[$sectionId]['item_responses'][$itemId])) {
+                $newSectionResponses[$sectionId]['item_responses'][$itemId] = [
+                    'item_id' => $itemId,
+                    'question_responses' => []
+                ];
+            }
+            $answerResponse = "";
+            // 添加缺失的问题
+            if (!empty($savedIdentifies[$identify])) {
+                $answerResponse = $savedIdentifies[$identify];
+            }
+            // 把最后提交的结果放到
+            if (!empty($answerResults[$sectionId][$itemId][$questionId])) {
+                $answerResponse = $answerResults[$sectionId][$itemId][$questionId]['response'];
+            }
+            // todo 兼容安卓
+            $noResponse = [];
+            if ($questionsIndex[$questionId]['answer_mode'] == 'single_choice') {
+                $noResponse = null;
+            }
+            if ($questionsIndex[$questionId]['answer_mode'] == 'choice') {
+                $noResponse = [];
+            }
+            if ($questionsIndex[$questionId]['answer_mode'] == 'rich_text') {
+                $noResponse = [""];
+            }
+            if ($questionsIndex[$questionId]['answer_mode'] == 'uncertain_choice') {
+                $noResponse = [];
+            }
+            if ($questionsIndex[$questionId]['answer_mode'] == 'true_false') {
+                $noResponse = [""];
+            }
+            if ($questionsIndex[$questionId]['answer_mode'] == 'text') {
+                $question = $this->findQuestion($assessment['sections'], $sectionId, $itemId, $questionId);
+                if ($question) {
+                    $responsePointsCount = count($question['response_points']);
+                    $noResponse = array_fill(0, $responsePointsCount, "");
+                } else {
+                    $noResponse = [""];
+                }
+            }
+            if ($assessmentSectionesIndex[$sectionId]['name'] == '材料题') {
+                $noResponse = [""];
+            }
+
+            $newSectionResponses[$sectionId]['item_responses'][$itemId]['question_responses'][] = [
+                'question_id' => $questionId,
+                'response' => $answerResponse ?? $noResponse
+            ];
+        }
+        // 重建后的section_responses替换掉原有的
+        $assessmentResponse['section_responses'] = array_values($newSectionResponses);
+
+        return $assessmentResponse;
+    }
+
+    protected function findQuestion($data, $sectionId, $itemId, $questionId) {
+        // 遍历 sections
+        foreach ($data['sections'] as $section) {
+            if ($section['id'] == $sectionId) {
+                // 遍历 items
+                foreach ($section['items'] as $item) {
+                    if ($item['id'] == $itemId) {
+                        // 遍历 questions
+                        foreach ($item['questions'] as $question) {
+                            if ($question['id'] == $questionId) {
+                                return $question;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null; // 如果没有找到，返回 null
+    }
+
+    function countTotalQuestions($data) {
+        $totalQuestions = 0;
+        // 遍历 sections
+        foreach ($data['section_responses'] as $section) {
+            // 遍历 items
+            foreach ($section['item_responses'] as $item) {
+                // 统计每个 item 的 questions 数量
+                $totalQuestions += count($item['question_responses']);
+            }
+        }
+
+        return $totalQuestions;
+    }
+
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, AssetHelper::uriForPath($url), $text);
+        }
+
+        return $text;
     }
 
     /**
@@ -1354,5 +1548,13 @@ class AnswerServiceImpl extends BaseService implements AnswerService
     protected function getAnswerQuestionTagService()
     {
         return $this->biz->service('ItemBank:Answer:AnswerQuestionTagService');
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->biz->service('Activity:TestpaperActivityService');
     }
 }

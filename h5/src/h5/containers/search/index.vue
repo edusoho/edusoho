@@ -1,0 +1,322 @@
+<template>
+  <div class="find-search">
+    <form action="/">
+      <van-search
+        v-model="selectedData.courseSetTitle"
+        shape="round"
+        show-action
+        :placeholder="$t('search.placeholder')"
+        :action-text="$t('btn.cancel')"
+        @search="onSearch"
+        @cancel="onCancel"
+      />
+    </form>
+    <lazyLoading
+          v-if="searchByClassroom && courseList.length > 0"
+          :course-list="courseList"
+          :is-all-data="true"
+          :vip-tag-show="true"
+          course-item-type="price"
+          :is-request-compile="true"
+          :type-list="'classroom_course_list'"
+          @needRequest="sendRequestCourse"
+          :showNumberData="showNumberData"
+        />
+    <emptyCourse
+        v-if="searchByClassroom && courseList.length === 0"
+        :has-button="false"
+        :text="$t('search.emptyCourse')"
+        :type="'course_list'"
+        :isSearch="true"
+      />
+    <van-tabs
+      v-if="isSearch"
+      v-model="active"
+      color="#408FFB"
+      line-height="1"
+      line-width="30"
+      title-active-color="#408FFB"
+    >
+      <van-tab :title="$t('search.course')">
+        <lazyLoading
+          :course-list="courseList"
+          :is-all-data="isAllCourse"
+          :vip-tag-show="true"
+          course-item-type="price"
+          :is-request-compile="course.isRequestCompile"
+          :type-list="'course_list'"
+          @needRequest="sendRequestCourse"
+          :showNumberData="showNumberData"
+        />
+        <emptyCourse
+          v-if="isEmptyCourse && course.isRequestCompile"
+          :has-button="false"
+          :text="$t('search.noFound')"
+          :type="'course_list'"
+        />
+      </van-tab>
+      <van-tab :title="$t('search.classroom')">
+        <div v-if="active === 1">
+          <lazyLoading
+            :course-list="classroomList"
+            :is-all-data="isAllClassroom"
+            :normal-tag-show="false"
+            :vip-tag-show="true"
+            course-item-type="price"
+            :is-request-compile="classroom.isRequestCompile"
+            :type-list="'classroom_list'"
+            @needRequest="sendRequestClassroom"
+            :showNumberData="showNumberData"
+          />
+          <emptyCourse
+            v-if="isEmptyClassroom && classroom.isRequestCompile"
+            :has-button="false"
+            :text="$t('search.noFound')"
+            :type="'classroom_list'"
+          />
+        </div>
+      </van-tab>
+      <van-tab :title="$t('search.questionBank')">
+        <div v-if="active === 2">
+          <lazyLoading
+            :course-list="itemBankList"
+            :is-all-data="isAllItemBank"
+            :normal-tag-show="false"
+            :vip-tag-show="true"
+            course-item-type="price"
+            :is-request-compile="itemBank.isRequestCompile"
+            :type-list="'item_bank_exercise'"
+            @needRequest="sendRequestItemBank"
+          />
+          <emptyCourse
+            v-if="isEmptyItemBank && itemBank.isRequestCompile"
+            :has-button="false"
+            :text="$t('search.noFound')"
+            :type="'item_bank_exercise'"
+          />
+        </div>
+      </van-tab>
+    </van-tabs>
+  </div>
+</template>
+<script>
+import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
+import emptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
+import Api from '@/api';
+import {mapState} from "vuex";
+export default {
+  nama: 'search',
+  components: {
+    lazyLoading,
+    emptyCourse,
+  },
+  data() {
+    return {
+      active: 0,
+      searchByClassroom: false,
+      selectedData: {
+        courseSetTitle: '',
+      },
+      isSearch: false,
+      classroomList: [],
+      isEmptyClassroom: false,
+      isAllClassroom: false,
+      classroom: {
+        isRequestCompile: false,
+        offset: 0,
+        limit: 10,
+      },
+      courseList: [],
+      isEmptyCourse: false,
+      isAllCourse: false,
+      course: {
+        isRequestCompile: false,
+        offset: 0,
+        limit: 10,
+      },
+      itemBankList: [],
+      isEmptyItemBank: false,
+      isAllItemBank: false,
+      itemBank: {
+        isRequestCompile: false,
+        offset: 0,
+        limit: 10,
+      }
+    };
+  },
+  computed: {
+    ...mapState({
+      showNumberData: state => state.goodsSettings.show_number_data
+    })
+  },
+  methods: {
+    onSearch() {
+      if (this.$route.query.id) {
+        this.searchByClassroom = true
+      } else {
+        this.isSearch = true;
+      }
+
+      this.initCourseList();
+      this.requestCourses();
+
+      this.initClassroomList();
+      this.requestClassroom();
+
+      this.initItemBankList();
+      this.requestItemBanks();
+    },
+    onCancel() {
+      this.isSearch = false;
+      this.$router.go(-1);
+    },
+    initClassroomList() {
+      this.classroom.isRequestCompile = false;
+      this.isAllClassroom = false;
+      this.classroomList = [];
+      this.classroom.offset = 0;
+    },
+
+    judegIsAllClassroom(paging) {
+      return this.classroomList.length >= paging.total;
+    },
+
+    requestClassroom() {
+      this.classroom.isRequestCompile = false;
+      const setting = {
+        offset: this.classroom.offset,
+        limit: this.classroom.limit,
+      };
+      const selectedData = { title: this.selectedData.courseSetTitle };
+      const config = Object.assign({}, selectedData, setting);
+
+      return Api.getClassList({
+        params: config,
+      })
+        .then(({ data, paging }) => {
+          data.forEach(element => {
+            this.classroomList.push(element);
+          });
+          this.requestClassRoomSuccess(paging);
+        })
+        .catch(err => {
+          console.log(err, 'error');
+        });
+    },
+
+    requestClassRoomSuccess(paging = {}) {
+      this.isAllClassroom = this.judegIsAllClassroom(paging);
+      if (!this.isAllClassroom) {
+        this.classroom.offset = this.classroomList.length;
+      }
+      this.classroom.isRequestCompile = true;
+      this.isEmptyClassroom = this.classroomList.length === 0;
+    },
+
+    sendRequestClassroom() {
+      if (!this.isAllClassroom) this.requestClassroom();
+    },
+
+    initCourseList() {
+      this.course.isRequestCompile = false;
+      this.isAllCourse = false;
+      this.courseList = [];
+      this.course.offset = 0;
+    },
+
+    judegIsAllCourse(paging) {
+      return this.courseList.length >= paging.total;
+    },
+
+    requestCourses() {
+      this.course.isRequestCompile = false;
+      const setting = {
+        offset: this.course.offset,
+        limit: this.course.limit,
+      };
+      const config = Object.assign({}, this.selectedData, setting);
+
+      if (this.$route.query.id) {
+        return Api.searchCourse({ query: { id: this.$route.query.id }, params: { title: this.selectedData.courseSetTitle } })
+          .then((res) => {
+            this.courseList = res;
+            })
+          .catch(err => {
+              console.log(err, 'error');
+            });
+      }
+
+      return Api.getCourseList({
+        params: config,
+      })
+        .then(({ data, paging }) => {
+          data.forEach(element => {
+            this.courseList.push(element);
+          });
+          this.requestCoursesSuccess(paging);
+        })
+        .catch(err => {
+          console.log(err, 'error');
+        });
+    },
+
+    requestCoursesSuccess(paging = {}) {
+      this.isAllCourse = this.judegIsAllCourse(paging);
+      if (!this.isAllCourse) {
+        this.offset = this.courseList.length;
+      }
+      this.course.isRequestCompile = true;
+      this.isEmptyCourse = this.courseList.length === 0;
+    },
+
+    sendRequestCourse() {
+      if (!this.isAllCourse) this.requestCourses();
+    },
+    initItemBankList() {
+      this.itemBank.isRequestCompile = false;
+      this.isAllItemBank = false;
+      this.itemBankList = [];
+      this.itemBank.offset = 0;
+    },
+
+    judegIsAllItemBank(paging) {
+      return this.itemBankList.length >= paging.total;
+    },
+
+    requestItemBanks() {
+      this.itemBank.isRequestCompile = false;
+      const setting = {
+        offset: this.itemBank.offset,
+        limit: this.itemBank.limit,
+      };
+      const selectedData = { title: this.selectedData.courseSetTitle };
+      const config = Object.assign({}, selectedData, setting);
+      return Api.getItemBankList({
+        params: config,
+      })
+        .then(({ data, paging }) => {
+          data.forEach(element => {
+            this.itemBankList.push(element);
+          });
+          this.requestItemBanksSuccess(paging);
+        })
+        .catch(err => {
+          console.log(err, 'error');
+        });
+    },
+
+    requestItemBanksSuccess(paging = {}) {
+      this.isAllItemBank = this.judegIsAllItemBank(paging);
+      if (!this.isAllItemBank) {
+        this.offset = this.itemBankList.length;
+      }
+      this.itemBank.isRequestCompile = true;
+      this.isEmptyItemBank = this.itemBankList.length === 0;
+    },
+
+    sendRequestItemBank() {
+      if (!this.isAllItemBank) this.requestItemBanks();
+    }
+  },
+};
+</script>

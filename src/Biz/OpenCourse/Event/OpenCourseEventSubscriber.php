@@ -5,7 +5,7 @@ namespace Biz\OpenCourse\Event;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\Taxonomy\TagOwnerManager;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\PluginBundle\Event\EventSubscriber;
+use Codeages\Biz\Framework\Event\EventSubscriber;
 
 class OpenCourseEventSubscriber extends EventSubscriber
 {
@@ -60,7 +60,7 @@ class OpenCourseEventSubscriber extends EventSubscriber
             throw OpenCourseException::NOTFOUND_OPENCOURSE();
         }
 
-        if ('draft' === $course['status'] || 'liveOpen' === $lesson['type']) {
+        if ('draft' === $course['status'] && 'open' === $course['type']) {
             $this->getOpenCourseService()->publishLesson($course['id'], $lesson['id']);
         }
 

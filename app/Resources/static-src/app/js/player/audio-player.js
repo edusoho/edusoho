@@ -69,7 +69,7 @@ class AudioPlayer extends Emitter {
         template: self.options.content,
         sequentialMode: true,
       },
-      autoplay: true, //音频自动播放开启
+      autoplay: self.options.autoplay, //音频自动播放开启
       initPos: self.options.customPos,
       disableModeSelection: self.options.disableModeSelection,
       rememberLastPos: rememberLastPos,

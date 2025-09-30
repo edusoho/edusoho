@@ -285,6 +285,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'endTime <= :endTime_GE',
                 'categoryId = :categoryId',
                 'categoryId IN (:categoryIds)',
+                'activityId IN (:activityIds)',
                 'activityId = :activityId',
                 'mode = :mode',
                 'mode IN ( :modes )',

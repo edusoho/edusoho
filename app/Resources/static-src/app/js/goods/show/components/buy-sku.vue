@@ -16,7 +16,7 @@
                         <slot>{{ buyViewText }}</slot>
                     </a>
                     <a :class="btnClass"
-                       v-if="isShow && needBuyVip"
+                       v-if="sku.hidePrice != '1' && isShow && needBuyVip"
                        class="goods-btn-hover pull-right"
                        :href="needBuyVipUrl"
                        >

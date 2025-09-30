@@ -28,6 +28,11 @@ html.nav-active body {
   height: 100%;
 }
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
 .es-wrap {
   &.nav-active {
     .es-transition();
@@ -110,7 +115,7 @@ html.nav-active body {
 
   }
 
-  .search-input-content::placeholder {  
+  .search-input-content::placeholder {
     color: #D2D3D4;
    }
 
@@ -363,4 +368,8 @@ a.transition {
 }
 .item-hover {
   display: none;
+}
+
+.viewer-backdrop {
+  background: rgba(255, 255, 255, 0.85) !important;
 }

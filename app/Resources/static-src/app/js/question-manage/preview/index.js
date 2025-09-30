@@ -1,12 +1,11 @@
 import Item from './item';
+import ItemPreview from 'common/vue/components/item-bank/item-preview';
 import { Browser } from 'common/utils';
 import 'app/common/katex-render';
 
 Vue.config.productionTip = false;
-if (app.lang == 'en') {
-  const locale = local.default;
-  itemBank.default.install(Vue, {locale});
-}
+
+Vue.component(ItemPreview.name, ItemPreview);
 
 new Vue({
   render: createElement => createElement(Item)

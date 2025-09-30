@@ -11,43 +11,51 @@ class BiLiBiLiVideoItemParser extends AbstractItemParser
     protected function parseForWebUrl($item, $url)
     {
         $parseUrl = parse_url($url);
-        if (isset($parseUrl['query']) && $params = explode('&', $parseUrl['query'])) {
-            foreach ($params as $param) {
-                $param = explode('=', $param);
-                if ('p' == $param[0]) {
-                    $page = $param[1];
-                }
-            }
+
+        // 获取视频分P参数
+        $page = 1; // 默认是第1页
+        if (isset($parseUrl['query'])) {
+            parse_str($parseUrl['query'], $queryParams);
+            $page = $queryParams['p'] ?? 1;
         }
+
         $response = $this->fetchUrl($url);
 
-        if (200 != $response['code']) {
+        if ($response['code'] !== 200) {
             throw ParserException::PARSED_FAILED_BILIBILI();
         }
-        preg_match('/cid=(.*?)&aid=(.*?)&attribute=(.*?)&bvid=(.*?)&show_bv/', $response['content'], $matches);
-        if (empty($matches)) {
-            preg_match('/"embedPlayer":(.*?)},"upData"/', $response['content'], $matches);
-            if (empty($matches)) {
-                throw ParserException::PARSED_FAILED_BILIBILI_VIDEO_ID();
-            }
-            $playerInfo = json_decode($matches[1], true);
+
+        $content = $response['content'];
+
+        // 提取 bvid, aid, cid 等信息
+        preg_match('/"bvid":"(.*?)"/', $content, $bvidMatch);
+        preg_match('/"aid":(\d+)/', $content, $aidMatch);
+        preg_match('/"cid":(\d+)/', $content, $cidMatch);
+
+        if (empty($bvidMatch) || empty($aidMatch) || empty($cidMatch)) {
+            throw ParserException::PARSED_FAILED_BILIBILI_VIDEO_ID();
         }
-        $aid = $playerInfo['aid'] ?? $matches[2];
-        $bvid = $playerInfo['bvid'] ?? $matches[4];
-        $cid = $playerInfo['cid'] ?? $matches[1];
-        $page = $page ?? ($playerInfo['p'] ?? 1);
 
-        preg_match('/<h1 title="(.*?)" class="video-title(.*?)">/', $response['content'], $titleMatches);
-        $title = empty($titleMatches) ? '' : $titleMatches[1];
+        $bvid = $bvidMatch[1];
+        $aid = $aidMatch[1];
+        $cid = $cidMatch[1];
 
-        preg_match('/"state":(.*?),"duration":(.*?),"mission_id"/', $response['content'], $durationMatches);
-        $duration = empty($durationMatches) ? '' : $durationMatches[2];
+        // 提取标题
+        preg_match('/<title>(.*?)_哔哩哔哩_bilibili<\/title>/', $content, $titleMatch);
+        $title = $titleMatch[1] ?? 'b站视频';
 
-        $parsedInfo = $this->getItem($bvid, $title, $duration, $url, $this->getPlayUrl($aid, $bvid, $cid, $page));
+        // 提取视频时长
+        preg_match('/"duration":(\d+)/', $content, $durationMatch);
+        $duration = $durationMatch[1] ?? 0;
+
+        // 构造播放地址
+        $playUrl = $this->getPlayUrl($aid, $bvid, $cid, $page);
+
+        // 构造返回数据
+        $parsedInfo = $this->getItem($bvid, $title, $duration, $url, $playUrl);
 
         return array_merge($item, $parsedInfo);
     }
-
     protected function getPlayUrl($aid, $bvid, $cid, $page)
     {
         return "https://player.bilibili.com/player.html?aid={$aid}&bvid={$bvid}&cid={$cid}&page={$page}";
@@ -88,4 +96,5 @@ class BiLiBiLiVideoItemParser extends AbstractItemParser
     protected function convertMediaUri($video)
     {
     }
+
 }

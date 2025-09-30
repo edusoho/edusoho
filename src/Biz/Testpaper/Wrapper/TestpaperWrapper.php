@@ -125,15 +125,16 @@ class TestpaperWrapper
         return $items;
     }
 
-    public function wrapAIAnalysis($items)
+    public function wrapAIAnalysis($answerSceneId, $items)
     {
+        $isAgentActive = $this->isAgentActive($answerSceneId);
         foreach ($items as &$item) {
             if ('material' == $item['type']) {
                 foreach ($item['subs'] as &$question) {
-                    $question['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($question, $item);
+                    $question['aiAnalysisEnable'] = !$isAgentActive && $this->canGenerateAIAnalysisForStudent($question, $item);
                 }
             } else {
-                $item['aiAnalysisEnable'] = $this->canGenerateAIAnalysisForStudent($item);
+                $item['aiAnalysisEnable'] = !$isAgentActive && $this->canGenerateAIAnalysisForStudent($item);
             }
         }
 

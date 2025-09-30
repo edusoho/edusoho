@@ -30,6 +30,8 @@ class Testpaper extends Activity
 
     const VALID_PERIOD_MODE_ONLY_START = 2;
 
+    const VALID_PERIOD_MODE_LIMIT = 3;
+
     protected function registerListeners()
     {
         return [
@@ -44,6 +46,9 @@ class Testpaper extends Activity
             $testpaper = $this->getAssessmentService()->getAssessment($activity['mediaId']);
             $activity['testpaper'] = $testpaper;
             $activity['answerScene'] = $this->getAnswerSceneService()->get($activity['answerSceneId']);
+            if (3 == $activity['answerScene']['valid_period_mode']) {
+                $activity['answerScene']['canUpdate'] = 0 == $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['answerSceneId']]);
+            }
             $activity = $this->filterActivity($activity, $activity['answerScene']);
         }
 
@@ -71,6 +76,7 @@ class Testpaper extends Activity
                 'redo_interval' => $fields['redoInterval'],
                 'need_score' => 1,
                 'start_time' => $fields['startTime'],
+                'valid_period_mode' => 3 == $fields['validPeriodMode'] ? $fields['validPeriodMode'] : 0,
                 'pass_score' => empty($fields['passScore']) ? 0 : $fields['passScore'],
                 'enable_facein' => empty($fields['enable_facein']) ? 0 : $fields['enable_facein'],
                 'exam_mode' => empty($fields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $fields['exam_mode'],
@@ -131,7 +137,7 @@ class Testpaper extends Activity
             'isLimitDoTimes' => $testpaperActivity['isLimitDoTimes'],
             'customComments' => $testpaperActivity['customComments'],
         ];
-        $newExt['validPeriodMode'] = $this->preValidPeriodMode(['start_time' => $newExt['startTime'], 'end_time' => $newExt['endTime']]);
+        $newExt['validPeriodMode'] = $this->preValidPeriodMode($testpaperActivity['answerScene']);
 
         return $this->create($newExt);
     }
@@ -179,13 +185,41 @@ class Testpaper extends Activity
 
         try {
             $this->getBiz()['db']->beginTransaction();
+            $answerScene = $this->getAnswerSceneService()->get($activity['answerScene']['id']);
+            if (3 == $answerScene['valid_period_mode'] && $this->getAnswerRecordService()->count(['answer_scene_id' => $answerScene['id']]) > 0) {
+                // 忽略 title，仅比较其他字段是否有变更（对比最新的 $answerScene）
+                $hasOtherChanges = (
+                    $filterFields['limitedTime'] != $answerScene['limited_time'] ||
+                    $filterFields['doTimes'] != $answerScene['do_times'] ||
+                    $filterFields['redoInterval'] != $answerScene['redo_interval'] ||
+                    $filterFields['startTime'] != $answerScene['start_time'] ||
+                    (3 == $fields['validPeriodMode'] ? $fields['validPeriodMode'] : 0) != $answerScene['valid_period_mode'] ||
+                    (empty($filterFields['passScore']) ? 0 : $filterFields['passScore']) != $answerScene['pass_score'] ||
+                    (empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein']) != $answerScene['enable_facein'] ||
+                    (empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode']) != $answerScene['exam_mode'] ||
+                    (empty($filterFields['endTime']) ? 0 : $filterFields['endTime']) != $answerScene['end_time'] ||
+                    (empty($filterFields['isItemsSeqRandom']) ? 0 : $filterFields['isItemsSeqRandom']) != $answerScene['is_items_seq_random'] ||
+                    (empty($filterFields['isOptionsSeqRandom']) ? 0 : $filterFields['isOptionsSeqRandom']) != $answerScene['is_options_seq_random']
+                );
+                if (!$hasOtherChanges) {
+                    // 只更新 title
+                    $this->getAnswerSceneService()->update($answerScene['id'], [
+                        'name' => $filterFields['title'],
+                    ]);
+                    $this->getBiz()['db']->commit();
 
+                    return $this->getTestpaperActivityService()->getActivity($activity['id']);
+                } else {
+                    throw ActivityException::TESTPAPER_ANSWER_RECORD_EXISTED();
+                }
+            }
             $answerScene = $this->getAnswerSceneService()->update($activity['answerScene']['id'], [
                 'name' => $filterFields['title'],
                 'limited_time' => $filterFields['limitedTime'],
                 'do_times' => $filterFields['doTimes'],
                 'redo_interval' => $filterFields['redoInterval'],
                 'start_time' => $filterFields['startTime'],
+                'valid_period_mode' => 3 == $fields['validPeriodMode'] ? $fields['validPeriodMode'] : 0,
                 'pass_score' => empty($filterFields['passScore']) ? 0 : $filterFields['passScore'],
                 'enable_facein' => empty($filterFields['enable_facein']) ? 0 : $filterFields['enable_facein'],
                 'exam_mode' => empty($filterFields['exam_mode']) ? self::EXAM_MODE_SIMULATION : $filterFields['exam_mode'],
@@ -342,6 +376,7 @@ class Testpaper extends Activity
                 'endTime',
                 'isItemsSeqRandom',
                 'isOptionsSeqRandom',
+                'validPeriodMode',
             ]
         );
 
@@ -384,6 +419,9 @@ class Testpaper extends Activity
             $validPeriodMode = self::VALID_PERIOD_MODE_ONLY_START;
         } else {
             $validPeriodMode = self::VALID_PERIOD_MODE_NO_LIMIT;
+        }
+        if (isset($scene['valid_period_mode']) && 3 == $scene['valid_period_mode']) {
+            $validPeriodMode = $scene['valid_period_mode'];
         }
 
         return $validPeriodMode;

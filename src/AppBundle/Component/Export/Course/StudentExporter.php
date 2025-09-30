@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\ThreadService;
+use Biz\MemberOperation\Service\MemberOperationService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 
@@ -40,6 +41,9 @@ class StudentExporter extends Exporter
         $fields = [
             'user.fields.username_label',
             'user.fields.email_label',
+            'join.channel',
+            'join.time',
+            'course.expiry_date',
             'task.learn_data_detail.createdTime',
             'course.plan_task.study_rate',
             'course.plan_task.put_question',
@@ -117,13 +121,16 @@ class StudentExporter extends Exporter
             $userHomeworkCount = empty($userHomeworkCounts[$courseMember['userId']]) ? 0 : $userHomeworkCounts[$courseMember['userId']];
             $userTestpaperCount = empty($userTestpaperCounts[$courseMember['userId']]) ? 0 : $userTestpaperCounts[$courseMember['userId']];
 
-            $member[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
+            $member[] = is_numeric($user['nickname']) ? $user['nickname'] . "\t" : $user['nickname'];
             $member[] = $user['email'];
-            $member[] = date('Y-n-d H:i:s', $courseMember['createdTime']);
-            $member[] = $courseMember['learningProgressPercent'].'%';
+            $member[] = $this->transJoinChannel($courseMember);
+            $member[] = date('Y-n-d H:i', $courseMember['createdTime']);
+            $member[] = empty($courseMember['deadline']) ? $this->container->get('translator')->trans('course.expiry_date.forever_mode') : date('Y-n-d H:i', $courseMember['deadline']);
+            $member[] = empty($courseMember['startLearnTime']) ? '-' : date('Y-n-d H:i:s', $courseMember['startLearnTime']);
+            $member[] = $courseMember['learningProgressPercent'] . '%';
             $member[] = $courseMember['threadCount'];
-            $member[] = $userHomeworkCount.'/'.$homeworkCount."\t";
-            $member[] = $userTestpaperCount.'/'.$testpaperCount."\t";
+            $member[] = $userHomeworkCount . '/' . $homeworkCount . "\t";
+            $member[] = $userTestpaperCount . '/' . $testpaperCount . "\t";
             $member[] = $profile['truename'] ? $profile['truename'] : '-';
             $member[] = $gender[$profile['gender']];
             $member[] = $profile['qq'] ? $profile['qq'] : '-';
@@ -136,13 +143,26 @@ class StudentExporter extends Exporter
             $member[] = $profile['weibo'] ? $profile['weibo'] : '-';
 
             foreach ($fields as $value) {
-                $member[] = $profile[$value] ? str_replace([PHP_EOL, '"'], '', $profile[$value])."\t" : '-';
+                $member[] = $profile[$value] ? str_replace([PHP_EOL, '"'], '', $profile[$value]) . "\t" : '-';
             }
 
             $datas[] = $member;
         }
 
         return $datas;
+    }
+
+    private function transJoinChannel($member)
+    {
+        if ('import_join' === $member['joinedChannel']) {
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'course', 'target_id' => $member['courseId'], 'user_id' => $member['userId'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+                return "{$operator['nickname']}添加";
+            }
+        }
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
     }
 
     private function findUserTaskCount($courseId, $type)
@@ -187,9 +207,19 @@ class StudentExporter extends Exporter
 
     public function buildCondition($conditions)
     {
+        if (isset($conditions['userKeyword']) && $conditions['userKeyword'] != '') {
+            $conditions['userIds'] = $this->getUserService()->getUserIdsByKeyword($conditions['userKeyword']);
+        }
+
         return [
             'courseId' => $conditions['courseId'],
             'role' => 'student',
+            'startTimeGreaterThan' => $conditions['startTimeGreaterThan'] ?? '',
+            'startTimeLessThan' => $conditions['startTimeLessThan'] ?? '',
+            'joinedChannel' => $conditions['joinedChannel'] ?? '',
+            'deadlineAfter' => $conditions['deadlineAfter'] ?? '',
+            'deadlineBefore' => $conditions['deadlineBefore'] ?? '',
+            'userIds' => $conditions['userIds'] ?? [],
         ];
     }
 
@@ -270,5 +300,13 @@ class StudentExporter extends Exporter
     protected function getCoursePlanLearnDataDailyStatisticsService()
     {
         return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
+    }
+
+    /**
+     * @return MemberOperationService
+     */
+    protected function getMemberOperationService()
+    {
+        return $this->getBiz()->service('MemberOperation:MemberOperationService');
     }
 }

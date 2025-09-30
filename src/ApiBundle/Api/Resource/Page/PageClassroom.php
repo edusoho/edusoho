@@ -7,6 +7,9 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MemberService;
+use Biz\Task\Service\TaskService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
@@ -40,6 +43,12 @@ class PageClassroom extends AbstractResource
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
         $classroom['courses'] = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        foreach ($classroom['courses'] as &$course) {
+            $course['videoMaxLevel'] = $this->getCourseService()->getVideoMaxLevel($course['id']);
+        }
+        if ($user->isLogin()) {
+            $classroom['courses'] = $this->appendLastLearnTask($classroom['courses']);
+        }
         $classroom = $this->getClassroomService()->appendSpecInfo($classroom);
 
         $this->getOCUtil()->multiple($classroom['courses'], ['courseSetId'], 'courseSet');
@@ -117,6 +126,25 @@ class PageClassroom extends AbstractResource
         $user = array_merge($profile, $user);
     }
 
+    private function appendLastLearnTask($courses)
+    {
+        $courseMembers = $this->getCourseMemberService()->findCourseMembersByUserIdAndCourseIds($this->getCurrentUser()->getId(), array_column($courses, 'id'));
+        $tasks = $this->getTaskService()->findTasksByIds(array_column($courseMembers, 'lastLearnTaskId'));
+        $courseMembers = array_column($courseMembers, null, 'courseId');
+        $tasks = array_column($tasks, null, 'id');
+        foreach ($courses as &$course) {
+            $member = $courseMembers[$course['id']] ?? [];
+            $course['lastLearnTask'] = empty($tasks[$member['lastLearnTaskId']]) ? null : [
+                'id' => $member['lastLearnTaskId'],
+                'number' => $tasks[$member['lastLearnTaskId']]['number'],
+                'title' => $tasks[$member['lastLearnTaskId']]['title'],
+                'type' => $tasks[$member['lastLearnTaskId']]['type'],
+            ];
+        }
+
+        return $courses;
+    }
+
     /**
      * @return ClassroomService
      */
@@ -144,5 +172,29 @@ class PageClassroom extends AbstractResource
     private function getVipRightService()
     {
         return $this->service('VipPlugin:Marketing:VipRightService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    private function getCourseMemberService()
+    {
+        return $this->service('Course:MemberService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    private function getTaskService()
+    {
+        return $this->service('Task:TaskService');
     }
 }

@@ -171,6 +171,8 @@ interface MemberService
 
     public function changeMembersDeadlineByCourseId($courseId, $day, $waveType);
 
+    public function changeMembersDeadlineByClassroomId($classroomId, $day, $waveType);
+
     public function batchUpdateMemberDeadlinesByDay($courseId, $userIds, $day, $waveType = 'plus');
 
     public function checkDayAndWaveTypeForUpdateDeadline($courseId, $userIds, $day, $waveType = 'plus');
@@ -197,7 +199,7 @@ interface MemberService
 
     public function refreshCourseMembersFinishData($courseId);
 
-    public function getUserLiveroomRoleByCourseIdAndUserId($courseId, $userId);
+    public function getUserLiveroomRoleByCourseIdAndUserIdAndActivityId($courseId, $userId, $activityId);
 
     public function releaseMultiClassMember($courseId, $multiClassId);
 

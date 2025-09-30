@@ -11,12 +11,12 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
 
     public function declares()
     {
-        return array(
-            'orderbys' => array(
+        return [
+            'orderbys' => [
                 'createdTime',
                 'id',
-            ),
-            'conditions' => array(
+            ],
+            'conditions' => [
                 'module = :module',
                 'module IN (:modules)',
                 'action = :action',
@@ -29,21 +29,21 @@ class LogDaoImpl extends GeneralDaoImpl implements LogDao
                 'createdTime >= :startDateTime_GE',
                 'userId IN ( :userIds )',
                 'userId != :exceptedUserId',
-            ),
-        );
+            ],
+        ];
     }
 
     public function analysisLoginNumByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(distinct userid)  as num FROM `{$this->table}` WHERE `action`='login_success' AND  `createdTime`>= ? AND `createdTime`<= ?  ";
+        $sql = "SELECT count(distinct userid) as num FROM `{$this->table}` WHERE `module` in ('user', 'mobile') and `action`='login_success' AND `createdTime`>= ? AND `createdTime`<= ?  ";
 
-        return $this->db()->fetchColumn($sql, array($startTime, $endTime));
+        return $this->db()->fetchColumn($sql, [$startTime, $endTime]);
     }
 
     public function analysisLoginDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(distinct userid) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `action`='login_success' AND `createdTime`>= ? AND `createdTime`<= ? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count(distinct userid) as `count`, from_unixtime(createdTime,'%Y-%m-%d') as `date` FROM `{$this->table}` WHERE `module` in ('user', 'mobile') and `action`='login_success' AND `createdTime`>= ? AND `createdTime`<= ? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
-        return $this->db()->fetchAll($sql, array($startTime, $endTime));
+        return $this->db()->fetchAll($sql, [$startTime, $endTime]);
     }
 }

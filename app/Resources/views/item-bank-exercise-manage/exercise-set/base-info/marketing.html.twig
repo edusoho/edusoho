@@ -3,6 +3,7 @@
 {% block title %}{{'course.plan_base_info'|trans}} - {{ exercise.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'business' %}
 {% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'app/js/course-manage/info/item-bank-exercise/index.js']) %}
+{% do css(['app/css/main-ant.css']) %}
 
 {% block page_title %}{{ 'course.marketing_setup'|trans }}{% endblock %}
 
@@ -19,25 +20,18 @@
         <div class="col-sm-2 control-label">
           <label class="control-label-required" for="course_price">{{ 'site.price'|trans }}</label>
         </div>
-        <div class="col-sm-8">
-          <input class="form-control course-mangae-info__input mrs" id="course_price" type="text" name="price"
-                 value="{{ exercise.price|default(0) }}" aria-required="true" aria-describedby="course_price-error"
-                 aria-invalid="true">
-          <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+        <div class="col-sm-8" style="display: flex; align-items: center; gap: 24px">
+          <span>
+            <input class="form-control course-mangae-info__input mrs" id="course_price" type="text" name="price"
+                   value="{{ exercise.price|default(0) }}" aria-required="true" aria-describedby="course_price-error"
+                   aria-invalid="true">
+            <span class="ml5">{{ 'site.currency.CNY'|trans }}</span>
+          </span>
+          <span style="display: flex; align-items: center; gap: 12px;">
+            {{ cd_radios('hidePrice', { '0': 'item_bank_exercise.marketing_setup.show_price'|trans, '1': 'item_bank_exercise.marketing_setup.hide_price'|trans }, exercise.hidePrice|default(0)) }}
+          </span>
         </div>
       </div>
-
-        {# <div class="form-group mb0">
-          <label class="col-sm-2 control-label mb5">
-            {{ 'course.marketing_setup.setup.is_show_label'|trans }}
-          </label>
-          <div class="col-sm-8 cd-radio-group mbm">
-            {{ cd_radios('showable', { '1': 'common.course.showable.show'|trans, '0': 'common.course.showable.hide'|trans }, exercise.showable|default(0)) }}
-            <div
-              class="course-mangae-info__tip js-expiry-tip">{{ 'item_bank_exercise.marketing_setup.rule.show'|trans }}
-            </div>
-          </div>
-        </div> #}
 
         <div class="form-group">
           <label class="col-sm-2 control-label mb5">
@@ -50,6 +44,10 @@
             {{ cd_radios('joinEnable', { '1': 'course.marketing_setup.setup.can_join'|trans, '0': 'course.marketing_setup.setup.can_not_join'|trans }, exercise.joinEnable|default(1)) }}
           </div>
         </div>
+
+        <div id="contract-setting"
+             data-exercise="{{ exercise|json_encode }}"
+        ></div>
 
         {% include 'item-bank-exercise-manage/exercise-set/base-info/set-rule.html.twig' %}
 

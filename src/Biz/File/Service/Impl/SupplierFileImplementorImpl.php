@@ -38,7 +38,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
         return $this->mergeResourceFile($fileInfo, $resourceFile);
     }
 
-    public function getFileByGlobalId($globalId)
+    public function getFileByGlobalId($globalId, $ssl = false)
     {
         $file = $this->getUploadFileDao()->getByGlobalId($globalId);
 
@@ -136,7 +136,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
         return $download;
     }
 
-    public function getDefaultHumbnails($globalId)
+    public function getDefaultHumbnails($globalId, $ssl = false)
     {
     }
 

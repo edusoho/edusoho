@@ -1,6 +1,5 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
-{% set script_controller = 'system/anti-fraud-reminders' %}
 {% set menu = 'admin_v2_anti_fraud_reminder_setting' %}
 {% do script(['app/js/admin-v2/security/anti-fraud-reminder/index.js'])  %}
 
@@ -74,7 +73,7 @@
   <div class="form-group">
     <div class="col-md-3 control-label"></div>
     <div class="controls col-md-8">
-      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      <button type="submit" class="btn btn-primary">{{ 'form.btn.submit'|trans }}</button>
     </div>
   </div>
 

@@ -1,0 +1,22 @@
+{% import 'macro.html.twig' as macro %}
+
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set course = macro.link(data.courseSetTitle, path('course_set_manage_course_ai_companion_study', {courseSetId: data.courseSetId, courseId: data.courseId})) %}
+
+      {% if data.status == 'success' %}
+        {{ 'notification.dataset-index.success'|trans({'%course%': course})|raw }}
+      {% else %}
+        {{ 'notification.dataset-index.failed'|trans({'%course%': course})|raw }}
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date('site.date_format_H_i_s'|trans) }}
+    </div>
+  </div>
+</li>

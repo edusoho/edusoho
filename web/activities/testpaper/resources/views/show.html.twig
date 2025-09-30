@@ -1,12 +1,12 @@
 {% set testpaper = activity.ext.testpaper %}
 {% if app.request.get('preview') %}
-  {{ render(controller('AppBundle:Activity/Testpaper:preview', {task: {courseId: activity.fromCourseId, activityId: activity.id}})) }}
+  {{ render(controller('AppBundle:Activity/Testpaper:preview', {task: {courseId: activity.fromCourseId, activityId: activity.id, assessmentId: app.request.get('assessmentId')}})) }}
 {% else %}
   {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
 
   {% if activity.startTime and activity.startTime > ('now'|date('U')) %}
     {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
-  {% elseif activity.endTime and activity.endTime < ('now'|date('U')) %}
+  {% elseif activity.endTime and activity.endTime < ('now'|date('U')) and activity.ext.validPeriodMode|default('0') != 3 %}
     {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
   {% else %}
     {% if not latestAnswerRecord %}

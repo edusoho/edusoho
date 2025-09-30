@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import PersonaMultiInput from 'app/common/component/persona-multi-input';
-import sortList from 'common/sortable';
 
 ReactDOM.render( 
   <PersonaMultiInput 
@@ -13,6 +12,10 @@ ReactDOM.render(
   />,
   document.getElementById('course-teachers')
 );
+
+$('[data-toggle="tooltip"]').tooltip({
+  html: true,
+});
 
 $('.js-btn-save').on('click', function(event){
   if($('input[name=teachers]').val() !== '[]'){

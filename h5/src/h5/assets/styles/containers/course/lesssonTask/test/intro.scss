@@ -1,0 +1,142 @@
+.intro-body {
+	height: 100%;
+	padding-bottom: 72px;
+	background-color: #f6f6f6;
+
+	img {
+		max-width: 100%;
+	}
+
+	.van-panel__footer {
+		padding: 8px 0 12px;
+	}
+
+	.testpaper-tips {
+		padding: 12px;
+		color: #666;
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 22px;
+		background-color: #fafafa;
+		border-radius: 6px;
+	}
+
+	.exam-over {
+		margin: 16px 16px 0;
+		padding: 8px 12px;
+		color: #ff7d00;
+		font-size: 16px;
+		text-align: center;
+		background-color: #fff;
+		border-radius: 8px;
+	}
+}
+
+.intro-panel {
+	margin: 8px 16px;
+	padding: 0 16px;
+	border-radius: 8px;
+
+	.van-panel__header {
+		padding: 12px 0 5px;
+
+		&::after {
+			display: none;
+		}
+	}
+
+	.van-cell__title span {
+		color: rgba(0, 0, 0, 0.85);
+		font-weight: 500;
+		font-size: 16px;
+	}
+
+	.intro-tip {
+		color: #ff6634;
+	}
+
+	.intro-cell {
+		padding: 12px 0;
+
+		.van-cell__title span {
+			color: rgba(0, 0, 0, 0.55);
+			font-weight: 400;
+			font-size: 16px;
+		}
+
+		.van-cell__value span {
+			color: rgba(0, 0, 0, 0.85);
+			font-weight: 400;
+			font-size: 16px;
+		}
+	}
+
+	.intro-cell:not(:last-child) {
+		border-bottom: solid 1px #f2f2f2;
+	}
+}
+
+.intro-panel__content {
+	color: #333;
+	font-size: vw(14);
+	line-height: vw(18);
+
+	&.intro-panel__content--title {
+		color: #666;
+	}
+}
+
+.intro-footer {
+	position: fixed;
+	bottom: 0;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 10px 16px;
+	background-color: #fff;
+	box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.04);
+
+	.intro-footer__btn {
+		width: 100%;
+		border-radius: 4px;
+	}
+}
+
+.choose-mode-popup {
+	padding: vw(24) vw(16) 0;
+	text-align: center;
+
+	.choose-mode-title {
+		color: #272e3b;
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	.choose-mode-change-radio {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: vw(94);
+		margin: vw(38) 0;
+
+		.choose-mode-group-radio {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.choose-mode-radio {
+			display: flex;
+			flex-direction: column;
+
+      &:nth-child(1) {
+        margin-right: vw(64);
+      }
+		}
+	}
+
+	.choose-mode__btn {
+		width: 100%;
+		border-radius: 4px;
+	}
+}

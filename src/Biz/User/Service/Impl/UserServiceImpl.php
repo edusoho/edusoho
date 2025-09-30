@@ -37,6 +37,8 @@ use Biz\User\Service\InviteRecordService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Symfony\Component\HttpFoundation\File\File;
@@ -161,6 +163,25 @@ class UserServiceImpl extends BaseService implements UserService
     public function findUserLikeNickname($nickname)
     {
         return $this->getUserDao()->findUserLikeNickname($nickname);
+    }
+
+    public function hideUserNickname($user)
+    {
+        if (empty($user)) {
+            return;
+        }
+        // 判断用户名长度并进行处理
+        if (2 == mb_strlen($user['nickname'], 'UTF-8')) {
+            // 如果用户名是两个字，显示第一个字并用 '*' 代替第二个字
+            $user['nickname'] = mb_substr($user['nickname'], 0, 1).'*';
+        } elseif (mb_strlen($user['nickname'], 'UTF-8') > 2) {
+            // 如果用户名超过两个字，显示第一个字和最后一个字，中间字用 '*' 替代
+            $firstChar = mb_substr($user['nickname'], 0, 1);
+            $lastChar = mb_substr($user['nickname'], -1, 1);
+            $user['nickname'] = $firstChar.str_repeat('*', mb_strlen($user['nickname'], 'UTF-8') - 2).$lastChar;
+        }
+
+        return $user;
     }
 
     public function findUserFollowing($userId, $start, $limit)
@@ -764,20 +785,23 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changePassword($id, $password)
     {
+        $user = $this->getUser($id) ?: $this->getUserByUUID($id);
+        if (empty($user)) {
+            $this->createNewException(UserException::NOTFOUND_USER());
+        }
+
         if (empty($password)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        if (!$this->validatePassword($password)) {
-            $this->createNewException(UserException::PASSWORD_INVALID());
-        }
-
-        $user = $this->getUser($id);
-
-        if (empty($user)) {
-            $user = $this->getUserByUUID($id);
-            if (empty($user)) {
-                $this->createNewException(UserException::NOTFOUND_USER());
+        $needStrongPassword = RoleHelper::isStaff($user['roles']);
+        if ($needStrongPassword) {
+            if (!PasswordValidator::validateStrong($password)) {
+                $this->createNewException(UserException::STAFF_PASSWORD_REQUIRE_STRONG());
+            }
+        } else {
+            if (!PasswordValidator::validate($password)) {
+                $this->createNewException(UserException::PASSWORD_INVALID());
             }
         }
 
@@ -786,6 +810,7 @@ class UserServiceImpl extends BaseService implements UserService
         $fields = [
             'salt' => $salt,
             'password' => $this->getPasswordEncoder()->encodePassword($password, $salt),
+            'passwordUpgraded' => PasswordValidator::getLevel($password),
         ];
 
         $updatePass = $this->getUserDao()->update($id, $fields);
@@ -1791,6 +1816,15 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getUserDao()->waveCounterById($userId, $name, $number);
     }
 
+    public function waveUsersCounter($userIds, $name, $number)
+    {
+        if (!ctype_digit((string) $number)) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        $this->getUserDao()->waveCounterByIds($userIds, $name, $number);
+    }
+
     public function clearUserCounter($userId, $name)
     {
         $this->getUserDao()->deleteCounterById($userId, $name);
@@ -2423,6 +2457,7 @@ class UserServiceImpl extends BaseService implements UserService
         try {
             $fields = [
                 'passwordInit' => 1,
+                'passwordUpgraded' => 1,
             ];
 
             $this->getAuthService()->changePassword($id, null, $newPassword);
@@ -2439,19 +2474,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function validatePassword($password)
     {
-        $auth = $this->getSettingService()->get('auth', []);
-        $passwordLevel = empty($auth['password_level']) ? 'low' : $auth['password_level'];
-        if ('low' == $passwordLevel && SimpleValidator::lowPassword($password)) {
-            return true;
-        }
-        if ('middle' == $passwordLevel && SimpleValidator::middlePassword($password)) {
-            return true;
-        }
-        if ('high' == $passwordLevel && SimpleValidator::highPassword($password)) {
-            return true;
-        }
-
-        return false;
+        return PasswordValidator::validate($password);
     }
 
     public function setFaceRegistered($id)

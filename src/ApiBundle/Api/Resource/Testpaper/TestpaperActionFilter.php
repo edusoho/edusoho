@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 
 class TestpaperActionFilter extends Filter
 {
-    protected $publicFields = array('testpaperResult', 'testpaper', 'items', 'task', 'courseId');
+    protected $publicFields = array('testpaperResult', 'testpaper', 'items', 'task', 'courseId', 'scene');
 
     protected function publicFields(&$data)
     {

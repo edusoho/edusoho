@@ -48,6 +48,10 @@ external_login:
   path:  '/login/external'
   defaults:
         _controller: 'AppBundle:Login:externalLogin'
+h5_login:
+    path:  '/login/h5'
+    defaults:
+      _controller: 'AppBundle:Login:h5Login'
 login_check:
     path: '/login_check'
 logout:
@@ -128,10 +132,6 @@ login_check_email:
     path: '/login/check/email'
     defaults:
         _controller: 'AppBundle:Login:checkEmail'
-password_init:
-    path: '/password/init'
-    defaults:
-        _controller: 'AppBundle:PasswordInit:initPassword'
 common_qrcode:
     path: '/common/qrcode'
     defaults:
@@ -482,12 +482,6 @@ settings_assistant_qrcode_crop_modal:
     path: '/settings/assistant/qrcode/crop/modal'
     defaults:
         _controller: 'AppBundle:Settings:assistantQrCodeCropModal'
-settings_avatar_fetch_partner:
-    path: '/settings/avatar/fetch_partner'
-    defaults:
-        _controller: 'AppBundle:Settings:avatarFetchPartner'
-    methods:
-        - POST
 settings_security:
     path: '/settings/security'
     defaults:
@@ -556,14 +550,6 @@ settings_binds_bind_callback:
     path: '/settings/bind/{type}/callback'
     defaults:
         _controller: 'AppBundle:Settings:bindCallback'
-settings_scrm:
-    path: '/settings/scrm'
-    defaults:
-        _controller: 'AppBundle:Settings:scrm'
-settings_scrm_bind:
-    path: '/settings/scrm/bind'
-    defaults:
-        _controller: 'AppBundle:Settings:scrmBind'
 settings_setup_password:
     path: '/settings/setup_password'
     defaults:
@@ -670,10 +656,6 @@ my_teaching_live_calendar:
     path: '/my/teaching/live/calendar'
     defaults:
         _controller: 'AppBundle:My/CourseSet:teachingLivesCalendar'
-my_live_courses_learning:
-    path: '/my/learning/live'
-    defaults:
-        _controller: 'AppBundle:My/CourseSet:lives'
 my_testpaper_check_list:
     path: '/my/testpaper/check'
     defaults:
@@ -722,6 +704,10 @@ my_wrong_question_book:
     path: '/my/wrong_question_book'
     defaults:
         _controller: 'AppBundle:My/WrongQuestionBook:index'
+my_contract:
+    path: '/my/contract'
+    defaults:
+        _controller: 'AppBundle:My/Contract:index'
 my_wrong_question_book_target_detail:
     path: '/my/wrong_question_book/wrong_questions'
     defaults:
@@ -954,14 +940,6 @@ teacher_qualification:
     path: '/teacher/qualification'
     defaults:
         _controller: 'AppBundle:Teacher:qualification'
-partner_login:
-    path: '/partner/login'
-    defaults:
-        _controller: 'AppBundle:Partner:login'
-partner_logout:
-    path: '/partner/logout'
-    defaults:
-        _controller: 'AppBundle:Partner:logout'
 cloud_set_server:
     path: '/cloud/set-server'
     defaults:
@@ -1448,10 +1426,6 @@ edu_cloud_sms_check:
     path: '/edu_cloud/sms_check/{type}'
     defaults:
         _controller: 'AppBundle:EduCloud:smsCheck'
-edu_cloud_sms_send_callback:
-    path: '/edu_cloud/sms/callback/{targetType}/{targetId}'
-    defaults:
-        _controller: 'AppBundle:EduCloud:smsCallBack'
 edu_cloud_search_callback:
     path: '/edu_cloud/search/callback'
     defaults:
@@ -1535,6 +1509,10 @@ open_course_explore:
     defaults:
         _controller: 'AppBundle:Explore:openCourse'
         category: ''
+open_course_comment:
+  path: '/open/course/{courseId}/comment'
+  defaults:
+    _controller: 'AppBundle:OpenCourse:comment'
 open_course_manage:
     path: '/open/course/{id}/manage'
     defaults:
@@ -1748,6 +1726,10 @@ live_open_course_manage_replay:
     path: '/open/course/{id}/manage/replay'
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:replayManage'
+live_open_course_manage_lessons:
+  path: '/open/course/{id}/manage/lessons'
+  defaults:
+    _controller: 'AppBundle:LiveOpenCourse:lessonsManage'
 live_open_course_lesson_replay_create:
     path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/create'
     defaults:
@@ -1757,11 +1739,11 @@ live_open_course_lesson_replay_upload:
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:uploadModal'
 live_open_course_live_replay_entry:
-    path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry'
+    path: '/open/course/{courseId}/lesson/{lessonId}/live_replay_entry'
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:entryReplay'
 live_open_course_live_replay_url:
-    path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/url'
+    path: '/open/course/{courseId}/lesson/{lessonId}/live/replay/url'
     defaults:
         _controller: 'AppBundle:LiveOpenCourse:getReplayUrl'
 live_open_lesson_time_check:
@@ -1824,6 +1806,10 @@ course_activity_download:
     path: '/course/{courseId}/activiy/{activityId}/download'
     defaults:
         _controller: 'AppBundle:Activity/Download:downloadFile'
+course_activity_download_file_preview:
+    path: '/course/{courseId}/activity/{activityId}/download_file/{materialId}/preview'
+    defaults:
+        _controller: 'AppBundle:Activity/Download:previewFile'
 course_manage_activity_manage_custom_route:
     path: '/course/{fromCourseId}/manage/activity_{mediaType}/{id}/{routeName}'
     defaults:
@@ -2196,6 +2182,14 @@ course_set_manage_course_tasks:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/tasks'
     defaults:
         _controller: 'AppBundle:Course/CourseManage:tasks'
+course_set_manage_course_item_bank:
+  path: '/course_set/{courseSetId}/manage/course/{courseId}/itemBank'
+  defaults:
+    _controller: 'AppBundle:Course/CourseManage:itemBank'
+course_set_manage_course_ai_companion_study:
+  path: '/course_set/{courseSetId}/manage/course/{courseId}/aiCompanionStudy'
+  defaults:
+    _controller: 'AppBundle:Course/CourseManage:aiCompanionStudy'
 course_set_manage_course_replay:
     path: '/course_set/{courseSetId}/manage/course/{courseId}/replay'
     defaults:
@@ -2799,6 +2793,10 @@ classroom_manage_courses:
     path: '/classroom/{id}/manage/courses'
     defaults:
         _controller: 'AppBundle:Classroom/ClassroomManage:courses'
+classroom_manage_item_bank:
+  path: '/classroom/{id}/manage/itemBank'
+  defaults:
+    _controller: 'AppBundle:Classroom/ClassroomManage:itemBank'
 classroom_manage_course_remove:
     path: '/classroom/{id}/manage/course/{courseId}/remove'
     defaults:
@@ -3067,6 +3065,10 @@ classroom_courses:
     path: '/classroom/{classroomId}/courses'
     defaults:
         _controller: 'AppBundle:Classroom/Course:list'
+classroom_itemBankBind:
+    path: '/classroom/{classroomId}/itemBankBind'
+    defaults:
+        _controller: 'AppBundle:Classroom/ClassroomItemBankBind:list'
 classroom_member_access:
     path: '/classroom/{classroomId}/member/{memberId}/access'
     defaults:
@@ -3920,6 +3922,10 @@ item_bank_exercise_manage_wrong_questions:
     path: '/item_bank_exercise/{exerciseId}/manage/wrong_questions'
     defaults:
         _controller: 'AppBundle:ItemBankExercise/StudentManage:wrongQuestions'
+item_bank_exercise_manage_ai_companion_study:
+    path: '/item_bank_exercise/{exerciseId}/manage/ai_companion_study'
+    defaults:
+        _controller: 'AppBundle:ItemBankExercise/StudentManage:aiCompanionStudy'
 item_bank_exercise_manage_students_add:
     path: '/item_bank_exercise/{exerciseId}/manage/students/add'
     defaults:
@@ -4215,3 +4221,8 @@ user_show_mobile:
     _controller: 'AppBundle:MobileMask:showMobile'
   methods:
     - POST
+
+secondary_verification:
+    path: '/secondary/verification'
+    defaults:
+        _controller: 'AppBundle:SecondaryVerification/SecondaryVerification:index'

@@ -1,0 +1,12 @@
+services:
+  agent_config_event_subscriber:
+    class: AgentBundle\Biz\AgentConfig\Event\AgentConfigEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }
+
+  study_plan_event_subscriber:
+    class: AgentBundle\Biz\StudyPlan\Event\StudyPlanEventSubscriber
+    arguments: [ '@biz' ]
+    tags:
+      - { name: codeages_plugin.event.subscriber }

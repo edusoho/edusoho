@@ -27,12 +27,9 @@ class QuestionAIAnalysisController extends BaseController
 
     private function syncToCloud($setting)
     {
-        $result = $this->getAIService()->inspectAccount();
-        if (empty($setting['teacher_enabled']) && empty($setting['student_enabled']) && 'ok' == $result['status']) {
-            $this->getAIService()->disableAccount();
-        }
+        $result = $this->getAIService()->inspectTenant();
         if ((!empty($setting['teacher_enabled']) || !empty($setting['student_enabled'])) && 'ok' != $result['status']) {
-            $this->getAIService()->enableAccount();
+            $this->getAIService()->enableTenant();
         }
     }
 

@@ -1,0 +1,102 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-custom" %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/secondary-verification/index.js']) %}
+
+{% block title %}
+  {{ 'admin_v2.secondary.verification.security_verification'|trans }}
+{% endblock %}
+{% block body %}
+  <form id="mobile-bind-form" data-user-id="{{app.user.id}}">
+    {% if exportFileName == 'user' or exportFileName == 'order' %}
+      <p>{{ 'admin_v2.secondary.verification.security_verification.tips'|trans }}</p>
+    {% endif %}
+    <div class="form-group cd-form-group">
+      <label class="control-label" style="margin-bottom: 10px;" for="mobile">{{'site.mobile_bind.phone_number'|trans}}</label>
+      <div class="controls"><p>{{ mobile|slice(0, 3) ~ '****' ~ mobile|slice(7, 4) }}</p></div>
+    </div>
+
+    {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+      <div class="form-group cd-mb24 js-drag-jigsaw hidden">
+        {% include 'common/drag.html.twig' with { auth: true } %}
+      </div>
+    {% endif %}
+
+    <div class="form-group cd-form-group">
+      <label class="control-label" style="margin-bottom: 10px;" for="sms_code">{{'form.sms_code'|trans}}</label>
+      <div class="controls cd-row">
+        <div class="col-xs-6">
+          <input type="text" maxlength="6" class="form-control input-sm" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_secondary_verification'})}}">
+          <p class="help-block"> </p>
+        </div>
+        <div class="col-xs-6">
+          <button type="button" style="padding-right:2px;" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send sms-send-btn"   data-url="{{ path('edu_cloud_sms_send_check_captcha') }}">
+            <span id="js-time-left"></span>
+            <span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <input class="form-control" type="hidden" id="mobile" name="mobile" value="{{ mobile }}"/>
+    <input class="form-control" type="hidden" id="params" name="params" value="{{ params|json_encode|e('html_attr') }}">
+    {% if exportFileName == 'user' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-user-btn cd-btn-primary" id="user-export" data-toggle="modal" data-target="#modal"
+         >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'classroomStudent' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-export-classroom-student-btn cd-btn-primary" id="classroom-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'deleteUser' %}
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn js-delete-user cd-btn-primary" id="delete-user" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'courseStudent' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="course-students"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-students-export cd-btn-primary" id="coruse-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'itemBankExercise' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="item-bank-exercise-students"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn item-bank-exercise-students-export cd-btn-primary" id="item-bank-exercise-student-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'overviewStudentDetail' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="course-overview-student-list"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-overview-student-list-export cd-btn-primary" id="course-overview-student-list-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'overviewTaskList' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="course-overview-task-list"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn course-overview-task-list-export cd-btn-primary" id="course-overview-task-list-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'overviewClassroomStudentDetail' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="classroom-statistics-students-learn"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn classroom-statistics-students-learn-export cd-btn-primary" id="classroom-statistics-students-learn-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'overviewClassroomStatisticsCourse' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="classroom-statistics-course-learn"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn classroom-statistics-course-learn-export cd-btn-primary" id="classroom-statistics-course-learn-export" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% elseif exportFileName == 'courseOrder' or exportFileName == 'order' or exportFileName == 'classroomOrder' %}
+      <input class="form-control" type="hidden" id="exportType" name="exportType" value="order"/>
+      <a class="btn cd-btn cd-btn-lg mobile-bind-form__btn order-export cd-btn-primary" id="course-order" data-toggle="modal" data-target="#modal"
+      >{{ 'form.btn.submit'|trans }}</a>
+    {% endif %}
+
+
+  </form>
+  <style>
+    /* 自定义模态框宽度 (576px以上屏幕生效) */
+    @media (min-width: 576px) {
+      .modal-custom {
+        max-width: 350px; /* 介于modal-sm和modal-md之间 */
+        margin: 1.75rem auto;
+      }
+      /* 针对所有包含 cd-btn-lg 类的按钮 */
+      .cd-btn-lg {
+        width: 80% !important;
+        box-sizing: border-box !important;
+        display: block !important;  /* 转换为块级元素 */
+        margin: 0 auto !important;   /* 水平自动居中 */
+      }
+    }
+
+  </style>
+{% endblock %}
+

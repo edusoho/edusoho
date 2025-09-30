@@ -2,6 +2,9 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use Biz\System\Service\SettingService;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,10 +36,35 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
             throw UserException::PASSWORD_ERROR();
         }
 
+        $passwordLevel = PasswordValidator::getLevel($password);
+        if ($user['passwordUpgraded'] != $passwordLevel) {
+            $this->getUserService()->updateUser($user['id'], ['passwordUpgraded' => $passwordLevel]);
+            $user['passwordUpgraded'] = $passwordLevel;
+        }
+
+        if (RoleHelper::isStudent($user['roles'])) {
+            $loginBindSetting = $this->getSettingService()->get('login_bind');
+            if (($loginBindSetting['student_weak_password_check'] ?? 0) && !PasswordValidator::isValidLevel($user['passwordUpgraded'])) {
+                throw UserException::PASSWORD_REQUIRE_UPGRADE();
+            }
+        } else {
+            if (!PasswordValidator::isStrongLevel($user['passwordUpgraded'])) {
+                throw UserException::PASSWORD_REQUIRE_UPGRADE();
+            }
+        }
+
         if ($user['locked']) {
             throw UserException::LOCKED_USER();
         }
 
         return $user;
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->container->get('biz')->service('System:SettingService');
     }
 }

@@ -2,9 +2,9 @@
 
 namespace Biz\File\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface UploadFileDao extends GeneralDaoInterface
+interface UploadFileDao extends AdvancedDaoInterface
 {
     public function getByHashId($hash);
 

@@ -251,4 +251,6 @@ interface TaskService
     public function syncClassroomCourseTasks($courseId, $real);
 
     public function isTaskLocked($taskId);
+
+    public function batchUpdateMediaByActivityIds($activityIds, $media);
 }

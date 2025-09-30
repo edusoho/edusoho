@@ -2,7 +2,9 @@
 
 namespace Biz\User\Dao;
 
-interface NotificationDao
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
+
+interface NotificationDao extends AdvancedDaoInterface
 {
     public function searchByUserId($userId, $start, $limit);
 

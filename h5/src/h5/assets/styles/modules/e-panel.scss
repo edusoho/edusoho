@@ -1,0 +1,23 @@
+.e-panel {
+  display: flex;
+  flex-direction: column;
+  margin: 0 vw(20);
+  background-color: white;
+
+  &-heading {
+    @extend .title-18;
+    padding: vw(25) 0 vw(15);
+  }
+
+  &-body {
+    font-size: vw(14);
+    margin-bottom: vw(25);
+    &.needFlex {
+      display: flex;
+      flex-direction: column;
+    }
+    .e-course:last-child {
+      padding-bottom: 0;
+    }
+  }
+}

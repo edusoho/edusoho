@@ -8,8 +8,12 @@ use AppBundle\Common\Exception\ResourceNotFoundException;
 use AppBundle\Common\JWTAuth;
 use Biz\Common\CommonException;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
+use Biz\System\Service\SettingService;
 use Biz\User\CurrentUser;
+use Biz\User\Support\PasswordValidator;
+use Biz\User\Support\RoleHelper;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+use Firebase\JWT\JWT;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -78,13 +82,72 @@ class BaseController extends Controller
         return $limitedTime;
     }
 
-    protected function authenticateUser(array $user)
+    /**
+     * 设置用户登录
+     *
+     * @param array $user
+     * @return CurrentUser
+     */
+    protected function authenticateUser(array $user): CurrentUser
     {
         $user['currentIp'] = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
 
-        return $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+        $currentUser = $this->switchUser($this->get('request_stack')->getCurrentRequest(), $currentUser);
+
+        $this->checkLoginPasswordUpgraded($currentUser, $this->get('request_stack')->getCurrentRequest());
+
+        return $currentUser;
+    }
+
+    protected function checkLoginPasswordUpgraded(CurrentUser $currentUser, Request $request)
+    {
+        if (!$currentUser->isLogin()) {
+            return;
+        }
+
+        if (RoleHelper::isStudent($currentUser['roles'])) {
+            $loginBindSetting = $this->getBiz()->service('System:SettingService')->get('login_bind');
+            if (!($loginBindSetting['student_weak_password_check'] ?? 0)) {
+                return;
+            }
+            if (PasswordValidator::isValidLevel($currentUser['passwordUpgraded'])) {
+                return ;
+            }
+        } else {
+            if (PasswordValidator::isStrongLevel($currentUser['passwordUpgraded'])) {
+                return ;
+            }
+        }
+        $request->getSession()->set('needUpgradePassword', 1);
+    }
+
+    protected function authByToken(Request $request)
+    {
+        $authorization = $request->headers->get('Authorization');
+        if (!empty($authorization) && (false !== strpos($authorization, 'Bearer '))) {
+            $token = str_replace('Bearer ', '', $authorization);
+        } else {
+            $token = $request->query->get('token');
+        }
+        if (empty($token)) {
+            return;
+        }
+        $storage = $this->setting('storage', []);
+        try {
+            $payload = JWT::decode($token, [$storage['cloud_access_key'] => $storage['cloud_secret_key']], ['HS256']);
+        } catch (\RuntimeException $e) {
+            return;
+        }
+        $user = $this->getUserService()->getUser($payload->sub);
+        if (empty($user)) {
+            return;
+        }
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $biz = $this->getBiz();
+        $biz['user'] = $currentUser;
     }
 
     protected function fillUserStatus($conditions)
@@ -148,7 +211,9 @@ class BaseController extends Controller
         //如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
         if (isset($_SERVER['HTTP_VIA'])) {
             //找不到为flase,否则为true
-            return stristr($_SERVER['HTTP_VIA'], 'wap') ? true : false;
+            if (stristr($_SERVER['HTTP_VIA'], 'wap')) {
+                return true;
+            };
         }
 
         //判断手机发送的客户端标志,兼容性有待提高
@@ -231,10 +296,6 @@ class BaseController extends Controller
         }
 
         $url = explode('?', $targetPath);
-
-        if ($url[0] == $this->generateUrl('partner_logout', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
-            return $this->generateUrl('homepage');
-        }
 
         if ($url[0] == $this->generateUrl('password_reset_update', [], UrlGeneratorInterface::ABSOLUTE_URL)) {
             $targetPath = $this->generateUrl('homepage', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -460,7 +521,7 @@ class BaseController extends Controller
      */
     protected function checkDragCaptchaToken(Request $request, $token)
     {
-        $enableAntiBrushCaptcha = $this->getSettingService()->node('ugc_content_audit.enable_anti_brush_captcha');
+        $enableAntiBrushCaptcha = $this->getBiz()->service('System:SettingService')->node('ugc_content_audit.enable_anti_brush_captcha');
         if (empty($enableAntiBrushCaptcha)) {
             return true;
         }

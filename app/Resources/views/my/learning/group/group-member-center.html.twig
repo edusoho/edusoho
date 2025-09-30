@@ -5,6 +5,7 @@
 {% set side_nav = 'my-group' %}
 {% set tab_nav = 'index' %}
 {% block main %}
+  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
     {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
       {% block heading %}
         {{'my.learning.group'|trans}}

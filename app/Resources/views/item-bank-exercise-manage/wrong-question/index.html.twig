@@ -8,6 +8,11 @@
   {% include 'item-bank-exercise-manage/panel-header/exercise-publish-header.html.twig' with {code: course_side_nav} %}
 {% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('static-dist/app/css/main-ant.css') }}" rel="stylesheet"/>
+{% endblock %}
+
 {% block main_body %}
   <input type="hidden" class="js-item-bank-id" value="{{ questionBank.id }}" />
   <div id="app">

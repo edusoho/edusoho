@@ -28,8 +28,10 @@
 </div>
 <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
 
-{% include 'export/export-btn.html.twig' with
-  {'exportFileName': exportName,
-  'targetFormId': 'bill-search-form'}
-%}
+{% if canExport %}
+  {% include 'export/export-btn.html.twig' with
+    {'exportFileName': exportName,
+    'targetFormId': 'bill-search-form'}
+  %}
+{% endif %}
 </form>

@@ -47,6 +47,7 @@
   app.cloudOldUploaderSdkUrl = '{{ cloud_sdk_url("old_uploader") }}';
   app.cloudOldDocumentSdkUrl = '{{ cloud_sdk_url("old_document") }}';
   app.lang = '{{ app.request.locale }}';
+  app.mainColor = '{{ current_theme().confirmConfig.maincolor|default('default') }}';
 </script>
 {% if state %}
   {% include 'admin-v2/script/translation.html.twig' %}

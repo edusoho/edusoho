@@ -97,6 +97,7 @@ class UserCommonController extends BaseController
         return $this->render($indexTwigUrl, [
             'users' => $users,
             'userCount' => $userCount,
+            'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
             'allRoles' => $this->getAllRoles(),
             'paginator' => $paginator,
             'profiles' => $profiles,
@@ -231,7 +232,7 @@ class UserCommonController extends BaseController
         $userData['password'] = $formData['password'];
         $userData['createdIp'] = $clientIp;
         $userData['type'] = $formData['type'];
-        $userData['passwordInit'] = 0;
+        $userData['passwordInit'] = 1;
 
         if (isset($formData['orgCode'])) {
             $userData['orgCode'] = $formData['orgCode'];
@@ -413,17 +414,8 @@ class UserCommonController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
-
-        if ($hasPartnerAuth) {
-            $partnerAvatar = $this->getAuthService()->getPartnerAvatar($user['id'], 'big');
-        } else {
-            $partnerAvatar = null;
-        }
-
         return $this->render($avatarTwigUrl, [
             'user' => $user,
-            'partnerAvatar' => $partnerAvatar,
         ]);
     }
 

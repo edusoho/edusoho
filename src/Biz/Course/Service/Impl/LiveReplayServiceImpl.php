@@ -13,6 +13,7 @@ use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
+use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskService;
@@ -58,7 +59,9 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         $result = $this->getLessonReplayDao()->deleteByLessonId($lessonId, $lessonType);
 
         $this->getLogService()->info('replay', 'delete_replay', '删除回放lessonId'.$lessonId);
-        $this->dispatchEvent('live.replay.delete', ['lessonId' => $lessonId]);
+        if ('live' == $lessonType) {
+            $this->dispatchEvent('live.replay.delete', ['lessonId' => $lessonId]);
+        }
 
         return $result;
     }
@@ -111,7 +114,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         return $this->getLessonReplayDao()->findByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
     }
 
-    public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false)
+    public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false, $isNormalCourse = true)
     {
         $replay = $this->getReplay($replayId);
         $user = $this->getCurrentUser();
@@ -122,7 +125,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             'provider' => $liveProvider,
             'user' => $user->isLogin() ? $user['email'] : '',
             'nickname' => $user->isLogin() ? $user['nickname'] : 'guest',
-            'role' => $user->isLogin() ? $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserId($replay['courseId'], $user['id']) : 'student',
+            'role' => $this->getRole($user, $isNormalCourse, $replay),
         ];
 
         //用来计算当前直播用户数量
@@ -231,7 +234,7 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
      * 处理直播回放返回的错误数据 对直播的返回进行重新返回
      * 此处的匹配是根据教育云返回的字符串进行匹配 若教育云返回消息变了这个代码将失效
      */
-    public function handleReplayErrorException(int $liveId, string $message, int $code)
+    private function handleReplayErrorException(int $liveId, string $message, int $code)
     {
         if ('回放状态错误，当前状态：none' == $message) {
             $message = '该直播无回放（未上课或未录制）';
@@ -251,6 +254,9 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
             return $replayDatas;
         }
         $liveActivity = $this->getLiveActivityService()->getByLiveId($liveId);
+        if (empty($liveActivity)) {
+            return $replayDatas;
+        }
         $activity = $this->getActivityService()->getByMediaIdAndMediaType($liveActivity['id'], 'live');
         $replayCount = $this->getLessonReplayDao()->count([
             'courseId' => $activity['fromCourseId'],
@@ -279,6 +285,56 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
         }
 
         return $replayDatas;
+    }
+
+    public function handleReplayGenerateEventForOpenCourse($liveId, $replayDatas)
+    {
+        $lesson = $this->getOpenCourseService()->getLiveOpenLessonByLiveId($liveId);
+        if (empty($lesson)) {
+            return;
+        }
+        $replays = [];
+        foreach ($replayDatas as $replay) {
+            $replays[] = $this->addReplay([
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'title' => $replay['subject'],
+                'replayId' => $replay['id'],
+                'globalId' => empty($replay['resourceNo']) ? '' : $replay['resourceNo'],
+                'type' => 'liveOpen',
+            ]);
+        }
+
+        $this->dispatchEvent('live.replay.generate', $replays);
+    }
+
+    public function getReplayByLessonIdAndReplayIdAndType($lessonId, $replayId, $type)
+    {
+        return $this->getLessonReplayDao()->getByLessonIdAndReplayIdAndType($lessonId, $replayId, $type);
+    }
+
+    private function getRole($user, $isNormalCourse, $replay)
+    {
+        $isLoggedIn = $user->isLogin();
+        $role = 'student'; // 默认角色设为学员
+
+        if ($isLoggedIn) {
+            if ($isNormalCourse) {
+                $role = $this->getCourseMemberService()->getUserLiveroomRoleByCourseIdAndUserIdAndActivityId(
+                    $replay['courseId'],
+                    $user['id'],
+                    $replay['lessonId']
+                ) ?? $role; // 防止返回空值
+            } else {
+                $member = $this->getOpenCourseService()->getCourseMember(
+                    $replay['courseId'],
+                    $user['id']
+                );
+                $role = $member['role'] ?? $role; // 确保从成员数据提取角色
+            }
+        }
+
+        return $role;
     }
 
     /**
@@ -346,6 +402,14 @@ class LiveReplayServiceImpl extends BaseService implements LiveReplayService
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     /**

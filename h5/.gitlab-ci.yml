@@ -1,0 +1,16 @@
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+    - node_modules
+
+deploy for develop:
+  stage: deploy
+  image: codeages/ci-php71:6
+  script:
+    - mkdir -p ~/.ssh
+    - touch ~/.ssh/deployerkey
+    - echo "$DEV_SERVER_PRIVATE_KEY" >> ~/.ssh/deployerkey
+    - chmod 400  ~/.ssh/deployerkey
+    - dep deploy dev
+  only:
+    - develop

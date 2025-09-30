@@ -27,7 +27,8 @@ class Members extends BaseResource
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
         foreach ($members as &$member) {
-            $member['user'] = empty($users[$member['userId']]) ? null : $users[$member['userId']];
+            $user = $this->getUserService()->hideUserNickname($users[$member['userId']]);
+            $member['user'] = empty($user) ? null : $user;
         }
 
         return $this->wrap($this->filter($members), $total);

@@ -57,6 +57,7 @@ class BillController extends BaseController
             'users' => $users,
             'userProfiles' => $userProfiles,
             'netIncome' => $netIncome,
+            'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
             'outflow' => $outflow,
             'inflow' => $inflow,
             'trades' => $trades,

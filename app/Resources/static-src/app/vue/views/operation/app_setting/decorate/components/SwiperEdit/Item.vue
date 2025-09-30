@@ -25,6 +25,7 @@
       <div
         v-show="selectdLink"
         class="pull-left text-overflow selectd-link"
+
       >
           {{ selectdLink }}
           <a-icon @click="handleModity" type="close-circle" />

@@ -2,9 +2,9 @@
 
 namespace Topxia\Api\Resource\User;
 
+use Biz\User\Support\PasswordValidator;
 use Silex\Application;
 use Topxia\Api\Util\SmsUtil;
-use AppBundle\Common\SimpleValidator;
 use Topxia\Api\Resource\BaseResource;
 use AppBundle\Common\EncryptionToolkit;
 use Topxia\Service\Common\ServiceKernel;
@@ -36,7 +36,7 @@ class Password extends BaseResource
         }
 
         $password = EncryptionToolkit::XXTEADecrypt(base64_decode($password), $request->getHost());
-        if (!SimpleValidator::password($password)) {
+        if (!PasswordValidator::validate($password)) {
             return $this->error('500', '密码不符合要求');
         }
 

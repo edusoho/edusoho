@@ -33,6 +33,7 @@ const init = function(html = '', options)
   };
   $.validator.addMethod = function(name, fn) {
   };
+  $.validator.format = function(source) {};
 
   global.$ = $;
   global.jQuery = $;

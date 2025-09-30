@@ -16,6 +16,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Classroom\Service\ReportService;
 use Biz\Content\Service\FileService;
+use Biz\Contract\Service\ContractService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\MemberOperation\Service\MemberOperationService;
@@ -62,6 +63,10 @@ class ClassroomManageController extends BaseController
             $coursePrice += $course['originPrice'];
         }
         $courseNum = count($courses);
+        $relatedContract = $this->getContractService()->getRelatedContractByGoodsKey("classroom_{$id}");
+        $classroom['contractId'] = $relatedContract['contractId'] ?? 0;
+        $classroom['contractForceSign'] = empty($relatedContract['sign']) ? 0 : 1;
+        $classroom['contractName'] = $relatedContract['contractName'] ?? '';
 
         return $this->render(
             'classroom-manage/index.html.twig',
@@ -131,6 +136,7 @@ class ClassroomManageController extends BaseController
                 'userProfiles' => $this->getUserService()->findUserProfilesByIds(array_column($students, 'userId')),
                 'paginator' => $paginator,
                 'role' => $role,
+                'canExport' => $this->getCurrentUser()->hasPermission('custom_export_permission'),
                 'disableDeleteSearchResult' => empty($fields['keyword']) && empty($fields['expired']),
                 'offset' => $paginator->getOffsetCount(),
             ]
@@ -261,6 +267,7 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $studentIds = $request->request->get('studentIds', []);
+        $studentIds = is_array($studentIds) ? $studentIds : explode(',', $studentIds);
         if (empty($this->getUserService()->findUsersByIds($studentIds))) {
             return $this->createJsonResponse(['success' => false]);
         }
@@ -315,7 +322,10 @@ class ClassroomManageController extends BaseController
             if (empty($user)) {
                 $this->createNewException(UserException::NOTFOUND_USER());
             }
-            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $operateUser = $this->getUser();
+            $data['remark'] = empty($data['remark']) ? $operateUser['nickname'].'添加' : $data['remark'];
+            $data['reason'] = $data['remark'];
+            $data['reason_type'] = 'import_join';
             $data['isNotify'] = 1;
             $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 
@@ -357,7 +367,8 @@ class ClassroomManageController extends BaseController
             $role,
             $start,
             $limit,
-            $exportAllowCount
+            $exportAllowCount,
+            $request->query->all()
         );
         $file = '';
         if (0 == $start) {
@@ -385,15 +396,27 @@ class ClassroomManageController extends BaseController
         return ExportHelp::exportCsv($request, $fileName);
     }
 
-    private function getExportContent($id, $role, $start, $limit, $exportAllowCount)
+    private function getExportContent($id, $role, $start, $limit, $exportAllowCount, $condition)
     {
+        $condition = ArrayToolkit::parts($condition, [
+            'startTimeGreaterThan',
+            'startTimeLessThan',
+            'joinedChannel',
+            'deadlineAfter',
+            'deadlineBefore',
+            'userKeyword',
+        ]);
+        if (isset($condition['userKeyword']) && '' != $condition['userKeyword']) {
+            $condition['userIds'] = $this->getUserService()->getUserIdsByKeyword($condition['userKeyword']);
+            unset($condition['userKeyword']);
+        }
         $this->getClassroomService()->tryManageClassroom($id);
         $gender = ['female' => '女', 'male' => '男', 'secret' => '秘密'];
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $condition = [
+        $condition = array_merge($condition, [
             'classroomId' => $classroom['id'],
             'role' => 'student' == $role ? 'student' : 'auditor',
-        ];
+        ]);
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
         $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount : $classroomMemberCount;
         if ($classroomMemberCount < ($start + $limit + 1)) {
@@ -416,7 +439,7 @@ class ClassroomManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
         $this->appendLearningProgress($classroomMembers, $id);
-        $str = '用户名,Email,加入学习时间,学习进度,学习有效期,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔,累加学习时长';
+        $str = '用户名,Email,加入学习时间,加入方式,学习进度,学习有效期,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔,累加学习时长';
         foreach ($fields as $key => $value) {
             $str .= ','.$value;
         }
@@ -428,6 +451,7 @@ class ClassroomManageController extends BaseController
             ) ? $users[$classroomMember['userId']]['nickname']."\t".',' : $users[$classroomMember['userId']]['nickname'].',';
             $member .= $users[$classroomMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
+            $member .= $this->transJoinChannel($classroomMember).',';
             $member .= $classroomMember['learningProgressPercent'].',';
             $member .= (empty($classroomMember['deadline']) ? $this->trans('course.expiry_date.forever_mode') : date(
                     'Y-n-d H:i',
@@ -496,7 +520,7 @@ class ClassroomManageController extends BaseController
                     return $this->createJsonResponse(true);
                 }
                 $date = TimeMachine::isTimestamp($fields['deadline']) ? $fields['deadline'] : strtotime($fields['deadline'].' 23:59:59');
-                $this->getClassroomService()->updateMember(['classroomId' => $classroomId], ['deadline' => $date]);
+                $this->getClassroomService()->changeMembersDeadlineByDate(['classroomId' => $classroomId], ['deadline' => $date]);
 
                 return $this->createJsonResponse(true);
             }
@@ -685,6 +709,11 @@ class ClassroomManageController extends BaseController
         if ($this->isPluginInstalled('Vip')) {
             $this->setVipRight($id, $class);
         }
+        if (empty($class['contractEnable'])) {
+            $this->getContractService()->unRelateContract("classroom_{$id}");
+        } else {
+            $this->getContractService()->relateContract($class['contractId'], "classroom_{$id}", $class['contractForceSign']);
+        }
 
         return $this->createJsonResponse(true);
     }
@@ -780,6 +809,18 @@ class ClassroomManageController extends BaseController
                 'price' => $price,
                 'coinPrice' => $coinPrice,
                 'users' => $users,
+            ]
+        );
+    }
+
+    public function itemBankAction($id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        return $this->render(
+            'classroom-manage/item-bank.html.twig',
+            [
+                'classroom' => $classroom,
             ]
         );
     }
@@ -1282,6 +1323,20 @@ class ClassroomManageController extends BaseController
         return $routes[$mode][$type];
     }
 
+    private function transJoinChannel($member)
+    {
+        if ('import_join' === $member['joinedChannel']) {
+            $records = $this->getMemberOperationService()->searchRecords(['target_type' => 'classroom', 'target_id' => $member['classroomId'], 'user_id' => $member['userId'], 'operate_type' => 'join'], ['id' => 'DESC'], 0, 1);
+            if (!empty($records)) {
+                $operator = $this->getUserService()->getUser($records[0]['operator_id']);
+
+                return "{$operator['nickname']}添加";
+            }
+        }
+
+        return ['free_join' => '免费加入', 'buy_join' => '购买加入', 'vip_join' => '会员加入'][$member['joinedChannel']] ?? '';
+    }
+
     private function getTagIdsFromRequest($request)
     {
         $tags = $request->request->get('tags');
@@ -1502,5 +1557,13 @@ class ClassroomManageController extends BaseController
     protected function getReportService()
     {
         return $this->getBiz()->service('Classroom:ReportService');
+    }
+
+    /**
+     * @return ContractService
+     */
+    private function getContractService()
+    {
+        return $this->createService('Contract:ContractService');
     }
 }

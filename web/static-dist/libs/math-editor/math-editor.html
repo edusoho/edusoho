@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>数学公式编辑器</title>
+	<script src="jquery-1.11.0.min.js"></script>
+	<script src="postmate.dev.js"></script>
+	<script src="mathquill.js"></script>
+	<link rel="stylesheet" href="mathquill.css"/>
+</head>
+<body>
+<script type="module">
+	let childApi;
+	const MQ = MathQuill.getInterface(2);
+	const editorEl = $('#editor')[0];
+	const mathField = MQ.MathField(editorEl, {
+		spaceBehavesLikeTab: true,
+		leftRightIntoCmdGoes: 'up',
+		restrictMismatchedBrackets: true,
+		sumStartsWithNEquals: true,
+		supSubsRequireOperand: true,
+		charsThatBreakOutOfSupSub: '+-=<>',
+		autoSubscriptNumerals: true,
+		autoCommands: 'pi theta sqrt sum frac',
+		autoOperatorNames: 'sin cos tan log lim max min',
+		maxDepth: 10,
+		substituteTextarea: function() {
+			return document.createElement('textarea');
+		},
+		handlers: {
+			edit: function() {
+                if (childApi && childApi.emit) {
+                    childApi.emit('update', mathField.latex());
+                }
+            }
+		}
+	});
+
+    const params = new URLSearchParams(window.location.search);
+    const defaultFormula = params.get('formula');
+    if (defaultFormula) {
+        mathField.latex(defaultFormula);
+    }
+
+    window.getFormula = () => {
+        return mathField.latex();
+    }
+
+	import {useEditor} from './editor.js';
+	useEditor(mathField, MQ);
+
+	const handshakeModel = new Postmate.Model({
+		// Expose your model to the Parent. Property values may be functions, promises, or regular values
+		laTeX: () => mathField.latex(),
+		set: (newLaTeX) => mathField.latex(newLaTeX ? newLaTeX : ''),
+	});
+
+	// When parent <-> child handshake is complete, events may be emitted to the parent
+	handshakeModel.then(parent => {
+		parent.emit('ready', 'Editor Ready!');
+		childApi = parent;
+	});
+
+	const optionEl = document.getElementById('option');
+	const childElements = optionEl.children;
+	let currentIndex = 0;
+
+	optionEl.addEventListener('wheel', (event) => {
+		const delta = event.deltaX; // 获取横向滚动的距离
+		const maxScrollLeft = optionEl.scrollWidth - optionEl.clientWidth; // 最大可滚动值
+
+		if ((optionEl.scrollLeft + delta > maxScrollLeft && delta > 0) || // 如果处于最右侧并且尝试向右滚动
+			(optionEl.scrollLeft + delta < 0 && delta < 0)) { // 如果处于最左侧并且尝试向左滚动
+			event.preventDefault(); // 阻止滚动事件，这将阻止触摸板手势
+		} else {
+			// 允许默认行为，即滚动
+			optionEl.scrollLeft += delta; // 您可以使用更复杂的动画效果来平滑滚动
+			for (let i = 0; i < childElements.length; i++) {
+				if ((childElements[i].offsetLeft - 32) > optionEl.scrollLeft) {
+					currentIndex = i - 1;
+					return;
+				}
+			}
+		}
+	}, {passive: false})
+
+	function scrollToSection(index) {
+		if (index >= 0 && index < childElements.length) {
+			const targetElement = childElements[index];
+			optionEl.scrollTo({
+				left: targetElement.offsetLeft - 32,
+				behavior: 'smooth' // 这将启用平滑滚动效果
+			});
+			currentIndex = index; // 更新当前索引
+		}
+	}
+
+	const prev = document.getElementById('prev');
+	prev.addEventListener('click', () => {
+		if (currentIndex > 0) { // 如果不是最后一个元素
+			scrollToSection(currentIndex - 1);
+		}
+	})
+
+	const next = document.getElementById('next');
+	next.addEventListener('click', () => {
+		if (currentIndex < childElements.length - 1) { // 如果不是最后一个元素
+			scrollToSection(currentIndex + 1);
+		}
+	})
+</script>
+<div id="editor-wrapper">
+	<div id="editor"></div>
+	<div id="option">
+		<div class="section" style="grid-template-columns: repeat(5, minmax(0, 1fr))">
+			<button id="sup2"></button>
+			<button id="sup"></button>
+			<button id="sub"></button>
+			<button id="sqrt2"></button>
+			<button id="sqrt"></button>
+			<button id="frac"></button>
+			<button id="abs"></button>
+			<button id="ceil"></button>
+			<button id="floor"></button>
+			<button id="set"></button>
+			<button id="differentiate"></button>
+			<button id="partial"></button>
+			<button id="int"></button>
+			<button id="oint" style="font-size: 21px"></button>
+			<button id="lim" style="font-size: 11px"></button>
+			<button id="log"></button>
+			<button id="lg"></button>
+			<button id="ln"></button>
+			<button id="sum" style="font-size: 12px"></button>
+			<button id="prod" style="font-size: 12px"></button>
+			<button id="union"></button>
+			<button id="intersection"></button>
+			<button id="overleftarrow"></button>
+			<button id="overline"></button>
+			<button id="overrightarrow"></button>
+		</div>
+		<div class="section" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+			<button id="add"></button>
+			<button id="subtract"></button>
+			<button id="pm"></button>
+			<button id="times"></button>
+			<button id="cdot"></button>
+			<button id="div"></button>
+			<button id="equal"></button>
+			<button id="l"></button>
+			<button id="g"></button>
+			<button id="ne"></button>
+			<button id="le"></button>
+			<button id="ge"></button>
+			<button id="equiv"></button>
+			<button id="approx"></button>
+			<button id="cong"></button>
+		</div>
+		<div class="section" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+			<button id="pi"></button>
+			<button id="theta"></button>
+			<button id="delta"></button>
+			<button id="alpha"></button>
+			<button id="beta"></button>
+			<button id="nabla"></button>
+			<button id="parallel"></button>
+			<button id="perp"></button>
+			<button id="angle"></button>
+			<button id="degree"></button>
+			<button id="infty"></button>
+			<button id="propto"></button>
+			<button id="because"></button>
+			<button id="therefore"></button>
+		</div>
+		<div class="section" style="grid-template-columns: repeat(6, minmax(0, 1fr))">
+			<button id="gamma"></button>
+			<button id="delta2"></button>
+			<button id="epsilon"></button>
+			<button id="zeta"></button>
+			<button id="eta"></button>
+			<button id="iota"></button>
+			<button id="kappa"></button>
+			<button id="lambda"></button>
+			<button id="mu"></button>
+			<button id="nu"></button>
+			<button id="xi"></button>
+			<button id="o"></button>
+			<button id="rho"></button>
+			<button id="sigma"></button>
+			<button id="tau"></button>
+			<button id="upsilon"></button>
+			<button id="phi"></button>
+			<button id="chi"></button>
+			<button id="psi"></button>
+			<button id="omega"></button>
+			<button id="gamma2"></button>
+			<button id="theta2"></button>
+			<button id="lambda2"></button>
+			<button id="xi2"></button>
+			<button id="pi2"></button>
+			<button id="sigma2"></button>
+			<button id="upsilon2"></button>
+			<button id="phi2"></button>
+			<button id="psi2"></button>
+			<button id="omega2"></button>
+		</div>
+		<div class="section" style="grid-template-columns: repeat(4, minmax(0, 1fr))">
+			<button id="subset"></button>
+			<button id="subseteq"></button>
+			<button id="notsubset"></button>
+			<button id="notsubseteq"></button>
+			<button id="supset"></button>
+			<button id="supseteq"></button>
+			<button id="notsupset"></button>
+			<button id="notsupseteq"></button>
+			<button id="in"></button>
+			<button id="ni"></button>
+			<button id="notin"></button>
+			<button id="notni"></button>
+			<button id="cup"></button>
+			<button id="cap"></button>
+			<button id="forall"></button>
+			<button id="exists"></button>
+			<button id="vee"></button>
+		</div>
+		<div class="section" style="grid-template-columns: repeat(3, minmax(0, 1fr)); margin-right: 0">
+			<button id="leftarrow"></button>
+			<button id="rightarrow"></button>
+			<button id="leftrightarrow"></button>
+			<button id="Longleftarrow"></button>
+			<button id="Longrightarrow"></button>
+			<button id="Longleftrightarrow"></button>
+			<button id="uparrow"></button>
+			<button id="uparrow2"></button>
+			<button id="updownarrow"></button>
+			<button id="downarrow"></button>
+			<button id="downarrow2"></button>
+			<button id="updownarrow2"></button>
+			<button id="ldots"></button>
+			<button id="cdots"></button>
+		</div>
+	</div>
+	<div style="margin: 16px auto 0 auto; display: flex; justify-content: space-between; font-size: large; font-weight: 700;">
+		<button id="prev"><</button>
+		<button id="next">></button>
+	</div>
+</div>
+</body>
+</html>
+<style>
+    body {
+        margin: 0;
+        font-size: 14px;
+        background-color: white;
+        overflow: hidden;
+    }
+    html, body {
+        width: 100%;
+        height: 100%;
+    }
+    *, *:before, *:after {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+    }
+    #editor-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+    }
+    #editor {
+        border-width: 2px;
+        border-color: #000;;
+        border-radius: 4px;
+        height: 100px;
+        background-color: white;
+        padding: 16px 32px;
+        outline-width: 0;
+        box-shadow: unset;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    #option {
+        margin-top: 32px;
+        background-color: ghostwhite;
+        padding: 16px;
+        border-radius: 1rem;
+        overflow: auto;
+        display: flex;
+        align-items: start;
+    }
+    button {
+        width: 48px;
+        height: 48px;
+        padding: 4px;
+        cursor: pointer !important;
+        border-radius: 4px;
+    }
+    button:hover {
+        background-color: #D4D4D4;
+        transition: background-color 300ms ease-out;
+    }
+    .section {
+        flex-shrink: 0;
+        width: fit-content;
+        gap: 0.25rem;
+        display: grid;
+        margin-right: 48px;
+    }
+    #prev {
+        background-color: ghostwhite;
+        margin-right: 40px;
+        padding: 4px;
+        width: 33px;
+        height: 33px;
+        border-radius: 9999px;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+        color: #9b9b9b;
+    }
+    #prev:hover {
+        background-color: whitesmoke;
+    }
+    #next {
+        background-color: ghostwhite;
+        padding: 4px;
+        width: 33px;
+        height: 33px;
+        border-radius: 9999px;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+        color: #9b9b9b;
+    }
+    #next:hover {
+        background-color: whitesmoke;
+    }
+    button, var, svg, span {
+        -webkit-user-select: none; /* Safari */
+        -moz-user-select: none;    /* Firefox */
+        -ms-user-select: none;
+        user-select: none;
+    }
+	.editor-iframe {
+		width: 100%;
+		height: 100%;
+	}
+</style>

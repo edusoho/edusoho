@@ -209,8 +209,8 @@ class CertificateTemplateController extends BaseController
             'certificateCode' => '',
             'certificateExpiryTime' => '',
             'certificateIssueTime' => '',
-            'certificateStamp' => empty($template['stamp']) ? '' : $this->getWebExtension()->getFurl($template['stamp']),
-            'certificateBasemap' => empty($template['basemap']) ? $this->getAssetUrl("static-dist/app/img/admin-v2/{$template['styleType']}_basemap.jpg") : $this->getWebExtension()->getFurl($template['basemap']),
+            'certificateStamp' => empty($template['stamp']) ? '' : $this->getFileService()->parseFileUri($template['stamp'])['fullpath'],
+            'certificateBasemap' => empty($template['basemap']) ? $this->getAssetUrl("static-dist/app/img/admin-v2/{$template['styleType']}_basemap.jpg") : $this->getFileService()->parseFileUri($template['basemap'])['fullpath'],
         ]);
 
         return $this->getImgBuilder($template['styleType'])->getCertificateImgByBase64($certificate, 0.5);
@@ -218,10 +218,9 @@ class CertificateTemplateController extends BaseController
 
     protected function getAssetUrl($path)
     {
-        $request = $this->get('request');
-        $path = $this->get('templating.helper.assets')->getUrl($path);
+        $biz = $this->getBiz();
 
-        return $request->getSchemeAndHttpHost().$path;
+        return "{$biz['root_directory']}web/{$path}";
     }
 
     protected function getImgBuilder($type)

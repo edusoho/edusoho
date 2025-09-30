@@ -22,6 +22,7 @@ class OpenCourseLessonDaoImpl extends GeneralDaoImpl implements OpenCourseLesson
                 'updatedTime >= :updatedTime_GE',
                 'status = :status',
                 'type = :type',
+                'type IN (:types)',
                 'free = :free',
                 'userId = :userId',
                 'mediaId = :mediaId',

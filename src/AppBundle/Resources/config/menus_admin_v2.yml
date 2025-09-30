@@ -424,6 +424,13 @@ admin_v2:
                                     name: admin_v2.course.item_bank_exercise.analysis_tab
                                     disable: true
                                     router_name: admin_v2_item_bank_exercise_analysis
+                        admin_v2_question_tag:
+                            name: admin_v2.question.tag_manage
+                            children:
+                                admin_v2_question_tag_manage:
+                                  name: admin_v2.question.tag_manage
+                                  router_name: admin_v2_question_tag_manage
+                                  disable: true
                         # 分类标签
                         admin_v2_course_category_tag:
                             name: admin_v2.course.category_tag_menu
@@ -1154,11 +1161,6 @@ admin_v2:
                                 admin_v2_learn_statistics:
                                     name: admin_v2.user.basic.statistics_tab
                                     router_name: admin_v2_user_learn_statistics
-                                admin_v2_login_record:
-                                    name: admin.user.basic.login_record_tab
-                                admin_v2_online:
-                                  name: admin_v2.user.basic.online_tab
-                                  router_name: admin_v2_online
                         admin_v2_staff_show:
                             quick_entrance_icon: 'staff'
                             router_name: admin_v2_staff
@@ -1272,8 +1274,6 @@ admin_v2:
                                             router_params:
                                                 id: (user.id)
                                             disable: true
-                                admin_v2_staff_login_record:
-                                    name: admin.user.basic.login_record_tab
                         admin_v2_approval_manage:
                             quick_entrance_icon: 'approve'
                             name: admin_v2.user.approval_menu
@@ -1313,13 +1313,21 @@ admin_v2:
                                     name: admin_v2.user.destroy_account.destroyed_tab
                                     router_name: admin_v2_destroyed_account
                                     disable: true
-                        admin_v2_scrm:
-                            name: admin_v2.user.scrm_menu
-                            class: js-new-corner-mark
+                        admin_v2_login_record_menu:
+                            router_name: admin_v2_login_record
+                            name: admin_v2.user.login_record
                             children:
-                                admin_v2_scrm_manage:
-                                    name: admin_v2.user.scrm_menu
-                                    router_name: admin_v2_scrm
+                                admin_v2_login_record:
+                                    router_name: admin_v2_login_record
+                                    name: admin_v2.user.login_record
+                        admin_v2_online_menu:
+                            router_name: admin_v2_online
+                            name: admin_v2.user.online
+                            children:
+                                admin_v2_online:
+                                    router_name: admin_v2_online
+                                    name: admin_v2.user.online
+
         # 交易模块
         admin_v2_trade:
             quick_entrance_icon_class: 'icon-color-red'
@@ -1540,6 +1548,14 @@ admin_v2:
                                     name: admin_v2.system.user_content_ctrl.private_message
                                     router_name: admin_v2_user_content_control_private_message
                                     disable: true
+                        admin_v2_course_contract:
+                          router_name: admin_v2_contract
+                          name: admin_v2_system.contract
+                          children:
+                            admin_v2_contract_manage:
+                              name: admin_v2_system.contract_manage
+                              router_name: admin_v2_contract_manage
+                              disable: true
                         admin_v2_course_purchase_agreement:
                           router_name: admin_v2_course_purchase_agreement
                           name: admin_v2.system.course_purchase_agreement_tab
@@ -2016,3 +2032,6 @@ admin_v2:
                             children:
                                 admin_v2_api_swagger_ui_api:
                                     name: API 列表
+        custom_export_permission:  # 权限标识符（唯一）
+            name: admin_v2.total_site_export  # 显示名称
+            group: system           # 分组（一般为system或自定义模块名）

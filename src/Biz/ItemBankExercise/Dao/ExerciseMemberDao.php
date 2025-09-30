@@ -6,9 +6,11 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface ExerciseMemberDao extends AdvancedDaoInterface
 {
-    public function getByExerciseIdAndUserId($exerciseId, $userId);
+    public function getByExerciseIdAndUserIdAndRole($exerciseId, $userId, $role);
 
     public function findByUserIdAndRole($userId, $role);
+
+    public function findByExerciseIdAndUserId($exerciseId, $userId);
 
     public function changeMembersDeadlineByExerciseId($exerciseId, $day);
 

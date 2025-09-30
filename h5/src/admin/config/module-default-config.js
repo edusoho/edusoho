@@ -1,0 +1,435 @@
+const { protocol, pathname, host } = window.location;
+const baseUri = `${protocol}//${host}${pathname
+  .split('/')
+  .slice(0, -1)
+  .join('/')}/`;
+// 模块初始化数据
+const MODULE_DEFAULT = {
+  slideShow: {
+    type: 'slide_show',
+    moduleType: '',
+    data: [
+      {
+        title: '',
+        image: {},
+        link: {
+          type: 'course',
+          target: null,
+          url: '',
+        },
+      },
+    ],
+  },
+  courseList: {
+    type: 'course_list',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '0',
+      sort: 'recommendedSeq',
+      lastDays: '0',
+      limit: '4',
+      displayStyle: 'distichous',
+      items: [],
+    },
+  },
+  classList: {
+    type: 'classroom_list',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '0',
+      sort: 'recommendedSeq',
+      lastDays: '0',
+      limit: '4',
+      displayStyle: 'distichous',
+      items: [],
+    },
+  },
+  openCourseList: {
+    type: 'open_course_list',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '0',
+      limitDays: '0',
+      limit: '4',
+      displayStyle: 'distichous',
+      items: [],
+    },
+  },
+  itemBankList: {
+    type: 'item_bank_exercise',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '',
+      sort: 'recommendedSeq',
+      lastDays: '0',
+      limit: '4',
+      displayStyle: 'distichous',
+      items: [],
+    },
+  },
+  graphicNavigation: {
+    type: 'graphic_navigation',
+    moduleType: 'navigation-1',
+    data: [
+      {
+        title: '班级',
+        image: {
+          url: '',
+          uri: `${baseUri}static/images/hotclass.png`,
+        },
+        link: {
+          type: 'classroom',
+          target: '跳转班级“全部”列表',
+          url: '',
+        },
+      },
+      {
+        title: '课程',
+        image: {
+          url: '',
+          uri: `${baseUri}static/images/openCourse.png`,
+        },
+        link: {
+          type: 'openCourse',
+          target: '跳转公开课“全部”列表',
+          url: '',
+        },
+      },
+      {
+        title: '会员专区',
+        image: {
+          url: '',
+          uri: `${baseUri}static/images/openCourse.png`,
+        },
+        link: {
+          type: 'openCourse',
+          target: '跳转会员页面',
+          url: '',
+        },
+      },
+    ],
+  },
+  h5GraphicNavigation: {
+    type: 'graphic_navigation',
+    moduleType: 'navigation-1',
+    data: [
+      {
+        title: '班级',
+        image: {
+          url: '',
+          uri: `static/images/hotclass.png`,
+        },
+        link: {
+          type: 'classroom',
+          target: '跳转班级“全部”列表',
+          url: '',
+        },
+      },
+      {
+        title: '课程',
+        image: {
+          url: '',
+          uri: `static/images/openCourse.png`,
+        },
+        link: {
+          type: 'course',
+          target: '跳转公课程“全部”列表',
+          url: '',
+        },
+      },
+      {
+        title: '会员专区',
+        image: {
+          url: '',
+          uri: `static/images/vip.png`,
+        },
+        link: {
+          type: 'vip',
+          target: '跳转会员页面',
+          url: '',
+        },
+      },
+    ],
+  },
+  poster: {
+    type: 'poster',
+    moduleType: '',
+    data: {
+      image: {},
+      link: {
+        type: 'course',
+        target: {},
+        url: '',
+      },
+      responsive: '1',
+    },
+  },
+  groupon: {
+    type: 'groupon',
+    moduleType: '',
+    data: {
+      activity: {},
+      tag: '',
+      titleShow: 'show',
+    },
+  },
+  cut: {
+    type: 'cut',
+    moduleType: '',
+    data: {
+      activity: {},
+      tag: '',
+      titleShow: 'show',
+    },
+  },
+  seckill: {
+    type: 'seckill',
+    moduleType: '',
+    data: {
+      activity: {},
+      tag: '',
+      titleShow: 'show',
+    },
+  },
+  coupon: {
+    type: 'coupon',
+    moduleType: '',
+    data: {
+      items: [],
+      titleShow: 'show',
+    },
+  },
+  vip: {
+    type: 'vip',
+    moduleType: '',
+    data: {
+      items: [],
+      sort: 'asc',
+      title: '',
+      titleShow: 'show',
+    },
+  },
+  search: {
+    type: 'search',
+    moduleType: '',
+    data: {},
+  },
+};
+// 各端对应的组件
+const BASE_MODULE = [
+  {
+    name: 'sidebar.carousel',
+    default: MODULE_DEFAULT.slideShow,
+  },
+  {
+    name: 'sidebar.courseList',
+    default: MODULE_DEFAULT.courseList,
+  },
+  {
+    name: 'sidebar.classList',
+    default: MODULE_DEFAULT.classList,
+  },
+  {
+    name: 'sidebar.imageAds',
+    default: MODULE_DEFAULT.poster,
+  },
+  {
+    name: 'sidebar.coupon',
+    default: MODULE_DEFAULT.coupon,
+  },
+  {
+    name: 'sidebar.memberArea',
+    default: MODULE_DEFAULT.vip,
+  },
+];
+
+const MARKETING_MODULE = [
+  {
+    name: 'sidebar.groupPurchase',
+    default: MODULE_DEFAULT.groupon,
+  },
+  {
+    name: 'sidebar.bargain',
+    default: MODULE_DEFAULT.cut,
+  },
+  {
+    name: 'sidebar.flashSale',
+    default: MODULE_DEFAULT.seckill,
+  },
+];
+
+const APP_BASE_MODULE = [
+  {
+    name: 'sidebar.carousel',
+    default: MODULE_DEFAULT.slideShow,
+  },
+  {
+    name: 'sidebar.courseList',
+    default: MODULE_DEFAULT.courseList,
+  },
+  {
+    name: 'sidebar.classList',
+    default: MODULE_DEFAULT.classList,
+  },
+  {
+    name: 'sidebar.imageAds',
+    default: MODULE_DEFAULT.poster,
+  },
+  {
+    name: 'sidebar.coupon',
+    default: MODULE_DEFAULT.coupon,
+  },
+  {
+    name: 'sidebar.memberArea',
+    default: MODULE_DEFAULT.vip,
+  },
+  {
+    name: 'sidebar.navigation',
+    default: MODULE_DEFAULT.graphicNavigation,
+  },
+  {
+    name: 'sidebar.openClassList',
+    default: MODULE_DEFAULT.openCourseList,
+  },
+  {
+    name: 'sidebar.questionBankList',
+    default: MODULE_DEFAULT.itemBankList,
+  },
+];
+
+const H5_BASE_MODULE = [
+  {
+    name: 'sidebar.carousel',
+    default: MODULE_DEFAULT.slideShow,
+    icon: 'icon-lunbotu',
+  },
+  {
+    name: 'sidebar.courseList',
+    default: MODULE_DEFAULT.courseList,
+    icon: 'icon-kechengliebiao',
+  },
+  {
+    name: 'sidebar.classList',
+    default: MODULE_DEFAULT.classList,
+    icon: 'icon-banjiliebiao',
+  },
+  {
+    name: 'sidebar.imageAds',
+    default: MODULE_DEFAULT.poster,
+    icon: 'icon-tuwenguanggao',
+  },
+  {
+    name: 'sidebar.navigation',
+    default: MODULE_DEFAULT.h5GraphicNavigation,
+    icon: 'icon-tuwendaohang',
+  },
+  {
+    name: 'sidebar.search',
+    default: MODULE_DEFAULT.search,
+    icon: 'icon-sousuo',
+  },
+  {
+    name: 'sidebar.questionBankList',
+    default: MODULE_DEFAULT.itemBankList,
+  },
+];
+
+const H5_MARKETING_MODULE = [
+  {
+    name: 'sidebar.coupon',
+    default: MODULE_DEFAULT.coupon,
+    icon: 'icon-youhuiquan',
+  },
+  // {
+  //   name: 'sidebar.memberArea',
+  //   default: MODULE_DEFAULT.vip,
+  //   icon: 'icon-huiyuanzhuanqu',
+  // },
+  {
+    name: 'sidebar.groupPurchase',
+    default: MODULE_DEFAULT.groupon,
+    icon: 'icon-pintuan',
+  },
+  {
+    name: 'sidebar.bargain',
+    default: MODULE_DEFAULT.cut,
+    icon: 'icon-kanjia',
+  },
+  {
+    name: 'sidebar.flashSale',
+    default: MODULE_DEFAULT.seckill,
+    icon: 'icon-miaosha',
+  },
+];
+
+// 内容条件搜索关键字
+const VALUE_DEFAULT = {
+  classroom_list: {
+    key: 'title',
+  },
+  course_list: {
+    key: 'displayedTitle',
+  },
+  open_course_list: {
+    key: 'title',
+  },
+  groupon: {
+    key: 'name',
+  },
+  coupon: {
+    key: 'name',
+  },
+  cut: {
+    key: 'name',
+  },
+  seckill: {
+    key: 'name',
+  },
+};
+
+// 拖动可调整顺序文案
+const TYPE_TEXT_DEFAULT = {
+  course_list: {
+    text: '课程',
+  },
+  classroom_list: {
+    text: '班级',
+  },
+  open_course_list: {
+    text: '公开课',
+  },
+  question_bank_list: {
+    text: '题库',
+  },
+  groupon: {
+    text: '活动',
+  },
+  coupon: {
+    text: '优惠券',
+  },
+  cut: {
+    text: '活动',
+  },
+  seckill: {
+    text: '活动',
+  },
+};
+
+export {
+  MODULE_DEFAULT,
+  BASE_MODULE,
+  MARKETING_MODULE,
+  APP_BASE_MODULE,
+  H5_BASE_MODULE,
+  H5_MARKETING_MODULE,
+  VALUE_DEFAULT,
+  TYPE_TEXT_DEFAULT,
+};

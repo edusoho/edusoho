@@ -6,6 +6,8 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DynUrlToolkit;
 use AppBundle\Util\AvatarAlert;
 use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
+use Biz\Activity\Type\Testpaper;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
@@ -13,10 +15,12 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Util\EdusohoLiveClient;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
@@ -73,6 +77,8 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('can_obtain_certificates', [$this, 'canObtainCertificates']),
             new \Twig_SimpleFunction('can_buy_course', [$this, 'canBuyCourse']),
             new \Twig_SimpleFunction('display_task_title', [$this, 'displayTaskTitle']),
+            new \Twig_SimpleFunction('get_video_max_level', [$this, 'getVideoMaxLevel']),
+            new \Twig_SimpleFunction('first_teacher', [$this, 'getFirstTeacher']),
         ];
     }
 
@@ -184,6 +190,14 @@ class CourseExtension extends \Twig_Extension
                 ];
                 $item = array_merge($default, $item);
                 $mediaType = empty($item['activity']['mediaType']) ? 'video' : $item['activity']['mediaType'];
+                $activityLength = empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType);
+                if ('testpaper' == $mediaType) {
+                    $testpaperActivity = $this->getTestpaperActivityService()->getActivity($item['activity']['mediaId']);
+                    $scene = $this->getAnswerSceneService()->get($testpaperActivity['answerSceneId']);
+                    if (Testpaper::VALID_PERIOD_MODE_LIMIT == $scene['valid_period_mode']) {
+                        $activityLength = $this->getActivityExtension()->lengthFormat($item['activity']['endTime'] - $item['activity']['startTime']);
+                    }
+                }
                 $result = [
                     'itemType' => $item['itemType'],
                     'number' => $item['number'],
@@ -201,12 +215,14 @@ class CourseExtension extends \Twig_Extension
                     'replayStatus' => empty($item['activity']['ext']['replayStatus']) ? '' : $item['activity']['ext']['replayStatus'],
                     'activityStartTimeStr' => empty($item['activity']['startTime']) ? '' : date('m-d H:i', $item['activity']['startTime']),
                     'activityStartTime' => empty($item['activity']['startTime']) ? '' : $item['activity']['startTime'],
-                    'activityLength' => empty($item['activity']['length']) ? '' : $this->getActivityExtension()->lengthFormat($item['activity']['length'], $mediaType),
+                    'activityLength' => $activityLength,
                     'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
                     'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
+                    'videoMaxLevel' => $item['videoMaxLevel'] ?? '',
+                    'isLastLearn' => $item['isLastLearn'],
                 ];
                 if ('live' === $item['type']) {
                     $currentTime = time();
@@ -425,6 +441,18 @@ class CourseExtension extends \Twig_Extension
         ]);
     }
 
+    public function getVideoMaxLevel($courseId)
+    {
+        return $this->getCourseService()->getVideoMaxLevel($courseId);
+    }
+
+    public function getFirstTeacher($courseId)
+    {
+        $teachers = $this->getMemberService()->findCourseTeachers($courseId);
+
+        return current($teachers);
+    }
+
     protected function isUserAvatarEmpty()
     {
         $user = $this->biz['user'];
@@ -556,7 +584,7 @@ class CourseExtension extends \Twig_Extension
     }
 
     /**
-     * @return
+     * @return UploadFileService
      */
     protected function getUploadFileService()
     {
@@ -604,5 +632,21 @@ class CourseExtension extends \Twig_Extension
     protected function createService($alias)
     {
         return $this->biz->service($alias);
+    }
+
+    /**
+     * @return TestpaperActivityService
+     */
+    protected function getTestpaperActivityService()
+    {
+        return $this->biz->service('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return AnswerSceneService
+     */
+    protected function getAnswerSceneService()
+    {
+        return $this->biz->service('ItemBank:Answer:AnswerSceneService');
     }
 }

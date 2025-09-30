@@ -104,7 +104,7 @@ interface LiveReplayService
 
     public function findReplaysByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live');
 
-    public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false);
+    public function entryReplay($replayId, $liveId, $liveProvider, $ssl = false, $isNormalCourse = true);
 
     public function updateReplayShow($showReplayIds, $lessonId);
 
@@ -119,4 +119,12 @@ interface LiveReplayService
      * @Log(module="live",action="generate_live_replay",funcName="findReplaysByCourseIdAndLessonId",param="courseId,liveId,type")
      */
     public function generateReplay($liveId, $courseId, $lessonId, $liveProvider, $type);
+
+    public function recordReplayVideo($replayId, $liveId);
+
+    public function handleReplayGenerateEvent($liveId, $replayDatas);
+
+    public function handleReplayGenerateEventForOpenCourse($liveId, $replayDatas);
+
+    public function getReplayByLessonIdAndReplayIdAndType($lessonId, $replayId, $type);
 }

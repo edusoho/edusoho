@@ -250,6 +250,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['seq'] = empty($lastCourse['seq']) ? 1 : $lastCourse['seq'] + 1;
         $course['maxRate'] = $courseSet['maxRate'];
         $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
+        $course['recommended'] = $courseSet['recommended'];
+        $course['recommendedSeq'] = $courseSet['recommendedSeq'];
+        $course['recommendedTime'] = $courseSet['recommendedTime'];
         $course['title'] = $this->purifyHtml($course['title'], true);
         $course['status'] = 'draft';
         $course['creator'] = $this->getCurrentUser()->getId();
@@ -370,6 +373,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'watchLimit',
                 'drainage',
                 'taskDisplay',
+                'hidePrice',
             ]
         );
 
@@ -409,7 +413,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourseDao()->update($id, $fields);
         $this->getCourseSpecsMediator()->onUpdateNormalData($course);
 
-        $this->dispatchEvent('course.update', new Event($course));
+        $this->dispatchEvent('course.update', new Event($course), ['oldCourse' => $oldCourse]);
         $this->dispatchEvent('course.marketing.update', ['oldCourse' => $oldCourse, 'newCourse' => $course]);
 
         return $course;
@@ -783,7 +787,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         try {
             $result = $this->getCourseDeleteService()->deleteCourse($id);
             $this->getCourseSpecsMediator()->onDelete($course);
-
+            $this->dispatchEvent('exercise.unBind', new Event(['bindId' => $id, 'bindType' => 'course']));
             $this->commit();
 
             return $result;
@@ -815,9 +819,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                     $this->getCourseSetService()->closeCourseSet($course['courseSetId']);
                 }
             }
-            $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
+            $this->dispatchEvent('exercise.banLearn', new Event(['bindType' => 'course', 'bindId' => $course['id']]));
             $this->unpublishGoodsSpecs($course);
+            $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -866,6 +871,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
         $this->getCourseSetService()->publishCourseSet($course['courseSetId']);
         $this->dispatchEvent('course.publish', $course);
+        $this->dispatchEvent('exercise.canLearn', ['bindType' => 'course', 'bindId' => $id]);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
         $this->publishGoodsSpecs($course);
@@ -1405,7 +1411,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::CHAPTERTYPE_INVALID());
         }
 
-        $chapter['title'] = $this->purifyHtml($chapter['title'], true);
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
@@ -1416,7 +1421,6 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function updateChapter($courseId, $chapterId, $fields)
     {
         $this->tryManageCourse($courseId);
-        $fields['title'] = $this->purifyHtml($fields['title'], true);
         $chapter = $this->getChapterDao()->get($chapterId);
         $oldChapter = $chapter;
 
@@ -3019,6 +3023,12 @@ class CourseServiceImpl extends BaseService implements CourseService
      */
     private function processFields($course, $fields, $courseSet)
     {
+        if (!empty($fields['expiryStartDate'])) {
+            $fields['expiryStartDate'] = strtotime(date('Y-m-d', $fields['expiryStartDate']));
+        }
+        if (!empty($fields['expiryEndDate'])) {
+            $fields['expiryEndDate'] = strtotime(date('Y-m-d', $fields['expiryEndDate']).' 23:59:59');
+        }
         if (in_array($course['status'], ['published', 'closed'])) {
             //计划发布或者关闭，不允许修改模式，但是允许修改时间
             unset($fields['expiryMode']);
@@ -3132,6 +3142,40 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canLearningByCourseSetIds($courseSetIds)
     {
         $this->getCourseDao()->canLearningByCourseSetId($courseSetIds);
+    }
+
+    public function getVideoMaxLevel($courseId)
+    {
+        $levels = $this->getActivityService()->findVideoActivityLevelsByCourseId($courseId);
+        $levels = array_unique(array_column($levels, 'convertMaxLevel'));
+        foreach (['4k', '2k'] as $level) {
+            if (in_array($level, $levels)) {
+                return $level;
+            }
+        }
+
+        return '';
+    }
+
+    public function getCourseSetVideoMaxLevel($courseSetId)
+    {
+        $courses = $this->findCoursesByCourseSetId($courseSetId);
+        $activities = $this->getActivityService()->findActivitiesByCourseIdsAndType(array_column($courses, 'id'), 'video', true);
+        $fileIds = [];
+        foreach ($activities as $activity) {
+            if ('self' == $activity['ext']['mediaSource']) {
+                $fileIds[] = $activity['ext']['mediaId'];
+            }
+        }
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $levels = array_unique(array_column($files, 'convertMaxLevel'));
+        foreach (['4k', '2k'] as $level) {
+            if (in_array($level, $levels)) {
+                return $level;
+            }
+        }
+
+        return '';
     }
 
     /**

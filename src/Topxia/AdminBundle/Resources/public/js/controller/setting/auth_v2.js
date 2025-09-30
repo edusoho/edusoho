@@ -22,22 +22,16 @@ define(function(require, exports, module) {
     $('.hiddenJsAction').click(function() {
       $('.dync_visible').hide();
       let protective = $('input[name=register_protective]:checked').val();
-      let level = $('[name=password_level]:checked').val();
       let mode = $('input[name=register_mode]').val();
 
       $('.' + protective + '_protective_' + mode).show();
 
       if (mode !== 'closed') {
         $('.not_closed_mode' + '.' + protective + '_protective').show();
-        $('.not_closed_mode' + '.' + level + '_password_level').show();
       }
     });
 
     $('input[name=register_protective]').change(function() {
-      $('.hiddenJsAction').click();
-    });
-
-    $('[name=password_level]').change(function() {
       $('.hiddenJsAction').click();
     });
 
@@ -134,12 +128,6 @@ define(function(require, exports, module) {
         $('.email-content').removeClass('hidden');
       } else {
         $('.email-content').addClass('hidden');
-      }
-
-      if (modle === 'mobile' || modle === 'email_or_mobile') {
-        $('.js-mobile-tip').removeClass('hidden');
-      } else {
-        $('.js-mobile-tip').addClass('hidden');
       }
 
       $('.hiddenJsAction').click();

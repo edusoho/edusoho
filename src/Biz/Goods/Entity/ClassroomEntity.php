@@ -161,6 +161,13 @@ class ClassroomEntity extends BaseGoodsEntity
         return $this->isSpecsStudent($goods, $specs, $userId) || $this->isSpecsTeacher($goods, $specs, $userId);
     }
 
+    public function isSpecHidePrice($goods, $spec)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($spec['targetId']);
+
+        return $classroom['hidePrice'];
+    }
+
     /**
      * @return ClassroomService
      */

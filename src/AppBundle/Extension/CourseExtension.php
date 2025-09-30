@@ -181,6 +181,11 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'name' => 'course.tab.tasks',
                 'content' => 'forGuest' === $for ? 'AppBundle:Course/Course:tasks' : 'AppBundle:My/Course:tasks',
             ],
+            'itemBankBind' => [
+                'name' => 'course.tab.itemBankBind',
+                'number' => 'itemBankBindNum',
+                'content' => 'AppBundle:Course/ItemBankBind:index',
+            ],
             'discussion' => [
                 'name' => 'course.tab.discussions',
                 'number' => 'discussionNum',

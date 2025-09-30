@@ -123,20 +123,7 @@ class LoginBindController extends BaseController
                 $this->getWeChatService()->freshOpenAppWeChatUserWhenLogin($this->getCurrentUser(), $token);
             }
 
-            if ($this->getAuthService()->hasPartnerAuth()) {
-                return $this->redirect($this->generateUrl('partner_login', ['goto' => $this->getTargetPath($request)]));
-            } else {
-                $currentUser = $this->getCurrentUser();
-                if (!$currentUser['passwordInit']) {
-                    $params = ['goto' => $this->getTargetPath($request)];
-                    $url = $this->generateUrl('password_init');
-                    $goto = $url.'?'.http_build_query($params);
-                } else {
-                    $goto = $this->getTargetPath($request);
-                }
-
-                return $this->redirect($goto);
-            }
+            return $this->redirect($this->getTargetPath($request));
         } else {
             $oUser = $oauthClient->getUserInfo($token);
             $this->storeOauthUserToSession($request, $oUser, $type, $os);

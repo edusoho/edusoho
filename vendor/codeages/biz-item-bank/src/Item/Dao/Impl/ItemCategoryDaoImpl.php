@@ -37,11 +37,14 @@ class ItemCategoryDaoImpl extends AdvancedDaoImpl implements ItemCategoryDao
             ],
             'orderbys' => [
                 'id',
+                'seq',
                 'created_time',
                 'updated_time',
             ],
             'conditions' => [
                 'id = :id',
+                'parent_id = :parent_id',
+                'bank_id = :bank_id',
                 'id IN (:ids)',
             ],
         ];

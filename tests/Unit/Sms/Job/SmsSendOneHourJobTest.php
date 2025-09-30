@@ -3,7 +3,7 @@
 namespace Tests\Unit\Sms\Job;
 
 use Biz\BaseTestCase;
-use Biz\Sms\Job\SmsSendOneHourJob;
+use Biz\Sms\Job\SmsSendJob;
 use AppBundle\Common\ReflectionUtils;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -50,7 +50,7 @@ class SmsSendOneHourJobTest extends BaseTestCase
         ReflectionUtils::setStaticProperty(new SmsProcessorFactory(), 'mockedProcessor', $mockedProcessor);
         ReflectionUtils::setStaticProperty(new CloudAPIFactory(), 'api', $mockedApi);
 
-        $job = new SmsSendOneHourJob(array(), $this->biz);
+        $job = new SmsSendJob(array(), $this->biz);
         $job->args = array('targetType' => 'LiveOpenLesson', 'targetId' => 112);
         $job->execute();
 
@@ -86,7 +86,7 @@ class SmsSendOneHourJobTest extends BaseTestCase
             )
         );
 
-        $job = new SmsSendOneHourJob(array(), $this->biz);
+        $job = new SmsSendJob(array(), $this->biz);
         $job->args = array('targetType' => '', 'targetId' => 112);
         $job->execute();
 

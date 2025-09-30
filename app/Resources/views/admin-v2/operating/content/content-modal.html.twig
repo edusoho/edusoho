@@ -2,6 +2,8 @@
 
 {% set modal_class = 'modal-lg' %}
 
+{% do script(['app/js/admin-v2/article/index.js', 'libs/es-ckeditor/ckeditor.js'])  %}
+
 {% block title %}{{'admin.custom_page_manage.create_custom_page'|trans}}{% endblock %}
 {% block body %}
 
@@ -133,7 +135,7 @@
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
-
+  {% include 'admin-v2/js_loader.html.twig' %}
 
   <script> app.load('content/content-modal'); </script>
 

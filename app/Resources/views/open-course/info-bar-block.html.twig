@@ -56,7 +56,11 @@
         <a class="js-qrcode qrcode-popover top"> 
           <i class="es-icon es-icon-phone1"></i>
           <div class="qrcode-content">
-            <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
+            {% if lesson|default() %}
+              <img src="{{ qrcode_data_uri(url('open_course_lesson_learn', {courseId: course.id, lessonId: lesson.id})) }}" alt="">
+            {% else %}
+              <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
+            {% endif %}
             <span class="gray-darker text-center text-sm">{{ 'my.teaching.open_course.infobar.WeChat_QR_code_lerarn_course'|trans|raw }}</span>
           </div>
         </a>
@@ -64,7 +68,7 @@
       {{ 'my.teaching.open_course.infobar.WeChat_QR_code'|trans }}
     </div>
    </div>
-  {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
+  {% if member.role|default('') == 'teacher' or has_permission('admin_v2_open_course_manage') %}
     <a href="{{ path('open_course_manage',{id:course.id}) }}" class="btn btn-default btn-setting hidden-xs hidden-sm" title="{{'my.teaching.open_course.infobar.course_manage_btn'|trans}}">
       <i class="es-icon es-icon-setting"></i>
     </a>

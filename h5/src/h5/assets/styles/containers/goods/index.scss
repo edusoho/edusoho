@@ -1,0 +1,262 @@
+.goods {
+	background-color: #f5f5f5;
+
+	.goods-detail {
+		.goods-detail__banner {
+			height: vw(210);
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+
+	.goods-info {
+		margin-top: vw(8);
+		padding-bottom: vw(48);
+		background-color: #f5f5f5;
+
+		.goods-info__nav {
+			position: sticky;
+			top: 0;
+			z-index: 999;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			height: vw(50);
+			font-size: vw(14);
+			background-color: #fff;
+			border-bottom: vw(1) solid #e1e1e1;
+
+			li > a {
+				position: relative;
+				color: #666;
+				transition: all 0.3s ease;
+
+				&.active {
+					color: #333;
+					font-weight: 500;
+					font-size: vw(16);
+
+					&::after {
+						position: absolute;
+						bottom: vw(-16);
+						left: 50%;
+						display: inline-block;
+						width: vw(16);
+						height: vw(3);
+						background-color: #03c777;
+						border-radius: vw(2);
+						transform: translateX(-50%);
+						content: '';
+					}
+				}
+			}
+		}
+
+		.goods-info__item {
+			margin-top: vw(8);
+			padding: vw(16);
+			background-color: #fff;
+
+			&:nth-of-type(1) {
+				margin-top: 0;
+			}
+		}
+
+		.goods-info__title {
+			color: #333;
+			font-weight: 500;
+			font-size: vw(16);
+		}
+	}
+}
+
+.goods-qr {
+	position: absolute;
+	top: 46px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: linear-gradient(180deg, #f8f9fe 0%, #f9f9f9 100%);
+
+	.goods-qr__header {
+		position: relative;
+		height: vw(180);
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.goods-qr__body {
+		position: absolute;
+		top: vw(45);
+		left: 50%;
+		width: vw(342);
+		height: vw(477);
+		padding-top: vw(72);
+		text-align: center;
+		background: rgba(255, 255, 255, 0.89);
+		border-radius: vw(12);
+		box-shadow: 0 vw(2) vw(48) 0 #dee9e5;
+		transform: translateX(-50%);
+
+		.goods-qr__body__title {
+			margin: 0;
+			color: #333;
+			font-weight: 500;
+			font-size: vw(16);
+			line-height: 28px;
+		}
+
+		.goods-qr__body__subtitle {
+			margin-top: vw(16);
+			color: #999;
+			font-weight: 400;
+			font-size: vw(16);
+			line-height: 24px;
+		}
+
+		.goods-qr__body__img {
+			position: relative;
+			width: vw(166);
+			height: vw(166);
+			margin: vw(65) auto 0;
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+
+			.qr-border {
+				position: absolute;
+				width: vw(20);
+				height: vw(20);
+				border: vw(3) solid transparent;
+			}
+
+			.qr-border-tl {
+				top: vw(-16);
+				left: vw(-16);
+				border-top-color: #2cda93;
+				border-left-color: #2cda93;
+				border-top-left-radius: vw(5);
+			}
+
+			.qr-border-tr {
+				top: vw(-16);
+				right: vw(-16);
+				border-top-color: #2cda93;
+				border-right-color: #2cda93;
+				border-top-right-radius: vw(5);
+			}
+
+			.qr-border-bl {
+				bottom: vw(-16);
+				left: vw(-16);
+				border-bottom-color: #2cda93;
+				border-left-color: #2cda93;
+				border-bottom-left-radius: vw(5);
+			}
+
+			.qr-border-br {
+				right: vw(-16);
+				bottom: vw(-16);
+				border-right-color: #2cda93;
+				border-bottom-color: #2cda93;
+				border-bottom-right-radius: vw(5);
+			}
+		}
+	}
+}
+
+.goods-reviews {
+	padding: vw(25) vw(32) 0;
+	text-align: center;
+
+	h3 {
+		color: #2b333b;
+		font-weight: normal;
+		font-size: vw(16);
+	}
+
+	.goods-reviews__content {
+		box-sizing: border-box;
+		width: 100%;
+		height: vw(120);
+		margin-top: vw(32);
+		padding: vw(16);
+		color: #999;
+		font-size: vw(13);
+		border-color: rgba(235, 235, 235, 1);
+		border-radius: vw(4);
+		resize: none;
+	}
+
+	.goods-reviews__submit {
+		margin-top: vw(30);
+		padding: vw(12) 0;
+		color: #fff;
+		font-size: vw(16);
+		background-color: #03c777;
+		border-radius: vw(4);
+	}
+}
+
+.goods-certificate {
+	margin-top: vw(8);
+	padding: vw(14);
+	line-height: vw(20);
+	background-color: #fff;
+
+	i {
+		position: relative;
+		top: vw(2);
+	}
+}
+
+.goods-vip {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: vw(8);
+	padding: vw(14);
+	background-color: #fff;
+
+	.goods-vip__left {
+		display: flex;
+		align-items: center;
+		color: #ff8922;
+		font-weight: 500;
+		font-size: vw(14);
+
+		img {
+			width: vw(24);
+			height: vw(24);
+			margin-right: vw(4);
+		}
+	}
+
+	i {
+		color: #ff8922;
+	}
+}
+
+.goods-empty-content {
+	margin-top: 24px;
+	text-align: center;
+
+	img {
+		width: 160px;
+		height: 130px;
+	}
+
+	p {
+		margin-top: 12px;
+		color: #666;
+		font-size: 14px;
+	}
+}

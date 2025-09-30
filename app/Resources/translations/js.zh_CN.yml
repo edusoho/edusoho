@@ -58,7 +58,6 @@ site.information: 信息
 site.tips: 提示
 site.tips.delist: 确认下架？
 site.unknow_server_error: 发生未知错误
-
 site.incorrect.password: 密码错误
 user.settings.security.mobile_bind.success: 手机绑定成功
 user.settings.security.mobile_bind.fail: 手机绑定失败
@@ -66,7 +65,8 @@ user.settings.security.mobile_bind.fail: 手机绑定失败
 site.modify.success: 修改成功
 user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
 
-
+password.hint.normal: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
+password.hint.strong: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 
 site.audio.quality.quota: 音质
 site.audio.quality.low: 流畅
@@ -271,6 +271,9 @@ activity.ppt_manage.media_error_hint: 请上传或选择PPT
 activity.ppt_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
 
 activity.testpaper_manage.media_required: 请选择试卷
+activity.testpaper_manage.media_type_required: 请选择试卷类型
+activity.testpaper_random: 随机卷
+activity.testpaper_regular: 固定卷
 activity.testpaper_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.testpaper_manage.positive_integer_error_hint: 必须为正整数
 activity.testpaper_manage.media_error_hint: 请选择试卷
@@ -358,6 +361,16 @@ auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
 auth.register.drag_captcha_tips: 请拖动左边滑块完成上方拼图
 auth.register.name_required_error_hint: 请输入帐号
 auth.register.password_required_error_hint: 请输入密码
+auth.register.register_by_email: 切换邮箱号注册 >>
+auth.register.register_by_mobile: 切换手机号注册 >>
+auth.register.mobile: 手机号码
+auth.register.email: 邮箱地址
+auth.register.input_mobile: 请填写你常用的手机号码作为登陆账号
+auth.register.input_email: 请填写你常用的邮箱地址作为登陆账号
+auth.register.input_email_verification_code: 填写邮箱验证码
+auth.register.input_mobile_verification_code: 填写短信验证码
+auth.register.email_verification_code: 邮箱验证码
+auth.register.mobile_verification_code: 短信验证码
 
 auth.mobile_captcha_required_error_hint: 请输入验证码
 auth.mobile_captcha_error_hint: 验证码错误
@@ -703,10 +716,8 @@ settings.setup.set_failed.hint: 设置帐号失败，请重试
 
 settings.user_profile.save_success_hint: 保存成功
 
-share.share_to_wechat_circle_of_friends_hint: 分享到微信朋友圈
+share.share_to_wechat_circle_of_friends_hint: 扫码分享
 share.qr_code_load_hint: 正在加载二维码...
-share.wechat_share_usage_hint: >
-  打开微信，点击底部的“发现”，<br>使用 “扫一扫” 即可将网页分享到我的朋友圈。
 
 task.plugin_question_post_success_hint: 提问成功
 task.plugin_question_add.title_required_error_hint: 请输入问题标题
@@ -743,8 +754,10 @@ course.plan_task.activity_manage.testpaper.time_limit: 考试时长
 validate.valid_enter_a_positive.integer: 请输入1至100的正整数
 validate.valid_rangetime.required: 请选择日期区间
 validate.valid_starttime.required: 请选择开始时间
+validate.valid_fixedtime.required: 请选择考试开始和结束时间
+validate.valid_maxDuration: 固定考试时间不能超过10个小时
 validate.valid_endtime.required: 请选择结束时间
-validate.valid_email_input.message: 请输入有效的电子邮件地址
+validate.valid_email_input.message: 请输入正确的邮箱地址
 validate.valid_idcard_formate.message: 请输入有效的身份证号码
 validate.valid_url_input.message: 请输入有效的网址
 activity.testpaper_manage.required.number: 请至少输入一位数字
@@ -798,7 +811,7 @@ validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.only_alphanumeric.message: 请输入数字或英文字母
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
-validate.phone.message: 请输入有效手机号码
+validate.phone.message: 请输入正确的手机号码
 validate.mobile_or_telephone.message: 请输入有效手机号码或者电话号码(区号-电话号码)
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
@@ -833,9 +846,12 @@ validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
 validate.have_spaces: 密码不能有空格哦
+validate.password: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
+validate.password.strong: 8-32位字符，包含字母大小写、数字、符号四种字符组合成的密码
+validate.check_password.message: 8-32位字符，包含字母、数字、符号任意两种及以上组合成的密码
 validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
 validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
-validate.check_password_high.message: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
+validate.check_password_high.message: 请设置8-32位包含字母大小写、数字、符号四种字符组合成的密码
 validate.custom_integer.message: 请输入正确的整数
 validate.int.message: 最多9位整数
 validate.float.message: 最多两位小数，整数位不超过8位！
@@ -1131,6 +1147,7 @@ admin.cloud_file.re_transcode_fail_hint: 重新转码失败!
 admin.cloud_file.detail_loading_hints: 正在加载，请等待......
 admin.cloud_file.select_course_placeholder: 选择课程
 admin.cloud_file.select_user_placeholder: 选择用户
+admin.cloud_file.add_tag_ok: 添加标签成功
 admin.coin.edit_success_hint: 操作成功
 admin.coin.edit_fail_hint: 操作失败
 admin.coin.give_success_hint: 操作成功
@@ -1163,14 +1180,12 @@ admin.course.close_course_hint: 关闭后仍在有效期的学员无法继续学
 admin.close.btn.confirm_close: 确认关闭？
 admin.close.btn.confirm_hide: 确认下架？
 admin.close.btn.confirm_publish: 确认发布？
-admin.course.close_success_hint: 已关闭页面显示
 admin.course.hide_course_hint: 课程下架后将不在前台展示，学员无法在首页和列表页查看
 admin.course.delist_course_hint: 课程下架后将不在前台展示，学员无法查看
 admin.course.hide_success_hint: 课程关闭成功！
 admin.course.show_success_hint: 已开启页面
 admin.course.delist_success_hint: 课程下架成功！
 admin.course.publish_hint: 确认发布？
-admin.course.publish_success_hint: 课程发布成功！
 admin.course.unknow_error_hint: 未知错误
 admin.course.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。真的要删除该课程吗？
 admin.course.mall_goods_exist.delete_hint: 删除课程，将删除课程的章节、课时、学员等信息。并且该产品已在营销商城中有对应的商品，将同时删除已在营销商城中的对应商品，真的要删除该课程吗？
@@ -1862,7 +1877,15 @@ course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
   例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
   对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
 goods.show_page.tab.intro: 简介
+goods.show_page.tab.question_bank: 题库
+goods.show_page.tab.question_bank.show: 查看全部
+goods.show_page.tab.question_bank.empty: 暂无绑定的题库哦～
+goods.show_page.tab.question_bank.chapter_exercise: 章节练习
+goods.show_page.tab.question_bank.test_paper_practice: 试卷练习
+goods.show_page.tab.question_bank.check: 查看
+goods.show_page.tab.question_bank.close: 关闭
 goods.show_page.tab.catalogue: 学习目录
+goods.show_page.tab.catalogua: 课程题库
 goods.show_page.tab.catalogue.empty: 购买完成后即可查看课程目录～
 goods.show_page.tab.reviews: 学员评价
 goods.show_page.tab.reviews_empty_tips: 暂无评价哦~
@@ -2108,16 +2131,16 @@ decorate.amount_of_goods: 商品数量
 decorate.creation_time: 创建时间
 decorate.operate: 操作
 decorate.search_class: 搜索班级
-decorate.coupon: 优惠卷
+decorate.coupon: 优惠券
 decorate.only_show_coupons_no_expired: 仅显示未过期的优惠券
 decorate.title: 标题栏
 decorate.show: 显示
 decorate.do_not_show: 不显示
 decorate.coupon_selection: 优惠券选择
-decorate.add_coupon: 添加优惠卷
+decorate.add_coupon: 添加优惠券
 decorate.choose_a_coupon: 选择优惠券
-decorate.search_for_coupons: 搜索优惠卷
-decorate.coupon_name: 优惠卷名称
+decorate.search_for_coupons: 搜索优惠券
+decorate.coupon_name: 优惠券名称
 decorate.prefix: 前缀
 decorate.offer_content: 优惠内容
 decorate.discount: 折扣
@@ -2191,6 +2214,7 @@ decorate.replay: 回放
 decorate.islearning: 人在学
 decorate.itemBankMax: 最多显示3个题库
 decorate.persons: 人
+decorate.question_bank: 题库
 
 scrm.title: 销客助手
 scrm.edusoho_title: EduSoho销客助手
@@ -2246,6 +2270,7 @@ admin_v2.homepage.wechat_come: 欢迎使用EduSoho教培产品
 admin_v2.homepage.wechat_code.m: 加入开源产品使用学习交流群，小伙伴在等你
 
 del.role.theater.hover.title: 该用户无讲师权限。移除后将不在移动端展示
+course.teacher.hover.title.live_teacher: 该老师为直播主讲老师
 upgrade.cloud.capabilities.to.experience: >
   <p class="title cd-dark-major">题目导入</p><div class="cd-dark-minor cd-text-md">升级云能力可体验更强大的导入功能</div>
 next.skip.intro.text: >
@@ -2288,6 +2313,35 @@ question.bank.difficulty.normal: 一般
 question.bank.difficulty: 困难
 question.bank.reset.btn: 重置
 
+question.bank.paper.status: 试卷状态
+question.bank.paper.type: 类型
+question.bank.paper.paper.type: 试卷类型
+question.bank.paper.generating: 生成中
+question.bank.paper.draft: 草稿
+question.bank.paper.fail: 生成失败
+question.bank.paper.closed: 已关闭
+question.bank.paper.published: 已发布
+question.bank.paper.typeKeyword: 请输入关键词
+question.bank.paper.name: 名称
+question.bank.paper.creator: 创建人
+question.bank.paper.regular: 固定卷
+question.bank.paper.aiPersonality: AI 个性卷
+question.bank.paper.random: 随机卷
+question.bank.paper.operation: 操作
+question.bank.paper.num: 试卷数量
+question.bank.paper.numberOfItems/score: 题数/分数
+question.bank.paper.updatePerson/updatedAt: 更新人/更新时间
+question.bank.paper.selectAll: 全选
+question.bank.paper.selectedItems: 选择 %select% 项
+question.bank.paper.pageTotal: 共 %total% 项
+question.bank.paper.preview: 预览
+question.bank.paper.close: 关闭
+question.bank.paper.edit: 编辑
+question.bank.paper.publish: 发布
+question.bank.paper.publish.success: 发布成功
+question.bank.paper.close.success: 关闭成功
+question.bank.paper.batch.delete: 批量删除
+
 classroom.category.choose.text: 请选择班级分类
 course.category.choose.text: 请选择课程分类
 classroom.services.choose.train: 练
@@ -2302,3 +2356,138 @@ course.live: 直播课程
 course.appointment: 预约课程
 course.try.look: 试看
 certificate: 证
+
+item_bank_exercise.addTestpaper: 添加试卷
+item_bank_exercise.abandonOperation: 确定放弃此次操作吗？
+item_bank_exercise.unsaved: 当前操作尚未保存
+
+course.market_setting.contract: 电子合同
+course.market_setting.contract.btn.view: 预览
+course.market_setting.contract.btn.close: 关闭
+course.market_setting.contract.tip: 启用后，学员开始学习前需完成电子合同签署
+course.market_setting.contract.mandatory_signature: 强制签署
+course.market_setting.contract.mandatory_signature.tip: 开启强制签署后，学员完成合同签署后才能学习，未签署的学员每次进入学习页面时弹窗提示签署合同。
+course.market_setting.contract.model.contractNumber: 合同编号
+course.market_setting.contract.model.contractSigning: '%name%-电子合同签署'
+course.market_setting.contract.model.partyA: 甲方
+course.market_setting.contract.model.signingDate: 签约日期
+course.market_setting.contract.model.partyB: 乙方
+course.market_setting.contract.model.handSignature: 手写签名
+course.market_setting.contract.model.partyBName: 乙方姓名
+course.market_setting.contract.model.iDNumber: 身份证号
+course.market_setting.contract.model.contactInformation: 联系方式
+
+tab.course_tab.index.my_courses: 我的课程
+tab.course_tab.index.enter_course_name: 请输入课程名称
+tab.course_tab.index.live_class_schedule: 直播课表
+tab.course_tab.index.learning: 学习中
+tab.course_tab.index.have_completed: 已学完
+tab.course_tab.index.have_expired: 已过期
+tab.course_tab.index.collect: 收藏
+
+tab.course_tab.course_list.empty: 暂无课程
+
+tab.course_tab.course_item.learning_progress: 学习进度
+tab.course_tab.course_item.last_time_learned: 上次学到：课时
+tab.course_tab.course_item.closed: 已关闭
+tab.course_tab.course_item.live_streaming: 直播
+tab.course_tab.course_item.view_course: 查看课程
+tab.course_tab.course_item.start_studying: 进入学习
+
+tab.classroom_tab.index.my_class: 我的班级
+tab.classroom_tab.index.enter_class_name: 请输入班级名称
+tab.classroom_tab.learning: 学习中
+tab.classroom_tab.have_completed: 已学完
+tab.classroom_tab.have_expired: 已过期
+
+tab.classroom_tab.classroom_list.empty: 暂无课程
+
+tab.classroom_tab.classroom_item.have_learned: 已学了%days%天
+tab.classroom_tab.classroom_item.learning_progress: 学习进度
+tab.classroom_tab.classroom_tab.closed: 已关闭
+tab.classroom_tab.classroom_tab.view_class: 查看班级
+tab.classroom_tab.classroom_tab.continue_learning: 继续学习
+
+course_manage.live_statistics.detail.index.course_mistakes: 课程错题
+course_manage.live_statistics.detail.index.classroom_mistakes: 班级错题
+course_manage.live_statistics.detail.index.quiz_mistakes: 题库练习错题
+
+my.learning.wrong_question_book.detail.course.search_placeholder: 请输入课程名称
+
+my.learning.wrong_question_book.detail.list_item.problem: 题
+my.learning.wrong_question_book.detail.list_item.check: 查看错题
+
+my.learning.wrong_question_book.detail.classroom.search_placeholder: 请输入班级名称
+
+my.learning.wrong_question_book.detail.item_bank.search_placeholder: 请输入题库练习名称
+
+my.learning.wrong_question_book.detail.index.course_mistakes: 课程错题
+my.learning.wrong_question_book.detail.index.classroom_mistakes: 班级错题
+my.learning.wrong_question_book.detail.index.quiz_mistakes: 题库练习错题
+
+my.learning.wrong_question_book.detail.index.practice_of_incorrect_answers: 错题练习
+my.learning.wrong_question_book.detail.index.modal.title: 错题练习
+my.learning.wrong_question_book.detail.index.modal.ok_text: 开始答题
+my.learning.wrong_question_book.detail.index.modal.cancel_text: 取消
+my.learning.wrong_question_book.detail.index.modal.display_quantity: 展示数量
+my.learning.wrong_question_book.detail.index.modal.questions: 题
+my.learning.wrong_question_book.detail.index.modal.custom: 自定义
+my.learning.wrong_question_book.detail.index.modal.tip: 可输入范围：1≤题目数量≤单个错题本全部错题
+my.learning.wrong_question_book.detail.index.message.warning.zero: 答题数不能为0
+
+my.learning.wrong_question_book.detail.screen.course.empty: 暂无数据
+my.learning.wrong_question_book.detail.screen.course.entire_plan: 全部计划
+my.learning.wrong_question_book.detail.screen.course.source: 题目来源
+my.learning.wrong_question_book.detail.screen.course.task_name: 任务名称
+my.learning.wrong_question_book.detail.screen.course.select_option.mistakes_frequency: 做错频次
+my.learning.wrong_question_book.detail.screen.course.select_option.desc: 由高至低
+my.learning.wrong_question_book.detail.screen.course.select_option.asc: 由低至高
+my.learning.wrong_question_book.detail.screen.course.search: 搜索
+my.learning.wrong_question_book.detail.screen.course.sources.exam_task: 考试任务
+my.learning.wrong_question_book.detail.screen.course.sources.job_task: 作业任务
+my.learning.wrong_question_book.detail.screen.course.sources.practice_task: 练习任务
+
+my.learning.wrong_question_book.detail.screen.classroom.empty: 暂无数据
+my.learning.wrong_question_book.detail.screen.classroom.all_courses: 全部课程
+my.learning.wrong_question_book.detail.screen.classroom.source: 题目来源
+my.learning.wrong_question_book.detail.screen.classroom.task_name: 任务名称
+my.learning.wrong_question_book.detail.screen.classroom.select_option.mistakes_frequency: 做错频次
+my.learning.wrong_question_book.detail.screen.classroom.select_option.desc: 由高至低
+my.learning.wrong_question_book.detail.screen.classroom.select_option.asc: 由低至高
+my.learning.wrong_question_book.detail.screen.classroom.search: 搜索
+my.learning.wrong_question_book.detail.screen.classroom.sources.exam_task: 考试任务
+my.learning.wrong_question_book.detail.screen.classroom.sources.job_task: 作业任务
+my.learning.wrong_question_book.detail.screen.classroom.sources.practice_task: 练习任务
+
+my.learning.wrong_question_book.detail.screen.question_bank.empty: 暂无数据
+my.learning.wrong_question_book.detail.screen.question_bank.all_papers: 全部试卷
+my.learning.wrong_question_book.detail.screen.question_bank.all_chapters: 全部章节
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.mistakes_frequency: 做错频次
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.desc: 由高至低
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: 由低至高
+my.learning.wrong_question_book.detail.screen.question_bank.search: 搜索
+my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: 章节练习
+my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: 试卷练习
+
+my.learning.wrong_question_book.detail.components.layout.trueOrFalseQuestions: 判断题
+my.learning.wrong_question_book.detail.components.layout.singleChoice: 单选题
+my.learning.wrong_question_book.detail.components.layout.multipleChoice: 多选题
+my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion: 不定项选择题
+my.learning.wrong_question_book.detail.components.layout.gapFilling: 填空题
+my.learning.wrong_question_book.detail.components.layout.essayQuestion: 问答题
+
+components.wrong_question.question_element.answer_result.answering_result: 答题结果
+components.wrong_question.question_element.analysis.analysis: 解析
+components.wrong_question.question_element.analysis.no_explanation: 无解析
+components.wrong_question.question_element.situation.source: 来源
+components.wrong_question.question_element.situation.mistakes_frequency: 做错频次
+components.wrong_question.question_element.situation.incorrect_questions: 错题时间
+components.wrong_question.question_element.situation.times: 次
+components.wrong_question.question_element.answer_result.correct: 正确
+components.wrong_question.question_element.answer_result.mistake: 错误
+components.wrong_question.question_element.right_answer.right_answers: 正确答案
+components.wrong_question.question_element.answer_result.gap_filling: 填空
+components.wrong_question.question_element.right_answer.your_answer: 你的答案
+components.wrong_question.question_element.right_answer.not_answered: 未作答
+components.wrong_question.question_element.right_answer.your_answer_is: 你的答案是
+components.wrong_question.question_element.right_answer.answered_incorrectly: 你答错了

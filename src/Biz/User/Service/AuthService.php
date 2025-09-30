@@ -6,10 +6,6 @@ interface AuthService
 {
     public function register($registration, $type = 'default');
 
-    public function syncLogin($userId);
-
-    public function syncLogout($userId);
-
     public function changeNickname($userId, $newName);
 
     public function changeEmail($userId, $password, $newEmail);
@@ -32,17 +28,7 @@ interface AuthService
 
     public function checkPayPassword($userId, $payPassword);
 
-    public function checkPartnerLoginById($userId, $password);
-
-    public function checkPartnerLoginByNickname($nickname, $password);
-
-    public function checkPartnerLoginByEmail($email, $password);
-
-    public function getPartnerAvatar($userId, $size = 'middle');
-
     public function hasPartnerAuth();
-
-    public function getPartnerName();
 
     public function isRegisterEnabled();
 }

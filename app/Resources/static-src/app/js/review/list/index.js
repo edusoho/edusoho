@@ -77,10 +77,12 @@ if ($form.length > 0) {
     let self = $(this);
     if (validator.form()) {
       self.button('loading');
-      captcha.setType("comment");
 
       if(isShowCaptcha == 1){
+        captcha.setType("comment");
         captcha.showDrag();
+      } else {
+        reviewPost();
       }
     }
   });
@@ -216,13 +218,15 @@ function initSubpostForm($form) {
       let self = $(this);
       self.button('loading');
 
-      captcha.setType("reply");
       if(isShowCaptcha == 1){
+        captcha.setType("reply");
         captcha.showDrag();
+      } else {
+        submitPostForm($form);
       }
     }
   });
-  
+
   captcha.on('success', function(data){
     if(data.type == 'reply'){
       isShowCaptcha = 0;

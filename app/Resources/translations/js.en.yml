@@ -325,6 +325,9 @@ activity.ppt_manage.media_error_hint: Please upload or select PPT
 input.ppt_manage.finish_detail_required_error_hint: Please enter the the minimum watch time
 
 activity.testpaper_manage.media_required: Please select the testpapers
+activity.testpaper_manage.media_type_required: Please select the testpaper types
+activity.testpaper_random: Random testpaper
+activity.testpaper_regular: Regular testpaper
 activity.testpaper_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
 activity.testpaper_manage.positive_integer_error_hint: Must be a positive integer
 activity.testpaper_manage.media_error_hint: Please select the testpapers
@@ -414,6 +417,16 @@ auth.register.number_validate_error_hint: 11 numbers, the first number can not b
 auth.register.drag_captcha_tips: Please drag the left block to finish the puzzle
 auth.register.name_required_error_hint: Please input username
 auth.register.password_required_error_hint: Please input password
+auth.register.register_by_email: Switch to another email address for registration >>
+auth.register.register_by_mobile: Switch to another mobile phone number for registration >>
+auth.register.mobile: Cell phone number
+auth.register.email: E-mail address
+auth.register.input_mobile: Enter mobile phone number as your login account
+auth.register.input_email: Enter email address as your login account
+auth.register.input_email_verification_code: Verification code
+auth.register.input_mobile_verification_code: Verification code
+auth.register.email_verification_code: Email verification code
+auth.register.mobile_verification_code: SMS verification code
 
 auth.mobile_captcha_required_error_hint: Please enter a verification code
 auth.mobile_captcha_error_hint: Verification code error
@@ -760,10 +773,8 @@ settings.setup.set_failed.hint: Set account failed, please try again
 
 settings.user_profile.save_success_hint: Saved successfully
 
-share.share_to_wechat_circle_of_friends_hint: Share to weibo moment
+share.share_to_wechat_circle_of_friends_hint: Scanning code sharing
 share.qr_code_load_hint: Loading qrcode ...
-share.wechat_share_usage_hint: >
-  Open the WeChat, click "discovery" on the bottom, <br> "scan" to share the page to the moment.
 
 task.plugin_question_post_success_hint: Ask question successfully
 task.plugin_question_add.title_required_error_hint: Please enter the question title
@@ -800,6 +811,8 @@ course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 validate.valid_enter_a_positive.integer: Please enter a positive integer from 1 to 100
 validate.valid_rangetime.required: Please select a date range
 validate.valid_starttime.required: Please select a start time
+validate.valid_fixedtime.required: Please select the start and end times of the exam
+validate.valid_maxDuration: The fixed examination duration should not exceed 10 hours
 validate.valid_endtime.required: Please select an end time
 validate.valid_email_input.message: Please enter a valid email address.
 validate.valid_idcard_formate.message: Please enter a valid ID card number.
@@ -890,7 +903,7 @@ validate.no_number_first_hint: URL path can only contain letters and numbers, pl
 validate.have_spaces: Password can't have spaces
 validate.check_password_low.message: 5-20 letters or numbers, case sensitive
 validate.check_password_middle.message: 8-20 letters or numbers, including at least two, case sensitive
-validate.check_password_high.message: 8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols
+validate.check_password_high.message: Please set a password consisting of 8 to 32 characters, which can include letters (both uppercase and lowercase), numbers, and symbols
 validate.custom_integer.message: Please enter the correct integer
 validate.int.message: up to 9 integers
 validate.float.message: up to two decimal places, and the integer digits should not exceed 8 digits!
@@ -1190,6 +1203,7 @@ admin.cloud_file.re_transcode_fail_hint: Retranscoding failed!
 admin.cloud_file.detail_loading_hints: Loading, please wait...
 admin.cloud_file.select_course_placeholder: Select Course
 admin.cloud_file.select_user_placeholder: Select User
+admin.cloud_file.add_tag_ok: Tag added successfully
 admin.coin.edit_success_hint: operation Successful
 admin.coin.edit_fail_hint: operation failed
 admin.coin.give_success_hint: operation Successful
@@ -1222,14 +1236,12 @@ admin.course.close_course_hint: Students who are still valid after closing canno
 admin.close.btn.confirm_close: Confirm close?
 admin.close.btn.confirm_hide: Confirm removal?
 admin.close.btn.confirm_publish: Confirm release?
-admin.course.close_success_hint: Course was closed successfully!
 admin.course.hide_course_hint: After the course is removed, it will not be displayed at the front desk, and students will not be able to view it on the home page and list page.
 admin.course.delist_course_hint: After the course is removed, it will not be displayed at the front desk and students will not be able to view it
 admin.course.hide_success_hint: Course hidden successfully!
 admin.course.show_success_hint: Page enabled!
 admin.course.delist_success_hint: Course removed successfully!
 admin.course.publish_hint: Confirm the release?
-admin.course.publish_success_hint: The course was published successfully!
 admin.course.unknow_error_hint: unknown mistake
 admin.course.delete_hint: Delete a course will delete the chapters, class hours, students, etc. of the course. Really want to delete the course?
 admin.course.remove_hint: Removal of the course will delete all student information and student data, and cannot be restored after removal! Are you sure you want to remove this course?
@@ -1902,6 +1914,13 @@ course.info.video.convert.audio.start: 'Open'
 course.info.video.convert.audio.close: 'Close'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
 goods.show_page.tab.intro: Goods Intro
+goods.show_page.tab.question_bank: Question Bank
+goods.show_page.tab.question_bank.show: View All
+goods.show_page.tab.question_bank.empty: There is no bound question bank for now~
+goods.show_page.tab.question_bank.chapter_exercise: Chapter Exercises
+goods.show_page.tab.question_bank.test_paper_practice: Test Paper Practice
+goods.show_page.tab.question_bank.check: Check
+goods.show_page.tab.question_bank.close: Close
 goods.show_page.tab.catalogue: Learn Catalogue
 goods.show_page.tab.catalogue.empty: After purchasing, you can view the course catalog~
 goods.show_page.tab.reviews: Reviews
@@ -2227,6 +2246,7 @@ decorate.replay: Live Playback
 decorate.islearning: Persons in learning
 decorate.itemBankMax: Display up to 3 question banks
 decorate.persons: Persons
+decorate.question_bank: Question Bank
 
 scrm.title: Scrm
 scrm.edusoho_title: EduSoho Scrm
@@ -2280,6 +2300,7 @@ admin_v2.homepage.wechat_come: Welcome to EduSoho enterprise products
 admin_v2.homepage.wechat_code.m: Join the open source product use learning exchange group, small partners are waiting for you
 
 del.role.theater.hover.title: This user does not have instructor rights. After removal, it will not be displayed on mobile
+course.teacher.hover.title.live_teacher: 'The teacher is a live teacher'
 upgrade.cloud.capabilities.to.experience: >
   <p class="title cd-dark-major">Topic introduction</p><div class="cd-dark-minor cd-text-md">Upgrade cloud capabilities to experience more powerful import capabilities</div>
 next.skip.intro.text: >
@@ -2321,6 +2342,34 @@ question.bank.delete.tip.title: Are you sure you want to delete this question?
 question.bank.delete.tip.content: Deleting a question may affect the practice session of a lesson. Please proceed with caution!
 question.bank.head.edit: Title editing
 
+question.bank.paper.status: Status
+question.bank.paper.type: Type
+question.bank.paper.generating: Generating
+question.bank.paper.draft: Draft
+question.bank.paper.fail: Fail
+question.bank.paper.closed: Closed
+question.bank.paper.published: Published
+question.bank.paper.typeKeyword: Input keywords
+question.bank.paper.name: Name
+question.bank.paper.creator: Creator
+question.bank.paper.regular: Regular
+question.bank.paper.aiPersonality: AI Personalized
+question.bank.paper.random: Random
+question.bank.paper.operation: Operation
+question.bank.paper.num: Amount
+question.bank.paper.numberOfItems/score: Number of items/Score
+question.bank.paper.updatePerson/updatedAt: Update Person/Updated Time
+question.bank.paper.selectAll: Select All
+question.bank.paper.selectedItems: Selected %select% items
+question.bank.paper.pageTotal: Total %total% items
+question.bank.paper.preview: Preview
+question.bank.paper.close: Close
+question.bank.paper.edit: Edit
+question.bank.paper.publish: Publish
+question.bank.paper.publish.success: Successfully published
+question.bank.paper.close.success: Successfully Closed
+question.bank.paper.batch.delete: Batch Delete
+
 classroom.category.choose.text: Please select a classroom category,
 course.category.choose.text: Please select a course category,
 classroom.services.choose.train: Practice,
@@ -2335,3 +2384,128 @@ course.live: Live Course,
 course.appointment: Appointment Course,
 course.try.look: Preview,
 certificate: Certificate
+
+item_bank_exercise.addTestpaper: Add test paper
+item_bank_exercise.abandonOperation: Are you sure to abandon this operation?
+item_bank_exercise.unsaved: The current operation has not been saved yet.
+
+course.market_setting.contract: Contract
+course.market_setting.contract.btn.view: View
+course.market_setting.contract.btn.close: Close
+course.market_setting.contract.tip: Once enabled, students are required to complete the electronic contract signing before starting the study
+course.market_setting.contract.mandatory_signature: Forced signature
+course.market_setting.contract.mandatory_signature.tip: After compulsory signing is enabled, students can only learn after signing the contract. For those who have not signed the contract, a pop-up prompts them to sign the contract every time they enter the learning page.
+course.market_setting.contract.model.contractNumber: Contract number
+course.market_setting.contract.model.contractSigning: '%name%-Contract signing'
+course.market_setting.contract.model.partyA: Party A
+course.market_setting.contract.model.signingDate: Signing date
+course.market_setting.contract.model.partyB: Party B
+course.market_setting.contract.model.handSignature: Hand signature
+course.market_setting.contract.model.partyBName: Party B's name
+course.market_setting.contract.model.iDNumber: ID number
+course.market_setting.contract.model.contactInformation: Contact information
+
+tab.course_tab.index.my_courses: My Courses
+tab.course_tab.index.enter_course_name: Please enter the course name
+tab.course_tab.index.live_class_schedule: Live class schedule
+tab.course_tab.index.learning: Learning
+tab.course_tab.index.have_completed: Have completed studying
+tab.course_tab.index.have_expired: Have expired
+tab.course_tab.index.collect: Collect
+
+tab.course_tab.course_list.empty: No courses available for the moment
+
+tab.course_tab.course_item.learning_progress: Learning progress
+tab.course_tab.course_item.last_time_learned: Last time learned： Class period
+tab.course_tab.course_item.closed: Closed
+tab.course_tab.course_item.live_streaming: Live streaming
+tab.course_tab.course_item.view_course: View the course
+tab.course_tab.course_item.start_studying: Start studying
+
+tab.classroom_tab.index.my_class: My class
+tab.classroom_tab.index.enter_class_name: Please enter the class name
+tab.classroom_tab.classroom_list.have_learned: Have learned for %days% day
+tab.classroom_tab.classroom_item.learning_progress: Progress
+tab.classroom_tab.classroom_tab.closed: Closed
+tab.classroom_tab.classroom_tab.view_class: View the class
+tab.classroom_tab.classroom_tab.continue_learning: Continue
+
+my.learning.wrong_question_book.detail.index.course_mistakes: Course mistakes
+my.learning.wrong_question_book.detail.index.classroom_mistakes: Classroom mistakes
+my.learning.wrong_question_book.detail.index.quiz_mistakes: Quiz mistakes
+
+my.learning.wrong_question_book.detail.course.search_placeholder: Please enter the course name
+
+my.learning.wrong_question_book.detail.list_item.problem: questions
+my.learning.wrong_question_book.detail.list_item.check: Check
+
+my.learning.wrong_question_book.detail.classroom.search_placeholder: Please enter the classroom name
+
+my.learning.wrong_question_book.detail.item_bank.search_placeholder: Please enter the name of the practice question bank
+
+my.learning.wrong_question_book.detail.index.practice_of_incorrect_answers: Practice of Incorrect Answers
+my.learning.wrong_question_book.detail.index.modal.title: Practice of Incorrect Answers
+my.learning.wrong_question_book.detail.index.modal.ok_text: Start answering the questions
+my.learning.wrong_question_book.detail.index.modal.cancel_text: Cancel
+my.learning.wrong_question_book.detail.index.modal.display_quantity: Display quantity
+my.learning.wrong_question_book.detail.index.modal.questions: questions
+my.learning.wrong_question_book.detail.index.modal.custom: Custom
+my.learning.wrong_question_book.detail.index.modal.tip: 'Input range: 1 ≤ Number of questions ≤ Total number of incorrect questions in a single error logbook'
+my.learning.wrong_question_book.detail.index.message.warning.zero: The number of answers cannot be zero
+
+my.learning.wrong_question_book.detail.screen.course.empty: No data
+my.learning.wrong_question_book.detail.screen.course.entire_plan: The entire plan
+my.learning.wrong_question_book.detail.screen.course.source: Source of the question
+my.learning.wrong_question_book.detail.screen.course.task_name: Task name
+my.learning.wrong_question_book.detail.screen.course.select_option.mistakes_frequency: Frequency of mistakes
+my.learning.wrong_question_book.detail.screen.course.select_option.desc: DESC
+my.learning.wrong_question_book.detail.screen.course.select_option.asc: ASC
+my.learning.wrong_question_book.detail.screen.course.search: Search
+my.learning.wrong_question_book.detail.screen.course.sources.exam_task: Exam task
+my.learning.wrong_question_book.detail.screen.course.sources.job_task: Job task
+my.learning.wrong_question_book.detail.screen.course.sources.practice_task: Practice task
+
+my.learning.wrong_question_book.detail.screen.classroom.empty: No data
+my.learning.wrong_question_book.detail.screen.classroom.all_courses: All courses
+my.learning.wrong_question_book.detail.screen.classroom.source: Source of the question
+my.learning.wrong_question_book.detail.screen.classroom.task_name: Task name
+my.learning.wrong_question_book.detail.screen.classroom.select_option.mistakes_frequency: Frequency of mistakes
+my.learning.wrong_question_book.detail.screen.classroom.select_option.desc: DESC
+my.learning.wrong_question_book.detail.screen.classroom.select_option.asc: ASC
+my.learning.wrong_question_book.detail.screen.classroom.search: Search
+my.learning.wrong_question_book.detail.screen.classroom.sources.exam_task: Exam task
+my.learning.wrong_question_book.detail.screen.classroom.sources.job_task: Job task
+my.learning.wrong_question_book.detail.screen.classroom.sources.practice_task: Practice task
+
+my.learning.wrong_question_book.detail.screen.question_bank.empty: No data
+my.learning.wrong_question_book.detail.screen.question_bank.all_papers: All the examination papers
+my.learning.wrong_question_book.detail.screen.question_bank.all_chapters: All chapters
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.mistakes_frequency: Frequency of mistakes
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.desc: DESC
+my.learning.wrong_question_book.detail.screen.question_bank.select_option.asc: ASC
+my.learning.wrong_question_book.detail.screen.question_bank.search: Search
+my.learning.wrong_question_book.detail.screen.question_bank.sources.chapter_exercises: Chapter exercises
+my.learning.wrong_question_book.detail.screen.question_bank.sources.test_paper_practice: Test paper practice
+
+my.learning.wrong_question_book.detail.components.layout.trueOrFalseQuestions: True Or False Questions
+my.learning.wrong_question_book.detail.components.layout.singleChoice: Single Choice
+my.learning.wrong_question_book.detail.components.layout.multipleChoice: Multiple Choice
+my.learning.wrong_question_book.detail.components.layout.multipleChoiceQuestion: Multiple Choice Question
+my.learning.wrong_question_book.detail.components.layout.gapFilling: Gap Filling
+my.learning.wrong_question_book.detail.components.layout.essayQuestion: Essay Question
+
+components.wrong_question.question_element.answer_result.answering_result: Answering result
+components.wrong_question.question_element.analysis.analysis: Analysis
+components.wrong_question.question_element.analysis.no_explanation: No explanation
+components.wrong_question.question_element.situation.source: Source
+components.wrong_question.question_element.situation.mistakes_frequency: Frequency of mistakes
+components.wrong_question.question_element.situation.incorrect_questions: Time spent on incorrect questions
+components.wrong_question.question_element.situation.times: times
+components.wrong_question.question_element.answer_result.correct: Correct
+components.wrong_question.question_element.answer_result.mistake: Error
+components.wrong_question.question_element.right_answer.right_answers: Right answers
+components.wrong_question.question_element.answer_result.gap_filling: Gap filling
+components.wrong_question.question_element.right_answer.your_answer: Your answer
+components.wrong_question.question_element.right_answer.not_answered: Not answered
+components.wrong_question.question_element.right_answer.your_answer_is: Your answer is
+components.wrong_question.question_element.right_answer.answered_incorrectly: You answered incorrectly.

@@ -9,11 +9,12 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
 {
     protected $table = 'item_bank_exercise_member';
 
-    public function getByExerciseIdAndUserId($exerciseId, $userId)
+    public function getByExerciseIdAndUserIdAndRole($exerciseId, $userId, $role)
     {
         return $this->getByFields([
             'exerciseId' => $exerciseId,
             'userId' => $userId,
+            'role' => $role,
         ]);
     }
 
@@ -27,9 +28,14 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
         return $this->findByFields(['userId' => $userId, 'role' => $role]);
     }
 
+    public function findByExerciseIdAndUserId($exerciseId, $userId)
+    {
+        return $this->findByFields(['exerciseId' => $exerciseId, 'userId' => $userId]);
+    }
+
     public function changeMembersDeadlineByExerciseId($exerciseId, $day)
     {
-        $sql = "UPDATE item_bank_exercise_member SET deadline = deadline {$day} WHERE exerciseId = {$exerciseId};";
+        $sql = "UPDATE `item_bank_exercise_member` SET `deadline` = `deadline` {$day} WHERE exerciseId = {$exerciseId} AND `role` = 'student';";
 
         return $this->db()->executeUpdate($sql, [$exerciseId, $day]);
     }
@@ -49,11 +55,16 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
                 'exerciseId IN (:exerciseIds)',
                 'role = :role',
                 'locked = :locked',
+                'canLearn = :canLearn',
                 'doneQuestionNum > :doneQuestionNum',
-                'updatedTime >= :startTimeGreaterThan',
-                'updatedTime < :startTimeLessThan',
+                'createdTime >= :startTimeGreaterThan',
+                'createdTime < :startTimeLessThan',
                 'deadline <= :deadlineLessThen',
                 'deadline >= :deadlineGreaterThan',
+                'deadline = 0 or deadline > :deadlineAfter',
+                'deadline > 0 and deadline <= :deadlineBefore',
+                'joinedChannel = :joinedChannel',
+                'joinedChannel IN (:joinedChannels)',
             ],
         ];
     }

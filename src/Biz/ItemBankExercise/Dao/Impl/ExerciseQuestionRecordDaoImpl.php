@@ -39,6 +39,7 @@ class ExerciseQuestionRecordDaoImpl extends AdvancedDaoImpl implements ExerciseQ
                 'exerciseId = :exerciseId',
                 'itemBankId = :itemBankId',
                 'questionId IN (:questionIds)',
+                'exerciseId IN (:exerciseIds)',
                 'itemId IN (:itemIds)',
             ],
         ];

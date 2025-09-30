@@ -30,49 +30,26 @@ if (isOldApiCall()) {
 
 use Symfony\Component\HttpFoundation\Request;
 
-fix_gpc_magic();
-
 $loader = require_once __DIR__.'/../app/autoload.php';
 require_once __DIR__.'/../app/bootstrap.php.cache';
 
 $kernel = new AppKernel('prod', false);
 //$kernel->loadClassCache();
 $request = Request::createFromGlobals();
+
+if (file_exists(__DIR__.'/../app/config/proxy.php')) {
+    $ips = require_once __DIR__.'/../app/config/proxy.php';
+    // @see https://symfony.com/doc/3.x/deployment/proxies.html
+    Request::setTrustedProxies(
+        $ips,
+        Request::HEADER_X_FORWARDED_ALL
+    );
+}
+
 $kernel->setRequest($request);
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
-
-function fix_gpc_magic()
-{
-    if (get_magic_quotes_gpc()) {
-        array_walk($_GET, '_fix_gpc_magic');
-        array_walk($_POST, '_fix_gpc_magic');
-        array_walk($_COOKIE, '_fix_gpc_magic');
-        array_walk($_REQUEST, '_fix_gpc_magic');
-        array_walk($_FILES, '_fix_gpc_magic_files');
-    }
-}
-
-function _fix_gpc_magic(&$item)
-{
-    if (is_array($item)) {
-        array_walk($item, '_fix_gpc_magic');
-    } else {
-        $item = stripslashes($item);
-    }
-}
-
-function _fix_gpc_magic_files(&$item, $key)
-{
-    if ('tmp_name' != $key) {
-        if (is_array($item)) {
-            array_walk($item, '_fix_gpc_magic_files');
-        } else {
-            $item = stripslashes($item);
-        }
-    }
-}
 
 function isOldApiCall()
 {

@@ -27,4 +27,16 @@ $('#password').focus(() => {
   $('.js-password-error').remove();
 });
 
+$('.js-password-open-eye').on('click', function () {
+  $('#password').attr('type', 'password');
+  $('.js-password-open-eye').hide();
+  $('.js-password-close-eye').show();
+})
+
+$('.js-password-close-eye').on('click', function () {
+  $('#password').attr('type', 'text');
+  $('.js-password-close-eye').hide();
+  $('.js-password-open-eye').show();
+})
+
 enterSubmit($form, $btn);
