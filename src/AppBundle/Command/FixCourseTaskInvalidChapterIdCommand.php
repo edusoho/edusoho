@@ -108,19 +108,20 @@ HELP
                 $rightChapters = $db->fetchAll("SELECT * FROM course_chapter WHERE courseId = {$courseId} AND title = '{$task['title']}' ORDER BY id ASC");
                 if (empty($rightChapters)) {
                     $deleteCount ++;
-                    $logger->info("       == 查询到可能正确的 chapter：无，说明这个Task应该被删除!");
+                    $logger->info("== 查询到可能正确的 chapter：无，说明这个Task应该被删除!");
                     if ($real) {
                         $deleted = $db->delete('course_task', array('id' => $task['id']));
-                        $logger->info("       @@ 删除 task: id:{$task['id']}\t, deleted: {$deleted}");
+                        $logger->info("@@ 删除 task: id:{$task['id']}\t, deleted: {$deleted}");
+                        $logger->info("@@ DELETED TASK", $task);
                     }
                 } else {
                     $updateCount ++;
                     foreach ($rightChapters as $rightChapter) {
-                        $logger->info("       == 查询到可能正确的 chapter: id:{$rightChapter['id']}\ttype:{$rightChapter['type']}\tnumber:{$rightChapter['number']}\tseq:{$rightChapter['seq']}\ttitle:{$rightChapter['title']}");
+                        $logger->info("== 查询到可能正确的 chapter: id:{$rightChapter['id']}\ttype:{$rightChapter['type']}\tnumber:{$rightChapter['number']}\tseq:{$rightChapter['seq']}\ttitle:{$rightChapter['title']}");
                     }
                     if ($real) {
                         $updated = $db->update('course_task', array('categoryId' => $rightChapters[0]['id']), array('id' => $task['id']));
-                        $logger->info("       @@ 更新 task: id:{$task['id']}\t, updated: {$updated}");
+                        $logger->info("@@ 更新 task: id:{$task['id']}\t, updated: {$updated}");
                     }
                 }
             }
