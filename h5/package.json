@@ -79,7 +79,7 @@
     "js-cookie": "^2.2.1",
     "lint-staged": "^10.2.11",
     "load-script": "^1.0.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "moment": "^2.29.1",
     "navigator.sendbeacon": "0.0.20",
     "node-sass": "^4.12.0",
