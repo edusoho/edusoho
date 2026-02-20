@@ -95,7 +95,7 @@
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
     "smooth-signature": "^1.0.15",
-    "swiper": "^5.4.5",
+    "swiper": "^12.1.2",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "url-loader": "^0.5.8",
