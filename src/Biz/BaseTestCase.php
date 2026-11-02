@@ -454,7 +454,7 @@ class TestCaseLazyDispatcher extends LazyDispatcher
         $this->container = $container;
     }
 
-    public function dispatch($eventName, Event $event = null)
+    public function dispatch($eventName, ?Event $event = null)
     {
         if (null === $event) {
             $event = new Event();

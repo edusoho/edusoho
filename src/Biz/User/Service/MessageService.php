@@ -127,7 +127,7 @@ interface MessageService
      *
      * @return true 总算删除成功
      */
-    public function deleteMessagesByIds(array $ids = null);
+    public function deleteMessagesByIds(?array $ids = null);
 
     public function clearUserNewMessageCounter($userId);
 

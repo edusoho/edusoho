@@ -233,7 +233,7 @@ class ChapterExerciseServiceImpl extends BaseService implements ChapterExerciseS
             ++$loop;
         }
 
-        return $module['title'].' > '.implode(ArrayToolkit::column($categories, 'name'), ' > ');
+        return $module['title'].' > '.implode(' > ', ArrayToolkit::column($categories, 'name'));
     }
 
     /**

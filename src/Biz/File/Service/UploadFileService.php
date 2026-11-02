@@ -88,7 +88,7 @@ interface UploadFileService
      * @return mixed
      * @Log(module="upload_file",action="create")
      */
-    public function addFile($targetType, $targetId, array $fileInfo = [], $implemtor = 'local', UploadedFile $originalFile = null);
+    public function addFile($targetType, $targetId, array $fileInfo = [], $implemtor = 'local', ?UploadedFile $originalFile = null);
 
     public function renameFile($id, $newFilename);
 

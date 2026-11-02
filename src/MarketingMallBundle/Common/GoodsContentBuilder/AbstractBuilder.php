@@ -13,7 +13,7 @@ abstract class AbstractBuilder
      */
     protected $biz;
 
-    public function __construct(Biz $biz = null)
+    public function __construct(?Biz $biz = null)
     {
         $this->biz = $biz;
     }

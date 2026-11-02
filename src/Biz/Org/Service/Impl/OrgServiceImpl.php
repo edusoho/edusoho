@@ -182,7 +182,7 @@ class OrgServiceImpl extends BaseService implements OrgService
             ksort($orgs);
             $orgs = ArrayToolkit::column($orgs, 'name');
 
-            return implode($orgs, '->');
+            return implode('->', $orgs);
         }
     }
 

@@ -58,7 +58,7 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      *
      * @return RedirectResponse
      */
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, ?AuthenticationException $authException = null)
     {
         $url = $this->router->generate('login');
 

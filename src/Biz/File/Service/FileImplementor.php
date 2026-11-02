@@ -23,7 +23,7 @@ interface FileImplementor
 
     public function player($globalId, $ssl = false);
 
-    public function addFile($targetType, $targetId, array $fileInfo = [], UploadedFile $originalFile = null);
+    public function addFile($targetType, $targetId, array $fileInfo = [], ?UploadedFile $originalFile = null);
 
     public function reconvert($globalId, $options);
 
@@ -31,7 +31,7 @@ interface FileImplementor
 
     public function deleteFile($file);
 
-    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = []);
+    public function moveFile($targetType, $targetId, ?UploadedFile $originalFile = null, $data = []);
 
     //FileImplementor2
     public function getFileByGlobalId($globalId, $ssl = false);

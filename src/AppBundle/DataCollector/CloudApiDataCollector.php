@@ -19,7 +19,7 @@ class CloudApiDataCollector extends DataCollector implements LateDataCollectorIn
         $this->biz = $biz;
     }
 
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function collect(Request $request, Response $response, ?\Exception $exception = null)
     {
     }
 

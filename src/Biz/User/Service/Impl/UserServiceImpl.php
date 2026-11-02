@@ -2886,7 +2886,7 @@ class UserSerialize
         return $user;
     }
 
-    public static function unserialize(array $user = null)
+    public static function unserialize(?array $user = null)
     {
         if (empty($user)) {
             return null;

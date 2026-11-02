@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class SupplierFileImplementorImpl extends BaseService implements FileImplementor
 {
-    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = [])
+    public function moveFile($targetType, $targetId, ?UploadedFile $originalFile = null, $data = [])
     {
     }
 
@@ -70,7 +70,7 @@ class SupplierFileImplementorImpl extends BaseService implements FileImplementor
         );
     }
 
-    public function addFile($targetType, $targetId, array $fileInfo = [], UploadedFile $originalFile = null)
+    public function addFile($targetType, $targetId, array $fileInfo = [], ?UploadedFile $originalFile = null)
     {
     }
 
