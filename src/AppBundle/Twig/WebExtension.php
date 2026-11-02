@@ -1182,7 +1182,7 @@ class WebExtension extends \Twig_Extension
 
         foreach ($keys as $key) {
             if (!isset($value[$key])) {
-                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key, implode(array_keys($context), ', ')));
+                throw new \InvalidArgumentException(sprintf('Key `%s` is not in context with %s', $key, implode(', ', array_keys($context))));
             }
 
             $value = $value[$key];

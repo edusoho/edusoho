@@ -20,7 +20,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 {
     private $cloudApis = [];
 
-    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = [])
+    public function moveFile($targetType, $targetId, ?UploadedFile $originalFile = null, $data = [])
     {
     }
 
@@ -64,7 +64,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
      * @throws UploadFileException
      * @throws \Exception
      */
-    public function addFile($targetType, $targetId, array $fileInfo = [], UploadedFile $originalFile = null)
+    public function addFile($targetType, $targetId, array $fileInfo = [], ?UploadedFile $originalFile = null)
     {
         if (!ArrayToolkit::requireds($fileInfo, ['filename', 'key', 'size'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());

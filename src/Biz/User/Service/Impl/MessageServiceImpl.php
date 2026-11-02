@@ -82,7 +82,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
     }
 
-    public function deleteMessagesByIds(array $ids = null)
+    public function deleteMessagesByIds(?array $ids = null)
     {
         if (empty($ids)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());

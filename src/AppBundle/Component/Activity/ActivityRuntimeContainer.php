@@ -147,7 +147,7 @@ class ActivityRuntimeContainer implements ActivityRuntimeContainerInterface
         return new JsonResponse($data, $status, $headers);
     }
 
-    public function render($view, array $parameters = array(), Response $response = null)
+    public function render($view, array $parameters = array(), ?Response $response = null)
     {
         if ($this->container->has('templating')) {
             return $this->container->get('templating')->renderResponse($view, $parameters, $response);

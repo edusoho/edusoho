@@ -23,7 +23,7 @@ class Tree
      */
     public $data;
 
-    public function __construct($data = array(), Tree $parent = null)
+    public function __construct($data = array(), ?Tree $parent = null)
     {
         $this->data = $data;
         $this->parent = $parent;

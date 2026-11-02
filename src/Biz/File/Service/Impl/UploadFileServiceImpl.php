@@ -859,7 +859,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $count;
     }
 
-    public function addFile($targetType, $targetId, array $fileInfo = [], $implemtor = 'local', UploadedFile $originalFile = null)
+    public function addFile($targetType, $targetId, array $fileInfo = [], $implemtor = 'local', ?UploadedFile $originalFile = null)
     {
         $this->beginTransaction();
         try {

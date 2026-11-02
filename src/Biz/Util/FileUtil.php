@@ -20,7 +20,7 @@ class FileUtil
         }
     }
 
-    public static function deepCopy($src, $dest, array $patternMatch = null)
+    public static function deepCopy($src, $dest, ?array $patternMatch = null)
     {
         $fileSystem = new FileSystem();
         if (!$fileSystem->exists($src)) {

@@ -27,7 +27,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     //@todo 目前没用到，如果用到，逻辑要改动
-    public function addFile($targetType, $targetId, array $fileInfo = [], UploadedFile $originalFile = null)
+    public function addFile($targetType, $targetId, array $fileInfo = [], ?UploadedFile $originalFile = null)
     {
         $errors = FileToolkit::validateFileExtension($originalFile);
 
@@ -138,7 +138,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = [])
+    public function moveFile($targetType, $targetId, ?UploadedFile $originalFile = null, $data = [])
     {
         $targetPath = $this->getFilePath($targetType, $targetId);
 

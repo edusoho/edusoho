@@ -415,7 +415,7 @@ class BaseController extends Controller
         return new ResourceNotFoundException($resourceType, $resourceId, $message);
     }
 
-    public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
+    public function createAccessDeniedException($message = 'Access Denied', ?\Exception $previous = null)
     {
         return new AccessDeniedException($message, 403, $previous);
     }
@@ -446,7 +446,7 @@ class BaseController extends Controller
         return $this->redirect($url, $status);
     }
 
-    public function render($view, array $parameters = [], Response $response = null)
+    public function render($view, array $parameters = [], ?Response $response = null)
     {
         $biz = $this->getBiz();
         foreach ($biz['render_view_resolvers'] as $resolver) {
